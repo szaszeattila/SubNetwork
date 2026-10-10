@@ -1,0 +1,9 @@
+check,result
+baseline_experimental_tiers_reproduced,PASS
+baseline_human_tiers_reproduced,PASS
+all_non_nM_records_accounted_for,PASS
+scope_core_reproduced,PASS
+organism_rows_reproduced,PASS
+organism_assay_review_complete,PASS
+no_family_fanout,PASS
+production_fingerprints_unchanged,PASS

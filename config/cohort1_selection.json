@@ -1,0 +1,221 @@
+{
+  "policy_id": "cohort1-selection",
+  "version": "2.1.0",
+  "adopted": "2026-09-13",
+  "supersedes": "analysis/cohort1/config/cns_indication_scope.json v1.0.0 (report scope, S0 core only)",
+  "decisions": "docs/COHORT-1-DECISIONS.md D01, D02, D03, D04, D05",
+  "status": "Production selection policy. Unlike the report configuration it supersedes, this file decides catalogue membership.",
+
+  "pinned_inputs": {
+    "chembl": {
+      "release": "chembl_37",
+      "path": "/mnt/data/chembl/chembl_37/chembl_37_sqlite/chembl_37.db",
+      "access": "read-only (sqlite URI mode=ro)"
+    },
+    "mesh_classification": {
+      "path": "analysis/cohort1/out/indication_scope.csv",
+      "sha256": "0733b17c45dca06232a4d74b6b22da74b3c772e384f4153c0d890905f98efb36",
+      "descriptors": 2869,
+      "provenance": "Saved output of the September 2026 cohort-1 report (scope v1.0.0), which resolved MeSH tree numbers against the NLM MeSH SPARQL endpoint. The raw mesh_tree.tsv cache is absent from this checkout.",
+      "why_not_refetched": "D14 pins this classification. A fresh MeSH fetch would be a different snapshot wearing the same name. This file is used as the ontology of record, and its tree_numbers column is the only ontology input the build reads.",
+      "coverage_check": "Every mesh_id present in chembl_37.drug_indication (2,178 distinct, 0 NULL) is classified here. The build asserts this and fails if a descriptor is unclassified, rather than treating an unmapped descriptor as out of scope.",
+      "recomputation_check": "The build recomputes in_core_scope from tree_numbers using the v1.0.0 core-root and boundary-exclusion rules and asserts it reproduces the saved column for all 2,869 descriptors. A mismatch fails the build: the base scope must not drift silently while the additions are being layered on."
+    }
+  },
+
+  "admission_routes": {
+    "note": "A parent enters cohort 1 if EITHER route qualifies. Neither route is evidence of anything: ATC is a classification and an indication record is a development annotation. Both reasons are stored per member and shown in the viewer.",
+    "atc_n": {
+      "id": "route_atc_n",
+      "rule": "The parent, or any member of its ChEMBL compound family (molecule_hierarchy), carries an ATC level-5 code whose level1 is 'N'.",
+      "phase_requirement": null,
+      "phase_requirement_reason": "D01: whole ATC N is an independent route with no CNS-indication phase floor. A curated pharmacology-route member is not silently discarded by a clinical phase floor aimed at the indication route.",
+      "kept_whole": true,
+      "flagged_subtrees": [
+        {"code": "N01B", "atc_level": "level3", "label": "Anesthetics, local", "flag": "peripheral_site_of_action"},
+        {"code": "N02B", "atc_level": "level3", "label": "Other analgesics and antipyretics", "flag": "general_analgesic"}
+      ],
+      "flag_treatment": "Annotated and visible, never removed. D02 retains both branches."
+    },
+    "indication": {
+      "id": "route_indication",
+      "rule": "The parent, or any family member, has a drug_indication row whose mesh_id is in the adopted scope AND whose max_phase_for_ind is >= 3.",
+      "phase_field": "drug_indication.max_phase_for_ind",
+      "min_phase": 3,
+      "phase_field_reason": "D01: the threshold applies to the qualifying indication, not to molecule_dictionary.max_phase across unrelated diseases.",
+      "missing_phase_treatment": "NULL, -1 (Unknown), 0.5, 1 and 2 cannot qualify through this route. They are recorded as non-qualifying scoped indications so the near-miss is visible, and they never disqualify an ATC-N match.",
+      "phase_labels": {"4": "Approved", "3": "Phase 3", "2": "Phase 2", "1": "Phase 1", "0.5": "Early Phase 1", "-1": "Unknown (ChEMBL -1)"}
+    }
+  },
+
+  "indication_scope": {
+    "id": "core-plus-pain-with-explicit-neuropathic",
+    "summary": "S0 core (C10 + F03 minus the three excluded boundary classes), plus the whole saved Pain tree, plus an explicit inclusion set that recovers neuropathic pain and fibromyalgia where the boundary exclusions would otherwise remove them.",
+
+    "core_roots": [
+      {"tree": "C10", "label": "Nervous System Diseases"},
+      {"tree": "F03", "label": "Mental Disorders"}
+    ],
+    "core_exclusion_rule": "A descriptor leaves core only when EVERY one of its tree numbers under a core root also falls inside an excluded boundary class. A descriptor with any remaining in-core placement stays in core. Carried unchanged from scope v1.0.0.",
+    "core_boundary_exclusions": [
+      {"id": "cns_oncology", "trees": ["C10.551", "C04.588.614"], "label": "Nervous system neoplasms"},
+      {"id": "peripheral_nervous_system", "trees": ["C10.668.829", "C10.292"], "label": "Peripheral nervous system and cranial nerve diseases"},
+      {"id": "muscle_and_neuromuscular_junction", "trees": ["C10.668.491", "C10.668.758"], "label": "Muscular diseases and neuromuscular junction diseases"}
+    ],
+    "not_adopted": "D02 adopts no blanket oncology, peripheral-nerve or muscle/NMJ admission route. The three exclusions above still apply except where the explicit inclusion set below overrides them.",
+
+    "additive_classes": [
+      {
+        "id": "general_pain",
+        "trees": ["C23.888.592.612"],
+        "label": "Pain (as a sign or symptom)",
+        "adopted": true,
+        "breadth_accepted": "D02 adopts the whole saved Pain tree. Its descendants include the angina descriptors (D000787 Angina Pectoris, D060050 Angina, Stable, D000789 Angina, Unstable, D000788 Angina Pectoris, Variant) and general somatic pain (low back pain, toothache, dysmenorrhea). The boundary review measured this breadth; it is accepted with visible admission reasons rather than silently narrowed to centrally acting analgesics.",
+        "phase_requirement": "Not waived. A pain indication still needs max_phase_for_ind >= 3. Loperamide's saved Pain phase is 0.5, so adding pain does not admit it."
+      }
+    ],
+
+    "explicit_inclusions": {
+      "precedence": "override_boundary_exclusions",
+      "precedence_reason": "D02: the user required neuropathic pain and fibromyalgia explicitly, even where another boundary exclusion would otherwise remove their descriptors. A descriptor matched here is in scope regardless of its boundary classes. The clinical phase requirement is NOT waived.",
+      "audit_finding": "Audited against the pinned classification on 2026-09-13. The report prose claimed Neuralgia (D009437) keeps an in-core C10 placement at C10.597.617.470. The saved row does not: its C10 placement is C10.668.829.600, inside the excluded peripheral-nerve class, and in_core_scope is 0. The boundary review's correction is the accurate one. Adding the Pain tree alone recovers Neuralgia, Postherpetic Neuralgia and Pudendal Neuralgia but NOT Trigeminal Neuralgia, Facial Neuralgia or Fibromyalgia, which is why this inclusion set exists.",
+
+      "tree_roots": [
+        {
+          "tree": "C10.668.829.600",
+          "label": "Neuralgia",
+          "reason": "Neuropathic pain by definition. Sits inside the excluded peripheral-nerve class. Its descendants (Postherpetic Neuralgia D051474, Pudendal Neuralgia D060545, Sciatica D012585, Morton Neuroma D000070607) also carry Pain-tree placements, but the rule is stated on the neurological root so it does not depend on the Pain tree happening to mirror it."
+        },
+        {
+          "tree": "C10.292.319.625",
+          "label": "Facial Neuralgia",
+          "reason": "Cranial-nerve neuralgias. Carries NO Pain-tree placement, so the Pain tree does not recover them. This root admits Facial Neuralgia (D005156) and Trigeminal Neuralgia (D014277, at C10.292.319.625.700.700), both named in D02."
+        },
+        {
+          "tree": "C07.465.299.625.500.700",
+          "label": "Trigeminal Neuralgia (stomatognathic placement)",
+          "reason": "The second placement of D014277. Redundant with the root above for this release, and recorded so the descriptor stays in scope if MeSH moves either placement."
+        },
+        {
+          "tree": "C10.668.491.425",
+          "label": "Fibromyalgia",
+          "reason": "Named explicitly in D02. Classified under the excluded muscle/NMJ branch and carries no Pain-tree placement, so neither the core rule nor the Pain tree recovers it. This root admits D005356 and any future descendant without readmitting the rest of C10.668.491."
+        }
+      ],
+
+      "descriptors": [
+        {
+          "mesh_id": "D003929",
+          "label": "Diabetic Neuropathies",
+          "trees": ["C10.668.829.300", "C19.246.099.937"],
+          "reason": "The largest neuropathic-pain indication in this release (100 drug_indication rows) and the condition the neuropathic-pain pharmacology is actually licensed for. Carries no Pain-tree placement. Admitted individually rather than by opening C10.668.829, which would be the blanket peripheral-nerve route D02 declines."
+        },
+        {
+          "mesh_id": "D000071075",
+          "label": "Small Fiber Neuropathy",
+          "trees": ["C10.668.829.860"],
+          "reason": "A painful sensory neuropathy with no Pain-tree placement. Admitted individually on the same basis as Diabetic Neuropathies."
+        },
+        {
+          "mesh_id": "D001007",
+          "label": "Anxiety",
+          "trees": ["F01.470.132"],
+          "scope_reason": "explicit_cns_heading",
+          "reason": "D16. MeSH files Anxiety as an emotion (F01 Behavior), not a disorder, and ChEMBL uses it for 182 indication records against 46 for Anxiety Disorders (F03). 120 parents reach phase 3 or approval for it and 108 of those carry ATC N. Admitted individually rather than by opening F01, which also holds behaviours and emotions that are not conditions."
+        },
+        {
+          "mesh_id": "D003863",
+          "label": "Depression",
+          "trees": ["F01.145.126.350", "F01.470.282"],
+          "scope_reason": "explicit_cns_heading",
+          "reason": "D16. The emotion heading beside Depressive Disorder (F03); every one of its 9 phase-3+ parents is already a member."
+        },
+        {
+          "mesh_id": "D016540",
+          "label": "Smoking Cessation",
+          "trees": ["F01.145.488.732"],
+          "scope_reason": "explicit_cns_heading",
+          "reason": "D16. The behaviour heading beside Tobacco Use Disorder (F03); every one of its 9 phase-3+ parents is already a member."
+        },
+        {
+          "mesh_id": "D000758",
+          "label": "Anesthesia",
+          "trees": ["E03.155"],
+          "scope_reason": "explicit_cns_heading",
+          "reason": "D16. A procedure heading (E03) that ChEMBL uses for anaesthetic agents; all 7 phase-3+ parents already carry ATC N. Its descendants are not opened: the descriptor is admitted by id."
+        }
+      ],
+
+      "considered_and_not_included": [
+        {"mesh_id": "D011843", "label": "Radiculopathy", "reason": "A nerve-root lesion descriptor, not a pain descriptor. Its painful presentation, Sciatica (D012585), is already admitted through both the Neuralgia root and the Pain tree."},
+        {"mesh_id": "D011115", "label": "Polyneuropathies", "reason": "A nerve-lesion descriptor covering painful and painless neuropathy alike. Painful entities enter through Neuralgia or the Pain tree."},
+        {"mesh_id": "D002349", "label": "Carpal Tunnel Syndrome", "reason": "An entrapment mononeuropathy; treatment is largely procedural. Not a neuropathic-pain descriptor."},
+        {"mesh_id": "D010523", "label": "Peripheral Nervous System Diseases", "reason": "The branch root itself. Including it would be the blanket peripheral-nerve route D02 explicitly declines."},
+        {"mesh_id": "D020422", "label": "Mononeuropathies", "reason": "Same reasoning as Polyneuropathies."}
+      ],
+      "completeness_caveat": "D02 states the listed descriptors are an audit starting point, not a claim that the complete neuropathic scope is mapped. This set was derived by auditing every non-core descriptor in the pinned classification that carries drug_indication rows. Descriptors added to MeSH later, or reclassified, are not covered until this file's version is raised."
+    },
+
+    "scope_class_labels": {
+      "core": "Core CNS scope (C10 + F03)",
+      "general_pain": "Pain tree",
+      "explicit_neuropathic": "Explicit neuropathic-pain inclusion",
+      "explicit_fibromyalgia": "Explicit fibromyalgia inclusion",
+      "explicit_cns_heading": "Explicit inclusion of a CNS condition MeSH files outside C10/F03"
+    }
+  },
+
+  "identity": {
+    "parent_rule": "Identity normalises to the ChEMBL parent molregno (molecule_hierarchy.parent_molregno, falling back to the molecule itself). Nothing is matched on a name.",
+    "retain": "Every contributing family member, its ChEMBL id, molecule type, structure type, withdrawal flag and which route it contributed. Salts, hydrates and formulations fold onto one chemical identity; stereoisomers, prodrugs and metabolites that ChEMBL gives distinct parents stay distinct.",
+    "molecule_types": {
+      "filter": null,
+      "reason": "D03: no molecule-type eligibility filter. Small molecules, proteins, antibodies, oligonucleotides, unknown categories and everything else qualify on the same routes."
+    },
+    "route_of_administration_filter": null,
+    "route_of_administration_reason": "D03: no oral-only or route restriction is inferred from the product framing.",
+    "withdrawn": {"action": "retain_and_flag", "reason": "D04"},
+    "structure_none": {"action": "retain_and_flag", "reason": "D04: an absent structure does not invalidate a traceable target claim, and no structure is invented."},
+    "anomaly_flags": [
+      {
+        "id": "molecule_type_anomaly_theophylline",
+        "molecules": ["CHEMBL190", "CHEMBL1355736"],
+        "observed": "Both are typed 'Protein' in molecule_dictionary in chembl_37.",
+        "action": "flag_only",
+        "reason": "D03: the source classification is flagged for review, never silently rewritten. Under the adopted all-types rule this annotation excludes nothing."
+      }
+    ]
+  },
+
+  "seeds": {
+    "policy": "supplement",
+    "reason": "D05: the clinical cohort supplements the existing catalogue. All 28 seed molecules are retained and searchable.",
+    "membership_labelling": "Seed membership and clinical membership are recorded as separate reasons. A seed is never grandfathered into cohort 1, and a seed outside cohort 1 is an example for designing cohort 2, not a member of an undefined cohort 2.",
+    "identity_reconciliation": [
+      {
+        "seed_chembl_id": "CHEMBL1355736",
+        "seed_name": "theophylline",
+        "parent_chembl_id": "CHEMBL190",
+        "rule": "One catalogue row at the parent. Both identities and the seed alias are preserved in provenance. This is the only seed that is not its own parent."
+      }
+    ],
+    "molecules": [
+      ["caffeine", "CHEMBL113"], ["theophylline", "CHEMBL1355736"], ["theobromine", "CHEMBL1114"],
+      ["istradefylline", "CHEMBL431770"], ["rolipram", "CHEMBL63"], ["cilostazol", "CHEMBL799"],
+      ["donepezil", "CHEMBL502"], ["pentoxifylline", "CHEMBL628"], ["sildenafil", "CHEMBL192"],
+      ["verapamil", "CHEMBL6966"], ["rivastigmine", "CHEMBL636"], ["tacrine", "CHEMBL95"],
+      ["selegiline", "CHEMBL972"], ["cannabidiol", "CHEMBL190461"], ["haloperidol", "CHEMBL54"],
+      ["clozapine", "CHEMBL42"], ["amitriptyline", "CHEMBL629"], ["loperamide", "CHEMBL841"],
+      ["dextromethorphan", "CHEMBL52440"], ["memantine", "CHEMBL807"], ["lamotrigine", "CHEMBL741"],
+      ["dipyridamole", "CHEMBL932"], ["vardenafil", "CHEMBL1520"], ["dronabinol", "CHEMBL465"],
+      ["phenelzine", "CHEMBL1089"], ["quinidine", "CHEMBL1294"], ["galantamine", "CHEMBL659"],
+      ["mibefradil", "CHEMBL45816"]
+    ]
+  },
+
+  "opening_view": {
+    "molecule": "CHEMBL113",
+    "name": "caffeine",
+    "reason": "D13: the application opens on the caffeine neighbourhood under the active filters."
+  }
+}

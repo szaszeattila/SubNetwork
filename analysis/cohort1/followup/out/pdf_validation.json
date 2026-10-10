@@ -1,0 +1,12 @@
+{
+  "report": "docs/COHORT-REPORT.pdf",
+  "report_sha256": "6fd1a816e0c894623fb48e0effb68cf2fda2c7998a9aa686c95a19b0bb225ca7",
+  "markdown_sha256": "b81c0751d6f5bb93b0a095a1ac27235c4241c2d54399bcab8d7e5a4f5a2f2f61",
+  "pages": 21,
+  "all_pages_visually_inspected": true,
+  "glyph_extraction_issues": 0,
+  "text_margin_issues": 0,
+  "original_pdf_sha256": "3a9624f60ebd04924256ab528dc1ecd78fc5e959ded2614acb22e69fb87aff37",
+  "original_archive_and_zotero_pdf_verified": true,
+  "validation_date": "2026-09-12"
+}

@@ -1,0 +1,99 @@
+{
+  "scope_id": "cns-indication-scope",
+  "version": "1.0.0",
+  "ontology": "MeSH",
+  "resolved_against": "NLM MeSH SPARQL endpoint, current-year graph (see MANIFEST.json for retrieval date and checksum)",
+  "join_key": "drug_indication.mesh_id -> MeSH descriptor id (exact identifier match; heading text is never matched on)",
+  "descendant_rule": "A descriptor belongs to a class when any of its tree numbers equals the class tree number, or begins with that tree number followed by a period.",
+  "exclusion_rule": "A descriptor is removed from the core scope only when EVERY one of its tree numbers that falls under a considered root also falls inside an excluded boundary class. A descriptor with any remaining in-core placement stays in core. This keeps conditions with two homes (e.g. myasthenia gravis, autoimmune C10.114 and neuromuscular-junction C10.668.758) inside the core scope.",
+
+  "roots_fetched": [
+    {"tree": "C10", "label": "Nervous System Diseases"},
+    {"tree": "F03", "label": "Mental Disorders"},
+    {"tree": "C04.588.614", "label": "Nervous System Neoplasms (neoplasms-by-site placement)"},
+    {"tree": "C23.888.592.612", "label": "Pain"},
+    {"tree": "C25.775", "label": "Substance-Related Disorders (chemically-induced placement)"}
+  ],
+
+  "core_roots": [
+    {
+      "tree": "C10",
+      "label": "Nervous System Diseases",
+      "reason": "The MeSH disease category for the nervous system. Admits neurological disease of the brain, spinal cord and their coverings, including the neurodegenerative, demyelinating, epileptic, movement, sleep and neurologic-manifestation branches."
+    },
+    {
+      "tree": "F03",
+      "label": "Mental Disorders",
+      "reason": "The MeSH category for psychiatric disease. Included on the prompt's instruction that psychiatric and neurological conditions are both in the considered scope. Carries mood, psychotic, anxiety, neurodevelopmental, neurocognitive and substance-related disorders."
+    }
+  ],
+
+  "boundary_classes": [
+    {
+      "id": "cns_oncology",
+      "trees": ["C10.551", "C04.588.614"],
+      "label": "Nervous system neoplasms",
+      "in_core": false,
+      "reason": "Sits inside C10 but admits drugs whose selection is driven by oncology pharmacology rather than by brain signalling. A record for temozolomide or bevacizumab in glioma is a real CNS-sited indication, yet the target relationship that explains it is DNA alkylation or VEGF blockade, not neurotransmission. Excluding it from the core keeps the catalogue's central claim - that a molecule's target relationships help explain brain pharmacology - honest, while the class is reported as its own admission delta so the choice stays reversible.",
+      "counter_argument": "Some agents here (e.g. drugs used for brain-tumour-associated seizures or oedema) are genuinely centrally acting. Those enter the core anyway through their own non-oncology indications."
+    },
+    {
+      "id": "peripheral_nervous_system",
+      "trees": ["C10.668.829", "C10.292"],
+      "label": "Peripheral nervous system and cranial nerve diseases",
+      "in_core": false,
+      "reason": "The prompt names peripheral nervous-system disease as a boundary to decide explicitly. A peripheral neuropathy indication does not establish that a drug acts centrally, which is the property the catalogue is about. Excluded from core and reported as its own delta.",
+      "counter_argument": "Several peripheral-neuropathy drugs (pregabalin, duloxetine, carbamazepine for trigeminal neuralgia) act on central targets and are used centrally. Nearly all of them re-enter the core through epilepsy, mood or neuropathic-pain descriptors that also carry a C10.597 placement, so the exclusion costs less than the branch size suggests. The measured re-entry is reported in indication_scope.csv."
+    },
+    {
+      "id": "muscle_and_neuromuscular_junction",
+      "trees": ["C10.668.491", "C10.668.758"],
+      "label": "Muscular diseases and neuromuscular junction diseases",
+      "in_core": false,
+      "reason": "Muscular dystrophies and myopathies are diseases of muscle, not of the nervous system, and are filed under C10 only because MeSH groups neuromuscular disease there. Their drugs act at the muscle or the junction. Excluded from core; myasthenia gravis and related autoimmune junction disease keep their C10.114 placement and stay in core under the exclusion rule above.",
+      "counter_argument": "Cholinesterase inhibitors used in myasthenia gravis share targets with the Alzheimer's drugs already central to this project. They are admitted through the autoimmune placement, so nothing is lost."
+    },
+    {
+      "id": "general_pain",
+      "trees": ["C23.888.592.612"],
+      "label": "Pain (as a sign or symptom)",
+      "in_core": false,
+      "outside_core_roots": true,
+      "reason": "Measured, not assumed: the MeSH descriptor Pain (D010146) carries tree numbers C23.888.592.612, F02.830.816.444 and G11.561.790.444, and none under C10 or F03. General pain therefore never enters the core scope by construction, and no rule is needed to keep it out. Analgesia as such is not evidence of central action - most of this branch is NSAID and local-anaesthetic pharmacology. Reported as an optional additive class.",
+      "counter_argument": "Neuropathic pain descriptors such as Neuralgia (D009437) carry BOTH C10.597.617.470 and C23.888.592.612.547, so nervous-system pain is already in core through its C10 placement while non-neurological pain is not. This is the split the report recommends keeping."
+    }
+  ],
+
+  "cumulative_variants": [
+    {"id": "S0_core", "adds": [], "label": "Core CNS scope (C10 + F03 minus excluded boundary classes)"},
+    {"id": "S1_core_plus_oncology", "adds": ["cns_oncology"], "label": "Core + CNS oncology"},
+    {"id": "S2_core_plus_pns", "adds": ["peripheral_nervous_system"], "label": "Core + peripheral/cranial nerve disease"},
+    {"id": "S3_core_plus_muscle", "adds": ["muscle_and_neuromuscular_junction"], "label": "Core + muscle and NMJ disease"},
+    {"id": "S4_core_plus_pain", "adds": ["general_pain"], "label": "Core + general pain"},
+    {"id": "S5_widest", "adds": ["cns_oncology", "peripheral_nervous_system", "muscle_and_neuromuscular_junction", "general_pain"], "label": "Widest considered scope (all of C10 + F03 + Pain)"}
+  ],
+
+  "atc": {
+    "level1": "N",
+    "label": "Nervous system",
+    "membership_rule": "A molecule is ATC-N-admitted when it, or any member of its ChEMBL compound family (molecule_hierarchy parent/child), carries an ATC level-5 code whose level1 is 'N'.",
+    "kept_whole": true,
+    "kept_whole_reason": "ATC N is reproduced entire so the report's baseline matches the brainstorming document's 521/361 query exactly. No ATC subtree is removed; boundary subtrees are flagged in the output instead of dropped.",
+    "flagged_subtrees": [
+      {
+        "code": "N01B",
+        "atc_level": "level3",
+        "label": "Anesthetics, local",
+        "flag": "peripheral_site_of_action",
+        "reason": "The prompt names local anaesthesia as a boundary. Local anaesthetics block peripheral nerve conduction at the site of application; ATC files them under N because they act on nervous tissue, not because they act centrally. Flagged in the catalogue rather than removed, because the ATC route's whole point is that it is a classification, not a verified claim of central action - and because several (lidocaine, mexiletine) have real central and cardiac target pharmacology."
+      },
+      {
+        "code": "N02B",
+        "atc_level": "level3",
+        "label": "Other analgesics and antipyretics",
+        "flag": "general_analgesic",
+        "reason": "Paracetamol, aspirin and the like. Same argument as the general_pain indication class, arriving by the ATC route instead. Flagged, not removed."
+      }
+    ]
+  }
+}

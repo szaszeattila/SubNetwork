@@ -1,0 +1,5 @@
+scenario,basis,added_measurements,affected_claims,affected_molecules,newly_measured_claims,newly_preliminary,newly_supported,previously_gap_molecules
+concentration_only,all_assignments,30,29,16,18,18,1,0
+concentration_only,human_single,6,5,5,1,1,1,0
+including_conditional_mass,all_assignments,2364,780,140,260,243,106,0
+including_conditional_mass,human_single,35,27,21,7,7,1,0

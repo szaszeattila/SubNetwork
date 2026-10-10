@@ -1,0 +1,3 @@
+# Cached source snapshots, re-created by step1_fetch_mesh.py. Not committed, so
+# the repository never carries a copy of an external release.
+cache/

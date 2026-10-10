@@ -1,0 +1,12 @@
+check,result,detail
+"1 baseline reproduction (ChEMBL 37, 521 / 361 / 15)",PASS,ATC-N small-molecule parents=521 (expected 521); with an approved family record=361 (expected 361); seeds inside ATC N=15 (expected 15)
+2 parent/salt deduplication,PASS,"2245 catalogue rows, all distinct parents; 0 rows that are a non-parent family member (expected 0); 1423 salt/hydrate/other forms folded in; theophylline CHEMBL1355736 -> parent CHEMBL190 as one row: True"
+3 admission-route union arithmetic,PASS,"13 stages checked, 0 violations of |A u B| = |A| + |B| - |A n B|"
+4 unrelated-indication approval kept distinct,PASS,"1147 candidates have an Approved record somewhere in the compound family, but only 506 are Approved *for a CNS indication*. 591 candidates are approved elsewhere while their qualifying CNS indication is below phase 4 - e.g. PRAZOSIN (CHEMBL2), family=Approved, CNS indication=Phase 3. The two are reported in separate columns and never merged."
+5 unresolved provenance never manufactures multi-study support,PASS,0 claims flagged multiple_study_support with fewer than two publication-class studies (expected 0); 0 claims reached Supported on two or more non-publication studies (expected 0)
+6 many measurements in one paper count as one study,PASS,"CHEMBL14 vs CHEMBL320: 20 qualifying Ki measurements across 20 distinct assays, all in ChEMBL doc_id 42526. The report records 1 claim-study link(s) carrying all 20 measurements, not 20 studies."
+7 documents sharing a PubMed id collapse to one study,PASS,"ChEMBL 37 holds 10 PubMed ids carried by more than one doc record. The study key resolves PubMed id first, so those doc rows collapse; 74691 of 106380 claim-study links are keyed by PubMed id."
+8 family/complex mechanisms are not fanned out to members,PASS,477 curated claims are asserted at family or complex level. Each stays one claim at the level ChEMBL asserts. Expanding them to their 3146 member components would have produced 2669 extra supported claims carrying no extra assertion.
+9 report totals match the exported records,PASS,checked 7 cross-totals against the CSVs; 0 mismatch(es)
+10 production artifacts unchanged,PASS,git reports no modification to 5 protected pipeline files
+10b generated artifacts (informational),INFO,"db/subnetwork.db: present, 1437696 bytes, mtime 1788628659; viz/graph.data.js: present, 2330003 bytes, mtime 1788630167"

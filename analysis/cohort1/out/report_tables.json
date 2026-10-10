@@ -1,0 +1,2461 @@
+{
+  "atc_boundary_flags": {
+    "general_analgesic (N02B)": 37,
+    "peripheral_site_of_action (N01B)": 20
+  },
+  "catalogue": {
+    "by_molecule_type": {
+      "Antibody": 115,
+      "Antibody drug conjugate": 1,
+      "Cell": 5,
+      "Enzyme": 32,
+      "Gene": 19,
+      "Oligonucleotide": 31,
+      "Oligosaccharide": 11,
+      "Protein": 127,
+      "Small molecule": 1771,
+      "Unknown": 117,
+      "Vaccine component": 16
+    },
+    "by_route": {
+      "atc_only": 136,
+      "both": 408,
+      "indication_only": 1701
+    },
+    "by_structure_type": {
+      "BOTH": 30,
+      "MOL": 1761,
+      "NONE": 222,
+      "SEQ": 232
+    },
+    "parents_total": 2245,
+    "small_molecule_parents": 1771,
+    "unresolved_identity_structure_none": 222,
+    "withdrawn_any_family": 78
+  },
+  "claim_tier_reasons": {
+    "censored_only": 59327,
+    "curated_no_target_assigned": 139,
+    "curated_traceable": 1859,
+    "deposited_datasets_only": 16,
+    "invalid_units_only": 293,
+    "mixed_non_publication_provenance;ambiguous_target_assignment": 11,
+    "multiple_publications_split_across_endpoint_classes": 398,
+    "multiple_publications_split_across_endpoint_classes;ambiguous_target_assignment": 345,
+    "multiple_study_support": 3236,
+    "multiple_study_support;ambiguous_target_assignment": 3919,
+    "no_qualifying_exact_measurement": 494,
+    "null_value_only": 30735,
+    "one_deposit": 475,
+    "one_deposit;ambiguous_target_assignment": 20346,
+    "one_patent": 131,
+    "one_patent;ambiguous_target_assignment": 102,
+    "one_publication": 3594,
+    "one_publication;ambiguous_target_assignment": 13049,
+    "patents_only": 31,
+    "patents_only;ambiguous_target_assignment": 5
+  },
+  "claims_by_tier": {
+    "limited_or_unresolved": 90989,
+    "preliminary": 38506,
+    "supported": 9014
+  },
+  "claims_by_tier_human_direct": {
+    "not_applicable": 130268,
+    "preliminary": 4799,
+    "supported": 3442
+  },
+  "claims_total": 138509,
+  "conflicts": {
+    "action_conflict_examples": [],
+    "action_variant_examples": [
+      {
+        "actions": "BINDING AGENT;INHIBITOR",
+        "detail": "curated actions differ at one target: BINDING AGENT;INHIBITOR",
+        "molecule": "CHLOROQUINE",
+        "target": "Ferriprotoporphyrin IX"
+      },
+      {
+        "actions": "INHIBITOR;MODULATOR",
+        "detail": "curated actions differ at one target: INHIBITOR;MODULATOR",
+        "molecule": "LENALIDOMIDE",
+        "target": "CRL4(CRBN) E3 ubiquitin ligase"
+      },
+      {
+        "actions": "AGONIST;BINDING AGENT",
+        "detail": "curated actions differ at one target: AGONIST;BINDING AGENT",
+        "molecule": "FINGOLIMOD",
+        "target": "Sphingosine 1-phosphate receptor"
+      },
+      {
+        "actions": "CHELATING AGENT;SEQUESTERING AGENT",
+        "detail": "curated actions differ at one target: CHELATING AGENT;SEQUESTERING AGENT",
+        "molecule": "DEXRAZOXANE",
+        "target": "Iron"
+      },
+      {
+        "actions": "AGONIST;PARTIAL AGONIST",
+        "detail": "curated actions differ at one target: AGONIST;PARTIAL AGONIST",
+        "molecule": "VARENICLINE",
+        "target": "Neuronal acetylcholine receptor; alpha4/beta2"
+      }
+    ],
+    "claims_with_action_conflict": 0,
+    "claims_with_action_variant_only": 5,
+    "claims_with_dispersion_conflict": 1832,
+    "dispersion_examples": [
+      {
+        "detail": "binding:Kd: 0.01023-1148 nM across 3 studies",
+        "molecule": "PRAZOSIN",
+        "n_studies": "36",
+        "role": "binding",
+        "target": "Adrenergic receptor alpha-1",
+        "tier": "supported"
+      },
+      {
+        "detail": "functional:Kd: 0.04169-4.677 nM across 14 studies",
+        "molecule": "PRAZOSIN",
+        "n_studies": "14",
+        "role": "functional",
+        "target": "Adrenergic receptor alpha-1",
+        "tier": "supported"
+      },
+      {
+        "detail": "binding:IC50: 8-5000 nM across 3 studies",
+        "molecule": "PRAZOSIN",
+        "n_studies": "17",
+        "role": "binding",
+        "target": "Adrenergic receptor alpha-2",
+        "tier": "supported"
+      },
+      {
+        "detail": "functional:Kd: 1.096-3715 nM across 7 studies",
+        "molecule": "PRAZOSIN",
+        "n_studies": "8",
+        "role": "functional",
+        "target": "Adrenergic receptor alpha-2",
+        "tier": "supported"
+      },
+      {
+        "detail": "binding:Ki: 0.027-7.943 nM across 17 studies",
+        "molecule": "PRAZOSIN",
+        "n_studies": "16",
+        "role": "binding",
+        "target": "Alpha-1B adrenergic receptor",
+        "tier": "supported"
+      },
+      {
+        "detail": "functional:IC50: 1.172e+04-1.172e+07 nM across 2 studies",
+        "molecule": "PRAZOSIN",
+        "n_studies": "2",
+        "role": "functional",
+        "target": "PC-3",
+        "tier": "supported"
+      },
+      {
+        "detail": "binding:IC50: 0.68-1.3e+04 nM across 6 studies",
+        "molecule": "PRAZOSIN",
+        "n_studies": "10",
+        "role": "binding",
+        "target": "Unchecked",
+        "tier": "supported"
+      },
+      {
+        "detail": "binding:Ki: 0.045-12.59 nM across 27 studies",
+        "molecule": "NICOTINE",
+        "n_studies": "32",
+        "role": "binding",
+        "target": "Neuronal acetylcholine receptor; alpha4/beta2",
+        "tier": "supported"
+      },
+      {
+        "detail": "functional:EC50: 1-9400 nM across 12 studies",
+        "molecule": "NICOTINE",
+        "n_studies": "12",
+        "role": "functional",
+        "target": "Neuronal acetylcholine receptor; alpha4/beta2",
+        "tier": "supported"
+      },
+      {
+        "detail": "binding:Ki: 5-1744 nM across 17 studies",
+        "molecule": "NICOTINE",
+        "n_studies": "18",
+        "role": "binding",
+        "target": "Neuronal acetylcholine receptor; alpha3/beta4",
+        "tier": "supported"
+      }
+    ],
+    "pairs_with_action_conflict": 0
+  },
+  "coverage_gaps": {
+    "approved_cns_indication": 7,
+    "by_molecule_type": {
+      "Antibody": 17,
+      "Cell": 4,
+      "Enzyme": 4,
+      "Gene": 16,
+      "Oligonucleotide": 19,
+      "Oligosaccharide": 2,
+      "Protein": 28,
+      "Small molecule": 204,
+      "Unknown": 65,
+      "Vaccine component": 2
+    },
+    "by_route": {
+      "atc_only": 47,
+      "both": 42,
+      "indication_only": 272
+    },
+    "examples": [
+      {
+        "chembl_id": "CHEMBL7010",
+        "cns_phase": "Phase 2",
+        "name": "FENCAMFAMIN",
+        "route": "both",
+        "type": "Small molecule"
+      },
+      {
+        "chembl_id": "CHEMBL7863",
+        "cns_phase": "Not applicable (ATC route only)",
+        "name": "APROBARBITAL",
+        "route": "atc_only",
+        "type": "Small molecule"
+      },
+      {
+        "chembl_id": "CHEMBL267719",
+        "cns_phase": "Not applicable (ATC route only)",
+        "name": "ALLOBARBITAL",
+        "route": "atc_only",
+        "type": "Small molecule"
+      },
+      {
+        "chembl_id": "CHEMBL13291",
+        "cns_phase": "Not applicable (ATC route only)",
+        "name": "FLUDIAZEPAM",
+        "route": "atc_only",
+        "type": "Small molecule"
+      },
+      {
+        "chembl_id": "CHEMBL279816",
+        "cns_phase": "Not applicable (ATC route only)",
+        "name": "TRICHLOROETHYLENE",
+        "route": "atc_only",
+        "type": "Small molecule"
+      },
+      {
+        "chembl_id": "CHEMBL16264",
+        "cns_phase": "Not applicable (ATC route only)",
+        "name": "ETHER",
+        "route": "atc_only",
+        "type": "Small molecule"
+      },
+      {
+        "chembl_id": "CHEMBL718",
+        "cns_phase": "Phase 1",
+        "name": "METHYLDOPA (RACEMIC)",
+        "route": "indication_only",
+        "type": "Small molecule"
+      },
+      {
+        "chembl_id": "CHEMBL45029",
+        "cns_phase": "Approved",
+        "name": "MEPHOBARBITAL",
+        "route": "both",
+        "type": "Small molecule"
+      },
+      {
+        "chembl_id": "CHEMBL46058",
+        "cns_phase": "Not applicable (ATC route only)",
+        "name": "ETHYL CHLORIDE",
+        "route": "atc_only",
+        "type": "Small molecule"
+      },
+      {
+        "chembl_id": "CHEMBL52125",
+        "cns_phase": "Phase 2",
+        "name": "CHLORPROETHAZINE",
+        "route": "both",
+        "type": "Small molecule"
+      },
+      {
+        "chembl_id": "CHEMBL64677",
+        "cns_phase": "Not applicable (ATC route only)",
+        "name": "DOXEFAZEPAM",
+        "route": "atc_only",
+        "type": "Small molecule"
+      },
+      {
+        "chembl_id": "CHEMBL85231",
+        "cns_phase": "Approved",
+        "name": "MEDIFOXAMINE",
+        "route": "both",
+        "type": "Small molecule"
+      },
+      {
+        "chembl_id": "CHEMBL91238",
+        "cns_phase": "Phase 2",
+        "name": "IPROCLOZIDE",
+        "route": "both",
+        "type": "Small molecule"
+      },
+      {
+        "chembl_id": "CHEMBL93047",
+        "cns_phase": "Unknown (ChEMBL -1)",
+        "name": "ETHADIONE",
+        "route": "both",
+        "type": "Small molecule"
+      },
+      {
+        "chembl_id": "CHEMBL92963",
+        "cns_phase": "Not applicable (ATC route only)",
+        "name": "NARCOBARBITAL",
+        "route": "atc_only",
+        "type": "Small molecule"
+      }
+    ],
+    "molecules": 361
+  },
+  "cumulative_stage_choices": {
+    "cns_indication_stage_approved_only": {
+      "note": "Indication route only, cumulative on max_phase_for_ind >= 4.0 for the qualifying CNS indication (not the molecule's max phase across unrelated conditions).",
+      "union": 506
+    },
+    "cns_indication_stage_approved_plus_phase1_2_3": {
+      "note": "Indication route only, cumulative on max_phase_for_ind >= 1.0 for the qualifying CNS indication (not the molecule's max phase across unrelated conditions).",
+      "union": 2077
+    },
+    "cns_indication_stage_approved_plus_phase2_3": {
+      "note": "Indication route only, cumulative on max_phase_for_ind >= 2.0 for the qualifying CNS indication (not the molecule's max phase across unrelated conditions).",
+      "union": 1766
+    },
+    "cns_indication_stage_approved_plus_phase3": {
+      "note": "Indication route only, cumulative on max_phase_for_ind >= 3.0 for the qualifying CNS indication (not the molecule's max phase across unrelated conditions).",
+      "union": 997
+    }
+  },
+  "curated_claim_specificity": {
+    "family_or_complex_level": 477,
+    "no_target_assigned": 139,
+    "other": 128,
+    "single_protein": 1255
+  },
+  "curated_family_level_examples": [
+    {
+      "action": "ANTAGONIST",
+      "mechanism": "Adrenergic receptor alpha-1 antagonist",
+      "molecule": "PRAZOSIN",
+      "molecule_chembl_id": "CHEMBL2",
+      "target": "Adrenergic receptor alpha-1",
+      "target_chembl_id": "CHEMBL2094251",
+      "target_type": "PROTEIN FAMILY"
+    },
+    {
+      "action": "AGONIST",
+      "mechanism": "Neuronal acetylcholine receptor; alpha4/beta2 agonist",
+      "molecule": "NICOTINE",
+      "molecule_chembl_id": "CHEMBL3",
+      "target": "Neuronal acetylcholine receptor; alpha4/beta2",
+      "target_chembl_id": "CHEMBL1907589",
+      "target_type": "PROTEIN COMPLEX"
+    },
+    {
+      "action": "INHIBITOR",
+      "mechanism": "Bacterial DNA gyrase inhibitor",
+      "molecule": "OFLOXACIN",
+      "molecule_chembl_id": "CHEMBL4",
+      "target": "Bacterial DNA gyrase",
+      "target_chembl_id": "CHEMBL2311224",
+      "target_type": "PROTEIN COMPLEX"
+    },
+    {
+      "action": "INHIBITOR",
+      "mechanism": "Cyclooxygenase inhibitor",
+      "molecule": "INDOMETHACIN",
+      "molecule_chembl_id": "CHEMBL6",
+      "target": "Cyclooxygenase",
+      "target_chembl_id": "CHEMBL2094253",
+      "target_type": "PROTEIN FAMILY"
+    },
+    {
+      "action": "INHIBITOR",
+      "mechanism": "Bacterial DNA gyrase inhibitor",
+      "molecule": "CIPROFLOXACIN",
+      "molecule_chembl_id": "CHEMBL8",
+      "target": "Bacterial DNA gyrase",
+      "target_chembl_id": "CHEMBL2311224",
+      "target_type": "PROTEIN COMPLEX"
+    },
+    {
+      "action": "INHIBITOR",
+      "mechanism": "Topoisomerase IV inhibitor",
+      "molecule": "CIPROFLOXACIN",
+      "molecule_chembl_id": "CHEMBL8",
+      "target": "Topoisomerase IV",
+      "target_chembl_id": "CHEMBL2363076",
+      "target_type": "PROTEIN COMPLEX"
+    },
+    {
+      "action": "ALLOSTERIC ANTAGONIST",
+      "mechanism": "GABA-A receptor; anion channel allosteric antagonist",
+      "molecule": "FLUMAZENIL",
+      "molecule_chembl_id": "CHEMBL407",
+      "target": "GABA-A receptor; anion channel",
+      "target_chembl_id": "CHEMBL2093872",
+      "target_type": "PROTEIN COMPLEX GROUP"
+    },
+    {
+      "action": "POSITIVE ALLOSTERIC MODULATOR",
+      "mechanism": "GABA-A receptor; anion channel positive allosteric modulator",
+      "molecule": "DIAZEPAM",
+      "molecule_chembl_id": "CHEMBL12",
+      "target": "GABA-A receptor; anion channel",
+      "target_chembl_id": "CHEMBL2093872",
+      "target_type": "PROTEIN COMPLEX GROUP"
+    },
+    {
+      "action": "NEGATIVE ALLOSTERIC MODULATOR",
+      "mechanism": "Neuronal acetylcholine receptor; alpha3/beta4 negative allosteric modulator",
+      "molecule": "MECAMYLAMINE",
+      "molecule_chembl_id": "CHEMBL267936",
+      "target": "Neuronal acetylcholine receptor; alpha3/beta4",
+      "target_chembl_id": "CHEMBL1907594",
+      "target_type": "PROTEIN COMPLEX"
+    },
+    {
+      "action": "BLOCKER",
+      "mechanism": "Sodium channel alpha subunit blocker",
+      "molecule": "PHENYTOIN",
+      "molecule_chembl_id": "CHEMBL16",
+      "target": "Sodium channel alpha subunit",
+      "target_chembl_id": "CHEMBL2331043",
+      "target_type": "PROTEIN FAMILY"
+    },
+    {
+      "action": "AGONIST",
+      "mechanism": "Adrenergic receptor alpha-2 agonist",
+      "molecule": "GUANABENZ",
+      "molecule_chembl_id": "CHEMBL420",
+      "target": "Adrenergic receptor alpha-2",
+      "target_chembl_id": "CHEMBL2095158",
+      "target_type": "PROTEIN FAMILY"
+    },
+    {
+      "action": "BLOCKER",
+      "mechanism": "Voltage-gated L-type calcium channel blocker",
+      "molecule": "VERAPAMIL",
+      "molecule_chembl_id": "CHEMBL6966",
+      "target": "Voltage-gated L-type calcium channel",
+      "target_chembl_id": "CHEMBL2095229",
+      "target_type": "PROTEIN FAMILY"
+    }
+  ],
+  "identity": {
+    "family_members_total": 3668,
+    "largest_family": 16,
+    "members_carrying_atc_but_not_parent": 11,
+    "members_carrying_indication_but_not_parent": 448,
+    "parents": 2245,
+    "parents_with_salts_or_forms": 883,
+    "seeds_not_their_own_parent": [
+      {
+        "parent_chembl_id": "CHEMBL190",
+        "seed": "theophylline",
+        "seed_chembl_id": "CHEMBL1355736"
+      }
+    ]
+  },
+  "indication_records": {
+    "boundary_only": 1408,
+    "candidate_indication_rows": 8850,
+    "in_core_scope": 7442,
+    "phase_on_qualifying_indication": {
+      "Approved": 1076,
+      "Early Phase 1": 189,
+      "Phase 1": 1342,
+      "Phase 2": 2873,
+      "Phase 3": 1955,
+      "Unknown (ChEMBL -1)": 7
+    }
+  },
+  "indication_scope": {
+    "descriptors_in_core": 974,
+    "descriptors_in_core_used_by_chembl": 359,
+    "descriptors_unresolved": 0,
+    "top_core_descriptors": [
+      {
+        "label": "Alzheimer Disease",
+        "mesh_id": "D000544",
+        "molecules": 288,
+        "rows": 306
+      },
+      {
+        "label": "Depressive Disorder",
+        "mesh_id": "D003866",
+        "molecules": 277,
+        "rows": 345
+      },
+      {
+        "label": "Schizophrenia",
+        "mesh_id": "D012559",
+        "molecules": 277,
+        "rows": 301
+      },
+      {
+        "label": "Parkinson Disease",
+        "mesh_id": "D010300",
+        "molecules": 234,
+        "rows": 253
+      },
+      {
+        "label": "Multiple Sclerosis",
+        "mesh_id": "D009103",
+        "molecules": 201,
+        "rows": 213
+      },
+      {
+        "label": "Major Depressive Disorder",
+        "mesh_id": "D003865",
+        "molecules": 191,
+        "rows": 232
+      },
+      {
+        "label": "Stroke",
+        "mesh_id": "D020521",
+        "molecules": 163,
+        "rows": 178
+      },
+      {
+        "label": "Brain Neoplasms",
+        "mesh_id": "D001932",
+        "molecules": 154,
+        "rows": 192
+      },
+      {
+        "label": "Amyotrophic Lateral Sclerosis",
+        "mesh_id": "D000690",
+        "molecules": 141,
+        "rows": 147
+      },
+      {
+        "label": "Psychotic Disorders",
+        "mesh_id": "D011618",
+        "molecules": 133,
+        "rows": 165
+      },
+      {
+        "label": "Dementia",
+        "mesh_id": "D003704",
+        "molecules": 131,
+        "rows": 140
+      },
+      {
+        "label": "Migraine Disorders",
+        "mesh_id": "D008881",
+        "molecules": 122,
+        "rows": 143
+      },
+      {
+        "label": "Bipolar Disorder",
+        "mesh_id": "D001714",
+        "molecules": 117,
+        "rows": 158
+      },
+      {
+        "label": "Epilepsy",
+        "mesh_id": "D004827",
+        "molecules": 114,
+        "rows": 131
+      },
+      {
+        "label": "Alcoholism",
+        "mesh_id": "D000437",
+        "molecules": 113,
+        "rows": 133
+      }
+    ]
+  },
+  "limited_reasons": {
+    "censored_only": 59327,
+    "curated_no_target_assigned": 139,
+    "curated_untraceable": 1,
+    "invalid_units_only": 293,
+    "no_qualifying_exact_measurement": 494,
+    "null_value_only": 30735
+  },
+  "molecule_level": {
+    "molecules_assessed": 2245,
+    "no_eligible_evidence_found": 361,
+    "with_any_curated_support": 1389,
+    "with_any_evidence": 1884,
+    "with_any_multiple_study_support": 830,
+    "with_any_qualifying_human_target_claim": 1369,
+    "with_any_supported_claim": 1555,
+    "with_only_limited_or_unresolved": 116,
+    "with_pair_supported_by_both_routes": 401,
+    "with_supported_human_direct_claim": 1125
+  },
+  "provenance": {
+    "chembl_release": "chembl_37",
+    "scope_version": "1.0.0",
+    "source_coverage_note": "ChEMBL 37 bulk release only. Absence of evidence here is absence in ChEMBL 37, not absence in the literature and not absence across the project's six production sources.",
+    "tier_rules_version": "1.0.0"
+  },
+  "route_arithmetic": [
+    {
+      "arithmetic_holds": "1",
+      "atc_n_only": "136",
+      "atc_n_total": "544",
+      "both_routes": "408",
+      "cns_indication_only": "1701",
+      "cns_indication_total": "2109",
+      "note": "Every candidate parent, any molecule_type. The catalogue as defined.",
+      "stage": "all_molecule_types",
+      "union": "2245",
+      "union_check_sum_minus_intersection": "2245"
+    },
+    {
+      "arithmetic_holds": "1",
+      "atc_n_only": "132",
+      "atc_n_total": "521",
+      "both_routes": "389",
+      "cns_indication_only": "1250",
+      "cns_indication_total": "1639",
+      "note": "Restricted to parents whose molecule_type is 'Small molecule' - the main comparison, and the same filter the 521 baseline used.",
+      "stage": "small_molecules_only",
+      "union": "1771",
+      "union_check_sum_minus_intersection": "1771"
+    },
+    {
+      "arithmetic_holds": "1",
+      "atc_n_only": "65",
+      "atc_n_total": "361",
+      "both_routes": "296",
+      "cns_indication_only": "591",
+      "cns_indication_total": "887",
+      "note": "Small-molecule parents with any max_phase=4 record in the compound family. ChEMBL's 4 labels Approved; it is not proof of current jurisdiction-specific approval or of a completed Phase IV trial.",
+      "stage": "small_molecules_approved_family",
+      "union": "952",
+      "union_check_sum_minus_intersection": "952"
+    },
+    {
+      "arithmetic_holds": "1",
+      "atc_n_only": "0",
+      "atc_n_total": "0",
+      "both_routes": "0",
+      "cns_indication_only": "506",
+      "cns_indication_total": "506",
+      "note": "Indication route only, cumulative on max_phase_for_ind >= 4.0 for the qualifying CNS indication (not the molecule's max phase across unrelated conditions).",
+      "stage": "cns_indication_stage_approved_only",
+      "union": "506",
+      "union_check_sum_minus_intersection": "506"
+    },
+    {
+      "arithmetic_holds": "1",
+      "atc_n_only": "0",
+      "atc_n_total": "0",
+      "both_routes": "0",
+      "cns_indication_only": "997",
+      "cns_indication_total": "997",
+      "note": "Indication route only, cumulative on max_phase_for_ind >= 3.0 for the qualifying CNS indication (not the molecule's max phase across unrelated conditions).",
+      "stage": "cns_indication_stage_approved_plus_phase3",
+      "union": "997",
+      "union_check_sum_minus_intersection": "997"
+    },
+    {
+      "arithmetic_holds": "1",
+      "atc_n_only": "0",
+      "atc_n_total": "0",
+      "both_routes": "0",
+      "cns_indication_only": "1766",
+      "cns_indication_total": "1766",
+      "note": "Indication route only, cumulative on max_phase_for_ind >= 2.0 for the qualifying CNS indication (not the molecule's max phase across unrelated conditions).",
+      "stage": "cns_indication_stage_approved_plus_phase2_3",
+      "union": "1766",
+      "union_check_sum_minus_intersection": "1766"
+    },
+    {
+      "arithmetic_holds": "1",
+      "atc_n_only": "0",
+      "atc_n_total": "0",
+      "both_routes": "0",
+      "cns_indication_only": "2077",
+      "cns_indication_total": "2077",
+      "note": "Indication route only, cumulative on max_phase_for_ind >= 1.0 for the qualifying CNS indication (not the molecule's max phase across unrelated conditions).",
+      "stage": "cns_indication_stage_approved_plus_phase1_2_3",
+      "union": "2077",
+      "union_check_sum_minus_intersection": "2077"
+    },
+    {
+      "arithmetic_holds": "1",
+      "atc_n_only": "136",
+      "atc_n_total": "544",
+      "both_routes": "408",
+      "cns_indication_only": "1701",
+      "cns_indication_total": "2109",
+      "note": "Core CNS scope (C10 + F03 minus excluded boundary classes)",
+      "stage": "scope_variant_S0_core",
+      "union": "2245",
+      "union_check_sum_minus_intersection": "2245"
+    },
+    {
+      "arithmetic_holds": "1",
+      "atc_n_only": "136",
+      "atc_n_total": "544",
+      "both_routes": "408",
+      "cns_indication_only": "1779",
+      "cns_indication_total": "2187",
+      "note": "Core + CNS oncology",
+      "stage": "scope_variant_S1_core_plus_oncology",
+      "union": "2323",
+      "union_check_sum_minus_intersection": "2323"
+    },
+    {
+      "arithmetic_holds": "1",
+      "atc_n_only": "132",
+      "atc_n_total": "544",
+      "both_routes": "412",
+      "cns_indication_only": "1786",
+      "cns_indication_total": "2198",
+      "note": "Core + peripheral/cranial nerve disease",
+      "stage": "scope_variant_S2_core_plus_pns",
+      "union": "2330",
+      "union_check_sum_minus_intersection": "2330"
+    },
+    {
+      "arithmetic_holds": "1",
+      "atc_n_only": "134",
+      "atc_n_total": "544",
+      "both_routes": "410",
+      "cns_indication_only": "1794",
+      "cns_indication_total": "2204",
+      "note": "Core + muscle and NMJ disease",
+      "stage": "scope_variant_S3_core_plus_muscle",
+      "union": "2338",
+      "union_check_sum_minus_intersection": "2338"
+    },
+    {
+      "arithmetic_holds": "1",
+      "atc_n_only": "87",
+      "atc_n_total": "544",
+      "both_routes": "457",
+      "cns_indication_only": "1901",
+      "cns_indication_total": "2358",
+      "note": "Core + general pain",
+      "stage": "scope_variant_S4_core_plus_pain",
+      "union": "2445",
+      "union_check_sum_minus_intersection": "2445"
+    },
+    {
+      "arithmetic_holds": "1",
+      "atc_n_only": "87",
+      "atc_n_total": "544",
+      "both_routes": "457",
+      "cns_indication_only": "2067",
+      "cns_indication_total": "2524",
+      "note": "Widest considered scope (all of C10 + F03 + Pain)",
+      "stage": "scope_variant_S5_widest",
+      "union": "2611",
+      "union_check_sum_minus_intersection": "2611"
+    }
+  ],
+  "scope_variants": {
+    "S0_core": {
+      "cns_indication_total": 2109,
+      "delta_vs_core": 0,
+      "label": "Core CNS scope (C10 + F03 minus excluded boundary classes)",
+      "union": 2245
+    },
+    "S1_core_plus_oncology": {
+      "cns_indication_total": 2187,
+      "delta_vs_core": 78,
+      "label": "Core + CNS oncology",
+      "union": 2323
+    },
+    "S2_core_plus_pns": {
+      "cns_indication_total": 2198,
+      "delta_vs_core": 85,
+      "label": "Core + peripheral/cranial nerve disease",
+      "union": 2330
+    },
+    "S3_core_plus_muscle": {
+      "cns_indication_total": 2204,
+      "delta_vs_core": 93,
+      "label": "Core + muscle and NMJ disease",
+      "union": 2338
+    },
+    "S4_core_plus_pain": {
+      "cns_indication_total": 2358,
+      "delta_vs_core": 200,
+      "label": "Core + general pain",
+      "union": 2445
+    },
+    "S5_widest": {
+      "cns_indication_total": 2524,
+      "delta_vs_core": 366,
+      "label": "Widest considered scope (all of C10 + F03 + Pain)",
+      "union": 2611
+    }
+  },
+  "seeds": {
+    "by_route": {
+      "both": 15,
+      "indication_only": 10,
+      "not_admitted": 3
+    },
+    "excluded": [
+      {
+        "chembl_id": "CHEMBL1114",
+        "name": "theobromine",
+        "reason": "excluded: has indication records, none inside the considered CNS scope"
+      },
+      {
+        "chembl_id": "CHEMBL841",
+        "name": "loperamide",
+        "reason": "excluded: indications fall only in boundary classes general_pain"
+      },
+      {
+        "chembl_id": "CHEMBL45816",
+        "name": "mibefradil",
+        "reason": "excluded: indications fall only in boundary classes cns_oncology"
+      }
+    ],
+    "in_catalogue": 25,
+    "rows": [
+      {
+        "admission_or_exclusion_reason": "ATC N (N06BC01); core CNS indication (18 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "4",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "207",
+        "n_curated_support": "1",
+        "n_limited_or_unresolved": "152",
+        "n_multiple_study_support": "20",
+        "n_preliminary": "34",
+        "n_supported": "21",
+        "n_supported_human_direct": "10",
+        "parent_chembl_id": "CHEMBL113",
+        "route_atc_n": "1",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL113",
+        "seed_is_parent": "1",
+        "seed_name": "caffeine"
+      },
+      {
+        "admission_or_exclusion_reason": "core CNS indication (2 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "1",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "212",
+        "n_curated_support": "3",
+        "n_limited_or_unresolved": "163",
+        "n_multiple_study_support": "24",
+        "n_preliminary": "22",
+        "n_supported": "27",
+        "n_supported_human_direct": "6",
+        "parent_chembl_id": "CHEMBL190",
+        "route_atc_n": "0",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL1355736",
+        "seed_is_parent": "0",
+        "seed_name": "theophylline"
+      },
+      {
+        "admission_or_exclusion_reason": "excluded: has indication records, none inside the considered CNS scope",
+        "any_qualifying_human_target_claim": "",
+        "cns_ind_max_phase": "",
+        "evidence_status": "not assessed - outside the catalogue",
+        "in_catalogue": "0",
+        "n_claims": "not assessed - not in catalogue",
+        "n_curated_support": "",
+        "n_limited_or_unresolved": "",
+        "n_multiple_study_support": "",
+        "n_preliminary": "",
+        "n_supported": "",
+        "n_supported_human_direct": "",
+        "parent_chembl_id": "CHEMBL1114",
+        "route_atc_n": "0",
+        "route_cns_indication": "0",
+        "seed_chembl_id": "CHEMBL1114",
+        "seed_is_parent": "1",
+        "seed_name": "theobromine"
+      },
+      {
+        "admission_or_exclusion_reason": "ATC N (N04CX01); core CNS indication (3 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "4",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "50",
+        "n_curated_support": "1",
+        "n_limited_or_unresolved": "37",
+        "n_multiple_study_support": "7",
+        "n_preliminary": "5",
+        "n_supported": "8",
+        "n_supported_human_direct": "6",
+        "parent_chembl_id": "CHEMBL431770",
+        "route_atc_n": "1",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL431770",
+        "seed_is_parent": "1",
+        "seed_name": "istradefylline"
+      },
+      {
+        "admission_or_exclusion_reason": "core CNS indication (5 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "2",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "58",
+        "n_curated_support": "1",
+        "n_limited_or_unresolved": "29",
+        "n_multiple_study_support": "16",
+        "n_preliminary": "12",
+        "n_supported": "17",
+        "n_supported_human_direct": "5",
+        "parent_chembl_id": "CHEMBL63",
+        "route_atc_n": "0",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL63",
+        "seed_is_parent": "1",
+        "seed_name": "rolipram"
+      },
+      {
+        "admission_or_exclusion_reason": "core CNS indication (7 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "3",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "163",
+        "n_curated_support": "1",
+        "n_limited_or_unresolved": "145",
+        "n_multiple_study_support": "4",
+        "n_preliminary": "13",
+        "n_supported": "5",
+        "n_supported_human_direct": "2",
+        "parent_chembl_id": "CHEMBL799",
+        "route_atc_n": "0",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL799",
+        "seed_is_parent": "1",
+        "seed_name": "cilostazol"
+      },
+      {
+        "admission_or_exclusion_reason": "ATC N (N06DA02); core CNS indication (24 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "4",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "141",
+        "n_curated_support": "1",
+        "n_limited_or_unresolved": "89",
+        "n_multiple_study_support": "20",
+        "n_preliminary": "31",
+        "n_supported": "21",
+        "n_supported_human_direct": "8",
+        "parent_chembl_id": "CHEMBL502",
+        "route_atc_n": "1",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL502",
+        "seed_is_parent": "1",
+        "seed_name": "donepezil"
+      },
+      {
+        "admission_or_exclusion_reason": "core CNS indication (8 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "2",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "157",
+        "n_curated_support": "2",
+        "n_limited_or_unresolved": "145",
+        "n_multiple_study_support": "0",
+        "n_preliminary": "10",
+        "n_supported": "2",
+        "n_supported_human_direct": "0",
+        "parent_chembl_id": "CHEMBL628",
+        "route_atc_n": "0",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL628",
+        "seed_is_parent": "1",
+        "seed_name": "pentoxifylline"
+      },
+      {
+        "admission_or_exclusion_reason": "core CNS indication (13 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "4",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "202",
+        "n_curated_support": "1",
+        "n_limited_or_unresolved": "149",
+        "n_multiple_study_support": "22",
+        "n_preliminary": "30",
+        "n_supported": "23",
+        "n_supported_human_direct": "8",
+        "parent_chembl_id": "CHEMBL192",
+        "route_atc_n": "0",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL192",
+        "seed_is_parent": "1",
+        "seed_name": "sildenafil"
+      },
+      {
+        "admission_or_exclusion_reason": "core CNS indication (3 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "3",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "244",
+        "n_curated_support": "1",
+        "n_limited_or_unresolved": "150",
+        "n_multiple_study_support": "32",
+        "n_preliminary": "61",
+        "n_supported": "33",
+        "n_supported_human_direct": "5",
+        "parent_chembl_id": "CHEMBL6966",
+        "route_atc_n": "0",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL6966",
+        "seed_is_parent": "1",
+        "seed_name": "verapamil"
+      },
+      {
+        "admission_or_exclusion_reason": "ATC N (N06DA03); core CNS indication (17 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "4",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "24",
+        "n_curated_support": "1",
+        "n_limited_or_unresolved": "7",
+        "n_multiple_study_support": "10",
+        "n_preliminary": "6",
+        "n_supported": "11",
+        "n_supported_human_direct": "2",
+        "parent_chembl_id": "CHEMBL636",
+        "route_atc_n": "1",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL636",
+        "seed_is_parent": "1",
+        "seed_name": "rivastigmine"
+      },
+      {
+        "admission_or_exclusion_reason": "ATC N (N06DA01); core CNS indication (2 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "4",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "192",
+        "n_curated_support": "1",
+        "n_limited_or_unresolved": "131",
+        "n_multiple_study_support": "18",
+        "n_preliminary": "42",
+        "n_supported": "19",
+        "n_supported_human_direct": "2",
+        "parent_chembl_id": "CHEMBL95",
+        "route_atc_n": "1",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL95",
+        "seed_is_parent": "1",
+        "seed_name": "tacrine"
+      },
+      {
+        "admission_or_exclusion_reason": "ATC N (N04BD01); core CNS indication (10 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "4",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "170",
+        "n_curated_support": "1",
+        "n_limited_or_unresolved": "154",
+        "n_multiple_study_support": "8",
+        "n_preliminary": "7",
+        "n_supported": "9",
+        "n_supported_human_direct": "3",
+        "parent_chembl_id": "CHEMBL972",
+        "route_atc_n": "1",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL972",
+        "seed_is_parent": "1",
+        "seed_name": "selegiline"
+      },
+      {
+        "admission_or_exclusion_reason": "ATC N (N03AX24); core CNS indication (43 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "4",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "123",
+        "n_curated_support": "1",
+        "n_limited_or_unresolved": "34",
+        "n_multiple_study_support": "15",
+        "n_preliminary": "73",
+        "n_supported": "16",
+        "n_supported_human_direct": "6",
+        "parent_chembl_id": "CHEMBL190461",
+        "route_atc_n": "1",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL190461",
+        "seed_is_parent": "1",
+        "seed_name": "cannabidiol"
+      },
+      {
+        "admission_or_exclusion_reason": "ATC N (N05AD01); core CNS indication (16 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "4",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "269",
+        "n_curated_support": "2",
+        "n_limited_or_unresolved": "140",
+        "n_multiple_study_support": "48",
+        "n_preliminary": "79",
+        "n_supported": "50",
+        "n_supported_human_direct": "21",
+        "parent_chembl_id": "CHEMBL54",
+        "route_atc_n": "1",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL54",
+        "seed_is_parent": "1",
+        "seed_name": "haloperidol"
+      },
+      {
+        "admission_or_exclusion_reason": "ATC N (N05AH02); core CNS indication (7 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "4",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "256",
+        "n_curated_support": "2",
+        "n_limited_or_unresolved": "123",
+        "n_multiple_study_support": "51",
+        "n_preliminary": "80",
+        "n_supported": "53",
+        "n_supported_human_direct": "24",
+        "parent_chembl_id": "CHEMBL42",
+        "route_atc_n": "1",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL42",
+        "seed_is_parent": "1",
+        "seed_name": "clozapine"
+      },
+      {
+        "admission_or_exclusion_reason": "ATC N (N06AA09); core CNS indication (6 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "4",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "195",
+        "n_curated_support": "2",
+        "n_limited_or_unresolved": "116",
+        "n_multiple_study_support": "6",
+        "n_preliminary": "71",
+        "n_supported": "8",
+        "n_supported_human_direct": "7",
+        "parent_chembl_id": "CHEMBL629",
+        "route_atc_n": "1",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL629",
+        "seed_is_parent": "1",
+        "seed_name": "amitriptyline"
+      },
+      {
+        "admission_or_exclusion_reason": "excluded: indications fall only in boundary classes general_pain",
+        "any_qualifying_human_target_claim": "",
+        "cns_ind_max_phase": "",
+        "evidence_status": "not assessed - outside the catalogue",
+        "in_catalogue": "0",
+        "n_claims": "not assessed - not in catalogue",
+        "n_curated_support": "",
+        "n_limited_or_unresolved": "",
+        "n_multiple_study_support": "",
+        "n_preliminary": "",
+        "n_supported": "",
+        "n_supported_human_direct": "",
+        "parent_chembl_id": "CHEMBL841",
+        "route_atc_n": "0",
+        "route_cns_indication": "0",
+        "seed_chembl_id": "CHEMBL841",
+        "seed_is_parent": "1",
+        "seed_name": "loperamide"
+      },
+      {
+        "admission_or_exclusion_reason": "ATC N (N07XX59); core CNS indication (19 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "3",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "170",
+        "n_curated_support": "2",
+        "n_limited_or_unresolved": "140",
+        "n_multiple_study_support": "3",
+        "n_preliminary": "25",
+        "n_supported": "5",
+        "n_supported_human_direct": "3",
+        "parent_chembl_id": "CHEMBL52440",
+        "route_atc_n": "1",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL52440",
+        "seed_is_parent": "1",
+        "seed_name": "dextromethorphan"
+      },
+      {
+        "admission_or_exclusion_reason": "ATC N (N06DX01); core CNS indication (32 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "4",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "104",
+        "n_curated_support": "1",
+        "n_limited_or_unresolved": "78",
+        "n_multiple_study_support": "10",
+        "n_preliminary": "15",
+        "n_supported": "11",
+        "n_supported_human_direct": "1",
+        "parent_chembl_id": "CHEMBL807",
+        "route_atc_n": "1",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL807",
+        "seed_is_parent": "1",
+        "seed_name": "memantine"
+      },
+      {
+        "admission_or_exclusion_reason": "ATC N (N03AX09); core CNS indication (21 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "4",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "174",
+        "n_curated_support": "1",
+        "n_limited_or_unresolved": "150",
+        "n_multiple_study_support": "5",
+        "n_preliminary": "18",
+        "n_supported": "6",
+        "n_supported_human_direct": "2",
+        "parent_chembl_id": "CHEMBL741",
+        "route_atc_n": "1",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL741",
+        "seed_is_parent": "1",
+        "seed_name": "lamotrigine"
+      },
+      {
+        "admission_or_exclusion_reason": "core CNS indication (2 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "4",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "169",
+        "n_curated_support": "2",
+        "n_limited_or_unresolved": "128",
+        "n_multiple_study_support": "6",
+        "n_preliminary": "33",
+        "n_supported": "8",
+        "n_supported_human_direct": "2",
+        "parent_chembl_id": "CHEMBL932",
+        "route_atc_n": "0",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL932",
+        "seed_is_parent": "1",
+        "seed_name": "dipyridamole"
+      },
+      {
+        "admission_or_exclusion_reason": "core CNS indication (2 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "4",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "51",
+        "n_curated_support": "1",
+        "n_limited_or_unresolved": "23",
+        "n_multiple_study_support": "8",
+        "n_preliminary": "19",
+        "n_supported": "9",
+        "n_supported_human_direct": "5",
+        "parent_chembl_id": "CHEMBL1520",
+        "route_atc_n": "0",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL1520",
+        "seed_is_parent": "1",
+        "seed_name": "vardenafil"
+      },
+      {
+        "admission_or_exclusion_reason": "core CNS indication (20 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "3",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "30",
+        "n_curated_support": "1",
+        "n_limited_or_unresolved": "2",
+        "n_multiple_study_support": "11",
+        "n_preliminary": "16",
+        "n_supported": "12",
+        "n_supported_human_direct": "6",
+        "parent_chembl_id": "CHEMBL465",
+        "route_atc_n": "0",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL465",
+        "seed_is_parent": "1",
+        "seed_name": "dronabinol"
+      },
+      {
+        "admission_or_exclusion_reason": "ATC N (N06AF03); core CNS indication (1 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "4",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "140",
+        "n_curated_support": "1",
+        "n_limited_or_unresolved": "115",
+        "n_multiple_study_support": "2",
+        "n_preliminary": "22",
+        "n_supported": "3",
+        "n_supported_human_direct": "2",
+        "parent_chembl_id": "CHEMBL1089",
+        "route_atc_n": "1",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL1089",
+        "seed_is_parent": "1",
+        "seed_name": "phenelzine"
+      },
+      {
+        "admission_or_exclusion_reason": "core CNS indication (6 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "3",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "108",
+        "n_curated_support": "1",
+        "n_limited_or_unresolved": "57",
+        "n_multiple_study_support": "7",
+        "n_preliminary": "43",
+        "n_supported": "8",
+        "n_supported_human_direct": "2",
+        "parent_chembl_id": "CHEMBL1294",
+        "route_atc_n": "0",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL1294",
+        "seed_is_parent": "1",
+        "seed_name": "quinidine"
+      },
+      {
+        "admission_or_exclusion_reason": "ATC N (N06DA04); core CNS indication (16 MeSH terms)",
+        "any_qualifying_human_target_claim": "1",
+        "cns_ind_max_phase": "4",
+        "evidence_status": "assessed_with_evidence",
+        "in_catalogue": "1",
+        "n_claims": "150",
+        "n_curated_support": "1",
+        "n_limited_or_unresolved": "133",
+        "n_multiple_study_support": "9",
+        "n_preliminary": "7",
+        "n_supported": "10",
+        "n_supported_human_direct": "3",
+        "parent_chembl_id": "CHEMBL659",
+        "route_atc_n": "1",
+        "route_cns_indication": "1",
+        "seed_chembl_id": "CHEMBL659",
+        "seed_is_parent": "1",
+        "seed_name": "galantamine"
+      },
+      {
+        "admission_or_exclusion_reason": "excluded: indications fall only in boundary classes cns_oncology",
+        "any_qualifying_human_target_claim": "",
+        "cns_ind_max_phase": "",
+        "evidence_status": "not assessed - outside the catalogue",
+        "in_catalogue": "0",
+        "n_claims": "not assessed - not in catalogue",
+        "n_curated_support": "",
+        "n_limited_or_unresolved": "",
+        "n_multiple_study_support": "",
+        "n_preliminary": "",
+        "n_supported": "",
+        "n_supported_human_direct": "",
+        "parent_chembl_id": "CHEMBL45816",
+        "route_atc_n": "0",
+        "route_cns_indication": "0",
+        "seed_chembl_id": "CHEMBL45816",
+        "seed_is_parent": "1",
+        "seed_name": "mibefradil"
+      }
+    ],
+    "total": 28,
+    "with_supported_human_direct": 24
+  },
+  "specificity": {
+    "homologous_or_unknown_species": 78928,
+    "human_curated": 1738,
+    "human_direct_complex": 430,
+    "human_direct_single_protein": 22003,
+    "human_direct_single_protein_mutant": 49,
+    "human_family_or_multiple": 571,
+    "no_target_assigned": 139,
+    "non_protein_or_unassigned": 25499,
+    "nonhuman": 9001,
+    "nonhuman_or_unknown_curated": 122,
+    "other": 29
+  },
+  "stage_breakdown": [
+    {
+      "n_molecules": 1147,
+      "phase_basis": "family_max_phase",
+      "stage": "Approved",
+      "subset": "all_candidates"
+    },
+    {
+      "n_molecules": 386,
+      "phase_basis": "family_max_phase",
+      "stage": "Phase 3",
+      "subset": "all_candidates"
+    },
+    {
+      "n_molecules": 591,
+      "phase_basis": "family_max_phase",
+      "stage": "Phase 2",
+      "subset": "all_candidates"
+    },
+    {
+      "n_molecules": 101,
+      "phase_basis": "family_max_phase",
+      "stage": "Phase 1",
+      "subset": "all_candidates"
+    },
+    {
+      "n_molecules": 1,
+      "phase_basis": "family_max_phase",
+      "stage": "Early Phase 1",
+      "subset": "all_candidates"
+    },
+    {
+      "n_molecules": 19,
+      "phase_basis": "family_max_phase",
+      "stage": "Unknown (ChEMBL -1)",
+      "subset": "all_candidates"
+    },
+    {
+      "n_molecules": 506,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Approved",
+      "subset": "all_candidates"
+    },
+    {
+      "n_molecules": 491,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Phase 3",
+      "subset": "all_candidates"
+    },
+    {
+      "n_molecules": 769,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Phase 2",
+      "subset": "all_candidates"
+    },
+    {
+      "n_molecules": 311,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Phase 1",
+      "subset": "all_candidates"
+    },
+    {
+      "n_molecules": 25,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Early Phase 1",
+      "subset": "all_candidates"
+    },
+    {
+      "n_molecules": 7,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Unknown (ChEMBL -1)",
+      "subset": "all_candidates"
+    },
+    {
+      "n_molecules": 136,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Not applicable (ATC route only)",
+      "subset": "all_candidates"
+    },
+    {
+      "n_molecules": 952,
+      "phase_basis": "family_max_phase",
+      "stage": "Approved",
+      "subset": "small_molecules"
+    },
+    {
+      "n_molecules": 263,
+      "phase_basis": "family_max_phase",
+      "stage": "Phase 3",
+      "subset": "small_molecules"
+    },
+    {
+      "n_molecules": 471,
+      "phase_basis": "family_max_phase",
+      "stage": "Phase 2",
+      "subset": "small_molecules"
+    },
+    {
+      "n_molecules": 66,
+      "phase_basis": "family_max_phase",
+      "stage": "Phase 1",
+      "subset": "small_molecules"
+    },
+    {
+      "n_molecules": 1,
+      "phase_basis": "family_max_phase",
+      "stage": "Early Phase 1",
+      "subset": "small_molecules"
+    },
+    {
+      "n_molecules": 18,
+      "phase_basis": "family_max_phase",
+      "stage": "Unknown (ChEMBL -1)",
+      "subset": "small_molecules"
+    },
+    {
+      "n_molecules": 434,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Approved",
+      "subset": "small_molecules"
+    },
+    {
+      "n_molecules": 357,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Phase 3",
+      "subset": "small_molecules"
+    },
+    {
+      "n_molecules": 607,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Phase 2",
+      "subset": "small_molecules"
+    },
+    {
+      "n_molecules": 216,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Phase 1",
+      "subset": "small_molecules"
+    },
+    {
+      "n_molecules": 18,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Early Phase 1",
+      "subset": "small_molecules"
+    },
+    {
+      "n_molecules": 7,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Unknown (ChEMBL -1)",
+      "subset": "small_molecules"
+    },
+    {
+      "n_molecules": 132,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Not applicable (ATC route only)",
+      "subset": "small_molecules"
+    },
+    {
+      "n_molecules": 373,
+      "phase_basis": "family_max_phase",
+      "stage": "Approved",
+      "subset": "atc_n_route"
+    },
+    {
+      "n_molecules": 38,
+      "phase_basis": "family_max_phase",
+      "stage": "Phase 3",
+      "subset": "atc_n_route"
+    },
+    {
+      "n_molecules": 112,
+      "phase_basis": "family_max_phase",
+      "stage": "Phase 2",
+      "subset": "atc_n_route"
+    },
+    {
+      "n_molecules": 2,
+      "phase_basis": "family_max_phase",
+      "stage": "Phase 1",
+      "subset": "atc_n_route"
+    },
+    {
+      "n_molecules": 19,
+      "phase_basis": "family_max_phase",
+      "stage": "Unknown (ChEMBL -1)",
+      "subset": "atc_n_route"
+    },
+    {
+      "n_molecules": 289,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Approved",
+      "subset": "atc_n_route"
+    },
+    {
+      "n_molecules": 46,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Phase 3",
+      "subset": "atc_n_route"
+    },
+    {
+      "n_molecules": 63,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Phase 2",
+      "subset": "atc_n_route"
+    },
+    {
+      "n_molecules": 2,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Phase 1",
+      "subset": "atc_n_route"
+    },
+    {
+      "n_molecules": 1,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Early Phase 1",
+      "subset": "atc_n_route"
+    },
+    {
+      "n_molecules": 7,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Unknown (ChEMBL -1)",
+      "subset": "atc_n_route"
+    },
+    {
+      "n_molecules": 136,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Not applicable (ATC route only)",
+      "subset": "atc_n_route"
+    },
+    {
+      "n_molecules": 1081,
+      "phase_basis": "family_max_phase",
+      "stage": "Approved",
+      "subset": "cns_indication_route"
+    },
+    {
+      "n_molecules": 379,
+      "phase_basis": "family_max_phase",
+      "stage": "Phase 3",
+      "subset": "cns_indication_route"
+    },
+    {
+      "n_molecules": 541,
+      "phase_basis": "family_max_phase",
+      "stage": "Phase 2",
+      "subset": "cns_indication_route"
+    },
+    {
+      "n_molecules": 100,
+      "phase_basis": "family_max_phase",
+      "stage": "Phase 1",
+      "subset": "cns_indication_route"
+    },
+    {
+      "n_molecules": 1,
+      "phase_basis": "family_max_phase",
+      "stage": "Early Phase 1",
+      "subset": "cns_indication_route"
+    },
+    {
+      "n_molecules": 7,
+      "phase_basis": "family_max_phase",
+      "stage": "Unknown (ChEMBL -1)",
+      "subset": "cns_indication_route"
+    },
+    {
+      "n_molecules": 506,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Approved",
+      "subset": "cns_indication_route"
+    },
+    {
+      "n_molecules": 491,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Phase 3",
+      "subset": "cns_indication_route"
+    },
+    {
+      "n_molecules": 769,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Phase 2",
+      "subset": "cns_indication_route"
+    },
+    {
+      "n_molecules": 311,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Phase 1",
+      "subset": "cns_indication_route"
+    },
+    {
+      "n_molecules": 25,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Early Phase 1",
+      "subset": "cns_indication_route"
+    },
+    {
+      "n_molecules": 7,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Unknown (ChEMBL -1)",
+      "subset": "cns_indication_route"
+    },
+    {
+      "n_molecules": 307,
+      "phase_basis": "family_max_phase",
+      "stage": "Approved",
+      "subset": "both_routes"
+    },
+    {
+      "n_molecules": 31,
+      "phase_basis": "family_max_phase",
+      "stage": "Phase 3",
+      "subset": "both_routes"
+    },
+    {
+      "n_molecules": 62,
+      "phase_basis": "family_max_phase",
+      "stage": "Phase 2",
+      "subset": "both_routes"
+    },
+    {
+      "n_molecules": 1,
+      "phase_basis": "family_max_phase",
+      "stage": "Phase 1",
+      "subset": "both_routes"
+    },
+    {
+      "n_molecules": 7,
+      "phase_basis": "family_max_phase",
+      "stage": "Unknown (ChEMBL -1)",
+      "subset": "both_routes"
+    },
+    {
+      "n_molecules": 289,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Approved",
+      "subset": "both_routes"
+    },
+    {
+      "n_molecules": 46,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Phase 3",
+      "subset": "both_routes"
+    },
+    {
+      "n_molecules": 63,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Phase 2",
+      "subset": "both_routes"
+    },
+    {
+      "n_molecules": 2,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Phase 1",
+      "subset": "both_routes"
+    },
+    {
+      "n_molecules": 1,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Early Phase 1",
+      "subset": "both_routes"
+    },
+    {
+      "n_molecules": 7,
+      "phase_basis": "cns_indication_max_phase_for_ind",
+      "stage": "Unknown (ChEMBL -1)",
+      "subset": "both_routes"
+    }
+  ],
+  "support_routes": {
+    "claims_curated_support": 1859,
+    "claims_multiple_study_support": 7155,
+    "claims_multiple_study_support_human_direct": 2247,
+    "pairs_both_routes": 538,
+    "pairs_curated_only": 1321,
+    "pairs_multiple_study_only": 6138,
+    "pairs_neither": 118199,
+    "pairs_total": 126196
+  },
+  "target_coverage": {
+    "accessions_new_vs_graph": 3544,
+    "by_family": [
+      {
+        "n_claims": 42956,
+        "n_supported_claims": 2586,
+        "n_targets": 1737,
+        "n_targets_not_in_current_graph": 1662,
+        "target_family_l1": "Enzyme"
+      },
+      {
+        "n_claims": 26749,
+        "n_supported_claims": 2568,
+        "n_targets": 1495,
+        "n_targets_not_in_current_graph": 1495,
+        "target_family_l1": "(unclassified)"
+      },
+      {
+        "n_claims": 47974,
+        "n_supported_claims": 2051,
+        "n_targets": 524,
+        "n_targets_not_in_current_graph": 445,
+        "target_family_l1": "Membrane receptor"
+      },
+      {
+        "n_claims": 7434,
+        "n_supported_claims": 692,
+        "n_targets": 306,
+        "n_targets_not_in_current_graph": 237,
+        "target_family_l1": "Ion channel"
+      },
+      {
+        "n_claims": 4850,
+        "n_supported_claims": 372,
+        "n_targets": 159,
+        "n_targets_not_in_current_graph": 146,
+        "target_family_l1": "Transporter"
+      },
+      {
+        "n_claims": 1224,
+        "n_supported_claims": 72,
+        "n_targets": 152,
+        "n_targets_not_in_current_graph": 145,
+        "target_family_l1": "Unclassified protein"
+      },
+      {
+        "n_claims": 5877,
+        "n_supported_claims": 251,
+        "n_targets": 125,
+        "n_targets_not_in_current_graph": 119,
+        "target_family_l1": "Transcription factor"
+      },
+      {
+        "n_claims": 355,
+        "n_supported_claims": 119,
+        "n_targets": 86,
+        "n_targets_not_in_current_graph": 84,
+        "target_family_l1": "Epigenetic regulator"
+      },
+      {
+        "n_claims": 151,
+        "n_supported_claims": 77,
+        "n_targets": 55,
+        "n_targets_not_in_current_graph": 54,
+        "target_family_l1": "Secreted protein"
+      },
+      {
+        "n_claims": 120,
+        "n_supported_claims": 34,
+        "n_targets": 43,
+        "n_targets_not_in_current_graph": 40,
+        "target_family_l1": "Other cytosolic protein"
+      },
+      {
+        "n_claims": 138,
+        "n_supported_claims": 34,
+        "n_targets": 27,
+        "n_targets_not_in_current_graph": 26,
+        "target_family_l1": "Enzyme;Other cytosolic protein"
+      },
+      {
+        "n_claims": 39,
+        "n_supported_claims": 10,
+        "n_targets": 20,
+        "n_targets_not_in_current_graph": 20,
+        "target_family_l1": "Enzyme;Transporter"
+      },
+      {
+        "n_claims": 35,
+        "n_supported_claims": 15,
+        "n_targets": 19,
+        "n_targets_not_in_current_graph": 16,
+        "target_family_l1": "Enzyme;Unclassified protein"
+      },
+      {
+        "n_claims": 61,
+        "n_supported_claims": 33,
+        "n_targets": 18,
+        "n_targets_not_in_current_graph": 18,
+        "target_family_l1": "Structural protein"
+      },
+      {
+        "n_claims": 37,
+        "n_supported_claims": 14,
+        "n_targets": 16,
+        "n_targets_not_in_current_graph": 16,
+        "target_family_l1": "Surface antigen"
+      },
+      {
+        "n_claims": 38,
+        "n_supported_claims": 6,
+        "n_targets": 12,
+        "n_targets_not_in_current_graph": 10,
+        "target_family_l1": "Auxiliary transport protein"
+      },
+      {
+        "n_claims": 42,
+        "n_supported_claims": 16,
+        "n_targets": 8,
+        "n_targets_not_in_current_graph": 8,
+        "target_family_l1": "Other cytosolic protein;Unclassified protein"
+      },
+      {
+        "n_claims": 35,
+        "n_supported_claims": 2,
+        "n_targets": 8,
+        "n_targets_not_in_current_graph": 8,
+        "target_family_l1": "Other nuclear protein"
+      },
+      {
+        "n_claims": 15,
+        "n_supported_claims": 6,
+        "n_targets": 7,
+        "n_targets_not_in_current_graph": 4,
+        "target_family_l1": "Epigenetic regulator;Unclassified protein"
+      },
+      {
+        "n_claims": 14,
+        "n_supported_claims": 4,
+        "n_targets": 6,
+        "n_targets_not_in_current_graph": 6,
+        "target_family_l1": "Adhesion;Membrane receptor"
+      },
+      {
+        "n_claims": 6,
+        "n_supported_claims": 0,
+        "n_targets": 6,
+        "n_targets_not_in_current_graph": 4,
+        "target_family_l1": "Ion channel;Unclassified protein"
+      },
+      {
+        "n_claims": 57,
+        "n_supported_claims": 7,
+        "n_targets": 4,
+        "n_targets_not_in_current_graph": 4,
+        "target_family_l1": "Other membrane protein"
+      },
+      {
+        "n_claims": 10,
+        "n_supported_claims": 0,
+        "n_targets": 4,
+        "n_targets_not_in_current_graph": 2,
+        "target_family_l1": "Transcription factor;Unclassified protein"
+      },
+      {
+        "n_claims": 4,
+        "n_supported_claims": 2,
+        "n_targets": 4,
+        "n_targets_not_in_current_graph": 4,
+        "target_family_l1": "Adhesion"
+      },
+      {
+        "n_claims": 33,
+        "n_supported_claims": 5,
+        "n_targets": 3,
+        "n_targets_not_in_current_graph": 0,
+        "target_family_l1": "Auxiliary transport protein;Ion channel"
+      },
+      {
+        "n_claims": 23,
+        "n_supported_claims": 5,
+        "n_targets": 3,
+        "n_targets_not_in_current_graph": 2,
+        "target_family_l1": "Ion channel;Membrane receptor"
+      },
+      {
+        "n_claims": 7,
+        "n_supported_claims": 1,
+        "n_targets": 3,
+        "n_targets_not_in_current_graph": 3,
+        "target_family_l1": "Membrane receptor;Unclassified protein"
+      },
+      {
+        "n_claims": 8,
+        "n_supported_claims": 5,
+        "n_targets": 3,
+        "n_targets_not_in_current_graph": 2,
+        "target_family_l1": "Ion channel;Transporter"
+      },
+      {
+        "n_claims": 7,
+        "n_supported_claims": 3,
+        "n_targets": 3,
+        "n_targets_not_in_current_graph": 2,
+        "target_family_l1": "Enzyme;Other cytosolic protein;Unclassified protein"
+      },
+      {
+        "n_claims": 6,
+        "n_supported_claims": 2,
+        "n_targets": 3,
+        "n_targets_not_in_current_graph": 3,
+        "target_family_l1": "Enzyme;Other nuclear protein"
+      },
+      {
+        "n_claims": 6,
+        "n_supported_claims": 0,
+        "n_targets": 3,
+        "n_targets_not_in_current_graph": 0,
+        "target_family_l1": "Epigenetic regulator;Transcription factor"
+      },
+      {
+        "n_claims": 3,
+        "n_supported_claims": 0,
+        "n_targets": 3,
+        "n_targets_not_in_current_graph": 3,
+        "target_family_l1": "Enzyme;Secreted protein"
+      },
+      {
+        "n_claims": 13,
+        "n_supported_claims": 9,
+        "n_targets": 2,
+        "n_targets_not_in_current_graph": 1,
+        "target_family_l1": "Enzyme;Ion channel"
+      },
+      {
+        "n_claims": 10,
+        "n_supported_claims": 2,
+        "n_targets": 2,
+        "n_targets_not_in_current_graph": 2,
+        "target_family_l1": "Other cytosolic protein;Transcription factor"
+      },
+      {
+        "n_claims": 2,
+        "n_supported_claims": 1,
+        "n_targets": 2,
+        "n_targets_not_in_current_graph": 2,
+        "target_family_l1": "Enzyme;Membrane receptor"
+      },
+      {
+        "n_claims": 2,
+        "n_supported_claims": 2,
+        "n_targets": 2,
+        "n_targets_not_in_current_graph": 2,
+        "target_family_l1": "Membrane receptor;Secreted protein"
+      },
+      {
+        "n_claims": 9,
+        "n_supported_claims": 3,
+        "n_targets": 1,
+        "n_targets_not_in_current_graph": 1,
+        "target_family_l1": "Membrane receptor;Other membrane protein"
+      },
+      {
+        "n_claims": 4,
+        "n_supported_claims": 2,
+        "n_targets": 1,
+        "n_targets_not_in_current_graph": 1,
+        "target_family_l1": "Enzyme;Ion channel;Transporter"
+      },
+      {
+        "n_claims": 3,
+        "n_supported_claims": 0,
+        "n_targets": 1,
+        "n_targets_not_in_current_graph": 1,
+        "target_family_l1": "Enzyme;Membrane receptor;Surface antigen"
+      },
+      {
+        "n_claims": 3,
+        "n_supported_claims": 0,
+        "n_targets": 1,
+        "n_targets_not_in_current_graph": 1,
+        "target_family_l1": "Enzyme;Epigenetic regulator"
+      },
+      {
+        "n_claims": 3,
+        "n_supported_claims": 1,
+        "n_targets": 1,
+        "n_targets_not_in_current_graph": 1,
+        "target_family_l1": "Membrane receptor;Surface antigen"
+      },
+      {
+        "n_claims": 1,
+        "n_supported_claims": 0,
+        "n_targets": 1,
+        "n_targets_not_in_current_graph": 1,
+        "target_family_l1": "Auxiliary transport protein;Ion channel;Unclassified protein"
+      },
+      {
+        "n_claims": 1,
+        "n_supported_claims": 0,
+        "n_targets": 1,
+        "n_targets_not_in_current_graph": 1,
+        "target_family_l1": "Secreted protein;Transcription factor"
+      },
+      {
+        "n_claims": 1,
+        "n_supported_claims": 0,
+        "n_targets": 1,
+        "n_targets_not_in_current_graph": 1,
+        "target_family_l1": "Surface antigen;Unclassified protein"
+      },
+      {
+        "n_claims": 1,
+        "n_supported_claims": 1,
+        "n_targets": 1,
+        "n_targets_not_in_current_graph": 1,
+        "target_family_l1": "Transporter;Unclassified protein"
+      },
+      {
+        "n_claims": 1,
+        "n_supported_claims": 1,
+        "n_targets": 1,
+        "n_targets_not_in_current_graph": 1,
+        "target_family_l1": "Enzyme;Surface antigen"
+      },
+      {
+        "n_claims": 1,
+        "n_supported_claims": 0,
+        "n_targets": 1,
+        "n_targets_not_in_current_graph": 1,
+        "target_family_l1": "Enzyme;Structural protein"
+      },
+      {
+        "n_claims": 1,
+        "n_supported_claims": 0,
+        "n_targets": 1,
+        "n_targets_not_in_current_graph": 1,
+        "target_family_l1": "Ion channel;Other cytosolic protein"
+      }
+    ],
+    "current_graph_status": "read from subnetwork.db (207 targets)",
+    "current_graph_targets": 207,
+    "distinct_targets_observed": 4885,
+    "distinct_uniprot_accessions": 3750,
+    "graph_targets_also_observed": 206,
+    "graph_targets_not_observed": 1,
+    "top_targets": [
+      {
+        "chembl_id": "CHEMBL612545",
+        "molecules": 1045,
+        "organism": "",
+        "supported_claims": 424,
+        "target": "Unchecked",
+        "type": "UNCHECKED"
+      },
+      {
+        "chembl_id": "CHEMBL240",
+        "molecules": 859,
+        "organism": "Homo sapiens",
+        "supported_claims": 75,
+        "target": "Voltage-gated inwardly rectifying potassium channel KCNH2",
+        "type": "SINGLE PROTEIN"
+      },
+      {
+        "chembl_id": "CHEMBL233",
+        "molecules": 858,
+        "organism": "Homo sapiens",
+        "supported_claims": 59,
+        "target": "Mu-type opioid receptor",
+        "type": "SINGLE PROTEIN"
+      },
+      {
+        "chembl_id": "CHEMBL238",
+        "molecules": 849,
+        "organism": "Homo sapiens",
+        "supported_claims": 34,
+        "target": "Sodium-dependent dopamine transporter",
+        "type": "SINGLE PROTEIN"
+      },
+      {
+        "chembl_id": "CHEMBL222",
+        "molecules": 847,
+        "organism": "Homo sapiens",
+        "supported_claims": 59,
+        "target": "Sodium-dependent noradrenaline transporter",
+        "type": "SINGLE PROTEIN"
+      },
+      {
+        "chembl_id": "CHEMBL228",
+        "molecules": 846,
+        "organism": "Homo sapiens",
+        "supported_claims": 58,
+        "target": "Sodium-dependent serotonin transporter",
+        "type": "SINGLE PROTEIN"
+      },
+      {
+        "chembl_id": "CHEMBL1833",
+        "molecules": 844,
+        "organism": "Homo sapiens",
+        "supported_claims": 15,
+        "target": "5-hydroxytryptamine receptor 2B",
+        "type": "SINGLE PROTEIN"
+      },
+      {
+        "chembl_id": "CHEMBL234",
+        "molecules": 842,
+        "organism": "Homo sapiens",
+        "supported_claims": 43,
+        "target": "D(3) dopamine receptor",
+        "type": "SINGLE PROTEIN"
+      },
+      {
+        "chembl_id": "CHEMBL2056",
+        "molecules": 834,
+        "organism": "Homo sapiens",
+        "supported_claims": 27,
+        "target": "D(1A) dopamine receptor",
+        "type": "SINGLE PROTEIN"
+      },
+      {
+        "chembl_id": "CHEMBL1867",
+        "molecules": 833,
+        "organism": "Homo sapiens",
+        "supported_claims": 16,
+        "target": "Alpha-2A adrenergic receptor",
+        "type": "SINGLE PROTEIN"
+      },
+      {
+        "chembl_id": "CHEMBL216",
+        "molecules": 830,
+        "organism": "Homo sapiens",
+        "supported_claims": 35,
+        "target": "Muscarinic acetylcholine receptor M1",
+        "type": "SINGLE PROTEIN"
+      },
+      {
+        "chembl_id": "CHEMBL214",
+        "molecules": 826,
+        "organism": "Homo sapiens",
+        "supported_claims": 53,
+        "target": "5-hydroxytryptamine receptor 1A",
+        "type": "SINGLE PROTEIN"
+      },
+      {
+        "chembl_id": "CHEMBL1951",
+        "molecules": 824,
+        "organism": "Homo sapiens",
+        "supported_claims": 17,
+        "target": "Amine oxidase [flavin-containing] A",
+        "type": "SINGLE PROTEIN"
+      },
+      {
+        "chembl_id": "CHEMBL211",
+        "molecules": 824,
+        "organism": "Homo sapiens",
+        "supported_claims": 22,
+        "target": "Muscarinic acetylcholine receptor M2",
+        "type": "SINGLE PROTEIN"
+      },
+      {
+        "chembl_id": "CHEMBL256",
+        "molecules": 808,
+        "organism": "Homo sapiens",
+        "supported_claims": 7,
+        "target": "Adenosine receptor A3",
+        "type": "SINGLE PROTEIN"
+      },
+      {
+        "chembl_id": "CHEMBL206",
+        "molecules": 802,
+        "organism": "Homo sapiens",
+        "supported_claims": 15,
+        "target": "Estrogen receptor",
+        "type": "SINGLE PROTEIN"
+      },
+      {
+        "chembl_id": "CHEMBL229",
+        "molecules": 794,
+        "organism": "Homo sapiens",
+        "supported_claims": 24,
+        "target": "Alpha-1A adrenergic receptor",
+        "type": "SINGLE PROTEIN"
+      },
+      {
+        "chembl_id": "CHEMBL241",
+        "molecules": 788,
+        "organism": "Homo sapiens",
+        "supported_claims": 6,
+        "target": "cGMP-inhibited 3',5'-cyclic phosphodiesterase 3A",
+        "type": "SINGLE PROTEIN"
+      },
+      {
+        "chembl_id": "CHEMBL208",
+        "molecules": 779,
+        "organism": "Homo sapiens",
+        "supported_claims": 20,
+        "target": "Progesterone receptor",
+        "type": "SINGLE PROTEIN"
+      },
+      {
+        "chembl_id": "CHEMBL217",
+        "molecules": 745,
+        "organism": "Homo sapiens",
+        "supported_claims": 99,
+        "target": "D(2) dopamine receptor",
+        "type": "SINGLE PROTEIN"
+      }
+    ]
+  },
+  "threshold_note": "Applied only inside the fixed cohort-1 candidate set. Thresholds never admit a molecule, never remove one, and say nothing about physiological exposure. Curated weak relationships (e.g. caffeine's curated ADORA3 mechanism at Ki = 100 uM) keep their catalogue membership and their curated tier at every threshold.",
+  "threshold_sensitivity": [
+    {
+      "basis": "all_assessed_evidence",
+      "claims_pass_any_rule": 22075,
+      "claims_pass_median_rule": 20828,
+      "endpoint_class": "ALL_CLASSES_UNION",
+      "molecules_pass_any_rule": 1183,
+      "molecules_pass_median_rule": 1164,
+      "threshold_uM": 1
+    },
+    {
+      "basis": "direct_human_single_protein_only",
+      "claims_pass_any_rule": 5158,
+      "claims_pass_median_rule": 4864,
+      "endpoint_class": "ALL_CLASSES_UNION",
+      "molecules_pass_any_rule": 825,
+      "molecules_pass_median_rule": 799,
+      "threshold_uM": 1
+    },
+    {
+      "basis": "all_assessed_evidence",
+      "claims_pass_any_rule": 34671,
+      "claims_pass_median_rule": 33885,
+      "endpoint_class": "ALL_CLASSES_UNION",
+      "molecules_pass_any_rule": 1301,
+      "molecules_pass_median_rule": 1296,
+      "threshold_uM": 10
+    },
+    {
+      "basis": "direct_human_single_protein_only",
+      "claims_pass_any_rule": 7118,
+      "claims_pass_median_rule": 6974,
+      "endpoint_class": "ALL_CLASSES_UNION",
+      "molecules_pass_any_rule": 928,
+      "molecules_pass_median_rule": 917,
+      "threshold_uM": 10
+    },
+    {
+      "basis": "all_assessed_evidence",
+      "claims_pass_any_rule": 44996,
+      "claims_pass_median_rule": 44843,
+      "endpoint_class": "ALL_CLASSES_UNION",
+      "molecules_pass_any_rule": 1359,
+      "molecules_pass_median_rule": 1355,
+      "threshold_uM": 100
+    },
+    {
+      "basis": "direct_human_single_protein_only",
+      "claims_pass_any_rule": 8003,
+      "claims_pass_median_rule": 7972,
+      "endpoint_class": "ALL_CLASSES_UNION",
+      "molecules_pass_any_rule": 992,
+      "molecules_pass_median_rule": 991,
+      "threshold_uM": 100
+    },
+    {
+      "basis": "all_assessed_evidence",
+      "claims_pass_any_rule": 48425,
+      "claims_pass_median_rule": 48321,
+      "endpoint_class": "ALL_CLASSES_UNION",
+      "molecules_pass_any_rule": 1365,
+      "molecules_pass_median_rule": 1362,
+      "threshold_uM": 300
+    },
+    {
+      "basis": "direct_human_single_protein_only",
+      "claims_pass_any_rule": 8183,
+      "claims_pass_median_rule": 8161,
+      "endpoint_class": "ALL_CLASSES_UNION",
+      "molecules_pass_any_rule": 1010,
+      "molecules_pass_median_rule": 1007,
+      "threshold_uM": 300
+    }
+  ],
+  "tier_distribution": [
+    {
+      "basis": "all_assessed_evidence",
+      "claim_role": "curated",
+      "n_claims": 140,
+      "tier": "limited_or_unresolved"
+    },
+    {
+      "basis": "all_assessed_evidence",
+      "claim_role": "curated",
+      "n_claims": 1859,
+      "tier": "supported"
+    },
+    {
+      "basis": "direct_human_single_protein_only",
+      "claim_role": "curated",
+      "n_claims": 804,
+      "tier": "not_applicable"
+    },
+    {
+      "basis": "direct_human_single_protein_only",
+      "claim_role": "curated",
+      "n_claims": 1195,
+      "tier": "supported"
+    },
+    {
+      "basis": "all_assessed_evidence",
+      "claim_role": "binding",
+      "n_claims": 70804,
+      "tier": "limited_or_unresolved"
+    },
+    {
+      "basis": "all_assessed_evidence",
+      "claim_role": "binding",
+      "n_claims": 11753,
+      "tier": "preliminary"
+    },
+    {
+      "basis": "all_assessed_evidence",
+      "claim_role": "binding",
+      "n_claims": 4441,
+      "tier": "supported"
+    },
+    {
+      "basis": "direct_human_single_protein_only",
+      "claim_role": "binding",
+      "n_claims": 80902,
+      "tier": "not_applicable"
+    },
+    {
+      "basis": "direct_human_single_protein_only",
+      "claim_role": "binding",
+      "n_claims": 4116,
+      "tier": "preliminary"
+    },
+    {
+      "basis": "direct_human_single_protein_only",
+      "claim_role": "binding",
+      "n_claims": 1980,
+      "tier": "supported"
+    },
+    {
+      "basis": "all_assessed_evidence",
+      "claim_role": "functional",
+      "n_claims": 20045,
+      "tier": "limited_or_unresolved"
+    },
+    {
+      "basis": "all_assessed_evidence",
+      "claim_role": "functional",
+      "n_claims": 26753,
+      "tier": "preliminary"
+    },
+    {
+      "basis": "all_assessed_evidence",
+      "claim_role": "functional",
+      "n_claims": 2714,
+      "tier": "supported"
+    },
+    {
+      "basis": "direct_human_single_protein_only",
+      "claim_role": "functional",
+      "n_claims": 48562,
+      "tier": "not_applicable"
+    },
+    {
+      "basis": "direct_human_single_protein_only",
+      "claim_role": "functional",
+      "n_claims": 683,
+      "tier": "preliminary"
+    },
+    {
+      "basis": "direct_human_single_protein_only",
+      "claim_role": "functional",
+      "n_claims": 267,
+      "tier": "supported"
+    }
+  ]
+}

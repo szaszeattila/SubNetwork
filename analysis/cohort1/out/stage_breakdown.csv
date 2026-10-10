@@ -1,0 +1,62 @@
+subset,phase_basis,stage,n_molecules
+all_candidates,family_max_phase,Approved,1147
+all_candidates,family_max_phase,Phase 3,386
+all_candidates,family_max_phase,Phase 2,591
+all_candidates,family_max_phase,Phase 1,101
+all_candidates,family_max_phase,Early Phase 1,1
+all_candidates,family_max_phase,Unknown (ChEMBL -1),19
+all_candidates,cns_indication_max_phase_for_ind,Approved,506
+all_candidates,cns_indication_max_phase_for_ind,Phase 3,491
+all_candidates,cns_indication_max_phase_for_ind,Phase 2,769
+all_candidates,cns_indication_max_phase_for_ind,Phase 1,311
+all_candidates,cns_indication_max_phase_for_ind,Early Phase 1,25
+all_candidates,cns_indication_max_phase_for_ind,Unknown (ChEMBL -1),7
+all_candidates,cns_indication_max_phase_for_ind,Not applicable (ATC route only),136
+small_molecules,family_max_phase,Approved,952
+small_molecules,family_max_phase,Phase 3,263
+small_molecules,family_max_phase,Phase 2,471
+small_molecules,family_max_phase,Phase 1,66
+small_molecules,family_max_phase,Early Phase 1,1
+small_molecules,family_max_phase,Unknown (ChEMBL -1),18
+small_molecules,cns_indication_max_phase_for_ind,Approved,434
+small_molecules,cns_indication_max_phase_for_ind,Phase 3,357
+small_molecules,cns_indication_max_phase_for_ind,Phase 2,607
+small_molecules,cns_indication_max_phase_for_ind,Phase 1,216
+small_molecules,cns_indication_max_phase_for_ind,Early Phase 1,18
+small_molecules,cns_indication_max_phase_for_ind,Unknown (ChEMBL -1),7
+small_molecules,cns_indication_max_phase_for_ind,Not applicable (ATC route only),132
+atc_n_route,family_max_phase,Approved,373
+atc_n_route,family_max_phase,Phase 3,38
+atc_n_route,family_max_phase,Phase 2,112
+atc_n_route,family_max_phase,Phase 1,2
+atc_n_route,family_max_phase,Unknown (ChEMBL -1),19
+atc_n_route,cns_indication_max_phase_for_ind,Approved,289
+atc_n_route,cns_indication_max_phase_for_ind,Phase 3,46
+atc_n_route,cns_indication_max_phase_for_ind,Phase 2,63
+atc_n_route,cns_indication_max_phase_for_ind,Phase 1,2
+atc_n_route,cns_indication_max_phase_for_ind,Early Phase 1,1
+atc_n_route,cns_indication_max_phase_for_ind,Unknown (ChEMBL -1),7
+atc_n_route,cns_indication_max_phase_for_ind,Not applicable (ATC route only),136
+cns_indication_route,family_max_phase,Approved,1081
+cns_indication_route,family_max_phase,Phase 3,379
+cns_indication_route,family_max_phase,Phase 2,541
+cns_indication_route,family_max_phase,Phase 1,100
+cns_indication_route,family_max_phase,Early Phase 1,1
+cns_indication_route,family_max_phase,Unknown (ChEMBL -1),7
+cns_indication_route,cns_indication_max_phase_for_ind,Approved,506
+cns_indication_route,cns_indication_max_phase_for_ind,Phase 3,491
+cns_indication_route,cns_indication_max_phase_for_ind,Phase 2,769
+cns_indication_route,cns_indication_max_phase_for_ind,Phase 1,311
+cns_indication_route,cns_indication_max_phase_for_ind,Early Phase 1,25
+cns_indication_route,cns_indication_max_phase_for_ind,Unknown (ChEMBL -1),7
+both_routes,family_max_phase,Approved,307
+both_routes,family_max_phase,Phase 3,31
+both_routes,family_max_phase,Phase 2,62
+both_routes,family_max_phase,Phase 1,1
+both_routes,family_max_phase,Unknown (ChEMBL -1),7
+both_routes,cns_indication_max_phase_for_ind,Approved,289
+both_routes,cns_indication_max_phase_for_ind,Phase 3,46
+both_routes,cns_indication_max_phase_for_ind,Phase 2,63
+both_routes,cns_indication_max_phase_for_ind,Phase 1,2
+both_routes,cns_indication_max_phase_for_ind,Early Phase 1,1
+both_routes,cns_indication_max_phase_for_ind,Unknown (ChEMBL -1),7

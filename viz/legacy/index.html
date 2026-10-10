@@ -1,0 +1,3741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SubNetwork — Drug-Target Interaction Map</title>
+<!-- Vendored, not CDN-linked: the whole point of loading graph.data.js as a
+     plain <script> rather than fetching JSON was that this page works off
+     file:// with no server. A remote <script> put that back - the page was
+     dead without a network connection. -->
+<script src="../vendor/vis-network.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel-bg: #171a21;
+    --border: #2a2f3a;
+    --text: #e6e8ec;
+    --text-dim: #9aa1ad;
+    --accent: #4da3ff;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  /* Three bands, not two columns. The page was graph | sidebar, with the
+     title, the search box and the display options stacked on top of the
+     sidebar - so the panel that answers "what did I just click" began a third
+     of the way down, under chrome that belongs to the picture rather than to
+     the selection. The chrome is now a bar across the top, what a control is
+     doing is a strip under it, and the sidebar holds one thing: the selection.
+
+     The controls were already folded to one line for exactly this reason and
+     it was not enough: folded or not, they sat between the reader and the
+     thing they had just clicked. */
+  #app { display: flex; flex-direction: column; height: 100vh; width: 100vw; }
+  #topbar {
+    flex: 0 0 auto; display: flex; align-items: center; flex-wrap: wrap;
+    gap: 10px 14px; padding: 9px 16px;
+    background: var(--panel-bg); border-bottom: 1px solid var(--border);
+    /* Positioned and above the canvas: the search results and the display
+       options both open as boxes hanging off this bar. */
+    position: relative; z-index: 5;
+  }
+  #topbar .brand { display: flex; align-items: baseline; gap: 9px; flex: 0 0 auto; }
+  #topbar h1 { font-size: 15px; margin: 0; }
+  #topbar .subtitle { color: var(--text-dim); font-size: 12px; }
+  /* Pushed to the far end, away from the controls that set a view up: this one
+     undoes one. */
+  #topbar #reset-btn { margin-left: auto; }
+
+  #main { display: flex; flex: 1 1 auto; min-height: 0; }
+  #graph-wrap { position: relative; flex: 1 1 auto; min-width: 0; height: 100%; }
+  #graph { width: 100%; height: 100%; background: var(--bg); }
+
+  #sidebar {
+    width: 320px; flex: 0 0 320px; height: 100%;
+    background: var(--panel-bg); border-left: 1px solid var(--border);
+    overflow-y: auto; padding: 18px;
+  }
+
+  .panel-section { margin-bottom: 20px; }
+  /* A panel section whose heading is its own disclosure control. Styled to
+     match .panel-section h2 exactly, so collapsing a section is an
+     affordance added to the existing heading rather than a second kind of
+     heading. Positioned for the same tooltip reason as .tier > summary. */
+  .section-toggle > summary {
+    cursor: pointer; list-style: none; position: relative;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text-dim); margin: 0 0 8px;
+  }
+  .section-toggle > summary::-webkit-details-marker { display: none; }
+  .section-toggle > summary::before { content: "\25B8 "; display: inline-block; width: 1em; }
+  .section-toggle[open] > summary::before { content: "\25BE "; }
+  .section-toggle > summary:hover { color: var(--text); }
+  /* Positioned so a heading's hover explanation anchors under the heading
+     itself rather than under the whole section. */
+  .panel-section h2 {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text-dim); margin: 0 0 8px; position: relative;
+  }
+
+  /* The controls, folded to one line. Styled as a bar rather than as a panel
+     heading: it is a lid on a box of settings, not a section of the reading.
+     In the top bar that lid is a button and the box opens under it. */
+  #view-options { position: relative; flex: 0 0 auto; }
+  #view-options > summary {
+    cursor: pointer; list-style: none; position: relative;
+    padding: 6px 9px; border: 1px solid var(--border); border-radius: 6px;
+    background: var(--bg); color: var(--text-dim);
+    font-size: 11.5px; line-height: 1.4;
+  }
+  #view-options > summary::-webkit-details-marker { display: none; }
+  #view-options > summary::before { content: "\25B8 "; display: inline-block; width: 1em; }
+  #view-options[open] > summary::before { content: "\25BE "; }
+  #view-options > summary:hover { color: var(--text); border-color: var(--accent); }
+  .view-options-state { color: var(--text-dim); opacity: 0.75; }
+  #view-options[open] > summary { color: var(--text); border-color: var(--accent); }
+  /* A popover hanging off its own button rather than a block that pushes the
+     page down. It scrolls when it has to, and that clips nothing that matters:
+     .help-text is anchored left:0;right:0 to the row it belongs to, so it
+     lengthens the scroll rather than being cut off sideways - the arrangement
+     #sidebar has always had. */
+  #view-options > #filters {
+    position: absolute; top: calc(100% + 6px); right: 0; width: 340px;
+    background: var(--panel-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 14px; z-index: 30;
+    max-height: 70vh; overflow-y: auto;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.5);
+  }
+  /* The banners get a strip of their own across the whole window, still
+     outside the disclosure. The argument for allowing a filter that removes
+     things is that it states its cost, and a cost behind a fold is not being
+     stated - so folding the controls away, or moving them, must not take the
+     banner with them. */
+  #filters-active:not(:empty) {
+    flex: 0 0 auto; padding: 4px 16px 12px;
+    background: var(--panel-bg); border-bottom: 1px solid var(--border);
+  }
+
+  /* No rule above it any more: the sidebar starts with the selection, so there
+     is nothing above it to be separated from. The border-top was there to keep
+     a panel from reading as a continuation of the controls stacked over it. */
+  #detail-empty { color: var(--text-dim); font-size: 13px; line-height: 1.5; }
+  #detail { display: none; }
+  #detail .title { font-size: 18px; font-weight: 600; margin-bottom: 2px; }
+  #detail .type-badge {
+    display: inline-block; font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.05em; padding: 2px 7px; border-radius: 10px;
+    margin-bottom: 12px; font-weight: 600;
+  }
+  .badge-molecule { background: #1c3a5e; color: #7ec2ff; }
+  .badge-target { background: #4a3418; color: #ffb04d; }
+
+  .field { margin-bottom: 8px; font-size: 13px; line-height: 1.4; }
+  /* Block + relative so a label's hover explanation anchors directly under
+     the label rather than under the whole field. It already occupied its own
+     line - the value below it is a div - so this changes nothing visually. */
+  .field .k {
+    display: block; position: relative;
+    color: var(--text-dim); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .field .v { word-break: break-word; }
+  .field a { color: var(--accent); text-decoration: none; }
+  .field a:hover { text-decoration: underline; }
+
+  .edge-list-item {
+    border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px;
+    margin-bottom: 8px; font-size: 12.5px; cursor: pointer;
+  }
+  .edge-list-item:hover { border-color: var(--accent); }
+  .edge-list-item .et { font-weight: 600; }
+  .edge-list-item .mo { color: var(--text-dim); font-size: 11.5px; margin-top: 2px; }
+
+  .lead-note {
+    font-size: 11px; color: #ffb04d; margin-top: 6px;
+  }
+  /* The evidence line under each row: the counts the list is ordered by.
+     Invariant 7 asks the trust signal to stay auditable, and a list sorted
+     on a number the reader cannot see is exactly the unauditable case. */
+  .edge-list-item .ev {
+    color: var(--text-dim); font-size: 11px; margin-top: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Edge lists are grouped by how well evidenced each edge is, reusing the
+     <details> idiom the measurement lists already use. Curated and
+     corroborated open; leads start shut, because they are the wall - tacrine
+     has 40 of them against 6 corroborated, and expanded they push the rows
+     that carry the evidence off-screen. The count stays on the summary, so
+     nothing is hidden without saying how much. */
+  .tier { margin: 0 0 10px; }
+  /* position: relative for the same reason .field .k and .panel-section h2
+     carry it: .help-text is absolutely positioned with left:0;right:0, so
+     without a positioned ancestor here it anchored to the viewport and
+     opened a screen-width box below the fold - the explanation existed and
+     could not be seen. */
+  .tier > summary {
+    cursor: pointer; padding: 4px 0; list-style: none; position: relative;
+    color: var(--text-dim); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .tier > summary::-webkit-details-marker { display: none; }
+  .tier > summary::before { content: "\25B8 "; display: inline-block; width: 1em; }
+  .tier[open] > summary::before { content: "\25BE "; }
+  .tier > summary:hover { color: var(--text); }
+
+  /* One assay that ChEMBL attributes to every member of a protein complex or
+     family. Collapsed to a single row because it is one measurement, and
+     printing it once per member reads as that many independent findings -
+     tacrine's calcium-channel assay is 26 rows carrying one number. */
+  .fangroup {
+    border: 1px dashed var(--border); border-radius: 6px;
+    padding: 6px 10px; margin-bottom: 8px;
+  }
+  .fangroup > summary {
+    cursor: pointer; list-style: none; font-size: 12.5px; font-weight: 600;
+    position: relative;
+  }
+  .fangroup > summary::-webkit-details-marker { display: none; }
+  .fangroup > summary::before { content: "\25B8 "; display: inline-block; width: 1em; }
+  .fangroup[open] > summary::before { content: "\25BE "; }
+  .fangroup > summary:hover { color: var(--accent); }
+  .fangroup-note {
+    color: var(--text-dim); font-size: 11px; line-height: 1.5;
+    margin: 6px 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border);
+  }
+
+  /* A protein assembly - several subunits ChEMBL records as one physical
+     thing. Bordered solid where .fangroup is dashed, because the two say
+     different things: a fan-out row is a claim about one experiment, this is a
+     claim about the proteins themselves. */
+  .cxgroup {
+    border: 1px solid #6b5a2e; border-radius: 6px;
+    padding: 6px 10px; margin-bottom: 8px;
+  }
+  .cxgroup > summary {
+    cursor: pointer; list-style: none; font-size: 12.5px; font-weight: 600;
+    position: relative; color: #ffb04d;
+  }
+  .cxgroup > summary::-webkit-details-marker { display: none; }
+  .cxgroup > summary::before { content: "\25B8 "; display: inline-block; width: 1em; }
+  .cxgroup[open] > summary::before { content: "\25BE "; }
+  .cxgroup > summary:hover { color: var(--accent); }
+  .cxgroup-note {
+    color: var(--text-dim); font-size: 11px; line-height: 1.5;
+    margin: 6px 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border);
+  }
+  .cxgroup-open { display: block; margin-top: 5px; color: var(--accent); cursor: pointer; }
+  .cxgroup-open:hover { text-decoration: underline; }
+  .badge-assembly { background: #4a3418; color: #ffc78a; }
+  .assembly-claim {
+    color: var(--text-dim); font-size: 11.5px; line-height: 1.55; margin-top: 10px;
+  }
+  .assembly-claim code {
+    font-size: 10.5px; background: rgba(255,176,77,0.1); padding: 1px 4px; border-radius: 3px;
+  }
+
+  /* The grouping control. Three mutually exclusive modes per tier, plus a
+     per-assembly override on an assembly's own panel, so "is this one receptor
+     or five" can be answered for the whole tier or for one receptor. */
+  .grouping { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .grouping-head {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text-dim); margin-bottom: 8px; position: relative;
+  }
+  /* position: relative anchors the tier's hover explanation to the row rather
+     than to the viewport - see the note on .tier > summary. The row, not the
+     name inside it, so the box gets the panel's full width instead of the few
+     characters the label happens to occupy. */
+  .grouping-tier { margin-bottom: 8px; position: relative; }
+  .grouping-tier-head {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px; font-size: 12px; line-height: 1.4;
+  }
+  .group-modes { display: inline-flex; gap: 4px; flex: none; }
+  .group-mode {
+    background: var(--bg); color: var(--text-dim);
+    border: 1px solid var(--border); border-radius: 5px;
+    padding: 2px 7px; font-size: 11px; font-family: inherit;
+    cursor: pointer; text-transform: capitalize;
+  }
+  .group-mode:hover:not(:disabled) { color: var(--text); border-color: var(--accent); }
+  .group-mode.on { color: #ffb04d; border-color: #6b5a2e; background: rgba(255,176,77,0.12); }
+  .group-mode:disabled { opacity: 0.4; cursor: default; }
+
+
+  /* The measurements behind a pooled value. Collapsed by default - a curated
+     edge carries up to thirteen, and expanded they buried the value they
+     produced. The summary line ("13 measurements from 12 papers") stays
+     visible, so the evidence is still counted where the number is, and one
+     click reaches it. Long lists scroll rather than push the panel down. */
+  .measurements { margin: 6px 0 0; }
+  .measurements > summary {
+    cursor: pointer; font-size: 11.5px; color: var(--accent);
+    list-style: none; padding: 2px 0;
+  }
+  .measurements > summary::-webkit-details-marker { display: none; }
+  .measurements > summary::before { content: "▸ "; display: inline-block; width: 1em; }
+  .measurements[open] > summary::before { content: "▾ "; }
+  .measurements ol {
+    margin: 4px 0 0; padding: 0; list-style: none;
+    border-left: 2px solid var(--border); font-size: 11.5px;
+    max-height: 260px; overflow-y: auto;
+  }
+  .measurements li { padding: 4px 0 4px 10px; line-height: 1.45; }
+  .measurements li + li { border-top: 1px solid var(--border); }
+  .measurements .mnum { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .measurements .mcite { color: var(--text-dim); display: block; margin-top: 1px; }
+  .measurements .mref { color: var(--text-dim); }
+  .measurements .mdesc { color: var(--text-dim); font-size: 10.5px; display: block; margin-top: 1px; }
+  .measurements li.uncounted { opacity: 0.65; }
+  .measurements .mexcl {
+    color: #e0a15c; font-size: 10.5px; display: block; margin-top: 1px;
+  }
+  /* Hover help on every field label. The explanations used to sit inline
+     under the heading, which made the panel long enough that the numbers it
+     exists to show were pushed off-screen. A dotted underline and a help
+     cursor advertise them; without that a hover-only explanation is one
+     nobody finds. Also opened on keyboard focus, since hover is not
+     available to everyone.
+
+     The tooltip is anchored to the sidebar's content width (left:0;right:0)
+     rather than to the label, because #sidebar scrolls vertically - which
+     computes overflow-x to auto - so anything extending past its edge would
+     be clipped rather than overflowing. */
+  .help {
+    position: relative; cursor: help;
+    /* --border is invisible against the panel at this size; the underline is
+       the only thing advertising that an explanation exists. */
+    border-bottom: 1px dotted rgba(154, 161, 173, 0.5);
+  }
+  .help:hover, .help:focus-visible { color: var(--text); outline: none; }
+  .help-text {
+    display: none; position: absolute; z-index: 20; left: 0; right: 0; top: 100%;
+    margin-top: 4px; padding: 8px 10px;
+    background: #0b0d11; border: 1px solid var(--border); border-radius: 6px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+    font-size: 11.5px; line-height: 1.5; color: var(--text-dim);
+    text-transform: none; letter-spacing: normal; font-weight: 400;
+  }
+  .help:hover + .help-text, .help:focus-visible + .help-text { display: block; }
+  /* A reference in the database list is never a measurement (see
+     interaction_sources.citation_kind), so it is labelled with what kind of
+     claim it supports rather than sitting bare, which is how a sampled
+     measurement citation passed for an independent reference. */
+  .src-cite { margin-top: 5px; font-size: 11.5px; line-height: 1.45; }
+  .src-cite-kind {
+    display: block; font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.04em; color: var(--text-dim);
+  }
+  .src-cite-hint { display: block; font-size: 10.5px; color: var(--text-dim); }
+
+  #legend {
+    position: absolute; bottom: 16px; left: 16px;
+    background: rgba(23,26,33,0.92); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 14px; font-size: 12px; line-height: 1.7;
+    max-width: 260px;
+  }
+  #legend h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); margin: 0 0 8px; }
+  /* Each block of rows encodes a different channel - shape, rim, colour,
+     dash - and unlabelled they read as one flat list of thirteen things.
+     The heading says which visual property the rows below it are about. */
+  /* position: relative for the same reason .tier > summary carries it: the
+     heading holds the block's explanation and .help-text is absolutely
+     positioned, so without it the box anchors to #legend as a whole. */
+  .legend-cat {
+    font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text-dim); opacity: 0.8; line-height: 1.4;
+    margin: 9px 0 3px; padding-top: 7px; border-top: 1px solid var(--border);
+    position: relative;
+  }
+  /* Upwards, unlike every other one on the page: the legend is pinned to the
+     bottom-left corner, so a box opening below it opens off the bottom of the
+     window - which is exactly how the panel's tier explanations became
+     unreachable. */
+  .legend-cat .help-text {
+    top: auto; bottom: 100%; margin: 0 0 6px;
+    left: 0; right: auto; width: 250px;
+  }
+  #legend h2 + .legend-cat { margin-top: 0; padding-top: 0; border-top: 0; }
+  .legend-row { display: flex; align-items: center; gap: 8px; line-height: 1.45; margin: 3px 0; }
+  .legend-swatch { width: 16px; height: 16px; border-radius: 3px; flex: 0 0 16px; }
+  .legend-line { width: 22px; height: 0; border-top: 3px solid; flex: 0 0 22px; }
+  .legend-line.dashed { border-top-style: dashed; border-top-width: 2px; }
+
+  #reset-btn {
+    flex: 0 0 auto;
+    background: var(--bg); border: 1px solid var(--border); color: var(--text);
+    border-radius: 6px; padding: 7px 12px; font-size: 12px;
+    font-family: inherit; cursor: pointer;
+  }
+  #reset-btn:hover { border-color: var(--accent); }
+
+  /* Search. Sits above the detail panel rather than over the canvas: it is a
+     way into the same panel that clicking a node opens, and the results are
+     the same rows the panel already renders. */
+  #search-wrap { position: relative; flex: 1 1 220px; max-width: 420px; }
+  /* The filter bar. This is the only control on the page that removes things
+     from the picture rather than marking them, so it is styled to be read
+     rather than skipped: the note under the checkbox is part of the control,
+     not decoration around it. */
+  #filters { margin: 0; }
+  /* position: relative because the label carries a hover explanation, and
+     .help-text is absolutely positioned - see the note on .tier > summary. */
+  .filter-row {
+    display: flex; align-items: flex-start; gap: 7px;
+    font-size: 12.5px; line-height: 1.4; cursor: pointer; position: relative;
+  }
+  .filter-row input { margin: 2px 0 0; cursor: pointer; flex: none; }
+  .filter-note {
+    color: var(--text-dim); font-size: 11px; line-height: 1.5;
+    margin: 5px 0 0 21px;
+  }
+  .filter-active {
+    margin: 8px 0 0; padding: 7px 9px; border-radius: 6px;
+    border: 1px solid #6b5a2e; background: rgba(255,176,77,0.08);
+    color: var(--text-dim); font-size: 11px; line-height: 1.5;
+  }
+  .filter-active strong { color: #ffb04d; font-weight: 600; }
+  /* Printed above an edge list the filter has shortened. A list that quietly
+     shrank would be the same failure as a capped search result reading as the
+     whole answer. */
+  .filter-hidden-note {
+    color: var(--text-dim); font-size: 11px; line-height: 1.45;
+    margin: 0 0 8px; padding-left: 10px; border-left: 2px solid #6b5a2e;
+  }
+  #search {
+    width: 100%; padding: 7px 26px 7px 9px;
+    background: var(--bg); color: var(--text);
+    border: 1px solid var(--border); border-radius: 6px;
+    font-size: 13px; font-family: inherit;
+  }
+  #search:focus { outline: none; border-color: var(--accent); }
+  #search::placeholder { color: var(--text-dim); }
+  #search-clear {
+    position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+    background: none; border: 0; color: var(--text-dim);
+    font-size: 15px; line-height: 1; cursor: pointer; padding: 2px 4px;
+  }
+  #search-clear:hover { color: var(--text); }
+  /* The results hang under the box as a popover. Empty, it is not there at
+     all, so the bar does not carry an empty container around. Scrolls for the
+     same reason #filters does, and clips nothing for the same reason. */
+  #search-results:empty { display: none; }
+  #search-results {
+    position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 30;
+    background: var(--panel-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px;
+    max-height: 62vh; overflow-y: auto;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.5);
+  }
+  /* Same heading treatment as .panel-section h2, and positioned for the same
+     reason: a category heading carries a hover explanation. */
+  .result-group h3 {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text-dim); margin: 12px 0 6px; position: relative;
+  }
+  .result-group:first-child h3 { margin-top: 0; }
+  .result-item {
+    border: 1px solid var(--border); border-radius: 6px; padding: 6px 9px;
+    margin-bottom: 6px; font-size: 12.5px; cursor: pointer;
+  }
+  .result-item:hover, .result-item.active { border-color: var(--accent); }
+  .result-item .rt { font-weight: 600; }
+  .result-item .rs { color: var(--text-dim); font-size: 11px; margin-top: 2px; line-height: 1.4; }
+  .result-item mark { background: rgba(77,163,255,0.28); color: inherit; border-radius: 2px; }
+  .result-more { color: var(--text-dim); font-size: 11px; margin: 2px 0 6px; }
+  .result-none { color: var(--text-dim); font-size: 12.5px; line-height: 1.5; }
+
+  /* A citation's own panel. The two ways a citation reaches this graph are
+     different claims and are never summed into one number (invariant 13):
+     measurements pooled into a value, and references that are explicitly not
+     measurements. */
+  .paper-edge { border: 1px solid var(--border); border-radius: 6px;
+    padding: 8px 10px; margin-bottom: 8px; font-size: 12.5px; cursor: pointer; }
+  .paper-edge:hover { border-color: var(--accent); }
+  .paper-edge .et { font-weight: 600; }
+  .paper-edge .mo { color: var(--text-dim); font-size: 11.5px; margin-top: 2px; }
+  .paper-edge .share {
+    color: var(--text-dim); font-size: 11px; margin-top: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+  .badge-paper { background: #2b2f52; color: #a9b4ff; }
+
+  /* Two molecules and their overlap - what a "Shares targets with" row opens.
+     One block per shared thing, with the two edges at it side by side, because
+     the comparison is the whole point and it used to take a click each way and
+     a scan of two 46-row lists. */
+  .pair-unit { margin-bottom: 14px; }
+  .pair-unit-head {
+    font-size: 12.5px; font-weight: 600; color: #ffb04d;
+    margin-bottom: 6px; line-height: 1.4;
+  }
+  .pair-unit-head .ev {
+    display: block; font-weight: 400; color: var(--text-dim);
+    font-size: 11px; margin-top: 3px;
+  }
+  /* Indented under what they are about, so a block with four subunits reads as
+     one shared receptor rather than as eight loose rows. */
+  .pair-edges { margin-left: 6px; padding-left: 10px; border-left: 2px solid var(--border); }
+  .pair-protein {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--text-dim); margin: 0 0 5px; cursor: pointer;
+  }
+  .pair-protein:hover { color: var(--text); }
+  .pair-note { color: var(--text-dim); font-size: 11.5px; line-height: 1.55; margin-top: 10px; }
+  .badge-pair { background: #1c3a5e; color: #7ec2ff; }
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- The chrome: what the page is, how to search it, and how it is drawn.
+       All three used to sit on top of the sidebar, above the selection, which
+       put a molecule's name a screenful below the click that opened it. They
+       are about the picture, not about what is selected, so they live over the
+       picture and the sidebar is left to hold one thing. -->
+  <header id="topbar">
+    <div class="brand">
+      <h1>SubNetwork</h1>
+      <div class="subtitle">Drug&ndash;target interaction map</div>
+    </div>
+    <div id="search-wrap">
+      <input id="search" type="search" autocomplete="off" spellcheck="false"
+             placeholder="Search molecules, targets, edges, papers"
+             title="Also matches common names (THC, CBD), brand names, IUPAC names, gene symbols, UniProt and ChEMBL ids, mechanisms, paper titles, PubMed IDs and DOIs">
+      <button id="search-clear" type="button" title="Clear search" hidden>&times;</button>
+      <div id="search-results"></div>
+    </div>
+    <details id="view-options">
+      <summary id="view-options-summary"></summary>
+      <div id="filters"></div>
+    </details>
+    <button id="reset-btn">Reset view</button>
+  </header>
+  <!-- Outside the disclosure and outside the sidebar both: what a control is
+       actively doing to the graph is not chrome to be folded away. -->
+  <div id="filters-active"></div>
+  <div id="main">
+    <div id="graph-wrap">
+      <div id="graph"></div>
+      <div id="legend">
+      <h2>Legend</h2>
+      <div class="legend-cat">Node shape &mdash; what it is</div>
+      <div class="legend-row"><span class="legend-swatch" style="background:#4da3ff; border: 1px solid #2d7fd6;"></span> Molecule</div>
+      <div class="legend-row"><span class="legend-swatch" style="background:#ffb04d; border: 1px solid #d68c2e; border-radius: 2px; transform: rotate(45deg);"></span> Target</div>
+      <!-- One block, not two. The hexagon and the enclosure were filed under
+           separate headings - "Node shape" and "Enclosure - protein
+           assemblies" - which read as two unrelated things when they are the
+           same one drawn two ways, and named protein assemblies twice in a
+           legend of five headings. The explanation moved onto the heading for
+           the same reason the panel's did: printed inline it was five lines of
+           prose nobody re-reads, and it made the legend tall enough to cover
+           the graph it is explaining. -->
+      <div class="legend-cat"><span class="help" tabindex="0">Protein assemblies &mdash; several proteins, one receptor</span><span class="help-text">Several
+        proteins ChEMBL records as one physical assembly. Collapsed, they merge
+        into one hexagon; hulled, every subunit stays on the canvas inside a
+        dashed enclosure &mdash; and either way the shared-target ranking counts
+        the assembly once, not once per subunit. Nothing that is not a subunit
+        is ever enclosed: a non-member that the layout puts inside is cut out of
+        the enclosure and the outline drawn around it. Which proteins form one
+        assembly comes from ChEMBL's own target typing, never from gene names.
+        The panel's grouping control sets this per tier or per assembly, and can
+        turn it off entirely.</span></div>
+      <div class="legend-row"><span class="legend-swatch" style="background:#ffb04d; border: 1px solid #d68c2e; clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);"></span> Collapsed into one node</div>
+      <div class="legend-row"><span class="legend-swatch" style="background:rgba(255,176,77,0.12); border: 1px dashed rgba(255,176,77,0.7); border-radius: 6px;"></span> Hulled &mdash; subunits kept separate</div>
+      <div class="legend-cat"><span class="help" tabindex="0">Node rim &mdash; brain expression</span><span class="help-text">A target
+        drawn with the thick rim is one UniProt records in brain tissue. The
+        plain thin outline above means UniProt has no tissue comment at all
+        &mdash; not that the protein is absent from the brain. The brain filter
+        in the panel hides the thin-rimmed targets on request; what it hides is
+        unverified, not non-brain.</span></div>
+      <div class="legend-row"><span class="legend-swatch" style="background:#ffb04d; border: 4px solid #d68c2e; border-radius: 2px; transform: rotate(45deg);"></span> Brain-expressed target</div>
+      <div class="legend-cat">Line colour &mdash; mechanism</div>
+      <div class="legend-row"><span class="legend-line" style="border-color:#e05c5c;"></span> Antagonist</div>
+      <div class="legend-row"><span class="legend-line" style="border-color:#e05ca8;"></span> Inverse agonist</div>
+      <div class="legend-row"><span class="legend-line" style="border-color:#5cc76a;"></span> Agonist / Activator</div>
+      <div class="legend-row"><span class="legend-line" style="border-color:#e0a15c;"></span> Inhibitor / Blocker</div>
+      <div class="legend-row"><span class="legend-line" style="border-color:#9aa1ad;"></span> Binder (unclassified)</div>
+      <div class="legend-row"><span class="legend-line" style="border-color:#b98be0;"></span> Functional-only (no binding data)</div>
+      <div class="legend-row"><span class="legend-line" style="border-color:#4dc7c7;"></span> Modulator (allosteric)</div>
+      <div class="legend-row"><span class="legend-line" style="border-color:#6b7280;"></span> Other mechanism</div>
+      <div class="legend-cat">Line style &mdash; evidence</div>
+      <div class="legend-row"><span class="legend-line" style="border-color:#c7ccd4;"></span> Solid: corroborated (curated, or more than one measurement)</div>
+      <div class="legend-row"><span class="legend-line dashed" style="border-color:#c7ccd4;"></span> Dashed: single-measurement lead</div>
+    </div>
+  </div>
+    <div id="sidebar">
+      <div id="detail-empty">Nothing selected yet. Try clicking <strong>Caffeine</strong> to see its receptors, then click one of those receptors to see what else binds it. Under a molecule, <strong>Shares targets with</strong> opens two molecules and just the targets they have in common. The search box also finds papers &mdash; by title, PubMed ID or DOI &mdash; and shows what each one contributes.</div>
+      <div id="detail"></div>
+    </div>
+  </div>
+</div>
+
+<script src="graph.data.js"></script>
+<script>
+// Every string rendered below comes from upstream databases - ChEMBL paper
+// titles, UniProt protein names, PDSP's free-text Reference column - and this
+// panel builds its markup with innerHTML. Unescaped, a title containing "&" or
+// "<" corrupts the panel, and this page is also published as a shared
+// artifact, so untrusted text reaching innerHTML is worth treating as a real
+// boundary rather than a cosmetic one.
+function esc(value) {
+  if (value == null) return "";
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+// Same idea for anything landing in an href. Only http(s) links are emitted -
+// a citation_url is always an external page, so anything else (javascript:,
+// data:) is upstream data gone wrong and gets dropped rather than rendered.
+function safeUrl(url) {
+  if (!url) return null;
+  try {
+    const parsed = new URL(url, window.location.href);
+    return (parsed.protocol === "https:" || parsed.protocol === "http:") ? parsed.href : null;
+  } catch (err) {
+    return null;
+  }
+}
+
+function link(url, label) {
+  const href = safeUrl(url);
+  if (!href) return `<span class="v">${esc(label)}</span>`;
+  return `<a href="${esc(href)}" target="_blank" rel="noopener">${esc(label)}</a>`;
+}
+
+// One place decides whether an edge counts as corroborated, so the graph
+// styling and the two panels can't drift apart. functional_n_measurements is
+// included because a FUNCTIONAL-only edge leaves n_measurements NULL - reading
+// only that column labelled every such edge a single-source lead regardless of
+// how many measurements actually backed it.
+function isCorroborated(e) {
+  const n = Math.max(e.n_measurements || 0, e.functional_n_measurements || 0);
+  return Boolean(e.is_primary_mechanism) || n > 1;
+}
+
+// Distinct papers behind an edge's counted measurements. Preferred over the
+// raw measurement count as the ordering key: n counts assays, and several
+// assays routinely share one paper - which is the case the edge panel already
+// calls out by always printing "from 1 paper". Ten measurements from one study
+// are one opinion; three from three studies are three.
+function paperCount(e) {
+  return paperKeys(e.measurements || []).size;
+}
+
+// The distinct papers behind a set of measurement rows, as identity keys.
+// One function because two places print this number - the target list's "N
+// papers" and the edge panel's "from N papers" - and they are the same claim
+// about the same rows. Read off two different field lists they disagreed, and
+// two panels disagreeing about one number is the failure invariant 13 exists
+// to prevent.
+//
+// Identity is citationKey's, so PDSP's free-text Reference is not silently
+// discarded: PDSP measurements carry no citation_url at all, and filtering on
+// citation_url dropped the one source in this database whose corroboration is
+// actually independent - out of the primary ranking key, and down to "0
+// papers" beside "1 measurement" on the two edges it backs.
+//
+// external_ref (the assay id) is the last resort, for a counted row that
+// cites nothing: it is not a paper, but it is one distinct piece of evidence,
+// and counting it as zero papers would understate a row that exists.
+function paperKeys(rows) {
+  const keys = rows
+    .filter(m => m.counted)
+    .map(m => citationKey(m.citation_url, m.citation_text)
+              || (m.external_ref ? "a:" + m.external_ref : null))
+    .filter(Boolean);
+  return new Set(keys);
+}
+
+// The larger of the two roles' counts, matching isCorroborated - not their
+// sum. Binding and functional measurements are different physical quantities
+// (invariant 4) and adding them would coin a number that appears nowhere else
+// in the viewer.
+function measurementCount(e) {
+  return Math.max(e.n_measurements || 0, e.functional_n_measurements || 0);
+}
+
+// 0 curated, 1 corroborated, 2 single-source lead. Built on isCorroborated
+// rather than beside it, so the graph's solid-vs-dashed styling and this
+// list's grouping cannot disagree about what counts as corroborated.
+function evidenceTier(e) {
+  if (e.is_primary_mechanism) return 0;
+  return isCorroborated(e) ? 1 : 2;
+}
+
+// Ordering *within* a tier. Deliberately never touches binding_value:
+// invariant 7 makes n the trust signal and the affinity value explicitly not
+// one, so a list that claims to rank by evidence must not be swayed by
+// potency. Sorting tacrine's targets by affinity would put a single
+// unreplicated IC50 on APP above the 13-paper acetylcholinesterase result.
+function compareEvidence(a, b, otherEndKey) {
+  return evidenceTier(a) - evidenceTier(b)
+      || paperCount(b) - paperCount(a)
+      || measurementCount(b) - measurementCount(a)
+      || databaseCount(b) - databaseCount(a)
+      || nodeLabel(a[otherEndKey]).localeCompare(nodeLabel(b[otherEndKey]));
+}
+
+const ACTION_COLORS = {
+  ANTAGONIST: "#e05c5c",
+  "INVERSE AGONIST": "#e05ca8",
+  AGONIST: "#5cc76a",
+  ACTIVATOR: "#5cc76a",
+  INHIBITOR: "#e0a15c",
+  BINDER: "#9aa1ad",
+  FUNCTIONAL: "#b98be0",
+  BLOCKER: "#e0a15c",
+  MODULATOR: "#4dc7c7",
+  "NEGATIVE ALLOSTERIC MODULATOR": "#4dc7c7",
+  "POSITIVE ALLOSTERIC MODULATOR": "#4dc7c7",
+};
+// Unknown action types get their own colour rather than falling through to
+// FUNCTIONAL's: an allosteric modulator and a functional-only edge mean
+// different things, and sharing a colour invites exactly the comparison
+// invariant 13 exists to prevent. The legend lists this as "Other mechanism".
+//
+// INVERSE AGONIST arrived with haloperidol and was the second instance of the
+// same drift: it is ChEMBL's curated, directional claim about the D2-family
+// receptors, and unmapped it drew in the fallback grey - one shade off
+// BINDER's, which means "raw affinity, no curated mechanism at all". The two
+// opposite ends of how much is known about an edge were rendering as the same
+// grey line. It has its own colour, and a test now holds every mapped colour
+// to a legend row so the next new action type cannot arrive unnoticed.
+//
+// The fallback is deliberately well clear of BINDER's grey rather than a
+// shade from it, for the same reason.
+function actionColor(actionType) {
+  return ACTION_COLORS[actionType] || "#6b7280";
+}
+
+const rawNodes = GRAPH_DATA.nodes;
+const rawEdges = GRAPH_DATA.edges;
+// nodeLabel and the similarity pass are called once per edge per render;
+// a linear scan of 155 nodes inside each was the only thing here that grew
+// with the graph.
+const nodeIndex = new Map(rawNodes.map(n => [n.id, n]));
+
+// ------------------------------------------------------- protein assemblies
+//
+// ChEMBL's unit of record is the assay, and an assay run against a protein
+// assembly is attributed to every subunit of it. The panel has collapsed that
+// since the fan-out work; the canvas never did, so the NMDA receptor was seven
+// nodes and the voltage-gated calcium channel twenty-six, and the canvas is
+// where the similarity reading actually happens.
+//
+// The ranking was worse than unchanged, it was wrong: `sharedTargets`
+// de-duplicated by *assay*, which catches one experiment attributed to many
+// subunits and misses two molecules reaching the same physical receptor
+// through different experiments. Dextromethorphan and memantine are both NMDA
+// antagonists - one fact about one receptor - and the panel reported an
+// eight-target overlap. De-duplicating by assay and de-duplicating by receptor
+// are two different corrections and this file previously had only the first.
+//
+// `groups` comes from export_graph.py and is reachable by identifier at every
+// step: assay id -> ChEMBL target -> target_dictionary.target_type. What is
+// deliberately NOT used is ChEMBL's protein_classification tree, which is a
+// sequence and function taxonomy blind to assembly - it puts CACNA1C and
+// CACNA1D on one leaf while they are two different channels, and files CACNB2,
+// which physically co-assembles with CACNA1C, somewhere else entirely.
+//
+// Two tiers, because they are two different claims:
+//   complex        PROTEIN COMPLEX - ChEMBL asserts the subunit composition.
+//                  Merging the subunits is a correction.
+//   complex_group  PROTEIN COMPLEX GROUP - ChEMBL's own definition is "a
+//                  poorly defined protein complex, where subunit composition
+//                  is unclear". The 26-member voltage-gated calcium channel is
+//                  one of these, and it lumps L-, N-, P/Q-, R- and T-type
+//                  channels together; collapsing it by default would undo the
+//                  reason mibefradil is in the seed set at all.
+// PROTEIN FAMILY is deliberately absent. Paralogues are not subunits, and
+// merging them would destroy the DRD2-vs-DRD3 and PDE4-vs-PDE5 distinctions
+// the seed set was built to show.
+const rawGroups = GRAPH_DATA.groups || [];
+const groupIndex = new Map(rawGroups.map(g => [g.id, g]));
+
+// Which assembly a target sits in, or undefined. export_graph.py guarantees at
+// most one - a node can only be inside one hull - so this is a plain lookup
+// rather than a list.
+const groupOfTargetId = new Map();
+rawGroups.forEach(g => g.members.forEach(id => groupOfTargetId.set(id, g)));
+
+const GROUP_MODES = ["collapse", "hull", "separate"];
+
+// The default treatment per tier, and the words the control uses for it. The
+// defaults are graded by what ChEMBL is willing to claim rather than by what
+// looks tidiest: the tier whose composition ChEMBL asserts is merged, the tier
+// it calls unclear is drawn as a grouping and left un-merged. Both are
+// changeable, per tier and per assembly, because "is this one receptor or
+// five" is a judgement a reader may reasonably want to make for themselves.
+const GROUP_TIERS = [
+  {
+    key: "complex",
+    label: "Protein complexes",
+    fallback: "collapse",
+    claim: "ChEMBL asserts the subunit composition, so merging the subunits "
+         + "is a correction rather than a simplification.",
+  },
+  {
+    key: "complex_group",
+    label: "Protein complex groups",
+    fallback: "hull",
+    claim: "ChEMBL calls the subunit composition unclear. Collapsing one can "
+         + "merge genuinely different channels, so the grouping is shown and "
+         + "the merge is not made unless you ask for it.",
+  },
+];
+
+const GROUP_TIER_LABELS = {
+  complex: "protein complex",
+  complex_group: "protein complex group",
+};
+
+// Read and written through functions for the same reason `filters` is: a
+// top-level `const` is not a property of the global object, so the offline
+// harness cannot otherwise drive it - and what a grouping mode does to the
+// shared-target counts is exactly the thing that needs a test.
+const grouping = {
+  complex: "collapse",
+  complex_group: "hull",
+  // Per-assembly, set from an assembly's own panel. A reader who wants the
+  // NMDA receptor merged should not have to merge the 26-way calcium channel
+  // to get it, which is what a tier-only control would force.
+  overrides: {},
+  // The escape hatch: no hulls, no merging, no collapsed rows in the panel,
+  // and no de-duplication in the ranking. Every subunit counted on its own.
+  ungrouped: false,
+};
+
+function setGrouping(tier, mode) {
+  if (!GROUP_MODES.includes(mode)) return grouping[tier];
+  grouping[tier] = mode;
+  return grouping[tier];
+}
+
+function setGroupOverride(groupId, mode) {
+  if (mode == null) delete grouping.overrides[groupId];
+  else if (GROUP_MODES.includes(mode)) grouping.overrides[groupId] = mode;
+  return groupMode(groupById(groupId));
+}
+
+// Apply a choice made on one assembly's own panel. When that choice creates a
+// collapsed node, move both kinds of selection onto it: our panel/highlight
+// selection and vis-network's canvas selection (the white selection rim).
+// The node does not exist on the canvas until applyFilters has made the new
+// mode visible, so selecting it has to happen afterwards.
+function applyGroupModeChoice(groupId, mode) {
+  const g = groupById(groupId);
+  if (!g) return;
+  setGroupOverride(groupId, mode || null);
+  applyFilters();
+  if (mode === "collapse" && groupMode(g) === "collapse") {
+    selectGroup(groupId);
+    network.selectNodes([groupId]);
+  }
+}
+
+function setUngrouped(on) {
+  grouping.ungrouped = !!on;
+  return grouping.ungrouped;
+}
+
+function ungroupedAll() {
+  return grouping.ungrouped;
+}
+
+function groupById(id) {
+  return groupIndex.get(id) || null;
+}
+
+// Reached through functions for the same reason `filters` is: a top-level
+// `const` is not a property of the global object, so the offline harness -
+// which evaluates this file in a vm and reaches its top-level *functions* -
+// cannot see the assemblies otherwise, and what grouping does to the
+// shared-target counts is exactly the thing that needs a test.
+function allGroups() {
+  return rawGroups;
+}
+
+function allGroupEdges() {
+  return groupEdges;
+}
+
+// The tier default, as distinct from groupMode(), which resolves a single
+// assembly's override and the global off-switch on top of it.
+function groupingDefault(tier) {
+  return grouping[tier];
+}
+
+// The one place that answers "how is this assembly being drawn". Everything
+// else - the canvas, the panel's lists, the ranking - reads it, so they cannot
+// disagree about whether seven subunits are one receptor.
+function groupMode(g) {
+  if (!g) return "separate";
+  if (grouping.ungrouped) return "separate";
+  return grouping.overrides[g.id] || grouping[g.tier] || "separate";
+}
+
+// A target's assembly, but only while that assembly is being treated as one:
+// in "separate" mode a subunit is just a target, which is the whole point of
+// the mode.
+function groupOfTarget(id) {
+  const g = groupOfTargetId.get(id);
+  return g && groupMode(g) !== "separate" ? g : null;
+}
+
+// Display name. ChEMBL's pref_name runs to
+// "Gamma-aminobutyric acid receptor subunit alpha-1/alpha-2/beta-2/gamma-2",
+// which is unreadable as a node label; the full string is on the tooltip and
+// in the assembly's own panel, so nothing is lost by shortening it here.
+function groupLabel(g, max) {
+  const limit = max || 34;
+  const name = String(g.name || "").split(";")[0].trim();
+  if (name.length <= limit) return name;
+  const cut = name.slice(0, limit);
+  const space = cut.lastIndexOf(" ");
+  return (space > limit * 0.5 ? cut.slice(0, space) : cut).trimEnd() + "…";
+}
+
+// Springs between the subunits of one assembly, so the force layout puts them
+// in one place. They carry no data, are never drawn (zero opacity, zero width,
+// no tooltip, unselectable) and exist only to fix the thing that made a hull
+// dishonest: vis's physics knows nothing about assemblies, so without them the
+// enclosure is drawn around wherever the layout happened to scatter twenty-six
+// calcium subunits - large, loose, and with room inside for nodes that are not
+// members. A tight cluster is the root-cause half of that; `hullExclusions`
+// below is the half that guarantees it.
+//
+// A star rather than a clique: 26 subunits would be 325 springs and would
+// overwhelm every other force on the canvas. The hub is the lowest member id,
+// so the layout is the same on every load rather than depending on iteration
+// order.
+const GLUE_LENGTH = 120;
+const glueEdges = [];
+rawGroups.forEach(g => {
+  const ids = g.members.slice().sort();
+  ids.slice(1).forEach(id => glueEdges.push({
+    id: `glue_${g.id}_${id}`, group: g, from: ids[0], to: id,
+  }));
+});
+
+// Physics only where the assembly is actually being drawn as one thing.
+// "Separate" means the reader has asked for these to be unrelated targets, and
+// a spring holding them together would still be making the claim the mode is
+// there to withdraw; "collapse" hides the subunits entirely.
+function glueActive(ge) {
+  return groupMode(ge.group) === "hull";
+}
+
+const glueEdgeIds = new Set(glueEdges.map(ge => ge.id));
+
+// Reached through a function for the same reason allGroups() is: a top-level
+// `const` is not a property of the global object, so the offline harness cannot
+// see it, and "the enclosure only ever surrounds its own members" is exactly
+// the claim that needs holding to.
+function allGlueEdges() {
+  return glueEdges;
+}
+
+function isGlueEdge(id) {
+  return glueEdgeIds.has(id);
+}
+
+// One synthetic node per assembly, and one synthetic edge per (molecule,
+// assembly) pair, built once. Membership is fixed by the data; only the mode
+// changes at runtime, so collapsing is a visibility decision like every other
+// one on this page rather than a rebuild of the graph.
+const groupEdges = [];
+rawGroups.forEach(g => {
+  const members = new Set(g.members);
+  const byMolecule = new Map();
+  rawEdges.forEach(e => {
+    if (!members.has(e.to)) return;
+    if (!byMolecule.has(e.from)) byMolecule.set(e.from, []);
+    byMolecule.get(e.from).push(e);
+  });
+  byMolecule.forEach((edges, molId) => {
+    groupEdges.push({ id: `grpint_${molId}_${g.id}`, from: molId, to: g.id, group: g, edges });
+  });
+});
+
+// A collapsed edge stands for several real ones, which can disagree about
+// mechanism. A curated mechanism wins - it is the strongest claim on offer -
+// and otherwise the most frequent action_type, with ties broken by edge id so
+// the colour on screen never depends on iteration order.
+function groupEdgeAction(ge) {
+  const curated = ge.edges.find(e => e.is_primary_mechanism);
+  if (curated) return curated.action_type;
+  const counts = new Map();
+  ge.edges.forEach(e => counts.set(e.action_type, (counts.get(e.action_type) || 0) + 1));
+  let best = null;
+  ge.edges.slice().sort((a, b) => String(a.id).localeCompare(String(b.id))).forEach(e => {
+    if (best === null || counts.get(e.action_type) > counts.get(best)) best = e.action_type;
+  });
+  return best;
+}
+
+// Solid when *any* subunit edge is corroborated: "this molecule acts on this
+// assembly" is corroborated as soon as one of the subunit claims is. The
+// breakdown is spelled out in the collapsed edge's own panel rather than
+// averaged away into a line style that could not carry it.
+function groupEdgeCorroborated(ge) {
+  return ge.edges.some(isCorroborated);
+}
+
+const visNodes = new vis.DataSet(rawNodes.map(n => {
+  const isMolecule = n.type === "molecule";
+  return {
+    id: n.id,
+    label: n.label,
+    shape: isMolecule ? "dot" : "diamond",
+    size: isMolecule ? 22 : 20,
+    // expressed_in_brain is 1 or NULL and never 0 (invariant 10), so a thick
+    // border asserts "UniProt records this in brain tissue" and a thin one
+    // asserts nothing at all - which is the honest reading of a missing
+    // tissue comment. The rim is the default reading of this field; the brain
+    // filter (see `filters`) can hide the thin-rimmed targets on request, and
+    // has to state what that costs, because a thin rim is not a negative.
+    borderWidth: !isMolecule && n.expressed_in_brain === 1 ? 4 : 1,
+    borderWidthSelected: !isMolecule && n.expressed_in_brain === 1 ? 5 : 2,
+    color: {
+      background: isMolecule ? "#4da3ff" : "#ffb04d",
+      border: isMolecule ? "#2d7fd6" : "#d68c2e",
+      highlight: { background: isMolecule ? "#7ec2ff" : "#ffc670", border: "#ffffff" },
+    },
+    font: { color: "#e6e8ec", size: 14 },
+    title: isMolecule
+      ? `${esc(n.label)}${n.molecular_formula ? " (" + esc(n.molecular_formula) + ")" : ""}`
+      : `${esc(n.label)}${n.protein_name ? " — " + esc(n.protein_name) : ""}`,
+    _raw: n,
+  };
+}).concat(rawGroups.map(g => {
+  // An assembly is a target-shaped thing, so it keeps the target palette, but
+  // it is not a protein and must not read as one: a hexagon says "several
+  // subunits drawn as one" where the diamond says "one protein". The legend
+  // names it, for the same reason every other channel on this canvas is named.
+  const brain = g.members.some(id => isBrainConfirmed(nodeById(id)));
+  return {
+    id: g.id,
+    label: groupLabel(g),
+    shape: "hexagon",
+    // Scaled with the assembly, capped: the 26-member calcium channel should
+    // look like more than the 2-member IKs channel without swamping the graph.
+    size: Math.min(34, 20 + g.members.length),
+    borderWidth: brain ? 4 : 1,
+    borderWidthSelected: brain ? 5 : 2,
+    // The target palette exactly, including the border colour: shape is the
+    // channel that says "assembly, not protein", and giving it a second one
+    // would be a distinction the legend has to explain twice.
+    color: {
+      background: "#ffb04d",
+      border: "#d68c2e",
+      highlight: { background: "#ffc670", border: "#ffffff" },
+    },
+    font: { color: "#e6e8ec", size: 14 },
+    title: `${esc(g.name)} — ${esc(plural(g.members.length, "subunit"))}, `
+      + `one ${esc(GROUP_TIER_LABELS[g.tier] || "assembly")}`,
+    _group: g,
+  };
+})));
+
+const visEdges = new vis.DataSet(rawEdges.map(e => {
+  const corroborated = isCorroborated(e);
+  return {
+    id: e.id,
+    from: e.from,
+    to: e.to,
+    color: { color: actionColor(e.action_type), highlight: "#ffffff", opacity: 0.85 },
+    width: corroborated ? 3 : 1.5,
+    dashes: !corroborated,
+    smooth: { type: "continuous" },
+    title: `${esc(e.action_type)}${e.binding_value != null ? " — " + esc(e.binding_type) + " " + esc(e.binding_value) + " " + esc(e.binding_units) : ""}`,
+    _raw: e,
+  };
+}).concat(groupEdges.map(ge => {
+  const corroborated = groupEdgeCorroborated(ge);
+  return {
+    id: ge.id,
+    from: ge.from,
+    to: ge.to,
+    color: { color: actionColor(groupEdgeAction(ge)), highlight: "#ffffff", opacity: 0.85 },
+    width: corroborated ? 3 : 1.5,
+    dashes: !corroborated,
+    smooth: { type: "continuous" },
+    title: `${esc(nodeLabel(ge.from))} → ${esc(groupLabel(ge.group))} — `
+      + `${esc(plural(ge.edges.length, "subunit edge"))}`,
+    _groupEdge: ge,
+  };
+})).concat(glueEdges.map(ge => ({
+  id: ge.id,
+  from: ge.from,
+  to: ge.to,
+  // Invisible by opacity, not by `hidden`. `hidden` is this page's word for
+  // "the filter took this out of the picture" - applyFilters writes it and
+  // nothing else does - and a glue spring was never in the picture to begin
+  // with. Whether it pulls is its own switch (`physics`, which is the only
+  // thing vis reads when it builds the physics body), so the two questions
+  // stay separate.
+  color: { color: "rgba(0,0,0,0)", opacity: 0 },
+  width: 0,
+  selectionWidth: 0,
+  hoverWidth: 0,
+  chosen: false,
+  smooth: false,
+  length: GLUE_LENGTH,
+  physics: glueActive(ge),
+  _glue: ge,
+}))));
+
+const container = document.getElementById("graph");
+const network = new vis.Network(container, { nodes: visNodes, edges: visEdges }, {
+  layout: { improvedLayout: true },
+  physics: {
+    solver: "forceAtlas2Based",
+    forceAtlas2Based: { gravitationalConstant: -60, springLength: 140, springConstant: 0.06 },
+    stabilization: { iterations: 200 },
+  },
+  interaction: { hover: true, tooltipDelay: 150 },
+  nodes: { borderWidth: 2 },
+  edges: { hoverWidth: 1 },
+});
+
+// ------------------------------------------------------------------- hulls
+//
+// The honest drawing of an assembly ChEMBL will not vouch for the composition
+// of: show the grouping, keep every subunit on the canvas and clickable, merge
+// nothing. Painted on `beforeDrawing` so it lands *under* the nodes and edges;
+// `afterDrawing` would lay a translucent sheet over the very labels it is
+// meant to be grouping.
+const HULL_PADDING = 26;
+
+// Andrew's monotone chain. Returns the points in hull order; for two subunits,
+// or three in a line, it degenerates and hullOutline takes over.
+function convexHull(points) {
+  if (points.length < 3) return points.slice();
+  const pts = points.slice().sort((a, b) => a.x - b.x || a.y - b.y);
+  const cross = (o, a, b) =>
+    (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
+  const half = list => {
+    const out = [];
+    list.forEach(p => {
+      while (out.length >= 2
+        && cross(out[out.length - 2], out[out.length - 1], p) <= 0) out.pop();
+      out.push(p);
+    });
+    out.pop();
+    return out;
+  };
+  return half(pts).concat(half(pts.slice().reverse()));
+}
+
+// A polygon to enclose, whatever the subunits happen to be doing. Two nodes
+// give a segment and a vertical pair gives a zero-width box, both of which draw
+// as nothing at all, so the degenerate cases get a rectangle with a floor on
+// each dimension rather than being skipped.
+function hullOutline(points) {
+  const hull = convexHull(points);
+  if (hull.length >= 3) return hull;
+  const xs = points.map(p => p.x);
+  const ys = points.map(p => p.y);
+  let x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs);
+  let y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+  if (x1 - x0 < 2) { x0 -= 1; x1 += 1; }
+  if (y1 - y0 < 2) { y0 -= 1; y1 += 1; }
+  return [{ x: x0, y: y0 }, { x: x1, y: y0 }, { x: x1, y: y1 }, { x: x0, y: y1 }];
+}
+
+// Ray casting. The boundary counts as inside, which is the conservative answer
+// to the question actually being asked: a node sitting on the outline is a node
+// the enclosure is claiming.
+function pointInPolygon(p, poly) {
+  let inside = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const a = poly[i], b = poly[j];
+    if ((a.y > p.y) !== (b.y > p.y)
+      && p.x < (b.x - a.x) * (p.y - a.y) / (b.y - a.y) + a.x) inside = !inside;
+  }
+  return inside;
+}
+
+// Distance from a point to the nearest edge of a polygon, ignoring which side
+// it is on. Paired with pointInPolygon so a node just outside the outline is
+// still given clearance rather than being touched by it.
+function distanceToPolygon(p, poly) {
+  let best = Infinity;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const a = poly[j], b = poly[i];
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const len2 = dx * dx + dy * dy;
+    const t = len2 ? Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / len2)) : 0;
+    const qx = a.x + t * dx, qy = a.y + t * dy;
+    best = Math.min(best, Math.hypot(p.x - qx, p.y - qy));
+  }
+  return best;
+}
+
+// Everything the enclosure must not contain.
+//
+// A convex hull over a force layout has no idea what it surrounds. The glue
+// springs above make the clusters tight, which makes this rare - but rare is
+// not the property being asked for: an enclosure that says "these proteins are
+// one receptor" must not be drawn around a protein that is not one of them,
+// ever, and a node that is a member of nothing has no way to argue back. So the
+// region is *carved* around every non-member that lands in or against it, the
+// outline traced round the gap, and the node drawn in the clear.
+//
+// Nodes are not moved to achieve this. Moving them would fight the physics that
+// placed them - vis restarts the simulation on every moveNode - and would make
+// the layout a function of the grouping mode, so a hull would silently rearrange
+// the graph around it. The picture stays the force layout; only what the
+// enclosure claims is corrected.
+//
+// `nodes` are `{id, x, y, r}`, r being the clearance that node needs. Pure, and
+// kept apart from the canvas for the same reason the visibility predicates are:
+// this is the rule, and it can be held to without a renderer.
+function hullExclusions(outline, memberIds, nodes) {
+  const members = new Set(memberIds);
+  if (!outline || outline.length < 3) return [];
+  return nodes.filter(n =>
+    !members.has(n.id)
+    && (pointInPolygon(n, outline) || distanceToPolygon(n, outline) < n.r));
+}
+
+function expandFromCentroid(pts, pad) {
+  const cx = pts.reduce((s, p) => s + p.x, 0) / pts.length;
+  const cy = pts.reduce((s, p) => s + p.y, 0) / pts.length;
+  return pts.map(p => {
+    const dx = p.x - cx, dy = p.y - cy;
+    const d = Math.sqrt(dx * dx + dy * dy) || 1;
+    return { x: p.x + (dx / d) * pad, y: p.y + (dy / d) * pad };
+  });
+}
+
+// Rounded by curving through the midpoint of each edge, so the hull reads as
+// an enclosing region rather than a polygon someone drew around the nodes.
+// Adds a subpath to an already-open path rather than starting one, because the
+// carved gaps are subpaths of the same path (see drawHulls). The curve stays
+// inside its polygon - each quadratic lies in the triangle of its two midpoints
+// and the vertex between them - so hit-testing an exclusion against the polygon
+// is conservative, never optimistic.
+function traceHullPathInto(ctx, pts) {
+  const mid = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
+  const start = mid(pts[pts.length - 1], pts[0]);
+  ctx.moveTo(start.x, start.y);
+  for (let i = 0; i < pts.length; i++) {
+    const cur = pts[i];
+    const m = mid(cur, pts[(i + 1) % pts.length]);
+    ctx.quadraticCurveTo(cur.x, cur.y, m.x, m.y);
+  }
+  ctx.closePath();
+}
+
+// How much room a node needs kept clear of it. The drawn radius plus a margin
+// for the label sitting under it, so a carved gap contains the whole node
+// rather than just its middle.
+function nodeClearance(id) {
+  const g = groupIndex.get(id);
+  if (g) return Math.min(34, 20 + g.members.length) + 14;
+  const n = nodeById(id);
+  return (n && n.type === "molecule" ? 22 : 20) + 14;
+}
+
+// Every node currently drawn, with the room it needs. Read once per frame and
+// handed to hullExclusions, so the containment rule sees the same canvas the
+// hull is being drawn on.
+function drawnNodes() {
+  const ids = rawNodes.filter(nodeOnCanvas).map(n => n.id)
+    .concat(rawGroups.filter(groupNodeOnCanvas).map(g => g.id));
+  const positions = network.getPositions(ids);
+  return ids.map(id => {
+    const p = positions[id];
+    return p ? { id, x: p.x, y: p.y, r: nodeClearance(id) } : null;
+  }).filter(Boolean);
+}
+
+function traceCircle(ctx, p, r) {
+  ctx.moveTo(p.x + r, p.y);
+  ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+}
+
+function drawHulls(ctx) {
+  const drawn = rawGroups.some(g => groupMode(g) === "hull") ? drawnNodes() : [];
+  rawGroups.forEach(g => {
+    if (groupMode(g) !== "hull") return;
+    const members = visibleMembers(g).filter(n => nodeOnCanvas(n));
+    if (members.length < 2) return;
+    const positions = network.getPositions(members.map(n => n.id));
+    const pts = members.map(n => positions[n.id]).filter(Boolean);
+    if (pts.length < 2) return;
+    // Dims with the graph. A hull is a statement about the nodes it holds, so
+    // it has no business staying lit while they are greyed out by a search or
+    // by a selection somewhere else entirely.
+    const lit = currentOpacity
+      ? members.reduce((m, n) => Math.max(m, currentOpacity.nodes.get(n.id) || 0), 0)
+      : 1;
+    if (lit <= 0.13) return;
+    const outline = expandFromCentroid(hullOutline(pts), HULL_PADDING);
+    const excluded = hullExclusions(outline, g.members, drawn);
+    ctx.save();
+    ctx.globalAlpha = lit;
+    // The enclosure and the gaps punched in it are one path, filled even-odd,
+    // so a non-member is outside the region rather than sitting on top of it -
+    // and stroked together, so the dashed outline visibly goes around the gap
+    // instead of the node looking like a subunit someone forgot to shade.
+    ctx.beginPath();
+    traceHullPathInto(ctx, outline);
+    excluded.forEach(n => traceCircle(ctx, n, n.r));
+    ctx.fillStyle = "rgba(255,176,77,0.09)";
+    ctx.fill("evenodd");
+    ctx.setLineDash([6, 5]);
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = "rgba(255,176,77,0.55)";
+    ctx.stroke();
+    // Above the topmost point rather than at the centroid, which is where the
+    // subunits are.
+    const top = outline.reduce((a, p) => (p.y < a.y ? p : a), outline[0]);
+    const cx = outline.reduce((s, p) => s + p.x, 0) / outline.length;
+    ctx.setLineDash([]);
+    ctx.fillStyle = "rgba(255,199,138,0.9)";
+    ctx.font = "12px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(groupLabel(g, 40), cx, top.y - 8);
+    ctx.restore();
+  });
+}
+
+network.on("beforeDrawing", drawHulls);
+
+const detailEmpty = document.getElementById("detail-empty");
+const detail = document.getElementById("detail");
+
+// "n=13" next to "Sources (3)" read as a contradiction, because the two count
+// different things: n counts individual assay measurements, the source list
+// counts databases. Spelling out "median of 13 measurements" and hanging the
+// measurements themselves off the value removes the guesswork - the reader can
+// open the list and see all thirteen.
+function fmtBinding(prefix, value, type, units, n, rows) {
+  if (value == null) return "";
+  const count = n || 1;
+  const pooled = count > 1
+    ? `median of ${esc(count)} measurements`
+    : `1 measurement`;
+  return `
+    <div class="field">
+      <span class="k">${helpLabel(prefix)}</span>
+      <div class="v">${esc(type)} = ${esc(value.toLocaleString())} ${esc(units)}
+        <span style="color:var(--text-dim)">— ${pooled}</span></div>
+      ${measurementListHTML(rows)}
+    </div>`;
+}
+
+// The plain-text form, so a value can be put inside a sentence that is
+// escaped as a whole (the citation panel does this) as well as rendered on
+// its own.
+function measurementValueText(m) {
+  const v = typeof m.value === "number" ? m.value.toLocaleString() : m.value;
+  return `${m.affinity_type} ${v} ${m.units || "nM"}`;
+}
+
+function fmtMeasurementValue(m) {
+  return esc(measurementValueText(m));
+}
+
+function measurementListHTML(rows) {
+  if (!rows || !rows.length) return "";
+  const counted = rows.filter(m => m.counted).length;
+  // Distinct papers, not rows: the interesting claim about caffeine/ADORA1
+  // is that thirteen measurements come from twelve independent studies
+  // spanning two decades, which the row count alone doesn't convey.
+  // Deliberately "papers", never "sources" - "source" means database
+  // everywhere else in this panel, and blurring the two is the confusion
+  // this whole section exists to remove.
+  // Counted rows only, so the paper count can never exceed the measurement
+  // count beside it ("1 measurement from 2 papers" is not a sentence).
+  const papers = paperKeys(rows).size;
+  const excluded = rows.length - counted;
+  const summary = [
+    `${counted} measurement${counted === 1 ? "" : "s"}`,
+    `from ${papers} paper${papers === 1 ? "" : "s"}`,
+    excluded ? `· ${excluded} more not counted` : null,
+  ].filter(Boolean).join(" ");
+  return `
+    <details class="measurements">
+      <summary>${esc(summary)}</summary>
+      <ol>
+        ${rows.map(m => `
+          <li class="${m.counted ? "" : "uncounted"}">
+            <span class="mnum">${fmtMeasurementValue(m)}</span>
+            ${m.external_ref ? `<span class="mref">· ${esc(m.name)} ${esc(m.external_ref)}</span>` : `<span class="mref">· ${esc(m.name)}</span>`}
+            ${m.citation_url || m.citation_text
+              ? `<span class="mcite">${link(m.citation_url, m.citation_text || m.citation_url)}</span>` : ""}
+            ${m.assay_description ? `<span class="mdesc">${esc(m.assay_description)}</span>` : ""}
+            ${m.data_validity_note
+              ? `<span class="mexcl">⚠ ${esc(m.name)} flags this value: ${esc(m.data_validity_note)}</span>` : ""}
+            ${m.counted ? "" : `<span class="mexcl">Not counted toward n — ${esc(m.name)} republishes records from a source already counted here.</span>`}
+          </li>`).join("")}
+      </ol>
+    </details>`;
+}
+
+// One explanation per field label in the panel. Kept in one place rather
+// than inline at each call site so the panel's vocabulary can be read - and
+// corrected - as a whole: several of these words (source, measurement,
+// database, n) mean specific and easily-confused things in this project.
+const HELP = {
+  "Confirmed brain-expressed targets only":
+    "Hides every target UniProt does not positively record in brain tissue. "
+    + "Those targets are unverified, not absent: this database stores brain "
+    + "expression as 1 or NULL and never 0, so a missing tissue comment is a "
+    + "gap in UniProt, not a finding. The filter is for concentrating the "
+    + "picture on what is confirmed \u2014 never for concluding that what it "
+    + "removed does not act in the brain.",
+  "Mechanism":
+    "How the molecule acts on this target. Taken from ChEMBL's curated "
+    + "mechanism where one exists; otherwise a note saying only that activity "
+    + "was reported, with no mechanism curated.",
+  "Primary mechanism":
+    "Yes when ChEMBL curates this as the drug's top-line mechanism of action "
+    + "— what the drug is understood to do. No means the interaction is real "
+    + "but is not that: an off-target or incidental activity.",
+  "Binding affinity":
+    "How tightly the molecule binds, in nanomolar — lower is tighter. The "
+    + "median of every measurement of a single type (Ki, else Kd, else IC50; "
+    + "never mixed), pooled in log space because affinities are log-normal.",
+  "Functional assay":
+    "Potency in a cell- or tissue-based assay: what the molecule does to the "
+    + "system, not how tightly it sticks. A different physical quantity from "
+    + "binding affinity, so it is pooled separately and never blended in.",
+  "Databases":
+    "Which databases this edge came through, and what each one contributed to it.",
+  "IUPAC name": "The systematic chemical name, from PubChem.",
+  "Formula": "Molecular formula and weight, from PubChem.",
+  "SMILES":
+    "A one-line text encoding of the molecule's structure, from PubChem. "
+    + "Paste it into any structure viewer to draw the molecule.",
+  "Links":
+    "Wikipedia first where an article is linked \u2014 it is the only one of these that explains what the thing is \u2014 then the source records this row was built from. No Wikipedia link means no article was found for this exact identifier, never that one was searched for and guessed at.",
+  "Protein": "The protein's recommended name, from UniProt.",
+  "Organism":
+    "The species the protein belongs to. Assays here are filtered to human "
+    + "targets, so this is Homo sapiens throughout.",
+  "Brain-expressed":
+    "Whether UniProt records this protein as expressed in brain tissue. "
+    + "\u201CUnverified\u201D means UniProt has no tissue comment at all — not "
+    + "that the protein is absent from the brain.",
+  "Targets":
+    "Proteins this molecule acts on, from the sources this project reads. "
+    + "Click one to open it.",
+  "Molecules that bind this target":
+    "Molecules in this database with a measured interaction at this protein. "
+    + "Click one to open it.",
+  "Shares targets with":
+    "Other molecules here that act on the same targets \u2014 the closest this "
+    + "database comes to \u201cthese two may work alike\u201d. Ranked by shared "
+    + "targets where both sides are corroborated, since an overlap made of two "
+    + "unreplicated leads is not evidence of anything. Two things count once "
+    + "rather than once per member: one assay spread across a protein family, "
+    + "and one physical assembly reached by either molecule however many "
+    + "separate experiments it took — which is why a row can read “2 "
+    + "shared targets (8 proteins, grouped)”. The grouping control decides "
+    + "the second; turning it off counts every subunit on its own. Selecting a "
+    + "molecule also lights these up on the graph, and clicking a row opens "
+    + "just those two molecules and the targets they have in common.",
+  "Overlap":
+    "The same three numbers the row you came from was ranked by, for this pair "
+    + "alone. Shared targets counts one physical assembly once however many "
+    + "subunits it has, and one assay once however many proteins it was filed "
+    + "against; the protein count in brackets is what that compressed.",
+  "What they share":
+    "Every target both molecules act on, with each molecule's own edge at it. "
+    + "One block per shared thing, which is not always one protein: an "
+    + "assembly is one block holding its subunits, and a single assay "
+    + "attributed to several proteins is one block holding those. Both "
+    + "molecules' edges sit together so the mechanisms and the evidence "
+    + "behind them can be compared without opening each one.",
+  "Open on its own":
+    "Leaves the pair and opens one of the two molecules, with everything it "
+    + "acts on rather than only the overlap.",
+  "One assay, many targets":
+    "One experiment, not this many findings. ChEMBL records results per "
+    + "assay, and an assay run against a protein complex or family is filed "
+    + "against every member of it \u2014 so a single measurement arrives here "
+    + "as many edges that each truthfully say \u201C1 measurement\u201D. They "
+    + "are collapsed into this one row, which expands to the members. Only "
+    + "edges with no other assay of their own are grouped this way.",
+  "Curated mechanism":
+    "ChEMBL curates this as the molecule's top-line mechanism of action — "
+    + "what the drug is understood to do, rather than an activity that was "
+    + "merely measured. The strongest thing this database can say about an edge.",
+  "Corroborated":
+    "More than one measurement backs this edge. This is a statement about how "
+    + "much evidence there is, not about how strong the interaction is — a "
+    + "weak affinity measured ten times is corroborated, and a tight one "
+    + "measured once is not.",
+  "Single-source leads":
+    "One measurement stands behind these. Real, but unreplicated — a lead to "
+    + "corroborate, not a settled finding, however strong the number looks. "
+    + "Collapsed by default because on some molecules they outnumber "
+    + "everything else several times over.",
+  // The database names in the Databases list are labels too, and which
+  // database a number came from is most of what tells a reader how much to
+  // trust it - especially BindingDB, whose rows are deliberately not counted.
+  "ChEMBL":
+    "EMBL-EBI's manually curated bioactivity database — the primary source "
+    + "here for mechanisms, binding assays and functional assays.",
+  "DGIdb":
+    "Aggregates drug–gene interaction claims from other resources; asserts "
+    + "an edge exists but contributes no measurement, so it's never counted.",
+  "BindingDB":
+    "A public binding-affinity database; ~97% of its rows here are "
+    + "republished from ChEMBL or PDSP, so they're shown but not counted.",
+  "PubChem":
+    "NCBI's chemical database — supplies compound identity here: formula, "
+    + "weight, structure and name.",
+  "UniProt":
+    "The reference database of protein sequence and function — supplies "
+    + "protein identity and tissue expression here.",
+  "PDSP":
+    "The Psychoactive Drug Screening Program's Ki database — a bulk release "
+    + "of receptor binding constants, strong for CNS targets.",
+  // The search result categories. Deliberately separate keys from the panel
+  // headings that share their words: "Targets" in a molecule panel means
+  // "proteins this molecule acts on", and reusing that explanation over a
+  // list of search hits would be the same word answering two questions.
+  "search-molecules":
+    "Molecules whose name, common or brand name, systematic name, formula or database id matches. "
+    + "Selecting one opens it exactly as clicking it on the graph would.",
+  "search-targets":
+    "Proteins whose gene symbol, recommended name or UniProt accession "
+    + "matches.",
+  "search-interactions":
+    "Single molecule–target edges, matched on either end's name, on the "
+    + "mechanism, or on the action type — so \u201Cantagonist\u201D finds every "
+    + "antagonist edge and \u201Ccaffeine adora1\u201D finds one.",
+  "search-papers":
+    "Every citation this database holds, matched on its title and on its "
+    + "link \u2014 so a PubMed ID or a DOI finds the paper directly. "
+    + "Selecting one shows what it contributes: which edges it measured, how "
+    + "many of each edge's pooled measurements are its own, and where it is "
+    + "cited for something other than a measurement. Not all of them are "
+    + "papers — see the note on the citation itself.",
+  "Measurements contributed":
+    "Edges with at least one measurement from this citation, and how much of "
+    + "each edge's pooled value is its own. \u201C2 of 13\u201D means this "
+    + "paper supplied two of the thirteen measurements the median was taken "
+    + "over — the rest are other studies.",
+  "Cited as a reference":
+    "Edges where this citation is attached without supplying a measurement: "
+    + "a drug-level mechanism claim, or the reference a database gives for "
+    + "asserting the interaction exists. Counted separately from measurements "
+    + "because it is a different kind of claim, not more of the same one.",
+  "Reaches the graph through":
+    "The databases that carried this citation into this project. It says how "
+    + "the reference got here, not how many independent findings stand behind "
+    + "it.",
+  "Protein assemblies":
+    "Several proteins that are one physical receptor or channel. ChEMBL's "
+    + "unit of record is the assay, and an assay run against an assembly is "
+    + "attributed to every subunit of it, so one experiment arrives here as "
+    + "many edges — and two drugs that act on the same receptor can look "
+    + "like they share eight targets when they share one. Which proteins form "
+    + "an assembly comes from ChEMBL's own target typing, never from gene "
+    + "names or its protein-family tree, which is blind to assembly.",
+  "Show every subunit individually":
+    "Turns off all grouping: no hulls, no merged nodes, no collapsed rows, "
+    + "and no de-duplication in the shared-target ranking. This is the raw "
+    + "shape of the database's rows. It is honest about what is stored and "
+    + "misleading about what it means — the NMDA receptor really is one "
+    + "receptor however many rows it occupies.",
+  "One receptor, many subunits":
+    "These targets are subunits of one assembly, so the ranking counts them "
+    + "once between any two molecules. The individual edges are still here, "
+    + "each with its own evidence; what is grouped is what they add up to.",
+  "Part of an assembly":
+    "This protein is a subunit of a larger receptor or channel that this page "
+    + "may be drawing as one thing. Said here as well as on the assembly, "
+    + "because a compressed shared-target count should never be a surprise.",
+  "ChEMBL type":
+    "ChEMBL's own typing of this target. PROTEIN COMPLEX means it asserts the "
+    + "subunit composition. PROTEIN COMPLEX GROUP is its label for “a "
+    + "poorly defined protein complex, where subunit composition is unclear” "
+    + "— the 26-member voltage-gated calcium channel is one, and it lumps "
+    + "L-, N-, P/Q-, R- and T-type channels together.",
+  "Subunits":
+    "The proteins this assembly is built from. “n here” counts the "
+    + "ones this database holds an edge to; ChEMBL may list more.",
+  "Complexes inside this":
+    "Precise complexes ChEMBL names whose subunits all sit inside this wider "
+    + "assembly. A node can only be inside one grouping on the canvas, so the "
+    + "wider one is drawn and these are kept here rather than discarded.",
+  "How this is drawn":
+    "Collapse merges the subunits into one node. Hull draws the grouping and "
+    + "keeps every subunit on the canvas. Separate treats them as unrelated "
+    + "targets. Collapse and hull both count the assembly once in the "
+    + "shared-target ranking; separate counts each subunit on its own.",
+  "What this citation is":
+    "Whether the thing being cited is a study. ChEMBL mechanism references "
+    + "include FDA labels and Wikipedia pages, DGIdb names the curating "
+    + "database when a claim carries no publication, and BindingDB cites its "
+    + "own compound page because its API exposes no reference at all.",
+};
+
+// A label with an explanation attached to it, for the cases where the
+// explanation is counted from the loaded data rather than written down in HELP
+// - a tier's largest assembly, or how many subunits "count everything
+// separately" would double-count. Same markup, same hover-or-focus behaviour;
+// only where the words come from differs.
+function helpTip(text, explanation) {
+  if (!explanation) return esc(text);
+  return `<span class="help" tabindex="0">${esc(text)}</span>`
+    + `<span class="help-text">${esc(explanation)}</span>`;
+}
+
+// A label with its hover explanation, if it has one. `key` lets a heading
+// that renders a count ("Databases (2)") look up its help by its bare name.
+function helpLabel(text, key) {
+  return helpTip(text, HELP[key || text]);
+}
+
+function externalLinks(n) {
+  const links = [];
+  const id = encodeURIComponent;
+  // Wikipedia first: for this project's stated reader - a non-expert - it is
+  // the only one of these that explains what the thing is. The rest are the
+  // records the row was built from. Absent when Wikidata had no article for
+  // the matching item, which is left blank rather than guessed at.
+  if (n.wikipedia_url) links.push(link(n.wikipedia_url, "Wikipedia"));
+  if (n.chembl_id) links.push(link(`https://www.ebi.ac.uk/chembl/compound_report_card/${id(n.chembl_id)}`, `ChEMBL ${n.chembl_id}`));
+  if (n.pubchem_cid) links.push(link(`https://pubchem.ncbi.nlm.nih.gov/compound/${id(n.pubchem_cid)}`, `PubChem CID ${n.pubchem_cid}`));
+  if (n.uniprot_accession) links.push(link(`https://www.uniprot.org/uniprotkb/${id(n.uniprot_accession)}`, `UniProt ${n.uniprot_accession}`));
+  return links.join(" · ");
+}
+
+function showMolecule(n) {
+  const connectedEdges = rawEdges.filter(e => e.from === n.id);
+  detail.innerHTML = `
+    <div class="title">${esc(n.label)}</div>
+    <div class="type-badge badge-molecule">Molecule</div>
+    <div class="panel-section">
+      ${n.iupac_name ? `<div class="field"><span class="k">${helpLabel("IUPAC name")}</span><div class="v">${esc(n.iupac_name)}</div></div>` : ""}
+      ${n.molecular_formula ? `<div class="field"><span class="k">${helpLabel("Formula")}</span><div class="v">${esc(n.molecular_formula)} &middot; ${esc(n.molecular_weight)} g/mol</div></div>` : ""}
+      ${n.smiles ? `<div class="field"><span class="k">${helpLabel("SMILES")}</span><div class="v" style="font-family:monospace;font-size:11px;">${esc(n.smiles)}</div></div>` : ""}
+      <div class="field"><span class="k">${helpLabel("Links")}</span><div class="v">${externalLinks(n)}</div></div>
+    </div>
+    <div class="panel-section">
+      <h2>${helpLabel(`Targets (${rowCountLabel(connectedEdges, "to")})`, "Targets")}</h2>
+      ${edgeListHTML(connectedEdges, "to")}
+    </div>
+    ${sharedTargetsHTML(n)}
+  `;
+}
+
+function showTarget(n) {
+  const connectedEdges = rawEdges.filter(e => e.to === n.id);
+  detail.innerHTML = `
+    <div class="title">${esc(n.label)}</div>
+    <div class="type-badge badge-target">Target</div>
+    <div class="panel-section">
+      ${n.protein_name ? `<div class="field"><span class="k">${helpLabel("Protein")}</span><div class="v">${esc(n.protein_name)}</div></div>` : ""}
+      <div class="field"><span class="k">${helpLabel("Organism")}</span><div class="v">${esc(n.organism || "Homo sapiens")}</div></div>
+      <div class="field"><span class="k">${helpLabel("Brain-expressed")}</span><div class="v">${n.expressed_in_brain === 1 ? "Yes" : n.expressed_in_brain === 0 ? "No" : "Unverified"}${n.expression_note ? " — " + esc(n.expression_note) : ""}</div></div>
+      <div class="field"><span class="k">${helpLabel("Links")}</span><div class="v">${externalLinks(n)}</div></div>
+    </div>
+    <div class="panel-section">
+      <h2>${helpLabel(`Molecules that bind this target (${rowCountLabel(connectedEdges, "from")})`, "Molecules that bind this target")}</h2>
+      ${edgeListHTML(connectedEdges, "from")}
+    </div>
+    ${targetAssemblyHTML(n)}
+  `;
+}
+
+// Said on the subunit's own panel, not only on the assembly's. A reader who
+// arrives at GRIN2B by clicking an edge should be told it is part of a receptor
+// this page is drawing as one thing - otherwise the count in "Shares targets
+// with" is compressed by a grouping they were never shown.
+function targetAssemblyHTML(n) {
+  const g = groupOfTargetId.get(n.id);
+  if (!g) return "";
+  const mode = groupMode(g);
+  const state = mode === "collapse"
+    ? "drawn as one node on the canvas, and counted once in the shared-target ranking"
+    : mode === "hull"
+      ? "drawn inside a hull on the canvas, and counted once in the shared-target ranking"
+      : "shown separately, and counted on its own";
+  return `
+    <div class="panel-section">
+      <h2>${helpLabel("Part of an assembly", "Part of an assembly")}</h2>
+      <div class="edge-list-item" data-group-id="${esc(g.id)}">
+        <div class="et" style="color:#ffb04d">${esc(g.name)}</div>
+        <div class="ev">${esc(plural(g.members.length, "subunit"))} &middot;
+          ${esc(GROUP_TIER_LABELS[g.tier] || "assembly")} &middot; ${esc(state)}</div>
+      </div>
+    </div>
+  `;
+}
+
+// An assembly's own panel. It carries three things a target panel does not:
+// what ChEMBL actually claims about the composition, which precise complexes
+// were folded into it, and the control for how it is drawn - because "is this
+// one receptor or five" is the judgement this whole feature exists to let a
+// reader make, and the place to make it is in front of the thing itself.
+function showGroup(g) {
+  const members = new Set(g.members);
+  const memberNodes = g.members.map(nodeById).filter(Boolean);
+  const hidden = memberNodes.filter(n => !nodeVisible(n)).length;
+
+  const byMolecule = new Map();
+  rawEdges.forEach(e => {
+    if (!members.has(e.to) || !edgeVisible(e)) return;
+    if (!byMolecule.has(e.from)) byMolecule.set(e.from, []);
+    byMolecule.get(e.from).push(e);
+  });
+  const molRows = [...byMolecule.entries()]
+    .map(([molId, edges]) => ({
+      molId,
+      edges,
+      solid: edges.filter(isCorroborated).length,
+      subunits: new Set(edges.map(e => e.to)).size,
+    }))
+    .sort((a, b) => b.solid - a.solid || b.subunits - a.subunits
+      || nodeLabel(a.molId).localeCompare(nodeLabel(b.molId)));
+
+  const claim = g.tier === "complex"
+    ? `ChEMBL types this <code>PROTEIN COMPLEX</code> &mdash; it asserts the
+       subunit composition, so treating the subunits as one receptor is a
+       correction rather than a simplification.`
+    : `ChEMBL types this <code>PROTEIN COMPLEX GROUP</code>, whose own
+       definition is &ldquo;a poorly defined protein complex, where subunit
+       composition is unclear&rdquo;. Merging it can fold genuinely different
+       channels together, which is why it is drawn rather than merged unless
+       you ask.`;
+
+  detail.innerHTML = `
+    <div class="title">${esc(g.name)}</div>
+    <div class="type-badge badge-assembly">Assembly</div>
+    <div class="panel-section">
+      <div class="field"><span class="k">${helpLabel("ChEMBL type", "ChEMBL type")}</span>
+        <div class="v">${esc(g.target_type)}</div></div>
+      <div class="field"><span class="k">${helpLabel("Subunits", "Subunits")}</span>
+        <div class="v">${esc(plural(g.members.length, "subunit"))} here${
+          g.n_components > g.members.length
+            ? ` &middot; ${esc(g.n_components)} listed by ChEMBL`
+            : ""}${hidden ? ` &middot; ${esc(hidden)} hidden by the brain filter` : ""}</div></div>
+      <div class="field"><span class="k">${helpLabel("Links")}</span>
+        <div class="v">${[
+          // Wikipedia first, as on a molecule or a target panel and for the
+          // same reason: it is the only one of these that explains what the
+          // receptor *is*. Absent where the assembly has no article, which
+          // here is a curated "there is none" rather than a gap - an
+          // assembly's Wikidata item cannot be derived from anything ChEMBL
+          // supplies, so the identity is hand-written and the ones with no
+          // English article are written down as such (COMPLEX_WIKIDATA_ITEMS
+          // in build_db.py).
+          g.wikipedia_url ? link(g.wikipedia_url, "Wikipedia") : "",
+          link("https://www.ebi.ac.uk/chembl/target_report_card/"
+            + encodeURIComponent(g.chembl_id) + "/", g.chembl_id),
+        ].filter(Boolean).join(" &middot; ")}</div></div>
+      <div class="assembly-claim">${claim}</div>
+    </div>
+    ${groupModeControlHTML(g)}
+    <div class="panel-section">
+      <h2>${helpLabel(`Subunits (${g.members.length})`, "Subunits")}</h2>
+      ${memberNodes.map(n => `
+        <div class="edge-list-item" data-node-id="${esc(n.id)}">
+          <div class="et" style="color:#ffb04d">${esc(n.label)}${
+            nodeVisible(n) ? "" : " — hidden by the brain filter"}</div>
+          ${n.protein_name ? `<div class="mo">${esc(n.protein_name)}</div>` : ""}
+        </div>`).join("")}
+    </div>
+    ${(g.absorbed || []).length ? `
+    <div class="panel-section">
+      <h2>${helpLabel(`Complexes ChEMBL names inside this (${g.absorbed.length})`,
+        "Complexes inside this")}</h2>
+      <div class="cxgroup-note">
+        A node can only sit inside one grouping, so where ChEMBL names both a
+        precise complex and the wider assembly it belongs to, the wider one is
+        drawn and the precise ones are kept here rather than discarded.
+      </div>
+      ${g.absorbed.map(a => `
+        <div class="edge-list-item">
+          <div class="et" style="color:#ffb04d">${esc(a.name)}</div>
+          <div class="ev">${esc(a.target_type)} &middot;
+            ${esc(a.members.map(nodeLabel).join(", "))}</div>
+          ${a.wikipedia_url && a.wikipedia_url !== g.wikipedia_url
+            ? `<div class="mo">${link(a.wikipedia_url, "Wikipedia")}</div>` : ""}
+        </div>`).join("")}
+    </div>` : ""}
+    <div class="panel-section">
+      <h2>${helpLabel(`Molecules that act on this (${molRows.length})`,
+        "Molecules that bind this target")}</h2>
+      ${molRows.map(r => `
+        <div class="edge-list-item" data-node-id="${esc(r.molId)}">
+          <div class="et" style="color:#4da3ff">${esc(nodeLabel(r.molId))}</div>
+          <div class="ev">${esc(plural(r.subunits, "subunit"))} measured &middot;
+            ${esc(r.solid)} of ${esc(r.edges.length)} corroborated</div>
+        </div>`).join("")}
+    </div>
+  `;
+}
+
+// The per-assembly override. Its fourth option is "follow the default", so a
+// reader can undo a choice without having to remember what the default was.
+function groupModeControlHTML(g) {
+  const tier = GROUP_TIERS.find(t => t.key === g.tier);
+  const inherited = grouping[g.tier] || "separate";
+  const chosen = grouping.overrides[g.id] || "";
+  const btn = (mode, label) => `
+    <button type="button" class="group-mode${chosen === mode ? " on" : ""}"
+      data-group-id="${esc(g.id)}" data-group-mode="${esc(mode)}">${esc(label)}</button>`;
+  // The scope of the control, on the heading rather than under the buttons -
+  // same move as the tier notes in groupingHTML, for the same reason.
+  const scope = grouping.ungrouped
+    ? "Grouping is off for the whole graph, so this assembly is shown "
+      + "separately whatever is chosen here."
+    : `Applies to this assembly only. ${tier ? tier.label : "Assemblies"} `
+      + `currently default to "${inherited}".`;
+  return `
+    <div class="panel-section">
+      <h2>${helpTip("How this is drawn", HELP["How this is drawn"] + " " + scope)}</h2>
+      <div class="group-modes">
+        ${btn("collapse", "Collapse")}
+        ${btn("hull", "Hull")}
+        ${btn("separate", "Separate")}
+        ${btn("", `Default (${inherited})`)}
+      </div>
+    </div>
+  `;
+}
+
+// One collapsed edge stands for several real ones. Rather than pick one to
+// show, this lists them - the panel a collapsed edge opens is the same edge
+// list the panel shows anywhere else, so nothing about the underlying data is
+// only reachable by un-collapsing first.
+function showGroupEdge(ge) {
+  const g = ge.group;
+  const shown = ge.edges.filter(edgeVisible);
+  detail.innerHTML = `
+    <div class="title">${esc(nodeLabel(ge.from))} → ${esc(groupLabel(g, 60))}</div>
+    <div class="type-badge badge-assembly">Collapsed edge</div>
+    <div class="panel-section">
+      <div class="cxgroup-note">
+        ${esc(plural(shown.length, "edge"))} to the subunits of
+        ${esc(g.name)}, drawn as one because the assembly is collapsed.
+        ${esc(shown.filter(isCorroborated).length)} of them are corroborated;
+        the line is solid if any of them is.
+      </div>
+      ${shown.slice().sort((a, b) => compareEvidence(a, b, "to"))
+        .map(e => edgeListItemHTML(e, "to")).join("")}
+    </div>
+    <div class="panel-section">
+      <div class="edge-list-item" data-group-id="${esc(g.id)}">
+        <div class="et" style="color:#ffb04d">${esc(g.name)}</div>
+        <div class="ev">Open the assembly</div>
+      </div>
+    </div>
+  `;
+}
+
+function nodeById(id) {
+  return nodeIndex.get(id);
+}
+
+function nodeLabel(id) {
+  const n = nodeIndex.get(id);
+  return n ? n.label : id;
+}
+
+function plural(n, word) {
+  return `${n} ${word}${n === 1 ? "" : "s"}`;
+}
+
+// One pooled value and the n behind it. Binding and functional get their own
+// line rather than one combined line: they are different physical quantities
+// (invariant 4), and a functional-only edge - 59 of the 244 here - previously
+// rendered with no value line at all, which read as an edge with no evidence
+// rather than an edge measured a different way.
+function valueLineHTML(label, type, value, units, n) {
+  if (value == null) return "";
+  return `<div class="mo">${label}${esc(type)} ${esc(value.toLocaleString())} `
+    + `${esc(units)} · ${esc(plural(n || 1, "measurement"))}</div>`;
+}
+
+function edgeListItemHTML(e, otherEndKey) {
+  const otherLabel = nodeLabel(e[otherEndKey]);
+  // Papers and databases are the keys this list is ordered by, so they are
+  // printed on every row. The tier heading already says whether the edge is
+  // corroborated, so the per-row lead note that used to sit here would only
+  // repeat it once per row.
+  const ev = [
+    plural(paperCount(e), "paper"),
+    plural(databaseCount(e), "database"),
+  ].join(" · ");
+  return `
+    <div class="edge-list-item" data-edge-id="${esc(e.id)}">
+      <div class="et" style="color:${actionColor(e.action_type)}">${esc(otherLabel)} — ${esc(e.action_type)}</div>
+      ${e.mechanism_of_action ? `<div class="mo">${esc(e.mechanism_of_action)}</div>` : ""}
+      ${valueLineHTML("", e.binding_type, e.binding_value, e.binding_units, e.n_measurements)}
+      ${valueLineHTML("Functional ", e.functional_type, e.functional_value, e.functional_units, e.functional_n_measurements)}
+      <div class="ev">${esc(ev)}</div>
+    </div>
+  `;
+}
+
+// The single assay behind an edge, when there is exactly one. ChEMBL's unit
+// of record is the assay, and it attributes an assay run against a protein
+// complex or family to every member of it - so one experiment arrives here as
+// many edges that each honestly say "1 measurement" while the page as a whole
+// says something false. Returns null the moment an edge has evidence of its
+// own from a second assay, which is what keeps rolipram's PDE4B edge (18
+// assays) out of this entirely.
+function fanoutRef(e) {
+  const refs = new Set((e.measurements || [])
+    .filter(m => m.counted && m.external_ref)
+    .map(m => m.external_ref));
+  return refs.size === 1 ? [...refs][0] : null;
+}
+
+// Group edges that share their one and only assay. Deliberately applied only
+// when the varying end is the *target*: an assay id is also shared by the
+// several compounds screened in one run (CHEMBL636450 covers three molecules
+// here), so grouping on it in a target's molecule list would merge genuinely
+// separate findings about different drugs.
+function groupFanouts(edges) {
+  const byRef = new Map();
+  edges.forEach(e => {
+    const ref = fanoutRef(e);
+    if (!ref) return;
+    if (!byRef.has(ref)) byRef.set(ref, []);
+    byRef.get(ref).push(e);
+  });
+  const out = [];
+  const emitted = new Set();
+  edges.forEach(e => {
+    const ref = fanoutRef(e);
+    const group = ref ? byRef.get(ref) : null;
+    if (!group || group.length < 2) {
+      out.push({ ref: null, edges: [e] });
+      return;
+    }
+    if (emitted.has(ref)) return;
+    emitted.add(ref);
+    out.push({ ref, edges: group });
+  });
+  return out;
+}
+
+function fanGroupHTML(group, otherEndKey) {
+  const first = group.edges[0];
+  const n = group.edges.length;
+  const genes = group.edges.map(e => nodeLabel(e[otherEndKey]));
+  const withDescr = first.measurements.find(m => m.counted && m.assay_description);
+  const value = first.binding_value != null
+    ? ` \u00b7 ${first.binding_type} ${first.binding_value.toLocaleString()} ${first.binding_units}`
+    : "";
+  return `
+    <details class="fangroup">
+      <summary>${helpLabel(`${n} targets, one assay${value}`, "One assay, many targets")}</summary>
+      <div class="fangroup-note">
+        ${esc(genes.join(", "))}<br>
+        All from ${esc(group.ref)}${withDescr ? ` \u2014 \u201c${esc(withDescr.assay_description)}\u201d` : ""}.
+        One measurement attributed to every member, not ${esc(n)} independent findings.
+      </div>
+      ${group.edges.map(e => edgeListItemHTML(e, otherEndKey)).join("")}
+    </details>
+  `;
+}
+
+// One row per assembly, whether it is drawn as a hull or merged into a single
+// node. The panel and the canvas have to agree about what counts as one thing:
+// a reader looking at one hexagon should not find seven separate rows in the
+// list beside it. This is a different grouping from the fan-out row above and
+// both can apply to the same targets - that one says "one experiment, many
+// proteins", this one says "many proteins, one receptor".
+function complexGroupHTML(g, edges, otherEndKey) {
+  const ranked = edges.slice().sort((a, b) => compareEvidence(a, b, otherEndKey));
+  const genes = ranked.map(e => nodeLabel(e[otherEndKey]));
+  const merged = groupMode(g) === "collapse";
+  const claim = g.tier === "complex"
+    ? "ChEMBL asserts this subunit composition, so these are one receptor "
+      + "measured through its parts."
+    : "ChEMBL records these as one assembly and calls the subunit composition "
+      + "unclear, so they are grouped and not merged.";
+  // Which subunits of the assembly this row actually accounts for. The row
+  // names the whole receptor, and a reader who opens it to find one protein
+  // inside has been told the receptor is one protein - so the count that
+  // matters is measured-against-total, not the bare number of rows.
+  const reach = `${plural(edges.length, "subunit")} of `
+    + `${g.members.length} measured here`;
+  // Assemblies are placed by their best-evidenced subunit (see unitTier), so a
+  // row can carry weaker edges than the tier it sits in. Said out loud: the
+  // promotion is the whole reason all four of verapamil's calcium edges are in
+  // one row instead of split across two tiers, and it must not be silent.
+  const spread = tierSpreadText(ranked);
+  return `
+    <details class="cxgroup">
+      <summary>${helpLabel(
+        `${groupLabel(g, 46)} · ${plural(edges.length, "subunit edge")}`,
+        "One receptor, many subunits")}</summary>
+      <div class="cxgroup-note">
+        ${esc(genes.join(", "))}<br>
+        ${esc(reach)}${spread ? ` &middot; ${esc(spread)}` : ""}.<br>
+        ${esc(claim)}
+        ${merged ? "Counted once on the canvas and in the shared-target ranking."
+                 : "Counted once in the shared-target ranking; drawn as a hull."}
+        <span class="cxgroup-open" data-group-id="${esc(g.id)}">Open
+          ${esc(groupLabel(g, 46))} &rarr;</span>
+      </div>
+      ${ranked.map(e => edgeListItemHTML(e, otherEndKey)).join("")}
+    </details>
+  `;
+}
+
+// "1 corroborated, 3 leads" - the evidence tiers a grouped row spans, or "" if
+// it is all one tier and the heading above it already said so.
+function tierSpreadText(edges) {
+  const counts = TIERS.map(() => 0);
+  edges.forEach(e => counts[evidenceTier(e)]++);
+  const named = counts
+    .map((n, i) => n ? `${n} ${TIER_SPREAD_WORDS[i]}${n === 1 ? "" : "s"}` : null)
+    .filter(Boolean);
+  return named.length > 1 ? named.join(", ") : "";
+}
+
+// The three evidence tiers, best first. Order here is the order on screen.
+const TIERS = [
+  { label: "Curated mechanism", open: true },
+  { label: "Corroborated", open: true },
+  { label: "Single-source leads", open: false },
+];
+
+// The same three, as a noun a sentence inside a row can count ("1 corroborated,
+// 3 leads"). Kept beside TIERS so a fourth tier cannot arrive with a heading
+// and no word for it.
+const TIER_SPREAD_WORDS = ["curated mechanism", "corroborated edge", "lead"];
+
+// An edge list grouped into evidence tiers and ranked within each. Empty
+// tiers are omitted rather than shown as "(0)": theophylline is 10 curated
+// and no corroborated-but-uncurated edges at all, and an empty middle group
+// would read as a missing section rather than an honest zero.
+function edgeListHTML(edges, otherEndKey) {
+  // A row is shown exactly when the node at its other end is on the canvas
+  // (see endVisible), and what the filter took is stated above the list. A
+  // list that quietly shrank would be the same failure as a capped search
+  // result reading as the whole answer.
+  const shown = visibleRows(edges, otherEndKey);
+  const hidden = edges.length - shown.length;
+  const note = hidden
+    ? `<div class="filter-hidden-note">${esc(plural(hidden, "row"))} hidden by
+         the brain filter &mdash; unverified, not absent.</div>`
+    : "";
+  // Grouped *before* the tiers split the list, not inside each tier. Built the
+  // other way round, an assembly whose subunit edges were not all equally
+  // evidenced came out as one row per tier, each expanding to its own share of
+  // the subunits: verapamil's four calcium-channel edges rendered as a
+  // "Voltage-gated calcium channel" row under Corroborated that opened to
+  // CACNA1C alone, and a second one under Leads with the other three. One
+  // receptor is one row, and where it sits is decided by its best evidence
+  // (unitTier), with the spread stated inside the row.
+  const units = displayUnits(shown, otherEndKey);
+  const groups = TIERS.map(() => []);
+  units.forEach(u => groups[unitTier(u)].push(u));
+  groups.forEach(g => g.sort((a, b) =>
+    compareEvidence(unitBest(a, otherEndKey), unitBest(b, otherEndKey), otherEndKey)));
+  return note + TIERS.map((tier, i) => {
+    if (groups[i].length === 0) return "";
+    const rows = groups[i].reduce((n, u) => n + u.edges.length, 0);
+    return `
+      <details class="tier"${tier.open ? " open" : ""}>
+        <summary>${helpLabel(`${tier.label} (${rows})`, tier.label)}</summary>
+        ${groups[i].map(u => unitHTML(u, otherEndKey)).join("")}
+      </details>
+    `;
+  }).join("");
+}
+
+// Where a row sits in the tiers. A grouped row is placed by its strongest
+// member, which is the same rule the canvas already uses for a collapsed edge
+// (groupEdgeCorroborated draws solid when any subunit edge is corroborated) -
+// so the panel and the picture cannot disagree about how well evidenced one
+// receptor is.
+function unitTier(u) {
+  return u.edges.reduce((best, e) => Math.min(best, evidenceTier(e)), TIERS.length - 1);
+}
+
+// The member a grouped row is ranked by: its best-evidenced edge, by exactly
+// the ordering the ungrouped rows use.
+function unitBest(u, otherEndKey) {
+  return u.edges.reduce((best, e) =>
+    compareEvidence(e, best, otherEndKey) < 0 ? e : best, u.edges[0]);
+}
+
+function unitHTML(u, otherEndKey) {
+  if (u.group) return complexGroupHTML(u.group, u.edges, otherEndKey);
+  if (u.ref) return fanGroupHTML(u, otherEndKey);
+  return edgeListItemHTML(u.edges[0], otherEndKey);
+}
+
+// Molecules that act on the same targets as this one - the question the
+// graph exists to answer and the one thing the panel could not previously be
+// asked. Ranked by shared targets where *both* edges are corroborated: a
+// similarity assembled out of two unreplicated leads is not evidence that two
+// drugs act alike, and with 93 targets sitting at a single edge that is most
+// of what an uncritical overlap count would find.
+//
+// A fan-out group counts once on each side. Donepezil and verapamil each have
+// one Cav1.2 QPatch assay attributed to four subunits; that is one shared
+// fact about calcium channels, and counting it four times ranks the pair
+// above caffeine/theophylline at the adenosine receptors, which is backed by
+// dozens of studies.
+//
+// Brain expression is reported, never filtered on. 79 of the 141 targets have
+// expressed_in_brain NULL, which invariant 10 defines as "UniProt has no
+// tissue comment", not "absent from the brain" - so hiding them would turn a
+// gap in the source into a claim this database cannot make.
+function sharedTargets(molNode) {
+  // Built from the visible edges only, so the ranking answers the question
+  // the reader is actually looking at. With the brain filter on, "shares
+  // targets with" means "shares confirmed brain targets with" - and the row
+  // counts, which are the ranking, move with it.
+  const mine = new Map();
+  rawEdges.forEach(e => {
+    if (e.from === molNode.id && edgeVisible(e)) mine.set(e.to, e);
+  });
+
+  const others = new Map();
+  rawEdges.forEach(e => {
+    if (e.from === molNode.id || !mine.has(e.to)) return;
+    if (!others.has(e.from)) others.set(e.from, []);
+    others.get(e.from).push({ tid: e.to, a: mine.get(e.to), b: e });
+  });
+
+  const rows = [];
+  others.forEach((hits, molId) => {
+    // What counts as one shared thing. There are two de-duplications here and
+    // they catch different failures:
+    //
+    //   a shared *receptor* - both molecules reach one physical assembly,
+    //   however many subunits and by however many separate experiments. This
+    //   is the one that was missing. Dextromethorphan reaches the NMDA
+    //   receptor through a single seven-subunit screen and memantine measures
+    //   the subunits one at a time, so the two share no assay id at all and
+    //   the overlap was reported as eight targets. It is one fact about one
+    //   receptor.
+    //
+    //   a shared *experiment* - one assay ChEMBL attributed to many proteins,
+    //   which fanoutRef already caught and still catches for the paralogue
+    //   fan-outs (the sodium-channel alphas, the PDE isoforms) that are not
+    //   assemblies and must not be merged.
+    //
+    // In "separate" mode groupOfTarget returns null and this is exactly the
+    // key it was before, which is what that mode is for; with grouping off
+    // altogether both de-duplications go and every subunit counts on its own.
+    const key = h => {
+      const g = groupOfTarget(h.tid);
+      if (g) return g.id;
+      if (grouping.ungrouped) return h.tid;
+      return (fanoutRef(h.a) || h.tid) + "/" + (fanoutRef(h.b) || h.tid);
+    };
+    // The units the counts are made of, kept on the row rather than thrown
+    // away and rebuilt later. The pair panel below lists exactly what was
+    // counted, so a row reading "2 shared targets (8 proteins, grouped)" and
+    // the list it opens cannot disagree about which two things those are -
+    // which is invariant 13 for a number and the thing it stands for.
+    const units = new Map();
+    hits.forEach(h => {
+      const k = key(h);
+      if (!units.has(k)) units.set(k, { key: k, group: groupOfTarget(h.tid), hits: [] });
+      units.get(k).hits.push(h);
+    });
+    const unitList = [...units.values()];
+    // "some", not "every", which is what the three Sets this replaced did: a
+    // key landed in the brain set or the corroborated set as soon as one hit
+    // under it qualified, and the counts below are the same numbers.
+    const brain = u => u.hits.some(h => (nodeById(h.tid) || {}).expressed_in_brain === 1);
+    const solid = u => u.hits.some(h => isCorroborated(h.a) && isCorroborated(h.b));
+    rows.push({
+      molId,
+      units: unitList,
+      shared: unitList.length,
+      brain: unitList.filter(brain).length,
+      solid: unitList.filter(solid).length,
+      // The proteins behind that count. Printed whenever it is larger, so the
+      // grouping is stated on the row it changes rather than being something
+      // the reader has to already know about to trust the number.
+      proteins: new Set(hits.map(h => h.tid)).size,
+    });
+  });
+
+  rows.sort((x, y) => y.solid - x.solid
+    || y.brain - x.brain
+    || y.shared - x.shared
+    || nodeLabel(x.molId).localeCompare(nodeLabel(y.molId)));
+  return rows;
+}
+
+function sharedTargetsHTML(molNode) {
+  const rows = sharedTargets(molNode);
+  if (rows.length === 0) return "";
+  // Collapsible, and open by default: it is the section closest to the
+  // question the graph exists to answer, so it is not hidden - but it sits
+  // below a target list that runs to 46 rows on tacrine, and a reader who
+  // has read it once should be able to fold it away rather than scroll past
+  // it on every selection.
+  return `
+    <div class="panel-section">
+      <details class="section-toggle" open>
+        <summary>${helpLabel(`Shares targets with (${rows.length})`, "Shares targets with")}</summary>
+        ${rows.map(r => `
+          <div class="edge-list-item" data-pair="${esc(pairId(molNode.id, r.molId))}">
+            <div class="et" style="color:#4da3ff">${esc(nodeLabel(r.molId))}</div>
+            <div class="ev">${esc(plural(r.shared, "shared target"))}${
+              r.proteins > r.shared
+                ? ` <span style="color:var(--text-dim)">(${esc(plural(r.proteins, "protein"))},
+                    grouped)</span>` : ""}
+              &middot; ${esc(r.solid)} corroborated on both sides
+              &middot; ${esc(r.brain)} brain-expressed</div>
+          </div>`).join("")}
+      </details>
+    </div>
+  `;
+}
+
+// ---------------------------------------------------------------------------
+// Two molecules and nothing but what they share.
+//
+// A "Shares targets with" row used to open the *other* molecule, which answers
+// a different question: it replaced one molecule's whole neighbourhood with
+// another's, and the overlap - the thing the row is a count of - still had to
+// be found by eye across two target lists that run to 46 rows on tacrine. A
+// row now opens the pair itself: both molecules, the targets they have in
+// common, and the two edges at each of those targets one above the other.
+//
+// It dims rather than removes, like every other selection here. Only the brain
+// filter takes things out of the picture (nodeVisible / edgeVisible), and a
+// second thing that removed would be a second answer to "what is on screen" -
+// which is the disagreement the one-rule-read-four-ways arrangement exists to
+// prevent.
+// ---------------------------------------------------------------------------
+
+function pairId(aId, bId) {
+  return aId + "|" + bId;
+}
+
+// The pair a selection id names, or null if it is no longer one - the brain
+// filter can remove the second molecule, or every edge the overlap was made
+// of. Built from sharedTargets rather than from its own walk of the edges, so
+// the panel is showing the row's own units and not a second opinion about
+// them.
+function pairFor(aId, bId) {
+  const a = nodeById(aId);
+  const b = nodeById(bId);
+  if (!a || !b || a.type !== "molecule" || b.type !== "molecule") return null;
+  const row = sharedTargets(a).find(r => r.molId === bId);
+  return row ? { a, b, row } : null;
+}
+
+function pairUnitSolid(u) {
+  return u.hits.some(h => isCorroborated(h.a) && isCorroborated(h.b));
+}
+
+// What one shared thing is called. An assembly by its own name, a fan-out by
+// the proteins the single assay was attributed to, everything else by its gene
+// symbol.
+function pairUnitLabel(u) {
+  if (u.group) return u.group.name;
+  return u.hits.map(h => nodeLabel(h.tid)).sort().join(", ");
+}
+
+// One shared thing, with both molecules' evidence at it. The heading says what
+// is being counted once and why, because a block holding eight proteins under
+// a heading that contributed 1 to "shared targets" is exactly the compression
+// that must not be silent.
+function pairUnitHTML(u) {
+  const hits = u.hits.slice()
+    .sort((x, y) => nodeLabel(x.tid).localeCompare(nodeLabel(y.tid)));
+  let head;
+  if (u.group) {
+    head = `
+      <div class="edge-list-item" data-group-id="${esc(u.group.id)}">
+        <div class="et" style="color:#ffb04d">${esc(u.group.name)}</div>
+        <div class="ev">${esc(plural(hits.length, "shared subunit"))} of
+          ${esc(u.group.members.length)} here &middot;
+          one assembly, counted once</div>
+      </div>`;
+  } else if (hits.length > 1) {
+    head = `
+      <div class="pair-unit-head">${esc(pairUnitLabel(u))}
+        <span class="ev">one assay on each side, counted once</span></div>`;
+  } else {
+    const n = nodeById(hits[0].tid) || {};
+    head = `
+      <div class="edge-list-item" data-node-id="${esc(hits[0].tid)}">
+        <div class="et" style="color:#ffb04d">${esc(nodeLabel(hits[0].tid))}</div>
+        ${n.protein_name ? `<div class="mo">${esc(n.protein_name)}</div>` : ""}
+      </div>`;
+  }
+  const named = hits.length > 1;
+  return `
+    <div class="pair-unit">
+      ${head}
+      <div class="pair-edges">
+        ${hits.map(h => `
+          ${named ? `<div class="pair-protein" data-node-id="${esc(h.tid)}">${
+            esc(nodeLabel(h.tid))}</div>` : ""}
+          ${edgeListItemHTML(h.a, "from")}
+          ${edgeListItemHTML(h.b, "from")}`).join("")}
+      </div>
+    </div>`;
+}
+
+function showPair(pair) {
+  const { a, b, row } = pair;
+  // Best-evidenced first, then the widest, then by name - the same order of
+  // priorities the shared-target ranking itself uses, so the list opens on the
+  // overlap that carries the row's number rather than on whatever is
+  // alphabetically first.
+  const units = row.units.slice().sort((x, y) =>
+    pairUnitSolid(y) - pairUnitSolid(x)
+    || y.hits.length - x.hits.length
+    || pairUnitLabel(x).localeCompare(pairUnitLabel(y)));
+  detail.innerHTML = `
+    <div class="title">${esc(a.label)} &amp; ${esc(b.label)}</div>
+    <div class="type-badge badge-pair">Shared targets</div>
+    <div class="panel-section">
+      <div class="field"><span class="k">${helpLabel("Overlap")}</span>
+        <div class="v">${esc(plural(row.shared, "shared target"))}${
+          row.proteins > row.shared
+            ? ` <span style="color:var(--text-dim)">(${
+                esc(plural(row.proteins, "protein"))}, grouped)</span>` : ""}
+          &middot; ${esc(row.solid)} corroborated on both sides
+          &middot; ${esc(row.brain)} brain-expressed</div></div>
+      <div class="pair-note">
+        The graph is showing these two molecules and the targets below. The
+        rest is dimmed, not removed &mdash; nothing here has been filtered out.
+        Sharing targets is not the same as acting alike: it says nothing about
+        dose, potency, or whether either molecule reaches the brain.
+      </div>
+    </div>
+    <div class="panel-section">
+      <h2>${helpLabel(`What they share (${units.length})`, "What they share")}</h2>
+      ${units.map(pairUnitHTML).join("")}
+    </div>
+    <div class="panel-section">
+      <h2>${helpLabel("Open on its own", "Open on its own")}</h2>
+      ${[a, b].map(m => `
+        <div class="edge-list-item" data-node-id="${esc(m.id)}">
+          <div class="et" style="color:#4da3ff">${esc(m.label)}</div>
+          <div class="ev">Everything this molecule acts on</div>
+        </div>`).join("")}
+    </div>
+  `;
+}
+
+// The two molecules, the shared targets, and the two edges at each of them.
+// Returned as sets rather than written onto the canvas, for the same reason
+// searchHighlight is: what a selection lights up is a decision, and a decision
+// a test cannot read without a renderer is one nobody checks.
+function pairHighlight(pair) {
+  const keepNodes = new Set([pair.a.id, pair.b.id]);
+  const keepEdges = new Set();
+  pair.row.units.forEach(u => u.hits.forEach(h => {
+    keepNodes.add(h.tid);
+    keepEdges.add(h.a.id);
+    keepEdges.add(h.b.id);
+  }));
+  return { keepNodes, keepEdges };
+}
+
+// No second hop, unlike a molecule's own selection: the overlap is already the
+// answer, and echoing one step out from it would put back most of the graph
+// the pair was selected to isolate.
+function highlightPair(pair) {
+  const { keepNodes, keepEdges } = pairHighlight(pair);
+  applyHighlight(keepNodes, keepEdges, new Set(), new Set());
+}
+
+// The rows a list is built from, before anything is ranked or tiered: one unit
+// per assembly, one per fan-out assay, one per remaining edge. Grouping happens
+// here and only here, so every consumer sees the same units and nothing can
+// split one receptor by looking at it a second time.
+function displayUnits(edges, otherEndKey) {
+  // Only the targets-of-a-molecule direction collapses; see groupFanouts.
+  if (otherEndKey !== "to") {
+    return edges.map(e => ({ group: null, ref: null, edges: [e] }));
+  }
+  // Assemblies first: an edge to a subunit of a grouped receptor belongs in
+  // that receptor's row whichever assay it arrived by, which is precisely the
+  // case assay-level grouping misses - memantine measures the NMDA subunits
+  // one at a time, so none of its edges is a fan-out and all of them are the
+  // same receptor.
+  const assemblies = new Map();
+  const units = [];
+  edges.forEach(e => {
+    const g = groupOfTarget(e.to);
+    if (!g) return;
+    if (!assemblies.has(g.id)) {
+      const unit = { group: g, ref: null, edges: [] };
+      assemblies.set(g.id, unit);
+      units.push(unit);
+    }
+    assemblies.get(g.id).edges.push(e);
+  });
+
+  const loose = edges.filter(e => !groupOfTarget(e.to));
+  // "Show every subunit individually" means every row too, so the assay-level
+  // grouping goes with the receptor-level one rather than quietly surviving it.
+  const fanGroups = grouping.ungrouped
+    ? loose.map(e => ({ ref: null, edges: [e] }))
+    : groupFanouts(loose);
+  fanGroups.forEach(fg => units.push({ group: null, ref: fg.ref, edges: fg.edges }));
+  return units;
+}
+
+// A set of edges as rows, grouped and ranked. edgeListHTML works from the units
+// directly because it has to tier them first; this is the same thing for a list
+// that is already one tier's worth.
+function renderRows(edges, otherEndKey) {
+  return displayUnits(edges, otherEndKey)
+    .sort((a, b) =>
+      compareEvidence(unitBest(a, otherEndKey), unitBest(b, otherEndKey), otherEndKey))
+    .map(u => unitHTML(u, otherEndKey)).join("");
+}
+
+function byRole(e, role) {
+  return (e.measurements || []).filter(m => m.role === role);
+}
+
+// Distinct databases, not source rows: the old heading counted (source, role)
+// pairs, so an edge backed by ChEMBL alone in two roles read as "Sources (2)"
+// and looked like corroboration it wasn't.
+function databaseCount(e) {
+  return new Set(e.sources.map(s => s.name)).size;
+}
+
+const ROLE_LABELS = { binding: "binding", functional: "functional" };
+
+const CITATION_KIND_LABELS = {
+  // Both of these are references that are NOT measurements of the edge -
+  // the only kind interaction_sources still stores. Naming the kind is the
+  // point: an unlabelled paper here read as a third opinion on the value,
+  // when a mechanism review is why the edge has an action_type at all and a
+  // DGIdb reference is why the edge exists with no number behind it.
+  mechanism: {
+    label: "Mechanism reference",
+    hint: "Drug-level MOA claim — typically a review, not evidence for any single value above.",
+  },
+  annotation: {
+    label: "Reference for the annotation",
+    hint: "Cited for asserting the interaction exists; contributes no measurement.",
+  },
+};
+
+// One entry per *database*, so the list length matches the "Databases (n)"
+// heading. It previously rendered one row per (database, role), so an edge
+// backed by ChEMBL alone in two roles showed two rows under a heading that
+// said 1.
+function databaseGroups(e) {
+  const groups = new Map();
+  for (const s of e.sources) {
+    if (!groups.has(s.name)) groups.set(s.name, { name: s.name, rows: [] });
+    groups.get(s.name).rows.push(s);
+  }
+  return [...groups.values()];
+}
+
+// What this database actually contributed, counted from the measurements
+// themselves rather than asserted. An annotation role contributes no
+// measurement by definition, which is the fact that made "Sources (3)" look
+// like it should corroborate "n=13" when one of the three never could.
+function contributionHTML(group, e) {
+  const parts = [];
+  for (const role of ["binding", "functional"]) {
+    const rows = byRole(e, role).filter(m => m.name === group.name);
+    if (!rows.length) continue;
+    const counted = rows.filter(m => m.counted).length;
+    const types = [...new Set(rows.map(m => m.affinity_type))].join("/");
+    const excluded = rows.length - counted;
+    // "0 binding measurements · 1 not counted" is not a sentence. A database
+    // whose every row was excluded still supplied rows; say so, and say they
+    // did not reach the value.
+    if (!counted) {
+      parts.push(`${excluded} ${ROLE_LABELS[role]} measurement${excluded === 1 ? "" : "s"}`
+        + ` (${esc(types)}), none counted toward the value above`);
+    } else {
+      parts.push(`${counted} ${ROLE_LABELS[role]} measurement${counted === 1 ? "" : "s"}`
+        + ` (${esc(types)})`
+        + (excluded ? ` · ${excluded} more not counted` : ""));
+    }
+  }
+  if (group.rows.some(s => s.role === "annotation")) {
+    parts.push("interaction annotation — no measurement");
+  }
+  return parts.length ? parts.join(" · ") : "no measurement recorded";
+}
+
+function sourceItemHTML(group, e) {
+  const citations = group.rows
+    .filter(s => s.citation_url || s.citation_text)
+    .map(s => {
+      const kind = CITATION_KIND_LABELS[s.citation_kind];
+      const label = s.citation_text || s.citation_url;
+      return `
+        <div class="src-cite">
+          <span class="src-cite-kind">${esc(kind ? kind.label : "Reference")}</span>
+          ${link(s.citation_url, label)}
+          ${kind ? `<span class="src-cite-hint">${esc(kind.hint)}</span>` : ""}
+        </div>`;
+    })
+    .join("");
+  return `
+    <div class="field">
+      <span class="k">${helpLabel(group.name)}</span>
+      <div class="v">${contributionHTML(group, e)}</div>
+      ${citations}
+    </div>
+  `;
+}
+
+function showEdge(e) {
+  const fromLabel = nodeLabel(e.from);
+  const toLabel = nodeLabel(e.to);
+  const lead = !isCorroborated(e);
+  detail.innerHTML = `
+    <div class="title">${esc(fromLabel)} → ${esc(toLabel)}</div>
+    <div class="type-badge" style="background:${actionColor(e.action_type)}22; color:${actionColor(e.action_type)}">${esc(e.action_type)}</div>
+    <div class="panel-section">
+      ${e.mechanism_of_action ? `<div class="field"><span class="k">${helpLabel("Mechanism")}</span><div class="v">${esc(e.mechanism_of_action)}</div></div>` : ""}
+      <div class="field"><span class="k">${helpLabel("Primary mechanism")}</span><div class="v">${e.is_primary_mechanism ? "Yes — curated top-line MOA" : "No"}</div></div>
+      ${fmtBinding("Binding affinity", e.binding_value, e.binding_type, e.binding_units, e.n_measurements, byRole(e, "binding"))}
+      ${fmtBinding("Functional assay", e.functional_value, e.functional_type, e.functional_units, e.functional_n_measurements, byRole(e, "functional"))}
+      ${lead ? `<div class="lead-note">Backed by a single measurement — treat as a lead to corroborate, not a settled finding.</div>` : ""}
+    </div>
+    <div class="panel-section">
+      <h2>${helpLabel(`Databases (${databaseCount(e)})`, "Databases")}</h2>
+      ${databaseGroups(e).map(g => sourceItemHTML(g, e)).join("") || `<div class="field"><span class="v" style="color:var(--text-dim)">No per-source provenance recorded</span></div>`}
+    </div>
+  `;
+}
+
+// ---------------------------------------------------------------------------
+// Search
+//
+// Four things are searchable, and they are kept as four separate result groups
+// rather than one ranked list, because a molecule, an edge and a citation are
+// not comparable answers to the same question - the reader knows which kind of
+// thing they are looking for, and interleaving them by score buries the one
+// they wanted under twenty of another kind.
+// ---------------------------------------------------------------------------
+
+// A query against one field: 0 exact, 1 prefix, 2 start of a word inside it,
+// 3 anywhere, null for no match. Word-start ranks above a bare substring
+// because "ADORA" should find ADORA1 before it finds anything that merely
+// contains those letters mid-word.
+function matchRank(text, query) {
+  if (text == null) return null;
+  const hay = String(text).toLowerCase();
+  const needle = query.toLowerCase();
+  if (!needle) return null;
+  const at = hay.indexOf(needle);
+  if (at < 0) return null;
+  if (at === 0) return hay.length === needle.length ? 0 : 1;
+  return /[a-z0-9]/.test(hay[at - 1]) ? 3 : 2;
+}
+
+// Fields are given in order of how much they identify the record: the name
+// first, then everything else. A field's position costs 4 - the width of the
+// rank scale - so any match in an earlier field beats every match in a later
+// one, and an exact hit on a UniProt accession still ranks below a substring
+// of the gene symbol it belongs to.
+const RANK_SCALE = 4;
+// Every single-string match, in any field, ranks above a query whose words
+// were only found scattered across several fields.
+const SCATTERED_RANK = 100;
+
+function recordRank(fields, query, terms) {
+  let best = null;
+  fields.forEach((value, i) => {
+    // Alternatives for one field share its priority; alias order must not
+    // make a common name less findable than a systematic name or identifier.
+    for (const alternative of Array.isArray(value) ? value : [value]) {
+      const r = matchRank(alternative, query);
+      if (r == null) continue;
+      const scored = r + i * RANK_SCALE;
+      if (best == null || scored < best) best = scored;
+    }
+  });
+  if (best != null) return best;
+  // "caffeine adora1" is two words that never appear adjacent in any one
+  // field, and is exactly how someone asks for a specific edge.
+  if (terms.length < 2) return null;
+  const hay = fields.flat().filter(Boolean).join("   ").toLowerCase();
+  return terms.every(t => hay.includes(t)) ? SCATTERED_RANK : null;
+}
+
+// Escaped text with the matched run wrapped in <mark>. The escaping has to
+// happen on the three slices separately rather than on the whole string
+// afterwards: escaping first would shift every offset (& becomes &amp;), and
+// escaping after inserting the tags would escape the tags. Invariant 11 -
+// this renders paper titles, which are upstream free text.
+function highlightMatch(text, query) {
+  const value = text == null ? "" : String(text);
+  const needle = (query || "").toLowerCase();
+  const at = needle ? value.toLowerCase().indexOf(needle) : -1;
+  if (at < 0) return esc(value);
+  return esc(value.slice(0, at))
+    + "<mark>" + esc(value.slice(at, at + needle.length)) + "</mark>"
+    + esc(value.slice(at + needle.length));
+}
+
+// ---------------------------------------------------------------------------
+// Citations
+//
+// A citation reaches this graph two different ways, and they are counted
+// separately everywhere below (invariant 13): as a *measurement* pooled into
+// an edge's value, and as a *reference* on a source link that is explicitly
+// not a measurement (interaction_sources.citation_kind). Summing them would
+// coin a number - "this paper backs 7 things" - that mixes a Ki determination
+// with a database's note that the edge exists.
+// ---------------------------------------------------------------------------
+
+// Identity is the URL where there is one: the same paper arrives as a
+// measurement citation and as a mechanism reference with different display
+// text, and those are one paper. Text is the fallback for the citations that
+// carry no link at all - PDSP's free-text Reference column, and DGIdb's list
+// of curating databases where a claim has no publication.
+//
+// A PDSP reference and a ChEMBL PubMed link to the same study therefore stay
+// two entries. That is invariant 15 applied here: matching them would mean
+// matching a citation by its name, which answers confidently and wrongly, and
+// merging two entries claims a paper is corroborated across databases when it
+// might be two different papers.
+function citationKey(url, text) {
+  if (url) return "u:" + url;
+  if (text) return "t:" + text;
+  return null;
+}
+
+function buildCitations() {
+  const found = new Map();
+  const get = (url, text) => {
+    const key = citationKey(url, text);
+    if (!key) return null;
+    if (!found.has(key)) {
+      found.set(key, { key, url: url || null, text: text || url, measurements: [], refs: [] });
+    }
+    const c = found.get(key);
+    if (!c.url && url) c.url = url;
+    return c;
+  };
+  rawEdges.forEach(e => {
+    (e.measurements || []).forEach(m => {
+      const c = get(m.citation_url, m.citation_text);
+      if (c) c.measurements.push({ edge: e, m });
+    });
+    (e.sources || []).forEach(s => {
+      const c = get(s.citation_url, s.citation_text);
+      if (c) c.refs.push({ edge: e, source: s });
+    });
+  });
+  return found;
+}
+
+// Built once, and reached through a function rather than left as a bare
+// const: a top-level `const` in a vm script is not a property of the sandbox
+// global, so the offline harness (tests/viewer_harness.mjs) could not see it,
+// and this index is the thing a paper search is entirely made of.
+let citationIndex = null;
+function citations() {
+  if (citationIndex === null) citationIndex = buildCitations();
+  return citationIndex;
+}
+
+function citationSummary(c) {
+  const edges = new Set();
+  c.measurements.forEach(x => edges.add(x.edge.id));
+  c.refs.forEach(x => edges.add(x.edge.id));
+  return {
+    edges: edges.size,
+    measurements: c.measurements.length,
+    counted: c.measurements.filter(x => x.m.counted).length,
+    refs: c.refs.length,
+  };
+}
+
+// One line for a result row. Measurements and references are joined with a
+// separator, never added together.
+function citationSummaryText(c) {
+  const s = citationSummary(c);
+  const parts = [];
+  if (s.measurements) {
+    parts.push(plural(s.measurements, "measurement")
+      + (s.counted < s.measurements ? ` (${s.measurements - s.counted} not counted)` : ""));
+  }
+  if (s.refs) parts.push(plural(s.refs, "reference"));
+  parts.push("on " + plural(s.edges, "interaction"));
+  return parts.join(" · ");
+}
+
+// Not every citation here is a study, and the ones that are not say so on
+// their own panel rather than being quietly filtered out of the search - a
+// reader who searched for "BindingDB" should find the record and be told what
+// it is. Returns null when the citation is an ordinary publication.
+function citationNote(c) {
+  const url = c.url || "";
+  if (/pubmed\.ncbi\.nlm\.nih\.gov|doi\.org|europepmc\.org/.test(url)) return null;
+  if (/ebi\.ac\.uk\/chembl\/document_report_card/.test(url)) {
+    return "A published study, linked through ChEMBL's own document record "
+      + "because ChEMBL holds no PubMed ID or DOI for it.";
+  }
+  if (/bindingdb\.org/.test(url)) {
+    return "BindingDB's compound record, not a publication. BindingDB's API "
+      + "exposes no reference for these measurements, so the paper behind "
+      + "them is not recorded here — which is one reason its rows are not "
+      + "counted toward an edge's n.";
+  }
+  if (/fda\.gov/.test(url) || /^FDA\b/.test(c.text || "")) {
+    return "A regulatory label, not a study — cited by ChEMBL's curators "
+      + "for a drug-level mechanism claim.";
+  }
+  if (/wikipedia\.org/.test(url)) {
+    return "A Wikipedia article, cited by ChEMBL's curators for a drug-level "
+      + "mechanism claim. Not evidence for any measured value.";
+  }
+  if (!c.url) {
+    return "No link recorded. DGIdb names the databases that curated a claim "
+      + "when the claim carries no publication, and that name is all this is.";
+  }
+  return null;
+}
+
+// ---------------------------------------------------------------------------
+
+const SEARCH_LIMIT = 8;
+const MIN_QUERY = 2;
+
+function searchGraph(query) {
+  const q = (query || "").trim();
+  if (q.length < MIN_QUERY) return null;
+  const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+
+  const molecules = [];
+  const targets = [];
+  // A hidden node is not on the graph, so it is not in the results either:
+  // an entry that scrolls the canvas to something the filter has removed is
+  // a dead end. Clearing the filter brings both back together.
+  rawNodes.forEach(n => {
+    if (!nodeVisible(n)) return;
+    const fields = n.type === "molecule"
+      ? [n.label, n.aliases || [], n.iupac_name, n.molecular_formula, n.chembl_id,
+         n.pubchem_cid == null ? null : String(n.pubchem_cid)]
+      : [n.label, n.protein_name, n.uniprot_accession];
+    const rank = recordRank(fields, q, terms);
+    if (rank == null) return;
+    const matchedAlias = (n.aliases || [])
+      .map(alias => ({ alias, rank: matchRank(alias, q) }))
+      .filter(hit => hit.rank != null)
+      .sort((a, b) => a.rank - b.rank)[0]?.alias;
+    (n.type === "molecule" ? molecules : targets).push({ rank, node: n, matchedAlias });
+  });
+
+  const edges = [];
+  rawEdges.forEach(e => {
+    if (!edgeVisible(e)) return;
+    const label = `${nodeLabel(e.from)} → ${nodeLabel(e.to)}`;
+    const aliasLabels = (nodeById(e.from)?.aliases || [])
+      .map(alias => `${alias} → ${nodeLabel(e.to)}`);
+    const rank = recordRank(
+      [[label, ...aliasLabels], e.action_type, e.mechanism_of_action], q, terms);
+    if (rank != null) edges.push({ rank, edge: e, label });
+  });
+
+  // A paper stays findable while any edge it touches is still drawn. One
+  // whose every edge the filter removed has nothing left to show on the
+  // canvas, and its panel would report measurements against edges that are
+  // not there.
+  const papers = [];
+  citations().forEach(c => {
+    const touches = c.measurements.some(h => edgeVisible(h.edge))
+      || c.refs.some(h => edgeVisible(h.edge));
+    if (!touches) return;
+    const rank = recordRank([c.text, c.url], q, terms);
+    if (rank != null) papers.push({ rank, citation: c });
+  });
+
+  molecules.sort((a, b) => a.rank - b.rank || a.node.label.localeCompare(b.node.label));
+  targets.sort((a, b) => a.rank - b.rank || a.node.label.localeCompare(b.node.label));
+  edges.sort((a, b) => a.rank - b.rank || a.label.localeCompare(b.label));
+  // Within a rank, the citation that contributes most comes first: a title
+  // fragment matching twelve papers should lead with the one carrying
+  // thirteen measurements, not the alphabetically first.
+  papers.sort((a, b) => a.rank - b.rank
+    || citationSummary(b.citation).measurements - citationSummary(a.citation).measurements
+    || String(a.citation.text).localeCompare(String(b.citation.text)));
+
+  return { query: q, molecules, targets, edges, papers,
+           total: molecules.length + targets.length + edges.length + papers.length };
+}
+
+function resultItemHTML(attr, id, title, subtitle, query) {
+  return `
+    <div class="result-item" ${attr}="${esc(id)}">
+      <div class="rt">${highlightMatch(title, query)}</div>
+      <div class="rs">${esc(subtitle)}</div>
+    </div>`;
+}
+
+// Every group prints its full count in the heading and caps the rows it
+// draws, so a capped list never reads as the whole answer.
+function resultGroupHTML(label, helpKey, rows, render) {
+  if (!rows.length) return "";
+  const shown = rows.slice(0, SEARCH_LIMIT);
+  const hidden = rows.length - shown.length;
+  return `
+    <div class="result-group">
+      <h3>${helpLabel(`${label} (${rows.length})`, helpKey)}</h3>
+      ${shown.map(render).join("")}
+      ${hidden ? `<div class="result-more">${esc(hidden)} more not shown — narrow the search.</div>` : ""}
+    </div>`;
+}
+
+const TIER_LABELS = TIERS.map(t => t.label);
+
+function searchResultsHTML(res) {
+  if (!res) return "";
+  const q = res.query;
+  if (res.total === 0) {
+    return `<div class="result-none">Nothing matches <strong>${esc(q)}</strong>.
+      Names (including common and brand names), gene symbols, UniProt and ChEMBL ids, mechanisms and paper titles
+      are all searched.</div>`;
+  }
+  const degree = (id, key) => rawEdges.filter(e => e[key] === id).length;
+  return [
+    resultGroupHTML("Molecules", "search-molecules", res.molecules, r =>
+      resultItemHTML("data-node-id", r.node.id, r.node.label,
+        [r.matchedAlias ? `Also known as ${r.matchedAlias}` : null,
+         plural(degree(r.node.id, "from"), "target")].filter(Boolean).join(" · "), q)),
+    resultGroupHTML("Targets", "search-targets", res.targets, r =>
+      resultItemHTML("data-node-id", r.node.id, r.node.label,
+        [r.node.protein_name, plural(degree(r.node.id, "to"), "molecule"),
+         r.node.expressed_in_brain === 1 ? "brain-expressed" : null]
+          .filter(Boolean).join(" · "), q)),
+    resultGroupHTML("Interactions", "search-interactions", res.edges, r =>
+      resultItemHTML("data-edge-id", r.edge.id, r.label,
+        `${r.edge.action_type} · ${TIER_LABELS[evidenceTier(r.edge)]}`, q)),
+    resultGroupHTML("Papers & references", "search-papers", res.papers, r =>
+      resultItemHTML("data-citation-key", r.citation.key, r.citation.text,
+        citationSummaryText(r.citation), q)),
+  ].join("");
+}
+
+// ---------------------------------------------------------------------------
+// The citation panel: what one paper contributes to this graph.
+// ---------------------------------------------------------------------------
+
+// How much of one edge's pooled value came from this citation. n_measurements
+// is the edge's counted total for the role, so "2 of 13" is the paper's actual
+// weight in the median rather than a bare count of its own rows.
+function citationRoleLineHTML(e, rows, role) {
+  const mine = rows.filter(m => m.role === role);
+  if (!mine.length) return "";
+  const counted = mine.filter(m => m.counted).length;
+  const total = (role === "binding" ? e.n_measurements : e.functional_n_measurements) || 0;
+  const values = [...new Set(mine.map(measurementValueText))].join(", ");
+  let claim;
+  if (!counted) {
+    claim = `${plural(mine.length, role + " measurement")} recorded, `
+      + "none counted toward the value on this edge";
+  } else {
+    claim = `${counted} of ${plural(total, role + " measurement")} pooled into this edge`;
+    if (mine.length > counted) claim += ` · ${mine.length - counted} more not counted`;
+  }
+  return `<div class="share">${esc(values)} — ${esc(claim)}</div>`;
+}
+
+function citationEdgeRowHTML(e, rows) {
+  return `
+    <div class="paper-edge" data-edge-id="${esc(e.id)}">
+      <div class="et" style="color:${actionColor(e.action_type)}">${esc(nodeLabel(e.from))} → ${esc(nodeLabel(e.to))} — ${esc(e.action_type)}</div>
+      ${citationRoleLineHTML(e, rows, "binding")}
+      ${citationRoleLineHTML(e, rows, "functional")}
+    </div>`;
+}
+
+function citationRefRowHTML(e, sources) {
+  const kinds = [...new Set(sources.map(s => {
+    const kind = CITATION_KIND_LABELS[s.citation_kind];
+    return `${s.name} — ${kind ? kind.label.toLowerCase() : "reference"}`;
+  }))];
+  return `
+    <div class="paper-edge" data-edge-id="${esc(e.id)}">
+      <div class="et" style="color:${actionColor(e.action_type)}">${esc(nodeLabel(e.from))} → ${esc(nodeLabel(e.to))} — ${esc(e.action_type)}</div>
+      <div class="share">${esc(kinds.join(" · "))} — contributes no measurement</div>
+    </div>`;
+}
+
+// Group a citation's hits by edge, best-evidenced edge first, reusing the
+// panel's one ordering rule so a paper's list is ranked the same way a
+// molecule's targets are.
+function groupByEdge(hits, pick) {
+  const groups = new Map();
+  hits.forEach(h => {
+    if (!groups.has(h.edge.id)) groups.set(h.edge.id, { edge: h.edge, items: [] });
+    groups.get(h.edge.id).items.push(pick(h));
+  });
+  return [...groups.values()].sort((a, b) => compareEvidence(a.edge, b.edge, "to"));
+}
+
+// Returns the markup rather than writing it, for the same reason
+// edgeListHTML and sharedTargetsHTML do: `detail` is a const the offline
+// harness cannot reach, so a panel that only assigns to it is a panel no test
+// can read.
+function citationPanelHTML(c) {
+  const note = citationNote(c);
+  const s = citationSummary(c);
+  const measured = groupByEdge(c.measurements, h => h.m);
+  const referenced = groupByEdge(c.refs, h => h.source);
+  const databases = [...new Set([
+    ...c.measurements.map(h => h.m.name),
+    ...c.refs.map(h => h.source.name),
+  ])].filter(Boolean);
+  return `
+    <div class="title">${esc(c.text)}</div>
+    <div class="type-badge badge-paper">Paper / reference</div>
+    <div class="panel-section">
+      ${c.url ? `<div class="field"><span class="k">${helpLabel("Links")}</span><div class="v">${link(c.url, c.url)}</div></div>` : ""}
+      <div class="field"><span class="k">${helpLabel("Reaches the graph through")}</span><div class="v">${esc(databases.join(", ") || "—")}</div></div>
+      ${note ? `<div class="field"><span class="k">${helpLabel("What this citation is")}</span><div class="v">${esc(note)}</div></div>` : ""}
+    </div>
+    ${measured.length ? `
+      <div class="panel-section">
+        <h2>${helpLabel(`Measurements contributed (${s.measurements})`, "Measurements contributed")}</h2>
+        ${measured.map(g => citationEdgeRowHTML(g.edge, g.items)).join("")}
+      </div>` : ""}
+    ${referenced.length ? `
+      <div class="panel-section">
+        <h2>${helpLabel(`Cited as a reference (${s.refs})`, "Cited as a reference")}</h2>
+        ${referenced.map(g => citationRefRowHTML(g.edge, g.items)).join("")}
+      </div>` : ""}
+  `;
+}
+
+function showCitation(c) {
+  detail.innerHTML = citationPanelHTML(c);
+}
+
+// What the panel is currently showing. Kept so the graph's highlight can be
+// restored when a search is cleared: typing dims the graph to the matches, and
+// clearing the box has to put back whatever was selected rather than resetting
+// the view out from under the reader.
+let selection = { kind: null, id: null };
+let searchQuery = "";
+
+// ---------------------------------------------------------------- filters
+//
+// The first control here that *removes* things from the picture. Everything
+// else on this page marks: brain expression is a node rim, evidence is a line
+// style, a search dims. Marking was the right default while the graph was 51
+// targets; at 207, with 81 of them sitting at a single edge, a reader who
+// wants the evidenced core has no way to get the periphery out of the way.
+//
+// Brain expression is the filter that has to argue for itself, because
+// expressed_in_brain is 1 or NULL and never 0 (invariant 10). "Hide the
+// unconfirmed" is therefore not "hide the non-brain": it hides ACHE and BCHE,
+// whose brain activity is the whole reason four of the molecules here are
+// approved drugs, and it drops galantamine off the graph completely because
+// neither of its two targets carries a UniProt tissue comment. None of that
+// makes the filter wrong - concentrating the picture on what is confirmed is
+// a real thing to want - but it makes an unlabelled version of it a lie. So
+// the control states its cost, counted from the data rather than asserted,
+// and a banner stays on screen for as long as the filter is on.
+const filters = { brainOnly: false };
+
+// Read and written through functions rather than by touching the binding. A
+// top-level `const` is not a property of the global object, so the offline
+// harness - which evaluates this file in a vm and reaches its top-level
+// *functions* - cannot otherwise drive the filter, and what a filter hides is
+// exactly the thing that needs a test.
+function setFilter(name, on) {
+  filters[name] = !!on;
+  return filters[name];
+}
+
+function filterOn(name) {
+  return !!filters[name];
+}
+
+function isBrainConfirmed(n) {
+  return !!n && n.type === "target" && n.expressed_in_brain === 1;
+}
+
+// Visibility is one rule read three ways, so the canvas, the panel lists, the
+// ranking and the search cannot disagree about what is on screen. A target
+// survives on a positive tissue comment; an edge survives with its target; a
+// molecule survives while it still has one edge left. A molecule is never
+// hidden for its own sake - it goes only when the filter has removed
+// everything it acts on, which is a statement about this database's coverage
+// and not about the drug.
+function targetVisible(n) {
+  return !filters.brainOnly || isBrainConfirmed(n);
+}
+
+function edgeVisible(e) {
+  return !filters.brainOnly || isBrainConfirmed(nodeById(e.to));
+}
+
+function moleculeVisible(n) {
+  return !filters.brainOnly
+    || rawEdges.some(e => e.from === n.id && edgeVisible(e));
+}
+
+function nodeVisible(n) {
+  if (!n) return false;
+  return n.type === "target" ? targetVisible(n) : moleculeVisible(n);
+}
+
+// ----------------------------------------------------------- on the canvas
+//
+// Collapsing is deliberately NOT folded into nodeVisible/edgeVisible. Those
+// four readings of one rule answer "is this part of the picture", and the
+// filter is the only thing allowed to change that answer - a subunit inside a
+// collapsed assembly is still in the picture, still listed in the panel (inside
+// the assembly's row) and still counted by the ranking. Collapsing answers a
+// different question, "what is drawn", and gets its own predicates so the two
+// cannot be confused for one another. Every canvas write below reads these;
+// every list, ranking and search reads the pair above.
+
+// The subunits of this assembly that the filter has left in the picture.
+function visibleMembers(g) {
+  return g.members.map(nodeById).filter(n => nodeVisible(n));
+}
+
+// The assembly that is currently standing in for this node on the canvas.
+function collapsedGroupOf(n) {
+  if (!n || n.type !== "target") return null;
+  const g = groupOfTargetId.get(n.id);
+  return g && groupMode(g) === "collapse" ? g : null;
+}
+
+function nodeOnCanvas(n) {
+  return nodeVisible(n) && !collapsedGroupOf(n);
+}
+
+function edgeOnCanvas(e) {
+  return edgeVisible(e) && !collapsedGroupOf(nodeById(e.to));
+}
+
+// An assembly is drawn as one node only when it is collapsed, and only while
+// the filter has left it at least one subunit to stand for.
+function groupNodeOnCanvas(g) {
+  return groupMode(g) === "collapse" && visibleMembers(g).length > 0;
+}
+
+function groupEdgeOnCanvas(ge) {
+  return groupMode(ge.group) === "collapse" && ge.edges.some(edgeVisible);
+}
+
+// Whether the node at the far end of an edge is on the canvas. This is the
+// single rule the panel's lists use, which is what keeps a list and the
+// picture agreeing: a row is shown exactly when the thing it would take you
+// to is there to be taken to.
+function endVisible(e, otherEndKey) {
+  return nodeVisible(nodeById(e[otherEndKey]));
+}
+
+function visibleRows(edges, otherEndKey) {
+  return edges.filter(e => endVisible(e, otherEndKey));
+}
+
+// "14" when nothing is filtered, "14 of 46" when something is. A heading that
+// silently reported the shortened count would make the filter invisible in
+// the one place the reader is counting.
+function rowCountLabel(edges, otherEndKey) {
+  const shown = visibleRows(edges, otherEndKey).length;
+  return shown === edges.length ? String(edges.length) : `${shown} of ${edges.length}`;
+}
+
+function listText(names) {
+  if (names.length === 0) return "";
+  if (names.length === 1) return names[0];
+  return names.slice(0, -1).join(", ") + " and " + names[names.length - 1];
+}
+
+// What the brain filter does to this database, counted rather than claimed.
+// Computed from the data on every render because the seed set has doubled
+// twice: a note quoting hardcoded gene names would have been wrong both times.
+function brainFilterStats() {
+  const targets = rawNodes.filter(n => n.type === "target");
+  const molecules = rawNodes.filter(n => n.type === "molecule");
+  const dropped = targets.filter(n => !isBrainConfirmed(n));
+  const degree = n => rawEdges.reduce((c, e) => c + (e.to === n.id ? 1 : 0), 0);
+  // The best-connected of the targets this hides, named so that the cost is
+  // concrete rather than a number. These are the ones a reader is most likely
+  // to notice missing.
+  const notable = dropped.slice()
+    .sort((a, b) => degree(b) - degree(a) || a.label.localeCompare(b.label))
+    .slice(0, 4).map(n => n.label);
+  const keptEdges = rawEdges.filter(e => isBrainConfirmed(nodeById(e.to)));
+  const orphaned = molecules.filter(n =>
+    !rawEdges.some(e => e.from === n.id && isBrainConfirmed(nodeById(e.to))));
+  return {
+    targets: targets.length,
+    keptTargets: targets.length - dropped.length,
+    droppedTargets: dropped.length,
+    notable,
+    molecules: molecules.length,
+    keptMolecules: molecules.length - orphaned.length,
+    orphaned: orphaned.map(n => n.label),
+    edges: rawEdges.length,
+    keptEdges: keptEdges.length,
+  };
+}
+
+// What grouping is doing to this database, counted rather than claimed - the
+// same rule the brain filter is held to. The seed set has doubled twice and a
+// note quoting hardcoded receptor names would have been wrong both times.
+function groupingStats() {
+  const tiers = GROUP_TIERS.map(t => {
+    const groups = rawGroups.filter(g => g.tier === t.key);
+    return {
+      key: t.key,
+      label: t.label,
+      claim: t.claim,
+      groups: groups.length,
+      members: groups.reduce((s, g) => s + g.members.length, 0),
+      largest: groups.slice().sort((a, b) => b.members.length - a.members.length
+        || String(a.chembl_id).localeCompare(String(b.chembl_id)))[0] || null,
+    };
+  });
+  return {
+    tiers,
+    groups: rawGroups.length,
+    members: rawGroups.reduce((s, g) => s + g.members.length, 0),
+    targets: rawNodes.filter(n => n.type === "target").length,
+  };
+}
+
+// Grouping is the second control here that changes what the picture claims
+// rather than only what it marks, so it states its own terms the way the brain
+// filter does. The difference is that neither setting is the safe one: merging
+// subunits that are one receptor corrects a count, and merging subunits that
+// are not over-merges it, and only ChEMBL's own typing separates those cases.
+function groupingHTML() {
+  const s = groupingStats();
+  if (s.groups === 0) return "";
+  // The worst case for the "count everything separately" note, named so the
+  // cost is concrete rather than a number.
+  const biggest = rawGroups.slice().sort((a, b) =>
+    b.members.length - a.members.length)[0];
+  const btn = (tier, mode, current) => `
+    <button type="button" class="group-mode${current === mode ? " on" : ""}"
+      data-grouping-tier="${esc(tier)}" data-grouping-mode="${esc(mode)}"
+      ${grouping.ungrouped ? "disabled" : ""}>${esc(mode)}</button>`;
+  // These notes used to sit under the controls, and between them they were
+  // eight lines of prose above every panel - read once, then scrolled past
+  // forever, and pushing the thing the reader had actually selected below the
+  // fold. They are the same words on hover, which is where the rest of this
+  // panel's vocabulary already lives.
+  const ungroupedTip =
+    HELP["Show every subunit individually"]
+    + ` Here that means two molecules both acting on `
+    + `${groupLabel(biggest, 40)} count it ${biggest.members.length} times over.`;
+  return `
+    <div class="grouping">
+      <div class="grouping-head">${helpLabel("Protein assemblies", "Protein assemblies")}</div>
+      ${s.tiers.filter(t => t.groups > 0).map(t => `
+        <div class="grouping-tier">
+          <div class="grouping-tier-head">
+            <span>${helpTip(t.label, t.claim
+              + (t.largest ? ` Largest here: ${groupLabel(t.largest, 40)}`
+                + ` (${plural(t.largest.members.length, "subunit")}).` : ""))}
+              <span style="color:var(--text-dim)">&mdash; ${esc(t.groups)},
+                ${esc(plural(t.members, "subunit"))}</span></span>
+            <span class="group-modes">
+              ${btn(t.key, "collapse", grouping[t.key])}
+              ${btn(t.key, "hull", grouping[t.key])}
+              ${btn(t.key, "separate", grouping[t.key])}
+            </span>
+          </div>
+        </div>`).join("")}
+      <label class="filter-row" for="filter-ungrouped">
+        <input type="checkbox" id="filter-ungrouped"${grouping.ungrouped ? " checked" : ""}>
+        <span>${helpTip("Show every subunit individually", ungroupedTip)}</span>
+      </label>
+    </div>`;
+}
+
+function filtersHTML() {
+  const s = brainFilterStats();
+  const orphanNote = s.orphaned.length
+    ? ` It also removes ${esc(listText(s.orphaned))} from the graph entirely`
+      + `${s.orphaned.length === 1 ? ", which has" : ", which have"} no `
+      + `confirmed target here at all.`
+    : "";
+  return `
+    <label class="filter-row" for="filter-brain">
+      <input type="checkbox" id="filter-brain"${filters.brainOnly ? " checked" : ""}>
+      <span>${helpLabel("Confirmed brain-expressed targets only")}</span>
+    </label>
+    <div class="filter-note">
+      Keeps the ${esc(s.keptTargets)} targets UniProt records in brain tissue and
+      hides the other ${esc(s.droppedTargets)} &mdash; which are
+      <em>unverified</em>, not known to be absent. Hides
+      ${esc(listText(s.notable))} among others.${orphanNote}
+    </div>
+    ${groupingHTML()}`;
+}
+
+// What a control is currently doing to the graph, stated outside the fold.
+// The controls collapse; what they have done to the picture does not, because
+// a reader looking at 86 of 207 targets needs to be told so whether or not they
+// have the control open - it is the one thing on this page that removes rather
+// than marks, and the whole argument for allowing it is that it says its cost.
+function filterBannersHTML() {
+  const s = brainFilterStats();
+  const g = groupingStats();
+  return (filters.brainOnly
+    ? `<div class="filter-active"><strong>Filter on</strong> &mdash;
+         showing ${esc(s.keptTargets)} of ${esc(s.targets)} targets,
+         ${esc(s.keptMolecules)} of ${esc(s.molecules)} molecules,
+         ${esc(s.keptEdges)} of ${esc(s.edges)} edges.
+         The rest is hidden, not absent.</div>`
+    : "")
+    + (grouping.ungrouped && g.groups
+    ? `<div class="filter-active"><strong>Grouping off</strong>
+         &mdash; ${esc(g.members)} of ${esc(g.targets)} targets are subunits of
+         ${esc(g.groups)} assemblies and are being counted separately.</div>`
+    : "");
+}
+
+// The one line the collapsed controls show. It names every setting, so folding
+// them away never hides a changed one: a reader who has moved the calcium
+// channel to "separate" and closed the block can still see that they did.
+function viewOptionsSummary() {
+  const parts = [filters.brainOnly ? "brain filter on" : "all targets"];
+  if (rawGroups.length) {
+    const overrides = Object.keys(grouping.overrides).length;
+    parts.push(grouping.ungrouped
+      ? "assemblies ungrouped"
+      : GROUP_TIERS.filter(t => rawGroups.some(g => g.tier === t.key))
+          .map(t => `${t.label.toLowerCase()} ${grouping[t.key]}`).join(", ")
+        + (overrides ? ` (${plural(overrides, "override")})` : ""));
+  }
+  return `Display options <span class="view-options-state">&mdash; `
+    + `${esc(parts.join(" · "))}</span>`;
+}
+
+// Re-render the panel that is already open, so a list built under the old
+// filter does not stay on screen describing a graph that has changed. Not
+// selectNode/selectEdge, which would also re-run the highlight and scroll the
+// canvas out from under the reader.
+function refreshSelection() {
+  if (selection.kind === "node") {
+    const n = nodeById(selection.id);
+    if (n) n.type === "molecule" ? showMolecule(n) : showTarget(n);
+  } else if (selection.kind === "edge") {
+    const e = rawEdges.find(x => x.id === selection.id);
+    if (e) showEdge(e);
+  } else if (selection.kind === "citation") {
+    const c = citations().get(selection.id);
+    if (c) showCitation(c);
+  } else if (selection.kind === "pair") {
+    // A pair stops existing when the filter removes the second molecule or
+    // every edge the overlap was made of, so the panel falls back to the
+    // molecule the reader came from rather than describing an overlap that is
+    // no longer on the canvas - the same move the collapsed-edge case makes.
+    const pair = pairFor(...selection.id.split("|"));
+    if (pair) showPair(pair);
+    else selectNode(selection.id.split("|")[0]);
+  } else if (selection.kind === "group") {
+    const g = groupById(selection.id);
+    if (g) showGroup(g);
+  } else if (selection.kind === "groupEdge") {
+    const ge = groupEdgeIndex.get(selection.id);
+    // A collapsed edge stops existing the moment its assembly stops being
+    // collapsed, so the panel falls back to the assembly rather than sitting
+    // there describing an edge that is no longer on the canvas.
+    if (ge && groupEdgeOnCanvas(ge)) showGroupEdge(ge);
+    else if (ge) selectGroup(ge.group.id);
+  }
+}
+
+// Push the current filter onto the graph. `hidden` rather than opacity: this
+// is the one thing on the page that means "not part of the picture", and
+// dimming already means three other things (a selection, a paper, a live
+// search). vis merges updates, so the opacity applyHighlight writes survives
+// this and vice versa.
+function applyFilters() {
+  visNodes.update(rawNodes.map(n => ({ id: n.id, hidden: !nodeOnCanvas(n) })));
+  visNodes.update(rawGroups.map(g => ({ id: g.id, hidden: !groupNodeOnCanvas(g) })));
+  visEdges.update(rawEdges.map(e => ({ id: e.id, hidden: !edgeOnCanvas(e) })));
+  visEdges.update(groupEdges.map(ge => ({ id: ge.id, hidden: !groupEdgeOnCanvas(ge) })));
+  // The glue springs follow the mode, not the filter: they are never drawn, so
+  // there is nothing for the filter to remove, and a subunit the filter has
+  // hidden is out of the physics body anyway.
+  visEdges.update(glueEdges.map(ge => ({ id: ge.id, physics: glueActive(ge) })));
+  renderControls();
+  refreshSelection();
+  if (searchQuery) runSearch(searchQuery);
+  restoreHighlight();
+}
+
+function render(html) {
+  // A search with results replaces the "nothing selected yet" hint, which
+  // otherwise sits between the box and its own results.
+  detailEmpty.style.display = html || searchQuery ? "none" : "block";
+  detail.style.display = html ? "block" : "none";
+}
+
+const groupEdgeIndex = new Map(groupEdges.map(ge => [ge.id, ge]));
+
+// An assembly's node and its collapsed edges are selected through the same two
+// entry points as everything else, so every existing caller - the canvas, the
+// search, a panel row - reaches them without knowing they are synthetic.
+function selectGroup(id) {
+  const g = groupById(id);
+  if (!g) return;
+  showGroup(g);
+  selection = { kind: "group", id };
+  render(true);
+  highlightGroup(g);
+}
+
+function selectGroupEdge(id) {
+  const ge = groupEdgeIndex.get(id);
+  if (!ge) return;
+  showGroupEdge(ge);
+  selection = { kind: "groupEdge", id };
+  render(true);
+  highlightEdgeSet(new Set(ge.edges.map(e => e.id)));
+}
+
+function highlightGroup(g) {
+  const members = new Set(g.members);
+  const keepNodes = new Set([g.id, ...g.members]);
+  const keepEdges = new Set();
+  rawEdges.forEach(e => {
+    if (!members.has(e.to)) return;
+    keepEdges.add(e.id);
+    keepNodes.add(e.from);
+  });
+  applyHighlight(keepNodes, keepEdges, new Set(), new Set());
+}
+
+function selectNode(id) {
+  if (groupIndex.has(id)) return selectGroup(id);
+  const n = rawNodes.find(x => x.id === id);
+  if (!n) return;
+  n.type === "molecule" ? showMolecule(n) : showTarget(n);
+  selection = { kind: "node", id };
+  render(true);
+  highlightNeighborhood(id);
+}
+
+function selectEdge(id) {
+  if (groupEdgeIndex.has(id)) return selectGroupEdge(id);
+  const e = rawEdges.find(x => x.id === id);
+  if (!e) return;
+  showEdge(e);
+  selection = { kind: "edge", id };
+  render(true);
+  highlightNeighborhood(null, id);
+}
+
+function selectPair(id) {
+  const pair = pairFor(...String(id).split("|"));
+  if (!pair) return;
+  showPair(pair);
+  selection = { kind: "pair", id };
+  render(true);
+  highlightPair(pair);
+  // Both, not one: neither molecule is more selected than the other, and
+  // leaving vis's own selection on whichever was clicked last would draw a
+  // halo that says otherwise.
+  network.selectNodes([pair.a.id, pair.b.id]);
+}
+
+function selectCitation(key) {
+  const c = citations().get(key);
+  if (!c) return;
+  showCitation(c);
+  selection = { kind: "citation", id: key };
+  render(true);
+  // Every edge this paper touches, lit at once. A paper's contribution is a
+  // shape on the graph - twelve edges at one receptor, or one lead nobody has
+  // replicated - and that is the thing a paper search is asking to see.
+  const edges = new Set([
+    ...c.measurements.map(h => h.edge.id),
+    ...c.refs.map(h => h.edge.id),
+  ]);
+  highlightEdgeSet(edges);
+}
+
+// The one place that writes opacity onto the graph, so the several things that
+// dim it - a selection, a paper, a live search - cannot disagree about what
+// dimmed means.
+// The opacity every node and edge should end up at, as two maps. Separate
+// from the code that writes it so a test can read the decision: the viewer
+// pushes these onto vis DataSets, which the offline harness only records.
+// A collapsed assembly lights when any of its subunits would, and a collapsed
+// edge when any of the edges it stands for would. Done here rather than in each
+// caller so the several things that build a highlight - a selection, a paper, a
+// live search - get it without any of them knowing that grouping exists.
+function withGroupsKept(nodeIds, edgeIds) {
+  const nodes = new Set(nodeIds);
+  const edges = new Set(edgeIds);
+  rawGroups.forEach(g => {
+    if (g.members.some(id => nodes.has(id))) nodes.add(g.id);
+  });
+  groupEdges.forEach(ge => {
+    if (ge.edges.some(e => edges.has(e.id))) edges.add(ge.id);
+  });
+  return { nodes, edges };
+}
+
+// The opacity the hull painter reads, so a dimmed assembly's hull dims with it
+// rather than staying lit over a greyed-out graph. Written by the two functions
+// below, which are the only things on this page that write opacity at all.
+let currentOpacity = null;
+
+function highlightOpacity(keepNodes, keepEdges, echoNodes, echoEdges) {
+  // Nothing kept *at all* is the only thing that means "not highlighting" -
+  // it is one decision about the whole picture, not one per channel. Read
+  // per-channel, an empty edge set means "every edge bright", which is right
+  // for a selection (a selected node always keeps its edges) and wrong for a
+  // search: matching a target by its UniProt accession keeps one node and no
+  // edges, and lit every line in the graph around an otherwise dimmed one.
+  const unfiltered = keepNodes.size === 0 && keepEdges.size === 0;
+  const keep = withGroupsKept(keepNodes, keepEdges);
+  const echo = withGroupsKept(echoNodes, echoEdges);
+  const nodeOpacity = id => unfiltered || keep.nodes.has(id) ? 1
+    : echo.nodes.has(id) ? 0.55 : 0.12;
+  const edgeOpacity = id => unfiltered || keep.edges.has(id) ? 0.9
+    : echo.edges.has(id) ? 0.3 : 0.06;
+  return {
+    nodes: new Map(rawNodes.map(n => [n.id, nodeOpacity(n.id)])
+      .concat(rawGroups.map(g => [g.id, nodeOpacity(g.id)]))),
+    edges: new Map(rawEdges.map(e => [e.id, edgeOpacity(e.id)])
+      .concat(groupEdges.map(ge => [ge.id, edgeOpacity(ge.id)]))),
+  };
+}
+
+function applyHighlight(keepNodes, keepEdges, echoNodes, echoEdges) {
+  const opacity = highlightOpacity(keepNodes, keepEdges, echoNodes, echoEdges);
+  currentOpacity = opacity;
+  visNodes.update(rawNodes.map(n => ({ id: n.id, opacity: opacity.nodes.get(n.id) }))
+    .concat(rawGroups.map(g => ({ id: g.id, opacity: opacity.nodes.get(g.id) }))));
+  visEdges.update(rawEdges.map(e => ({
+    id: e.id,
+    color: {
+      color: actionColor(e.action_type),
+      highlight: "#ffffff",
+      opacity: opacity.edges.get(e.id),
+    },
+  })).concat(groupEdges.map(ge => ({
+    id: ge.id,
+    color: {
+      color: actionColor(groupEdgeAction(ge)),
+      highlight: "#ffffff",
+      opacity: opacity.edges.get(ge.id),
+    },
+  }))));
+}
+
+function highlightNeighborhood(nodeId, edgeId) {
+  let keepNodes = new Set();
+  let keepEdges = new Set();
+  // The second hop: the other molecules acting on the selected molecule's
+  // targets, drawn between the neighbourhood and the dimmed rest. Selecting a
+  // molecule used to dim exactly the thing this graph is for - who else is on
+  // these targets - so seeing whether two drugs act alike took one click per
+  // target. Held at a lower opacity rather than full, because they are
+  // context for the selection, not part of it.
+  let echoNodes = new Set();
+  let echoEdges = new Set();
+
+  if (nodeId) {
+    keepNodes.add(nodeId);
+    rawEdges.forEach(e => {
+      if (e.from === nodeId || e.to === nodeId) {
+        keepEdges.add(e.id);
+        keepNodes.add(e.from);
+        keepNodes.add(e.to);
+      }
+    });
+    // Molecules only. A target's second hop is every other target of every
+    // molecule that binds it, which for ACHE is most of the graph - that is
+    // not a neighbourhood, it's a reset.
+    const selected = nodeById(nodeId);
+    if (selected && selected.type === "molecule") {
+      rawEdges.forEach(e => {
+        if (e.from !== nodeId && keepNodes.has(e.to)) {
+          echoEdges.add(e.id);
+          echoNodes.add(e.from);
+        }
+      });
+    }
+  } else if (edgeId) {
+    const e = rawEdges.find(x => x.id === edgeId);
+    keepEdges.add(edgeId);
+    keepNodes.add(e.from);
+    keepNodes.add(e.to);
+  }
+
+  applyHighlight(keepNodes, keepEdges, echoNodes, echoEdges);
+}
+
+// An arbitrary set of edges and their endpoints, with no second hop: a paper's
+// edges are already the answer, and echoing everything one step out from them
+// would drown the thing being shown.
+function highlightEdgeSet(edgeIds) {
+  const keepEdges = new Set(edgeIds);
+  const keepNodes = new Set();
+  rawEdges.forEach(e => {
+    if (!keepEdges.has(e.id)) return;
+    keepNodes.add(e.from);
+    keepNodes.add(e.to);
+  });
+  applyHighlight(keepNodes, keepEdges, new Set(), new Set());
+}
+
+// What a live search lights up. Matched nodes, the endpoints of matched edges,
+// and - the part that makes a query like "PDE" read as a region rather than a
+// scatter of dots - every edge that runs between two matched nodes, even
+// though the edge itself was not a hit.
+function searchHighlight(res) {
+  const keepNodes = new Set();
+  const keepEdges = new Set();
+  res.molecules.forEach(r => keepNodes.add(r.node.id));
+  res.targets.forEach(r => keepNodes.add(r.node.id));
+  res.edges.forEach(r => {
+    keepEdges.add(r.edge.id);
+    keepNodes.add(r.edge.from);
+    keepNodes.add(r.edge.to);
+  });
+  res.papers.forEach(r => {
+    r.citation.measurements.forEach(h => { if (edgeVisible(h.edge)) keepEdges.add(h.edge.id); });
+    r.citation.refs.forEach(h => { if (edgeVisible(h.edge)) keepEdges.add(h.edge.id); });
+  });
+  rawEdges.forEach(e => {
+    if (keepEdges.has(e.id)) {
+      keepNodes.add(e.from);
+      keepNodes.add(e.to);
+    } else if (keepNodes.has(e.from) && keepNodes.has(e.to)) {
+      keepEdges.add(e.id);
+    }
+  });
+  return { keepNodes, keepEdges };
+}
+
+// Put back the highlight the current selection implies. Called when a search
+// is cleared: the reader's selection survived the search, so the graph should
+// go back to it rather than to the unfiltered view.
+function restoreHighlight() {
+  if (selection.kind === "node") return highlightNeighborhood(selection.id);
+  if (selection.kind === "edge") return highlightNeighborhood(null, selection.id);
+  if (selection.kind === "citation") return selectCitation(selection.id);
+  if (selection.kind === "pair") {
+    const pair = pairFor(...selection.id.split("|"));
+    if (pair) return highlightPair(pair);
+  }
+  resetHighlight();
+}
+
+// The unfiltered graph. Its own function rather than applyHighlight with empty
+// sets, because the resting edge opacity is 0.85 and applyHighlight's "kept"
+// opacity is 0.9 - clearing a search would otherwise leave the graph very
+// slightly brighter than the reset button does.
+function resetHighlight() {
+  currentOpacity = null;
+  visNodes.update(rawNodes.map(n => ({ id: n.id, opacity: 1 }))
+    .concat(rawGroups.map(g => ({ id: g.id, opacity: 1 }))));
+  visEdges.update(rawEdges.map(e => ({ id: e.id, color: { color: actionColor(e.action_type), highlight: "#ffffff", opacity: 0.85 } }))
+    .concat(groupEdges.map(ge => ({ id: ge.id, color: { color: actionColor(groupEdgeAction(ge)), highlight: "#ffffff", opacity: 0.85 } }))));
+}
+
+function clearSelection() {
+  selection = { kind: null, id: null };
+  render(false);
+  resetHighlight();
+  network.unselectAll();
+}
+
+// Rendered from JS rather than written into the markup, so its numbers are
+// counted from the data that is actually loaded and its label goes through
+// helpLabel like every other piece of this panel's vocabulary.
+const filtersEl = document.getElementById("filters");
+const viewOptionsSummaryEl = document.getElementById("view-options-summary");
+const filtersActiveEl = document.getElementById("filters-active");
+
+// The controls, the line that stands for them when they are folded, and the
+// banners for what they are doing - written together so a setting cannot change
+// in one of the three and not the others.
+function renderControls() {
+  filtersEl.innerHTML = filtersHTML();
+  viewOptionsSummaryEl.innerHTML = viewOptionsSummary();
+  filtersActiveEl.innerHTML = filterBannersHTML();
+}
+
+renderControls();
+// Delegated, because filtersHTML() replaces the checkbox on every render.
+filtersEl.addEventListener("change", function (ev) {
+  if (!ev.target) return;
+  if (ev.target.id === "filter-brain") {
+    setFilter("brainOnly", ev.target.checked);
+  } else if (ev.target.id === "filter-ungrouped") {
+    setUngrouped(ev.target.checked);
+  } else {
+    return;
+  }
+  applyFilters();
+});
+
+// The per-tier mode buttons. Delegated for the same reason the checkbox is:
+// filtersHTML() replaces the whole bar on every render.
+filtersEl.addEventListener("click", function (ev) {
+  const btn = ev.target.closest && ev.target.closest("[data-grouping-tier]");
+  if (!btn) return;
+  // A tier default is a different setting from a per-assembly override, and
+  // changing the default should not silently leave old overrides sitting on
+  // top of it - a reader who moves the whole tier to "separate" and still sees
+  // one collapsed receptor has been told something untrue about the control.
+  grouping.overrides = {};
+  setGrouping(btn.getAttribute("data-grouping-tier"), btn.getAttribute("data-grouping-mode"));
+  applyFilters();
+});
+
+const searchInput = document.getElementById("search");
+const searchResults = document.getElementById("search-results");
+const searchClear = document.getElementById("search-clear");
+// The results of the query on screen, so Enter can open the first one without
+// re-running the search.
+let lastResults = null;
+
+function runSearch(query) {
+  searchQuery = (query || "").trim();
+  lastResults = searchGraph(searchQuery);
+  searchResults.innerHTML = searchResultsHTML(lastResults);
+  searchClear.hidden = !searchQuery;
+  render(detail.style.display === "block");
+  if (lastResults && lastResults.total > 0) {
+    const { keepNodes, keepEdges } = searchHighlight(lastResults);
+    applyHighlight(keepNodes, keepEdges, new Set(), new Set());
+  } else {
+    restoreHighlight();
+  }
+}
+
+// The first result across the groups, in the order they are drawn. Enter on a
+// query that named one thing exactly should open it without a trip to the
+// mouse.
+function firstResult(res) {
+  if (!res) return null;
+  if (res.molecules.length) return { kind: "node", id: res.molecules[0].node.id };
+  if (res.targets.length) return { kind: "node", id: res.targets[0].node.id };
+  if (res.edges.length) return { kind: "edge", id: res.edges[0].edge.id };
+  if (res.papers.length) return { kind: "citation", id: res.papers[0].citation.key };
+  return null;
+}
+
+function openResult(hit) {
+  if (!hit) return;
+  if (hit.kind === "node") {
+    selectNode(hit.id);
+    network.selectNodes([hit.id]);
+  } else if (hit.kind === "edge") {
+    selectEdge(hit.id);
+  } else {
+    selectCitation(hit.id);
+  }
+}
+
+searchInput.addEventListener("input", function (ev) {
+  runSearch(ev.target.value);
+});
+
+searchInput.addEventListener("keydown", function (ev) {
+  if (ev.key === "Enter") {
+    openResult(firstResult(lastResults));
+  } else if (ev.key === "Escape") {
+    searchInput.value = "";
+    runSearch("");
+  }
+});
+
+searchClear.addEventListener("click", function () {
+  searchInput.value = "";
+  runSearch("");
+  searchInput.focus();
+});
+
+network.on("click", function (params) {
+  // A glue spring is not a claim about anything and has nothing to open, so a
+  // stray hit on one clears the selection like a click on empty canvas rather
+  // than doing nothing at all.
+  const edges = params.edges.filter(id => !glueEdgeIds.has(id));
+  if (params.nodes.length > 0) {
+    selectNode(params.nodes[0]);
+  } else if (edges.length > 0) {
+    selectEdge(edges[0]);
+  } else {
+    clearSelection();
+  }
+});
+
+// One handler for every clickable row on the page - the panel's edge lists,
+// the shared-target rows, the search results and a citation's edge rows - which
+// all name what they open in a data attribute rather than each carrying their
+// own listener. Bound to #app rather than to #sidebar because the search
+// results moved out of the sidebar and into the top bar; a click with none of
+// these attributes on it falls straight through, so covering the whole app
+// costs nothing and cannot leave a row somewhere that nothing is listening to.
+document.getElementById("app").addEventListener("click", function (ev) {
+  const item = ev.target.closest(
+    "[data-group-mode], [data-group-id], [data-node-id], [data-edge-id], "
+    + "[data-citation-key], [data-pair]");
+  if (!item) return;
+  // Checked with !== null, not for truthiness: the "follow the default" button
+  // carries an empty mode, which is the value that clears the override.
+  const mode = item.getAttribute("data-group-mode");
+  if (mode !== null) {
+    applyGroupModeChoice(item.getAttribute("data-group-id"), mode);
+    return;
+  }
+  const pair = item.getAttribute("data-pair");
+  if (pair) {
+    selectPair(pair);
+    return;
+  }
+  const groupId = item.getAttribute("data-group-id");
+  if (groupId) {
+    selectGroup(groupId);
+    return;
+  }
+  const nodeId = item.getAttribute("data-node-id");
+  if (nodeId) {
+    selectNode(nodeId);
+    network.selectNodes([nodeId]);
+    return;
+  }
+  const citationKey = item.getAttribute("data-citation-key");
+  if (citationKey) {
+    selectCitation(citationKey);
+    return;
+  }
+  selectEdge(item.getAttribute("data-edge-id"));
+});
+
+document.getElementById("reset-btn").addEventListener("click", function () {
+  searchInput.value = "";
+  runSearch("");
+  clearSelection();
+  network.fit({ animation: true });
+});
+</script>
+</body>
+</html>

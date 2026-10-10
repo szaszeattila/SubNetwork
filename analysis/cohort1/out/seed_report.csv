@@ -1,0 +1,29 @@
+seed_name,seed_chembl_id,parent_chembl_id,seed_is_parent,in_catalogue,route_atc_n,route_cns_indication,admission_or_exclusion_reason,cns_ind_max_phase,n_claims,n_supported,n_preliminary,n_limited_or_unresolved,n_curated_support,n_multiple_study_support,n_supported_human_direct,any_qualifying_human_target_claim,evidence_status
+caffeine,CHEMBL113,CHEMBL113,1,1,1,1,ATC N (N06BC01); core CNS indication (18 MeSH terms),4,207,21,34,152,1,20,10,1,assessed_with_evidence
+theophylline,CHEMBL1355736,CHEMBL190,0,1,0,1,core CNS indication (2 MeSH terms),1,212,27,22,163,3,24,6,1,assessed_with_evidence
+theobromine,CHEMBL1114,CHEMBL1114,1,0,0,0,"excluded: has indication records, none inside the considered CNS scope",,not assessed - not in catalogue,,,,,,,,not assessed - outside the catalogue
+istradefylline,CHEMBL431770,CHEMBL431770,1,1,1,1,ATC N (N04CX01); core CNS indication (3 MeSH terms),4,50,8,5,37,1,7,6,1,assessed_with_evidence
+rolipram,CHEMBL63,CHEMBL63,1,1,0,1,core CNS indication (5 MeSH terms),2,58,17,12,29,1,16,5,1,assessed_with_evidence
+cilostazol,CHEMBL799,CHEMBL799,1,1,0,1,core CNS indication (7 MeSH terms),3,163,5,13,145,1,4,2,1,assessed_with_evidence
+donepezil,CHEMBL502,CHEMBL502,1,1,1,1,ATC N (N06DA02); core CNS indication (24 MeSH terms),4,141,21,31,89,1,20,8,1,assessed_with_evidence
+pentoxifylline,CHEMBL628,CHEMBL628,1,1,0,1,core CNS indication (8 MeSH terms),2,157,2,10,145,2,0,0,1,assessed_with_evidence
+sildenafil,CHEMBL192,CHEMBL192,1,1,0,1,core CNS indication (13 MeSH terms),4,202,23,30,149,1,22,8,1,assessed_with_evidence
+verapamil,CHEMBL6966,CHEMBL6966,1,1,0,1,core CNS indication (3 MeSH terms),3,244,33,61,150,1,32,5,1,assessed_with_evidence
+rivastigmine,CHEMBL636,CHEMBL636,1,1,1,1,ATC N (N06DA03); core CNS indication (17 MeSH terms),4,24,11,6,7,1,10,2,1,assessed_with_evidence
+tacrine,CHEMBL95,CHEMBL95,1,1,1,1,ATC N (N06DA01); core CNS indication (2 MeSH terms),4,192,19,42,131,1,18,2,1,assessed_with_evidence
+selegiline,CHEMBL972,CHEMBL972,1,1,1,1,ATC N (N04BD01); core CNS indication (10 MeSH terms),4,170,9,7,154,1,8,3,1,assessed_with_evidence
+cannabidiol,CHEMBL190461,CHEMBL190461,1,1,1,1,ATC N (N03AX24); core CNS indication (43 MeSH terms),4,123,16,73,34,1,15,6,1,assessed_with_evidence
+haloperidol,CHEMBL54,CHEMBL54,1,1,1,1,ATC N (N05AD01); core CNS indication (16 MeSH terms),4,269,50,79,140,2,48,21,1,assessed_with_evidence
+clozapine,CHEMBL42,CHEMBL42,1,1,1,1,ATC N (N05AH02); core CNS indication (7 MeSH terms),4,256,53,80,123,2,51,24,1,assessed_with_evidence
+amitriptyline,CHEMBL629,CHEMBL629,1,1,1,1,ATC N (N06AA09); core CNS indication (6 MeSH terms),4,195,8,71,116,2,6,7,1,assessed_with_evidence
+loperamide,CHEMBL841,CHEMBL841,1,0,0,0,excluded: indications fall only in boundary classes general_pain,,not assessed - not in catalogue,,,,,,,,not assessed - outside the catalogue
+dextromethorphan,CHEMBL52440,CHEMBL52440,1,1,1,1,ATC N (N07XX59); core CNS indication (19 MeSH terms),3,170,5,25,140,2,3,3,1,assessed_with_evidence
+memantine,CHEMBL807,CHEMBL807,1,1,1,1,ATC N (N06DX01); core CNS indication (32 MeSH terms),4,104,11,15,78,1,10,1,1,assessed_with_evidence
+lamotrigine,CHEMBL741,CHEMBL741,1,1,1,1,ATC N (N03AX09); core CNS indication (21 MeSH terms),4,174,6,18,150,1,5,2,1,assessed_with_evidence
+dipyridamole,CHEMBL932,CHEMBL932,1,1,0,1,core CNS indication (2 MeSH terms),4,169,8,33,128,2,6,2,1,assessed_with_evidence
+vardenafil,CHEMBL1520,CHEMBL1520,1,1,0,1,core CNS indication (2 MeSH terms),4,51,9,19,23,1,8,5,1,assessed_with_evidence
+dronabinol,CHEMBL465,CHEMBL465,1,1,0,1,core CNS indication (20 MeSH terms),3,30,12,16,2,1,11,6,1,assessed_with_evidence
+phenelzine,CHEMBL1089,CHEMBL1089,1,1,1,1,ATC N (N06AF03); core CNS indication (1 MeSH terms),4,140,3,22,115,1,2,2,1,assessed_with_evidence
+quinidine,CHEMBL1294,CHEMBL1294,1,1,0,1,core CNS indication (6 MeSH terms),3,108,8,43,57,1,7,2,1,assessed_with_evidence
+galantamine,CHEMBL659,CHEMBL659,1,1,1,1,ATC N (N06DA04); core CNS indication (16 MeSH terms),4,150,10,7,133,1,9,3,1,assessed_with_evidence
+mibefradil,CHEMBL45816,CHEMBL45816,1,0,0,0,excluded: indications fall only in boundary classes cns_oncology,,not assessed - not in catalogue,,,,,,,,not assessed - outside the catalogue

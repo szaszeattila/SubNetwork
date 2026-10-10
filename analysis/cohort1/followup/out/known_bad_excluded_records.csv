@@ -1,0 +1,5 @@
+activity_id,assay_chembl_id,molregno,description,standard_type,standard_relation,standard_value,standard_units
+3104702,CHEMBL1074487,779620,Inhibition of PLAP by analogous luminescence assay,IC50,>,5000,nM
+3104706,CHEMBL1074487,84592,Inhibition of PLAP by analogous luminescence assay,IC50,>,5000,nM
+3104707,CHEMBL1074487,84633,Inhibition of PLAP by analogous luminescence assay,IC50,>,5000,nM
+24796652,CHEMBL5133661,9372,Inhibition of human AChE by Ellman's method,IC50,=,32.36,nM

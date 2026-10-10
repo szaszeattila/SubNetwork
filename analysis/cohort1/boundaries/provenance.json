@@ -1,0 +1,16 @@
+{
+  "chembl_release": "chembl_37",
+  "chembl_path": "/mnt/data/chembl/chembl_37/chembl_37_sqlite/chembl_37.db",
+  "chembl_bytes": 30480314368,
+  "input_sha256": {
+    "analysis/cohort1/out/indication_scope.csv": "0733b17c45dca06232a4d74b6b22da74b3c772e384f4153c0d890905f98efb36",
+    "analysis/cohort1/out/candidates.csv": "1bf5c09c827ce10414ad6465aefce8ffa314619eed9e8fbd40523af38e338fd2",
+    "analysis/cohort1/boundaries/audit.py": "53b22dc231cdfda482cabd766a32b56dfa23ffd4785a22e025b04e2b1fec30db"
+  },
+  "checks": [
+    "Exact baseline parent set reproduced",
+    "995 small-molecule phase-3 core reproduced",
+    "2611 widest unrestricted union reproduced"
+  ],
+  "limitations": "Membership and source-curated mechanism annotations only; no new evidence tiers or current regulatory verification. Phase is indication-specific; whole ATC N is independent of phase."
+}

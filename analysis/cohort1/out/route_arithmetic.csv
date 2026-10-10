@@ -1,0 +1,14 @@
+stage,atc_n_only,cns_indication_only,both_routes,union,atc_n_total,cns_indication_total,union_check_sum_minus_intersection,arithmetic_holds,note
+all_molecule_types,136,1701,408,2245,544,2109,2245,1,"Every candidate parent, any molecule_type. The catalogue as defined."
+small_molecules_only,132,1250,389,1771,521,1639,1771,1,"Restricted to parents whose molecule_type is 'Small molecule' - the main comparison, and the same filter the 521 baseline used."
+small_molecules_approved_family,65,591,296,952,361,887,952,1,Small-molecule parents with any max_phase=4 record in the compound family. ChEMBL's 4 labels Approved; it is not proof of current jurisdiction-specific approval or of a completed Phase IV trial.
+cns_indication_stage_approved_only,0,506,0,506,0,506,506,1,"Indication route only, cumulative on max_phase_for_ind >= 4.0 for the qualifying CNS indication (not the molecule's max phase across unrelated conditions)."
+cns_indication_stage_approved_plus_phase3,0,997,0,997,0,997,997,1,"Indication route only, cumulative on max_phase_for_ind >= 3.0 for the qualifying CNS indication (not the molecule's max phase across unrelated conditions)."
+cns_indication_stage_approved_plus_phase2_3,0,1766,0,1766,0,1766,1766,1,"Indication route only, cumulative on max_phase_for_ind >= 2.0 for the qualifying CNS indication (not the molecule's max phase across unrelated conditions)."
+cns_indication_stage_approved_plus_phase1_2_3,0,2077,0,2077,0,2077,2077,1,"Indication route only, cumulative on max_phase_for_ind >= 1.0 for the qualifying CNS indication (not the molecule's max phase across unrelated conditions)."
+scope_variant_S0_core,136,1701,408,2245,544,2109,2245,1,Core CNS scope (C10 + F03 minus excluded boundary classes)
+scope_variant_S1_core_plus_oncology,136,1779,408,2323,544,2187,2323,1,Core + CNS oncology
+scope_variant_S2_core_plus_pns,132,1786,412,2330,544,2198,2330,1,Core + peripheral/cranial nerve disease
+scope_variant_S3_core_plus_muscle,134,1794,410,2338,544,2204,2338,1,Core + muscle and NMJ disease
+scope_variant_S4_core_plus_pain,87,1901,457,2445,544,2358,2445,1,Core + general pain
+scope_variant_S5_widest,87,2067,457,2611,544,2524,2611,1,Widest considered scope (all of C10 + F03 + Pain)

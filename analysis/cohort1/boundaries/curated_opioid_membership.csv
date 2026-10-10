@@ -1,0 +1,97 @@
+parent_molregno,chembl_id,name,source_molregno,source_mec_id,target_id,target_name,mechanism,in_core,in_small_phase3_core,in_widest
+419580,CHEMBL398707,HYDROMORPHONE,699406,704,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+27624,CHEMBL656,OXYCODONE,2197697,705,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+62259,CHEMBL841,LOPERAMIDE,548913,706,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,0,0,1
+699395,CHEMBL1237044,TRAMADOL,699416,707,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+27190,CHEMBL634,ALFENTANIL,674482,708,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+675272,CHEMBL1201321,DIFENOXIN,674550,709,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,0,0,0
+675245,CHEMBL1201294,DIPHENOXYLATE,674616,710,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,0,0,0
+19915,CHEMBL596,FENTANYL,675110,711,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+19915,CHEMBL596,FENTANYL,30072,712,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+27624,CHEMBL656,OXYCODONE,674841,713,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+6005,CHEMBL70,MORPHINE,1376014,714,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+685193,CHEMBL1213351,PROPOXYPHENE,2197587,715,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+435293,CHEMBL270190,ALVIMOPAN,435293,716,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor antagonist,0,0,0
+22528,CHEMBL607,MEPERIDINE,547402,717,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+27576,CHEMBL651,METHADONE,674776,718,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+685193,CHEMBL1213351,PROPOXYPHENE,699455,719,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+19572,CHEMBL592,LEVORPHANOL,2197639,720,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,0,0,1
+454306,CHEMBL1595,DIHYDROCODEINE,1355857,721,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+111871,CHEMBL1005,REMIFENTANIL,675071,722,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+660529,CHEMBL1186579,METHYLNALTREXONE,675721,723,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor antagonist,1,1,1
+27638,CHEMBL658,SUFENTANIL,675114,724,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+19915,CHEMBL596,FENTANYL,19915,725,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+421070,CHEMBL1514,LEVOMETHADYL ACETATE,674768,726,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+446784,CHEMBL511142,BUPRENORPHINE,1543312,727,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+675298,CHEMBL1201347,ANILERIDINE,674998,728,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+518361,CHEMBL1685,DEZOCINE,518361,729,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor partial agonist,1,1,1
+675298,CHEMBL1201347,ANILERIDINE,674494,730,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+675727,CHEMBL1201776,TAPENTADOL,675728,731,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+45838,CHEMBL33986,BUTORPHANOL,76963,732,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor partial agonist,1,1,1
+446784,CHEMBL511142,BUPRENORPHINE,446784,733,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+704148,CHEMBL1254682,LEVALLORPHAN,1355867,734,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor antagonist,0,0,0
+388373,CHEMBL1457,HYDROCODONE,675466,1089,CHEMBL2095181,Opioid receptors; mu/kappa/delta,Opioid receptors; mu/kappa/delta agonist,1,1,1
+6167,CHEMBL485,CODEINE,675465,1090,CHEMBL2095181,Opioid receptors; mu/kappa/delta,Opioid receptors; mu/kappa/delta agonist,1,1,1
+94484,CHEMBL963,OXYMORPHONE,674745,1091,CHEMBL2095181,Opioid receptors; mu/kappa/delta,Opioid receptors; mu/kappa/delta agonist,1,1,1
+21459,CHEMBL19019,NALTREXONE,21459,1092,CHEMBL2095181,Opioid receptors; mu/kappa/delta,Opioid receptors; mu/kappa/delta antagonist,1,1,1
+6167,CHEMBL485,CODEINE,3283133,1093,CHEMBL2095181,Opioid receptors; mu/kappa/delta,Opioid receptors; mu/kappa/delta agonist,1,1,1
+6167,CHEMBL485,CODEINE,2335062,1094,CHEMBL2095181,Opioid receptors; mu/kappa/delta,Opioid receptors; mu/kappa/delta agonist,1,1,1
+21459,CHEMBL19019,NALTREXONE,675100,1095,CHEMBL2095181,Opioid receptors; mu/kappa/delta,Opioid receptors; mu/kappa/delta antagonist,1,1,1
+77207,CHEMBL895,NALBUPHINE,675083,1096,CHEMBL2095181,Opioid receptors; mu/kappa/delta,Opioid receptors; mu/kappa/delta agonist,1,1,1
+6902,CHEMBL80,NALOXONE,551147,1098,CHEMBL2095181,Opioid receptors; mu/kappa/delta,Opioid receptors; mu/kappa/delta antagonist,1,1,1
+388373,CHEMBL1457,HYDROCODONE,2197548,1099,CHEMBL2095181,Opioid receptors; mu/kappa/delta,Opioid receptors; mu/kappa/delta agonist,1,1,1
+518361,CHEMBL1685,DEZOCINE,518361,1308,CHEMBL237,Kappa-type opioid receptor,Kappa opioid receptor antagonist,1,1,1
+675298,CHEMBL1201347,ANILERIDINE,674494,1309,CHEMBL237,Kappa-type opioid receptor,Kappa opioid receptor agonist,1,1,1
+675298,CHEMBL1201347,ANILERIDINE,674998,1310,CHEMBL237,Kappa-type opioid receptor,Kappa opioid receptor agonist,1,1,1
+446784,CHEMBL511142,BUPRENORPHINE,446784,1311,CHEMBL237,Kappa-type opioid receptor,Kappa opioid receptor agonist,1,1,1
+446784,CHEMBL511142,BUPRENORPHINE,1543312,1312,CHEMBL237,Kappa-type opioid receptor,Kappa opioid receptor agonist,1,1,1
+45838,CHEMBL33986,BUTORPHANOL,76963,1313,CHEMBL237,Kappa-type opioid receptor,Kappa opioid receptor partial agonist,1,1,1
+704148,CHEMBL1254682,LEVALLORPHAN,1355867,1314,CHEMBL237,Kappa-type opioid receptor,Kappa opioid receptor partial agonist,0,0,0
+1449222,CHEMBL2219418,NALOXEGOL,1449220,2306,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor antagonist,1,1,1
+1425665,CHEMBL2159122,ELUXADOLINE,1425665,2315,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,0,0,0
+1540491,CHEMBL2364619,METHYLSAMIDORPHAN,1540491,4922,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor antagonist,0,0,0
+1626744,CHEMBL3137313,AXELOPRAN,1626744,4933,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor antagonist,0,0,0
+324544,CHEMBL426084,SAMIDORPHAN,324544,4940,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor antagonist,1,1,1
+1927255,CHEMBL3545406,LY2940094,1927255,4963,CHEMBL2014,Nociceptin receptor,Nociceptin receptor antagonist,1,0,1
+1376099,CHEMBL2103829,FAXELADOL,1376099,4998,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,0,0,1
+2197551,CHEMBL3989680,AXOMADOL,2197551,5001,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,0,0,1
+2197551,CHEMBL3989680,AXOMADOL,2197551,5002,CHEMBL236,Delta-type opioid receptor,Delta opioid receptor agonist,0,0,1
+2197551,CHEMBL3989680,AXOMADOL,2197551,5003,CHEMBL237,Kappa-type opioid receptor,Kappa opioid receptor agonist,0,0,1
+1376148,CHEMBL2103878,ONDELOPRAN,1376148,5013,CHEMBL2095181,Opioid receptors; mu/kappa/delta,Opioid receptors; mu/kappa/delta antagonist,1,1,1
+1927257,CHEMBL3545408,NALTALIMIDE,1927257,5015,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor partial agonist,0,0,0
+2197352,CHEMBL3989481,FRAKEFAMIDE,2197352,5085,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,0,0,0
+1378025,CHEMBL2105755,NALDEMEDINE,1378025,5356,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor antagonist,0,0,0
+1592329,CHEMBL3039511,BEVENOPRAN,1592329,5377,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor antagonist,0,0,0
+1540477,CHEMBL2364605,CEBRANOPADOL,1540477,5387,CHEMBL2014,Nociceptin receptor,Nociceptin receptor agonist,1,0,1
+1540477,CHEMBL2364605,CEBRANOPADOL,1540477,5388,CHEMBL2095181,Opioid receptors; mu/kappa/delta,Opioid receptors; mu/kappa/delta agonist,1,0,1
+438664,CHEMBL267495,NALFURAFINE,514258,5748,CHEMBL237,Kappa-type opioid receptor,Kappa opioid receptor agonist,0,0,0
+1589794,CHEMBL2443262,OLICERIDINE,1589794,5814,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+1378025,CHEMBL2105755,NALDEMEDINE,1592326,6164,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor antagonist,0,0,0
+27624,CHEMBL656,OXYCODONE,27624,6176,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+2096440,CHEMBL3833389,DEXTROMORAMIDE,2096440,6694,CHEMBL2095181,Opioid receptors; mu/kappa/delta,Opioid receptors; mu/kappa/delta agonist,1,1,1
+1626752,CHEMBL3137321,BENZHYDROCODONE,1626741,7630,CHEMBL2095181,Opioid receptors; mu/kappa/delta,Opioid receptors; mu/kappa/delta agonist,0,0,1
+2335354,CHEMBL4297383,GSK-1521498,2335354,7815,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor antagonist,1,0,1
+1726008,CHEMBL3219616,CP-866087,1726008,7837,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor antagonist,1,0,1
+1265436,CHEMBL1921847,ATICAPRANT,1265436,7841,CHEMBL237,Kappa-type opioid receptor,Kappa opioid receptor antagonist,1,1,1
+664149,CHEMBL1190199,ASIMADOLINE,664149,7842,CHEMBL237,Kappa-type opioid receptor,Kappa opioid receptor agonist,0,0,0
+2462476,CHEMBL4592045,NAVACAPRANT,2462476,7846,CHEMBL237,Kappa-type opioid receptor,Kappa opioid receptor antagonist,1,1,1
+2197786,CHEMBL3989915,DIFELIKEFALIN,2197786,7848,CHEMBL237,Kappa-type opioid receptor,Kappa opioid receptor agonist,0,0,1
+2335603,CHEMBL4297632,OXYCODEGOL,2335603,8032,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,0,0,1
+2464833,CHEMBL4594402,ORP-101,2464833,8033,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor partial agonist,0,0,0
+139237,CHEMBL314437,MEPTAZINOL,139237,8034,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor partial agonist,1,1,1
+2464833,CHEMBL4594402,ORP-101,2464833,8111,CHEMBL237,Kappa-type opioid receptor,Kappa opioid receptor antagonist,0,0,0
+1766215,CHEMBL3304244,LY-2940094,1766215,8434,CHEMBL2014,Nociceptin receptor,Nociceptin receptor antagonist,1,0,1
+324544,CHEMBL426084,SAMIDORPHAN,1378019,8781,CHEMBL237,Kappa-type opioid receptor,Kappa opioid receptor partial agonist,1,1,1
+324544,CHEMBL426084,SAMIDORPHAN,1378019,8812,CHEMBL236,Delta-type opioid receptor,Delta opioid receptor partial agonist,1,1,1
+2335398,CHEMBL4297427,SCH-486757,2335398,8915,CHEMBL2014,Nociceptin receptor,Nociceptin receptor agonist,0,0,0
+557416,CHEMBL561339,ADL-5747 FREE BASE,2335316,8999,CHEMBL236,Delta-type opioid receptor,Delta opioid receptor agonist,0,0,1
+324544,CHEMBL426084,SAMIDORPHAN,1378019,9004,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor antagonist,1,1,1
+472505,CHEMBL459324,DIACETYLMORPHINE,472505,9118,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1
+1278006,CHEMBL1946618,AZD-7268,1278006,9203,CHEMBL236,Delta-type opioid receptor,Delta opioid receptor agonist,1,0,1
+469362,CHEMBL494480,ADL-5859,469362,9251,CHEMBL236,Delta-type opioid receptor,Delta opioid receptor agonist,0,0,1
+100696,CHEMBL982,NALMEFENE,2832706,9608,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor antagonist,1,1,1
+100696,CHEMBL982,NALMEFENE,2832706,9609,CHEMBL236,Delta-type opioid receptor,Delta opioid receptor antagonist,1,1,1
+100696,CHEMBL982,NALMEFENE,2832706,9610,CHEMBL237,Kappa-type opioid receptor,Kappa opioid receptor partial agonist,1,1,1
+6902,CHEMBL80,NALOXONE,2832707,9684,CHEMBL2095181,Opioid receptors; mu/kappa/delta,Opioid receptors; mu/kappa/delta antagonist,1,1,1
+2197786,CHEMBL3989915,DIFELIKEFALIN,2832774,9842,CHEMBL237,Kappa-type opioid receptor,Kappa opioid receptor agonist,0,0,1
+421070,CHEMBL1514,LEVOMETHADYL ACETATE,421070,9846,CHEMBL233,Mu-type opioid receptor,Mu opioid receptor agonist,1,1,1

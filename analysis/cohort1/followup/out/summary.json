@@ -1,0 +1,63 @@
+{
+  "baseline_tier_mismatches": 0,
+  "checks": {
+    "all_non_nM_records_accounted_for": true,
+    "baseline_experimental_tiers_reproduced": true,
+    "baseline_human_tiers_reproduced": true,
+    "no_family_fanout": true,
+    "organism_assay_review_complete": true,
+    "organism_rows_reproduced": true,
+    "production_fingerprints_unchanged": true,
+    "scope_core_reproduced": true
+  },
+  "chembl_bytes": 30480314368,
+  "chembl_path": "/mnt/data/chembl/chembl_37/chembl_37_sqlite/chembl_37.db",
+  "chembl_release": "chembl_37",
+  "human_tier_symmetric_difference": 0,
+  "input_sha256": {
+    "analysis/cohort1/followup/analyze.py": "11d8b1e8754a62ef981ad125f7bfc1ae81b75cc34eca79a585945d908417c76e",
+    "analysis/cohort1/followup/organism_review.json": "6157f956eaf3820817d7553f7a61e8918604f71d1d654729dea88e75c9c3b27d",
+    "analysis/cohort1/followup/rules.json": "74e7c10de532d25d9d970624ddb5514f60a99503a05e61f2632ba18ca8c859d5",
+    "analysis/cohort1/out/assessed_claims.csv.gz": "d81c0208a0d341c7692fdd232537f613e6cfb6043fbfe88c3ca090f6bf1c9567",
+    "analysis/cohort1/out/candidates.csv": "1bf5c09c827ce10414ad6465aefce8ffa314619eed9e8fbd40523af38e338fd2",
+    "analysis/cohort1/out/family_members.csv": "016f35bd9f6fb5e1eb1c278ae4573a9fb3fc50d0abd7d0407fd287a26608caea",
+    "analysis/cohort1/out/indication_scope.csv": "0733b17c45dca06232a4d74b6b22da74b3c772e384f4153c0d890905f98efb36",
+    "analysis/cohort1/out/measurements.csv.gz": "7e889dc53e4b188d03f171804ed70b785a78b447acf31109cb32dc839cfd550a",
+    "analysis/cohort1/out/seed_membership.csv": "4b0b56b67ec1035d46c7b5bac0d71b88d12e6110ed2580b5b835ae9db35a06f3",
+    "analysis/cohort1/scripts/common.py": "f8c6f092d9ab4df88d8fad116d14fe07d66ff68965ddc51a93fc8b1ff46689b4",
+    "analysis/cohort1/scripts/step2_candidates.py": "bbde902c6ac828956f59b188a83b9762b4f07d2ed21d159744ac89992ee0bbbf",
+    "analysis/cohort1/scripts/step3_evidence.py": "46115580c5feac21557ecd5b37048b66b3de424a27b768f30fff35de2cca1bbe"
+  },
+  "measurement_status_counts": {
+    "excluded_nonpositive": 8,
+    "excluded_null_value": 102708,
+    "excluded_other_relation": 5903,
+    "excluded_units": 2714,
+    "included_exact": 117519,
+    "retained_as_bound": 81867
+  },
+  "organism_exact_protein_assigned": 31,
+  "organism_protein_assigned": 36,
+  "retained_relation_counts": {
+    "<": 902,
+    "<=": 33,
+    ">": 80812,
+    ">=": 87,
+    ">>": 5,
+    "~": 28
+  },
+  "rules_version": "1.0.0",
+  "scope_counts": {
+    "core": 2245,
+    "core_plus_oncology": 2323,
+    "core_plus_oncology_and_pain": 2523,
+    "core_plus_pain": 2445,
+    "widest": 2611
+  },
+  "source_coverage": "ChEMBL 37 and baseline exported MeSH classification only; no current MeSH fetch or new pharmacology source",
+  "unit_recovery_classes": {
+    "concentration": 30,
+    "conditional_mass": 2334,
+    "not_recovered": 350
+  }
+}

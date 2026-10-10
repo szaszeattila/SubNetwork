@@ -1,0 +1,29 @@
+{
+  "version": "1.0.0",
+  "status": "Read-only sensitivity analysis; no import policy or production evidence rule is adopted.",
+  "unit_recovery": {
+    "exact_relation_required": "=",
+    "concentration_factors_to_nM": {"M": 1000000000, "mM": 1000000, "uM": 1000, "microM": 1000, "nM": 1, "pM": 0.001, "pmol/L": 0.001, "mol/L": 1000000000, "mol/dm3": 1000000000},
+    "scaled_syntax": "Only an explicit 10^integer prefix followed by a supported concentration unit. Apostrophe exponent notation remains manual review.",
+    "mass_factors_to_g_per_L": {"ug.mL-1": 0.001, "ug ml-1": 0.001, "ng/ml": 0.000001},
+    "mass_identity_requirement": "Measured ChEMBL record is a structured Small molecule with a positive full_mwt and a canonical structure. Use that measured record, never the parent freebase weight.",
+    "mass_caveat": "Conditional sensitivity only: source-record identity does not prove whether the publication expressed mass as salt, freebase, hydrate or formulation. Verify original material before adopting.",
+    "upstream_flags": "Preserved; sensitivity follows baseline treatment rather than silently excluding flags. Conversion fixes dimensions, not assay interpretation."
+  },
+  "evidence_bases": {
+    "human_single": "Human SINGLE PROTEIN; experiment confidence 9, relationship D, no variant. Supported curated claims retained at this target level.",
+    "human_single_and_complex": "human_single plus human PROTEIN COMPLEX; experiment confidence 7, relationship D, no variant. Each complex remains one target.",
+    "human_with_families": "human_single_and_complex plus human PROTEIN COMPLEX GROUP (confidence 7) and PROTEIN FAMILY (confidence 5); D, no variant for experiments. Each group/family remains one target."
+  },
+  "experimental_tier_rule": "Supported requires >=2 distinct publication-class study keys within one role:endpoint. Preliminary requires >=1 identifiable study. No curated claim upgrades an experimental role.",
+  "policies": [
+    {"id": "P0_all_clinical", "label": "Whole clinical catalogue", "keep_atc": true, "min_cns_phase": null},
+    {"id": "P1_indication_phase3", "label": "CNS indication Approved or Phase 3 only", "keep_atc": false, "min_cns_phase": 3},
+    {"id": "P2_atc_plus_approved", "label": "Whole ATC N plus CNS indication Approved", "keep_atc": true, "min_cns_phase": 4},
+    {"id": "P3_atc_plus_phase3", "label": "Whole ATC N plus CNS indication Approved or Phase 3", "keep_atc": true, "min_cns_phase": 3},
+    {"id": "P4_atc_plus_phase2", "label": "Whole ATC N plus CNS indication Approved or Phase 2/3", "keep_atc": true, "min_cns_phase": 2}
+  ],
+  "policy_categories": ["all_types", "small_molecules"],
+  "scope_note": "Every policy uses S0 core indications; scope extensions are counted separately but their added molecules have not undergone the baseline evidence assessment.",
+  "organism_note": "Retain all excluded rows in a separate context inventory. Protein-assigned rows are manually classified by assay description; no whole-organism observation is pooled with in-vitro binding/functional potency."
+}

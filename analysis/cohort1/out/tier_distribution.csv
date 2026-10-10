@@ -1,0 +1,17 @@
+claim_role,basis,tier,n_claims
+curated,all_assessed_evidence,limited_or_unresolved,140
+curated,all_assessed_evidence,supported,1859
+curated,direct_human_single_protein_only,not_applicable,804
+curated,direct_human_single_protein_only,supported,1195
+binding,all_assessed_evidence,limited_or_unresolved,70804
+binding,all_assessed_evidence,preliminary,11753
+binding,all_assessed_evidence,supported,4441
+binding,direct_human_single_protein_only,not_applicable,80902
+binding,direct_human_single_protein_only,preliminary,4116
+binding,direct_human_single_protein_only,supported,1980
+functional,all_assessed_evidence,limited_or_unresolved,20045
+functional,all_assessed_evidence,preliminary,26753
+functional,all_assessed_evidence,supported,2714
+functional,direct_human_single_protein_only,not_applicable,48562
+functional,direct_human_single_protein_only,preliminary,683
+functional,direct_human_single_protein_only,supported,267

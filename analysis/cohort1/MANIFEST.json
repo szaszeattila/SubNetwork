@@ -1,0 +1,57 @@
+{
+  "sources": {
+    "chembl_37": {
+      "access_mode": "read-only (SQLite URI mode=ro; no write can reach the release file)",
+      "access_status": "ok",
+      "checksum_note": "Full-file sha256 not computed: the release is 30.5 GB. Pinned by release name, path and byte size instead.",
+      "license": "CC BY-SA 3.0 (ChEMBL data); see https://chembl.gitbook.io/chembl-interface-documentation/about",
+      "local_path": "/mnt/data/chembl/chembl_37/chembl_37_sqlite/chembl_37.db",
+      "name": "ChEMBL 37 bulk release (SQLite)",
+      "publisher": "EMBL-EBI",
+      "retrieved": "2026-09-07",
+      "size_bytes": 30480314368,
+      "tables_read": [
+        "molecule_dictionary",
+        "molecule_hierarchy",
+        "molecule_atc_classification",
+        "atc_classification",
+        "drug_indication",
+        "drug_mechanism",
+        "mechanism_refs",
+        "activities",
+        "assays",
+        "target_dictionary",
+        "target_components",
+        "component_sequences",
+        "component_class",
+        "protein_classification",
+        "docs",
+        "bioassay_ontology",
+        "action_type"
+      ],
+      "url": "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_37/"
+    },
+    "mesh": {
+      "access_status": "ok",
+      "failures": [],
+      "files": {
+        "cache/mesh_tree.tsv": {
+          "rows": 7169,
+          "sha256": "dc8f2681ac7f03fa27608ed2d5a56586b2293b30fbb056b9c056b63d2d2da019"
+        },
+        "cache/mesh_unresolved.tsv": {
+          "rows": 0,
+          "sha256": "bff88b23a6f9356d4a2f8853848093d547e8c056501c2d6c41c94cd52c751908"
+        }
+      },
+      "graph": "http://id.nlm.nih.gov/mesh",
+      "license": "Public domain (NLM MeSH is in the public domain; see https://www.nlm.nih.gov/databases/download/terms_and_conditions.html)",
+      "name": "MeSH (Medical Subject Headings) tree numbers",
+      "publisher": "U.S. National Library of Medicine",
+      "query": "descriptor treeNumber, current-year graph, inference=false",
+      "retrieved": "2026-09-07",
+      "url": "https://id.nlm.nih.gov/mesh/sparql"
+    }
+  },
+  "updated": "2026-09-07T20:22:59-07:00"
+}

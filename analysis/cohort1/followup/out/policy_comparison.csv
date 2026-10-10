@@ -1,0 +1,61 @@
+policy,label,category,scenario,evidence_basis,catalogue_molecules,withdrawn_flagged,identity_none,supported_claims,supported_pairs,supported_targets,molecules_with_supported,preliminary_claims,molecules_with_supported_or_preliminary,molecules_without_qualifying_edges,seeds_retained
+P0_all_clinical__all_types,Whole clinical catalogue,all_types,baseline,human_single,2245,78,222,3442,2799,750,1125,4799,1369,876,25
+P0_all_clinical__all_types,Whole clinical catalogue,all_types,baseline,human_single_and_complex,2245,78,222,3672,3008,828,1196,5015,1433,812,25
+P0_all_clinical__all_types,Whole clinical catalogue,all_types,baseline,human_with_families,2245,78,222,4078,3396,914,1370,5122,1550,695,25
+P0_all_clinical__all_types,Whole clinical catalogue,all_types,concentration_only,human_single,2245,78,222,3443,2800,750,1125,4799,1369,876,25
+P0_all_clinical__all_types,Whole clinical catalogue,all_types,concentration_only,human_single_and_complex,2245,78,222,3673,3009,828,1196,5015,1433,812,25
+P0_all_clinical__all_types,Whole clinical catalogue,all_types,concentration_only,human_with_families,2245,78,222,4079,3397,914,1370,5122,1550,695,25
+P0_all_clinical__small_molecules,Whole clinical catalogue,small_molecules,baseline,human_single,1771,75,35,3143,2535,651,926,4750,1164,607,24
+P0_all_clinical__small_molecules,Whole clinical catalogue,small_molecules,baseline,human_single_and_complex,1771,75,35,3338,2711,716,975,4951,1204,567,24
+P0_all_clinical__small_molecules,Whole clinical catalogue,small_molecules,baseline,human_with_families,1771,75,35,3718,3074,795,1137,5056,1310,461,24
+P0_all_clinical__small_molecules,Whole clinical catalogue,small_molecules,concentration_only,human_single,1771,75,35,3144,2536,651,926,4750,1164,607,24
+P0_all_clinical__small_molecules,Whole clinical catalogue,small_molecules,concentration_only,human_single_and_complex,1771,75,35,3339,2712,716,975,4951,1204,567,24
+P0_all_clinical__small_molecules,Whole clinical catalogue,small_molecules,concentration_only,human_with_families,1771,75,35,3719,3075,795,1137,5056,1310,461,24
+P1_indication_phase3__all_types,CNS indication Approved or Phase 3 only,all_types,baseline,human_single,997,44,91,1745,1354,390,582,2304,678,319,22
+P1_indication_phase3__all_types,CNS indication Approved or Phase 3 only,all_types,baseline,human_single_and_complex,997,44,91,1833,1433,428,615,2416,706,291,22
+P1_indication_phase3__all_types,CNS indication Approved or Phase 3 only,all_types,baseline,human_with_families,997,44,91,2054,1647,482,707,2474,769,228,22
+P1_indication_phase3__all_types,CNS indication Approved or Phase 3 only,all_types,concentration_only,human_single,997,44,91,1746,1355,390,582,2304,678,319,22
+P1_indication_phase3__all_types,CNS indication Approved or Phase 3 only,all_types,concentration_only,human_single_and_complex,997,44,91,1834,1434,428,615,2416,706,291,22
+P1_indication_phase3__all_types,CNS indication Approved or Phase 3 only,all_types,concentration_only,human_with_families,997,44,91,2055,1648,482,707,2474,769,228,22
+P1_indication_phase3__small_molecules,CNS indication Approved or Phase 3 only,small_molecules,baseline,human_single,791,41,12,1628,1256,345,500,2281,592,199,22
+P1_indication_phase3__small_molecules,CNS indication Approved or Phase 3 only,small_molecules,baseline,human_single_and_complex,791,41,12,1704,1323,376,523,2388,609,182,22
+P1_indication_phase3__small_molecules,CNS indication Approved or Phase 3 only,small_molecules,baseline,human_with_families,791,41,12,1916,1528,426,607,2446,665,126,22
+P1_indication_phase3__small_molecules,CNS indication Approved or Phase 3 only,small_molecules,concentration_only,human_single,791,41,12,1629,1257,345,500,2281,592,199,22
+P1_indication_phase3__small_molecules,CNS indication Approved or Phase 3 only,small_molecules,concentration_only,human_single_and_complex,791,41,12,1705,1324,376,523,2388,609,182,22
+P1_indication_phase3__small_molecules,CNS indication Approved or Phase 3 only,small_molecules,concentration_only,human_with_families,791,41,12,1917,1529,426,607,2446,665,126,22
+P2_atc_plus_approved__all_types,Whole ATC N plus CNS indication Approved,all_types,baseline,human_single,761,58,31,1191,935,225,374,1438,436,325,18
+P2_atc_plus_approved__all_types,Whole ATC N plus CNS indication Approved,all_types,baseline,human_single_and_complex,761,58,31,1259,996,250,391,1528,455,306,18
+P2_atc_plus_approved__all_types,Whole ATC N plus CNS indication Approved,all_types,baseline,human_with_families,761,58,31,1464,1197,294,489,1565,523,238,18
+P2_atc_plus_approved__all_types,Whole ATC N plus CNS indication Approved,all_types,concentration_only,human_single,761,58,31,1192,936,225,374,1438,436,325,18
+P2_atc_plus_approved__all_types,Whole ATC N plus CNS indication Approved,all_types,concentration_only,human_single_and_complex,761,58,31,1260,997,250,391,1528,455,306,18
+P2_atc_plus_approved__all_types,Whole ATC N plus CNS indication Approved,all_types,concentration_only,human_with_families,761,58,31,1465,1198,294,489,1565,523,238,18
+P2_atc_plus_approved__small_molecules,Whole ATC N plus CNS indication Approved,small_molecules,baseline,human_single,677,56,1,1148,896,202,344,1429,404,273,18
+P2_atc_plus_approved__small_molecules,Whole ATC N plus CNS indication Approved,small_molecules,baseline,human_single_and_complex,677,56,1,1210,951,223,356,1518,418,259,18
+P2_atc_plus_approved__small_molecules,Whole ATC N plus CNS indication Approved,small_molecules,baseline,human_with_families,677,56,1,1408,1145,264,448,1555,481,196,18
+P2_atc_plus_approved__small_molecules,Whole ATC N plus CNS indication Approved,small_molecules,concentration_only,human_single,677,56,1,1149,897,202,344,1429,404,273,18
+P2_atc_plus_approved__small_molecules,Whole ATC N plus CNS indication Approved,small_molecules,concentration_only,human_single_and_complex,677,56,1,1211,952,223,356,1518,418,259,18
+P2_atc_plus_approved__small_molecules,Whole ATC N plus CNS indication Approved,small_molecules,concentration_only,human_with_families,677,56,1,1409,1146,264,448,1555,481,196,18
+P3_atc_plus_phase3__all_types,Whole ATC N plus CNS indication Approved or Phase 3,all_types,baseline,human_single,1206,66,94,1838,1439,395,616,2400,729,477,22
+P3_atc_plus_phase3__all_types,Whole ATC N plus CNS indication Approved or Phase 3,all_types,baseline,human_single_and_complex,1206,66,94,1935,1527,434,651,2536,762,444,22
+P3_atc_plus_phase3__all_types,Whole ATC N plus CNS indication Approved or Phase 3,all_types,baseline,human_with_families,1206,66,94,2190,1775,488,769,2597,845,361,22
+P3_atc_plus_phase3__all_types,Whole ATC N plus CNS indication Approved or Phase 3,all_types,concentration_only,human_single,1206,66,94,1839,1440,395,616,2400,729,477,22
+P3_atc_plus_phase3__all_types,Whole ATC N plus CNS indication Approved or Phase 3,all_types,concentration_only,human_single_and_complex,1206,66,94,1936,1528,434,651,2536,762,444,22
+P3_atc_plus_phase3__all_types,Whole ATC N plus CNS indication Approved or Phase 3,all_types,concentration_only,human_with_families,1206,66,94,2191,1776,488,769,2597,845,361,22
+P3_atc_plus_phase3__small_molecules,Whole ATC N plus CNS indication Approved or Phase 3,small_molecules,baseline,human_single,995,63,12,1719,1339,349,532,2377,641,354,22
+P3_atc_plus_phase3__small_molecules,Whole ATC N plus CNS indication Approved or Phase 3,small_molecules,baseline,human_single_and_complex,995,63,12,1804,1415,381,557,2508,663,332,22
+P3_atc_plus_phase3__small_molecules,Whole ATC N plus CNS indication Approved or Phase 3,small_molecules,baseline,human_with_families,995,63,12,2049,1653,431,666,2569,738,257,22
+P3_atc_plus_phase3__small_molecules,Whole ATC N plus CNS indication Approved or Phase 3,small_molecules,concentration_only,human_single,995,63,12,1720,1340,349,532,2377,641,354,22
+P3_atc_plus_phase3__small_molecules,Whole ATC N plus CNS indication Approved or Phase 3,small_molecules,concentration_only,human_single_and_complex,995,63,12,1805,1416,381,557,2508,663,332,22
+P3_atc_plus_phase3__small_molecules,Whole ATC N plus CNS indication Approved or Phase 3,small_molecules,concentration_only,human_with_families,995,63,12,2050,1654,431,666,2569,738,257,22
+P4_atc_plus_phase2__all_types,Whole ATC N plus CNS indication Approved or Phase 2/3,all_types,baseline,human_single,1912,76,167,3043,2458,696,984,4055,1184,728,24
+P4_atc_plus_phase2__all_types,Whole ATC N plus CNS indication Approved or Phase 2/3,all_types,baseline,human_single_and_complex,1912,76,167,3246,2643,769,1048,4249,1242,670,24
+P4_atc_plus_phase2__all_types,Whole ATC N plus CNS indication Approved or Phase 2/3,all_types,baseline,human_with_families,1912,76,167,3611,2993,845,1211,4339,1355,557,24
+P4_atc_plus_phase2__all_types,Whole ATC N plus CNS indication Approved or Phase 2/3,all_types,concentration_only,human_single,1912,76,167,3044,2459,696,984,4055,1184,728,24
+P4_atc_plus_phase2__all_types,Whole ATC N plus CNS indication Approved or Phase 2/3,all_types,concentration_only,human_single_and_complex,1912,76,167,3247,2644,769,1048,4249,1242,670,24
+P4_atc_plus_phase2__all_types,Whole ATC N plus CNS indication Approved or Phase 2/3,all_types,concentration_only,human_with_families,1912,76,167,3612,2994,845,1211,4339,1355,557,24
+P4_atc_plus_phase2__small_molecules,Whole ATC N plus CNS indication Approved or Phase 2/3,small_molecules,baseline,human_single,1540,73,24,2804,2250,616,818,4022,1013,527,24
+P4_atc_plus_phase2__small_molecules,Whole ATC N plus CNS indication Approved or Phase 2/3,small_molecules,baseline,human_single_and_complex,1540,73,24,2977,2407,679,862,4205,1050,490,24
+P4_atc_plus_phase2__small_molecules,Whole ATC N plus CNS indication Approved or Phase 2/3,small_molecules,baseline,human_with_families,1540,73,24,3323,2738,749,1013,4295,1152,388,24
+P4_atc_plus_phase2__small_molecules,Whole ATC N plus CNS indication Approved or Phase 2/3,small_molecules,concentration_only,human_single,1540,73,24,2805,2251,616,818,4022,1013,527,24
+P4_atc_plus_phase2__small_molecules,Whole ATC N plus CNS indication Approved or Phase 2/3,small_molecules,concentration_only,human_single_and_complex,1540,73,24,2978,2408,679,862,4205,1050,490,24
+P4_atc_plus_phase2__small_molecules,Whole ATC N plus CNS indication Approved or Phase 2/3,small_molecules,concentration_only,human_with_families,1540,73,24,3324,2739,749,1013,4295,1152,388,24

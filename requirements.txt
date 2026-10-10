@@ -1,0 +1,17 @@
+# >=2.27 is load-bearing, not cosmetic: BindingDB's compound endpoint has been
+# observed returning HTTP 200 with an empty body, and build_db.py relies on
+# that surfacing as requests.exceptions.JSONDecodeError, which only subclasses
+# RequestException (and so is caught as a skippable per-molecule failure
+# rather than aborting the run) from 2.27 onward.
+requests>=2.27
+# Sequence alignment for scripts/resolve_cohort_orthologues.py (D20), the only
+# script that needs it: SIMD Smith-Waterman/Needleman-Wunsch, so matching every
+# non-human record against the human proteome takes about two minutes rather
+# than hours. The build and every other backfill run without it.
+parasail>=1.3
+# PDF rendering only: analysis/cohort1/followup/build_pdf.py turns a markdown
+# document into the PDF that gets annotated in Zotero. It was run with
+# ReportLab 4.x and markdown-it-py 4.x, and also needs the system Noto and
+# DejaVu fonts. No build, backfill, export or test imports either.
+markdown-it-py>=4.0
+reportlab>=4.0

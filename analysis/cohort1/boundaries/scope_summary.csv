@@ -1,0 +1,11 @@
+policy,boundary,core,expanded,added
+all_categories_no_phase_floor,cns_oncology,2245,2323,78
+all_categories_no_phase_floor,peripheral_nervous_system,2245,2330,85
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2245,2338,93
+all_categories_no_phase_floor,general_pain,2245,2445,200
+all_categories_no_phase_floor,all_boundaries,2245,2611,366
+small_molecules_phase3_or_approved,cns_oncology,995,1002,7
+small_molecules_phase3_or_approved,peripheral_nervous_system,995,1015,20
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,995,1033,38
+small_molecules_phase3_or_approved,general_pain,995,1094,99
+small_molecules_phase3_or_approved,all_boundaries,995,1129,134

@@ -1,0 +1,11 @@
+{
+  "atc_n_parents": 544,
+  "catalogue_parents": 2245,
+  "catalogue_small_molecule_parents": 1771,
+  "chembl_release": "chembl_37",
+  "core_indication_parents": 2109,
+  "core_scope_descriptors": 974,
+  "core_scope_descriptors_used_in_chembl": 359,
+  "scope_version": "1.0.0",
+  "seeds_in_catalogue": 25
+}

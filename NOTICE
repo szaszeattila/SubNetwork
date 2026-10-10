@@ -1,0 +1,46 @@
+SubNetwork
+Copyright (c) 2026 Attila Szabo
+
+The code in this repository is under the MIT License (see LICENSE). That
+licence covers the code only. The data the pipeline reads, and anything derived
+from it - the databases it builds, the exported viewer payload, and the tables
+under analysis/ - stay under their sources' own terms:
+
+  ChEMBL (EMBL-EBI)                   CC BY-SA 3.0
+  IUPHAR/BPS Guide to Pharmacology    database ODbL; contents CC BY-SA 4.0
+  UniProt                             CC BY 4.0
+  MeSH (U.S. National Library of      NLM terms and conditions; MeSH is a
+  Medicine)                           registered mark of the NLM, which does
+                                      not endorse this project; reached
+                                      through PubChem (NCBI) and the FDA's
+                                      UNII registry
+  ClinicalTrials.gov (U.S. National   NLM terms and conditions; trial status
+  Library of Medicine)                only
+  Wikidata                            CC0 1.0
+
+Share-alike terms mean a redistributed derivative of ChEMBL or GtoPdb data must
+carry the same licence and credit its source. The two are kept in separate
+exported files for that reason: everything derived from GtoPdb is in
+viz/gtopdb.data.js, under GtoPdb's terms above, and viz/graph.data.js and
+viz/evidence/ hold none of it. The viewer combines them only when it draws.
+
+Documentation
+-------------
+
+The written documentation under docs/ is under the Creative Commons
+Attribution 4.0 International licence (CC BY 4.0,
+https://creativecommons.org/licenses/by/4.0/): reuse it, adapted or not, with
+credit to "SubNetwork, Attila Szabo" and a link to the licence. Two parts of it
+are not covered. Figures and tables of source data stay under that source's
+terms, as above. Passages quoted from papers and other published works belong
+to their authors.
+
+This project is exploratory and educational. It is not medical, dosing or
+safety guidance.
+
+Third-party code
+----------------
+
+viz/vendor/vis-network.min.js is vis-network 9.1.9, copyright (c) 2011-2017
+Almende B.V. and (c) 2017-2019 visjs contributors, dual-licensed under the
+Apache License 2.0 and the MIT License. Its licence header is kept in the file.

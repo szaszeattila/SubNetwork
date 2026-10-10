@@ -1,0 +1,53 @@
+cff-version: 1.2.0
+message: >-
+  If you use SubNetwork, please cite it as below. Its data is the work of the
+  databases it is built from, so please cite those too: ChEMBL always, and the
+  IUPHAR/BPS Guide to Pharmacology where you used its part.
+title: "SubNetwork: a map of drug-target interactions"
+type: software
+authors:
+  - family-names: Szabo
+    given-names: Attila
+license: MIT
+repository-code: "https://github.com/szaszeattila/SubNetwork"
+abstract: >-
+  An explorable network of what molecules developed for neurological and
+  psychiatric conditions act on: the proteins, how each molecule acts there,
+  and how much published evidence stands behind each claim, built from ChEMBL 37
+  and the IUPHAR/BPS Guide to Pharmacology. Exploratory and educational; not
+  medical, dosing or safety guidance.
+keywords:
+  - cheminformatics
+  - pharmacology
+  - chembl
+  - drug-target-interactions
+  - network-visualization
+references:
+  - type: article
+    title: >-
+      The ChEMBL Database in 2023: a drug discovery platform spanning multiple
+      bioactivity data types and time periods
+    authors:
+      - family-names: Zdrazil
+        given-names: Barbara
+      - name: "et al."
+    journal: Nucleic Acids Research
+    year: 2024
+    volume: 52
+    issue: D1
+    start: D1180
+    end: D1192
+    doi: 10.1093/nar/gkad1004
+  - type: article
+    title: The IUPHAR/BPS Guide to PHARMACOLOGY in 2026
+    authors:
+      - family-names: Harding
+        given-names: Simon D.
+      - name: "et al."
+    journal: Nucleic Acids Research
+    year: 2026
+    volume: 54
+    issue: D1
+    start: D1446
+    end: D1456
+    doi: 10.1093/nar/gkaf1067

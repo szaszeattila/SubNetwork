@@ -1,0 +1,37 @@
+{
+  "db/schema.sql": {
+    "sha256": "64f16e81c3bbfe04711ff09898e763b148cdd1925a299808786751778113ff7d",
+    "size": 16210,
+    "mtime_ns": 1788618654321745758
+  },
+  "db/subnetwork.db": {
+    "sha256": "f3fefcb89c2c0933e63851a02376f8ade25b69f3923c3aee782803d6c1702df4",
+    "size": 1437696,
+    "mtime_ns": 1788628659054095291
+  },
+  "scripts/build_db.py": {
+    "sha256": "189a77dcf608f74372422a18be82a2763d054fa55f16c9a105523fd0f600d3ff",
+    "size": 111195,
+    "mtime_ns": 1788618654323624650
+  },
+  "scripts/chembl_local.py": {
+    "sha256": "7bc0fcbc276527d0a073fa0f7ddd9966ccb60d9eb8e8cc56f60d22499c4eac52",
+    "size": 14583,
+    "mtime_ns": 1787965375521737945
+  },
+  "scripts/export_graph.py": {
+    "sha256": "e47031c3f1526774a47452b47af73319ce68b956c3b9a360480c6d7422d5edcf",
+    "size": 14314,
+    "mtime_ns": 1788630115330403472
+  },
+  "viz/index.html": {
+    "sha256": "647df4a54a95794be83408549d0544bd50ff4cb2792dd4c69bc532162506416e",
+    "size": 173655,
+    "mtime_ns": 1788630167190828351
+  },
+  "viz/graph.data.js": {
+    "sha256": "4505c33e88f4aa04a1f2c49caf14258cd54f6edf8efe8f2720fdb8f3b09cd8cf",
+    "size": 2330003,
+    "mtime_ns": 1788630167512968219
+  }
+}

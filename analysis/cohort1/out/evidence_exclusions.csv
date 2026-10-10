@@ -1,0 +1,10 @@
+exclusion_reason,n_activity_rows,retained_in_output
+assay_type_not_B_or_F,483915,0
+standard_type_out_of_scope,321727,0
+null_value,102708,1
+censored_bound,81867,1
+organism_based_format,21999,0
+other_relation,5903,1
+units_not_nM,2714,1
+nonpositive_value,8,1
+documented_exclusion,4,0

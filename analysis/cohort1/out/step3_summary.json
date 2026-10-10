@@ -1,0 +1,35 @@
+{
+  "activity_rows_scanned": 1138364,
+  "candidate_family_members": 3668,
+  "candidate_parents": 2245,
+  "censored_measurements": 81867,
+  "chembl_release": "chembl_37",
+  "claims": 138509,
+  "claims_by_role": {
+    "binding": 86998,
+    "curated": 1999,
+    "functional": 49512
+  },
+  "claims_by_tier": {
+    "limited_or_unresolved": 90989,
+    "preliminary": 38506,
+    "supported": 9014
+  },
+  "distinct_targets_observed": 4885,
+  "exact_measurements": 117519,
+  "exclusions": {
+    "assay_type_not_B_or_F": 483915,
+    "censored_bound": 81867,
+    "documented_exclusion": 4,
+    "nonpositive_value": 8,
+    "null_value": 102708,
+    "organism_based_format": 21999,
+    "other_relation": 5903,
+    "standard_type_out_of_scope": 321727,
+    "units_not_nM": 2714
+  },
+  "measurement_rows_in_scope": 310719,
+  "molecules_with_no_eligible_evidence": 361,
+  "target_family_source": "ChEMBL protein_classification, walked to levels 1 and 2. Used ONLY to summarise family coverage - never to infer physical assembly (see docs/DATA-QUALITY-LOG.md).",
+  "tier_rules_version": "1.0.0"
+}

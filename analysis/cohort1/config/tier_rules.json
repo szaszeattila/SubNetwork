@@ -1,0 +1,113 @@
+{
+  "rules_id": "cohort1-evidence-tiers",
+  "version": "1.0.0",
+  "status": "Report definitions only. These are NOT production trust rules and do not supersede any invariant in CLAUDE.md.",
+  "source_coverage": "ChEMBL 37 bulk release only. Absence of evidence here is absence in ChEMBL 37, not absence in the literature and not absence across the project's six production sources.",
+
+  "claim_granularity": {
+    "key": ["parent_molregno", "target_chembl_id", "claim_role"],
+    "claim_role": ["curated", "binding", "functional"],
+    "note": "Evidence is assigned per molecule-target claim. A well-evidenced target does not upgrade any other claim for the same molecule, and a binding claim never upgrades a functional claim at the same target. Curated action_type is retained on curated claims; endpoint types are retained on experimental claims and are never pooled across types."
+  },
+
+  "measurement_validity": {
+    "included_exact": {
+      "standard_relation": "=",
+      "standard_units": "nM",
+      "standard_value": "> 0 and not null",
+      "standard_type_in": ["Ki", "Kd", "IC50", "EC50", "AC50", "Kb"],
+      "assay_type_in": ["B", "F"],
+      "reason": "Reuses CLAUDE.md invariant 1 (a value is a measurement only if the source says it is) and the pipeline's unit normalisation. A non-'=' relation is a censored bound, not a measured value."
+    },
+    "retained_as_bound": {
+      "standard_relation_in": [">", "<", ">=", "<=", "~"],
+      "reason": "Censored observations are kept as bounds and counted, but never enter a numeric summary or a threshold pass."
+    },
+    "retained_flags": ["data_validity_comment", "potential_duplicate", "activity_comment"],
+    "flags_do_not_exclude": "ChEMBL's own data-validity flags are recorded per measurement and reported, not used to drop rows - matching how the production pipeline stores them on `measurements`.",
+    "documented_exclusions": {
+      "CHEMBL_ASSAY_LINK_EXCLUSIONS": ["CHEMBL5133661", "CHEMBL1074487"],
+      "reason": "Reused verbatim from the production pipeline's documented known-bad upstream records (see docs/DATA-QUALITY-LOG.md). Excluded on this path too, with the reason preserved, never silently dropped.",
+      "organism_based_format": "Within assay_type=F, bao_format label 'organism-based format' is excluded: whole-organism readouts whose ChEMBL target is a species, not a molecular target."
+    }
+  },
+
+  "endpoint_classes": {
+    "rule": "endpoint_class = <role>:<standard_type>, where role is 'binding' for assay_type B and 'functional' for assay_type F.",
+    "never_pooled": "Ki, Kd, binding IC50, functional IC50, EC50, AC50 and Kb are separate classes. Replication is counted inside one class only. Two binding measurements never establish an action, and a functional endpoint is never merged with a binding endpoint.",
+    "affinity_precedence_for_display": ["Ki", "Kd", "IC50"],
+    "pooling": "log10-space median within one (claim, endpoint_class), matching CLAUDE.md invariant 3."
+  },
+
+  "study_identity": {
+    "study_key_order": ["pmid:<pubmed_id>", "doi:<doi>", "patent:<patent_id>", "doc:<doc_chembl_id>"],
+    "provenance_class": {
+      "publication": "docs.doc_type = 'PUBLICATION' and a pubmed_id or doi is present.",
+      "patent": "docs.doc_type = 'PATENT'.",
+      "deposited_dataset": "docs.doc_type = 'DATASET' - one bulk deposit (e.g. Sanger GDSC, DrugMatrix), regardless of how many activity rows it carries.",
+      "unresolved": "No doc row, or a doc with no pubmed_id, doi or patent_id."
+    },
+    "counts_original_evidence_not_appearances": "Support is counted in distinct studies, never in activity rows. Several assays from one paper are one study; identical values re-deposited under one dataset are one study.",
+    "duplicate_resolution": "Two doc rows collapse to one study when they share a pubmed_id, or share a doi. ChEMBL's own potential_duplicate flag is retained on the measurement and reported."
+  },
+
+  "tiers": {
+    "supported": {
+      "routes": {
+        "curated_support": {
+          "definition": "A ChEMBL drug_mechanism record for this molecule family at this target, carrying at least one traceable mechanism reference (mechanism_refs) or a mechanism_comment.",
+          "specificity": "Qualifies only at the target/action specificity ChEMBL asserts. A PROTEIN FAMILY or PROTEIN COMPLEX mechanism is Supported at that level and is never expanded into supported claims for individual members.",
+          "caveat": "Curated support is one curator's assertion. It does not imply an independently replicated measurement."
+        },
+        "multiple_study_support": {
+          "definition": "Two or more distinct studies with provenance_class 'publication' carrying qualifying exact measurements for the same claim within one endpoint_class.",
+          "caveat": "Multiple papers are a documented proxy for independence, not proof of independent laboratories, independent experiments, or independent material. Deposited datasets, patents and unresolved documents are retained and reported but never create multi-study support."
+        }
+      },
+      "recorded_separately": "curated_support and multiple_study_support are stored as separate flags so the report can show each route and their intersection."
+    },
+    "preliminary": {
+      "definition": "At least one identifiable study (publication, patent or deposited dataset) with a qualifying exact measurement for the claim, and no Supported-tier evidence for that claim.",
+      "sub_reasons": ["one_publication", "one_patent", "one_deposit", "deposited_datasets_only", "patents_only", "multiple_publications_split_across_endpoint_classes"]
+    },
+    "limited_or_unresolved": {
+      "definition": "Evidence exists but is insufficient for the claim being evaluated. The specific reason is preserved, never discarded.",
+      "reasons": {
+        "curated_untraceable": "A curated mechanism with no reference and no comment.",
+        "curated_no_target_assigned": "A curated mechanism whose drug_mechanism.tid is null.",
+        "curated_indirect": "drug_mechanism.direct_interaction = 0 - an indirect mechanism, not a measured target relationship.",
+        "censored_only": "Every measurement for the claim is a censored bound.",
+        "invalid_units_only": "Every measurement carries units the report cannot normalise.",
+        "unresolved_study_provenance": "Support exists but no measurement resolves to an identifiable study.",
+        "ambiguous_target_assignment": "Target assignment is homologous, multiple, unchecked or non-molecular.",
+        "documented_exclusion": "Every backing record is on the pipeline's documented known-bad exclusion list."
+      }
+    },
+    "no_eligible_evidence": "The molecule is in the catalogue and ChEMBL 37 holds no curated mechanism and no assessable activity for it at any target. A coverage gap, retained in the catalogue.",
+    "not_assessed": "The source needed for this molecule/source combination was unavailable. Recorded as unknown, never as a negative finding."
+  },
+
+  "target_specificity": {
+    "human_direct_single_protein": "target_type='SINGLE PROTEIN' and tax_id=9606 and confidence_score=9 and relationship_type='D' and variant_id is null. This is the main empirical comparison.",
+    "human_direct_single_protein_mutant": "As above but variant_id is not null.",
+    "human_direct_complex": "target_type in ('PROTEIN COMPLEX','PROTEIN COMPLEX GROUP') and tax_id=9606 and confidence_score=7.",
+    "human_family_or_multiple": "target_type='PROTEIN FAMILY' or confidence_score=5, human.",
+    "homologous_or_unknown_species": "confidence_score in (4,6,8) or relationship_type='H'.",
+    "nonhuman": "target tax_id is present and not 9606.",
+    "non_protein_or_unassigned": "confidence_score <= 3 or relationship_type in ('N','S','M','U').",
+    "confidence_note": "ChEMBL confidence scores 9, 7 and 8 are different target-assignment categories (direct single protein, direct complex subunits, homologous single protein). They are not a quality ranking, and a generic '>= 7' filter mixes them. This report never uses '>= 7' as a proxy for direct human single-protein evidence."
+  },
+
+  "conflicts": {
+    "action_conflict": "Two or more curated mechanism records for the same (molecule family, target) whose action_type maps to opposing parent_type (POSITIVE MODULATOR vs NEGATIVE MODULATOR).",
+    "measurement_dispersion": "Within one (claim, endpoint_class) with qualifying exact values from two or more distinct studies, log10(max/min) > 2 - values disagreeing by more than a hundredfold.",
+    "effect_on_tier": "A conflict never raises a tier. Contradictory reports are shown, and a claim with a conflict keeps its tier and carries the conflict flag and detail, so accumulating incompatible reports cannot look like stronger support."
+  },
+
+  "thresholds": {
+    "micromolar": [1, 10, 100, 300],
+    "primary_rule": "A (claim, endpoint_class) passes threshold T when the log10-space median of its qualifying exact nM values is <= T.",
+    "sensitivity_rule": "Also reported: passes when ANY qualifying exact value is <= T.",
+    "scope": "Applied only inside the fixed cohort-1 candidate set. Thresholds never admit a molecule, never remove one, and say nothing about physiological exposure. Curated weak relationships (e.g. caffeine's curated ADORA3 mechanism at Ki = 100 uM) keep their catalogue membership and their curated tier at every threshold."
+  }
+}

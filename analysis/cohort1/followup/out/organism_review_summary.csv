@@ -1,0 +1,11 @@
+context_class,records
+cell_assay_format_conflict,2
+in_vivo_binding_dose_context,3
+in_vivo_metabolic_response,1
+in_vivo_occupancy,4
+in_vivo_phenotype_exposure,2
+in_vivo_physiology,5
+microorganism_phenotype,14
+platelet_context_ambiguous,2
+polymerization_context_ambiguous,1
+uptake_context_ambiguous,2

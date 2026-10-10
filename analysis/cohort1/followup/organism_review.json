@@ -1,0 +1,28 @@
+{
+  "basis": "Manual reading of all 22 distinct assay descriptions behind the 36 protein-assigned records. Descriptions are ChEMBL source text, not independently verified experimental methods.",
+  "default_action": "Keep as contextual evidence; do not pool with baseline in-vitro potency or upgrade a biological evidence tier.",
+  "reviews": {
+    "CHEMBL1785997": {"class": "cell_assay_format_conflict", "reason": "Description explicitly identifies human H1 signalling in SK-N-SH cells. Organism-format label conflicts with that description; verify publication methods before reclassification."},
+    "CHEMBL1794333": {"class": "microorganism_phenotype", "reason": "Hsp90 counterscreen in a microorganism system; mapped homologue does not turn a growth/readout assay into direct human Hsp90 activity."},
+    "CHEMBL1794470": {"class": "microorganism_phenotype", "reason": "Antimalarial Hsp90-labelled screen in a microorganism system, with homologous assignment; retain the phenotypic context."},
+    "CHEMBL4604712": {"class": "in_vivo_occupancy", "reason": "Rat alpha4beta2 receptor occupancy related to brain concentration; keep brain matrix and occupancy endpoint distinct from binding affinity."},
+    "CHEMBL4604713": {"class": "in_vivo_occupancy", "reason": "Rat alpha4beta2 receptor occupancy related to plasma concentration; not interchangeable with the paired brain-concentration endpoint."},
+    "CHEMBL4810415": {"class": "in_vivo_phenotype_exposure", "reason": "Mouse tumour polyp response versus plasma exposure; does not isolate a COX2 biochemical inhibitory constant."},
+    "CHEMBL4810416": {"class": "in_vivo_phenotype_exposure", "reason": "Mouse tumour polyp response versus ileum exposure; keep tissue and phenotype explicit."},
+    "CHEMBL5223873": {"class": "in_vivo_occupancy", "reason": "Rat 5HT4 occupancy versus brain concentration in ng/g; tissue mass denominator requires additional assumptions for molarity."},
+    "CHEMBL5223874": {"class": "in_vivo_occupancy", "reason": "Rat 5HT4 occupancy versus plasma mass concentration; preserve exposure and measured chemical form."},
+    "CHEMBL641373": {"class": "in_vivo_physiology", "reason": "Alpha2-mediated vasoconstriction in pithed rats; physiological endpoint with homologous family assignment."},
+    "CHEMBL648491": {"class": "in_vivo_physiology", "reason": "Blood-pressure response in rats at a stated dose; description and IC50 nM field require methods review."},
+    "CHEMBL675844": {"class": "in_vivo_binding_dose_context", "reason": "Spiperone displacement is described at a 10 mg/kg dose; inspect methods before treating the standard nM number as comparable in-vitro affinity."},
+    "CHEMBL687924": {"class": "cell_assay_format_conflict", "reason": "Description says in vivo but identifies ERalpha/ERbeta co-expressed in HEK293 cells; family-level cell assay is plausible, pending original methods."},
+    "CHEMBL697020": {"class": "platelet_context_ambiguous", "reason": "Description says in vivo and gel-filtered human platelets; platelet aggregation cannot be assumed to be direct receptor binding."},
+    "CHEMBL702340": {"class": "platelet_context_ambiguous", "reason": "Human platelet serotonin uptake, labelled in vivo with homologous assignment. Preserve functional context and resolve metadata before reassignment."},
+    "CHEMBL767695": {"class": "in_vivo_metabolic_response", "reason": "Lactate oxidation attributed to pyruvate dehydrogenase kinase inhibition; retains downstream metabolic response and family-level assignment."},
+    "CHEMBL782725": {"class": "in_vivo_physiology", "reason": "Oral progestational response in a uterine model is a dose endpoint, not a molar protein affinity."},
+    "CHEMBL785239": {"class": "uptake_context_ambiguous", "reason": "Rat dopamine uptake description does not establish preparation or exposure basis; no automatic conversion to in-vitro transporter potency."},
+    "CHEMBL785240": {"class": "uptake_context_ambiguous", "reason": "Rat serotonin uptake description is incomplete and the assignment homologous; inspect methods before pooling."},
+    "CHEMBL795984": {"class": "in_vivo_physiology", "reason": "Alpha1-mediated vasoconstriction in pithed rats; preserve family and physiological endpoint."},
+    "CHEMBL795986": {"class": "in_vivo_physiology", "reason": "Alpha2-mediated vasoconstriction in pithed rats; preserve family and physiological endpoint."},
+    "CHEMBL819251": {"class": "polymerization_context_ambiguous", "reason": "Tubulin polymerization at 30 C sounds biochemical but the preparation is unspecified; verify methods and homologous group assignment."}
+  }
+}

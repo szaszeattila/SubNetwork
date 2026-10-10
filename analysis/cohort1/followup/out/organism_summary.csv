@@ -1,0 +1,15 @@
+target_type,specificity,records
+CELL-LINE,non_protein_or_unassigned,19
+CELL-LINE,nonhuman,3
+ORGANISM,non_protein_or_unassigned,195
+ORGANISM,nonhuman,21742
+PROTEIN COMPLEX GROUP,homologous_or_unknown_species,1
+PROTEIN COMPLEX,human_direct_complex,1
+PROTEIN COMPLEX,nonhuman,2
+PROTEIN FAMILY,homologous_or_unknown_species,2
+PROTEIN FAMILY,human_family_or_multiple,2
+PROTEIN FAMILY,nonhuman,5
+SINGLE PROTEIN,homologous_or_unknown_species,16
+SINGLE PROTEIN,human_direct_single_protein,1
+SINGLE PROTEIN,nonhuman,6
+UNCHECKED,non_protein_or_unassigned,4

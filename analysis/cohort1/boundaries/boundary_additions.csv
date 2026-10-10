@@ -1,0 +1,1121 @@
+policy,boundary,parent_molregno,chembl_id,name,molecule_type,qualifying_indications,in_unrestricted_core
+all_categories_no_phase_floor,cns_oncology,1470,CHEMBL427,MECHLORETHAMINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,5200,CHEMBL9194,ATRASENTAN,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,12911,CHEMBL276711,SEMAXANIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,17224,CHEMBL584,NELFINAVIR,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,21393,CHEMBL18901,EFAPROXIRAL,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,59842,CHEMBL39677,ACRIDINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,63100,CHEMBL43452,POMALIDOMIDE,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,72035,CHEMBL45816,MIBEFRADIL,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,83217,CHEMBL300138,ENZASTAURIN,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,84516,CHEMBL301523,PHENYLALANINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,84655,CHEMBL298734,LONAFARNIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,88232,CHEMBL939,GEFITINIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,96557,CHEMBL59990,MAFOSFAMIDE,Small molecule,D008577 Meningeal Neoplasms (phase 1); D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,112480,CHEMBL1006,AMIFOSTINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,119640,CHEMBL1024,IFOSFAMIDE,Small molecule,D016543 Central Nervous System Neoplasms (phase 3),0
+all_categories_no_phase_floor,cns_oncology,120195,CHEMBL75094,PRINOMASTAT,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,124181,CHEMBL77305,RUBITECAN,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,143870,CHEMBL90983,TERAMEPROCOL,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,182377,CHEMBL113051,GIMATECAN,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,194493,CHEMBL118841,PYRAZOLOACRIDINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,197166,CHEMBL118218,IROFULVEN,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,243124,CHEMBL414804,OXALIPLATIN,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,277853,CHEMBL167691,LAROMUSTINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,280533,CHEMBL166937,SARCNU,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,320848,CHEMBL408350,EDOTREOTIDE,Small molecule,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,cns_oncology,321172,CHEMBL262135,GALLIUM OXODOTREOTIDE,Protein,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,cns_oncology,364690,CHEMBL219568,GUANINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,374008,CHEMBL225072,PEMETREXED,Small molecule,D055756 Meningeal Carcinomatosis (phase 2),0
+all_categories_no_phase_floor,cns_oncology,398942,CHEMBL236687,PERILLYL ALCOHOL,Small molecule,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,cns_oncology,440654,CHEMBL407874,6-O-BENZYLGUANINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,454137,CHEMBL452715,ALANOSINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,460092,CHEMBL473417,VISMODEGIB,Small molecule,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,cns_oncology,469866,CHEMBL521686,OLAPARIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,493099,CHEMBL450449,TRABECTEDIN,Small molecule,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,cns_oncology,494280,CHEMBL506871,VELIPARIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,522991,CHEMBL447686,GOSSYPOL ACETIC ACID,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,586744,CHEMBL587723,AEE-788,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,674596,CHEMBL1200645,ETOPOSIDE PHOSPHATE,Small molecule,D016543 Central Nervous System Neoplasms (phase 3),0
+all_categories_no_phase_floor,cns_oncology,674934,CHEMBL1200983,GALLIUM NITRATE,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,675588,CHEMBL1201608,MUROMONAB-CD3,Unknown,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,716009,CHEMBL1289601,LENVATINIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 1); D055756 Meningeal Carcinomatosis (phase 2),0
+all_categories_no_phase_floor,cns_oncology,1037657,CHEMBL1614650,EXATECAN,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,1277553,CHEMBL1946170,REGORAFENIB,Small molecule,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,cns_oncology,1376882,CHEMBL2104612,MITOLACTOL,Small molecule,D016543 Central Nervous System Neoplasms (phase 3),0
+all_categories_no_phase_floor,cns_oncology,1377240,CHEMBL2104970,INCYCLINIDE,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,1377690,CHEMBL2105420,TAUROLIDINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,1377987,CHEMBL2105717,CABOZANTINIB,Small molecule,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,cns_oncology,1379413,CHEMBL2107143,GLUFOSFAMIDE,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,1380622,CHEMBL2108356,PEGDINETANIB,Unknown,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,1380772,CHEMBL2108506,INTERFERON ALFA,Protein,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,1380797,CHEMBL2108531,POLIFEPROSAN 20,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,1380851,CHEMBL2108585,CONTUSUGENE LADENOVEC,Gene,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,1381747,CHEMBL2109307,LMB-7,Unknown,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,1381831,CHEMBL2109391,MDX-447,Unknown,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,1381987,CHEMBL2109547,ME1-14 F(AB')2,Unknown,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,1503492,CHEMBL2304041,SAGOPILONE,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,1510539,CHEMBL2311128,TETRAHYDROURIDINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,1519923,CHEMBL2325741,CAPIVASERTIB,Small molecule,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,cns_oncology,1525993,CHEMBL2336325,VISTUSERTIB,Small molecule,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,cns_oncology,1567700,CHEMBL2396661,ALPELISIB,Small molecule,D008579 Meningioma (phase 1),0
+all_categories_no_phase_floor,cns_oncology,1627018,CHEMBL3137685,NEDAPLATIN,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,2087700,CHEMBL3809489,BEMCENTINIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 0.5),0
+all_categories_no_phase_floor,cns_oncology,2089439,CHEMBL3813842,PAXALISIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,2096424,CHEMBL3833373,AVELUMAB,Antibody,D008579 Meningioma (phase 1); D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,2197894,CHEMBL3990023,TOZULERISTIDE,Protein,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,2252281,CHEMBL4112930,PAMIPARIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,2283573,CHEMBL4205422,MK-0752,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,2335246,CHEMBL4297275,CYTOCHLOR,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,2335427,CHEMBL4297456,ATN-161,Protein,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,2335686,CHEMBL4297715,CAMRELIZUMAB,Antibody,D055756 Meningeal Carcinomatosis (phase 2),0
+all_categories_no_phase_floor,cns_oncology,2335977,CHEMBL4298006,ENVAFOLIMAB,Antibody,D055756 Meningeal Carcinomatosis (phase 2),0
+all_categories_no_phase_floor,cns_oncology,2340360,CHEMBL4302409,LUTETIUM OXODOTREOTIDE,Protein,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,cns_oncology,2341275,CHEMBL4303404,PELABRESIB,Small molecule,D010524 Peripheral Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,cns_oncology,2489825,CHEMBL4742157,GSK-2256098,Small molecule,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,cns_oncology,2739857,CHEMBL5095426,ZURLETRECTINIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,2831997,CHEMBL5314346,VERTEPORFIN,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,cns_oncology,2832656,CHEMBL5315005,RHENIUM RE-186 OBISBEMEDA,Unknown,D055756 Meningeal Carcinomatosis (phase 1),0
+all_categories_no_phase_floor,cns_oncology,3283083,CHEMBL6067492,BLEOMYCIN,Unknown,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,1223,CHEMBL421,SULFASALAZINE,Small molecule,D010523 Peripheral Nervous System Diseases (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,6772,CHEMBL9967,PIRENZEPINE,Small molecule,D003929 Diabetic Neuropathies (phase 2); D010523 Peripheral Nervous System Diseases (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,10423,CHEMBL12318,CLODRONIC ACID,Small molecule,D020516 Brachial Plexus Neuropathies (phase 3),0
+all_categories_no_phase_floor,peripheral_nervous_system,12957,CHEMBL534,KETOTIFEN,Small molecule,D010523 Peripheral Nervous System Diseases (phase 3),0
+all_categories_no_phase_floor,peripheral_nervous_system,20668,CHEMBL17976,RESINIFERATOXIN,Small molecule,D000070607 Morton Neuroma (phase 1),0
+all_categories_no_phase_floor,peripheral_nervous_system,27152,CHEMBL632,BETAMETHASONE,Small molecule,D002349 Carpal Tunnel Syndrome (phase 3); D012585 Sciatica (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,42756,CHEMBL31574,FISETIN,Small molecule,D002349 Carpal Tunnel Syndrome (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,50942,CHEMBL34124,OLODANRIGAN,Small molecule,"D003929 Diabetic Neuropathies (phase 2); D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,peripheral_nervous_system,91392,CHEMBL57997,T-62,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,peripheral_nervous_system,110103,CHEMBL70046,SORIVUDINE,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,peripheral_nervous_system,112480,CHEMBL1006,AMIFOSTINE,Small molecule,D010523 Peripheral Nervous System Diseases (phase 3); D014277 Trigeminal Neuralgia (phase 3),0
+all_categories_no_phase_floor,peripheral_nervous_system,141088,CHEMBL313971,ZUCAPSAICIN,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,peripheral_nervous_system,144959,CHEMBL91829,RUBOXISTAURIN,Small molecule,D003929 Diabetic Neuropathies (phase 3),0
+all_categories_no_phase_floor,peripheral_nervous_system,219259,CHEMBL334830,RANIRESTAT,Small molecule,D003929 Diabetic Neuropathies (phase 3); D011115 Polyneuropathies (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,243124,CHEMBL414804,OXALIPLATIN,Small molecule,D010523 Peripheral Nervous System Diseases (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,259664,CHEMBL348475,TARIQUIDAR,Small molecule,D009437 Neuralgia (phase 1),0
+all_categories_no_phase_floor,peripheral_nervous_system,302799,CHEMBL180101,ESREBOXETINE,Small molecule,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,321640,CHEMBL363387,LIDORESTAT,Small molecule,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,321964,CHEMBL1382,TOLTERODINE,Small molecule,D009437 Neuralgia (phase 1),0
+all_categories_no_phase_floor,peripheral_nervous_system,368538,CHEMBL185,FLUOROURACIL,Small molecule,D010523 Peripheral Nervous System Diseases (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,381691,CHEMBL1451,TRIAMCINOLONE,Small molecule,"D009437 Neuralgia (phase 0.5); D011843 Radiculopathy (phase 3); D018917 Optic Neuropathy, Ischemic (phase 1)",0
+all_categories_no_phase_floor,peripheral_nervous_system,396930,CHEMBL232943,MK0686,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,peripheral_nervous_system,445557,CHEMBL470888,BVT.115959,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,449425,CHEMBL511099,BICIFADINE,Small molecule,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,464655,CHEMBL457077,SALVIANOLIC ACID A,Small molecule,D003929 Diabetic Neuropathies (phase 1),0
+all_categories_no_phase_floor,peripheral_nervous_system,557416,CHEMBL561339,ADL-5747 FREE BASE,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,peripheral_nervous_system,568337,CHEMBL574737,UCN-01,Small molecule,"D018304 Esthesioneuroblastoma, Olfactory (phase 1)",0
+all_categories_no_phase_floor,peripheral_nervous_system,583322,CHEMBL1760,TERBUTALINE,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,603466,CHEMBL604710,Z160,Small molecule,"D011843 Radiculopathy (phase 2); D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,peripheral_nervous_system,619399,CHEMBL1088751,PH-797804,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,peripheral_nervous_system,675052,CHEMBL1201101,TESTOSTERONE CYPIONATE,Small molecule,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,704852,CHEMBL1255871,ASTAXANTHIN,Small molecule,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,1054550,CHEMBL1631723,PROGERININ,Small molecule,D003929 Diabetic Neuropathies (phase 1),0
+all_categories_no_phase_floor,peripheral_nervous_system,1121894,CHEMBL1743023,FULRANUMAB,Antibody,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,1362572,CHEMBL2074765,KRN5500,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,1376099,CHEMBL2103829,FAXELADOL,Small molecule,D009437 Neuralgia (phase 1),0
+all_categories_no_phase_floor,peripheral_nervous_system,1376108,CHEMBL2103838,DILMAPIMOD,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,1377904,CHEMBL2105634,COLENEURAMIDE,Small molecule,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,1378389,CHEMBL2106119,CALCIUM GLUCONATE,Small molecule,D010523 Peripheral Nervous System Diseases (phase 1),0
+all_categories_no_phase_floor,peripheral_nervous_system,1379598,CHEMBL2107328,DASOLAMPANEL ETIBUTIL,Small molecule,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,1379636,CHEMBL2107366,REZATOMIDINE,Small molecule,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,1380041,CHEMBL2107771,RALFINAMIDE,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,1380400,CHEMBL2108134,POLOXAMER,Small molecule,D009437 Neuralgia (phase 3),0
+all_categories_no_phase_floor,peripheral_nervous_system,1380919,CHEMBL2108653,THROMBOMODULIN ALFA,Unknown,D010523 Peripheral Nervous System Diseases (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,1381005,CHEMBL2108739,PLACULUMAB,Antibody,D012585 Sciatica (phase 1),0
+all_categories_no_phase_floor,peripheral_nervous_system,1381151,CHEMBL2108885,ACTOVEGIN,Unknown,D003929 Diabetic Neuropathies (phase 3),0
+all_categories_no_phase_floor,peripheral_nervous_system,1381258,CHEMBL2108992,ATEXAKIN ALFA,Protein,D010523 Peripheral Nervous System Diseases (phase 1),0
+all_categories_no_phase_floor,peripheral_nervous_system,1381968,CHEMBL2109528,FASINUMAB,Antibody,D012585 Sciatica (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,1519188,CHEMBL2325014,PF-05089771,Small molecule,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,1540500,CHEMBL2364628,RICOLINOSTAT,Small molecule,D003929 Diabetic Neuropathies (phase 2); D010523 Peripheral Nervous System Diseases (phase 1),0
+all_categories_no_phase_floor,peripheral_nervous_system,1626782,CHEMBL3137348,SENREBOTASE,Enzyme,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,peripheral_nervous_system,1675825,CHEMBL3186534,RIVOCERANIB,Small molecule,"D018304 Esthesioneuroblastoma, Olfactory (phase 2)",0
+all_categories_no_phase_floor,peripheral_nervous_system,1794136,CHEMBL3341997,BIIB-095,Small molecule,D003929 Diabetic Neuropathies (phase 1),0
+all_categories_no_phase_floor,peripheral_nervous_system,1926888,CHEMBL3545039,AZD1386,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,1927057,CHEMBL3545208,AZD3161,Unknown,D009437 Neuralgia (phase 1),0
+all_categories_no_phase_floor,peripheral_nervous_system,1927070,CHEMBL3545221,AZD2423,Unknown,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,1927127,CHEMBL3545278,ATX08-001,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,peripheral_nervous_system,1951836,CHEMBL3590674,ABT-639,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,2015713,CHEMBL3682589,ELISMETREP,Small molecule,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,2039189,CHEMBL3707218,FUNAPIDE,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,peripheral_nervous_system,2039289,CHEMBL3707318,GRC-17536,Unknown,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,2039290,CHEMBL3707319,GRC-15300,Unknown,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,2039371,CHEMBL3707400,INDANTADOL,Unknown,D003929 Diabetic Neuropathies (phase 2); D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,2197730,CHEMBL3989859,TOCOPHEROL ACETATE,Small molecule,D020516 Brachial Plexus Neuropathies (phase 3),0
+all_categories_no_phase_floor,peripheral_nervous_system,2335153,CHEMBL4297182,PEGCANTRATINIB,Small molecule,D009437 Neuralgia (phase 1),0
+all_categories_no_phase_floor,peripheral_nervous_system,2335623,CHEMBL4297652,ANTIMONY,Small molecule,D010523 Peripheral Nervous System Diseases (phase 3),0
+all_categories_no_phase_floor,peripheral_nervous_system,2335685,CHEMBL4297714,CALMANGAFODIPIR,Unknown,D010523 Peripheral Nervous System Diseases (phase 1),0
+all_categories_no_phase_floor,peripheral_nervous_system,2335742,CHEMBL4297771,INTERLEUKIN-10,Unknown,D009437 Neuralgia (phase 1),0
+all_categories_no_phase_floor,peripheral_nervous_system,2335881,CHEMBL4297910,ARTEMIN,Unknown,D011843 Radiculopathy (phase 1); D012585 Sciatica (phase 1),0
+all_categories_no_phase_floor,peripheral_nervous_system,2336034,CHEMBL4298063,CILIARY NEUROTROPHIC FACTOR,Unknown,"D018917 Optic Neuropathy, Ischemic (phase 1)",0
+all_categories_no_phase_floor,peripheral_nervous_system,2341275,CHEMBL4303404,PELABRESIB,Small molecule,D010524 Peripheral Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,2364732,CHEMBL4457723,BMS-741672,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,2464964,CHEMBL4594533,CBX-129801,Unknown,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,2465004,CHEMBL4594573,FEPIXNEBART,Antibody,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,2733861,CHEMBL5089410,PILAVAPADIN,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,peripheral_nervous_system,2739620,CHEMBL5095189,NYX-2925,Small molecule,D003929 Diabetic Neuropathies (phase 2); D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,2739655,CHEMBL5095224,ELIAPIXANT,Small molecule,D003929 Diabetic Neuropathies (phase 1); D009437 Neuralgia (phase 1),0
+all_categories_no_phase_floor,peripheral_nervous_system,2832046,CHEMBL5314395,GW493838,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,2832051,CHEMBL5314400,DWP05195,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,peripheral_nervous_system,2832052,CHEMBL5314401,CNV2197944,Small molecule,"D003929 Diabetic Neuropathies (phase 2); D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,peripheral_nervous_system,2832138,CHEMBL5314487,SUZETRIGINE,Small molecule,D003929 Diabetic Neuropathies (phase 2); D009437 Neuralgia (phase 1),0
+all_categories_no_phase_floor,peripheral_nervous_system,2832164,CHEMBL5314513,CLOFUTRIBEN,Small molecule,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,2832609,CHEMBL5314958,CRISUGABALIN,Small molecule,"D003929 Diabetic Neuropathies (phase 1); D009437 Neuralgia (phase 3); D051474 Neuralgia, Postherpetic (phase 3)",0
+all_categories_no_phase_floor,peripheral_nervous_system,3284041,CHEMBL6068550,GRT-6010,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,peripheral_nervous_system,3284055,CHEMBL6068564,"1-(4-(DIMETHYLAMINO)PIPERIDIN-1-YL)-3-HYDROXY-3-(1-METHYL-1H-IMIDAZOL-2-YL)PROPAN-1-ONE, (S)-",Small molecule,D009437 Neuralgia (phase 1),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,556,CHEMBL6622,ISOSORBIDE DINITRATE,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 1)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,1085,CHEMBL17,DICHLORPHENAMIDE,Small molecule,"D020513 Paralysis, Hyperkalemic Periodic (phase 3); D020514 Hypokalemic Periodic Paralysis (phase 3); D020967 Myotonic Disorders (phase 3)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,9913,CHEMBL12610,BENZYDAMINE,Small molecule,D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,10531,CHEMBL509,MECLOFENAMIC ACID,Small molecule,D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,11968,CHEMBL527,PIROXICAM,Small molecule,D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,12417,CHEMBL101,PHENYLBUTAZONE,Small molecule,D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,12850,CHEMBL13817,IBUTAMOREN,Small molecule,D005356 Fibromyalgia (phase 2),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,12890,CHEMBL13828,OXATOMIDE,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,12957,CHEMBL534,KETOTIFEN,Small molecule,D005356 Fibromyalgia (phase 3),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,22873,CHEMBL19299,LOXOPROFEN,Small molecule,D009135 Muscular Diseases (phase 2); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,26431,CHEMBL622,ETODOLAC,Small molecule,D009135 Muscular Diseases (phase 3),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,27417,CHEMBL645,BISOPROLOL,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,43448,CHEMBL770,TOLAZOLINE,Small molecule,D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,84482,CHEMBL925,TYROSINE,Small molecule,"D017696 Myopathies, Nemaline (phase 2)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,85553,CHEMBL56367,NIMESULIDE,Small molecule,D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,97010,CHEMBL63323,NIFLUMIC ACID,Small molecule,D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,117758,CHEMBL75435,DEXKETOPROFEN,Small molecule,D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,118617,CHEMBL1020,TOLMETIN,Small molecule,D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,141088,CHEMBL313971,ZUCAPSAICIN,Small molecule,D063806 Myalgia (phase 3),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,150585,CHEMBL93645,ACECLOFENAC,Small molecule,D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,151923,CHEMBL413965,FELBINAC,Small molecule,D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,153408,CHEMBL94394,BUFEXAMAC,Small molecule,D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,171866,CHEMBL102358,IDROCILAMIDE,Small molecule,D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,227917,CHEMBL1228,OXYPHENBUTAZONE ANHYDROUS,Small molecule,D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,254483,CHEMBL152452,SIALIC ACID,Small molecule,D009135 Muscular Diseases (phase 1),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,302799,CHEMBL180101,ESREBOXETINE,Small molecule,D005356 Fibromyalgia (phase 3),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,317541,CHEMBL435298,ESFLURBIPROFEN,Small molecule,D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,421089,CHEMBL1515,METHIMAZOLE,Small molecule,D003882 Dermatomyositis (phase 2); D017285 Polymyositis (phase 2),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,512450,CHEMBL456341,LENABASUM,Small molecule,D003882 Dermatomyositis (phase 3),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,571201,CHEMBL583912,(-)-EPICATECHIN,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,598869,CHEMBL589092,FENTIAZAC,Small molecule,D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,621308,CHEMBL1089221,BENDAZAC,Small molecule,D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,641201,CHEMBL1159662,RIBOSE (PYRANOSE),Small molecule,D005356 Fibromyalgia (phase 2),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,671041,CHEMBL1197091,HALOFUGINONE,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,674286,CHEMBL1200335,TESTOSTERONE ENANTHATE,Small molecule,"D020391 Muscular Dystrophy, Facioscapulohumeral (phase 1)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,674781,CHEMBL1200830,FERROUS SULFATE,Small molecule,D005356 Fibromyalgia (phase 3),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,675149,CHEMBL1201198,PEMIROLAST,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,675195,CHEMBL1201244,ROCURONIUM,Small molecule,D063806 Myalgia (phase 3),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,675842,CHEMBL1201891,DEFLAZACORT,Small molecule,"D009136 Muscular Dystrophies (phase 4); D020388 Muscular Dystrophy, Duchenne (phase 4); D049288 Muscular Dystrophies, Limb-Girdle (phase 3)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,685336,CHEMBL1213492,GIVINOSTAT,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 3); D020388 Muscular Dystrophy, Duchenne (phase 4)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,838204,CHEMBL1414320,SUXIBUZONE,Small molecule,D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,875517,CHEMBL1451633,ETOFENAMATE,Small molecule,D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,876580,CHEMBL1452696,FEPRAZONE,Small molecule,D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,1025553,CHEMBL1601669,ALFACALCIDOL,Small molecule,D009135 Muscular Diseases (phase 3),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,1059674,CHEMBL1644698,SODIUM NITRATE,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,1121904,CHEMBL1743033,ITOLIZUMAB,Antibody,D003882 Dermatomyositis (phase 1),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,1121940,CHEMBL1743069,SIFALIMUMAB,Antibody,D003882 Dermatomyositis (phase 1),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,1144723,CHEMBL1773683,EZUTROMID,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,1232772,CHEMBL1892201,MOFEBUTAZONE,Small molecule,D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,1376099,CHEMBL2103829,FAXELADOL,Small molecule,D005356 Fibromyalgia (phase 2),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,1379236,CHEMBL2106966,PIKETOPROFEN,Small molecule,D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,1379636,CHEMBL2107366,REZATOMIDINE,Small molecule,D005356 Fibromyalgia (phase 2),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,1380072,CHEMBL2107802,RIMEPORIDE,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 1)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,1380317,CHEMBL2108051,STAMULUMAB,Antibody,"D020388 Muscular Dystrophy, Duchenne (phase 1); D020391 Muscular Dystrophy, Facioscapulohumeral (phase 1); D049288 Muscular Dystrophies, Limb-Girdle (phase 1)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,1380544,CHEMBL2108278,ETEPLIRSEN,Oligonucleotide,"D009136 Muscular Dystrophies (phase 4); D020388 Muscular Dystrophy, Duchenne (phase 4)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,1381001,CHEMBL2108735,DRISAPERSEN,Oligonucleotide,"D009136 Muscular Dystrophies (phase 3); D020388 Muscular Dystrophy, Duchenne (phase 3)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,1381817,CHEMBL2109377,PAMREVLUMAB,Antibody,"D020388 Muscular Dystrophy, Duchenne (phase 3)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,1530622,CHEMBL2348780,VAMOROLONE,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 4)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,1543376,CHEMBL2368925,DOLASETRON,Small molecule,D005356 Fibromyalgia (phase 3),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,1627075,CHEMBL3137744,RIBITOL,Small molecule,"D049288 Muscular Dystrophies, Limb-Girdle (phase 1)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,1926840,CHEMBL3544991,DOMAGROZUMAB,Antibody,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2076856,CHEMBL3786673,EDASALONEXENT,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 3)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2335439,CHEMBL4297468,ZETOMIPZOMIB,Protein,D003882 Dermatomyositis (phase 2); D017285 Polymyositis (phase 2),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2335448,CHEMBL4297477,BREPOCITINIB,Small molecule,D003882 Dermatomyositis (phase 3),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2335521,CHEMBL4297550,ATYR-1940,Unknown,"D020391 Muscular Dystrophy, Facioscapulohumeral (phase 1)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2335537,CHEMBL4297566,CASIMERSEN,Oligonucleotide,"D009136 Muscular Dystrophies (phase 4); D020388 Muscular Dystrophy, Duchenne (phase 4)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2335733,CHEMBL4297762,GOLODIRSEN,Oligonucleotide,"D009136 Muscular Dystrophies (phase 4); D020388 Muscular Dystrophy, Duchenne (phase 4)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2335779,CHEMBL4297808,DAZUKIBART,Antibody,D003882 Dermatomyositis (phase 2); D009220 Myositis (phase 3),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2335966,CHEMBL4297995,BAZLITORAN,Unknown,D003882 Dermatomyositis (phase 2),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2336033,CHEMBL4298062,VILTOLARSEN,Oligonucleotide,"D009136 Muscular Dystrophies (phase 4); D020388 Muscular Dystrophy, Duchenne (phase 4)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2336147,CHEMBL4298176,GARETOSMAB,Antibody,"D018979 Myositis, Inclusion Body (phase 2)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2336152,CHEMBL4298181,RESAMIRIGENE BILPARVOVEC,Gene,"D020914 Myopathies, Structural, Congenital (phase 1)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2336163,CHEMBL4298192,SUVODIRSEN,Oligonucleotide,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2336164,CHEMBL4298193,SUVODIRSEN SODIUM,Oligonucleotide,"D020388 Muscular Dystrophy, Duchenne (phase 1)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2464761,CHEMBL4594330,DAXDILIMAB,Antibody,D009220 Myositis (phase 2),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2464767,CHEMBL4594336,FORDADISTROGENE MOVAPARVOVEC,Gene,"D020388 Muscular Dystrophy, Duchenne (phase 3)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2486500,CHEMBL4650240,BIDRIDISTROGENE XEBOPARVOVEC,Gene,"D049288 Muscular Dystrophies, Limb-Girdle (phase 3)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2486501,CHEMBL4650241,DELANDISTROGENE MOXEPARVOVEC,Gene,"D020388 Muscular Dystrophy, Duchenne (phase 4)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2486616,CHEMBL4650356,FAPI GA-68,Small molecule,D009220 Myositis (phase 0.5),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2486693,CHEMBL4650433,ULVIPRUBART,Antibody,"D018979 Myositis, Inclusion Body (phase 2)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2537410,CHEMBL4802159,ENPATORAN,Small molecule,D003882 Dermatomyositis (phase 2),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2739602,CHEMBL5095171,BOCIDELPAR,Small molecule,"D017240 Mitochondrial Myopathies (phase 1); D017240 Mitochondrial Myopathies (phase 2); D020388 Muscular Dystrophy, Duchenne (phase 1)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2739620,CHEMBL5095189,NYX-2925,Small molecule,D005356 Fibromyalgia (phase 2),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2739707,CHEMBL5095276,FLAVOCOXID,Unknown,"D020388 Muscular Dystrophy, Duchenne (phase 1)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2739799,CHEMBL5095368,BROGIDIRSEN,Oligonucleotide,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2832137,CHEMBL5314486,SEVASEMTEN,Small molecule,"D009136 Muscular Dystrophies (phase 1); D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2832324,CHEMBL5314673,EMPASIPRUBART,Antibody,D003882 Dermatomyositis (phase 2); D009220 Myositis (phase 2),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,2832634,CHEMBL5314983,FRONIGLUTIDE,Protein,D003882 Dermatomyositis (phase 2); D017285 Polymyositis (phase 2),0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,3283076,CHEMBL6067485,GENTAMICIN,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 1)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,3283724,CHEMBL6068233,DERAMIOCEL,Cell,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,3284062,CHEMBL6068571,ARGX-119,Antibody,"D020294 Myasthenic Syndromes, Congenital (phase 1)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,3284084,CHEMBL6068593,VESLETEPLIRSEN,Oligonucleotide,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,muscle_and_neuromuscular_junction,3284673,CHEMBL6069182,CLOFEZONE ANHYDROUS,Small molecule,D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,general_pain,556,CHEMBL6622,ISOSORBIDE DINITRATE,Small molecule,D000787 Angina Pectoris (phase 4),0
+all_categories_no_phase_floor,general_pain,2045,CHEMBL435,HYDROCHLOROTHIAZIDE,Small molecule,D000787 Angina Pectoris (phase 4),0
+all_categories_no_phase_floor,general_pain,5797,CHEMBL477,ADENOSINE,Small molecule,"D010146 Pain (phase 2); D060050 Angina, Stable (phase 3)",0
+all_categories_no_phase_floor,general_pain,5975,CHEMBL480,LANSOPRAZOLE,Small molecule,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,6402,CHEMBL489,AFIMOXIFENE,Small molecule,D059373 Mastodynia (phase 2),0
+all_categories_no_phase_floor,general_pain,6706,CHEMBL416146,ETORICOXIB,Small molecule,D004412 Dysmenorrhea (phase 3); D010146 Pain (phase 3); D014098 Toothache (phase 3); D017116 Low Back Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,9913,CHEMBL12610,BENZYDAMINE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,general_pain,10358,CHEMBL505,CHLORPHENIRAMINE,Small molecule,D001416 Back Pain (phase 4); D006261 Headache (phase 4); D010146 Pain (phase 4),0
+all_categories_no_phase_floor,general_pain,10423,CHEMBL12318,CLODRONIC ACID,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,10531,CHEMBL509,MECLOFENAMIC ACID,Small molecule,D004412 Dysmenorrhea (phase 4); D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,general_pain,11968,CHEMBL527,PIROXICAM,Small molecule,D010146 Pain (phase 1); D018771 Arthralgia (phase 4); D056844 Renal Colic (phase 3); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,general_pain,12417,CHEMBL101,PHENYLBUTAZONE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,general_pain,12957,CHEMBL534,KETOTIFEN,Small molecule,D059350 Chronic Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,14125,CHEMBL548,DINOPROSTONE,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,16543,CHEMBL15768,CAMPHOR,Small molecule,D001416 Back Pain (phase 4); D010146 Pain (phase 4),0
+all_categories_no_phase_floor,general_pain,19572,CHEMBL592,LEVORPHANOL,Small molecule,D010146 Pain (phase 0.5),0
+all_categories_no_phase_floor,general_pain,20668,CHEMBL17976,RESINIFERATOXIN,Small molecule,"D000070607 Morton Neuroma (phase 1); D000072716 Cancer Pain (phase 1); D010148 Pain, Intractable (phase 1)",0
+all_categories_no_phase_floor,general_pain,22873,CHEMBL19299,LOXOPROFEN,Small molecule,D010146 Pain (phase 3); D017116 Low Back Pain (phase 3); D018771 Arthralgia (phase 4); D019547 Neck Pain (phase 2); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,general_pain,26431,CHEMBL622,ETODOLAC,Small molecule,D010146 Pain (phase 3); D059787 Acute Pain (phase 4),0
+all_categories_no_phase_floor,general_pain,27152,CHEMBL632,BETAMETHASONE,Small molecule,D012585 Sciatica (phase 2); D019547 Neck Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,27588,CHEMBL652,FLECAINIDE,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,29989,CHEMBL686,MEFENAMIC ACID,Small molecule,D004412 Dysmenorrhea (phase 4); D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,30211,CHEMBL23393,SODIUM LAURYL SULFATE,Small molecule,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,43448,CHEMBL770,TOLAZOLINE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,general_pain,46726,CHEMBL782,TOLBUTAMIDE,Small molecule,D059350 Chronic Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,50942,CHEMBL34124,OLODANRIGAN,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,general_pain,54547,CHEMBL289469,GRANISETRON,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,58424,CHEMBL43185,PIPERINE,Small molecule,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,60401,CHEMBL834,PAMIDRONIC ACID,Small molecule,D017116 Low Back Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,62259,CHEMBL841,LOPERAMIDE,Small molecule,D010146 Pain (phase 0.5),0
+all_categories_no_phase_floor,general_pain,67010,CHEMBL865,VALDECOXIB,Small molecule,D004412 Dysmenorrhea (phase 4); D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,85553,CHEMBL56367,NIMESULIDE,Small molecule,D010146 Pain (phase 1); D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,general_pain,88800,CHEMBL56564,TROPISETRON,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,91392,CHEMBL57997,T-62,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,general_pain,97010,CHEMBL63323,NIFLUMIC ACID,Small molecule,D018771 Arthralgia (phase 2); D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,general_pain,100157,CHEMBL980,GUAIFENESIN,Small molecule,D006261 Headache (phase 4),0
+all_categories_no_phase_floor,general_pain,107098,CHEMBL69308,PELUBIPROFEN,Small molecule,D001416 Back Pain (phase 3); D004412 Dysmenorrhea (phase 3); D017116 Low Back Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,110103,CHEMBL70046,SORIVUDINE,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,general_pain,110435,CHEMBL997,IBANDRONIC ACID,Small molecule,D010146 Pain (phase 3); D015746 Abdominal Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,112102,CHEMBL302795,TENOXICAM,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,117758,CHEMBL75435,DEXKETOPROFEN,Small molecule,D010146 Pain (phase 3); D017116 Low Back Pain (phase 3); D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,general_pain,118617,CHEMBL1020,TOLMETIN,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,general_pain,122567,CHEMBL75124,NONIVAMIDE,Small molecule,D017116 Low Back Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,140107,CHEMBL1077,BROMFENAC,Small molecule,"D010149 Pain, Postoperative (phase 4); D058447 Eye Pain (phase 4)",0
+all_categories_no_phase_floor,general_pain,141088,CHEMBL313971,ZUCAPSAICIN,Small molecule,"D010146 Pain (phase 3); D018771 Arthralgia (phase 3); D051474 Neuralgia, Postherpetic (phase 2); D063806 Myalgia (phase 3)",0
+all_categories_no_phase_floor,general_pain,150585,CHEMBL93645,ACECLOFENAC,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,general_pain,151923,CHEMBL413965,FELBINAC,Small molecule,D010146 Pain (phase 3); D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,general_pain,153408,CHEMBL94394,BUFEXAMAC,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,general_pain,171866,CHEMBL102358,IDROCILAMIDE,Small molecule,D018771 Arthralgia (phase 2); D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,general_pain,199817,CHEMBL1189,DIETHYLAMINE,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,209007,CHEMBL1196,PROPARACAINE,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,227917,CHEMBL1228,OXYPHENBUTAZONE ANHYDROUS,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,general_pain,231062,CHEMBL1242,PHENAZOPYRIDINE,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,259664,CHEMBL348475,TARIQUIDAR,Small molecule,D009437 Neuralgia (phase 1),0
+all_categories_no_phase_floor,general_pain,302799,CHEMBL180101,ESREBOXETINE,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,308917,CHEMBL1366,AURANOFIN,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,310199,CHEMBL364804,GW-406381,Small molecule,D010146 Pain (phase 1); D014098 Toothache (phase 3),0
+all_categories_no_phase_floor,general_pain,317541,CHEMBL435298,ESFLURBIPROFEN,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,general_pain,317909,CHEMBL175,DEXIBUPROFEN,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,321964,CHEMBL1382,TOLTERODINE,Small molecule,D009437 Neuralgia (phase 1); D010146 Pain (phase 3); D017116 Low Back Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,356724,CHEMBL213907,THIOCOLCHICOSIDE,Small molecule,D017116 Low Back Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,358940,CHEMBL214796,NGD-8243,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,378616,CHEMBL225411,GW842166X,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,381691,CHEMBL1451,TRIAMCINOLONE,Small molecule,D009437 Neuralgia (phase 0.5); D010146 Pain (phase 3); D015746 Abdominal Pain (phase 2); D020069 Shoulder Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,396930,CHEMBL232943,MK0686,Small molecule,"D010146 Pain (phase 2); D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,general_pain,405364,CHEMBL1479,DANAZOL,Small molecule,D059373 Mastodynia (phase 2),0
+all_categories_no_phase_floor,general_pain,407453,CHEMBL241694,ETHISTERONE,Small molecule,D004412 Dysmenorrhea (phase 3),0
+all_categories_no_phase_floor,general_pain,419463,CHEMBL1499,CORTISONE,Small molecule,D017116 Low Back Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,421038,CHEMBL1511,ESTRADIOL VALERATE,Small molecule,D004412 Dysmenorrhea (phase 3),0
+all_categories_no_phase_floor,general_pain,428747,CHEMBL1531,ETONOGESTREL,Small molecule,D004412 Dysmenorrhea (phase 2),0
+all_categories_no_phase_floor,general_pain,445557,CHEMBL470888,BVT.115959,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,general_pain,449425,CHEMBL511099,BICIFADINE,Small molecule,D017116 Low Back Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,453548,CHEMBL460291,LACIDIPINE,Small molecule,"D060050 Angina, Stable (phase 2)",0
+all_categories_no_phase_floor,general_pain,469362,CHEMBL494480,ADL-5859,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,494274,CHEMBL498416,L-KYNURENINE,Small molecule,D006261 Headache (phase 1),0
+all_categories_no_phase_floor,general_pain,495109,CHEMBL1655,TOREMIFENE,Small molecule,D059373 Mastodynia (phase 3),0
+all_categories_no_phase_floor,general_pain,500007,CHEMBL525610,TERIPARATIDE,Protein,D001416 Back Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,557416,CHEMBL561339,ADL-5747 FREE BASE,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,general_pain,581843,CHEMBL1753,CLINDAMYCIN,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,583322,CHEMBL1760,TERBUTALINE,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,general_pain,598869,CHEMBL589092,FENTIAZAC,Small molecule,D018771 Arthralgia (phase 2); D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,general_pain,603466,CHEMBL604710,Z160,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,general_pain,619398,CHEMBL1088750,ARRY-797,Small molecule,D014098 Toothache (phase 2),0
+all_categories_no_phase_floor,general_pain,619399,CHEMBL1088751,PH-797804,Small molecule,"D010146 Pain (phase 1); D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,general_pain,621308,CHEMBL1089221,BENDAZAC,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,general_pain,624125,CHEMBL1096562,METHYL AMINOLEVULINATE,Small molecule,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,625082,CHEMBL1097205,BORNEOL,Small molecule,"D060050 Angina, Stable (phase 3)",0
+all_categories_no_phase_floor,general_pain,643171,CHEMBL1161632,BICARBONATE,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,647206,CHEMBL1164729,FEBUXOSTAT,Small molecule,"D060050 Angina, Stable (phase 2)",0
+all_categories_no_phase_floor,general_pain,674342,CHEMBL1200391,TROMETHAMINE,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,674489,CHEMBL1200538,BETAMETHASONE ACETATE,Small molecule,D017116 Low Back Pain (phase 0.5),0
+all_categories_no_phase_floor,general_pain,674510,CHEMBL1200559,LACTIC ACID,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,674611,CHEMBL1200660,ISOSORBIDE,Small molecule,"D060050 Angina, Stable (phase 3)",0
+all_categories_no_phase_floor,general_pain,674816,CHEMBL1200865,LOTEPREDNOL ETABONATE,Small molecule,D058447 Eye Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,674829,CHEMBL1200878,TRIAMCINOLONE HEXACETONIDE,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,675068,CHEMBL1201117,METHOCARBAMOL,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,675085,CHEMBL1201134,LUBIPROSTONE,Small molecule,D059350 Chronic Pain (phase 4),0
+all_categories_no_phase_floor,general_pain,675097,CHEMBL1201146,NORETHINDRONE ACETATE,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,675153,CHEMBL1201202,FONDAPARINUX,Oligosaccharide,"D000789 Angina, Unstable (phase 4)",0
+all_categories_no_phase_floor,general_pain,675158,CHEMBL1201207,BETAMETHASONE PHOSPHORIC ACID,Small molecule,D017116 Low Back Pain (phase 0.5),0
+all_categories_no_phase_floor,general_pain,675181,CHEMBL1201230,MAGNESIUM,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,675195,CHEMBL1201244,ROCURONIUM,Small molecule,D001416 Back Pain (phase 3); D010146 Pain (phase 2); D063806 Myalgia (phase 3),0
+all_categories_no_phase_floor,general_pain,675260,CHEMBL1201309,NAFARELIN,Protein,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,675310,CHEMBL1201359,STRONTIUM,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,675723,CHEMBL1201772,PRASUGREL,Small molecule,"D000789 Angina, Unstable (phase 4)",0
+all_categories_no_phase_floor,general_pain,680641,CHEMBL1206690,PARECOXIB,Small molecule,"D010146 Pain (phase 3); D010149 Pain, Postoperative (phase 4); D020069 Shoulder Pain (phase 2); D056844 Renal Colic (phase 3)",0
+all_categories_no_phase_floor,general_pain,689324,CHEMBL1222883,GSK1482160,Small molecule,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,838204,CHEMBL1414320,SUXIBUZONE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,general_pain,875517,CHEMBL1451633,ETOFENAMATE,Small molecule,D018771 Arthralgia (phase 2); D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,general_pain,876580,CHEMBL1452696,FEPRAZONE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,general_pain,1038997,CHEMBL1616046,HYPOCHLOROUS ACID,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,1041053,CHEMBL1618102,BUTYLSCOPOLAMINE,Small molecule,D015746 Abdominal Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,1059674,CHEMBL1644698,SODIUM NITRATE,Small molecule,"D060050 Angina, Stable (phase 2)",0
+all_categories_no_phase_floor,general_pain,1121894,CHEMBL1743023,FULRANUMAB,Antibody,D010146 Pain (phase 2); D017116 Low Back Pain (phase 2); D059350 Chronic Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,1158403,CHEMBL1795072,ZICONOTIDE ACETATE,Protein,D010146 Pain (phase 4),0
+all_categories_no_phase_floor,general_pain,1161221,CHEMBL1800159,RELUGOLIX,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,1173330,CHEMBL1823241,DINALBUPHINE SEBACATE,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,1232772,CHEMBL1892201,MOFEBUTAZONE,Small molecule,D018771 Arthralgia (phase 2); D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,general_pain,1243552,CHEMBL1902981,EPERISONE,Small molecule,D001416 Back Pain (phase 3); D017116 Low Back Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,1248689,CHEMBL1908318,NEPADUTANT,Protein,D015746 Abdominal Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,1362572,CHEMBL2074765,KRN5500,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,general_pain,1376099,CHEMBL2103829,FAXELADOL,Small molecule,D009437 Neuralgia (phase 1); D059350 Chronic Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,1376108,CHEMBL2103838,DILMAPIMOD,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,general_pain,1377431,CHEMBL2105161,NICOBOXIL,Small molecule,D017116 Low Back Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,1378112,CHEMBL2105842,CORTIVAZOL,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,1378658,CHEMBL2106388,CALCIUM HYDROXIDE,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,1379236,CHEMBL2106966,PIKETOPROFEN,Small molecule,D018771 Arthralgia (phase 2); D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,general_pain,1379999,CHEMBL2107729,ATACIGUAT,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,1380041,CHEMBL2107771,RALFINAMIDE,Small molecule,D009437 Neuralgia (phase 2); D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,1380399,CHEMBL2108133,POLIGLUSAM,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,1380400,CHEMBL2108134,POLOXAMER,Small molecule,D009437 Neuralgia (phase 3),0
+all_categories_no_phase_floor,general_pain,1380502,CHEMBL2108236,CAPSICUM,Unknown,D017116 Low Back Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,1380656,CHEMBL2108390,FIBRIN,Unknown,D010146 Pain (phase 0.5),0
+all_categories_no_phase_floor,general_pain,1380821,CHEMBL2108555,PETROLATUM,Unknown,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,1380836,CHEMBL2108570,ABOBOTULINUMTOXINA,Unknown,D017116 Low Back Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,1381005,CHEMBL2108739,PLACULUMAB,Antibody,D012585 Sciatica (phase 1),0
+all_categories_no_phase_floor,general_pain,1381017,CHEMBL2108751,PECTIN,Unknown,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,1381024,CHEMBL2108758,PEPPERMINT OIL,Unknown,D015746 Abdominal Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,1381160,CHEMBL2108894,ALGINIC ACID,Unknown,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,1381230,CHEMBL2108964,"INSULIN, ISOPHANE",Protein,D017116 Low Back Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,1381967,CHEMBL2109527,MEDI-578,Unknown,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,1381968,CHEMBL2109528,FASINUMAB,Antibody,D001416 Back Pain (phase 2); D012585 Sciatica (phase 2); D015746 Abdominal Pain (phase 2); D017116 Low Back Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,1383001,CHEMBL2110561,SAMARIUM LEXIDRONAM PENTASODIUM,Small molecule,D010146 Pain (phase 4),0
+all_categories_no_phase_floor,general_pain,1449451,CHEMBL2219640,STRONTIUM CHLORIDE,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,1519188,CHEMBL2325014,PF-05089771,Small molecule,D010146 Pain (phase 1); D014098 Toothache (phase 2),0
+all_categories_no_phase_floor,general_pain,1626752,CHEMBL3137321,BENZHYDROCODONE,Small molecule,D059787 Acute Pain (phase 4),0
+all_categories_no_phase_floor,general_pain,1626782,CHEMBL3137348,SENREBOTASE,Enzyme,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,general_pain,1671611,CHEMBL3182320,TROXERUTIN,Small molecule,"D060050 Angina, Stable (phase 3)",0
+all_categories_no_phase_floor,general_pain,1733801,CHEMBL3235279,CAPADENOSON,Small molecule,"D060050 Angina, Stable (phase 2)",0
+all_categories_no_phase_floor,general_pain,1926888,CHEMBL3545039,AZD1386,Small molecule,D009437 Neuralgia (phase 2); D010146 Pain (phase 2); D059350 Chronic Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,1927057,CHEMBL3545208,AZD3161,Unknown,D009437 Neuralgia (phase 1); D010146 Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,1927070,CHEMBL3545221,AZD2423,Unknown,D009437 Neuralgia (phase 2); D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,1927127,CHEMBL3545278,ATX08-001,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,general_pain,1946198,CHEMBL3577885,PF-05105679,Small molecule,D010146 Pain (phase 0.5),0
+all_categories_no_phase_floor,general_pain,1951058,CHEMBL3589904,PF-04531083,Small molecule,D014098 Toothache (phase 2); D059350 Chronic Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,1951836,CHEMBL3590674,ABT-639,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,general_pain,2039189,CHEMBL3707218,FUNAPIDE,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,general_pain,2039290,CHEMBL3707319,GRC-15300,Unknown,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,general_pain,2039327,CHEMBL3707356,TIVANISIRAN,Oligonucleotide,D058447 Eye Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,2039371,CHEMBL3707400,INDANTADOL,Unknown,D009437 Neuralgia (phase 2); D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,2197551,CHEMBL3989680,AXOMADOL,Small molecule,D010146 Pain (phase 1); D017116 Low Back Pain (phase 2); D059350 Chronic Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,2197786,CHEMBL3989915,DIFELIKEFALIN,Protein,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,2279012,CHEMBL4175981,OLORINAB,Small molecule,D015746 Abdominal Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,2289258,CHEMBL4211107,ATB-346,Small molecule,D059350 Chronic Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,2335153,CHEMBL4297182,PEGCANTRATINIB,Small molecule,D009437 Neuralgia (phase 1),0
+all_categories_no_phase_floor,general_pain,2335163,CHEMBL4297192,SIMETHICONE,Unknown,D015746 Abdominal Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,2335199,CHEMBL4297228,BRIVOLIGIDE,Unknown,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,2335278,CHEMBL4297307,NEOSAXITOXIN,Small molecule,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,2335288,CHEMBL4297317,PF-06305591,Small molecule,D010146 Pain (phase 0.5),0
+all_categories_no_phase_floor,general_pain,2335385,CHEMBL4297414,PD-217014,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,2335603,CHEMBL4297632,OXYCODEGOL,Small molecule,D017116 Low Back Pain (phase 1); D017116 Low Back Pain (phase 3); D059350 Chronic Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,2335742,CHEMBL4297771,INTERLEUKIN-10,Unknown,D009437 Neuralgia (phase 1),0
+all_categories_no_phase_floor,general_pain,2335881,CHEMBL4297910,ARTEMIN,Unknown,D012585 Sciatica (phase 1),0
+all_categories_no_phase_floor,general_pain,2336046,CHEMBL4298075,PROPOLIS WAX,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,2336112,CHEMBL4298141,ASALHYDROMORPHONE,Small molecule,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,2338195,CHEMBL4300244,SAMARIUM,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,2364732,CHEMBL4457723,BMS-741672,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,general_pain,2464725,CHEMBL4594294,VOCACAPSAICIN,Small molecule,"D010146 Pain (phase 2); D010149 Pain, Postoperative (phase 1)",0
+all_categories_no_phase_floor,general_pain,2464970,CHEMBL4594539,TRENIBOTULINUMTOXINE,Protein,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,2465004,CHEMBL4594573,FEPIXNEBART,Antibody,D009437 Neuralgia (phase 2); D017116 Low Back Pain (phase 2); D059350 Chronic Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,2486575,CHEMBL4650315,DESMETRAMADOL,Small molecule,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,2733861,CHEMBL5089410,PILAVAPADIN,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,general_pain,2739620,CHEMBL5095189,NYX-2925,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,general_pain,2739638,CHEMBL5095207,AB-001,Small molecule,D017116 Low Back Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,2739655,CHEMBL5095224,ELIAPIXANT,Small molecule,D009437 Neuralgia (phase 1); D010146 Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,2739673,CHEMBL5095242,NINERAFAXSTAT,Small molecule,"D060050 Angina, Stable (phase 2)",0
+all_categories_no_phase_floor,general_pain,2739848,CHEMBL5095417,EBARESDAX,Small molecule,D010146 Pain (phase 2); D059350 Chronic Pain (phase 1); D059787 Acute Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,2739890,CHEMBL5095459,ENCOBERMINOGENE REZMADENOVEC,Gene,"D000789 Angina, Unstable (phase 1)",0
+all_categories_no_phase_floor,general_pain,2832046,CHEMBL5314395,GW493838,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,general_pain,2832051,CHEMBL5314400,DWP05195,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,general_pain,2832052,CHEMBL5314401,CNV2197944,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,general_pain,2832138,CHEMBL5314487,SUZETRIGINE,Small molecule,D009437 Neuralgia (phase 1); D010146 Pain (phase 3); D059787 Acute Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,2832217,CHEMBL5314566,VICASINABIN,Small molecule,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,general_pain,2832249,CHEMBL5314598,IBUPROFEN TRELAMINE,Small molecule,D001416 Back Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,2832609,CHEMBL5314958,CRISUGABALIN,Small molecule,"D009437 Neuralgia (phase 3); D010146 Pain (phase 2); D051474 Neuralgia, Postherpetic (phase 3)",0
+all_categories_no_phase_floor,general_pain,3283076,CHEMBL6067485,GENTAMICIN,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,general_pain,3283723,CHEMBL6068232,DENRAKIBART,Antibody,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,general_pain,3284041,CHEMBL6068550,GRT-6010,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,general_pain,3284055,CHEMBL6068564,"1-(4-(DIMETHYLAMINO)PIPERIDIN-1-YL)-3-HYDROXY-3-(1-METHYL-1H-IMIDAZOL-2-YL)PROPAN-1-ONE, (S)-",Small molecule,D009437 Neuralgia (phase 1),0
+all_categories_no_phase_floor,general_pain,3284673,CHEMBL6069182,CLOFEZONE ANHYDROUS,Small molecule,D018771 Arthralgia (phase 2); D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,556,CHEMBL6622,ISOSORBIDE DINITRATE,Small molecule,"D000787 Angina Pectoris (phase 4); D020388 Muscular Dystrophy, Duchenne (phase 1)",0
+all_categories_no_phase_floor,all_boundaries,1085,CHEMBL17,DICHLORPHENAMIDE,Small molecule,"D020513 Paralysis, Hyperkalemic Periodic (phase 3); D020514 Hypokalemic Periodic Paralysis (phase 3); D020967 Myotonic Disorders (phase 3)",0
+all_categories_no_phase_floor,all_boundaries,1223,CHEMBL421,SULFASALAZINE,Small molecule,D010523 Peripheral Nervous System Diseases (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1470,CHEMBL427,MECHLORETHAMINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2045,CHEMBL435,HYDROCHLOROTHIAZIDE,Small molecule,D000787 Angina Pectoris (phase 4),0
+all_categories_no_phase_floor,all_boundaries,5200,CHEMBL9194,ATRASENTAN,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,5797,CHEMBL477,ADENOSINE,Small molecule,"D010146 Pain (phase 2); D060050 Angina, Stable (phase 3)",0
+all_categories_no_phase_floor,all_boundaries,5975,CHEMBL480,LANSOPRAZOLE,Small molecule,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,6402,CHEMBL489,AFIMOXIFENE,Small molecule,D059373 Mastodynia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,6706,CHEMBL416146,ETORICOXIB,Small molecule,D004412 Dysmenorrhea (phase 3); D010146 Pain (phase 3); D014098 Toothache (phase 3); D017116 Low Back Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,6772,CHEMBL9967,PIRENZEPINE,Small molecule,D003929 Diabetic Neuropathies (phase 2); D010523 Peripheral Nervous System Diseases (phase 2),0
+all_categories_no_phase_floor,all_boundaries,9913,CHEMBL12610,BENZYDAMINE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,all_boundaries,10358,CHEMBL505,CHLORPHENIRAMINE,Small molecule,D001416 Back Pain (phase 4); D006261 Headache (phase 4); D010146 Pain (phase 4),0
+all_categories_no_phase_floor,all_boundaries,10423,CHEMBL12318,CLODRONIC ACID,Small molecule,D010146 Pain (phase 3); D020516 Brachial Plexus Neuropathies (phase 3),0
+all_categories_no_phase_floor,all_boundaries,10531,CHEMBL509,MECLOFENAMIC ACID,Small molecule,D004412 Dysmenorrhea (phase 4); D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,all_boundaries,11968,CHEMBL527,PIROXICAM,Small molecule,D010146 Pain (phase 1); D018771 Arthralgia (phase 4); D056844 Renal Colic (phase 3); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,all_boundaries,12417,CHEMBL101,PHENYLBUTAZONE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,all_boundaries,12850,CHEMBL13817,IBUTAMOREN,Small molecule,D005356 Fibromyalgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,12890,CHEMBL13828,OXATOMIDE,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,12911,CHEMBL276711,SEMAXANIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,12957,CHEMBL534,KETOTIFEN,Small molecule,D005356 Fibromyalgia (phase 3); D010523 Peripheral Nervous System Diseases (phase 3); D059350 Chronic Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,14125,CHEMBL548,DINOPROSTONE,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,16543,CHEMBL15768,CAMPHOR,Small molecule,D001416 Back Pain (phase 4); D010146 Pain (phase 4),0
+all_categories_no_phase_floor,all_boundaries,17224,CHEMBL584,NELFINAVIR,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,19572,CHEMBL592,LEVORPHANOL,Small molecule,D010146 Pain (phase 0.5),0
+all_categories_no_phase_floor,all_boundaries,20668,CHEMBL17976,RESINIFERATOXIN,Small molecule,"D000070607 Morton Neuroma (phase 1); D000072716 Cancer Pain (phase 1); D010148 Pain, Intractable (phase 1)",0
+all_categories_no_phase_floor,all_boundaries,21393,CHEMBL18901,EFAPROXIRAL,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,22873,CHEMBL19299,LOXOPROFEN,Small molecule,D009135 Muscular Diseases (phase 2); D010146 Pain (phase 3); D017116 Low Back Pain (phase 3); D018771 Arthralgia (phase 4); D019547 Neck Pain (phase 2); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,all_boundaries,26431,CHEMBL622,ETODOLAC,Small molecule,D009135 Muscular Diseases (phase 3); D010146 Pain (phase 3); D059787 Acute Pain (phase 4),0
+all_categories_no_phase_floor,all_boundaries,27152,CHEMBL632,BETAMETHASONE,Small molecule,D002349 Carpal Tunnel Syndrome (phase 3); D012585 Sciatica (phase 2); D019547 Neck Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,27417,CHEMBL645,BISOPROLOL,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,27588,CHEMBL652,FLECAINIDE,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,29989,CHEMBL686,MEFENAMIC ACID,Small molecule,D004412 Dysmenorrhea (phase 4); D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,30211,CHEMBL23393,SODIUM LAURYL SULFATE,Small molecule,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,42756,CHEMBL31574,FISETIN,Small molecule,D002349 Carpal Tunnel Syndrome (phase 2),0
+all_categories_no_phase_floor,all_boundaries,43448,CHEMBL770,TOLAZOLINE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,all_boundaries,46726,CHEMBL782,TOLBUTAMIDE,Small molecule,D059350 Chronic Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,50942,CHEMBL34124,OLODANRIGAN,Small molecule,"D003929 Diabetic Neuropathies (phase 2); D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,54547,CHEMBL289469,GRANISETRON,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,58424,CHEMBL43185,PIPERINE,Small molecule,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,59842,CHEMBL39677,ACRIDINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,60401,CHEMBL834,PAMIDRONIC ACID,Small molecule,D017116 Low Back Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,62259,CHEMBL841,LOPERAMIDE,Small molecule,D010146 Pain (phase 0.5),0
+all_categories_no_phase_floor,all_boundaries,63100,CHEMBL43452,POMALIDOMIDE,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,67010,CHEMBL865,VALDECOXIB,Small molecule,D004412 Dysmenorrhea (phase 4); D010146 Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,72035,CHEMBL45816,MIBEFRADIL,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,83217,CHEMBL300138,ENZASTAURIN,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,84482,CHEMBL925,TYROSINE,Small molecule,"D017696 Myopathies, Nemaline (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,84516,CHEMBL301523,PHENYLALANINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,84655,CHEMBL298734,LONAFARNIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,85553,CHEMBL56367,NIMESULIDE,Small molecule,D010146 Pain (phase 1); D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,all_boundaries,88232,CHEMBL939,GEFITINIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,88800,CHEMBL56564,TROPISETRON,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,91392,CHEMBL57997,T-62,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,96557,CHEMBL59990,MAFOSFAMIDE,Small molecule,D008577 Meningeal Neoplasms (phase 1); D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,97010,CHEMBL63323,NIFLUMIC ACID,Small molecule,D018771 Arthralgia (phase 2); D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,100157,CHEMBL980,GUAIFENESIN,Small molecule,D006261 Headache (phase 4),0
+all_categories_no_phase_floor,all_boundaries,107098,CHEMBL69308,PELUBIPROFEN,Small molecule,D001416 Back Pain (phase 3); D004412 Dysmenorrhea (phase 3); D017116 Low Back Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,110103,CHEMBL70046,SORIVUDINE,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,110435,CHEMBL997,IBANDRONIC ACID,Small molecule,D010146 Pain (phase 3); D015746 Abdominal Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,112102,CHEMBL302795,TENOXICAM,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,112480,CHEMBL1006,AMIFOSTINE,Small molecule,D010523 Peripheral Nervous System Diseases (phase 3); D014277 Trigeminal Neuralgia (phase 3); D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,117758,CHEMBL75435,DEXKETOPROFEN,Small molecule,D010146 Pain (phase 3); D017116 Low Back Pain (phase 3); D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,all_boundaries,118617,CHEMBL1020,TOLMETIN,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,all_boundaries,119640,CHEMBL1024,IFOSFAMIDE,Small molecule,D016543 Central Nervous System Neoplasms (phase 3),0
+all_categories_no_phase_floor,all_boundaries,120195,CHEMBL75094,PRINOMASTAT,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,122567,CHEMBL75124,NONIVAMIDE,Small molecule,D017116 Low Back Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,124181,CHEMBL77305,RUBITECAN,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,140107,CHEMBL1077,BROMFENAC,Small molecule,"D010149 Pain, Postoperative (phase 4); D058447 Eye Pain (phase 4)",0
+all_categories_no_phase_floor,all_boundaries,141088,CHEMBL313971,ZUCAPSAICIN,Small molecule,"D010146 Pain (phase 3); D018771 Arthralgia (phase 3); D051474 Neuralgia, Postherpetic (phase 2); D063806 Myalgia (phase 3)",0
+all_categories_no_phase_floor,all_boundaries,143870,CHEMBL90983,TERAMEPROCOL,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,144959,CHEMBL91829,RUBOXISTAURIN,Small molecule,D003929 Diabetic Neuropathies (phase 3),0
+all_categories_no_phase_floor,all_boundaries,150585,CHEMBL93645,ACECLOFENAC,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,all_boundaries,151923,CHEMBL413965,FELBINAC,Small molecule,D010146 Pain (phase 3); D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,all_boundaries,153408,CHEMBL94394,BUFEXAMAC,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,all_boundaries,171866,CHEMBL102358,IDROCILAMIDE,Small molecule,D018771 Arthralgia (phase 2); D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,182377,CHEMBL113051,GIMATECAN,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,194493,CHEMBL118841,PYRAZOLOACRIDINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,197166,CHEMBL118218,IROFULVEN,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,199817,CHEMBL1189,DIETHYLAMINE,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,209007,CHEMBL1196,PROPARACAINE,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,219259,CHEMBL334830,RANIRESTAT,Small molecule,D003929 Diabetic Neuropathies (phase 3); D011115 Polyneuropathies (phase 2),0
+all_categories_no_phase_floor,all_boundaries,227917,CHEMBL1228,OXYPHENBUTAZONE ANHYDROUS,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,all_boundaries,231062,CHEMBL1242,PHENAZOPYRIDINE,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,243124,CHEMBL414804,OXALIPLATIN,Small molecule,D010523 Peripheral Nervous System Diseases (phase 2); D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,254483,CHEMBL152452,SIALIC ACID,Small molecule,D009135 Muscular Diseases (phase 1),0
+all_categories_no_phase_floor,all_boundaries,259664,CHEMBL348475,TARIQUIDAR,Small molecule,D009437 Neuralgia (phase 1),0
+all_categories_no_phase_floor,all_boundaries,277853,CHEMBL167691,LAROMUSTINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,280533,CHEMBL166937,SARCNU,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,302799,CHEMBL180101,ESREBOXETINE,Small molecule,D003929 Diabetic Neuropathies (phase 2); D005356 Fibromyalgia (phase 3); D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,308917,CHEMBL1366,AURANOFIN,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,310199,CHEMBL364804,GW-406381,Small molecule,D010146 Pain (phase 1); D014098 Toothache (phase 3),0
+all_categories_no_phase_floor,all_boundaries,317541,CHEMBL435298,ESFLURBIPROFEN,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,all_boundaries,317909,CHEMBL175,DEXIBUPROFEN,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,320848,CHEMBL408350,EDOTREOTIDE,Small molecule,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,all_boundaries,321172,CHEMBL262135,GALLIUM OXODOTREOTIDE,Protein,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,all_boundaries,321640,CHEMBL363387,LIDORESTAT,Small molecule,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,all_boundaries,321964,CHEMBL1382,TOLTERODINE,Small molecule,D009437 Neuralgia (phase 1); D010146 Pain (phase 3); D017116 Low Back Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,356724,CHEMBL213907,THIOCOLCHICOSIDE,Small molecule,D017116 Low Back Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,358940,CHEMBL214796,NGD-8243,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,364690,CHEMBL219568,GUANINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,368538,CHEMBL185,FLUOROURACIL,Small molecule,D010523 Peripheral Nervous System Diseases (phase 2),0
+all_categories_no_phase_floor,all_boundaries,374008,CHEMBL225072,PEMETREXED,Small molecule,D055756 Meningeal Carcinomatosis (phase 2),0
+all_categories_no_phase_floor,all_boundaries,378616,CHEMBL225411,GW842166X,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,381691,CHEMBL1451,TRIAMCINOLONE,Small molecule,"D009437 Neuralgia (phase 0.5); D010146 Pain (phase 3); D011843 Radiculopathy (phase 3); D015746 Abdominal Pain (phase 2); D018917 Optic Neuropathy, Ischemic (phase 1); D020069 Shoulder Pain (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,396930,CHEMBL232943,MK0686,Small molecule,"D010146 Pain (phase 2); D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,398942,CHEMBL236687,PERILLYL ALCOHOL,Small molecule,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,all_boundaries,405364,CHEMBL1479,DANAZOL,Small molecule,D059373 Mastodynia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,407453,CHEMBL241694,ETHISTERONE,Small molecule,D004412 Dysmenorrhea (phase 3),0
+all_categories_no_phase_floor,all_boundaries,419463,CHEMBL1499,CORTISONE,Small molecule,D017116 Low Back Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,421038,CHEMBL1511,ESTRADIOL VALERATE,Small molecule,D004412 Dysmenorrhea (phase 3),0
+all_categories_no_phase_floor,all_boundaries,421089,CHEMBL1515,METHIMAZOLE,Small molecule,D003882 Dermatomyositis (phase 2); D017285 Polymyositis (phase 2),0
+all_categories_no_phase_floor,all_boundaries,428747,CHEMBL1531,ETONOGESTREL,Small molecule,D004412 Dysmenorrhea (phase 2),0
+all_categories_no_phase_floor,all_boundaries,440654,CHEMBL407874,6-O-BENZYLGUANINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,445557,CHEMBL470888,BVT.115959,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,449425,CHEMBL511099,BICIFADINE,Small molecule,D003929 Diabetic Neuropathies (phase 2); D017116 Low Back Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,453548,CHEMBL460291,LACIDIPINE,Small molecule,"D060050 Angina, Stable (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,454137,CHEMBL452715,ALANOSINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,460092,CHEMBL473417,VISMODEGIB,Small molecule,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,all_boundaries,464655,CHEMBL457077,SALVIANOLIC ACID A,Small molecule,D003929 Diabetic Neuropathies (phase 1),0
+all_categories_no_phase_floor,all_boundaries,469362,CHEMBL494480,ADL-5859,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,469866,CHEMBL521686,OLAPARIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,493099,CHEMBL450449,TRABECTEDIN,Small molecule,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,all_boundaries,494274,CHEMBL498416,L-KYNURENINE,Small molecule,D006261 Headache (phase 1),0
+all_categories_no_phase_floor,all_boundaries,494280,CHEMBL506871,VELIPARIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,495109,CHEMBL1655,TOREMIFENE,Small molecule,D059373 Mastodynia (phase 3),0
+all_categories_no_phase_floor,all_boundaries,500007,CHEMBL525610,TERIPARATIDE,Protein,D001416 Back Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,512450,CHEMBL456341,LENABASUM,Small molecule,D003882 Dermatomyositis (phase 3),0
+all_categories_no_phase_floor,all_boundaries,522991,CHEMBL447686,GOSSYPOL ACETIC ACID,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,557416,CHEMBL561339,ADL-5747 FREE BASE,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,568337,CHEMBL574737,UCN-01,Small molecule,"D018304 Esthesioneuroblastoma, Olfactory (phase 1)",0
+all_categories_no_phase_floor,all_boundaries,571201,CHEMBL583912,(-)-EPICATECHIN,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,581843,CHEMBL1753,CLINDAMYCIN,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,583322,CHEMBL1760,TERBUTALINE,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,586744,CHEMBL587723,AEE-788,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,598869,CHEMBL589092,FENTIAZAC,Small molecule,D018771 Arthralgia (phase 2); D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,603466,CHEMBL604710,Z160,Small molecule,"D011843 Radiculopathy (phase 2); D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,619398,CHEMBL1088750,ARRY-797,Small molecule,D014098 Toothache (phase 2),0
+all_categories_no_phase_floor,all_boundaries,619399,CHEMBL1088751,PH-797804,Small molecule,"D010146 Pain (phase 1); D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,621308,CHEMBL1089221,BENDAZAC,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,all_boundaries,624125,CHEMBL1096562,METHYL AMINOLEVULINATE,Small molecule,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,625082,CHEMBL1097205,BORNEOL,Small molecule,"D060050 Angina, Stable (phase 3)",0
+all_categories_no_phase_floor,all_boundaries,641201,CHEMBL1159662,RIBOSE (PYRANOSE),Small molecule,D005356 Fibromyalgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,643171,CHEMBL1161632,BICARBONATE,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,647206,CHEMBL1164729,FEBUXOSTAT,Small molecule,"D060050 Angina, Stable (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,671041,CHEMBL1197091,HALOFUGINONE,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,674286,CHEMBL1200335,TESTOSTERONE ENANTHATE,Small molecule,"D020391 Muscular Dystrophy, Facioscapulohumeral (phase 1)",0
+all_categories_no_phase_floor,all_boundaries,674342,CHEMBL1200391,TROMETHAMINE,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,674489,CHEMBL1200538,BETAMETHASONE ACETATE,Small molecule,D017116 Low Back Pain (phase 0.5),0
+all_categories_no_phase_floor,all_boundaries,674510,CHEMBL1200559,LACTIC ACID,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,674596,CHEMBL1200645,ETOPOSIDE PHOSPHATE,Small molecule,D016543 Central Nervous System Neoplasms (phase 3),0
+all_categories_no_phase_floor,all_boundaries,674611,CHEMBL1200660,ISOSORBIDE,Small molecule,"D060050 Angina, Stable (phase 3)",0
+all_categories_no_phase_floor,all_boundaries,674781,CHEMBL1200830,FERROUS SULFATE,Small molecule,D005356 Fibromyalgia (phase 3),0
+all_categories_no_phase_floor,all_boundaries,674816,CHEMBL1200865,LOTEPREDNOL ETABONATE,Small molecule,D058447 Eye Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,674829,CHEMBL1200878,TRIAMCINOLONE HEXACETONIDE,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,674934,CHEMBL1200983,GALLIUM NITRATE,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,675052,CHEMBL1201101,TESTOSTERONE CYPIONATE,Small molecule,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,all_boundaries,675068,CHEMBL1201117,METHOCARBAMOL,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,675085,CHEMBL1201134,LUBIPROSTONE,Small molecule,D059350 Chronic Pain (phase 4),0
+all_categories_no_phase_floor,all_boundaries,675097,CHEMBL1201146,NORETHINDRONE ACETATE,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,675149,CHEMBL1201198,PEMIROLAST,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,675153,CHEMBL1201202,FONDAPARINUX,Oligosaccharide,"D000789 Angina, Unstable (phase 4)",0
+all_categories_no_phase_floor,all_boundaries,675158,CHEMBL1201207,BETAMETHASONE PHOSPHORIC ACID,Small molecule,D017116 Low Back Pain (phase 0.5),0
+all_categories_no_phase_floor,all_boundaries,675181,CHEMBL1201230,MAGNESIUM,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,675195,CHEMBL1201244,ROCURONIUM,Small molecule,D001416 Back Pain (phase 3); D010146 Pain (phase 2); D063806 Myalgia (phase 3),0
+all_categories_no_phase_floor,all_boundaries,675260,CHEMBL1201309,NAFARELIN,Protein,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,675310,CHEMBL1201359,STRONTIUM,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,675588,CHEMBL1201608,MUROMONAB-CD3,Unknown,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,675723,CHEMBL1201772,PRASUGREL,Small molecule,"D000789 Angina, Unstable (phase 4)",0
+all_categories_no_phase_floor,all_boundaries,675842,CHEMBL1201891,DEFLAZACORT,Small molecule,"D009136 Muscular Dystrophies (phase 4); D020388 Muscular Dystrophy, Duchenne (phase 4); D049288 Muscular Dystrophies, Limb-Girdle (phase 3)",0
+all_categories_no_phase_floor,all_boundaries,680641,CHEMBL1206690,PARECOXIB,Small molecule,"D010146 Pain (phase 3); D010149 Pain, Postoperative (phase 4); D020069 Shoulder Pain (phase 2); D056844 Renal Colic (phase 3)",0
+all_categories_no_phase_floor,all_boundaries,685336,CHEMBL1213492,GIVINOSTAT,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 3); D020388 Muscular Dystrophy, Duchenne (phase 4)",0
+all_categories_no_phase_floor,all_boundaries,689324,CHEMBL1222883,GSK1482160,Small molecule,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,704852,CHEMBL1255871,ASTAXANTHIN,Small molecule,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,all_boundaries,716009,CHEMBL1289601,LENVATINIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 1); D055756 Meningeal Carcinomatosis (phase 2),0
+all_categories_no_phase_floor,all_boundaries,838204,CHEMBL1414320,SUXIBUZONE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,all_boundaries,875517,CHEMBL1451633,ETOFENAMATE,Small molecule,D018771 Arthralgia (phase 2); D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,876580,CHEMBL1452696,FEPRAZONE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+all_categories_no_phase_floor,all_boundaries,1025553,CHEMBL1601669,ALFACALCIDOL,Small molecule,D009135 Muscular Diseases (phase 3),0
+all_categories_no_phase_floor,all_boundaries,1037657,CHEMBL1614650,EXATECAN,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1038997,CHEMBL1616046,HYPOCHLOROUS ACID,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1041053,CHEMBL1618102,BUTYLSCOPOLAMINE,Small molecule,D015746 Abdominal Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,1054550,CHEMBL1631723,PROGERININ,Small molecule,D003929 Diabetic Neuropathies (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1059674,CHEMBL1644698,SODIUM NITRATE,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 2); D060050 Angina, Stable (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,1121894,CHEMBL1743023,FULRANUMAB,Antibody,D003929 Diabetic Neuropathies (phase 2); D010146 Pain (phase 2); D017116 Low Back Pain (phase 2); D059350 Chronic Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1121904,CHEMBL1743033,ITOLIZUMAB,Antibody,D003882 Dermatomyositis (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1121940,CHEMBL1743069,SIFALIMUMAB,Antibody,D003882 Dermatomyositis (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1144723,CHEMBL1773683,EZUTROMID,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,1158403,CHEMBL1795072,ZICONOTIDE ACETATE,Protein,D010146 Pain (phase 4),0
+all_categories_no_phase_floor,all_boundaries,1161221,CHEMBL1800159,RELUGOLIX,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,1173330,CHEMBL1823241,DINALBUPHINE SEBACATE,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1232772,CHEMBL1892201,MOFEBUTAZONE,Small molecule,D018771 Arthralgia (phase 2); D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1243552,CHEMBL1902981,EPERISONE,Small molecule,D001416 Back Pain (phase 3); D017116 Low Back Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,1248689,CHEMBL1908318,NEPADUTANT,Protein,D015746 Abdominal Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1277553,CHEMBL1946170,REGORAFENIB,Small molecule,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1362572,CHEMBL2074765,KRN5500,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1376099,CHEMBL2103829,FAXELADOL,Small molecule,D005356 Fibromyalgia (phase 2); D009437 Neuralgia (phase 1); D059350 Chronic Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1376108,CHEMBL2103838,DILMAPIMOD,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1376882,CHEMBL2104612,MITOLACTOL,Small molecule,D016543 Central Nervous System Neoplasms (phase 3),0
+all_categories_no_phase_floor,all_boundaries,1377240,CHEMBL2104970,INCYCLINIDE,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1377431,CHEMBL2105161,NICOBOXIL,Small molecule,D017116 Low Back Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,1377690,CHEMBL2105420,TAUROLIDINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1377904,CHEMBL2105634,COLENEURAMIDE,Small molecule,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1377987,CHEMBL2105717,CABOZANTINIB,Small molecule,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1378112,CHEMBL2105842,CORTIVAZOL,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1378389,CHEMBL2106119,CALCIUM GLUCONATE,Small molecule,D010523 Peripheral Nervous System Diseases (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1378658,CHEMBL2106388,CALCIUM HYDROXIDE,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,1379236,CHEMBL2106966,PIKETOPROFEN,Small molecule,D018771 Arthralgia (phase 2); D063806 Myalgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1379413,CHEMBL2107143,GLUFOSFAMIDE,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1379598,CHEMBL2107328,DASOLAMPANEL ETIBUTIL,Small molecule,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1379636,CHEMBL2107366,REZATOMIDINE,Small molecule,D003929 Diabetic Neuropathies (phase 2); D005356 Fibromyalgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1379999,CHEMBL2107729,ATACIGUAT,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1380041,CHEMBL2107771,RALFINAMIDE,Small molecule,D009437 Neuralgia (phase 2); D010146 Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,1380072,CHEMBL2107802,RIMEPORIDE,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 1)",0
+all_categories_no_phase_floor,all_boundaries,1380317,CHEMBL2108051,STAMULUMAB,Antibody,"D020388 Muscular Dystrophy, Duchenne (phase 1); D020391 Muscular Dystrophy, Facioscapulohumeral (phase 1); D049288 Muscular Dystrophies, Limb-Girdle (phase 1)",0
+all_categories_no_phase_floor,all_boundaries,1380399,CHEMBL2108133,POLIGLUSAM,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1380400,CHEMBL2108134,POLOXAMER,Small molecule,D009437 Neuralgia (phase 3),0
+all_categories_no_phase_floor,all_boundaries,1380502,CHEMBL2108236,CAPSICUM,Unknown,D017116 Low Back Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1380544,CHEMBL2108278,ETEPLIRSEN,Oligonucleotide,"D009136 Muscular Dystrophies (phase 4); D020388 Muscular Dystrophy, Duchenne (phase 4)",0
+all_categories_no_phase_floor,all_boundaries,1380622,CHEMBL2108356,PEGDINETANIB,Unknown,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1380656,CHEMBL2108390,FIBRIN,Unknown,D010146 Pain (phase 0.5),0
+all_categories_no_phase_floor,all_boundaries,1380772,CHEMBL2108506,INTERFERON ALFA,Protein,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1380797,CHEMBL2108531,POLIFEPROSAN 20,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1380821,CHEMBL2108555,PETROLATUM,Unknown,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,1380836,CHEMBL2108570,ABOBOTULINUMTOXINA,Unknown,D017116 Low Back Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1380851,CHEMBL2108585,CONTUSUGENE LADENOVEC,Gene,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1380919,CHEMBL2108653,THROMBOMODULIN ALFA,Unknown,D010523 Peripheral Nervous System Diseases (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1381001,CHEMBL2108735,DRISAPERSEN,Oligonucleotide,"D009136 Muscular Dystrophies (phase 3); D020388 Muscular Dystrophy, Duchenne (phase 3)",0
+all_categories_no_phase_floor,all_boundaries,1381005,CHEMBL2108739,PLACULUMAB,Antibody,D012585 Sciatica (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1381017,CHEMBL2108751,PECTIN,Unknown,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1381024,CHEMBL2108758,PEPPERMINT OIL,Unknown,D015746 Abdominal Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1381151,CHEMBL2108885,ACTOVEGIN,Unknown,D003929 Diabetic Neuropathies (phase 3),0
+all_categories_no_phase_floor,all_boundaries,1381160,CHEMBL2108894,ALGINIC ACID,Unknown,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,1381230,CHEMBL2108964,"INSULIN, ISOPHANE",Protein,D017116 Low Back Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1381258,CHEMBL2108992,ATEXAKIN ALFA,Protein,D010523 Peripheral Nervous System Diseases (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1381747,CHEMBL2109307,LMB-7,Unknown,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1381817,CHEMBL2109377,PAMREVLUMAB,Antibody,"D020388 Muscular Dystrophy, Duchenne (phase 3)",0
+all_categories_no_phase_floor,all_boundaries,1381831,CHEMBL2109391,MDX-447,Unknown,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1381967,CHEMBL2109527,MEDI-578,Unknown,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1381968,CHEMBL2109528,FASINUMAB,Antibody,D001416 Back Pain (phase 2); D012585 Sciatica (phase 2); D015746 Abdominal Pain (phase 2); D017116 Low Back Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1381987,CHEMBL2109547,ME1-14 F(AB')2,Unknown,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1383001,CHEMBL2110561,SAMARIUM LEXIDRONAM PENTASODIUM,Small molecule,D010146 Pain (phase 4),0
+all_categories_no_phase_floor,all_boundaries,1449451,CHEMBL2219640,STRONTIUM CHLORIDE,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1503492,CHEMBL2304041,SAGOPILONE,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1510539,CHEMBL2311128,TETRAHYDROURIDINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1519188,CHEMBL2325014,PF-05089771,Small molecule,D003929 Diabetic Neuropathies (phase 2); D010146 Pain (phase 1); D014098 Toothache (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1519923,CHEMBL2325741,CAPIVASERTIB,Small molecule,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1525993,CHEMBL2336325,VISTUSERTIB,Small molecule,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1530622,CHEMBL2348780,VAMOROLONE,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 4)",0
+all_categories_no_phase_floor,all_boundaries,1540500,CHEMBL2364628,RICOLINOSTAT,Small molecule,D003929 Diabetic Neuropathies (phase 2); D010523 Peripheral Nervous System Diseases (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1543376,CHEMBL2368925,DOLASETRON,Small molecule,D005356 Fibromyalgia (phase 3),0
+all_categories_no_phase_floor,all_boundaries,1567700,CHEMBL2396661,ALPELISIB,Small molecule,D008579 Meningioma (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1626752,CHEMBL3137321,BENZHYDROCODONE,Small molecule,D059787 Acute Pain (phase 4),0
+all_categories_no_phase_floor,all_boundaries,1626782,CHEMBL3137348,SENREBOTASE,Enzyme,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,1627018,CHEMBL3137685,NEDAPLATIN,Small molecule,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1627075,CHEMBL3137744,RIBITOL,Small molecule,"D049288 Muscular Dystrophies, Limb-Girdle (phase 1)",0
+all_categories_no_phase_floor,all_boundaries,1671611,CHEMBL3182320,TROXERUTIN,Small molecule,"D060050 Angina, Stable (phase 3)",0
+all_categories_no_phase_floor,all_boundaries,1675825,CHEMBL3186534,RIVOCERANIB,Small molecule,"D018304 Esthesioneuroblastoma, Olfactory (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,1733801,CHEMBL3235279,CAPADENOSON,Small molecule,"D060050 Angina, Stable (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,1794136,CHEMBL3341997,BIIB-095,Small molecule,D003929 Diabetic Neuropathies (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1926840,CHEMBL3544991,DOMAGROZUMAB,Antibody,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,1926888,CHEMBL3545039,AZD1386,Small molecule,D009437 Neuralgia (phase 2); D010146 Pain (phase 2); D059350 Chronic Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1927057,CHEMBL3545208,AZD3161,Unknown,D009437 Neuralgia (phase 1); D010146 Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1927070,CHEMBL3545221,AZD2423,Unknown,D009437 Neuralgia (phase 2); D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,1927127,CHEMBL3545278,ATX08-001,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,1946198,CHEMBL3577885,PF-05105679,Small molecule,D010146 Pain (phase 0.5),0
+all_categories_no_phase_floor,all_boundaries,1951058,CHEMBL3589904,PF-04531083,Small molecule,D014098 Toothache (phase 2); D059350 Chronic Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,1951836,CHEMBL3590674,ABT-639,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2015713,CHEMBL3682589,ELISMETREP,Small molecule,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2039189,CHEMBL3707218,FUNAPIDE,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,2039289,CHEMBL3707318,GRC-17536,Unknown,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2039290,CHEMBL3707319,GRC-15300,Unknown,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2039327,CHEMBL3707356,TIVANISIRAN,Oligonucleotide,D058447 Eye Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2039371,CHEMBL3707400,INDANTADOL,Unknown,D003929 Diabetic Neuropathies (phase 2); D009437 Neuralgia (phase 2); D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2076856,CHEMBL3786673,EDASALONEXENT,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 3)",0
+all_categories_no_phase_floor,all_boundaries,2087700,CHEMBL3809489,BEMCENTINIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 0.5),0
+all_categories_no_phase_floor,all_boundaries,2089439,CHEMBL3813842,PAXALISIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2096424,CHEMBL3833373,AVELUMAB,Antibody,D008579 Meningioma (phase 1); D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2197551,CHEMBL3989680,AXOMADOL,Small molecule,D010146 Pain (phase 1); D017116 Low Back Pain (phase 2); D059350 Chronic Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2197730,CHEMBL3989859,TOCOPHEROL ACETATE,Small molecule,D020516 Brachial Plexus Neuropathies (phase 3),0
+all_categories_no_phase_floor,all_boundaries,2197786,CHEMBL3989915,DIFELIKEFALIN,Protein,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2197894,CHEMBL3990023,TOZULERISTIDE,Protein,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2252281,CHEMBL4112930,PAMIPARIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2279012,CHEMBL4175981,OLORINAB,Small molecule,D015746 Abdominal Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2283573,CHEMBL4205422,MK-0752,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2289258,CHEMBL4211107,ATB-346,Small molecule,D059350 Chronic Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2335153,CHEMBL4297182,PEGCANTRATINIB,Small molecule,D009437 Neuralgia (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2335163,CHEMBL4297192,SIMETHICONE,Unknown,D015746 Abdominal Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2335199,CHEMBL4297228,BRIVOLIGIDE,Unknown,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2335246,CHEMBL4297275,CYTOCHLOR,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2335278,CHEMBL4297307,NEOSAXITOXIN,Small molecule,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2335288,CHEMBL4297317,PF-06305591,Small molecule,D010146 Pain (phase 0.5),0
+all_categories_no_phase_floor,all_boundaries,2335385,CHEMBL4297414,PD-217014,Small molecule,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2335427,CHEMBL4297456,ATN-161,Protein,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2335439,CHEMBL4297468,ZETOMIPZOMIB,Protein,D003882 Dermatomyositis (phase 2); D017285 Polymyositis (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2335448,CHEMBL4297477,BREPOCITINIB,Small molecule,D003882 Dermatomyositis (phase 3),0
+all_categories_no_phase_floor,all_boundaries,2335521,CHEMBL4297550,ATYR-1940,Unknown,"D020391 Muscular Dystrophy, Facioscapulohumeral (phase 1)",0
+all_categories_no_phase_floor,all_boundaries,2335537,CHEMBL4297566,CASIMERSEN,Oligonucleotide,"D009136 Muscular Dystrophies (phase 4); D020388 Muscular Dystrophy, Duchenne (phase 4)",0
+all_categories_no_phase_floor,all_boundaries,2335603,CHEMBL4297632,OXYCODEGOL,Small molecule,D017116 Low Back Pain (phase 1); D017116 Low Back Pain (phase 3); D059350 Chronic Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,2335623,CHEMBL4297652,ANTIMONY,Small molecule,D010523 Peripheral Nervous System Diseases (phase 3),0
+all_categories_no_phase_floor,all_boundaries,2335685,CHEMBL4297714,CALMANGAFODIPIR,Unknown,D010523 Peripheral Nervous System Diseases (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2335686,CHEMBL4297715,CAMRELIZUMAB,Antibody,D055756 Meningeal Carcinomatosis (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2335733,CHEMBL4297762,GOLODIRSEN,Oligonucleotide,"D009136 Muscular Dystrophies (phase 4); D020388 Muscular Dystrophy, Duchenne (phase 4)",0
+all_categories_no_phase_floor,all_boundaries,2335742,CHEMBL4297771,INTERLEUKIN-10,Unknown,D009437 Neuralgia (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2335779,CHEMBL4297808,DAZUKIBART,Antibody,D003882 Dermatomyositis (phase 2); D009220 Myositis (phase 3),0
+all_categories_no_phase_floor,all_boundaries,2335881,CHEMBL4297910,ARTEMIN,Unknown,D011843 Radiculopathy (phase 1); D012585 Sciatica (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2335966,CHEMBL4297995,BAZLITORAN,Unknown,D003882 Dermatomyositis (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2335977,CHEMBL4298006,ENVAFOLIMAB,Antibody,D055756 Meningeal Carcinomatosis (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2336033,CHEMBL4298062,VILTOLARSEN,Oligonucleotide,"D009136 Muscular Dystrophies (phase 4); D020388 Muscular Dystrophy, Duchenne (phase 4)",0
+all_categories_no_phase_floor,all_boundaries,2336034,CHEMBL4298063,CILIARY NEUROTROPHIC FACTOR,Unknown,"D018917 Optic Neuropathy, Ischemic (phase 1)",0
+all_categories_no_phase_floor,all_boundaries,2336046,CHEMBL4298075,PROPOLIS WAX,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,2336112,CHEMBL4298141,ASALHYDROMORPHONE,Small molecule,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2336147,CHEMBL4298176,GARETOSMAB,Antibody,"D018979 Myositis, Inclusion Body (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,2336152,CHEMBL4298181,RESAMIRIGENE BILPARVOVEC,Gene,"D020914 Myopathies, Structural, Congenital (phase 1)",0
+all_categories_no_phase_floor,all_boundaries,2336163,CHEMBL4298192,SUVODIRSEN,Oligonucleotide,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,2336164,CHEMBL4298193,SUVODIRSEN SODIUM,Oligonucleotide,"D020388 Muscular Dystrophy, Duchenne (phase 1)",0
+all_categories_no_phase_floor,all_boundaries,2338195,CHEMBL4300244,SAMARIUM,Small molecule,D010146 Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,2340360,CHEMBL4302409,LUTETIUM OXODOTREOTIDE,Protein,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2341275,CHEMBL4303404,PELABRESIB,Small molecule,D010524 Peripheral Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2364732,CHEMBL4457723,BMS-741672,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2464725,CHEMBL4594294,VOCACAPSAICIN,Small molecule,"D010146 Pain (phase 2); D010149 Pain, Postoperative (phase 1)",0
+all_categories_no_phase_floor,all_boundaries,2464761,CHEMBL4594330,DAXDILIMAB,Antibody,D009220 Myositis (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2464767,CHEMBL4594336,FORDADISTROGENE MOVAPARVOVEC,Gene,"D020388 Muscular Dystrophy, Duchenne (phase 3)",0
+all_categories_no_phase_floor,all_boundaries,2464964,CHEMBL4594533,CBX-129801,Unknown,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2464970,CHEMBL4594539,TRENIBOTULINUMTOXINE,Protein,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2465004,CHEMBL4594573,FEPIXNEBART,Antibody,D009437 Neuralgia (phase 2); D017116 Low Back Pain (phase 2); D059350 Chronic Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2486500,CHEMBL4650240,BIDRIDISTROGENE XEBOPARVOVEC,Gene,"D049288 Muscular Dystrophies, Limb-Girdle (phase 3)",0
+all_categories_no_phase_floor,all_boundaries,2486501,CHEMBL4650241,DELANDISTROGENE MOXEPARVOVEC,Gene,"D020388 Muscular Dystrophy, Duchenne (phase 4)",0
+all_categories_no_phase_floor,all_boundaries,2486575,CHEMBL4650315,DESMETRAMADOL,Small molecule,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2486616,CHEMBL4650356,FAPI GA-68,Small molecule,D009220 Myositis (phase 0.5),0
+all_categories_no_phase_floor,all_boundaries,2486693,CHEMBL4650433,ULVIPRUBART,Antibody,"D018979 Myositis, Inclusion Body (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,2489825,CHEMBL4742157,GSK-2256098,Small molecule,D008579 Meningioma (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2537410,CHEMBL4802159,ENPATORAN,Small molecule,D003882 Dermatomyositis (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2733861,CHEMBL5089410,PILAVAPADIN,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,2739602,CHEMBL5095171,BOCIDELPAR,Small molecule,"D017240 Mitochondrial Myopathies (phase 1); D017240 Mitochondrial Myopathies (phase 2); D020388 Muscular Dystrophy, Duchenne (phase 1)",0
+all_categories_no_phase_floor,all_boundaries,2739620,CHEMBL5095189,NYX-2925,Small molecule,D003929 Diabetic Neuropathies (phase 2); D005356 Fibromyalgia (phase 2); D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2739638,CHEMBL5095207,AB-001,Small molecule,D017116 Low Back Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2739655,CHEMBL5095224,ELIAPIXANT,Small molecule,D003929 Diabetic Neuropathies (phase 1); D009437 Neuralgia (phase 1); D010146 Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2739673,CHEMBL5095242,NINERAFAXSTAT,Small molecule,"D060050 Angina, Stable (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,2739707,CHEMBL5095276,FLAVOCOXID,Unknown,"D020388 Muscular Dystrophy, Duchenne (phase 1)",0
+all_categories_no_phase_floor,all_boundaries,2739799,CHEMBL5095368,BROGIDIRSEN,Oligonucleotide,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,2739848,CHEMBL5095417,EBARESDAX,Small molecule,D010146 Pain (phase 2); D059350 Chronic Pain (phase 1); D059787 Acute Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2739857,CHEMBL5095426,ZURLETRECTINIB,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2739890,CHEMBL5095459,ENCOBERMINOGENE REZMADENOVEC,Gene,"D000789 Angina, Unstable (phase 1)",0
+all_categories_no_phase_floor,all_boundaries,2831997,CHEMBL5314346,VERTEPORFIN,Small molecule,D016543 Central Nervous System Neoplasms (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2832046,CHEMBL5314395,GW493838,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2832051,CHEMBL5314400,DWP05195,Small molecule,"D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,2832052,CHEMBL5314401,CNV2197944,Small molecule,"D003929 Diabetic Neuropathies (phase 2); D051474 Neuralgia, Postherpetic (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,2832137,CHEMBL5314486,SEVASEMTEN,Small molecule,"D009136 Muscular Dystrophies (phase 1); D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,2832138,CHEMBL5314487,SUZETRIGINE,Small molecule,D003929 Diabetic Neuropathies (phase 2); D009437 Neuralgia (phase 1); D010146 Pain (phase 3); D059787 Acute Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2832164,CHEMBL5314513,CLOFUTRIBEN,Small molecule,D003929 Diabetic Neuropathies (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2832217,CHEMBL5314566,VICASINABIN,Small molecule,D010146 Pain (phase 1),0
+all_categories_no_phase_floor,all_boundaries,2832249,CHEMBL5314598,IBUPROFEN TRELAMINE,Small molecule,D001416 Back Pain (phase 3),0
+all_categories_no_phase_floor,all_boundaries,2832324,CHEMBL5314673,EMPASIPRUBART,Antibody,D003882 Dermatomyositis (phase 2); D009220 Myositis (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2832609,CHEMBL5314958,CRISUGABALIN,Small molecule,"D003929 Diabetic Neuropathies (phase 1); D009437 Neuralgia (phase 3); D010146 Pain (phase 2); D051474 Neuralgia, Postherpetic (phase 3)",0
+all_categories_no_phase_floor,all_boundaries,2832634,CHEMBL5314983,FRONIGLUTIDE,Protein,D003882 Dermatomyositis (phase 2); D017285 Polymyositis (phase 2),0
+all_categories_no_phase_floor,all_boundaries,2832656,CHEMBL5315005,RHENIUM RE-186 OBISBEMEDA,Unknown,D055756 Meningeal Carcinomatosis (phase 1),0
+all_categories_no_phase_floor,all_boundaries,3283076,CHEMBL6067485,GENTAMICIN,Small molecule,"D010146 Pain (phase 3); D020388 Muscular Dystrophy, Duchenne (phase 1)",0
+all_categories_no_phase_floor,all_boundaries,3283083,CHEMBL6067492,BLEOMYCIN,Unknown,D016543 Central Nervous System Neoplasms (phase 2),0
+all_categories_no_phase_floor,all_boundaries,3283723,CHEMBL6068232,DENRAKIBART,Antibody,D010146 Pain (phase 2),0
+all_categories_no_phase_floor,all_boundaries,3283724,CHEMBL6068233,DERAMIOCEL,Cell,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,3284041,CHEMBL6068550,GRT-6010,Small molecule,D009437 Neuralgia (phase 2),0
+all_categories_no_phase_floor,all_boundaries,3284055,CHEMBL6068564,"1-(4-(DIMETHYLAMINO)PIPERIDIN-1-YL)-3-HYDROXY-3-(1-METHYL-1H-IMIDAZOL-2-YL)PROPAN-1-ONE, (S)-",Small molecule,D009437 Neuralgia (phase 1),0
+all_categories_no_phase_floor,all_boundaries,3284062,CHEMBL6068571,ARGX-119,Antibody,"D020294 Myasthenic Syndromes, Congenital (phase 1)",0
+all_categories_no_phase_floor,all_boundaries,3284084,CHEMBL6068593,VESLETEPLIRSEN,Oligonucleotide,"D020388 Muscular Dystrophy, Duchenne (phase 2)",0
+all_categories_no_phase_floor,all_boundaries,3284673,CHEMBL6069182,CLOFEZONE ANHYDROUS,Small molecule,D018771 Arthralgia (phase 2); D063806 Myalgia (phase 2),0
+small_molecules_phase3_or_approved,cns_oncology,10840,CHEMBL513,CARMUSTINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 3),1
+small_molecules_phase3_or_approved,cns_oncology,20917,CHEMBL601,AMINOLEVULINIC ACID,Small molecule,D008579 Meningioma (phase 3),1
+small_molecules_phase3_or_approved,cns_oncology,51182,CHEMBL803,CYTARABINE,Small molecule,D008577 Meningeal Neoplasms (phase 4); D055756 Meningeal Carcinomatosis (phase 4),1
+small_molecules_phase3_or_approved,cns_oncology,119640,CHEMBL1024,IFOSFAMIDE,Small molecule,D016543 Central Nervous System Neoplasms (phase 3),0
+small_molecules_phase3_or_approved,cns_oncology,674596,CHEMBL1200645,ETOPOSIDE PHOSPHATE,Small molecule,D016543 Central Nervous System Neoplasms (phase 3),0
+small_molecules_phase3_or_approved,cns_oncology,675597,CHEMBL1201481,PORFIMER SODIUM,Small molecule,D016543 Central Nervous System Neoplasms (phase 3),1
+small_molecules_phase3_or_approved,cns_oncology,1376882,CHEMBL2104612,MITOLACTOL,Small molecule,D016543 Central Nervous System Neoplasms (phase 3),0
+small_molecules_phase3_or_approved,peripheral_nervous_system,8062,CHEMBL428647,PACLITAXEL,Small molecule,D010523 Peripheral Nervous System Diseases (phase 3),1
+small_molecules_phase3_or_approved,peripheral_nervous_system,10423,CHEMBL12318,CLODRONIC ACID,Small molecule,D020516 Brachial Plexus Neuropathies (phase 3),0
+small_molecules_phase3_or_approved,peripheral_nervous_system,12957,CHEMBL534,KETOTIFEN,Small molecule,D010523 Peripheral Nervous System Diseases (phase 3),0
+small_molecules_phase3_or_approved,peripheral_nervous_system,26280,CHEMBL126,LINEZOLID,Small molecule,D009901 Optic Nerve Diseases (phase 3),1
+small_molecules_phase3_or_approved,peripheral_nervous_system,27029,CHEMBL628,PENTOXIFYLLINE,Small molecule,D020516 Brachial Plexus Neuropathies (phase 3),1
+small_molecules_phase3_or_approved,peripheral_nervous_system,27152,CHEMBL632,BETAMETHASONE,Small molecule,D002349 Carpal Tunnel Syndrome (phase 3),0
+small_molecules_phase3_or_approved,peripheral_nervous_system,85305,CHEMBL930,GLUTAMINE,Small molecule,D010523 Peripheral Nervous System Diseases (phase 3),1
+small_molecules_phase3_or_approved,peripheral_nervous_system,93617,CHEMBL957,BOSENTAN,Small molecule,"D018917 Optic Neuropathy, Ischemic (phase 3)",1
+small_molecules_phase3_or_approved,peripheral_nervous_system,112480,CHEMBL1006,AMIFOSTINE,Small molecule,D010523 Peripheral Nervous System Diseases (phase 3); D014277 Trigeminal Neuralgia (phase 3),0
+small_molecules_phase3_or_approved,peripheral_nervous_system,144959,CHEMBL91829,RUBOXISTAURIN,Small molecule,D003929 Diabetic Neuropathies (phase 3),0
+small_molecules_phase3_or_approved,peripheral_nervous_system,219259,CHEMBL334830,RANIRESTAT,Small molecule,D003929 Diabetic Neuropathies (phase 3),0
+small_molecules_phase3_or_approved,peripheral_nervous_system,381691,CHEMBL1451,TRIAMCINOLONE,Small molecule,D011843 Radiculopathy (phase 3),0
+small_molecules_phase3_or_approved,peripheral_nervous_system,432232,CHEMBL1543,GLUTATHIONE,Small molecule,D010523 Peripheral Nervous System Diseases (phase 3),1
+small_molecules_phase3_or_approved,peripheral_nervous_system,663629,CHEMBL1189679,PALONOSETRON,Small molecule,D013285 Strabismus (phase 3),1
+small_molecules_phase3_or_approved,peripheral_nervous_system,1380400,CHEMBL2108134,POLOXAMER,Small molecule,D009437 Neuralgia (phase 3),0
+small_molecules_phase3_or_approved,peripheral_nervous_system,1926762,CHEMBL3544913,VIXOTRIGINE,Small molecule,D014277 Trigeminal Neuralgia (phase 3),1
+small_molecules_phase3_or_approved,peripheral_nervous_system,2197730,CHEMBL3989859,TOCOPHEROL ACETATE,Small molecule,D020516 Brachial Plexus Neuropathies (phase 3),0
+small_molecules_phase3_or_approved,peripheral_nervous_system,2335623,CHEMBL4297652,ANTIMONY,Small molecule,D010523 Peripheral Nervous System Diseases (phase 3),0
+small_molecules_phase3_or_approved,peripheral_nervous_system,2341536,CHEMBL4303665,BENFOTIAMINE,Small molecule,D003929 Diabetic Neuropathies (phase 3),1
+small_molecules_phase3_or_approved,peripheral_nervous_system,2832609,CHEMBL5314958,CRISUGABALIN,Small molecule,"D009437 Neuralgia (phase 3); D051474 Neuralgia, Postherpetic (phase 3)",0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,1085,CHEMBL17,DICHLORPHENAMIDE,Small molecule,"D020513 Paralysis, Hyperkalemic Periodic (phase 3); D020514 Hypokalemic Periodic Paralysis (phase 3); D020967 Myotonic Disorders (phase 3)",0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,9913,CHEMBL12610,BENZYDAMINE,Small molecule,D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,10531,CHEMBL509,MECLOFENAMIC ACID,Small molecule,D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,11968,CHEMBL527,PIROXICAM,Small molecule,D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,12417,CHEMBL101,PHENYLBUTAZONE,Small molecule,D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,12957,CHEMBL534,KETOTIFEN,Small molecule,D005356 Fibromyalgia (phase 3),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,22873,CHEMBL19299,LOXOPROFEN,Small molecule,D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,26431,CHEMBL622,ETODOLAC,Small molecule,D009135 Muscular Diseases (phase 3),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,43448,CHEMBL770,TOLAZOLINE,Small molecule,D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,85305,CHEMBL930,GLUTAMINE,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 3)",1
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,85553,CHEMBL56367,NIMESULIDE,Small molecule,D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,117758,CHEMBL75435,DEXKETOPROFEN,Small molecule,D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,118617,CHEMBL1020,TOLMETIN,Small molecule,D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,141088,CHEMBL313971,ZUCAPSAICIN,Small molecule,D063806 Myalgia (phase 3),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,150585,CHEMBL93645,ACECLOFENAC,Small molecule,D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,151923,CHEMBL413965,FELBINAC,Small molecule,D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,153408,CHEMBL94394,BUFEXAMAC,Small molecule,D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,227917,CHEMBL1228,OXYPHENBUTAZONE ANHYDROUS,Small molecule,D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,302799,CHEMBL180101,ESREBOXETINE,Small molecule,D005356 Fibromyalgia (phase 3),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,317541,CHEMBL435298,ESFLURBIPROFEN,Small molecule,D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,328201,CHEMBL1393,SPIRONOLACTONE,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 3)",1
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,426110,CHEMBL256997,ATALUREN,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 4)",1
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,512450,CHEMBL456341,LENABASUM,Small molecule,D003882 Dermatomyositis (phase 3),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,611591,CHEMBL1076211,TOLPERISONE,Small molecule,D063806 Myalgia (phase 3),1
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,619400,CHEMBL1088752,LOSMAPIMOD,Small molecule,"D020391 Muscular Dystrophy, Facioscapulohumeral (phase 3)",1
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,621308,CHEMBL1089221,BENDAZAC,Small molecule,D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,674781,CHEMBL1200830,FERROUS SULFATE,Small molecule,D005356 Fibromyalgia (phase 3),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,675195,CHEMBL1201244,ROCURONIUM,Small molecule,D063806 Myalgia (phase 3),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,675842,CHEMBL1201891,DEFLAZACORT,Small molecule,"D009136 Muscular Dystrophies (phase 4); D020388 Muscular Dystrophy, Duchenne (phase 4); D049288 Muscular Dystrophies, Limb-Girdle (phase 3)",0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,685336,CHEMBL1213492,GIVINOSTAT,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 3); D020388 Muscular Dystrophy, Duchenne (phase 4)",0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,838204,CHEMBL1414320,SUXIBUZONE,Small molecule,D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,876580,CHEMBL1452696,FEPRAZONE,Small molecule,D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,1025553,CHEMBL1601669,ALFACALCIDOL,Small molecule,D009135 Muscular Diseases (phase 3),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,1378029,CHEMBL2105759,BARICITINIB,Small molecule,D003882 Dermatomyositis (phase 3),1
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,1530622,CHEMBL2348780,VAMOROLONE,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 4)",0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,1543376,CHEMBL2368925,DOLASETRON,Small molecule,D005356 Fibromyalgia (phase 3),0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,2076856,CHEMBL3786673,EDASALONEXENT,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 3)",0
+small_molecules_phase3_or_approved,muscle_and_neuromuscular_junction,2335448,CHEMBL4297477,BREPOCITINIB,Small molecule,D003882 Dermatomyositis (phase 3),0
+small_molecules_phase3_or_approved,general_pain,556,CHEMBL6622,ISOSORBIDE DINITRATE,Small molecule,D000787 Angina Pectoris (phase 4),0
+small_molecules_phase3_or_approved,general_pain,1278,CHEMBL23,DILTIAZEM,Small molecule,"D000787 Angina Pectoris (phase 4); D060050 Angina, Stable (phase 4)",1
+small_molecules_phase3_or_approved,general_pain,2045,CHEMBL435,HYDROCHLOROTHIAZIDE,Small molecule,D000787 Angina Pectoris (phase 4),0
+small_molecules_phase3_or_approved,general_pain,2994,CHEMBL457,GEMFIBROZIL,Small molecule,D015746 Abdominal Pain (phase 4),1
+small_molecules_phase3_or_approved,general_pain,5797,CHEMBL477,ADENOSINE,Small molecule,"D060050 Angina, Stable (phase 3)",0
+small_molecules_phase3_or_approved,general_pain,6706,CHEMBL416146,ETORICOXIB,Small molecule,D004412 Dysmenorrhea (phase 3); D010146 Pain (phase 3); D014098 Toothache (phase 3); D017116 Low Back Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,8062,CHEMBL428647,PACLITAXEL,Small molecule,D010146 Pain (phase 3),1
+small_molecules_phase3_or_approved,general_pain,9913,CHEMBL12610,BENZYDAMINE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,general_pain,10358,CHEMBL505,CHLORPHENIRAMINE,Small molecule,D001416 Back Pain (phase 4); D006261 Headache (phase 4); D010146 Pain (phase 4),0
+small_molecules_phase3_or_approved,general_pain,10423,CHEMBL12318,CLODRONIC ACID,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,10531,CHEMBL509,MECLOFENAMIC ACID,Small molecule,D004412 Dysmenorrhea (phase 4); D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,general_pain,11968,CHEMBL527,PIROXICAM,Small molecule,D018771 Arthralgia (phase 4); D056844 Renal Colic (phase 3); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,general_pain,12417,CHEMBL101,PHENYLBUTAZONE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,general_pain,12428,CHEMBL529,AZITHROMYCIN,Small molecule,D015746 Abdominal Pain (phase 3),1
+small_molecules_phase3_or_approved,general_pain,12957,CHEMBL534,KETOTIFEN,Small molecule,D059350 Chronic Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,14125,CHEMBL548,DINOPROSTONE,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,16543,CHEMBL15768,CAMPHOR,Small molecule,D001416 Back Pain (phase 4); D010146 Pain (phase 4),0
+small_molecules_phase3_or_approved,general_pain,21697,CHEMBL122,ROFECOXIB,Small molecule,D010146 Pain (phase 3),1
+small_molecules_phase3_or_approved,general_pain,22391,CHEMBL606,MISOPROSTOL,Small molecule,D010146 Pain (phase 3),1
+small_molecules_phase3_or_approved,general_pain,22873,CHEMBL19299,LOXOPROFEN,Small molecule,D010146 Pain (phase 3); D017116 Low Back Pain (phase 3); D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,general_pain,26431,CHEMBL622,ETODOLAC,Small molecule,D010146 Pain (phase 3); D059787 Acute Pain (phase 4),0
+small_molecules_phase3_or_approved,general_pain,27912,CHEMBL137,METRONIDAZOLE,Small molecule,D010146 Pain (phase 3),1
+small_molecules_phase3_or_approved,general_pain,29989,CHEMBL686,MEFENAMIC ACID,Small molecule,D004412 Dysmenorrhea (phase 4),0
+small_molecules_phase3_or_approved,general_pain,43448,CHEMBL770,TOLAZOLINE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,general_pain,54547,CHEMBL289469,GRANISETRON,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,67010,CHEMBL865,VALDECOXIB,Small molecule,D004412 Dysmenorrhea (phase 4); D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,78303,CHEMBL902,FAMOTIDINE,Small molecule,D002637 Chest Pain (phase 4),1
+small_molecules_phase3_or_approved,general_pain,85553,CHEMBL56367,NIMESULIDE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,general_pain,100157,CHEMBL980,GUAIFENESIN,Small molecule,D006261 Headache (phase 4),0
+small_molecules_phase3_or_approved,general_pain,107098,CHEMBL69308,PELUBIPROFEN,Small molecule,D001416 Back Pain (phase 3); D004412 Dysmenorrhea (phase 3),0
+small_molecules_phase3_or_approved,general_pain,110435,CHEMBL997,IBANDRONIC ACID,Small molecule,D010146 Pain (phase 3); D015746 Abdominal Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,117758,CHEMBL75435,DEXKETOPROFEN,Small molecule,D010146 Pain (phase 3); D017116 Low Back Pain (phase 3); D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,general_pain,118617,CHEMBL1020,TOLMETIN,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,general_pain,119162,CHEMBL1021,NEPAFENAC,Small molecule,"D010149 Pain, Postoperative (phase 4)",1
+small_molecules_phase3_or_approved,general_pain,122567,CHEMBL75124,NONIVAMIDE,Small molecule,D017116 Low Back Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,140107,CHEMBL1077,BROMFENAC,Small molecule,"D010149 Pain, Postoperative (phase 4); D058447 Eye Pain (phase 4)",0
+small_molecules_phase3_or_approved,general_pain,141088,CHEMBL313971,ZUCAPSAICIN,Small molecule,D010146 Pain (phase 3); D018771 Arthralgia (phase 3); D063806 Myalgia (phase 3),0
+small_molecules_phase3_or_approved,general_pain,143284,CHEMBL1082,AMOXICILLIN,Small molecule,D010146 Pain (phase 3); D017116 Low Back Pain (phase 3),1
+small_molecules_phase3_or_approved,general_pain,150585,CHEMBL93645,ACECLOFENAC,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,general_pain,151923,CHEMBL413965,FELBINAC,Small molecule,D010146 Pain (phase 3); D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,general_pain,153408,CHEMBL94394,BUFEXAMAC,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,general_pain,187962,CHEMBL1162,NORETHINDRONE,Small molecule,D004412 Dysmenorrhea (phase 3); D010146 Pain (phase 3),1
+small_molecules_phase3_or_approved,general_pain,199817,CHEMBL1189,DIETHYLAMINE,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,209007,CHEMBL1196,PROPARACAINE,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,227917,CHEMBL1228,OXYPHENBUTAZONE ANHYDROUS,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,general_pain,231062,CHEMBL1242,PHENAZOPYRIDINE,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,263453,CHEMBL1311,ISOSORBIDE MONONITRATE,Small molecule,D000787 Angina Pectoris (phase 4),1
+small_molecules_phase3_or_approved,general_pain,304381,CHEMBL1353,SODIUM BICARBONATE,Small molecule,D010146 Pain (phase 4),1
+small_molecules_phase3_or_approved,general_pain,310199,CHEMBL364804,GW-406381,Small molecule,D014098 Toothache (phase 3),0
+small_molecules_phase3_or_approved,general_pain,317541,CHEMBL435298,ESFLURBIPROFEN,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,general_pain,321964,CHEMBL1382,TOLTERODINE,Small molecule,D010146 Pain (phase 3); D017116 Low Back Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,341382,CHEMBL1404,RANOLAZINE,Small molecule,D000787 Angina Pectoris (phase 4),1
+small_molecules_phase3_or_approved,general_pain,356724,CHEMBL213907,THIOCOLCHICOSIDE,Small molecule,D017116 Low Back Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,381691,CHEMBL1451,TRIAMCINOLONE,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,407453,CHEMBL241694,ETHISTERONE,Small molecule,D004412 Dysmenorrhea (phase 3),0
+small_molecules_phase3_or_approved,general_pain,419463,CHEMBL1499,CORTISONE,Small molecule,D017116 Low Back Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,419617,CHEMBL253582,SUCROSE,Small molecule,D010146 Pain (phase 3),1
+small_molecules_phase3_or_approved,general_pain,421032,CHEMBL1509,DROSPIRENONE,Small molecule,D004412 Dysmenorrhea (phase 3),1
+small_molecules_phase3_or_approved,general_pain,421038,CHEMBL1511,ESTRADIOL VALERATE,Small molecule,D004412 Dysmenorrhea (phase 3),0
+small_molecules_phase3_or_approved,general_pain,432232,CHEMBL1543,GLUTATHIONE,Small molecule,D010146 Pain (phase 3),1
+small_molecules_phase3_or_approved,general_pain,449425,CHEMBL511099,BICIFADINE,Small molecule,D017116 Low Back Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,495109,CHEMBL1655,TOREMIFENE,Small molecule,D059373 Mastodynia (phase 3),0
+small_molecules_phase3_or_approved,general_pain,581843,CHEMBL1753,CLINDAMYCIN,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,611591,CHEMBL1076211,TOLPERISONE,Small molecule,D017116 Low Back Pain (phase 3); D018771 Arthralgia (phase 3); D063806 Myalgia (phase 3),1
+small_molecules_phase3_or_approved,general_pain,621308,CHEMBL1089221,BENDAZAC,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,general_pain,625082,CHEMBL1097205,BORNEOL,Small molecule,"D060050 Angina, Stable (phase 3)",0
+small_molecules_phase3_or_approved,general_pain,643171,CHEMBL1161632,BICARBONATE,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,674611,CHEMBL1200660,ISOSORBIDE,Small molecule,"D060050 Angina, Stable (phase 3)",0
+small_molecules_phase3_or_approved,general_pain,674682,CHEMBL1200731,POTASSIUM CHLORIDE,Small molecule,"D000789 Angina, Unstable (phase 3)",1
+small_molecules_phase3_or_approved,general_pain,675068,CHEMBL1201117,METHOCARBAMOL,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,675085,CHEMBL1201134,LUBIPROSTONE,Small molecule,D059350 Chronic Pain (phase 4),0
+small_molecules_phase3_or_approved,general_pain,675097,CHEMBL1201146,NORETHINDRONE ACETATE,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,675181,CHEMBL1201230,MAGNESIUM,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,675195,CHEMBL1201244,ROCURONIUM,Small molecule,D001416 Back Pain (phase 3); D063806 Myalgia (phase 3),0
+small_molecules_phase3_or_approved,general_pain,675310,CHEMBL1201359,STRONTIUM,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,675723,CHEMBL1201772,PRASUGREL,Small molecule,"D000789 Angina, Unstable (phase 4)",0
+small_molecules_phase3_or_approved,general_pain,675813,CHEMBL1201864,DIENOGEST,Small molecule,D004412 Dysmenorrhea (phase 3),1
+small_molecules_phase3_or_approved,general_pain,680641,CHEMBL1206690,PARECOXIB,Small molecule,"D010146 Pain (phase 3); D010149 Pain, Postoperative (phase 4); D056844 Renal Colic (phase 3)",0
+small_molecules_phase3_or_approved,general_pain,838204,CHEMBL1414320,SUXIBUZONE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,general_pain,876580,CHEMBL1452696,FEPRAZONE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,general_pain,993371,CHEMBL1569487,LORNOXICAM,Small molecule,D010146 Pain (phase 3),1
+small_molecules_phase3_or_approved,general_pain,1041053,CHEMBL1618102,BUTYLSCOPOLAMINE,Small molecule,D015746 Abdominal Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,1161221,CHEMBL1800159,RELUGOLIX,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,1243552,CHEMBL1902981,EPERISONE,Small molecule,D001416 Back Pain (phase 3); D017116 Low Back Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,1377431,CHEMBL2105161,NICOBOXIL,Small molecule,D017116 Low Back Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,1378658,CHEMBL2106388,CALCIUM HYDROXIDE,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,1380041,CHEMBL2107771,RALFINAMIDE,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,1380400,CHEMBL2108134,POLOXAMER,Small molecule,D009437 Neuralgia (phase 3),0
+small_molecules_phase3_or_approved,general_pain,1383001,CHEMBL2110561,SAMARIUM LEXIDRONAM PENTASODIUM,Small molecule,D010146 Pain (phase 4),0
+small_molecules_phase3_or_approved,general_pain,1540477,CHEMBL2364605,CEBRANOPADOL,Small molecule,D010146 Pain (phase 3),1
+small_molecules_phase3_or_approved,general_pain,1626752,CHEMBL3137321,BENZHYDROCODONE,Small molecule,D059787 Acute Pain (phase 4),0
+small_molecules_phase3_or_approved,general_pain,1671611,CHEMBL3182320,TROXERUTIN,Small molecule,"D060050 Angina, Stable (phase 3)",0
+small_molecules_phase3_or_approved,general_pain,2335603,CHEMBL4297632,OXYCODEGOL,Small molecule,D017116 Low Back Pain (phase 3); D059350 Chronic Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,2336046,CHEMBL4298075,PROPOLIS WAX,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,2338195,CHEMBL4300244,SAMARIUM,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,2832138,CHEMBL5314487,SUZETRIGINE,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,2832249,CHEMBL5314598,IBUPROFEN TRELAMINE,Small molecule,D001416 Back Pain (phase 3),0
+small_molecules_phase3_or_approved,general_pain,2832609,CHEMBL5314958,CRISUGABALIN,Small molecule,"D009437 Neuralgia (phase 3); D051474 Neuralgia, Postherpetic (phase 3)",0
+small_molecules_phase3_or_approved,general_pain,3283076,CHEMBL6067485,GENTAMICIN,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,556,CHEMBL6622,ISOSORBIDE DINITRATE,Small molecule,D000787 Angina Pectoris (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,1085,CHEMBL17,DICHLORPHENAMIDE,Small molecule,"D020513 Paralysis, Hyperkalemic Periodic (phase 3); D020514 Hypokalemic Periodic Paralysis (phase 3); D020967 Myotonic Disorders (phase 3)",0
+small_molecules_phase3_or_approved,all_boundaries,1278,CHEMBL23,DILTIAZEM,Small molecule,"D000787 Angina Pectoris (phase 4); D060050 Angina, Stable (phase 4)",1
+small_molecules_phase3_or_approved,all_boundaries,2045,CHEMBL435,HYDROCHLOROTHIAZIDE,Small molecule,D000787 Angina Pectoris (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,2994,CHEMBL457,GEMFIBROZIL,Small molecule,D015746 Abdominal Pain (phase 4),1
+small_molecules_phase3_or_approved,all_boundaries,5797,CHEMBL477,ADENOSINE,Small molecule,"D060050 Angina, Stable (phase 3)",0
+small_molecules_phase3_or_approved,all_boundaries,6706,CHEMBL416146,ETORICOXIB,Small molecule,D004412 Dysmenorrhea (phase 3); D010146 Pain (phase 3); D014098 Toothache (phase 3); D017116 Low Back Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,8062,CHEMBL428647,PACLITAXEL,Small molecule,D010146 Pain (phase 3); D010523 Peripheral Nervous System Diseases (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,9913,CHEMBL12610,BENZYDAMINE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,10358,CHEMBL505,CHLORPHENIRAMINE,Small molecule,D001416 Back Pain (phase 4); D006261 Headache (phase 4); D010146 Pain (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,10423,CHEMBL12318,CLODRONIC ACID,Small molecule,D010146 Pain (phase 3); D020516 Brachial Plexus Neuropathies (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,10531,CHEMBL509,MECLOFENAMIC ACID,Small molecule,D004412 Dysmenorrhea (phase 4); D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,10840,CHEMBL513,CARMUSTINE,Small molecule,D016543 Central Nervous System Neoplasms (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,11968,CHEMBL527,PIROXICAM,Small molecule,D018771 Arthralgia (phase 4); D056844 Renal Colic (phase 3); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,12417,CHEMBL101,PHENYLBUTAZONE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,12428,CHEMBL529,AZITHROMYCIN,Small molecule,D015746 Abdominal Pain (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,12957,CHEMBL534,KETOTIFEN,Small molecule,D005356 Fibromyalgia (phase 3); D010523 Peripheral Nervous System Diseases (phase 3); D059350 Chronic Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,14125,CHEMBL548,DINOPROSTONE,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,16543,CHEMBL15768,CAMPHOR,Small molecule,D001416 Back Pain (phase 4); D010146 Pain (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,20917,CHEMBL601,AMINOLEVULINIC ACID,Small molecule,D008579 Meningioma (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,21697,CHEMBL122,ROFECOXIB,Small molecule,D010146 Pain (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,22391,CHEMBL606,MISOPROSTOL,Small molecule,D010146 Pain (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,22873,CHEMBL19299,LOXOPROFEN,Small molecule,D010146 Pain (phase 3); D017116 Low Back Pain (phase 3); D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,26280,CHEMBL126,LINEZOLID,Small molecule,D009901 Optic Nerve Diseases (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,26431,CHEMBL622,ETODOLAC,Small molecule,D009135 Muscular Diseases (phase 3); D010146 Pain (phase 3); D059787 Acute Pain (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,27029,CHEMBL628,PENTOXIFYLLINE,Small molecule,D020516 Brachial Plexus Neuropathies (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,27152,CHEMBL632,BETAMETHASONE,Small molecule,D002349 Carpal Tunnel Syndrome (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,27912,CHEMBL137,METRONIDAZOLE,Small molecule,D010146 Pain (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,29989,CHEMBL686,MEFENAMIC ACID,Small molecule,D004412 Dysmenorrhea (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,43448,CHEMBL770,TOLAZOLINE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,51182,CHEMBL803,CYTARABINE,Small molecule,D008577 Meningeal Neoplasms (phase 4); D055756 Meningeal Carcinomatosis (phase 4),1
+small_molecules_phase3_or_approved,all_boundaries,54547,CHEMBL289469,GRANISETRON,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,67010,CHEMBL865,VALDECOXIB,Small molecule,D004412 Dysmenorrhea (phase 4); D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,78303,CHEMBL902,FAMOTIDINE,Small molecule,D002637 Chest Pain (phase 4),1
+small_molecules_phase3_or_approved,all_boundaries,85305,CHEMBL930,GLUTAMINE,Small molecule,"D010523 Peripheral Nervous System Diseases (phase 3); D020388 Muscular Dystrophy, Duchenne (phase 3)",1
+small_molecules_phase3_or_approved,all_boundaries,85553,CHEMBL56367,NIMESULIDE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,93617,CHEMBL957,BOSENTAN,Small molecule,"D018917 Optic Neuropathy, Ischemic (phase 3)",1
+small_molecules_phase3_or_approved,all_boundaries,100157,CHEMBL980,GUAIFENESIN,Small molecule,D006261 Headache (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,107098,CHEMBL69308,PELUBIPROFEN,Small molecule,D001416 Back Pain (phase 3); D004412 Dysmenorrhea (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,110435,CHEMBL997,IBANDRONIC ACID,Small molecule,D010146 Pain (phase 3); D015746 Abdominal Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,112480,CHEMBL1006,AMIFOSTINE,Small molecule,D010523 Peripheral Nervous System Diseases (phase 3); D014277 Trigeminal Neuralgia (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,117758,CHEMBL75435,DEXKETOPROFEN,Small molecule,D010146 Pain (phase 3); D017116 Low Back Pain (phase 3); D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,118617,CHEMBL1020,TOLMETIN,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,119162,CHEMBL1021,NEPAFENAC,Small molecule,"D010149 Pain, Postoperative (phase 4)",1
+small_molecules_phase3_or_approved,all_boundaries,119640,CHEMBL1024,IFOSFAMIDE,Small molecule,D016543 Central Nervous System Neoplasms (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,122567,CHEMBL75124,NONIVAMIDE,Small molecule,D017116 Low Back Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,140107,CHEMBL1077,BROMFENAC,Small molecule,"D010149 Pain, Postoperative (phase 4); D058447 Eye Pain (phase 4)",0
+small_molecules_phase3_or_approved,all_boundaries,141088,CHEMBL313971,ZUCAPSAICIN,Small molecule,D010146 Pain (phase 3); D018771 Arthralgia (phase 3); D063806 Myalgia (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,143284,CHEMBL1082,AMOXICILLIN,Small molecule,D010146 Pain (phase 3); D017116 Low Back Pain (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,144959,CHEMBL91829,RUBOXISTAURIN,Small molecule,D003929 Diabetic Neuropathies (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,150585,CHEMBL93645,ACECLOFENAC,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,151923,CHEMBL413965,FELBINAC,Small molecule,D010146 Pain (phase 3); D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,153408,CHEMBL94394,BUFEXAMAC,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,187962,CHEMBL1162,NORETHINDRONE,Small molecule,D004412 Dysmenorrhea (phase 3); D010146 Pain (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,199817,CHEMBL1189,DIETHYLAMINE,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,209007,CHEMBL1196,PROPARACAINE,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,219259,CHEMBL334830,RANIRESTAT,Small molecule,D003929 Diabetic Neuropathies (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,227917,CHEMBL1228,OXYPHENBUTAZONE ANHYDROUS,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,231062,CHEMBL1242,PHENAZOPYRIDINE,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,263453,CHEMBL1311,ISOSORBIDE MONONITRATE,Small molecule,D000787 Angina Pectoris (phase 4),1
+small_molecules_phase3_or_approved,all_boundaries,302799,CHEMBL180101,ESREBOXETINE,Small molecule,D005356 Fibromyalgia (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,304381,CHEMBL1353,SODIUM BICARBONATE,Small molecule,D010146 Pain (phase 4),1
+small_molecules_phase3_or_approved,all_boundaries,310199,CHEMBL364804,GW-406381,Small molecule,D014098 Toothache (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,317541,CHEMBL435298,ESFLURBIPROFEN,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,321964,CHEMBL1382,TOLTERODINE,Small molecule,D010146 Pain (phase 3); D017116 Low Back Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,328201,CHEMBL1393,SPIRONOLACTONE,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 3)",1
+small_molecules_phase3_or_approved,all_boundaries,341382,CHEMBL1404,RANOLAZINE,Small molecule,D000787 Angina Pectoris (phase 4),1
+small_molecules_phase3_or_approved,all_boundaries,356724,CHEMBL213907,THIOCOLCHICOSIDE,Small molecule,D017116 Low Back Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,381691,CHEMBL1451,TRIAMCINOLONE,Small molecule,D010146 Pain (phase 3); D011843 Radiculopathy (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,407453,CHEMBL241694,ETHISTERONE,Small molecule,D004412 Dysmenorrhea (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,419463,CHEMBL1499,CORTISONE,Small molecule,D017116 Low Back Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,419617,CHEMBL253582,SUCROSE,Small molecule,D010146 Pain (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,421032,CHEMBL1509,DROSPIRENONE,Small molecule,D004412 Dysmenorrhea (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,421038,CHEMBL1511,ESTRADIOL VALERATE,Small molecule,D004412 Dysmenorrhea (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,426110,CHEMBL256997,ATALUREN,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 4)",1
+small_molecules_phase3_or_approved,all_boundaries,432232,CHEMBL1543,GLUTATHIONE,Small molecule,D010146 Pain (phase 3); D010523 Peripheral Nervous System Diseases (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,449425,CHEMBL511099,BICIFADINE,Small molecule,D017116 Low Back Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,495109,CHEMBL1655,TOREMIFENE,Small molecule,D059373 Mastodynia (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,512450,CHEMBL456341,LENABASUM,Small molecule,D003882 Dermatomyositis (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,581843,CHEMBL1753,CLINDAMYCIN,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,611591,CHEMBL1076211,TOLPERISONE,Small molecule,D017116 Low Back Pain (phase 3); D018771 Arthralgia (phase 3); D063806 Myalgia (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,619400,CHEMBL1088752,LOSMAPIMOD,Small molecule,"D020391 Muscular Dystrophy, Facioscapulohumeral (phase 3)",1
+small_molecules_phase3_or_approved,all_boundaries,621308,CHEMBL1089221,BENDAZAC,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,625082,CHEMBL1097205,BORNEOL,Small molecule,"D060050 Angina, Stable (phase 3)",0
+small_molecules_phase3_or_approved,all_boundaries,643171,CHEMBL1161632,BICARBONATE,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,663629,CHEMBL1189679,PALONOSETRON,Small molecule,D013285 Strabismus (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,674596,CHEMBL1200645,ETOPOSIDE PHOSPHATE,Small molecule,D016543 Central Nervous System Neoplasms (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,674611,CHEMBL1200660,ISOSORBIDE,Small molecule,"D060050 Angina, Stable (phase 3)",0
+small_molecules_phase3_or_approved,all_boundaries,674682,CHEMBL1200731,POTASSIUM CHLORIDE,Small molecule,"D000789 Angina, Unstable (phase 3)",1
+small_molecules_phase3_or_approved,all_boundaries,674781,CHEMBL1200830,FERROUS SULFATE,Small molecule,D005356 Fibromyalgia (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,675068,CHEMBL1201117,METHOCARBAMOL,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,675085,CHEMBL1201134,LUBIPROSTONE,Small molecule,D059350 Chronic Pain (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,675097,CHEMBL1201146,NORETHINDRONE ACETATE,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,675181,CHEMBL1201230,MAGNESIUM,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,675195,CHEMBL1201244,ROCURONIUM,Small molecule,D001416 Back Pain (phase 3); D063806 Myalgia (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,675310,CHEMBL1201359,STRONTIUM,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,675597,CHEMBL1201481,PORFIMER SODIUM,Small molecule,D016543 Central Nervous System Neoplasms (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,675723,CHEMBL1201772,PRASUGREL,Small molecule,"D000789 Angina, Unstable (phase 4)",0
+small_molecules_phase3_or_approved,all_boundaries,675813,CHEMBL1201864,DIENOGEST,Small molecule,D004412 Dysmenorrhea (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,675842,CHEMBL1201891,DEFLAZACORT,Small molecule,"D009136 Muscular Dystrophies (phase 4); D020388 Muscular Dystrophy, Duchenne (phase 4); D049288 Muscular Dystrophies, Limb-Girdle (phase 3)",0
+small_molecules_phase3_or_approved,all_boundaries,680641,CHEMBL1206690,PARECOXIB,Small molecule,"D010146 Pain (phase 3); D010149 Pain, Postoperative (phase 4); D056844 Renal Colic (phase 3)",0
+small_molecules_phase3_or_approved,all_boundaries,685336,CHEMBL1213492,GIVINOSTAT,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 3); D020388 Muscular Dystrophy, Duchenne (phase 4)",0
+small_molecules_phase3_or_approved,all_boundaries,838204,CHEMBL1414320,SUXIBUZONE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,876580,CHEMBL1452696,FEPRAZONE,Small molecule,D018771 Arthralgia (phase 4); D063806 Myalgia (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,993371,CHEMBL1569487,LORNOXICAM,Small molecule,D010146 Pain (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,1025553,CHEMBL1601669,ALFACALCIDOL,Small molecule,D009135 Muscular Diseases (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,1041053,CHEMBL1618102,BUTYLSCOPOLAMINE,Small molecule,D015746 Abdominal Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,1161221,CHEMBL1800159,RELUGOLIX,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,1243552,CHEMBL1902981,EPERISONE,Small molecule,D001416 Back Pain (phase 3); D017116 Low Back Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,1376882,CHEMBL2104612,MITOLACTOL,Small molecule,D016543 Central Nervous System Neoplasms (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,1377431,CHEMBL2105161,NICOBOXIL,Small molecule,D017116 Low Back Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,1378029,CHEMBL2105759,BARICITINIB,Small molecule,D003882 Dermatomyositis (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,1378658,CHEMBL2106388,CALCIUM HYDROXIDE,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,1380041,CHEMBL2107771,RALFINAMIDE,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,1380400,CHEMBL2108134,POLOXAMER,Small molecule,D009437 Neuralgia (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,1383001,CHEMBL2110561,SAMARIUM LEXIDRONAM PENTASODIUM,Small molecule,D010146 Pain (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,1530622,CHEMBL2348780,VAMOROLONE,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 4)",0
+small_molecules_phase3_or_approved,all_boundaries,1540477,CHEMBL2364605,CEBRANOPADOL,Small molecule,D010146 Pain (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,1543376,CHEMBL2368925,DOLASETRON,Small molecule,D005356 Fibromyalgia (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,1626752,CHEMBL3137321,BENZHYDROCODONE,Small molecule,D059787 Acute Pain (phase 4),0
+small_molecules_phase3_or_approved,all_boundaries,1671611,CHEMBL3182320,TROXERUTIN,Small molecule,"D060050 Angina, Stable (phase 3)",0
+small_molecules_phase3_or_approved,all_boundaries,1926762,CHEMBL3544913,VIXOTRIGINE,Small molecule,D014277 Trigeminal Neuralgia (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,2076856,CHEMBL3786673,EDASALONEXENT,Small molecule,"D020388 Muscular Dystrophy, Duchenne (phase 3)",0
+small_molecules_phase3_or_approved,all_boundaries,2197730,CHEMBL3989859,TOCOPHEROL ACETATE,Small molecule,D020516 Brachial Plexus Neuropathies (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,2335448,CHEMBL4297477,BREPOCITINIB,Small molecule,D003882 Dermatomyositis (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,2335603,CHEMBL4297632,OXYCODEGOL,Small molecule,D017116 Low Back Pain (phase 3); D059350 Chronic Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,2335623,CHEMBL4297652,ANTIMONY,Small molecule,D010523 Peripheral Nervous System Diseases (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,2336046,CHEMBL4298075,PROPOLIS WAX,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,2338195,CHEMBL4300244,SAMARIUM,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,2341536,CHEMBL4303665,BENFOTIAMINE,Small molecule,D003929 Diabetic Neuropathies (phase 3),1
+small_molecules_phase3_or_approved,all_boundaries,2832138,CHEMBL5314487,SUZETRIGINE,Small molecule,D010146 Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,2832249,CHEMBL5314598,IBUPROFEN TRELAMINE,Small molecule,D001416 Back Pain (phase 3),0
+small_molecules_phase3_or_approved,all_boundaries,2832609,CHEMBL5314958,CRISUGABALIN,Small molecule,"D009437 Neuralgia (phase 3); D051474 Neuralgia, Postherpetic (phase 3)",0
+small_molecules_phase3_or_approved,all_boundaries,3283076,CHEMBL6067485,GENTAMICIN,Small molecule,D010146 Pain (phase 3),0
