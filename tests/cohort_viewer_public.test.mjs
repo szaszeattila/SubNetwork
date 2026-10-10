@@ -119,7 +119,7 @@ describe("what the page is not", () => {
 describe("where to report an error", () => {
   // The public repository is where errors go (CONTRIBUTING.md): said in the
   // permanent strip, since About is closed by default, and in About with what
-  // a useful report names. scripts/publish_github.sh publishes to this address.
+  // a useful report names. This repository's own address (docs/PUBLISHING.md).
   test("the disclaimer and About both link the repository's issues", () => {
     const html = viewerHtml();
     const strip = /<div id="disclaimer">([\s\S]*?)<\/div>/.exec(html)[1];

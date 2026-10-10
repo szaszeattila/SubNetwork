@@ -332,3 +332,17 @@ The user annotated the second round on 2026-10-10 and decided each question.
 - **Description and topics** are set by the first publish:
   `cheminformatics`, `pharmacology`, `chembl`, `drug-target-interactions` and
   `network-visualization`.
+
+## Later the same day: this repository became the working copy
+
+The snapshot route ran once, publishing the copy **private** on 2026-10-10.
+The user then changed the working arrangement before it went public: each
+contribution would have had to be carried back to the private copy by hand and
+would have returned under a snapshot commit. This repository is now where the
+work is done. The private copy, `szaszeattila/SubNetwork-private`, is archived
+with the history and the two files kept back. `scripts/publish_github.sh` and
+`scripts/public_snapshot.py` are gone. Their audit lives on as
+`scripts/privacy_check.py`, run by a pre-commit and a pre-push hook, and the
+pre-push hook also refuses every branch but `main`, because unfinished work
+stays local. [PUBLISHING.md](PUBLISHING.md), *The GitHub repository*, is the
+procedure; the third round above records what was decided first.

@@ -11,8 +11,8 @@ the evidence shards. Kept as history, not as a procedure. The artifact's link
 no longer works, and publishing the page again would create a new artifact at
 a new address.
 
-The code's public copy on GitHub is a separate procedure, **The public GitHub
-copy**, at the very end.
+The code's GitHub repository, what may be pushed to it and how it goes public,
+is **The GitHub repository**, at the very end.
 
 ## The artifact (deleted 2026-10-10)
 
@@ -349,76 +349,79 @@ does not promise that removing one leaves the other in place. The
 `--preview` check will catch an exposed preview on the next upload. Checking
 by hand right away catches it sooner.
 
-## The public GitHub copy
+## The GitHub repository
 
-Decided 2026-10-10 ([HOSTING-REVIEW-ANSWERS.md](HOSTING-REVIEW-ANSWERS.md),
-second round): the code goes public as a **fresh copy**, one snapshot commit
-per publish, in a new public repository. It is **not published yet**. This
-repository stays private and keeps its full history. The history is never
-pushed anywhere public, because it carries a personal address and private
-session links, and rewriting it would still leave the old commits reachable on
-GitHub by their hashes.
+This repository is `szaszeattila/SubNetwork`, and it is where the work is
+done. It began on 2026-10-10 as one snapshot commit of a private working copy,
+`szaszeattila/SubNetwork-private`, which is archived read-only on GitHub. That
+copy keeps the history from before the snapshot, which is never pushed here:
+it carries a personal address and private session links, and rewriting it
+would still leave the old commits reachable on GitHub by their hashes
+([HOSTING-REVIEW-ANSWERS.md](HOSTING-REVIEW-ANSWERS.md), second round). It
+also keeps the two files the snapshot left out, the archived report's Zotero
+annotation export and its PDF, whose links are paths on the machine the PDF
+was rendered on.
 
-### Publishing
+The first plan was to keep working privately and publish a snapshot of the
+private copy each time (`scripts/publish_github.sh`, since removed). The user
+dropped it the same day, before the repository went public, because each
+contribution would have had to be carried back by hand and would have
+reappeared under a snapshot commit instead of its own.
+
+### Pushing
+
+**Unfinished work stays on this machine** (the user's decision, 2026-10-10).
+Work happens on local branches and worktrees. Only `main` is pushed, and only
+finished work is merged into it. Nothing pushed can be taken back: a deleted
+branch's commits stay reachable by their hashes, and a fork keeps its own copy.
+A local branch is also not backed up anywhere, so a worktree's branch is
+merged or kept before the worktree is removed.
+
+Two hooks hold this, once a clone has run:
 
 ```bash
-scripts/publish_github.sh --dry-run     # checks, stage, audit, commit; keeps the staged repository to inspect
-scripts/publish_github.sh --private     # first publish only: create the copy private, to look at on GitHub
-scripts/publish_github.sh --go-public   # make that private copy public; pushes nothing
-scripts/publish_github.sh               # create the copy public, or add a snapshot to it
-scripts/publish_github.sh --carried     # add a snapshot after carrying a contribution back from it
+git config core.hooksPath .githooks
 ```
 
-A dry run builds the snapshot in a temporary folder on this machine. It shows
-the files, but not how GitHub presents them: the README, the *Cite this
-repository* button, the topics. `--private` creates the real repository where
-only its owner can see it. Since the copy only ever holds snapshots, making it
-public later exposes nothing beyond what was looked at.
+- **pre-commit** searches what is staged, and the author and committer
+  identities, for a home-directory path, a gmail address, a claude.ai session
+  link or a job directory (`scripts/privacy_check.py`).
+- **pre-push** refuses any branch but `main` (tags are allowed), and searches
+  every commit the push would publish: its files, its message and its
+  identities. It checks every commit, not just the tip, because a leak fixed
+  by a later commit is still public in the earlier one.
 
-It needs `gh auth login` once. The script works as follows:
+Both read text, gzip members and a PDF's compressed streams. A match is
+fixed and committed, never waved through. `--no-verify` skips the hooks and is
+not for that. `python3 scripts/privacy_check.py --tree` searches every tracked
+file at HEAD, and a test runs it.
 
-- **It snapshots the commit, not the working tree.** It refuses while tracked
-  files differ from HEAD. It also refuses while the commit email is not a
-  GitHub no-reply address, since that email becomes the snapshot's author. It
-  runs both suites.
-- **It keeps two files back.** `scripts/public_snapshot.py` exports HEAD with
-  `git archive`, so nothing gitignored or uncommitted can reach the public
-  copy. It leaves out `EXCLUDED`: the archived report's Zotero annotation
-  export and its PDF, whose links are paths on this machine. A path in
-  `EXCLUDED` that no longer exists stops the export, so a rename cannot
-  quietly publish what the list kept back. It adds one file, `.public-copy`,
-  which is never committed here. The tests that check `EXCLUDED` against this
-  repository's files skip where that marker is, since the public copy has
-  none of those files by design.
-- **It audits what it staged.** The staged tree is searched for a
-  home-directory path, a gmail address, a claude.ai session link or a job
-  directory. That covers text files, gzip members and a PDF's compressed
-  streams. Any match stops the publish. Fix it here and commit; nothing is
-  waved through.
-- **It creates the repository on the first publish.** The repository gets its
-  description and its five topics (`cheminformatics`, `pharmacology`,
-  `chembl`, `drug-target-interactions`, `network-visualization`). When it
-  goes public, the script also turns on private vulnerability reporting for
-  [SECURITY.md](../SECURITY.md), which GitHub offers only on public
-  repositories. Each later publish adds one commit, never a force-push.
-- **It refuses to overwrite a contribution.** A commit on the public `main`
-  that the script did not make (one without a `Snapshot-Of:` line) would be
-  reverted by the next snapshot. Carry it back here first, with its author as
-  a `Co-authored-by:` trailer, then rerun with `--carried`. The next snapshot
-  repeats every such trailer since the last one, leaving out the assistant's,
-  so GitHub credits the contributor.
-- **It pushes only to a snapshot copy.** `PUBLIC_REPO` defaults to
-  `szaszeattila/SubNetwork`, which was this repository's name until the user
-  renamed it `SubNetwork-private` on 2026-10-10. The script pushes to an
-  existing repository only if `.public-copy` is on its `main`, and this
-  repository never has that file. It also refuses while any remote here
-  points at `PUBLIC_REPO`: after the rename, `origin` still named the old
-  address, and once the public copy took that name, an ordinary `git push`
-  would have sent it the whole history. `origin` now names
-  `SubNetwork-private`. The page's error-report links
-  (the disclaimer strip and About), `CITATION.cff` and the test holding those
-  links (`tests/cohort_viewer_public.test.mjs`) point at the same address, so
-  a different `PUBLIC_REPO` means changing those with it.
+Commit as the GitHub no-reply address (`git config user.email
+<id>+<user>@users.noreply.github.com`). The hooks refuse a gmail identity,
+but not any other address.
 
-After the first publish, deploy the page to production too, so that its
-GitHub links lead somewhere.
+### Going public
+
+The repository is still **private**, so the README, the *Cite this
+repository* button and the topics can be looked at on GitHub before anyone
+else sees them. Its description and its five topics (`cheminformatics`,
+`pharmacology`, `chembl`, `drug-target-interactions`,
+`network-visualization`) are already set. To make it public:
+
+```bash
+gh repo edit szaszeattila/SubNetwork --visibility public --accept-visibility-change-consequences
+gh api -X PUT repos/szaszeattila/SubNetwork/private-vulnerability-reporting
+```
+
+The second command turns on private vulnerability reporting for
+[SECURITY.md](../SECURITY.md), which GitHub offers only on public
+repositories. Then deploy the page to production, so that its GitHub links
+lead somewhere. The page's error-report links (the disclaimer strip and
+About), `CITATION.cff` and the test holding those links
+(`tests/cohort_viewer_public.test.mjs`) all name this address, so a rename
+changes all of them.
+
+### Contributions
+
+A pull request is reviewed and merged here like any other change, and keeps
+its own commits and author ([CONTRIBUTING.md](../CONTRIBUTING.md)).

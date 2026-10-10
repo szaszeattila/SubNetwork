@@ -200,8 +200,9 @@ scripts/resolve_cohort_*.py  the backfills listed under Running it
 scripts/export_cohort.py  CLI: db/cohort1.db -> viz/*.data.js + viz/evidence/
 scripts/cohort_report.py  CLI: the active build's results; --write/--check-status
 scripts/deploy_cloudflare.sh  deploy the page (docs/PUBLISHING.md)
-scripts/publish_github.sh, scripts/public_snapshot.py  publish the code's public
-                          copy: one audited snapshot of HEAD, never the history
+scripts/privacy_check.py, .githooks/  keep a home path, a personal address or a
+                          session link out of this public repository, and
+                          every branch but main on this machine
 scripts/cohort/           the pipeline - scope, selection, targets, evidence,
                           classes, store, build, validate, export, report, status
 viz/index.html            the page: self-contained, vendored vis-network
@@ -220,7 +221,7 @@ analysis/probe/           50 settled drug relationships put to the ranking, and
 analysis/cohort1/         the read-only analysis behind COHORT-REPORT.md
 docs/                     the reasoning; docs/INDEX.md is the index
 README.md, CONTRIBUTING.md, SECURITY.md, CITATION.cff  for people arriving at
-                          the public copy; this file stays the rulebook
+                          the repository; this file stays the rulebook
 
 legacy - the rollback path, not to be modified (docs/LEGACY-PIPELINE.md):
 db/schema.sql, scripts/build_db.py, scripts/chembl_local.py,
@@ -522,7 +523,7 @@ the `class_wikipedia` table: 415 through the Wikidata item carrying the
 descriptor, and 80 whose item has no article through the main article its
 English category declares (Xanthines to *Xanthine*).
 
-The pipeline suite is 478 tests and the node suites are 695 (466 cohort
+The pipeline suite is 487 tests and the node suites are 695 (466 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`
@@ -857,7 +858,8 @@ molecules) are in [docs/COHORT-2.md](docs/COHORT-2.md) and come first.
   curated neuropharmacology route, in
   [docs/COHORT-BOUNDARY-REVIEW.md](docs/COHORT-BOUNDARY-REVIEW.md) — a
   membership change and the user's call.
-- **Nothing enforces the suites.** No CI, no hook; both run offline in seconds.
+- **Nothing enforces the suites.** No CI, and the git hooks check privacy, not
+  the suites; both run offline in seconds.
 - **The legacy pipeline's fate is undecided** — a maintained rollback path
   (which needs a test that builds it) or history (a tag, and delete the code).
 - **Not ready to open to the public.** Open from the hosting review: phones
@@ -868,11 +870,39 @@ molecules) are in [docs/COHORT-2.md](docs/COHORT-2.md) and come first.
   links, a visible data date, how to cite, the load and failure states, the
   "no interactions" line, two more headers, a staging copy, a deploy record
   naming the data, and a way to report an error (GitHub issues, linked from
-  the strip and About, live once the public copy below exists). The table is in [docs/HOSTING-REVIEW.md](docs/HOSTING-REVIEW.md), and
+  the strip and About, live once this repository is public). The table is in [docs/HOSTING-REVIEW.md](docs/HOSTING-REVIEW.md), and
   the answers to the user's questions on it in
   [docs/HOSTING-REVIEW-ANSWERS.md](docs/HOSTING-REVIEW-ANSWERS.md).
 
-## Published snapshot
+## Repository and pushing
+
+**This repository is public: everything pushed to it is public and
+permanent.** It is `szaszeattila/SubNetwork`, still private on GitHub until
+the user makes it public ([docs/PUBLISHING.md](docs/PUBLISHING.md), *Going
+public*). It began on 2026-10-10 as one snapshot of a private working copy,
+`szaszeattila/SubNetwork-private`, now archived. That copy holds the history
+from before the snapshot, which carries a personal address and session links,
+and is never pushed here.
+
+**Unfinished work stays local** (the user's decision, 2026-10-10). This
+overrides the default of pushing a session's branch:
+
+- **Never push a branch other than `main`**, a worktree's branch included.
+  Commit to it and leave it on this machine. Merging into `main` and pushing
+  happen when the user asks. A deleted branch's commits stay reachable by
+  their hashes, so a push cannot be taken back.
+- **A local branch has no backup.** Before a worktree is removed, its branch
+  is merged or kept, never deleted unmerged.
+- **Never write a home path, a personal address, a claude.ai session link or
+  a job directory into the repository**, in a file or a commit message, and
+  commit as the GitHub no-reply address. The hooks in `.githooks/` refuse all
+  of these, and pre-push refuses every branch but `main`
+  (`scripts/privacy_check.py`). Each clone enables them once with
+  `git config core.hooksPath .githooks`. Never `--no-verify`.
+- **A contributor's pull request is merged here like any other change**,
+  keeping its commits and author ([CONTRIBUTING.md](CONTRIBUTING.md)).
+
+## Hosting
 
 The cohort viewer runs on Cloudflare Workers behind Cloudflare Access,
 **with** the evidence shards, and is the one hosted copy. The claude.ai
@@ -887,11 +917,3 @@ is in [docs/LEGACY-PIPELINE.md](docs/LEGACY-PIPELINE.md).
 instead, leaving production alone. Each upload names the data build in its
 message and is kept under `deploys/`. The addresses stay out of the
 repository ([docs/PUBLISHING.md](docs/PUBLISHING.md), *The Cloudflare copy*).
-
-**The code goes public as a fresh copy, never this history** (the user's
-decision, 2026-10-10): `scripts/publish_github.sh` publishes one snapshot
-commit of HEAD to a public repository, after `scripts/public_snapshot.py` has
-kept back the archived Zotero export and PDF and refused any home path,
-personal address or session link in what is left. Not published yet: its
-default target, `szaszeattila/SubNetwork`, is still this private repository's
-name ([docs/PUBLISHING.md](docs/PUBLISHING.md), *The public GitHub copy*).

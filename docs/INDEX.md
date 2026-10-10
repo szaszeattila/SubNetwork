@@ -30,7 +30,7 @@ one of the two.
 | how good the similarity ranking is | [SIMILARITY-DIAGNOSIS.md](SIMILARITY-DIAGNOSIS.md) |
 | what to do next | [NEXT-STEPS-PROPOSAL.md](NEXT-STEPS-PROPOSAL.md), then COHORT-2.md's **Open** |
 | how to deploy the viewer (Cloudflare, staging first) | [PUBLISHING.md](PUBLISHING.md), *The Cloudflare copy* |
-| how to publish the code's public copy on GitHub | [PUBLISHING.md](PUBLISHING.md), *The public GitHub copy* |
+| what may be pushed to GitHub, and how the repository goes public | [PUBLISHING.md](PUBLISHING.md), *The GitHub repository* |
 | to build it all from a fresh clone, starting with ChEMBL 37 | [REPRODUCING.md](REPRODUCING.md) |
 
 ## All of them
@@ -49,7 +49,7 @@ one of the two.
 
 | document | what it answers | numbers |
 | --- | --- | --- |
-| [PUBLISHING.md](PUBLISHING.md) | how to deploy the viewer to Cloudflare: staging with `--preview`, production, the deploy record, the headers and who may open it; how the code's public GitHub copy is published, as one audited snapshot and never the history (not yet published); and, as history, the claude.ai artifact deleted 2026-10-10 (its procedure, refusals and versions 1–28) | Access coverage checked 2026-10-10; refusal counts from 18 session transcripts, as of version 22 |
+| [PUBLISHING.md](PUBLISHING.md) | how to deploy the viewer to Cloudflare: staging with `--preview`, production, the deploy record, the headers and who may open it; this GitHub repository: begun 2026-10-10 as one audited snapshot of a private working copy, never its history; only `main` pushed, and the hooks that refuse a personal path, address or session link; how it goes public (still private); and, as history, the claude.ai artifact deleted 2026-10-10 (its procedure, refusals and versions 1–28) | Access coverage checked 2026-10-10; refusal counts from 18 session transcripts, as of version 22 |
 | [REPRODUCING.md](REPRODUCING.md) | how to go from a fresh clone to a page that opens: where to download ChEMBL 37 and its checksum, `CHEMBL_SQLITE_PATH`, the build and backfill order, and which backfills read live sources and will not reproduce exactly (GtoPdb refuses any release but 2026.3) | checked against EBI's server 2026-10-10 |
 | [CHEMBL-ERROR-REPORT-ALFUZOSIN.md](CHEMBL-ERROR-REPORT-ALFUZOSIN.md) | the drafted report to ChEMBL that alfuzosin is filed as an alpha-1 agonist, its evidence, and what to undo when ChEMBL fixes it | checked 2026-10-10; **not yet sent** |
 

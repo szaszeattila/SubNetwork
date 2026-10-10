@@ -46,10 +46,10 @@ in CLAUDE.md) alone; it is kept unchanged as a rollback path. Documents go in
 
 ## How changes arrive here
 
-The public repository is published as snapshots of a private working copy. A
-merged pull request is carried into that copy by hand and comes back in the
-next snapshot, so it appears under a snapshot commit rather than its own. That
-commit names you as a co-author, which GitHub credits to your account.
+This repository is where the project is developed. A pull request is reviewed
+and merged here, and keeps its own commits and its author. Only `main` is
+published; work in progress is not pushed as branches, so open a pull request
+against `main`.
 
 ## Licence
 
