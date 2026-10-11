@@ -376,8 +376,8 @@ Access policy comes off.
   launch (`robots.txt` / `noindex`), and add the favicon the first pass's
   link-preview item does not mention. *Address done 2026-10-10: the page is
   public at `subnetwork.dev`, registered through Cloudflare, attached by the
-  production deploy, and HSTS-preloaded as every `.dev` is; the `workers.dev`
-  addresses stay behind Access. Indexing and the favicon are open.*
+  production deploy, and HSTS-preloaded as every `.dev` is; production's `workers.dev`
+  address is off and the preview URLs stay behind Access. Indexing and the favicon are open.*
 
 ### Content a public reader will misread
 

@@ -2,8 +2,10 @@
 # Deploy the cohort viewer to Cloudflare Workers static assets (the successor
 # to Cloudflare Pages), evidence shards included, as the Worker named below.
 # Production is public at the custom domain below, which every production
-# deploy attaches; the workers.dev addresses, previews included, stay behind
-# Cloudflare Access, which is set in the dashboard, not here.
+# deploy attaches, and nowhere else: its workers.dev address is switched off,
+# since it shows the account name. Preview URLs stay on workers.dev behind
+# Cloudflare Access, which is set in the dashboard, not here (an Access
+# application whose Workers destination covers the Worker's preview URLs).
 #
 # Ships five paths and nothing else (docs/HOSTING-REVIEW.md): index.html,
 # vendor/, graph.data.js, gtopdb.data.js and evidence/, plus a _headers file
@@ -69,8 +71,8 @@ cp -r viz/vendor viz/evidence "$SITE"/
 cp NOTICE "$SITE/NOTICE.txt"
 
 # The custom domain goes in a production deploy only: a version upload is
-# never served at it. workers.dev is stated rather than left to wrangler's
-# default, because the staging alias and the Access check live there.
+# never served at it. Both workers.dev settings are stated rather than left to
+# wrangler's defaults, which tie preview URLs to the production route.
 ROUTES=""
 [ "$MODE" = deploy ] && ROUTES=",
   \"routes\": [{ \"pattern\": \"$DOMAIN\", \"custom_domain\": true }]"
@@ -79,7 +81,7 @@ cat > "$STAGE/wrangler.jsonc" <<JSON
   "name": "$WORKER",
   "compatibility_date": "2026-10-01",
   "assets": { "directory": "./assets" },
-  "workers_dev": true,
+  "workers_dev": false,
   "preview_urls": true$ROUTES
 }
 JSON
@@ -142,10 +144,10 @@ else
   (cd "$STAGE" && wrangler deploy --message "$MESSAGE") 2>&1 | tee "$LOG"
 fi
 
-# Private means the login page, not the site. Every workers.dev URL, the
-# production one included, stays behind Access: the public address is the
-# custom domain, and a workers.dev URL that serves the page is an exposure
-# (it also shows the account name), so it fails the run.
+# Private means the login page, not the site. Every workers.dev URL wrangler
+# reports stays behind Access: the public address is the custom domain, and a
+# workers.dev URL that serves the page is an exposure (it also shows the
+# account name), so it fails the run.
 STATUS=0
 for url in $(grep -o 'https://[a-z0-9.-]*\.workers\.dev' "$LOG" | sort -u); do
   ANSWER=$(curl -sS -o /dev/null -w '%{http_code} %{redirect_url}' "$url/" || true)

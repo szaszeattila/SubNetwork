@@ -910,9 +910,9 @@ overrides the default of pushing a session's branch:
 
 The cohort viewer runs on Cloudflare Workers, **with** the evidence shards,
 and is the one hosted copy: **public at <https://subnetwork.dev>** since
-2026-10-10, while the Worker's `workers.dev` addresses, staging included,
-stay behind Cloudflare Access and out of the repository (they show the
-account name). The claude.ai artifact it was also published as (versions
+2026-10-10 and nowhere else. The Worker's `workers.dev` addresses show the
+account name and stay out of the repository: production's is switched off,
+and the preview URLs, staging included, stay behind Cloudflare Access. The claude.ai artifact it was also published as (versions
 1–28) was **deleted on 2026-10-10** at the user's request, so that two
 shareable copies could not drift; [docs/PUBLISHING.md](docs/PUBLISHING.md) keeps its procedure and
 version history as a record. The legacy viewer's separate artifact snapshot
@@ -920,8 +920,8 @@ is in [docs/LEGACY-PIPELINE.md](docs/LEGACY-PIPELINE.md).
 
 `scripts/deploy_cloudflare.sh` deploys after both suites and
 `--check-status` pass, attaches `subnetwork.dev`, and fails unless that
-address serves the deploy and every `workers.dev` address still answers with
-the Access login; `--preview` uploads to the private **staging** alias
+address serves the deploy and every `workers.dev` address wrangler reports
+answers with the Access login; `--preview` uploads to the private **staging** alias
 instead, leaving production alone. Each upload names the data build in its
 message and is kept under `deploys/`. The `workers.dev` addresses stay out
 of the repository ([docs/PUBLISHING.md](docs/PUBLISHING.md), *The Cloudflare copy*).

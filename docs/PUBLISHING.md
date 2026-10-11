@@ -279,9 +279,10 @@ Since 2026-10-10 the viewer runs on Cloudflare Workers static assets, the
 successor to Cloudflare Pages (wrangler now routes its `pages` commands to
 Workers), **with** the evidence shards. It is the one hosted copy, and
 since 2026-10-10 it is public at **<https://subnetwork.dev>**, a domain
-registered through Cloudflare Registrar in the same account. The Worker's
-`workers.dev` addresses show the account name, so they stay behind Access and
-out of this repository.
+registered through Cloudflare Registrar in the same account, and nowhere
+else. The Worker's `workers.dev` addresses show the account name, so they stay
+out of this repository: production's is switched off (`workers_dev: false`),
+and the preview URLs, staging included, stay behind Access.
 
 ### Deploying
 
@@ -342,23 +343,27 @@ The file also sets:
 
 ### Who may open it
 
-Anyone, at `subnetwork.dev`: Access covers only the Worker's `workers.dev`
-hostnames, and a custom domain is a hostname of its own. Who may open the
-`workers.dev` copies is set in the dashboard, not by the script. Cloudflare
-Access covers the production `workers.dev` URL and every preview hostname of
-the Worker. That was
+Anyone, at `subnetwork.dev`. Who may open the preview URLs is set in the
+dashboard, not by the script: one Access application, *subnetwork -
+Cloudflare Workers*, whose destination is the Worker `subnetwork` with the
+type *preview URLs*. Its other type, *production and preview URLs*, covers
+the Worker at **every** address it answers on, the custom domain included,
+which is why attaching `subnetwork.dev` first served the Access login there.
+Before that change, Access covered the production `workers.dev` URL and every
+preview hostname of the Worker. That was
 checked on 2026-10-10: the main URL, three version preview URLs, the
 `staging` alias and an unused alias name all answered `302` to the Access
 login. The policy admits only members of the Cloudflare account. To admit
 others, add an **Emails** rule to that policy. An email *domain* rule for a
 public mail provider would admit everyone who uses that provider.
 
-Production went public on 2026-10-10 by attaching `subnetwork.dev`, not by
-taking Access off anything, so the private copies kept the protection they
-had. Putting the site behind Access again means adding `subnetwork.dev` to an
-Access application in the Zero Trust dashboard; detaching the custom domain
-(Worker → Settings → Domains & Routes) takes it offline instead, and the next
-production deploy attaches it again.
+Production went public on 2026-10-10: `subnetwork.dev` attached, the Access
+destination narrowed to preview URLs, and the production `workers.dev` route
+switched off, after which a preview URL was checked to still answer `302`.
+Putting the site behind Access again means setting that destination back to
+*production and preview URLs*; detaching the custom domain (Worker → Settings
+→ Domains & Routes) takes it offline instead, and the next production deploy
+attaches it again.
 
 ## The GitHub repository
 
