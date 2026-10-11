@@ -30,7 +30,7 @@ Access admits only members of the Cloudflare account.
 | First impression | **Partly done.** About explains the page and the title is "SubNetwork"; no meta description, Open Graph tags or intro yet. |
 | Security headers | **Done**, including a `script-src` CSP by the inline script's hash. |
 | Local path in the payload | **Done.** The export leaves `chembl_path` out of `meta`. |
-| Gaps found by the second pass | **Partly done.** Done: licence links, a visible data date, how to cite, the load and failure states, a staging copy, the deploy record, one hosted copy, the interactions line and the two optional headers. Open: privacy, a contact route, other browsers, keyboard access, monitoring, the address, the 43 unexamined claims. See *What the first pass missed*. |
+| Gaps found by the second pass | **Partly done.** Done: licence links, a visible data date, how to cite, the load and failure states, a staging copy, the deploy record, one hosted copy, the interactions line and the two optional headers. Open: privacy, a contact route, other browsers, keyboard access, monitoring, indexing and a favicon, the 43 unexamined claims. The address is `subnetwork.dev`. See *What the first pass missed*. |
 
 Before admitting anyone beyond the account, the remaining choice is phones,
 and the link-preview tags are the remaining work from the first pass. Of the
@@ -374,7 +374,10 @@ Access policy comes off.
   need its own HSTS: every `.dev` domain is HSTS-preloaded, but a `.org` is
   not. Decide at the same time whether search engines should index a soft
   launch (`robots.txt` / `noindex`), and add the favicon the first pass's
-  link-preview item does not mention.
+  link-preview item does not mention. *Address done 2026-10-10: the page is
+  public at `subnetwork.dev`, registered through Cloudflare, attached by the
+  production deploy, and HSTS-preloaded as every `.dev` is; the `workers.dev`
+  addresses stay behind Access. Indexing and the favicon are open.*
 
 ### Content a public reader will misread
 

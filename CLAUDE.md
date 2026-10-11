@@ -862,15 +862,19 @@ molecules) are in [docs/COHORT-2.md](docs/COHORT-2.md) and come first.
   the suites; both run offline in seconds.
 - **The legacy pipeline's fate is undecided** — a maintained rollback path
   (which needs a test that builds it) or history (a tag, and delete the code).
-- **Not ready to open to the public.** Open from the hosting review: phones
+- **Public since 2026-10-10, with the hosting review's items open.** The
+  page is at `subnetwork.dev`; the GitHub repository is still private, so
+  the page's error-report links 404 until it is made public. Open: phones
   (responsive, or stated desktop-only — the user's call), and a meta
   description and link-preview tags; and from its second pass, a privacy
-  note, Firefox/Safari, keyboard access, external monitoring and the
-  address. Done 2026-10-10: shareable links, a `script-src` CSP, licence
-  links, a visible data date, how to cite, the load and failure states, the
-  "no interactions" line, two more headers, a staging copy, a deploy record
-  naming the data, and a way to report an error (GitHub issues, linked from
-  the strip and About, live once this repository is public). The table is in [docs/HOSTING-REVIEW.md](docs/HOSTING-REVIEW.md), and
+  note, Firefox/Safari, keyboard access, external monitoring, whether
+  search engines should index it (`robots.txt`), and a favicon. Done
+  2026-10-10: shareable links, a `script-src` CSP, licence links, a visible
+  data date, how to cite, the load and failure states, the "no interactions"
+  line, two more headers, a staging copy, a deploy record naming the data,
+  the address, and a way to report an error (GitHub issues, linked from the
+  strip and About, live once this repository is public). The table is in
+  [docs/HOSTING-REVIEW.md](docs/HOSTING-REVIEW.md), and
   the answers to the user's questions on it in
   [docs/HOSTING-REVIEW-ANSWERS.md](docs/HOSTING-REVIEW-ANSWERS.md).
 
@@ -904,16 +908,20 @@ overrides the default of pushing a session's branch:
 
 ## Hosting
 
-The cohort viewer runs on Cloudflare Workers behind Cloudflare Access,
-**with** the evidence shards, and is the one hosted copy. The claude.ai
-artifact it was also published as (versions 1–28) was **deleted on
-2026-10-10** at the user's request, so that two shareable copies could not
-drift; [docs/PUBLISHING.md](docs/PUBLISHING.md) keeps its procedure and
+The cohort viewer runs on Cloudflare Workers, **with** the evidence shards,
+and is the one hosted copy: **public at <https://subnetwork.dev>** since
+2026-10-10, while the Worker's `workers.dev` addresses, staging included,
+stay behind Cloudflare Access and out of the repository (they show the
+account name). The claude.ai artifact it was also published as (versions
+1–28) was **deleted on 2026-10-10** at the user's request, so that two
+shareable copies could not drift; [docs/PUBLISHING.md](docs/PUBLISHING.md) keeps its procedure and
 version history as a record. The legacy viewer's separate artifact snapshot
 is in [docs/LEGACY-PIPELINE.md](docs/LEGACY-PIPELINE.md).
 
 `scripts/deploy_cloudflare.sh` deploys after both suites and
-`--check-status` pass; `--preview` uploads to the private **staging** alias
+`--check-status` pass, attaches `subnetwork.dev`, and fails unless that
+address serves the deploy and every `workers.dev` address still answers with
+the Access login; `--preview` uploads to the private **staging** alias
 instead, leaving production alone. Each upload names the data build in its
-message and is kept under `deploys/`. The addresses stay out of the
-repository ([docs/PUBLISHING.md](docs/PUBLISHING.md), *The Cloudflare copy*).
+message and is kept under `deploys/`. The `workers.dev` addresses stay out
+of the repository ([docs/PUBLISHING.md](docs/PUBLISHING.md), *The Cloudflare copy*).

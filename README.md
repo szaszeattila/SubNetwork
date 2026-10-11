@@ -6,6 +6,8 @@ molecules act on them. Each line is a claim from a public database: which
 protein the molecule acts on, how it acts there (agonist, antagonist,
 inhibitor, …), and how much published evidence stands behind it.
 
+**Open it at <https://subnetwork.dev>.**
+
 **Exploratory and educational. Not medical, dosing or safety guidance.** Two
 molecules that share targets here are not interchangeable drugs, and the page
 says nothing about taking drugs together.

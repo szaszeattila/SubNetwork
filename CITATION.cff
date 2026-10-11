@@ -10,6 +10,7 @@ authors:
     given-names: Attila
 license: MIT
 repository-code: "https://github.com/szaszeattila/SubNetwork"
+url: "https://subnetwork.dev"
 abstract: >-
   An explorable network of what molecules developed for neurological and
   psychiatric conditions act on: the proteins, how each molecule acts there,

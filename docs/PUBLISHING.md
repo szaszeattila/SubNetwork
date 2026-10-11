@@ -277,8 +277,11 @@ absence of evidence".
 
 Since 2026-10-10 the viewer runs on Cloudflare Workers static assets, the
 successor to Cloudflare Pages (wrangler now routes its `pages` commands to
-Workers), **with** the evidence shards. It is the one hosted copy. Its
-addresses are in the Cloudflare dashboard, not in this repository.
+Workers), **with** the evidence shards. It is the one hosted copy, and
+since 2026-10-10 it is public at **<https://subnetwork.dev>**, a domain
+registered through Cloudflare Registrar in the same account. The Worker's
+`workers.dev` addresses show the account name, so they stay behind Access and
+out of this repository.
 
 ### Deploying
 
@@ -309,11 +312,16 @@ Every mode runs both suites and `--check-status` first. It then stages
 - **What was uploaded is kept.** Each upload is archived under `deploys/`
   (gitignored, about 11 MB). Once a rebuild replaces the data, that archive is
   the only copy of what went live. Prune it by hand.
-- **Access is checked after every upload.** The script requests each URL
-  wrangler printed. For a preview, any URL that serves the page instead of
-  redirecting to the `cloudflareaccess.com` login fails the run. For
-  production it only reports the answer, since production is meant to be
-  public one day.
+- **Access is checked after every upload.** The script requests each
+  `workers.dev` URL wrangler printed, and any that serves the page instead of
+  redirecting to the `cloudflareaccess.com` login fails the run, production's
+  included.
+- **The custom domain is attached by the deploy.** A production deploy puts
+  `subnetwork.dev` in the staged `wrangler.jsonc` as a custom-domain route,
+  so the attachment is in this script rather than a dashboard click, and a
+  preview never touches it. It then waits until `https://subnetwork.dev/`
+  serves a CSP naming this deploy's script hash, and fails the run if it
+  never does.
 - **Undo:** `wrangler rollback --name subnetwork` makes the previous version
   the deployment again, or pass a version id from `wrangler versions list`.
 
@@ -334,20 +342,23 @@ The file also sets:
 
 ### Who may open it
 
-Who may open it is set in the dashboard, not by the script. Cloudflare Access
-covers the production URL and every preview hostname of the Worker. That was
+Anyone, at `subnetwork.dev`: Access covers only the Worker's `workers.dev`
+hostnames, and a custom domain is a hostname of its own. Who may open the
+`workers.dev` copies is set in the dashboard, not by the script. Cloudflare
+Access covers the production `workers.dev` URL and every preview hostname of
+the Worker. That was
 checked on 2026-10-10: the main URL, three version preview URLs, the
 `staging` alias and an unused alias name all answered `302` to the Access
 login. The policy admits only members of the Cloudflare account. To admit
 others, add an **Emails** rule to that policy. An email *domain* rule for a
 public mail provider would admit everyone who uses that provider.
 
-When production goes public, take Access off the production (workers.dev)
-route only. Then confirm that a preview URL still answers `302`. Cloudflare's
-documentation says Access can cover production, previews or both, but it
-does not promise that removing one leaves the other in place. The
-`--preview` check will catch an exposed preview on the next upload. Checking
-by hand right away catches it sooner.
+Production went public on 2026-10-10 by attaching `subnetwork.dev`, not by
+taking Access off anything, so the private copies kept the protection they
+had. Putting the site behind Access again means adding `subnetwork.dev` to an
+Access application in the Zero Trust dashboard; detaching the custom domain
+(Worker → Settings → Domains & Routes) takes it offline instead, and the next
+production deploy attaches it again.
 
 ## The GitHub repository
 
@@ -415,8 +426,9 @@ gh api -X PUT repos/szaszeattila/SubNetwork/private-vulnerability-reporting
 
 The second command turns on private vulnerability reporting for
 [SECURITY.md](../SECURITY.md), which GitHub offers only on public
-repositories. Then deploy the page to production, so that its GitHub links
-lead somewhere. The page's error-report links (the disclaimer strip and
+repositories. The page went public at `subnetwork.dev` first, so until this
+is run its *Report an error* links lead to a 404; set the repository's
+homepage to `https://subnetwork.dev` at the same time. The page's error-report links (the disclaimer strip and
 About), `CITATION.cff` and the test holding those links
 (`tests/cohort_viewer_public.test.mjs`) all name this address, so a rename
 changes all of them.

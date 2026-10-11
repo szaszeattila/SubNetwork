@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # Deploy the cohort viewer to Cloudflare Workers static assets (the successor
 # to Cloudflare Pages), evidence shards included, as the Worker named below.
-# Who may open it is set by Cloudflare Access in the dashboard, not here.
+# Production is public at the custom domain below, which every production
+# deploy attaches; the workers.dev addresses, previews included, stay behind
+# Cloudflare Access, which is set in the dashboard, not here.
 #
 # Ships five paths and nothing else (docs/HOSTING-REVIEW.md): index.html,
 # vendor/, graph.data.js, gtopdb.data.js and evidence/, plus a _headers file
@@ -26,6 +28,7 @@
 set -euo pipefail
 
 WORKER=subnetwork
+DOMAIN=subnetwork.dev
 PREVIEW_ALIAS=staging
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 cd "$ROOT"
@@ -65,11 +68,19 @@ cp viz/index.html viz/graph.data.js viz/gtopdb.data.js "$SITE"/
 cp -r viz/vendor viz/evidence "$SITE"/
 cp NOTICE "$SITE/NOTICE.txt"
 
+# The custom domain goes in a production deploy only: a version upload is
+# never served at it. workers.dev is stated rather than left to wrangler's
+# default, because the staging alias and the Access check live there.
+ROUTES=""
+[ "$MODE" = deploy ] && ROUTES=",
+  \"routes\": [{ \"pattern\": \"$DOMAIN\", \"custom_domain\": true }]"
 cat > "$STAGE/wrangler.jsonc" <<JSON
 {
   "name": "$WORKER",
   "compatibility_date": "2026-10-01",
-  "assets": { "directory": "./assets" }
+  "assets": { "directory": "./assets" },
+  "workers_dev": true,
+  "preview_urls": true$ROUTES
 }
 JSON
 
@@ -131,19 +142,33 @@ else
   (cd "$STAGE" && wrangler deploy --message "$MESSAGE") 2>&1 | tee "$LOG"
 fi
 
-# Private means the login page, not the site. A preview URL that serves the
-# page is an exposure, so it fails the run; the production URL is reported,
-# since it is meant to be public one day.
+# Private means the login page, not the site. Every workers.dev URL, the
+# production one included, stays behind Access: the public address is the
+# custom domain, and a workers.dev URL that serves the page is an exposure
+# (it also shows the account name), so it fails the run.
 STATUS=0
 for url in $(grep -o 'https://[a-z0-9.-]*\.workers\.dev' "$LOG" | sort -u); do
   ANSWER=$(curl -sS -o /dev/null -w '%{http_code} %{redirect_url}' "$url/" || true)
   case "$ANSWER" in
     302\ https://*.cloudflareaccess.com/*) echo "behind Access: $url" ;;
-    *) if [ "$MODE" = preview ]; then
-         echo "NOT behind Access: $url answered ${ANSWER%% *}" >&2; STATUS=1
-       else
-         echo "answers without Access: $url (${ANSWER%% *})"
-       fi ;;
+    *) echo "NOT behind Access: $url answered ${ANSWER%% *}" >&2; STATUS=1 ;;
   esac
 done
+
+# Public means the page itself, from this deploy: the CSP names the inline
+# script's hash, so a matching header is this deploy's page and no other.
+# A new custom domain's certificate can take a few minutes to issue.
+if [ "$MODE" = deploy ]; then
+  WANT="sha256-${CSP##*sha256-}"; WANT="${WANT%%\'*}"
+  for _ in $(seq 30); do
+    CSP_LIVE=$(curl -sS -D - -o /dev/null "https://$DOMAIN/" 2>/dev/null \
+               | grep -i '^content-security-policy:' || true)
+    case "$CSP_LIVE" in *"$WANT"*) break ;; esac
+    sleep 10
+  done
+  case "$CSP_LIVE" in
+    *"$WANT"*) echo "public: https://$DOMAIN/ serves this deploy" ;;
+    *) echo "https://$DOMAIN/ does not serve this deploy yet" >&2; STATUS=1 ;;
+  esac
+fi
 exit $STATUS
