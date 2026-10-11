@@ -863,8 +863,7 @@ molecules) are in [docs/COHORT-2.md](docs/COHORT-2.md) and come first.
 - **The legacy pipeline's fate is undecided** — a maintained rollback path
   (which needs a test that builds it) or history (a tag, and delete the code).
 - **Public since 2026-10-10, with the hosting review's items open.** The
-  page is at `subnetwork.dev`; the GitHub repository is still private, so
-  the page's error-report links 404 until it is made public. Open: phones
+  page is at `subnetwork.dev` and this repository is public. Open: phones
   (responsive, or stated desktop-only — the user's call), and a meta
   description and link-preview tags; and from its second pass, a privacy
   note, Firefox/Safari, keyboard access, external monitoring, whether
@@ -873,7 +872,7 @@ molecules) are in [docs/COHORT-2.md](docs/COHORT-2.md) and come first.
   data date, how to cite, the load and failure states, the "no interactions"
   line, two more headers, a staging copy, a deploy record naming the data,
   the address, and a way to report an error (GitHub issues, linked from the
-  strip and About, live once this repository is public). The table is in
+  strip and About). The table is in
   [docs/HOSTING-REVIEW.md](docs/HOSTING-REVIEW.md), and
   the answers to the user's questions on it in
   [docs/HOSTING-REVIEW-ANSWERS.md](docs/HOSTING-REVIEW-ANSWERS.md).
@@ -881,9 +880,9 @@ molecules) are in [docs/COHORT-2.md](docs/COHORT-2.md) and come first.
 ## Repository and pushing
 
 **This repository is public: everything pushed to it is public and
-permanent.** It is `szaszeattila/SubNetwork`, still private on GitHub until
-the user makes it public ([docs/PUBLISHING.md](docs/PUBLISHING.md), *Going
-public*). It began on 2026-10-10 as one snapshot of a private working copy,
+permanent.** It is `szaszeattila/SubNetwork`, public on GitHub since
+2026-10-10 ([docs/PUBLISHING.md](docs/PUBLISHING.md), *Going public*). It
+began on 2026-10-10 as one snapshot of a private working copy,
 `szaszeattila/SubNetwork-private`, now archived. That copy holds the history
 from before the snapshot, which carries a personal address and session links,
 and is never pushed here.

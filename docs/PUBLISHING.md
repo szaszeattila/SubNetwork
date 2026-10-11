@@ -418,11 +418,10 @@ but not any other address.
 
 ### Going public
 
-The repository is still **private**, so the README, the *Cite this
-repository* button and the topics can be looked at on GitHub before anyone
-else sees them. Its description and its five topics (`cheminformatics`,
-`pharmacology`, `chembl`, `drug-target-interactions`,
-`network-visualization`) are already set. To make it public:
+The repository went **public** on 2026-10-10, after the page, with its
+description, its five topics (`cheminformatics`, `pharmacology`, `chembl`,
+`drug-target-interactions`, `network-visualization`) and its homepage,
+`https://subnetwork.dev`, set. It was made public with:
 
 ```bash
 gh repo edit szaszeattila/SubNetwork --visibility public --accept-visibility-change-consequences
@@ -431,10 +430,9 @@ gh api -X PUT repos/szaszeattila/SubNetwork/private-vulnerability-reporting
 
 The second command turns on private vulnerability reporting for
 [SECURITY.md](../SECURITY.md), which GitHub offers only on public
-repositories. The page went public at `subnetwork.dev` first, so until this
-is run its *Report an error* links lead to a 404; set the repository's
-homepage to `https://subnetwork.dev` at the same time. The page's error-report links (the disclaimer strip and
-About), `CITATION.cff` and the test holding those links
+repositories; both were checked afterwards, and the repository and its issues
+answered an anonymous request. The page's error-report links (the disclaimer
+strip and About), `CITATION.cff` and the test holding those links
 (`tests/cohort_viewer_public.test.mjs`) all name this address, so a rename
 changes all of them.
 
