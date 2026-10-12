@@ -725,6 +725,50 @@ class ClaimAggregationTest(unittest.TestCase):
         self.assertEqual(claim["tier_reason"],
                          "multiple_publications_split_across_endpoint_classes")
 
+    def test_a_paper_reporting_only_a_bound_is_not_a_second_publication(self):
+        # Caffeine at human ADORA1, homologous assignment: one paper's Ki, a
+        # second paper's AC50 > 30 uM and a DrugMatrix row with no value. One
+        # paper holds an exact value, so the reason says one publication, not
+        # several split across endpoint classes.
+        rows = [obs(activity_id=1, study_key="pmid:1", pubmed_id=1),
+                obs(activity_id=2, study_key="pmid:2", pubmed_id=2,
+                    endpoint_class="binding:AC50", value_status="bound", value_nm=None),
+                obs(activity_id=3, study_key="doc:D", provenance_class="deposited_dataset",
+                    pubmed_id=None, value_status="unresolved", value_nm=None)]
+        claim = self.aggregate(rows)[self.key()]
+        self.assertEqual(claim["tier"], "preliminary")
+        self.assertEqual(claim["tier_reason"], "one_publication")
+        self.assertEqual(claim["n_publications"], 2)   # both papers are still listed
+
+    def test_reason_names_where_the_exact_values_come_from(self):
+        # A paper with only a bound does not make deposited values "one publication".
+        rows = [obs(activity_id=1, study_key="doc:D", provenance_class="deposited_dataset",
+                    pubmed_id=None),
+                obs(activity_id=2, study_key="pmid:2", pubmed_id=2,
+                    value_status="bound", value_nm=None)]
+        self.assertEqual(self.aggregate(rows)[self.key()]["tier_reason"],
+                         "deposited_datasets_only")
+
+        rows = [obs(activity_id=1, study_key="doc:D", provenance_class="deposited_dataset",
+                    pubmed_id=None),
+                obs(activity_id=2, study_key="patent:A", provenance_class="patent",
+                    pubmed_id=None, patent_id="A")]
+        claim = self.aggregate(rows)[self.key()]
+        self.assertEqual(claim["tier"], "preliminary")
+        self.assertEqual(claim["tier_reason"], "patents_and_deposits_only")
+
+    def test_an_untraceable_document_alone_is_not_preliminary(self):
+        # The policy's Preliminary needs an identifiable study with an exact
+        # value; a document with no PubMed id, DOI or patent is not one, even
+        # beside a paper that reported only a bound.
+        rows = [obs(activity_id=1, study_key="doc:X", provenance_class="unresolved",
+                    pubmed_id=None),
+                obs(activity_id=2, study_key="pmid:2", pubmed_id=2,
+                    value_status="bound", value_nm=None)]
+        claim = self.aggregate(rows)[self.key()]
+        self.assertEqual(claim["tier"], "limited_or_unresolved")
+        self.assertEqual(claim["tier_reason"], "unresolved_study_provenance")
+
     def test_patents_and_deposits_never_create_multiple_study_support(self):
         rows = [obs(activity_id=1, study_key="patent:A", provenance_class="patent",
                     pubmed_id=None, patent_id="A"),

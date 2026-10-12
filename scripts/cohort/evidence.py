@@ -525,6 +525,11 @@ def aggregate_claims(observations, curated, policy):
         multiple_study = False
         all_studies, all_pub_studies = set(), set()
         patents = datasets = 0
+        # The studies that hold an exact value, by provenance class. A
+        # Preliminary claim's reason names these and nothing else: a paper
+        # that reported only a bound, or a deposit with no value, is listed
+        # with the claim but is not where its values come from.
+        exact_studies = collections.defaultdict(set)
         conflict_dispersion = False
         conflict_detail = []
 
@@ -562,6 +567,9 @@ def aggregate_claims(observations, curated, policy):
             # -class studies, and only inside this one endpoint class.
             pub_with_exact = {r["study_key"] for r in exact
                               if r["provenance_class"] == "publication" and r["study_key"]}
+            for r in exact:
+                if r["study_key"]:
+                    exact_studies[r["provenance_class"]].add(r["study_key"])
             ec_supported = len(pub_with_exact) >= 2
             if ec_supported:
                 multiple_study = True
@@ -599,22 +607,27 @@ def aggregate_claims(observations, curated, policy):
                 ],
             }
 
+        # A document with no PubMed id, DOI or patent number is not an
+        # identifiable study, so it alone never makes a claim Preliminary.
+        exact_pubs = exact_studies["publication"]
+        exact_patents = exact_studies["patent"]
+        exact_datasets = exact_studies["deposited_dataset"]
         if multiple_study:
             tier, reason = "supported", "multiple_study_support"
-        elif any(e["n_measurements"] for e in endpoints.values()) and all_studies:
+        elif exact_pubs or exact_patents or exact_datasets:
             tier = "preliminary"
-            if all_pub_studies:
+            if exact_pubs:
                 reason = ("multiple_publications_split_across_endpoint_classes"
-                          if len(all_pub_studies) >= 2 else "one_publication")
-            elif datasets and not patents:
+                          if len(exact_pubs) >= 2 else "one_publication")
+            elif exact_datasets and not exact_patents:
                 reason = "deposited_datasets_only"
-            elif patents and not datasets:
+            elif exact_patents and not exact_datasets:
                 reason = "patents_only"
             else:
-                reason = "one_publication"
+                reason = "patents_and_deposits_only"
         else:
             tier = "limited_or_unresolved"
-            if n_exact and not all_studies:
+            if n_exact:
                 reason = "unresolved_study_provenance"
             elif n_conditional and not n_exact:
                 reason = "conditional_conversion_only"

@@ -1135,6 +1135,7 @@ describe("a retained claim says what else the pair holds", () => {
     for (const r of ["curated_support", "multiple_study_support",
                      "multiple_publications_split_across_endpoint_classes",
                      "one_publication", "deposited_datasets_only", "patents_only",
+                     "patents_and_deposits_only",
                      "unresolved_study_provenance", "conditional_conversion_only",
                      "censored_only", "invalid_units_only",
                      "curated_no_target_assigned", "curated_target_not_claimable",

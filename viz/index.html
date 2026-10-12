@@ -3039,19 +3039,23 @@ const TIER_REASONS = {
   },
   multiple_publications_split_across_endpoint_classes: {
     label: "Several publications, no two in one endpoint class",
-    text: "Several papers, but each measured a different kind of value, so none replicates another.",
+    text: "Several papers gave exact values, but each measured a different kind of value, so none replicates another.",
   },
   one_publication: {
     label: "One publication",
-    text: "All the exact values come from one paper.",
+    text: "Only one paper gave an exact value, so nothing replicates it. Any other values are from patents or bulk deposits, which never count as replication.",
   },
   deposited_datasets_only: {
     label: "Bulk deposits only",
-    text: "The data was deposited in bulk rather than published, which never counts as replication.",
+    text: "The exact values were deposited in bulk rather than published, which never counts as replication.",
   },
   patents_only: {
     label: "Patents only",
-    text: "All the data comes from patents, which never count as replication.",
+    text: "The exact values all come from patents, which never count as replication.",
+  },
+  patents_and_deposits_only: {
+    label: "Patents and bulk deposits only",
+    text: "The exact values come from patents and bulk deposits, neither of which ever counts as replication.",
   },
   unresolved_study_provenance: {
     label: "No identifiable study",

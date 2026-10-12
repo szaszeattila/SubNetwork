@@ -483,8 +483,8 @@ hand-written and is never rewritten.
 <!-- Written by `python3 scripts/cohort_report.py --write-status`. Do not edit by hand: `--check-status` fails when this block and the active build disagree, and a rewrite discards whatever was typed here. The prose outside the markers is hand-written and is never touched. -->
 
 Pipeline and viewer both working. Current database, `db/cohort1.db`, built
-2026-10-10 against the `chembl_37` bulk release under selection policy
-`cohort1-selection v2.1.0` and evidence policy `cohort1-evidence v1.1.0`:
+2026-10-11 against the `chembl_37` bulk release under selection policy
+`cohort1-selection v2.1.0` and evidence policy `cohort1-evidence v1.1.1`:
 
 **1,335 catalogue entries · 2,578 targets · 81,019 claims · 210,204 observations**
 
@@ -523,7 +523,7 @@ the `class_wikipedia` table: 415 through the Wikidata item carrying the
 descriptor, and 80 whose item has no article through the main article its
 English category declares (Xanthines to *Xanthine*).
 
-The pipeline suite is 487 tests and the node suites are 695 (466 cohort
+The pipeline suite is 490 tests and the node suites are 695 (466 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`

@@ -49,6 +49,42 @@ alone.
 
 ---
 
+## 2026-10-11 — "Several publications" for a claim one paper measured
+
+Found by a reader at caffeine and human ADORA1, in the broader basis (ChEMBL's
+*homologous* assignment, relationship type `H`: filed against the human record,
+but ChEMBL could not confirm the protein measured was the human one). The claim
+has four rows from three studies: a 2000 paper's Ki = 29 µM, a 2023 paper's
+AC50 > 30 µM, and two DrugMatrix rows with no value. The panel said
+*Preliminary · Several publications, no two in one endpoint class*, and the
+reader asked, fairly, why three sources were not Supported.
+
+The tier was right: one exact value from one paper. The reason was wrong. It
+was chosen from every study with **any** row, so the bound-only 2023 paper
+counted as a second publication, while replication itself was always counted
+over exact values only. The patent and deposit branches had the same fault,
+counting rows rather than studies with an exact value, and a claim whose exact
+values came from both a patent and a deposit fell through to "one
+publication".
+
+**What changed** (evidence policy 1.1.0 to 1.1.1). A Preliminary reason now
+names only the studies that hold an exact value, with a new
+`patents_and_deposits_only` for the fall-through case. The other studies are
+still listed with the claim and still counted in `n_publications`. The tier
+condition now matches the policy's own definition: an identifiable study
+(publication, patent or deposit) with an exact value. The old code accepted any
+study key at all, so ketoprofen's broader functional claim at SLC22A7 was
+Preliminary on one document with no PubMed id, DOI or patent, beside a paper
+that reported only a bound. It is now Limited, *No identifiable study*.
+
+Measured on the rebuild: the same 80,491 non-GtoPdb claims, 420 reasons
+changed (334 "several publications" to "one publication"; 83 "one
+publication" to deposits, patents, or both; 2 "several publications" to
+deposits or patents only), and that one tier. No Supported claim moved, so no
+score did.
+
+---
+
 ## 2026-10-10 — alfuzosin's agonist is withheld, and how many more there might be
 
 The 2026-09-27 entry below left ChEMBL's alpha-1 `AGONIST` for alfuzosin in

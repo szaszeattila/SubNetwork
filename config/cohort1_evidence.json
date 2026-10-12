@@ -1,6 +1,6 @@
 {
   "policy_id": "cohort1-evidence",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "adopted": "2026-09-13",
   "supersedes": "analysis/cohort1/config/tier_rules.json v1.0.0 (report definitions) and the production measurement-count corroboration rule (CLAUDE.md invariant 7, pre-cohort-1)",
   "decisions": "docs/COHORT-1-DECISIONS.md D06, D07, D08, D09, D10, D11, D12",
@@ -98,7 +98,8 @@
     },
     "preliminary": {
       "definition": "At least one identifiable eligible study (publication, patent or deposited dataset) with a qualifying exact measurement for the claim, and no Supported evidence for that claim in this basis.",
-      "sub_reasons": ["one_publication", "one_patent", "one_deposit", "deposited_datasets_only", "patents_only", "multiple_publications_split_across_endpoint_classes"]
+      "sub_reasons": ["one_publication", "one_patent", "one_deposit", "deposited_datasets_only", "patents_only", "patents_and_deposits_only", "multiple_publications_split_across_endpoint_classes"],
+      "sub_reason_rule": "The sub-reason names only the studies that hold a qualifying exact measurement. A publication that reported only a bound, or a deposit with no value, is kept with the claim and never named as a source of its values (1.1.1; 1.1.0 named every study with any row, so 'Several publications' was shown for a claim whose one exact value came from one paper)."
     },
     "limited_or_unresolved": {
       "definition": "Retained observations that exist but do not meet the rules above. The reason is always preserved; no default interaction edge is invented.",
