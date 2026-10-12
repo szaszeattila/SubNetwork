@@ -218,6 +218,8 @@ analysis/similarity_harness/  grades the ranking against ATC level-4 classes
 analysis/probe/           50 settled drug relationships put to the ranking, and
                           what went wrong where it misses. A diagnostic, never a
                           tuning target; read-only.
+analysis/wiki_comparison/ a nootropics wiki's compound list placed against
+                          ChEMBL and the catalogue, by name. Read-only.
 analysis/cohort1/         the read-only analysis behind COHORT-REPORT.md
 docs/                     the reasoning; docs/INDEX.md is the index
 README.md, CONTRIBUTING.md, SECURITY.md, CITATION.cff  for people arriving at
