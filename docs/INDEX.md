@@ -59,7 +59,7 @@ one of the two.
 | --- | --- | --- |
 | [SIMILARITY-HARNESS.md](SIMILARITY-HARNESS.md) | how the ranking is graded against ATC level-4 classes, what the constant sweep found, and what was adopted on the strength of it | current, but see trap 4 — it quotes two grades on two question sets |
 | [SIMILARITY-DIAGNOSIS.md](SIMILARITY-DIAGNOSIS.md) | where the ranking is right and wrong against 50 known drug relationships, and why — including that the ATC N key is its hardest slice | measured 2026-09-17 against the active build |
-| [NOOTROPIC-WIKI-COMPARISON.md](NOOTROPIC-WIKI-COMPARISON.md) | which of a nootropics wiki's 2,184 compounds are in the catalogue, which are in ChEMBL and fail the clinical rule (310 with a curated mechanism), and which no source here holds (semax, selank); and that pipotiazine is outside while its ester is in | measured 2026-10-11; matched by name, 363 names not looked up |
+| [NOOTROPIC-WIKI-COMPARISON.md](NOOTROPIC-WIKI-COMPARISON.md) | which of a nootropics wiki's 2,184 compounds are in the catalogue, which are in ChEMBL and fail the clinical rule (314 with a curated mechanism), and which no source here holds (semax, selank); how its list compares with six others (PsychonautWiki, TripSit, Wikipedia, Wikidata, Nootropics Expert); and that pipotiazine is outside while its ester is in | measured 2026-10-11; matched by name |
 
 **Proposals — nothing in these is adopted, and listing one is not adopting it.**
 

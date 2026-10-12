@@ -1282,7 +1282,7 @@ oxycodone,Oxycodone,Psychiatric & neuro-clinical,Opioid,chembl_name,high,,CHEMBL
 hydrocodone,Hydrocodone,Psychiatric & neuro-clinical,Opioid,chembl_name,high,,CHEMBL1457,HYDROCODONE,CHEMBL1457,route_indication/has_supported,4,R,2,5,1
 fentanyl,Fentanyl,Psychiatric & neuro-clinical,Opioid,chembl_name,high,,CHEMBL596,FENTANYL,CHEMBL596,both_routes/has_supported,4,N,3,29,1
 tramadol,Tramadol,Psychiatric & neuro-clinical,Opioid,chembl_name,high,,CHEMBL1237044,TRAMADOL,CHEMBL1237044,both_routes/has_supported,4,N,1,9,1
-heroin,Heroin,Psychiatric & neuro-clinical,Opioid,not_looked_up,,,,,,,,,,,
+heroin,Heroin,Psychiatric & neuro-clinical,Opioid,pubchem_inchikey,low,,CHEMBL459324,DIACETYLMORPHINE,CHEMBL459324,both_routes/has_supported,3,N,1,0,1
 buprenorphine,Buprenorphine,Psychiatric & neuro-clinical,Opioid,chembl_name,high,,CHEMBL511142,BUPRENORPHINE,CHEMBL511142,both_routes/has_supported,4,N,4,10,0
 methadone,Methadone,Psychiatric & neuro-clinical,Opioid,chembl_name,high,,CHEMBL651,METHADONE,CHEMBL651,both_routes/has_supported,4,N,1,10,1
 naltrexone,Naltrexone,Psychiatric & neuro-clinical,Opioid,chembl_name,high,,CHEMBL19019,NALTREXONE,CHEMBL19019,both_routes/has_supported,4,N,2,13,1
@@ -1294,7 +1294,7 @@ clonazepam,Clonazepam,Psychiatric & neuro-clinical,Benzodiazepine,chembl_name,hi
 clonazolam,Clonazolam,Psychiatric & neuro-clinical,Benzodiazepine,unii_not_in_chembl,,UNII HJH52YYC1X,,,,,,,,,
 clorazepate,Clorazepate,Psychiatric & neuro-clinical,Benzodiazepine,chembl_synonym,medium,,CHEMBL1213252,CLORAZEPIC ACID,CHEMBL1213252,both_routes/has_supported,4,N,1,0,1
 deschloroetizolam,Deschloroetizolam,Psychiatric & neuro-clinical,Benzodiazepine,unii_not_in_chembl,,UNII 69HF7J354D,,,,,,,,,
-diclazepam,Diclazepam,Psychiatric & neuro-clinical,Benzodiazepine,not_looked_up,,,,,,,,,,,
+diclazepam,Diclazepam,Psychiatric & neuro-clinical,Benzodiazepine,pubchem_inchikey,low,,CHEMBL268248,,,,,,0,0,0
 estazolam,Estazolam,Psychiatric & neuro-clinical,Benzodiazepine,chembl_name,high,,CHEMBL285674,ESTAZOLAM,CHEMBL285674,both_routes/has_supported,4,N,1,3,1
 etizolam,Etizolam,Psychiatric & neuro-clinical,Benzodiazepine,chembl_name,high,,CHEMBL1289779,ETIZOLAM,CHEMBL1289779,route_atc_n/has_preliminary,2,N,0,3,0
 flualprazolam,Flualprazolam,Psychiatric & neuro-clinical,Benzodiazepine,unii_not_in_chembl,,UNII FWF5L8D2BE,,,,,,,,,
@@ -1304,7 +1304,7 @@ flunitrazepam,Flunitrazepam,Psychiatric & neuro-clinical,Benzodiazepine,chembl_n
 flunitrazolam,Flunitrazolam,Psychiatric & neuro-clinical,Benzodiazepine,unii_not_in_chembl,,UNII OK0I6HTR1Y,,,,,,,,,
 gidazepam,Gidazepam,Psychiatric & neuro-clinical,Benzodiazepine,unii_inchikey,high,,CHEMBL1565882,,,,,,0,0,0
 lorazepam,Lorazepam,Psychiatric & neuro-clinical,Benzodiazepine,chembl_name,high,,CHEMBL580,LORAZEPAM,CHEMBL580,both_routes/has_supported,4,N,1,3,1
-metizolam,Metizolam,Psychiatric & neuro-clinical,Benzodiazepine,not_looked_up,,,,,,,,,,,
+metizolam,Metizolam,Psychiatric & neuro-clinical,Benzodiazepine,pubchem_not_in_chembl,,,,,,,,,,,
 midazolam,Midazolam,Psychiatric & neuro-clinical,Benzodiazepine,chembl_name,high,,CHEMBL655,MIDAZOLAM,CHEMBL655,both_routes/has_supported,4,N,2,9,1
 nifoxipam,Nifoxipam,Psychiatric & neuro-clinical,Benzodiazepine,unii_not_in_chembl,,UNII 9O6C9M3CH6,,,,,,,,,
 oxazepam,Oxazepam,Psychiatric & neuro-clinical,Benzodiazepine,chembl_name,high,,CHEMBL568,OXAZEPAM,CHEMBL568,both_routes/has_supported,4,N,1,2,1
@@ -1325,37 +1325,37 @@ cyclobenzaprine,Cyclobenzaprine,Psychiatric & neuro-clinical,Muscle Relaxant,che
 methocarbamol,Methocarbamol,Psychiatric & neuro-clinical,Muscle Relaxant,chembl_name,high,,CHEMBL1201117,METHOCARBAMOL,CHEMBL1201117,route_indication/has_supported,4,M,1,0,1
 tizanidine,Tizanidine,Psychiatric & neuro-clinical,Muscle Relaxant,chembl_name,high,,CHEMBL1079,TIZANIDINE,CHEMBL1079,route_indication/has_supported,4,M,1,6,1
 alfaxalone,Alfaxalone,Psychiatric & neuro-clinical,Anesthetic,chembl_name,high,,CHEMBL190279,ALFAXALONE,CHEMBL190279,route_atc_n/has_supported_broader_only,2,N,0,0,1
-alphadolone,Alphadolone,Psychiatric & neuro-clinical,Anesthetic,not_looked_up,,,,,,,,,,,
+alphadolone,Alphadolone,Psychiatric & neuro-clinical,Anesthetic,pubchem_inchikey,low,,CHEMBL2104019,ALFADOLONE,,,2,,0,0,0
 bupivacaine,Bupivacaine,Psychiatric & neuro-clinical,Anesthetic,chembl_name,high,,CHEMBL1098,BUPIVACAINE,CHEMBL1098,both_routes/has_supported,4,N,2,4,1
-emla-cream,EMLA Cream,Psychiatric & neuro-clinical,Anesthetic,not_looked_up,,,,,,,,,,,
+emla-cream,EMLA Cream,Psychiatric & neuro-clinical,Anesthetic,no_match,,,,,,,,,,,
 hydroxydione,Hydroxydione,Psychiatric & neuro-clinical,Anesthetic,unii_connectivity,low,,CHEMBL3137790|CHEMBL4760675|CHEMBL6150275,,,,,,0,2,0
-lidocaine-5-medicated-plaster,Lidocaine 5% Medicated Plaster,Psychiatric & neuro-clinical,Anesthetic,not_looked_up,,,,,,,,,,,
+lidocaine-5-medicated-plaster,Lidocaine 5% Medicated Plaster,Psychiatric & neuro-clinical,Anesthetic,no_match,,,,,,,,,,,
 minaxolone,Minaxolone,Psychiatric & neuro-clinical,Anesthetic,chembl_name,high,,CHEMBL2105209,MINAXOLONE,,,2,,0,0,1
-org-20599,Org 20599,Psychiatric & neuro-clinical,Anesthetic,not_looked_up,,,,,,,,,,,
-org-21465,Org 21465,Psychiatric & neuro-clinical,Anesthetic,not_looked_up,,,,,,,,,,,
+org-20599,Org 20599,Psychiatric & neuro-clinical,Anesthetic,pubchem_connectivity,low,,CHEMBL3137825,,,,,,0,0,0
+org-21465,Org 21465,Psychiatric & neuro-clinical,Anesthetic,pubchem_inchikey,low,,CHEMBL1790261,,,,,,0,0,0
 procaine,Procaine,Psychiatric & neuro-clinical,Anesthetic,chembl_name,high,,CHEMBL569,PROCAINE,CHEMBL569,route_atc_n/has_supported,4,CNS,1,3,1
 propofol,Propofol,Psychiatric & neuro-clinical,Anesthetic,chembl_name,high,,CHEMBL526,PROPOFOL,CHEMBL526,both_routes/has_supported,4,N,1,5,1
 proxymetacaine,Proxymetacaine,Psychiatric & neuro-clinical,Anesthetic,chembl_synonym,medium,,CHEMBL1196,PROPARACAINE,CHEMBL1196,route_indication/has_supported,4,S,1,4,1
 renanolone,Renanolone,Psychiatric & neuro-clinical,Anesthetic,chembl_name,high,,CHEMBL1908048,RENANOLONE,,,2,,0,0,0
 ropivacaine,Ropivacaine,Psychiatric & neuro-clinical,Anesthetic,chembl_name,high,,CHEMBL1077896,ROPIVACAINE,CHEMBL1077896,both_routes/has_supported,4,N,1,1,1
 lidocaine,Lidocaine,Psychiatric & neuro-clinical,Anesthetic,chembl_name,high,,CHEMBL79,LIDOCAINE,CHEMBL79,both_routes/has_supported,4,CDNRS,2,7,1
-atropine-ophthalmic,Atropine (ophthalmic),Psychiatric & neuro-clinical,Anticholinergic,not_looked_up,,,,,,,,,,,
-24-s-hydroxycholesterol,24(S)-Hydroxycholesterol,Psychiatric & neuro-clinical,Neurosteroid,not_looked_up,,,,,,,,,,,
-3-androstanediol,3α-Androstanediol,Psychiatric & neuro-clinical,Neurosteroid,not_looked_up,,,,,,,,,,,
-5-dihydroprogesterone,5α-Dihydroprogesterone,Psychiatric & neuro-clinical,Neurosteroid,not_looked_up,,,,,,,,,,,
+atropine-ophthalmic,Atropine (ophthalmic),Psychiatric & neuro-clinical,Anticholinergic,no_match,,,,,,,,,,,
+24-s-hydroxycholesterol,24(S)-Hydroxycholesterol,Psychiatric & neuro-clinical,Neurosteroid,pubchem_inchikey,low,,CHEMBL171804,,,,,,0,4,1
+3-androstanediol,3α-Androstanediol,Psychiatric & neuro-clinical,Neurosteroid,pubchem_inchikey,low,,CHEMBL335062,ANDROSTANDIOL,,,,,0,2,0
+5-dihydroprogesterone,5α-Dihydroprogesterone,Psychiatric & neuro-clinical,Neurosteroid,pubchem_inchikey,low,,CHEMBL407717,,,,,,0,3,0
 allopregnanolone,Allopregnanolone,Psychiatric & neuro-clinical,Neurosteroid,chembl_synonym,medium,,CHEMBL207538,BREXANOLONE,CHEMBL207538,both_routes/has_supported,4,N,1,1,1
-allotetrahydrocorticosterone,Allotetrahydrocorticosterone,Psychiatric & neuro-clinical,Neurosteroid,not_looked_up,,,,,,,,,,,
-androstadienol,Androstadienol,Psychiatric & neuro-clinical,Neurosteroid,not_looked_up,,,,,,,,,,,
+allotetrahydrocorticosterone,Allotetrahydrocorticosterone,Psychiatric & neuro-clinical,Neurosteroid,pubchem_connectivity,low,,CHEMBL1908040,,,,,,0,0,0
+androstadienol,Androstadienol,Psychiatric & neuro-clinical,Neurosteroid,pubchem_not_in_chembl,,,,,,,,,,,
 androstadienone,Androstadienone,Psychiatric & neuro-clinical,Neurosteroid,unii_connectivity,low,,CHEMBL141998,,,,,,0,1,0
 androstenediol,Androstenediol,Psychiatric & neuro-clinical,Neurosteroid,chembl_name,high,,CHEMBL440283,ANDROSTENEDIOL,,,-1,,0,6,0
 androstenol,Androstenol,Psychiatric & neuro-clinical,Neurosteroid,chembl_name,high,,CHEMBL142348,ANDROSTENOL,,,,,0,2,1
-androstenone,Androstenone,Psychiatric & neuro-clinical,Neurosteroid,not_looked_up,,,,,,,,,,,
+androstenone,Androstenone,Psychiatric & neuro-clinical,Neurosteroid,pubchem_inchikey,low,,CHEMBL1309552,,,,,,0,0,0
 androsterone,Androsterone,Psychiatric & neuro-clinical,Neurosteroid,chembl_name,high,,CHEMBL87285,ANDROSTERONE,,,,,0,6,0
 brexanolone,Brexanolone,Psychiatric & neuro-clinical,Neurosteroid,chembl_name,high,,CHEMBL207538,BREXANOLONE,CHEMBL207538,both_routes/has_supported,4,N,1,1,1
 deoxycorticosterone,Deoxycorticosterone,Psychiatric & neuro-clinical,Neurosteroid,chembl_synonym,medium,,CHEMBL1200542,DESOXYCORTICOSTERONE ACETATE,,,4,H,1,0,0
 dhea,DHEA,Psychiatric & neuro-clinical,Neurosteroid,chembl_synonym,low,,CHEMBL90593,PRASTERONE,CHEMBL90593,route_indication/has_supported,4,AG,1,6,1
-dhea-sulfate,DHEA Sulfate,Psychiatric & neuro-clinical,Neurosteroid,not_looked_up,,,,,,,,,,,
-ent-a011,ENT-A011,Psychiatric & neuro-clinical,Neurosteroid,not_looked_up,,,,,,,,,,,
+dhea-sulfate,DHEA Sulfate,Psychiatric & neuro-clinical,Neurosteroid,pubchem_inchikey,low,,CHEMBL259898,PRASTERONE SULFURIC ACID,,,-1,,0,1,0
+ent-a011,ENT-A011,Psychiatric & neuro-clinical,Neurosteroid,no_match,,,,,,,,,,,
 epiandrosterone,Epiandrosterone,Psychiatric & neuro-clinical,Neurosteroid,chembl_name,high,,CHEMBL272195,EPIANDROSTERONE,,,,,0,5,0
 epipregnanolone,Epipregnanolone,Psychiatric & neuro-clinical,Neurosteroid,unii_inchikey,high,,CHEMBL1908049,,,,,,0,0,0
 estratetraenol,Estratetraenol,Psychiatric & neuro-clinical,Neurosteroid,unii_inchikey,high,,CHEMBL1080216,,,,,,0,0,0
@@ -1366,15 +1366,15 @@ pregnenolone-sulfate,Pregnenolone Sulfate,Psychiatric & neuro-clinical,Neuroster
 sage-324,SAGE-324,Psychiatric & neuro-clinical,Neurosteroid,unii_not_in_chembl,,UNII 9J768D78HM,,,,,,,,,
 sage-718,SAGE-718,Psychiatric & neuro-clinical,Neurosteroid,chembl_synonym,medium,,CHEMBL5095095,DALZANEMDOR,CHEMBL5095095,route_indication/has_preliminary,3,,0,4,0
 sepranolone,Sepranolone,Psychiatric & neuro-clinical,Neurosteroid,chembl_name,high,,CHEMBL2057301,SEPRANOLONE,,,2,,0,3,0
-thdoc,THDOC,Psychiatric & neuro-clinical,Neurosteroid,not_looked_up,,,,,,,,,,,
+thdoc,THDOC,Psychiatric & neuro-clinical,Neurosteroid,pubchem_inchikey,low,,CHEMBL3140372,,,,,,0,0,0
 pregnanolone,Pregnanolone,Psychiatric & neuro-clinical,Neurosteroid,chembl_synonym,medium,,CHEMBL210952,ELTANOLONE,,,2,,0,0,0
 mk-0777,MK-0777,Psychiatric & neuro-clinical,GABA-A PAM,chembl_name,high,,CHEMBL200177,MK-0777,,,2,,0,0,1
 sb-649868,SB-649868,Psychiatric & neuro-clinical,Orexin Antagonist,chembl_name,high,,CHEMBL1272307,SB-649868,,,2,,2,4,1
-validol,Validol,Psychiatric & neuro-clinical,Sedative,not_looked_up,,,,,,,,,,,
+validol,Validol,Psychiatric & neuro-clinical,Sedative,pubchem_not_in_chembl,,,,,,,,,,,
 apimostinel,Apimostinel,Psychiatric & neuro-clinical,NMDA Modulator,chembl_name,high,,CHEMBL3989872,APIMOSTINEL,,,2,,1,0,0
 aptiganel,Aptiganel,Psychiatric & neuro-clinical,NMDA Modulator,chembl_name,high,,CHEMBL92484,APTIGANEL,,,2,,0,1,0
 av-101,AV-101,Psychiatric & neuro-clinical,NMDA Modulator,chembl_name,high,,CHEMBL3545351,AV-101,,,3,,1,0,0
-bnh-015b,BnH-015B,Psychiatric & neuro-clinical,NMDA Modulator,not_looked_up,,,,,,,,,,,
+bnh-015b,BnH-015B,Psychiatric & neuro-clinical,NMDA Modulator,no_match,,,,,,,,,,,
 eliprodil,Eliprodil,Psychiatric & neuro-clinical,NMDA Modulator,chembl_name,high,,CHEMBL28564,ELIPRODIL,,,2,,0,5,0
 esmethadone,Esmethadone,Psychiatric & neuro-clinical,NMDA Modulator,chembl_name,high,,CHEMBL350719,ESMETHADONE,CHEMBL350719,route_indication/has_preliminary,3,,0,1,0
 lanicemine,Lanicemine,Psychiatric & neuro-clinical,NMDA Modulator,chembl_name,high,,CHEMBL467084,LANICEMINE,,,2,,1,0,1
@@ -1382,24 +1382,24 @@ mij821,MIJ821,Psychiatric & neuro-clinical,NMDA Modulator,chembl_synonym,medium,
 rislenemdaz,Rislenemdaz,Psychiatric & neuro-clinical,NMDA Modulator,chembl_name,high,,CHEMBL2068839,RISLENEMDAZ,,,2,,1,1,0
 traxoprodil,Traxoprodil,Psychiatric & neuro-clinical,NMDA Modulator,chembl_name,high,,CHEMBL17350,TRAXOPRODIL,,,2,,1,4,1
 suritozole,Suritozole,Psychiatric & neuro-clinical,GABA-A Modulator,chembl_name,high,,CHEMBL278764,SURITOZOLE,,,2,,0,0,0
-adx71441,ADX71441,Psychiatric & neuro-clinical,GABA-B PAM,not_looked_up,,,,,,,,,,,
+adx71441,ADX71441,Psychiatric & neuro-clinical,GABA-B PAM,pubchem_inchikey,low,,CHEMBL5408692,,,,,,0,0,0
 afobazole,Afobazole,Psychiatric & neuro-clinical,Sigma-1 Agonist,chembl_synonym,medium,,CHEMBL3707307,FABOMOTIZOLE,CHEMBL3707307,both_routes/no_eligible_evidence,3,N,0,0,0
 opc-14523,OPC-14523,Psychiatric & neuro-clinical,Sigma-1 Agonist,unii_inchikey,high,,CHEMBL294144,,,,,,0,1,0
 siramesine,Siramesine,Psychiatric & neuro-clinical,Sigma-1 Agonist,chembl_name,high,,CHEMBL61479,SIRAMESINE,,,2,,0,8,0
 lithium-carbonate,Lithium Carbonate,Psychiatric & neuro-clinical,Mood Stabilizer,chembl_name,high,,CHEMBL1200826,LITHIUM CARBONATE,CHEMBL1200826,route_indication/has_supported,4,,2,0,0
 lithium-citrate,Lithium Citrate,Psychiatric & neuro-clinical,Mood Stabilizer,chembl_name,high,,CHEMBL1201170,LITHIUM CITRATE ANHYDROUS,CHEMBL1201170,route_indication/has_supported,4,,2,0,0
 lithium-sulfate,Lithium Sulfate,Psychiatric & neuro-clinical,Mood Stabilizer,unii_not_in_chembl,,UNII 919XA137JK,,,,,,,,,
-1p-lsd,1P-LSD,Psychedelics & entactogens,Psychedelic,not_looked_up,,,,,,,,,,,
+1p-lsd,1P-LSD,Psychedelics & entactogens,Psychedelic,pubchem_not_in_chembl,,,,,,,,,,,
 2c-b,2C-B,Psychedelics & entactogens,Psychedelic,unii_inchikey,high,,CHEMBL292821,,,,,,0,5,1
-4-aco-dmt,4-AcO-DMT,Psychedelics & entactogens,Psychedelic,not_looked_up,,,,,,,,,,,
-ayahuasca,Ayahuasca,Psychedelics & entactogens,Psychedelic,not_looked_up,,,,,,,,,,,
-salvia-divinorum,Salvia divinorum,Psychedelics & entactogens,Psychedelic,not_looked_up,,,,,,,,,,,
+4-aco-dmt,4-AcO-DMT,Psychedelics & entactogens,Psychedelic,pubchem_inchikey,low,,CHEMBL6143661,,,,,,0,2,0
+ayahuasca,Ayahuasca,Psychedelics & entactogens,Psychedelic,no_match,,,,,,,,,,,
+salvia-divinorum,Salvia divinorum,Psychedelics & entactogens,Psychedelic,no_match,,,,,,,,,,,
 salvinorin-b-methoxymethyl-ether,Salvinorin B methoxymethyl ether,Psychedelics & entactogens,Psychedelic,chembl_name,high,,CHEMBL258098,SALVINORIN B METHOXYMETHYL ETHER,,,,,0,3,0
-dmt,DMT,Psychedelics & entactogens,Psychedelic,not_looked_up,,,,,,,,,,,
+dmt,DMT,Psychedelics & entactogens,Psychedelic,no_match,,,,,,,,,,,
 lsd,LSD,Psychedelics & entactogens,Psychedelic,chembl_synonym,low,,CHEMBL263881,LYSERGIDE,,,2,,0,21,1
 2-5-dma,"2,5-DMA",Psychedelics & entactogens,Phenethylamine,unii_inchikey,high,,CHEMBL8642,,,,,,0,4,0
 25b-nboh,25B-NBOH,Psychedelics & entactogens,Phenethylamine,unii_not_in_chembl,,UNII KHR1SJ9L0Y,,,,,,,,,
-25b-nbome,25B-NBOMe,Psychedelics & entactogens,Phenethylamine,not_looked_up,,,,,,,,,,,
+25b-nbome,25B-NBOMe,Psychedelics & entactogens,Phenethylamine,pubchem_inchikey,low,,CHEMBL3590188,,,,,,0,2,0
 25c-nboh,25C-NBOH,Psychedelics & entactogens,Phenethylamine,unii_not_in_chembl,,UNII P8BP3X5EBR,,,,,,,,,
 25c-nbome,25C-NBOMe,Psychedelics & entactogens,Phenethylamine,unii_not_in_chembl,,UNII 9FGW3C260N,,,,,,,,,
 25d-nbome,25D-NBOMe,Psychedelics & entactogens,Phenethylamine,unii_not_in_chembl,,UNII 7RET11HE13,,,,,,,,,
@@ -1407,7 +1407,7 @@ lsd,LSD,Psychedelics & entactogens,Psychedelic,chembl_synonym,low,,CHEMBL263881,
 25i-nboh,25I-NBOH,Psychedelics & entactogens,Phenethylamine,unii_not_in_chembl,,UNII W9G4BGW8K4,,,,,,,,,
 25i-nbome,25I-NBOMe,Psychedelics & entactogens,Phenethylamine,unii_inchikey,high,,CHEMBL1908863,,,,,,0,8,1
 25n-nbome,25N-NBOMe,Psychedelics & entactogens,Phenethylamine,unii_not_in_chembl,,UNII 0G7SSW2N0S,,,,,,,,,
-2c-b-fly,2C-B-FLY,Psychedelics & entactogens,Phenethylamine,not_looked_up,,,,,,,,,,,
+2c-b-fly,2C-B-FLY,Psychedelics & entactogens,Phenethylamine,pubchem_inchikey,low,,CHEMBL101189,,,,,,0,2,0
 2c-c,2C-C,Psychedelics & entactogens,Phenethylamine,unii_inchikey,high,,CHEMBL124733,,,,,,0,1,0
 2c-d,2C-D,Psychedelics & entactogens,Phenethylamine,unii_inchikey,high,,CHEMBL124049,,,,,,0,1,0
 2c-e,2C-E,Psychedelics & entactogens,Phenethylamine,unii_inchikey,high,,CHEMBL124063,,,,,,0,1,0
@@ -1420,80 +1420,80 @@ lsd,LSD,Psychedelics & entactogens,Psychedelic,chembl_synonym,low,,CHEMBL263881,
 2c-t-7,2C-T-7,Psychedelics & entactogens,Phenethylamine,unii_inchikey,high,,CHEMBL126432,,,,,,0,0,0
 3c-e,3C-E,Psychedelics & entactogens,Phenethylamine,unii_inchikey,high,,CHEMBL128038,,,,,,0,0,0
 3c-p,3C-P,Psychedelics & entactogens,Phenethylamine,unii_not_in_chembl,,UNII 4KRX4MHV7L,,,,,,,,,
-aleph-1,Aleph-1,Psychedelics & entactogens,Phenethylamine,not_looked_up,,,,,,,,,,,
+aleph-1,Aleph-1,Psychedelics & entactogens,Phenethylamine,no_match,,,,,,,,,,,
 alfetamine,Alfetamine,Psychedelics & entactogens,Phenethylamine,chembl_synonym,medium,,CHEMBL2110598,ALETAMINE,,,2,,0,0,0
 allylescaline,Allylescaline,Psychedelics & entactogens,Phenethylamine,unii_not_in_chembl,,UNII J39IWS08EN,,,,,,,,,
-ariadne,Ariadne,Psychedelics & entactogens,Phenethylamine,not_looked_up,,,,,,,,,,,
+ariadne,Ariadne,Psychedelics & entactogens,Phenethylamine,pubchem_connectivity,low,,CHEMBL2110031|CHEMBL433696,DIMOXAMINE,,,-1,,0,0,0
 bromo-dragonfly,Bromo-DragonFLY,Psychedelics & entactogens,Phenethylamine,unii_inchikey,high,,CHEMBL1177916,,,,,,0,2,0
-dob,DOB,Psychedelics & entactogens,Phenethylamine,not_looked_up,,,,,,,,,,,
+dob,DOB,Psychedelics & entactogens,Phenethylamine,pubchem_inchikey,low,,CHEMBL6607,BROLAMFETAMINE,,,2,,0,6,1
 doc,DOC,Psychedelics & entactogens,Phenethylamine,unii_inchikey,high,,CHEMBL8100,,,,,,0,0,0
 doi,DOI,Psychedelics & entactogens,Phenethylamine,unii_inchikey,high,,CHEMBL6616,,,,,,0,7,1
 dom,DOM,Psychedelics & entactogens,Phenethylamine,chembl_name,high,,CHEMBL8600,DOM,,,,,0,6,1
 escaline,Escaline,Psychedelics & entactogens,Phenethylamine,unii_inchikey,high,,CHEMBL319415,,,,,,0,6,0
 mescaline,Mescaline,Psychedelics & entactogens,Phenethylamine,chembl_name,high,,CHEMBL26687,MESCALINE,,,1,,0,6,1
-methallylescaline,Methallylescaline,Psychedelics & entactogens,Phenethylamine,not_looked_up,,,,,,,,,,,
-n-phenethyl-dimethylamine,N-Phenethyl Dimethylamine,Psychedelics & entactogens,Phenethylamine,not_looked_up,,,,,,,,,,,
-pea-p,PEA-P,Psychedelics & entactogens,Phenethylamine,not_looked_up,,,,,,,,,,,
-pma,PMA,Psychedelics & entactogens,Phenethylamine,not_looked_up,,,,,,,,,,,
-pmma,PMMA,Psychedelics & entactogens,Phenethylamine,not_looked_up,,,,,,,,,,,
+methallylescaline,Methallylescaline,Psychedelics & entactogens,Phenethylamine,pubchem_inchikey,low,,CHEMBL126803,,,,,,0,0,0
+n-phenethyl-dimethylamine,N-Phenethyl Dimethylamine,Psychedelics & entactogens,Phenethylamine,pubchem_inchikey,low,,CHEMBL46278,,,,,,0,2,0
+pea-p,PEA-P,Psychedelics & entactogens,Phenethylamine,no_match,,,,,,,,,,,
+pma,PMA,Psychedelics & entactogens,Phenethylamine,no_match,,,,,,,,,,,
+pmma,PMMA,Psychedelics & entactogens,Phenethylamine,no_match,,,,,,,,,,,
 proscaline,Proscaline,Psychedelics & entactogens,Phenethylamine,unii_inchikey,high,,CHEMBL340765,,,,,,0,0,0
 tma-2,TMA-2,Psychedelics & entactogens,Phenethylamine,unii_inchikey,high,,CHEMBL8389,,,,,,0,4,0
 tma-6,TMA-6,Psychedelics & entactogens,Phenethylamine,unii_inchikey,high,,CHEMBL34108,,,,,,0,2,0
-4-aco-det,4-AcO-DET,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
-4-aco-dipt,4-AcO-DiPT,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
-4-aco-met,4-AcO-MET,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
-4-aco-mipt,4-AcO-MiPT,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
-4-ho-det,4-HO-DET,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
-4-ho-dipt,4-HO-DiPT,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
-4-ho-dpt,4-HO-DPT,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
+4-aco-det,4-AcO-DET,Psychedelics & entactogens,Tryptamine,pubchem_not_in_chembl,,,,,,,,,,,
+4-aco-dipt,4-AcO-DiPT,Psychedelics & entactogens,Tryptamine,pubchem_not_in_chembl,,,,,,,,,,,
+4-aco-met,4-AcO-MET,Psychedelics & entactogens,Tryptamine,pubchem_not_in_chembl,,,,,,,,,,,
+4-aco-mipt,4-AcO-MiPT,Psychedelics & entactogens,Tryptamine,pubchem_not_in_chembl,,,,,,,,,,,
+4-ho-det,4-HO-DET,Psychedelics & entactogens,Tryptamine,pubchem_inchikey,low,,CHEMBL143202,,,,,,0,3,0
+4-ho-dipt,4-HO-DiPT,Psychedelics & entactogens,Tryptamine,pubchem_not_in_chembl,,,,,,,,,,,
+4-ho-dpt,4-HO-DPT,Psychedelics & entactogens,Tryptamine,pubchem_not_in_chembl,,,,,,,,,,,
 4-ho-ept,4-HO-EPT,Psychedelics & entactogens,Tryptamine,unii_not_in_chembl,,UNII Y3J8M5UX6G,,,,,,,,,
-4-ho-met,4-HO-MET,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
-4-ho-mipt,4-HO-MiPT,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
-4-ho-mpt,4-HO-MPT,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
-5-meo-dalt,5-MeO-DALT,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
+4-ho-met,4-HO-MET,Psychedelics & entactogens,Tryptamine,pubchem_not_in_chembl,,,,,,,,,,,
+4-ho-mipt,4-HO-MiPT,Psychedelics & entactogens,Tryptamine,pubchem_inchikey,low,,CHEMBL171419,,,,,,0,0,0
+4-ho-mpt,4-HO-MPT,Psychedelics & entactogens,Tryptamine,pubchem_not_in_chembl,,,,,,,,,,,
+5-meo-dalt,5-MeO-DALT,Psychedelics & entactogens,Tryptamine,pubchem_inchikey,low,,CHEMBL2391541,,,,,,0,23,0
 5-meo-dibf,5-MeO-DiBF,Psychedelics & entactogens,Tryptamine,unii_not_in_chembl,,UNII 98H5PQ3THV,,,,,,,,,
-5-meo-dipt,5-MeO-DiPT,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
+5-meo-dipt,5-MeO-DiPT,Psychedelics & entactogens,Tryptamine,pubchem_inchikey,low,,CHEMBL2140942,,,,,,0,0,0
 5-meo-dmt,5-MeO-DMT,Psychedelics & entactogens,Tryptamine,chembl_synonym,medium,,CHEMBL7257,MEBUFOTENIN,,,2,,0,18,1
-5-meo-mipt,5-MeO-MiPT,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
+5-meo-mipt,5-MeO-MiPT,Psychedelics & entactogens,Tryptamine,pubchem_inchikey,low,,CHEMBL172139,,,,,,0,0,0
 amt,AMT,Psychedelics & entactogens,Tryptamine,rejected_on_review,,ChEMBL synonym of 3-amino-3-deoxythymidine; the wiki means alpha-methyltryptamine,,,,,,,,,
 bufotenine,Bufotenine,Psychedelics & entactogens,Tryptamine,chembl_name,high,,CHEMBL416526,BUFOTENINE,,,,,0,8,1
-det,DET,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
-dipt,DiPT,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
-dpt,DPT,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
+det,DET,Psychedelics & entactogens,Tryptamine,no_match,,,,,,,,,,,
+dipt,DiPT,Psychedelics & entactogens,Tryptamine,pubchem_inchikey,low,,CHEMBL4303330,,,,,,0,0,0
+dpt,DPT,Psychedelics & entactogens,Tryptamine,no_match,,,,,,,,,,,
 ibogaine,Ibogaine,Psychedelics & entactogens,Tryptamine,chembl_name,high,,CHEMBL222287,IBOGAINE,,,2,,0,6,0
-met,MET,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
-mipt,MiPT,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
-mpt,MPT,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
+met,MET,Psychedelics & entactogens,Tryptamine,rejected_on_review,,PubChem name reached methionine; the wiki means methylethyltryptamine,,,,,,,,,
+mipt,MiPT,Psychedelics & entactogens,Tryptamine,pubchem_inchikey,low,,CHEMBL353728,,,,,,0,0,0
+mpt,MPT,Psychedelics & entactogens,Tryptamine,no_match,,,,,,,,,,,
 psilocin,Psilocin,Psychedelics & entactogens,Tryptamine,chembl_name,high,,CHEMBL65547,PSILOCIN,,,2,,0,6,1
 psilocybin,Psilocybin,Psychedelics & entactogens,Tryptamine,chembl_name,high,,CHEMBL194378,PSILOCYBIN,CHEMBL194378,route_indication/has_supported,3,,1,4,1
-psilocybin-mushrooms,Psilocybin mushrooms,Psychedelics & entactogens,Tryptamine,not_looked_up,,,,,,,,,,,
+psilocybin-mushrooms,Psilocybin mushrooms,Psychedelics & entactogens,Tryptamine,no_match,,,,,,,,,,,
 tryptamine,Tryptamine,Psychedelics & entactogens,Tryptamine,chembl_name,high,,CHEMBL6640,TRYPTAMINE,,,,,0,18,1
 1b-lsd,1B-LSD,Psychedelics & entactogens,Lysergamide,unii_not_in_chembl,,UNII Y6JQX3L6LP,,,,,,,,,
 1cp-al-lad,1cP-AL-LAD,Psychedelics & entactogens,Lysergamide,unii_not_in_chembl,,UNII HH7F72QLZ3,,,,,,,,,
-1cp-lsd,1cP-LSD,Psychedelics & entactogens,Lysergamide,not_looked_up,,,,,,,,,,,
-1cp-mipla,1cP-MiPLA,Psychedelics & entactogens,Lysergamide,not_looked_up,,,,,,,,,,,
-1p-eth-lad,1P-ETH-LAD,Psychedelics & entactogens,Lysergamide,not_looked_up,,,,,,,,,,,
+1cp-lsd,1cP-LSD,Psychedelics & entactogens,Lysergamide,pubchem_not_in_chembl,,,,,,,,,,,
+1cp-mipla,1cP-MiPLA,Psychedelics & entactogens,Lysergamide,pubchem_not_in_chembl,,,,,,,,,,,
+1p-eth-lad,1P-ETH-LAD,Psychedelics & entactogens,Lysergamide,pubchem_not_in_chembl,,,,,,,,,,,
 1v-lsd,1V-LSD,Psychedelics & entactogens,Lysergamide,unii_not_in_chembl,,UNII V9TJ3HT283,,,,,,,,,
-al-lad,AL-LAD,Psychedelics & entactogens,Lysergamide,not_looked_up,,,,,,,,,,,
+al-lad,AL-LAD,Psychedelics & entactogens,Lysergamide,pubchem_inchikey,low,,CHEMBL281787,,,,,,0,0,0
 ald-52,ALD-52,Psychedelics & entactogens,Lysergamide,unii_not_in_chembl,,UNII R224WJZ8M7,,,,,,,,,
-ergine,Ergine,Psychedelics & entactogens,Lysergamide,not_looked_up,,,,,,,,,,,
-eth-lad,ETH-LAD,Psychedelics & entactogens,Lysergamide,not_looked_up,,,,,,,,,,,
-lae-32,LAE-32,Psychedelics & entactogens,Lysergamide,not_looked_up,,,,,,,,,,,
-lsm-775,LSM-775,Psychedelics & entactogens,Lysergamide,not_looked_up,,,,,,,,,,,
-lsz,LSZ,Psychedelics & entactogens,Lysergamide,not_looked_up,,,,,,,,,,,
-mipla,MiPLA,Psychedelics & entactogens,Lysergamide,not_looked_up,,,,,,,,,,,
-pargy-lad,PARGY-LAD,Psychedelics & entactogens,Lysergamide,not_looked_up,,,,,,,,,,,
+ergine,Ergine,Psychedelics & entactogens,Lysergamide,pubchem_inchikey,low,,CHEMBL227213,,,,,,0,1,0
+eth-lad,ETH-LAD,Psychedelics & entactogens,Lysergamide,pubchem_inchikey,low,,CHEMBL22694,,,,,,0,0,0
+lae-32,LAE-32,Psychedelics & entactogens,Lysergamide,pubchem_not_in_chembl,,,,,,,,,,,
+lsm-775,LSM-775,Psychedelics & entactogens,Lysergamide,pubchem_not_in_chembl,,,,,,,,,,,
+lsz,LSZ,Psychedelics & entactogens,Lysergamide,pubchem_connectivity,low,,CHEMBL137781|CHEMBL138989|CHEMBL343755,,,,,,0,17,0
+mipla,MiPLA,Psychedelics & entactogens,Lysergamide,pubchem_not_in_chembl,,,,,,,,,,,
+pargy-lad,PARGY-LAD,Psychedelics & entactogens,Lysergamide,pubchem_not_in_chembl,,,,,,,,,,,
 pro-lad,PRO-LAD,Psychedelics & entactogens,Lysergamide,unii_inchikey,high,,CHEMBL22258,,,,,,0,0,0
-3-mmc,3-MMC,Psychedelics & entactogens,Cathinone,not_looked_up,,,,,,,,,,,
-a-php,A-PHP,Psychedelics & entactogens,Cathinone,not_looked_up,,,,,,,,,,,
-a-pvp,A-PVP,Psychedelics & entactogens,Cathinone,not_looked_up,,,,,,,,,,,
+3-mmc,3-MMC,Psychedelics & entactogens,Cathinone,pubchem_not_in_chembl,,,,,,,,,,,
+a-php,A-PHP,Psychedelics & entactogens,Cathinone,no_match,,,,,,,,,,,
+a-pvp,A-PVP,Psychedelics & entactogens,Cathinone,pubchem_inchikey,low,,CHEMBL205082,,,,,,0,2,0
 butylone,Butylone,Psychedelics & entactogens,Cathinone,unii_not_in_chembl,,UNII X72T4EQ4FQ,,,,,,,,,
 cathinone,Cathinone,Psychedelics & entactogens,Cathinone,chembl_name,high,,CHEMBL2104047,CATHINONE,,,2,,0,0,0
-ephylone,Ephylone,Psychedelics & entactogens,Cathinone,not_looked_up,,,,,,,,,,,
-eth-cat,ETH-CAT,Psychedelics & entactogens,Cathinone,not_looked_up,,,,,,,,,,,
+ephylone,Ephylone,Psychedelics & entactogens,Cathinone,pubchem_not_in_chembl,,,,,,,,,,,
+eth-cat,ETH-CAT,Psychedelics & entactogens,Cathinone,pubchem_inchikey,low,,CHEMBL3298876,,,,,,0,2,1
 ethylone,Ethylone,Psychedelics & entactogens,Cathinone,unii_not_in_chembl,,UNII L91C78FW96,,,,,,,,,
 hexedrone,Hexedrone,Psychedelics & entactogens,Cathinone,unii_not_in_chembl,,UNII KLF7T8YQP5,,,,,,,,,
-mdpv,MDPV,Psychedelics & entactogens,Cathinone,not_looked_up,,,,,,,,,,,
+mdpv,MDPV,Psychedelics & entactogens,Cathinone,pubchem_connectivity,low,,CHEMBL4088891,,,,,,0,1,0
 mephedrone,Mephedrone,Psychedelics & entactogens,Cathinone,chembl_name,high,,CHEMBL4094396,MEPHEDRONE,,,1,,0,2,0
 methcathinone,Methcathinone,Psychedelics & entactogens,Cathinone,unii_inchikey,high,,CHEMBL4070364,,,,,,0,2,0
 methylone,Methylone,Psychedelics & entactogens,Cathinone,chembl_name,high,,CHEMBL3604010,METHYLONE,,,2,,0,2,0
@@ -1501,42 +1501,42 @@ mexedrone,Mexedrone,Psychedelics & entactogens,Cathinone,unii_not_in_chembl,,UNI
 n-ethylhexedrone,N-Ethylhexedrone,Psychedelics & entactogens,Cathinone,unii_not_in_chembl,,UNII TAX3KSX6GY,,,,,,,,,
 pentedrone,Pentedrone,Psychedelics & entactogens,Cathinone,unii_not_in_chembl,,UNII 2ELU1B757Q,,,,,,,,,
 5-apb,5-APB,Psychedelics & entactogens,Entactogen,unii_not_in_chembl,,UNII 2M3825704H,,,,,,,,,
-5-mapb,5-MAPB,Psychedelics & entactogens,Entactogen,not_looked_up,,,,,,,,,,,
+5-mapb,5-MAPB,Psychedelics & entactogens,Entactogen,pubchem_connectivity,low,,CHEMBL5402187|CHEMBL5431933,,,,,,0,1,0
 6-apb,6-APB,Psychedelics & entactogens,Entactogen,unii_not_in_chembl,,UNII 285VE60914,,,,,,,,,
-6-apdb,6-APDB,Psychedelics & entactogens,Entactogen,not_looked_up,,,,,,,,,,,
+6-apdb,6-APDB,Psychedelics & entactogens,Entactogen,pubchem_inchikey,low,,CHEMBL124055,,,,,,0,0,0
 mda,MDA,Psychedelics & entactogens,Entactogen,chembl_synonym,low,,CHEMBL6731,TENAMFETAMINE,,,2,,0,9,0
 mdai,MDAI,Psychedelics & entactogens,Entactogen,unii_inchikey,high,,CHEMBL162375,,,,,,0,1,0
-mdea,MDEA,Psychedelics & entactogens,Entactogen,not_looked_up,,,,,,,,,,,
+mdea,MDEA,Psychedelics & entactogens,Entactogen,pubchem_inchikey,low,,CHEMBL3185149,,,,,,0,0,0
 mdma,MDMA,Psychedelics & entactogens,Entactogen,chembl_synonym,low,,CHEMBL43048,MIDOMAFETAMINE,CHEMBL43048,route_indication/has_supported,3,,3,7,1
-2-fluorodeschloroketamine,2-Fluorodeschloroketamine,Psychedelics & entactogens,Dissociative,not_looked_up,,,,,,,,,,,
-3-cl-pcp,3-Cl-PCP,Psychedelics & entactogens,Dissociative,not_looked_up,,,,,,,,,,,
-3-ho-pce,3-HO-PCE,Psychedelics & entactogens,Dissociative,not_looked_up,,,,,,,,,,,
-3-ho-pcp,3-HO-PCP,Psychedelics & entactogens,Dissociative,not_looked_up,,,,,,,,,,,
-3-meo-pce,3-MeO-PCE,Psychedelics & entactogens,Dissociative,not_looked_up,,,,,,,,,,,
+2-fluorodeschloroketamine,2-Fluorodeschloroketamine,Psychedelics & entactogens,Dissociative,pubchem_not_in_chembl,,,,,,,,,,,
+3-cl-pcp,3-Cl-PCP,Psychedelics & entactogens,Dissociative,no_match,,,,,,,,,,,
+3-ho-pce,3-HO-PCE,Psychedelics & entactogens,Dissociative,pubchem_not_in_chembl,,,,,,,,,,,
+3-ho-pcp,3-HO-PCP,Psychedelics & entactogens,Dissociative,pubchem_inchikey,low,,CHEMBL123708,,,,,,0,0,0
+3-meo-pce,3-MeO-PCE,Psychedelics & entactogens,Dissociative,pubchem_not_in_chembl,,,,,,,,,,,
 3-meo-pcmo,3-MeO-PCMo,Psychedelics & entactogens,Dissociative,unii_not_in_chembl,,UNII 96QW73BA62,,,,,,,,,
-3-meo-pcp,3-MeO-PCP,Psychedelics & entactogens,Dissociative,not_looked_up,,,,,,,,,,,
-4-meo-pcp,4-MeO-PCP,Psychedelics & entactogens,Dissociative,not_looked_up,,,,,,,,,,,
+3-meo-pcp,3-MeO-PCP,Psychedelics & entactogens,Dissociative,pubchem_not_in_chembl,,,,,,,,,,,
+4-meo-pcp,4-MeO-PCP,Psychedelics & entactogens,Dissociative,pubchem_inchikey,low,,CHEMBL1760302,,,,,,0,0,0
 deschloroketamine,Deschloroketamine,Psychedelics & entactogens,Dissociative,unii_inchikey,high,,CHEMBL2068808,,,,,,0,0,0
 dextromethorphan,Dextromethorphan,Psychedelics & entactogens,Dissociative,chembl_name,high,,CHEMBL52440,DEXTROMETHORPHAN,CHEMBL52440,both_routes/has_supported,4,NR,4,20,1
 esketamine,Esketamine,Psychedelics & entactogens,Dissociative,chembl_name,high,,CHEMBL395091,ESKETAMINE,CHEMBL395091,both_routes/has_supported,4,N,2,3,1
 gacyclidine,Gacyclidine,Psychedelics & entactogens,Dissociative,chembl_name,high,,CHEMBL3989791,GACYCLIDINE,,,2,,0,0,0
-hxe,HXE,Psychedelics & entactogens,Dissociative,not_looked_up,,,,,,,,,,,
+hxe,HXE,Psychedelics & entactogens,Dissociative,no_match,,,,,,,,,,,
 methoxetamine,Methoxetamine,Psychedelics & entactogens,Dissociative,unii_not_in_chembl,,UNII ZO5ZCE6E12,,,,,,,,,
-mxipr,MXiPr,Psychedelics & entactogens,Dissociative,not_looked_up,,,,,,,,,,,
+mxipr,MXiPr,Psychedelics & entactogens,Dissociative,no_match,,,,,,,,,,,
 nitrous-oxide,Nitrous oxide,Psychedelics & entactogens,Dissociative,chembl_name,high,,CHEMBL1234579,NITROUS OXIDE,CHEMBL1234579,both_routes/no_eligible_evidence,4,N,0,0,0
 norketamine,Norketamine,Psychedelics & entactogens,Dissociative,chembl_name,high,,CHEMBL1039,NORKETAMINE,,,,,0,0,0
-o-pce,O-PCE,Psychedelics & entactogens,Dissociative,not_looked_up,,,,,,,,,,,
+o-pce,O-PCE,Psychedelics & entactogens,Dissociative,pubchem_not_in_chembl,,,,,,,,,,,
 atropa-belladonna,Atropa belladonna,Psychedelics & entactogens,Deliriant,chembl_synonym,medium,,CHEMBL2108906,BELLADONNA,,,3,A,0,0,0
 atropine,Atropine,Psychedelics & entactogens,Deliriant,chembl_name,high,,CHEMBL517712,ATROPINE,CHEMBL517712,route_indication/has_supported,4,AS,6,16,1
 benztropine,Benztropine,Psychedelics & entactogens,Deliriant,chembl_name,high,,CHEMBL1201203,BENZTROPINE,CHEMBL1201203,both_routes/has_supported,4,N,1,27,1
 biperiden,Biperiden,Psychedelics & entactogens,Deliriant,chembl_name,high,,CHEMBL1101,BIPERIDEN,CHEMBL1101,both_routes/has_supported,4,N,2,9,1
 brompheniramine,Brompheniramine,Psychedelics & entactogens,Deliriant,chembl_name,high,,CHEMBL811,BROMPHENIRAMINE,,,4,R,1,12,1
 chlorpheniramine,Chlorpheniramine,Psychedelics & entactogens,Deliriant,chembl_name,high,,CHEMBL505,CHLORPHENIRAMINE,CHEMBL505,route_indication/has_supported,4,R,2,22,1
-datura,Datura,Psychedelics & entactogens,Deliriant,not_looked_up,,,,,,,,,,,
+datura,Datura,Psychedelics & entactogens,Deliriant,no_match,,,,,,,,,,,
 dimenhydrinate,Dimenhydrinate,Psychedelics & entactogens,Deliriant,chembl_name,high,,CHEMBL1200406,DIMENHYDRINATE,CHEMBL1200406,route_indication/has_supported,4,R,1,0,0
 diphenhydramine,Diphenhydramine,Psychedelics & entactogens,Deliriant,chembl_name,high,,CHEMBL657,DIPHENHYDRAMINE,CHEMBL657,route_indication/has_supported,4,DR,2,27,1
 doxylamine,Doxylamine,Psychedelics & entactogens,Deliriant,chembl_name,high,,CHEMBL1004,DOXYLAMINE,,,4,R,1,1,1
-grayanotoxin,Grayanotoxin,Psychedelics & entactogens,Deliriant,not_looked_up,,,,,,,,,,,
+grayanotoxin,Grayanotoxin,Psychedelics & entactogens,Deliriant,pubchem_inchikey,low,,CHEMBL2000679,,,,,,0,0,0
 hyoscyamine,Hyoscyamine,Psychedelics & entactogens,Deliriant,chembl_name,high,,CHEMBL1331216,HYOSCYAMINE,,,-1,A,0,7,0
 meclizine,Meclizine,Psychedelics & entactogens,Deliriant,chembl_name,high,,CHEMBL1623,MECLIZINE,CHEMBL1623,route_indication/has_supported,4,R,1,23,1
 nutmeg,Nutmeg,Psychedelics & entactogens,Deliriant,unii_no_structure,,UNII AEE24M3MQ9,,,,,,,,,
@@ -1545,11 +1545,11 @@ procyclidine,Procyclidine,Psychedelics & entactogens,Deliriant,chembl_name,high,
 scopolamine,Scopolamine,Psychedelics & entactogens,Deliriant,chembl_name,high,,CHEMBL569713,SCOPOLAMINE,CHEMBL569713,both_routes/has_supported,4,ANS,1,10,1
 trihexyphenidyl,Trihexyphenidyl,Psychedelics & entactogens,Deliriant,chembl_name,high,,CHEMBL1490,TRIHEXYPHENIDYL,CHEMBL1490,both_routes/has_supported,4,N,1,8,1
 1-3-butanediol,"1,3-Butanediol",Psychedelics & entactogens,Depressant,chembl_name,high,,CHEMBL1231501,"1,3-BUTANEDIOL",,,,,0,0,0
-2m2b,2M2B,Psychedelics & entactogens,Depressant,not_looked_up,,,,,,,,,,,
-f-phenibut,F-Phenibut,Psychedelics & entactogens,Depressant,not_looked_up,,,,,,,,,,,
-gbl,GBL,Psychedelics & entactogens,Depressant,not_looked_up,,,,,,,,,,,
-ghb,GHB,Psychedelics & entactogens,Depressant,not_looked_up,,,,,,,,,,,
-mephenaqualone,Mephenaqualone,Psychedelics & entactogens,Depressant,not_looked_up,,,,,,,,,,,
+2m2b,2M2B,Psychedelics & entactogens,Depressant,pubchem_inchikey,low,,CHEMBL44658,AMYLENE HYDRATE,,,-1,,0,0,0
+f-phenibut,F-Phenibut,Psychedelics & entactogens,Depressant,no_match,,,,,,,,,,,
+gbl,GBL,Psychedelics & entactogens,Depressant,pubchem_inchikey,low,,CHEMBL95681,BUTYROLACTONE,,,,,0,0,1
+ghb,GHB,Psychedelics & entactogens,Depressant,pubchem_inchikey,low,,CHEMBL1342,OXYBATE,CHEMBL1342,both_routes/has_supported,4,N,4,3,1
+mephenaqualone,Mephenaqualone,Psychedelics & entactogens,Depressant,no_match,,,,,,,,,,,
 methaqualone,Methaqualone,Psychedelics & entactogens,Depressant,chembl_name,high,,CHEMBL282052,METHAQUALONE,CHEMBL282052,route_atc_n/has_supported,4,N,2,0,0
 alpha-pinene,Alpha-Pinene,Psychedelics & entactogens,Terpene,chembl_name,high,,CHEMBL442565,ALPHA-PINENE,,,1,,0,0,0
 beta-caryophyllene,Beta-Caryophyllene,Psychedelics & entactogens,Terpene,chembl_name,high,,CHEMBL445740,BETA-CARYOPHYLLENE,,,1,,0,2,1
@@ -1564,15 +1564,15 @@ nootkatone,Nootkatone,Psychedelics & entactogens,Terpene,chembl_name,high,,CHEMB
 parthenolide,Parthenolide,Psychedelics & entactogens,Terpene,chembl_name,high,,CHEMBL540445,PARTHENOLIDE,,,2,,0,0,0
 peppermint-oil,Peppermint Oil,Psychedelics & entactogens,Terpene,chembl_name,high,,CHEMBL2108758,PEPPERMINT OIL,,,3,,0,0,0
 ursolic-acid,Ursolic Acid,Psychedelics & entactogens,Terpene,chembl_name,high,,CHEMBL169,URSOLIC ACID,,,2,,0,33,0
-17-allyl-19-nortestosterone,17α-Allyl-19-nortestosterone,"Hormones, GI & derm",Hormone,not_looked_up,,,,,,,,,,,
+17-allyl-19-nortestosterone,17α-Allyl-19-nortestosterone,"Hormones, GI & derm",Hormone,no_match,,,,,,,,,,,
 6-ketoprogesterone,6-Ketoprogesterone,"Hormones, GI & derm",Hormone,unii_inchikey,high,,CHEMBL3138672,,,,,,0,0,0
 algestone,Algestone,"Hormones, GI & derm",Hormone,chembl_synonym,medium,,CHEMBL2105960,ALGESTONE ACETONIDE,,,2,,0,0,0
 algestone-acetonide,Algestone acetonide,"Hormones, GI & derm",Hormone,chembl_name,high,,CHEMBL2105960,ALGESTONE ACETONIDE,,,2,,0,0,0
 arimidex,Arimidex,"Hormones, GI & derm",Hormone,chembl_synonym,medium,,CHEMBL1399,ANASTROZOLE,,,4,L,1,4,1
-arimistane,Arimistane,"Hormones, GI & derm",Hormone,not_looked_up,,,,,,,,,,,
-erythropoietin,Erythropoietin,"Hormones, GI & derm",Hormone,not_looked_up,,,,,,,,,,,
+arimistane,Arimistane,"Hormones, GI & derm",Hormone,pubchem_inchikey,low,,CHEMBL5266519,,,,,,0,1,0
+erythropoietin,Erythropoietin,"Hormones, GI & derm",Hormone,pubchem_not_in_chembl,,,,,,,,,,,
 hydroxyprogesterone-caproate,Hydroxyprogesterone Caproate,"Hormones, GI & derm",Hormone,chembl_name,high,,CHEMBL1200848,HYDROXYPROGESTERONE CAPROATE,,,4,G,1,9,0
-dhed,DHED,"Hormones, GI & derm",Hormone,not_looked_up,,,,,,,,,,,
+dhed,DHED,"Hormones, GI & derm",Hormone,pubchem_not_in_chembl,,,,,,,,,,,
 choriogonadotropin-alfa,Choriogonadotropin Alfa,"Hormones, GI & derm",Hormone,chembl_name,high,,CHEMBL1201464,CHORIOGONADOTROPIN ALFA,,,4,G,1,0,0
 conjugated-estrogens,Conjugated Estrogens,"Hormones, GI & derm",Hormone,chembl_synonym,medium,,CHEMBL1201649,"ESTROGENS, CONJUGATED",CHEMBL1201649,route_indication/has_supported,4,G,1,0,0
 danazol,Danazol,"Hormones, GI & derm",Hormone,chembl_name,high,,CHEMBL1479,DANAZOL,,,4,G,2,10,1
@@ -1588,7 +1588,7 @@ megestrol-acetate,Megestrol Acetate,"Hormones, GI & derm",Hormone,chembl_name,hi
 progesterone,Progesterone,"Hormones, GI & derm",Hormone,chembl_name,high,,CHEMBL103,PROGESTERONE,CHEMBL103,route_indication/has_supported,4,G,1,34,1
 urofollitropin,Urofollitropin,"Hormones, GI & derm",Hormone,chembl_name,high,,CHEMBL1201520,UROFOLLITROPIN,,,4,G,1,0,0
 abiraterone-acetate,Abiraterone Acetate,"Hormones, GI & derm",Antiandrogen,chembl_name,high,,CHEMBL271227,ABIRATERONE ACETATE,,,4,,1,3,1
-allyltestosterone,Allyltestosterone,"Hormones, GI & derm",Antiandrogen,not_looked_up,,,,,,,,,,,
+allyltestosterone,Allyltestosterone,"Hormones, GI & derm",Antiandrogen,no_match,,,,,,,,,,,
 cyproterone-acetate,Cyproterone Acetate,"Hormones, GI & derm",Antiandrogen,chembl_name,high,,CHEMBL139835,CYPROTERONE ACETATE,,,3,G,3,6,1
 dutasteride,Dutasteride,"Hormones, GI & derm",Antiandrogen,chembl_name,high,,CHEMBL1200969,DUTASTERIDE,,,4,G,1,3,1
 enzalutamide,Enzalutamide,"Hormones, GI & derm",Antiandrogen,chembl_name,high,,CHEMBL1082407,ENZALUTAMIDE,,,4,L,1,8,1
@@ -1598,9 +1598,9 @@ topilutamide,Topilutamide,"Hormones, GI & derm",Antiandrogen,chembl_name,high,,C
 bicalutamide,Bicalutamide,"Hormones, GI & derm",Antiandrogen,chembl_name,high,,CHEMBL409,BICALUTAMIDE,,,4,L,1,10,1
 ru-58841,RU-58841,"Hormones, GI & derm",Antiandrogen,chembl_name,high,,CHEMBL9337,RU-58841,,,,,0,3,0
 finasteride,Finasteride,"Hormones, GI & derm",Antiandrogen,chembl_name,high,,CHEMBL710,FINASTERIDE,,,4,DG,1,9,1
-pyrilutamide,Pyrilutamide,"Hormones, GI & derm",Antiandrogen,not_looked_up,,,,,,,,,,,
+pyrilutamide,Pyrilutamide,"Hormones, GI & derm",Antiandrogen,pubchem_not_in_chembl,,,,,,,,,,,
 cb-03-01,CB-03-01,"Hormones, GI & derm",Antiandrogen,chembl_synonym,medium,,CHEMBL3590187,CLASCOTERONE,,,4,D,1,1,1
-y-134,Y-134,"Hormones, GI & derm",SERM,not_looked_up,,,,,,,,,,,
+y-134,Y-134,"Hormones, GI & derm",SERM,pubchem_inchikey,low,,CHEMBL178334,,,,,,0,2,1
 4-hydroxytamoxifen,4-Hydroxytamoxifen,"Hormones, GI & derm",SERM,chembl_synonym,medium,,CHEMBL489,AFIMOXIFENE,,,3,,2,2,0
 acefluranol,Acefluranol,"Hormones, GI & derm",SERM,chembl_name,high,,CHEMBL2104694,ACEFLURANOL,,,2,,0,0,0
 arzoxifene,Arzoxifene,"Hormones, GI & derm",SERM,chembl_name,high,,CHEMBL226267,ARZOXIFENE,,,3,,1,2,0
@@ -1610,20 +1610,20 @@ tamoxifen,Tamoxifen,"Hormones, GI & derm",SERM,chembl_name,high,,CHEMBL83,TAMOXI
 toremifene,Toremifene,"Hormones, GI & derm",SERM,chembl_name,high,,CHEMBL1655,TOREMIFENE,CHEMBL1655,route_indication/has_supported,4,L,1,2,1
 clomifene-citrate,Clomifene Citrate,"Hormones, GI & derm",SERM,chembl_synonym,medium,,CHEMBL2355051,CLOMIPHENE,,,4,G,1,21,1
 raloxifene,Raloxifene,"Hormones, GI & derm",SERM,chembl_name,high,,CHEMBL81,RALOXIFENE,CHEMBL81,route_indication/has_supported,4,G,2,45,1
-asc41,ASC41,"Hormones, GI & derm",Thyroid,not_looked_up,,,,,,,,,,,
+asc41,ASC41,"Hormones, GI & derm",Thyroid,no_match,,,,,,,,,,,
 elunetirom,Elunetirom,"Hormones, GI & derm",Thyroid,unii_inchikey,high,,CHEMBL5314909,ABX-002,,,1,,0,0,0
 potassium-iodide,Potassium Iodide,"Hormones, GI & derm",Thyroid,chembl_name,high,,CHEMBL1141,POTASSIUM IODIDE,,,4,RSV,1,1,0
 sobetirome,Sobetirome,"Hormones, GI & derm",Thyroid,chembl_name,high,,CHEMBL107400,SOBETIROME,,,2,,0,2,1
-t2,T2,"Hormones, GI & derm",Thyroid,not_looked_up,,,,,,,,,,,
+t2,T2,"Hormones, GI & derm",Thyroid,pubchem_inchikey,low,,CHEMBL1743303,DIIODOTHYRONINE,,,,,0,0,1
 methimazole,Methimazole,"Hormones, GI & derm",Thyroid,chembl_name,high,,CHEMBL1515,METHIMAZOLE,,,4,H,1,4,1
 t3,T3,"Hormones, GI & derm",Thyroid,chembl_synonym,low,,CHEMBL4531334,T3-CLK,,,,,0,5,0
-t4,T4,"Hormones, GI & derm",Thyroid,not_looked_up,,,,,,,,,,,
+t4,T4,"Hormones, GI & derm",Thyroid,pubchem_inchikey,low,,CHEMBL1624,LEVOTHYROXINE,,,4,H,1,15,1
 almestrone,Almestrone,"Hormones, GI & derm",Estrogen,chembl_name,high,,CHEMBL2104052,ALMESTRONE,,,2,,0,0,0
 alpha-estradiol,Alpha-Estradiol,"Hormones, GI & derm",Estrogen,chembl_squashed,low,,CHEMBL286452,ALFATRADIOL,,,2,,0,3,1
 way-200070,WAY-200070,"Hormones, GI & derm",Estrogen,unii_inchikey,high,,CHEMBL188528,,,,,,0,6,1
 estriol,Estriol,"Hormones, GI & derm",Estrogen,chembl_name,high,,CHEMBL193482,ESTRIOL,,,4,G,1,11,1
 activated-charcoal,Activated Charcoal,"Hormones, GI & derm",Gastrointestinal,chembl_synonym,medium,,CHEMBL2106049,"CHARCOAL, ACTIVATED",CHEMBL2106049,route_indication/no_eligible_evidence,3,A,0,0,0
-allohol,Allohol,"Hormones, GI & derm",Gastrointestinal,not_looked_up,,,,,,,,,,,
+allohol,Allohol,"Hormones, GI & derm",Gastrointestinal,no_match,,,,,,,,,,,
 cisapride,Cisapride,"Hormones, GI & derm",Gastrointestinal,chembl_name,high,,CHEMBL1729,CISAPRIDE,,,4,A,1,28,1
 magnesium-hydroxide,Magnesium Hydroxide,"Hormones, GI & derm",Gastrointestinal,chembl_name,high,,CHEMBL1200718,MAGNESIUM HYDROXIDE,,,4,AG,1,0,0
 minesapride,Minesapride,"Hormones, GI & derm",Gastrointestinal,unii_not_in_chembl,,UNII I7V9UD0ND0,,,,,,,,,
@@ -1647,11 +1647,11 @@ oxybutynin,Oxybutynin,"Hormones, GI & derm",Gastrointestinal,chembl_name,high,,C
 pantoprazole,Pantoprazole,"Hormones, GI & derm",Gastrointestinal,chembl_name,high,,CHEMBL1502,PANTOPRAZOLE,,,4,A,1,9,1
 ramosetron,Ramosetron,"Hormones, GI & derm",Gastrointestinal,chembl_name,high,,CHEMBL1643895,RAMOSETRON,,,4,,1,9,1
 ranitidine,Ranitidine,"Hormones, GI & derm",Gastrointestinal,chembl_name,high,,CHEMBL1790041,RANITIDINE,CHEMBL1790041,route_indication/has_supported,4,A,3,17,0
-jxl069,JXL069,"Hormones, GI & derm",Dermatological,not_looked_up,,,,,,,,,,,
+jxl069,JXL069,"Hormones, GI & derm",Dermatological,pubchem_inchikey,low,,CHEMBL4779727,,,,,,0,0,1
 calcipotriol,Calcipotriol,"Hormones, GI & derm",Dermatological,chembl_synonym,medium,,CHEMBL1200666,CALCIPOTRIENE,,,4,D,1,11,1
 crisaborole,Crisaborole,"Hormones, GI & derm",Dermatological,chembl_name,high,,CHEMBL484785,CRISABOROLE,,,4,D,1,10,1
 difamilast,Difamilast,"Hormones, GI & derm",Dermatological,chembl_name,high,,CHEMBL3989968,DIFAMILAST,,,3,,1,0,0
-keraxidil,Keraxidil,"Hormones, GI & derm",Dermatological,not_looked_up,,,,,,,,,,,
+keraxidil,Keraxidil,"Hormones, GI & derm",Dermatological,no_match,,,,,,,,,,,
 ammonium-lactate,Ammonium Lactate,"Hormones, GI & derm",Dermatological,chembl_name,high,,CHEMBL1200747,AMMONIUM LACTATE,,,4,,1,0,0
 azelaic-acid,Azelaic Acid,"Hormones, GI & derm",Dermatological,chembl_name,high,,CHEMBL1238,AZELAIC ACID,,,4,D,1,0,1
 bimatoprost,Bimatoprost,"Hormones, GI & derm",Dermatological,chembl_name,high,,CHEMBL1200963,BIMATOPROST,,,4,S,1,1,1
@@ -1661,13 +1661,13 @@ eflornithine,Eflornithine,"Hormones, GI & derm",Dermatological,chembl_name,high,
 glycolic-acid,Glycolic Acid,"Hormones, GI & derm",Dermatological,chembl_name,high,,CHEMBL252557,GLYCOLIC ACID,,,2,,0,0,0
 hydroquinone,Hydroquinone,"Hormones, GI & derm",Dermatological,chembl_name,high,,CHEMBL537,HYDROQUINONE,,,4,D,0,15,0
 salicylic-acid,Salicylic Acid,"Hormones, GI & derm",Dermatological,chembl_name,high,,CHEMBL424,SALICYLIC ACID,CHEMBL424,route_indication/has_supported,4,DS,0,13,1
-zinc-oxide-sunscreen,Zinc Oxide (Sunscreen),"Hormones, GI & derm",Dermatological,not_looked_up,,,,,,,,,,,
+zinc-oxide-sunscreen,Zinc Oxide (Sunscreen),"Hormones, GI & derm",Dermatological,no_match,,,,,,,,,,,
 isotretinoin,Isotretinoin,"Hormones, GI & derm",Retinoid,chembl_name,high,,CHEMBL547,ISOTRETINOIN,CHEMBL547,route_indication/has_supported,4,D,1,3,1
 retinol,Retinol,"Hormones, GI & derm",Retinoid,chembl_name,high,,CHEMBL986,RETINOL,,,4,ADRS,0,5,1
 adapalene,Adapalene,"Hormones, GI & derm",Retinoid,chembl_name,high,,CHEMBL1265,ADAPALENE,,,4,D,1,9,1
 tazarotene,Tazarotene,"Hormones, GI & derm",Retinoid,chembl_name,high,,CHEMBL1657,TAZAROTENE,,,4,D,1,3,1
 tretinoin,Tretinoin,"Hormones, GI & derm",Retinoid,chembl_name,high,,CHEMBL38,TRETINOIN,,,4,DL,1,33,1
-urea-30-ointment,Urea 30% ointment,"Hormones, GI & derm",Keratolytic,not_looked_up,,,,,,,,,,,
+urea-30-ointment,Urea 30% ointment,"Hormones, GI & derm",Keratolytic,no_match,,,,,,,,,,,
 cilomilast,Cilomilast,"Hormones, GI & derm",Respiratory,chembl_name,high,,CHEMBL511115,CILOMILAST,,,3,,1,6,1
 dyphylline,Dyphylline,"Hormones, GI & derm",Respiratory,chembl_name,high,,CHEMBL1752,DYPHYLLINE,,,4,R,2,0,1
 enprofylline,Enprofylline,"Hormones, GI & derm",Respiratory,chembl_name,high,,CHEMBL279898,ENPROFYLLINE,,,2,,0,10,0
@@ -1714,17 +1714,17 @@ sodium-tetradecyl-sulphate,Sodium Tetradecyl Sulphate,Other clinical,Sclerosant,
 tranexamic-acid,Tranexamic Acid,Other clinical,Antifibrinolytic,chembl_name,high,,CHEMBL877,TRANEXAMIC ACID,CHEMBL877,route_indication/has_supported,4,B,1,2,1
 itopride,Itopride,Other clinical,Prokinetic,chembl_name,high,,CHEMBL2107457,ITOPRIDE,,,3,A,2,3,0
 prucalopride,Prucalopride,Other clinical,Prokinetic,chembl_name,high,,CHEMBL117287,PRUCALOPRIDE,,,4,A,2,9,1
-udca,UDCA,Other clinical,Bile Acid,not_looked_up,,,,,,,,,,,
+udca,UDCA,Other clinical,Bile Acid,pubchem_inchikey,low,,CHEMBL1551,URSODIOL,,,4,A,1,6,1
 arecaidine,Arecaidine,Other clinical,Alkaloid,unii_inchikey,high,,CHEMBL432561,,,,,,0,0,1
 arecoline,Arecoline,Other clinical,Alkaloid,chembl_name,high,,CHEMBL7303,ARECOLINE,,,-1,,0,11,1
 colchicine,Colchicine,Other clinical,Alkaloid,chembl_name,high,,CHEMBL107,COLCHICINE,,,4,M,1,7,1
 dynamine,Dynamine,Other clinical,Alkaloid,chembl_synonym,medium,,CHEMBL354077,AMIFAMPRIDINE,CHEMBL354077,both_routes/has_supported,4,N,2,0,1
-diacca,Diacca,Other clinical,Prodrug,not_looked_up,,,,,,,,,,,
+diacca,Diacca,Other clinical,Prodrug,pubchem_not_in_chembl,,,,,,,,,,,
 abt-239,ABT-239,Other clinical,Modulators,unii_inchikey,high,,CHEMBL351231,,,,,,0,3,1
 adrenochrome,Adrenochrome,Other clinical,Modulators,unii_inchikey,high,,CHEMBL1314174,,,,,,0,0,0
-amn082,AMN082,Other clinical,Modulators,not_looked_up,,,,,,,,,,,
-astra2959,Astra2959,Other clinical,Modulators,not_looked_up,,,,,,,,,,,
-aut-00063,AUT-00063,Other clinical,Modulators,not_looked_up,,,,,,,,,,,
+amn082,AMN082,Other clinical,Modulators,pubchem_inchikey,low,,CHEMBL1387826,,,,,,0,1,1
+astra2959,Astra2959,Other clinical,Modulators,no_match,,,,,,,,,,,
+aut-00063,AUT-00063,Other clinical,Modulators,pubchem_not_in_chembl,,,,,,,,,,,
 basimglurant,Basimglurant,Other clinical,Modulators,chembl_name,high,,CHEMBL3301626,BASIMGLURANT,,,2,,1,3,1
 bavisant,Bavisant,Other clinical,Modulators,chembl_name,high,,CHEMBL2103862,BAVISANT,,,2,,1,1,0
 ciproxifan,Ciproxifan,Other clinical,Modulators,chembl_name,high,,CHEMBL14638,CIPROXIFAN,,,,,0,10,1
@@ -1735,196 +1735,196 @@ foliglurax,Foliglurax,Other clinical,Modulators,chembl_name,high,,CHEMBL4089083,
 gallein,Gallein,Other clinical,Modulators,unii_inchikey,high,,CHEMBL4469620,,,,,,0,0,0
 gsk189254,GSK189254,Other clinical,Modulators,chembl_name,high,,CHEMBL517140,GSK189254,,,2,,1,2,1
 jnj-40411813,JNJ-40411813,Other clinical,Modulators,chembl_name,high,,CHEMBL3337527,JNJ-40411813,,,2,,1,1,0
-ly341495,LY341495,Other clinical,Modulators,not_looked_up,,,,,,,,,,,
+ly341495,LY341495,Other clinical,Modulators,pubchem_inchikey,low,,CHEMBL432038,,,,,,0,14,1
 ly379268,LY379268,Other clinical,Modulators,chembl_squashed,low,,CHEMBL275079,LY-379268,,,,,0,7,1
 mavoglurant,Mavoglurant,Other clinical,Modulators,chembl_name,high,,CHEMBL3087515,MAVOGLURANT,,,2,,1,2,1
-mepb,MEPB,Other clinical,Modulators,not_looked_up,,,,,,,,,,,
+mepb,MEPB,Other clinical,Modulators,pubchem_inchikey,low,,CHEMBL1738936,,,,,,0,1,0
 metadoxine,Metadoxine,Other clinical,Modulators,unii_not_in_chembl,,UNII EJQ7M98H5J,,,,,,,,,
 metergoline,Metergoline,Other clinical,Modulators,chembl_name,high,,CHEMBL19215,METERGOLINE,,,2,G,0,21,1
 nicergoline,Nicergoline,Other clinical,Modulators,chembl_name,high,,CHEMBL1372950,NICERGOLINE,CHEMBL1372950,route_indication/has_preliminary,4,C,0,16,0
-org-43902,ORG-43902,Other clinical,Modulators,not_looked_up,,,,,,,,,,,
-ro5203648,RO5203648,Other clinical,Modulators,not_looked_up,,,,,,,,,,,
-s-38093,S 38093,Other clinical,Modulators,not_looked_up,,,,,,,,,,,
+org-43902,ORG-43902,Other clinical,Modulators,no_match,,,,,,,,,,,
+ro5203648,RO5203648,Other clinical,Modulators,pubchem_inchikey,low,,CHEMBL3680154,,,,,,0,2,0
+s-38093,S 38093,Other clinical,Modulators,pubchem_connectivity,low,,CHEMBL4575319,,,,,,0,3,0
 tak-041,TAK-041,Other clinical,Modulators,chembl_synonym,medium,,CHEMBL4779773,ZELATRIAZIN,,,2,,0,1,1
 tak-063,TAK-063,Other clinical,Modulators,chembl_synonym,medium,,CHEMBL3989972,BALIPODECT,,,2,,1,0,0
 tak-418,TAK-418,Other clinical,Modulators,chembl_name,high,,CHEMBL4297835,TAK-418,,,1,,0,0,0
 tak-831,TAK-831,Other clinical,Modulators,chembl_synonym,medium,,CHEMBL2338801,LUVADAXISTAT,,,2,,0,3,0
-tenoten,Tenoten,Other clinical,Modulators,not_looked_up,,,,,,,,,,,
+tenoten,Tenoten,Other clinical,Modulators,no_match,,,,,,,,,,,
 travoprost,Travoprost,Other clinical,Modulators,chembl_name,high,,CHEMBL1200799,TRAVOPROST,,,4,S,1,2,1
-unithiol,Unithiol,Other clinical,Modulators,not_looked_up,,,,,,,,,,,
-skf-81297,SKF 81297,Other clinical,Research Chemical,not_looked_up,,,,,,,,,,,
-3c-pep,3C-PEP,Other clinical,Research Chemical,not_looked_up,,,,,,,,,,,
+unithiol,Unithiol,Other clinical,Modulators,pubchem_not_in_chembl,,,,,,,,,,,
+skf-81297,SKF 81297,Other clinical,Research Chemical,pubchem_inchikey,low,,CHEMBL353335,,,,,,0,3,1
+3c-pep,3C-PEP,Other clinical,Research Chemical,no_match,,,,,,,,,,,
 adl-5747,ADL-5747,Other clinical,Research Chemical,chembl_name,high,,CHEMBL561339,ADL-5747 FREE BASE,,,2,,1,3,1
 alpertine,Alpertine,Other clinical,Research Chemical,chembl_name,high,,CHEMBL2104031,ALPERTINE,,,2,,0,0,0
 e-6837,E-6837,Other clinical,Research Chemical,unii_inchikey,high,,CHEMBL175835,,,,,,0,1,0
 lit-001,LIT-001,Other clinical,Research Chemical,unii_inchikey,high,,CHEMBL4204210,,,,,,0,4,1
 mk-3984,MK-3984,Other clinical,Research Chemical,unii_not_in_chembl,,UNII NDR4H1Q159,,,,,,,,,
-morphodrol,Morphodrol,Other clinical,Research Chemical,not_looked_up,,,,,,,,,,,
-compound-7p,Compound 7P,Other clinical,Research Chemical,not_looked_up,,,,,,,,,,,
+morphodrol,Morphodrol,Other clinical,Research Chemical,no_match,,,,,,,,,,,
+compound-7p,Compound 7P,Other clinical,Research Chemical,pubchem_inchikey,low,,CHEMBL3824120,,,,,,0,0,0
 as-601811,AS-601811,Other clinical,Enzyme,unii_inchikey,high,,CHEMBL118319,,,,,,0,1,0
 hyaluronidase,Hyaluronidase,Other clinical,Enzyme,chembl_name,high,,CHEMBL1201636,HYALURONIDASE,CHEMBL1201636,route_indication/no_eligible_evidence,4,B,1,0,0
 coriander,Coriander,Nutrients & botanicals,Herb,unii_no_structure,,UNII 1OV56052IK,,,,,,,,,
-moringa,Moringa,Nutrients & botanicals,Herb,not_looked_up,,,,,,,,,,,
+moringa,Moringa,Nutrients & botanicals,Herb,no_match,,,,,,,,,,,
 myrrh,Myrrh,Nutrients & botanicals,Herb,chembl_name,high,,CHEMBL2109203,MYRRH,,,3,,0,0,0
 sage,Sage,Nutrients & botanicals,Herb,unii_no_structure,,UNII 065C5D077J,,,,,,,,,
-biotredin,Biotredin,Nutrients & botanicals,Amino Acid,not_looked_up,,,,,,,,,,,
+biotredin,Biotredin,Nutrients & botanicals,Amino Acid,no_match,,,,,,,,,,,
 l-histidine,L-Histidine,Nutrients & botanicals,Amino Acid,chembl_synonym,medium,,CHEMBL17962,HISTIDINE,,,2,,0,1,1
 l-methionine,L-Methionine,Nutrients & botanicals,Amino Acid,chembl_synonym,medium,,CHEMBL42336,METHIONINE,CHEMBL42336,route_indication/has_supported,3,V,0,1,1
 l-threonine,L-Threonine,Nutrients & botanicals,Amino Acid,chembl_synonym,medium,,CHEMBL291747,THREONINE,,,2,,0,0,1
 calcium-chloride,Calcium Chloride,Nutrients & botanicals,Mineral,chembl_name,high,,CHEMBL1200668,CALCIUM CHLORIDE,,,4,ABG,0,0,0
 lithium-chloride,Lithium Chloride,Nutrients & botanicals,Mineral,unii_inchikey,high,,CHEMBL69710,CHLOROLITHIUM,,,,,0,1,0
-lithium-in-drinking-water,Lithium in Drinking Water,Nutrients & botanicals,Mineral,not_looked_up,,,,,,,,,,,
+lithium-in-drinking-water,Lithium in Drinking Water,Nutrients & botanicals,Mineral,no_match,,,,,,,,,,,
 magnesium-chloride,Magnesium Chloride,Nutrients & botanicals,Mineral,chembl_name,high,,CHEMBL2219642,MAGNESIUM CHLORIDE ANHYDROUS,,,4,AB,0,0,0
 magnesium-sulfate,Magnesium Sulfate,Nutrients & botanicals,Mineral,chembl_name,high,,CHEMBL2021423,MAGNESIUM SULFATE ANHYDROUS,CHEMBL2021423,route_indication/no_eligible_evidence,4,ABDV,2,0,0
 potassium-chloride,Potassium Chloride,Nutrients & botanicals,Mineral,chembl_name,high,,CHEMBL1200731,POTASSIUM CHLORIDE,CHEMBL1200731,route_indication/has_preliminary,4,AB,1,1,0
 sodium-thiosulfate,Sodium Thiosulfate,Nutrients & botanicals,Mineral,chembl_name,high,,CHEMBL1208642,THIOSULFURIC ACID,,,4,V,1,0,0
-sucrosomial-magnesium,Sucrosomial Magnesium,Nutrients & botanicals,Mineral,not_looked_up,,,,,,,,,,,
-zinc-bisglycinate,Zinc Bisglycinate,Nutrients & botanicals,Mineral,not_looked_up,,,,,,,,,,,
+sucrosomial-magnesium,Sucrosomial Magnesium,Nutrients & botanicals,Mineral,no_match,,,,,,,,,,,
+zinc-bisglycinate,Zinc Bisglycinate,Nutrients & botanicals,Mineral,pubchem_not_in_chembl,,,,,,,,,,,
 7-8-3-trihydroxyflavone,"7,8,3'-Trihydroxyflavone",Nutrients & botanicals,Flavonoid,unii_inchikey,high,,CHEMBL225513,,,,,,0,1,0
-cacao-powder,Cacao Powder,Nutrients & botanicals,Flavonoid,not_looked_up,,,,,,,,,,,
-cf3cn,CF3CN,Nutrients & botanicals,Flavonoid,not_looked_up,,,,,,,,,,,
+cacao-powder,Cacao Powder,Nutrients & botanicals,Flavonoid,no_match,,,,,,,,,,,
+cf3cn,CF3CN,Nutrients & botanicals,Flavonoid,pubchem_not_in_chembl,,,,,,,,,,,
 dihydromyricetin,Dihydromyricetin,Nutrients & botanicals,Flavonoid,chembl_synonym,medium,,CHEMBL3348861,AMPELOPSIN,,,2,,0,2,0
-egcg-green-tea-extract,EGCG (Green Tea Extract),Nutrients & botanicals,Flavonoid,not_looked_up,,,,,,,,,,,
+egcg-green-tea-extract,EGCG (Green Tea Extract),Nutrients & botanicals,Flavonoid,no_match,,,,,,,,,,,
 isoliquiritigenin,Isoliquiritigenin,Nutrients & botanicals,Flavonoid,chembl_name,high,,CHEMBL129795,ISOLIQUIRITIGENIN,,,,,0,31,0
-r13,R13,Nutrients & botanicals,Flavonoid,not_looked_up,,,,,,,,,,,
-r7,R7,Nutrients & botanicals,Flavonoid,not_looked_up,,,,,,,,,,,
-hypoxen,Hypoxen,Nutrients & botanicals,Antioxidant,not_looked_up,,,,,,,,,,,
-black-hoof-mushroom,Black Hoof Mushroom,Nutrients & botanicals,Mushroom,not_looked_up,,,,,,,,,,,
-poria-mushroom,Poria Mushroom,Nutrients & botanicals,Mushroom,not_looked_up,,,,,,,,,,,
-tiger-milk-mushroom,Tiger Milk Mushroom,Nutrients & botanicals,Mushroom,not_looked_up,,,,,,,,,,,
+r13,R13,Nutrients & botanicals,Flavonoid,pubchem_not_in_chembl,,,,,,,,,,,
+r7,R7,Nutrients & botanicals,Flavonoid,pubchem_not_in_chembl,,,,,,,,,,,
+hypoxen,Hypoxen,Nutrients & botanicals,Antioxidant,no_match,,,,,,,,,,,
+black-hoof-mushroom,Black Hoof Mushroom,Nutrients & botanicals,Mushroom,no_match,,,,,,,,,,,
+poria-mushroom,Poria Mushroom,Nutrients & botanicals,Mushroom,no_match,,,,,,,,,,,
+tiger-milk-mushroom,Tiger Milk Mushroom,Nutrients & botanicals,Mushroom,no_match,,,,,,,,,,,
 1-mna,1-MNA,formats & blends,Supplement,chembl_synonym,low,,CHEMBL71733,TRIGONELLAMIDE,,,2,,0,1,1
-5-alpha-hydroxy-laxogenin,5-alpha-Hydroxy-Laxogenin,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-5-htp,5-HTP,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-6-paradol,6-Paradol,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-akkermansia,Akkermansia,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+5-alpha-hydroxy-laxogenin,5-alpha-Hydroxy-Laxogenin,formats & blends,Supplement,pubchem_not_in_chembl,,,,,,,,,,,
+5-htp,5-HTP,formats & blends,Supplement,pubchem_inchikey,low,,CHEMBL162789,,,,,,0,0,0
+6-paradol,6-Paradol,formats & blends,Supplement,pubchem_inchikey,low,,CHEMBL2071440,,,,,,0,6,0
+akkermansia,Akkermansia,formats & blends,Supplement,no_match,,,,,,,,,,,
 allithiamine,Allithiamine,formats & blends,Supplement,unii_not_in_chembl,,UNII 83SWN21920,,,,,,,,,
 allyl-isothiocyanate,Allyl Isothiocyanate,formats & blends,Supplement,chembl_name,high,,CHEMBL233248,ALLYL ISOTHIOCYANATE,,,1,,0,4,1
 aloe-vera,Aloe Vera,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL2108221,ALOE,,,3,,0,0,0
-alpha-mannans,Alpha-Mannans,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-amylase,Amylase,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+alpha-mannans,Alpha-Mannans,formats & blends,Supplement,no_match,,,,,,,,,,,
+amylase,Amylase,formats & blends,Supplement,pubchem_not_in_chembl,,,,,,,,,,,
 anserine,Anserine,formats & blends,Supplement,chembl_name,high,,CHEMBL448301,ANSERINE,,,,,0,0,0
-apoaequorin,Apoaequorin,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+apoaequorin,Apoaequorin,formats & blends,Supplement,no_match,,,,,,,,,,,
 apple-cider-vinegar,Apple Cider Vinegar,formats & blends,Supplement,unii_no_structure,,UNII 0UE22Q87VC,,,,,,,,,
 arginine,Arginine,formats & blends,Supplement,chembl_name,high,,CHEMBL1485,ARGININE,CHEMBL1485,route_indication/has_supported_broader_only,3,,0,1,1
 artemisinin,Artemisinin,formats & blends,Supplement,chembl_name,high,,CHEMBL269671,ARTEMISININ,CHEMBL269671,route_indication/has_preliminary,3,P,1,4,1
 astaxanthin,Astaxanthin,formats & blends,Supplement,chembl_name,high,,CHEMBL1255871,ASTAXANTHIN,,,3,,1,0,0
-atp,ATP,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-atplex,ATPLEX,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-banaba-leaf-extract,Banaba Leaf Extract,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-bcaas,BCAAs,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-beetroot-extract,Beetroot Extract,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+atp,ATP,formats & blends,Supplement,pubchem_inchikey,low,,CHEMBL14249,ADENOSINE TRIPHOSPHATE,,,2,,0,26,1
+atplex,ATPLEX,formats & blends,Supplement,no_match,,,,,,,,,,,
+banaba-leaf-extract,Banaba Leaf Extract,formats & blends,Supplement,no_match,,,,,,,,,,,
+bcaas,BCAAs,formats & blends,Supplement,no_match,,,,,,,,,,,
+beetroot-extract,Beetroot Extract,formats & blends,Supplement,no_match,,,,,,,,,,,
 beta-alanine,Beta-Alanine,formats & blends,Supplement,chembl_name,high,,CHEMBL297569,BETA-ALANINE,,,,,0,4,1
 beta-carotene,Beta-Carotene,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL1293,BETA CAROTENE,,,4,AD,0,4,0
-beta-glucans,Beta-Glucans,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+beta-glucans,Beta-Glucans,formats & blends,Supplement,rejected_on_review,,PubChem name reached maltotriose; beta-glucans are a polysaccharide family,,,,,,,,,
 beta-sitosterol,Beta-Sitosterol,formats & blends,Supplement,chembl_name,high,,CHEMBL221542,BETA-SITOSTEROL,,,,,0,3,1
 betaine-hcl,Betaine HCl,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL95889,BETAINE,CHEMBL95889,route_indication/has_supported,4,A,1,0,0
 biotin,Biotin,formats & blends,Supplement,chembl_name,high,,CHEMBL857,BIOTIN,CHEMBL857,route_indication/has_preliminary,4,A,0,0,1
-blue-lotus,Blue Lotus,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-bone-broth-protein,Bone Broth Protein,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+blue-lotus,Blue Lotus,formats & blends,Supplement,no_match,,,,,,,,,,,
+bone-broth-protein,Bone Broth Protein,formats & blends,Supplement,no_match,,,,,,,,,,,
 boron,Boron,formats & blends,Supplement,unii_not_in_chembl,,UNII N9E3X5056Q,,,,,,,,,
 bromelain,Bromelain,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL2109027,BROMELAINS,,,4,DM,1,0,0
 butyric-acid,Butyric Acid,formats & blends,Supplement,chembl_name,high,,CHEMBL14227,BUTYRIC ACID,,,2,,0,6,1
-c60-fullerene,C60 Fullerene,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-calcium-alpha-ketoglutarate,Calcium Alpha-Ketoglutarate,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+c60-fullerene,C60 Fullerene,formats & blends,Supplement,pubchem_not_in_chembl,,,,,,,,,,,
+calcium-alpha-ketoglutarate,Calcium Alpha-Ketoglutarate,formats & blends,Supplement,pubchem_not_in_chembl,,,,,,,,,,,
 calcium-citrate,Calcium Citrate,formats & blends,Supplement,chembl_name,high,,CHEMBL2106123,CALCIUM CITRATE,,,3,A,0,0,0
 calcium-l-threonate,Calcium L-Threonate,formats & blends,Supplement,unii_not_in_chembl,,UNII HBB4YPO93U,,,,,,,,,
 carnosic-acid,Carnosic Acid,formats & blends,Supplement,chembl_name,high,,CHEMBL484853,CARNOSIC ACID,,,,,0,9,0
 carnosine,Carnosine,formats & blends,Supplement,chembl_name,high,,CHEMBL242948,CARNOSINE,,,3,,0,1,1
-casein-protein,Casein Protein,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+casein-protein,Casein Protein,formats & blends,Supplement,no_match,,,,,,,,,,,
 chitosan,Chitosan,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL2108133,POLIGLUSAM,,,3,,0,0,0
-chlorella,Chlorella,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+chlorella,Chlorella,formats & blends,Supplement,no_match,,,,,,,,,,,
 chlorogenic-acid,Chlorogenic Acid,formats & blends,Supplement,chembl_name,high,,CHEMBL284616,CHLOROGENIC ACID,,,2,,0,8,1
 chlorophyll,Chlorophyll,formats & blends,Supplement,unii_no_structure,,UNII 00WNZ48OR9,,,,,,,,,
-chondroitin,Chondroitin,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+chondroitin,Chondroitin,formats & blends,Supplement,no_match,,,,,,,,,,,
 chromium-picolinate,Chromium Picolinate,formats & blends,Supplement,chembl_name,high,,CHEMBL3185022,CHROMIUM PICOLINATE,,,1,,0,0,0
 chrysin,Chrysin,formats & blends,Supplement,chembl_name,high,,CHEMBL117,CHRYSIN,,,,,0,34,1
 cinnamon,Cinnamon,formats & blends,Supplement,chembl_name,high,,CHEMBL2108924,CINNAMON,,,3,,0,0,0
-cinnamon-extract,Cinnamon Extract,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-cinsulin,CinSulin,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+cinnamon-extract,Cinnamon Extract,formats & blends,Supplement,no_match,,,,,,,,,,,
+cinsulin,CinSulin,formats & blends,Supplement,no_match,,,,,,,,,,,
 citrulline,Citrulline,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL444814,L-CITRULLINE,CHEMBL444814,route_indication/limited_only,3,,0,0,1
 citrulline-malate,Citrulline Malate,formats & blends,Supplement,chembl_name,high,,CHEMBL444814,L-CITRULLINE,CHEMBL444814,route_indication/limited_only,3,,0,0,1
-citrus-bergamot,Citrus Bergamot,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-cla,CLA,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-collagen-peptides,Collagen Peptides,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-collagen-type-ii,Collagen Type II,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-colostrum,Colostrum,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+citrus-bergamot,Citrus Bergamot,formats & blends,Supplement,no_match,,,,,,,,,,,
+cla,CLA,formats & blends,Supplement,pubchem_inchikey,low,,CHEMBL1195861,,,,,,0,0,0
+collagen-peptides,Collagen Peptides,formats & blends,Supplement,no_match,,,,,,,,,,,
+collagen-type-ii,Collagen Type II,formats & blends,Supplement,no_match,,,,,,,,,,,
+colostrum,Colostrum,formats & blends,Supplement,no_match,,,,,,,,,,,
 copper,Copper,formats & blends,Supplement,chembl_name,high,,CHEMBL55643,COPPER,,,4,,0,1,0
 cranberry,Cranberry,formats & blends,Supplement,unii_no_structure,,UNII 0MVO31Q3QS,,,,,,,,,
 cyanidin,Cyanidin,formats & blends,Supplement,chembl_name,high,,CHEMBL404515,CYANIDIN,,,,,0,7,0
 d-aspartic-acid,D-Aspartic Acid,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL29757,D-ASPARTATE,,,2,,0,1,1
-d-chiro-inositol,D-Chiro-Inositol,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+d-chiro-inositol,D-Chiro-Inositol,formats & blends,Supplement,pubchem_connectivity,low,,CHEMBL1222251|CHEMBL1231671|CHEMBL1950780|CHEMBL278373|CHEMBL3976780|CHEMBL468154,INOSITOL|SCYLLITOL,,,3,A,0,1,1
 d-mannose,D-Mannose,formats & blends,Supplement,chembl_name,high,,CHEMBL469448,D-MANNOSE,,,2,,0,3,1
 d-ribose,D-Ribose,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL1159662,RIBOSE (PYRANOSE),,,2,,0,0,0
 d-serine,D-Serine,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL285123,(D)-SERINE,CHEMBL285123,route_indication/has_supported_broader_only,3,,0,1,1
 daidzein,Daidzein,formats & blends,Supplement,chembl_name,high,,CHEMBL8145,DAIDZEIN,,,2,,0,15,1
-dandelion-root,Dandelion Root,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-devil-s-claw,Devil's Claw,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+dandelion-root,Dandelion Root,formats & blends,Supplement,no_match,,,,,,,,,,,
+devil-s-claw,Devil's Claw,formats & blends,Supplement,no_match,,,,,,,,,,,
 dextrose,Dextrose,formats & blends,Supplement,chembl_name,high,,CHEMBL1222250,DEXTROSE,CHEMBL1222250,route_indication/has_supported_broader_only,4,BCV,0,0,1
-dgl,DGL,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-dha,DHA,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+dgl,DGL,formats & blends,Supplement,rejected_on_review,,PubChem name reached D-glutamate; the wiki means deglycyrrhizinated licorice,,,,,,,,,
+dha,DHA,formats & blends,Supplement,pubchem_not_in_chembl,,,,,,,,,,,
 dihydroberberine,Dihydroberberine,formats & blends,Supplement,chembl_name,high,,CHEMBL11848,DIHYDROBERBERINE,,,,,0,0,0
-dim,DIM,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+dim,DIM,formats & blends,Supplement,no_match,,,,,,,,,,,
 diosmin,Diosmin,formats & blends,Supplement,chembl_name,high,,CHEMBL231884,DIOSMIN,,,4,C,1,2,0
-divaza,Divaza,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-dragon-fruit,Dragon Fruit,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+divaza,Divaza,formats & blends,Supplement,no_match,,,,,,,,,,,
+dragon-fruit,Dragon Fruit,formats & blends,Supplement,no_match,,,,,,,,,,,
 ecdysterone,Ecdysterone,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL224128,20-HYDROXYECDYSONE,,,2,,0,2,0
-elderberry,Elderberry,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+elderberry,Elderberry,formats & blends,Supplement,no_match,,,,,,,,,,,
 emodin,Emodin,formats & blends,Supplement,chembl_name,high,,CHEMBL289277,EMODIN,,,,,0,20,0
-epa,EPA,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+epa,EPA,formats & blends,Supplement,pubchem_inchikey,low,,CHEMBL460026,ICOSAPENT,CHEMBL460026,route_indication/has_supported,3,,1,10,1
 epicatechin,Epicatechin,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL583912,(-)-EPICATECHIN,,,2,,0,8,1
 ergocalciferol,Ergocalciferol,formats & blends,Supplement,chembl_name,high,,CHEMBL1536,ERGOCALCIFEROL,CHEMBL1536,route_indication/has_supported,4,A,1,5,0
 ergothioneine,Ergothioneine,formats & blends,Supplement,unii_inchikey,high,,CHEMBL5209630,,,,,,0,0,0
 erucin,Erucin,formats & blends,Supplement,chembl_name,high,,CHEMBL2151143,ERUCIN,,,,,0,1,0
-essential-phospholipids,Essential Phospholipids,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-evening-primrose,Evening Primrose,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+essential-phospholipids,Essential Phospholipids,formats & blends,Supplement,no_match,,,,,,,,,,,
+evening-primrose,Evening Primrose,formats & blends,Supplement,no_match,,,,,,,,,,,
 evodiamine,Evodiamine,formats & blends,Supplement,chembl_name,high,,CHEMBL486598,EVODIAMINE,,,,,0,3,0
 fad,FAD,formats & blends,Supplement,chembl_synonym,low,,CHEMBL1232653,FLAVIN ADENIN DINUCLEOTIDE,,,-1,,0,0,1
-fennel,Fennel,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+fennel,Fennel,formats & blends,Supplement,no_match,,,,,,,,,,,
 ferulic-acid,Ferulic Acid,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL32749,FERULATE,,,-1,,0,14,0
 fish-oil,Fish Oil,formats & blends,Supplement,chembl_name,high,,CHEMBL3833369,FISH OIL,CHEMBL3833369,route_indication/no_eligible_evidence,4,,1,0,0
-fmn,FMN,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+fmn,FMN,formats & blends,Supplement,pubchem_inchikey,low,,CHEMBL1201794,RIBOFLAVIN 5'-PHOSPHATE,,,4,,1,9,1
 forskolin,Forskolin,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL52606,COLFORSIN,,,2,,0,13,1
-fucoidan,Fucoidan,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+fucoidan,Fucoidan,formats & blends,Supplement,no_match,,,,,,,,,,,
 fucoxanthin,Fucoxanthin,formats & blends,Supplement,chembl_name,high,,CHEMBL1773903,FUCOXANTHIN,,,2,,0,0,0
 fulvic-acid,Fulvic Acid,formats & blends,Supplement,unii_not_in_chembl,,UNII XII14C5FXV,,,,,,,,,
 gamma-tocopherol,Gamma-Tocopherol,formats & blends,Supplement,chembl_name,high,,CHEMBL2151591,GAMMA-TOCOPHEROL,,,2,,0,0,0
-garlic-extract,Garlic Extract,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+garlic-extract,Garlic Extract,formats & blends,Supplement,no_match,,,,,,,,,,,
 gelatin,Gelatin,formats & blends,Supplement,chembl_name,high,,CHEMBL2108518,GELATIN,,,3,,0,0,0
 genistein,Genistein,formats & blends,Supplement,chembl_name,high,,CHEMBL44,GENISTEIN,,,2,,0,60,1
-gla,GLA,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+gla,GLA,formats & blends,Supplement,no_match,,,,,,,,,,,
 glucosamine,Glucosamine,formats & blends,Supplement,chembl_name,high,,CHEMBL493287,GLUCOSAMINE,,,4,M,1,0,0
-glucose-hypertonic-injection,Glucose (Hypertonic Injection),formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+glucose-hypertonic-injection,Glucose (Hypertonic Injection),formats & blends,Supplement,no_match,,,,,,,,,,,
 glutamine,Glutamine,formats & blends,Supplement,chembl_name,high,,CHEMBL930,GLUTAMINE,,,4,A,1,0,1
 glutathione,Glutathione,formats & blends,Supplement,chembl_name,high,,CHEMBL1543,GLUTATHIONE,CHEMBL1543,route_indication/has_preliminary,3,V,0,2,1
 glycerol,Glycerol,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL692,GLYCERIN,CHEMBL692,route_indication/limited_only,4,A,0,0,1
 glycine,Glycine,formats & blends,Supplement,chembl_name,high,,CHEMBL773,GLYCINE,CHEMBL773,route_indication/has_supported_broader_only,4,AB,0,3,1
-grape-seed-extract,Grape Seed Extract,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-gymnema-sylvestre,Gymnema Sylvestre,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-hawthorn,Hawthorn,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+grape-seed-extract,Grape Seed Extract,formats & blends,Supplement,no_match,,,,,,,,,,,
+gymnema-sylvestre,Gymnema Sylvestre,formats & blends,Supplement,no_match,,,,,,,,,,,
+hawthorn,Hawthorn,formats & blends,Supplement,no_match,,,,,,,,,,,
 hesperidin,Hesperidin,formats & blends,Supplement,chembl_name,high,,CHEMBL449317,HESPERIDIN,,,3,,0,3,0
 hmb,HMB,formats & blends,Supplement,chembl_name,high,,CHEMBL4525124,HMB,,,,,0,0,0
-humic-acid,Humic Acid,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+humic-acid,Humic Acid,formats & blends,Supplement,no_match,,,,,,,,,,,
 hyaluronic-acid,Hyaluronic Acid,formats & blends,Supplement,chembl_name,high,,CHEMBL5314376,HYALURONIC ACID,CHEMBL5314376,route_indication/no_eligible_evidence,4,DMRS,0,0,0
 hydroxytyrosol,Hydroxytyrosol,formats & blends,Supplement,chembl_name,high,,CHEMBL1950045,HYDROXYTYROSOL,,,3,,0,2,0
-i3c,I3C,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-immunoglobulins,Immunoglobulins,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+i3c,I3C,formats & blends,Supplement,pubchem_inchikey,low,,CHEMBL155625,INDOLE-3-CARBINOL,,,2,,0,0,1
+immunoglobulins,Immunoglobulins,formats & blends,Supplement,no_match,,,,,,,,,,,
 iodine,Iodine,formats & blends,Supplement,chembl_name,high,,CHEMBL1201225,IODINE,,,3,D,0,0,0
-ip6-inositol-hexaphosphate,IP6 (Inositol Hexaphosphate),formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+ip6-inositol-hexaphosphate,IP6 (Inositol Hexaphosphate),formats & blends,Supplement,no_match,,,,,,,,,,,
 iron,Iron,formats & blends,Supplement,unii_not_in_chembl,,UNII E1UOL152H7,,,,,,,,,
 iron-bisglycinate,Iron Bisglycinate,formats & blends,Supplement,chembl_squashed,low,,CHEMBL4297753,FERROUS BISGLYCINATE,,,3,,1,0,0
-jbsnf-000088,JBSNF-000088,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+jbsnf-000088,JBSNF-000088,formats & blends,Supplement,pubchem_inchikey,low,,CHEMBL4206972,,,,,,0,2,0
 kaempferol,Kaempferol,formats & blends,Supplement,chembl_name,high,,CHEMBL150,KAEMPFEROL,,,1,,0,58,1
-ketone-ester,Ketone Ester,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+ketone-ester,Ketone Ester,formats & blends,Supplement,pubchem_not_in_chembl,,,,,,,,,,,
 l-theanine,L-Theanine,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL3039113,THEANINE,CHEMBL3039113,route_indication/no_eligible_evidence,3,,0,0,0
 l-tyrosine,L-Tyrosine,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL925,TYROSINE,,,4,,0,1,1
 lactase,Lactase,formats & blends,Supplement,chembl_name,high,,CHEMBL2108505,LACTASE,,,3,,1,0,0
-lactoferrin,Lactoferrin,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-laminarin,Laminarin,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+lactoferrin,Lactoferrin,formats & blends,Supplement,pubchem_not_in_chembl,,,,,,,,,,,
+laminarin,Laminarin,formats & blends,Supplement,pubchem_not_in_chembl,,,,,,,,,,,
 lanosterol,Lanosterol,formats & blends,Supplement,chembl_name,high,,CHEMBL225111,LANOSTEROL,,,,,0,1,1
 leucine,Leucine,formats & blends,Supplement,chembl_name,high,,CHEMBL291962,LEUCINE,,,3,,0,1,1
 levocarnitine,Levocarnitine,formats & blends,Supplement,chembl_name,high,,CHEMBL1149,LEVOCARNITINE,CHEMBL1149,route_indication/has_preliminary,4,A,0,2,1
-lipase,Lipase,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-liposomal-vitamin-c,Liposomal Vitamin C,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+lipase,Lipase,formats & blends,Supplement,no_match,,,,,,,,,,,
+liposomal-vitamin-c,Liposomal Vitamin C,formats & blends,Supplement,no_match,,,,,,,,,,,
 lithium-aspartate,Lithium Aspartate,formats & blends,Supplement,unii_not_in_chembl,,UNII U2514Q0PG1,,,,,,,,,
 lithium-orotate,Lithium Orotate,formats & blends,Supplement,unii_not_in_chembl,,UNII L2N7Z24B30,,,,,,,,,
 lumbrokinase,Lumbrokinase,formats & blends,Supplement,unii_no_structure,,UNII N4484W64JW,,,,,,,,,
@@ -1943,26 +1943,26 @@ magnesium-glycinate,Magnesium Glycinate,formats & blends,Supplement,chembl_name,
 magnesium-l-threonate,Magnesium L-Threonate,formats & blends,Supplement,unii_not_in_chembl,,UNII 1Y26ZZ0OTM,,,,,,,,,
 magnesium-lactate,Magnesium Lactate,formats & blends,Supplement,chembl_name,high,,CHEMBL3707281,MAGNESIUM LACTATE,,,-1,A,0,0,0
 magnesium-malate,Magnesium Malate,formats & blends,Supplement,unii_not_in_chembl,,UNII LA9X9UJA2Z,,,,,,,,,
-magnesium-n-acetyl-taurinate,Magnesium N-Acetyl Taurinate,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+magnesium-n-acetyl-taurinate,Magnesium N-Acetyl Taurinate,formats & blends,Supplement,no_match,,,,,,,,,,,
 magnesium-orotate,Magnesium Orotate,formats & blends,Supplement,chembl_name,high,,CHEMBL3707282,MAGNESIUM OROTATE,,,-1,A,0,0,0
 magnesium-oxide,Magnesium Oxide,formats & blends,Supplement,chembl_name,high,,CHEMBL1200572,MAGNESIUM OXIDE,,,4,A,0,0,0
 magnesium-pidolate,Magnesium Pidolate,formats & blends,Supplement,chembl_name,high,,CHEMBL397976,PIDOLIC ACID,,,2,A,0,0,0
 magnesium-taurate,Magnesium Taurate,formats & blends,Supplement,unii_not_in_chembl,,UNII RCM1N3D968,,,,,,,,,
 malic-acid,Malic Acid,formats & blends,Supplement,chembl_name,high,,CHEMBL1455497,MALIC ACID,,,2,,0,0,1
 maltodextrin,Maltodextrin,formats & blends,Supplement,chembl_name,high,,CHEMBL2107951,MALTODEXTRIN,,,3,,0,0,0
-marshmallow-root,Marshmallow Root,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+marshmallow-root,Marshmallow Root,formats & blends,Supplement,no_match,,,,,,,,,,,
 matrine,Matrine,formats & blends,Supplement,chembl_name,high,,CHEMBL204860,MATRINE,,,,,0,0,0
-mct-oil,MCT Oil,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+mct-oil,MCT Oil,formats & blends,Supplement,no_match,,,,,,,,,,,
 menaquinone-7,Menaquinone-7,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL1230575,MENAQUINONE 7,,,2,,0,0,0
 methylcobalamin,Methylcobalamin,formats & blends,Supplement,chembl_name,high,,CHEMBL4297672,METHYLCOBALAMIN,,,2,,0,0,0
 molybdenum,Molybdenum,formats & blends,Supplement,unii_not_in_chembl,,UNII 81AH48963U,,,,,,,,,
 msm,MSM,formats & blends,Supplement,chembl_synonym,low,,CHEMBL25028,DIMETHYL SULFONE,,,1,,0,0,0
-mullein,Mullein,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+mullein,Mullein,formats & blends,Supplement,no_match,,,,,,,,,,,
 myricetin,Myricetin,formats & blends,Supplement,chembl_name,high,,CHEMBL164,MYRICETIN,,,,,0,65,1
 n-acetyl-glucosamine,N-Acetyl Glucosamine,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL447878,N-ACETYLGLUCOSAMINE,,,2,,0,1,0
-na-r-ala,NA-R-ALA,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-nac,NAC,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-nacet,NACET,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+na-r-ala,NA-R-ALA,formats & blends,Supplement,no_match,,,,,,,,,,,
+nac,NAC,formats & blends,Supplement,no_match,,,,,,,,,,,
+nacet,NACET,formats & blends,Supplement,no_match,,,,,,,,,,,
 nattokinase,Nattokinase,formats & blends,Supplement,unii_no_structure,,UNII H81695M5OP,,,,,,,,,
 neohesperidin,Neohesperidin,formats & blends,Supplement,chembl_name,high,,CHEMBL506398,NEOHESPERIDIN,,,,,0,0,0
 nobiletin,Nobiletin,formats & blends,Supplement,chembl_name,high,,CHEMBL76447,NOBILETIN,,,,,0,2,1
@@ -1974,212 +1974,212 @@ pantothenic-acid,Pantothenic Acid,formats & blends,Supplement,chembl_name,high,,
 papain,Papain,formats & blends,Supplement,chembl_name,high,,CHEMBL2108075,PAPAIN,,,1,,0,0,0
 phenethyl-isothiocyanate,Phenethyl Isothiocyanate,formats & blends,Supplement,chembl_squashed,low,,CHEMBL151649,PHENETHYLISOTHIOCYANATE,,,,,0,5,0
 phloretin,Phloretin,formats & blends,Supplement,chembl_name,high,,CHEMBL45068,PHLORETIN,,,,,0,13,1
-phylloquinone,Phylloquinone,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+phylloquinone,Phylloquinone,formats & blends,Supplement,pubchem_inchikey,low,,CHEMBL1550,PHYTONADIONE,,,4,B,0,4,0
 piceatannol,Piceatannol,formats & blends,Supplement,chembl_name,high,,CHEMBL69863,PICEATANNOL,,,,,0,15,0
 piperine,Piperine,formats & blends,Supplement,chembl_name,high,,CHEMBL43185,PIPERINE,,,2,,0,11,1
-pomegranate-extract,Pomegranate Extract,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+pomegranate-extract,Pomegranate Extract,formats & blends,Supplement,no_match,,,,,,,,,,,
 propionyl-l-carnitine,Propionyl-L-Carnitine,formats & blends,Supplement,unii_inchikey,high,,CHEMBL3392074,,,,,,0,0,0
-protease,Protease,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-punicalagins,Punicalagins,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+protease,Protease,formats & blends,Supplement,pubchem_not_in_chembl,,,,,,,,,,,
+punicalagins,Punicalagins,formats & blends,Supplement,no_match,,,,,,,,,,,
 pycnogenol,Pycnogenol,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL2109208,MARITIME PINE,CHEMBL2109208,route_indication/no_eligible_evidence,3,,0,0,0
 pygeum,Pygeum,formats & blends,Supplement,unii_no_structure,,UNII 709HYI14M4,,,,,,,,,
 pyridoxal-5-phosphate,Pyridoxal-5-Phosphate,formats & blends,Supplement,chembl_squashed,low,,CHEMBL82202,PYRIDOXAL PHOSPHATE ANHYDROUS,,,3,A,0,7,1
 pyroglutamic-acid,Pyroglutamic Acid,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL397976,PIDOLIC ACID,,,2,A,0,0,0
 pyruvic-acid,Pyruvic Acid,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL1162144,PYRUVATE,,,2,,0,2,1
-quercetin-phytosome,Quercetin Phytosome,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-r-alpha-lipoic-acid,R-Alpha Lipoic Acid,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-r-alpha-lipoic-acid-with-biotin,R-Alpha Lipoic Acid with Biotin,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+quercetin-phytosome,Quercetin Phytosome,formats & blends,Supplement,no_match,,,,,,,,,,,
+r-alpha-lipoic-acid,R-Alpha Lipoic Acid,formats & blends,Supplement,pubchem_inchikey,low,,CHEMBL134342,THIOCTIC ACID,,,,,0,1,1
+r-alpha-lipoic-acid-with-biotin,R-Alpha Lipoic Acid with Biotin,formats & blends,Supplement,no_match,,,,,,,,,,,
 rhoifolin,Rhoifolin,formats & blends,Supplement,chembl_name,high,,CHEMBL395990,RHOIFOLIN,,,,,0,1,0
-rose-hip-extract,Rose Hip Extract,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+rose-hip-extract,Rose Hip Extract,formats & blends,Supplement,no_match,,,,,,,,,,,
 rosmarinic-acid,Rosmarinic Acid,formats & blends,Supplement,chembl_name,high,,CHEMBL324842,ROSMARINIC ACID,,,,,0,17,0
 rutin,Rutin,formats & blends,Supplement,chembl_name,high,,CHEMBL226335,RUTIN,,,3,C,0,18,0
-s-acetyl-glutathione,S-Acetyl Glutathione,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-s-phenylacetyl-glutathione,S-Phenylacetyl Glutathione,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-saccharomyces-boulardii,Saccharomyces Boulardii,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+s-acetyl-glutathione,S-Acetyl Glutathione,formats & blends,Supplement,no_match,,,,,,,,,,,
+s-phenylacetyl-glutathione,S-Phenylacetyl Glutathione,formats & blends,Supplement,pubchem_not_in_chembl,,,,,,,,,,,
+saccharomyces-boulardii,Saccharomyces Boulardii,formats & blends,Supplement,no_match,,,,,,,,,,,
 salicin,Salicin,formats & blends,Supplement,chembl_name,high,,CHEMBL462997,SALICIN,,,-1,,0,0,0
-salidrosol,Salidrosol,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-santa-cruz-paleo-nootropic-caps,Santa Cruz Paleo Nootropic Caps,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-sea-moss,Sea Moss,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+salidrosol,Salidrosol,formats & blends,Supplement,no_match,,,,,,,,,,,
+santa-cruz-paleo-nootropic-caps,Santa Cruz Paleo Nootropic Caps,formats & blends,Supplement,no_match,,,,,,,,,,,
+sea-moss,Sea Moss,formats & blends,Supplement,no_match,,,,,,,,,,,
 selenium,Selenium,formats & blends,Supplement,chembl_name,high,,CHEMBL6068503,SELENIUM,CHEMBL6068503,route_indication/no_eligible_evidence,3,,0,0,0
 selenomethionine,Selenomethionine,formats & blends,Supplement,chembl_name,high,,CHEMBL113178,SELENOMETHIONINE,,,4,,0,0,0
 serrapeptase,Serrapeptase,formats & blends,Supplement,chembl_name,high,,CHEMBL2108880,SERRAPEPTASE,,,2,,1,0,0
-shiitake,Shiitake,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+shiitake,Shiitake,formats & blends,Supplement,no_match,,,,,,,,,,,
 silybin,Silybin,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL9509,SILIBININ,,,3,A,0,9,0
-slippery-elm,Slippery Elm,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+slippery-elm,Slippery Elm,formats & blends,Supplement,no_match,,,,,,,,,,,
 sodium-ascorbate,Sodium Ascorbate,formats & blends,Supplement,chembl_name,high,,CHEMBL591665,SODIUM ASCORBATE,,,4,,0,0,0
 sodium-bicarbonate,Sodium Bicarbonate,formats & blends,Supplement,chembl_name,high,,CHEMBL1353,SODIUM BICARBONATE,CHEMBL1353,route_indication/has_supported,4,B,0,0,1
-solcoseryl,Solcoseryl,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-souvenaid,Souvenaid,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+solcoseryl,Solcoseryl,formats & blends,Supplement,no_match,,,,,,,,,,,
+souvenaid,Souvenaid,formats & blends,Supplement,no_match,,,,,,,,,,,
 spermidine,Spermidine,formats & blends,Supplement,chembl_name,high,,CHEMBL19612,SPERMIDINE,,,3,,0,15,1
-spirulina,Spirulina,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-stinging-nettle,Stinging Nettle,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-strontium-citrate,Strontium Citrate,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+spirulina,Spirulina,formats & blends,Supplement,no_match,,,,,,,,,,,
+stinging-nettle,Stinging Nettle,formats & blends,Supplement,no_match,,,,,,,,,,,
+strontium-citrate,Strontium Citrate,formats & blends,Supplement,pubchem_not_in_chembl,,,,,,,,,,,
 sulforaphane,Sulforaphane,formats & blends,Supplement,chembl_name,high,,CHEMBL48802,SULFORAPHANE,CHEMBL48802,route_indication/has_supported,3,,0,5,0
 superoxide-dismutase,Superoxide Dismutase,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL2108545,ORGOTEIN,,,4,M,0,0,0
-tart-cherry-extract,Tart Cherry Extract,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+tart-cherry-extract,Tart Cherry Extract,formats & blends,Supplement,no_match,,,,,,,,,,,
 taurine,Taurine,formats & blends,Supplement,chembl_name,high,,CHEMBL239243,TAURINE,,,3,,0,0,1
 tetrahydrocurcumin,Tetrahydrocurcumin,formats & blends,Supplement,chembl_name,high,,CHEMBL318743,TETRAHYDROCURCUMIN,,,,,0,2,0
-tmg,TMG,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+tmg,TMG,formats & blends,Supplement,no_match,,,,,,,,,,,
 tocotrienols,Tocotrienols,formats & blends,Supplement,unii_no_structure,,UNII KP2MW85SSQ,,,,,,,,,
-tremella,Tremella,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+tremella,Tremella,formats & blends,Supplement,no_match,,,,,,,,,,,
 tributyrin,Tributyrin,formats & blends,Supplement,chembl_name,high,,CHEMBL118722,TRIBUTYRIN,,,1,,0,0,1
 trigonelline,Trigonelline,formats & blends,Supplement,chembl_name,high,,CHEMBL350675,TRIGONELLINE,,,,,0,0,0
 turkesterone,Turkesterone,formats & blends,Supplement,chembl_name,high,,CHEMBL2087140,TURKESTERONE,,,,,0,0,0
-turkey-tail-mushroom,Turkey Tail Mushroom,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-turmeric-curcumin,Turmeric (Curcumin),formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+turkey-tail-mushroom,Turkey Tail Mushroom,formats & blends,Supplement,no_match,,,,,,,,,,,
+turmeric-curcumin,Turmeric (Curcumin),formats & blends,Supplement,no_match,,,,,,,,,,,
 uridine-monophosphate,Uridine Monophosphate,formats & blends,Supplement,unii_inchikey,high,,CHEMBL214393,,,,,,0,1,1
 uridine-triacetate,Uridine Triacetate,formats & blends,Supplement,chembl_name,high,,CHEMBL2107381,URIDINE TRIACETATE,,,4,A,1,0,0
 vanadium,Vanadium,formats & blends,Supplement,unii_not_in_chembl,,UNII 00J9J9XKDE,,,,,,,,,
-vesilute,Vesilute,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+vesilute,Vesilute,formats & blends,Supplement,no_match,,,,,,,,,,,
 vitamin-b-complex,Vitamin B Complex,formats & blends,Supplement,chembl_name,high,,CHEMBL2108015,VITAMIN B COMPLEX,,,3,,0,0,0
-vitamin-b1-thiamine,Vitamin B1 (Thiamine),formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-vitamin-b2-riboflavin,Vitamin B2 (Riboflavin),formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-vitamin-b3-niacin,Vitamin B3 (Niacin),formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-vitamin-b6-pyridoxine,Vitamin B6 (Pyridoxine),formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-vitamin-b8-inositol,Vitamin B8 (Inositol),formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-vitamin-b9-folate,Vitamin B9 (Folate),formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-vitamin-c,Vitamin C,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+vitamin-b1-thiamine,Vitamin B1 (Thiamine),formats & blends,Supplement,no_match,,,,,,,,,,,
+vitamin-b2-riboflavin,Vitamin B2 (Riboflavin),formats & blends,Supplement,no_match,,,,,,,,,,,
+vitamin-b3-niacin,Vitamin B3 (Niacin),formats & blends,Supplement,no_match,,,,,,,,,,,
+vitamin-b6-pyridoxine,Vitamin B6 (Pyridoxine),formats & blends,Supplement,no_match,,,,,,,,,,,
+vitamin-b8-inositol,Vitamin B8 (Inositol),formats & blends,Supplement,no_match,,,,,,,,,,,
+vitamin-b9-folate,Vitamin B9 (Folate),formats & blends,Supplement,no_match,,,,,,,,,,,
+vitamin-c,Vitamin C,formats & blends,Supplement,pubchem_inchikey,low,,CHEMBL196,ASCORBIC ACID,CHEMBL196,route_indication/has_supported_broader_only,4,AGS,1,5,1
 vitamin-d3,Vitamin D3,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL1042,CHOLECALCIFEROL,CHEMBL1042,route_indication/has_supported,4,A,1,8,0
 vitamin-e,Vitamin E,formats & blends,Supplement,chembl_name,high,,CHEMBL3989727,VITAMIN E,CHEMBL3989727,route_indication/limited_only,4,A,0,0,0
 vitamin-k,Vitamin K,formats & blends,Supplement,chembl_name,high,,CHEMBL1201519,VITAMIN K,CHEMBL1201519,route_indication/no_eligible_evidence,4,,0,0,0
-whey-protein-isolate,Whey Protein Isolate,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-wild-yam,Wild Yam,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+whey-protein-isolate,Whey Protein Isolate,formats & blends,Supplement,no_match,,,,,,,,,,,
+wild-yam,Wild Yam,formats & blends,Supplement,no_match,,,,,,,,,,,
 wogonin,Wogonin,formats & blends,Supplement,chembl_name,high,,CHEMBL16171,WOGONIN,,,,,0,7,0
 xanthohumol,Xanthohumol,formats & blends,Supplement,chembl_name,high,,CHEMBL253896,XANTHOHUMOL,,,2,,0,3,0
-yeast-extract,Yeast Extract,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+yeast-extract,Yeast Extract,formats & blends,Supplement,no_match,,,,,,,,,,,
 zeaxanthin,Zeaxanthin,formats & blends,Supplement,chembl_name,high,,CHEMBL2359248,ZEAXANTHIN,,,3,,0,0,1
 zinc,Zinc,formats & blends,Supplement,unii_inchikey,high,,CHEMBL1201279,,,,,,0,1,0
 zinc-l-carnosine,Zinc L-Carnosine,formats & blends,Supplement,chembl_synonym,medium,,CHEMBL242948,CARNOSINE,,,3,,0,1,1
 zinc-picolinate,Zinc Picolinate,formats & blends,Supplement,unii_not_in_chembl,,UNII ALO92O31SE,,,,,,,,,
-lion-s-mane,Lion's Mane,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-human-placenta-extract,Human Placenta Extract,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
+lion-s-mane,Lion's Mane,formats & blends,Supplement,no_match,,,,,,,,,,,
+human-placenta-extract,Human Placenta Extract,formats & blends,Supplement,no_match,,,,,,,,,,,
 icosapent-ethyl,Icosapent Ethyl,formats & blends,Supplement,chembl_name,high,,CHEMBL2095209,ICOSAPENT ETHYL,,,4,,1,7,1
 omega-3-fatty-acids,Omega-3 Fatty Acids,formats & blends,Supplement,chembl_name,high,,CHEMBL4298065,OMEGA-3 FATTY ACIDS,CHEMBL4298065,route_indication/no_eligible_evidence,3,A,0,0,0
 pentosan-polysulfate-sodium,Pentosan Polysulfate Sodium,formats & blends,Supplement,chembl_name,high,,CHEMBL1201516,PENTOSAN POLYSULFATE SODIUM,,,4,CG,1,0,0
-l-carnitine,L-Carnitine,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-dmg,DMG,formats & blends,Supplement,not_looked_up,,,,,,,,,,,
-intranasal-insulin,Intranasal Insulin,formats & blends,Nasal,not_looked_up,,,,,,,,,,,
-exomitin,Exomitin,formats & blends,Topical Formula,not_looked_up,,,,,,,,,,,
-jxl082,JXL082,formats & blends,Topical Formula,not_looked_up,,,,,,,,,,,
-ky-19382,KY-19382,formats & blends,Topical Formula,not_looked_up,,,,,,,,,,,
+l-carnitine,L-Carnitine,formats & blends,Supplement,pubchem_inchikey,low,,CHEMBL1149,LEVOCARNITINE,CHEMBL1149,route_indication/has_preliminary,4,A,0,2,1
+dmg,DMG,formats & blends,Supplement,pubchem_inchikey,low,,CHEMBL1232274,,,,,,0,0,0
+intranasal-insulin,Intranasal Insulin,formats & blends,Nasal,no_match,,,,,,,,,,,
+exomitin,Exomitin,formats & blends,Topical Formula,no_match,,,,,,,,,,,
+jxl082,JXL082,formats & blends,Topical Formula,no_match,,,,,,,,,,,
+ky-19382,KY-19382,formats & blends,Topical Formula,no_match,,,,,,,,,,,
 menthol,Menthol,formats & blends,Topical Formula,chembl_name,high,,CHEMBL256087,MENTHOL,CHEMBL256087,route_indication/has_supported,4,,2,5,0
-mitovitan,MitoVitan,formats & blends,Topical Formula,not_looked_up,,,,,,,,,,,
-mitovitan-active,MitoVitan Active,formats & blends,Topical Formula,not_looked_up,,,,,,,,,,,
+mitovitan,MitoVitan,formats & blends,Topical Formula,no_match,,,,,,,,,,,
+mitovitan-active,MitoVitan Active,formats & blends,Topical Formula,no_match,,,,,,,,,,,
 sm-04554,SM-04554,formats & blends,Topical Formula,chembl_synonym,medium,,CHEMBL4650339,DALOSIRVAT,,,2,,0,0,0
-tdm-105795,TDM-105795,formats & blends,Topical Formula,not_looked_up,,,,,,,,,,,
-transdermal-magnesium,Transdermal Magnesium,formats & blends,Topical Formula,not_looked_up,,,,,,,,,,,
+tdm-105795,TDM-105795,formats & blends,Topical Formula,pubchem_not_in_chembl,,,,,,,,,,,
+transdermal-magnesium,Transdermal Magnesium,formats & blends,Topical Formula,no_match,,,,,,,,,,,
 tromantadine,Tromantadine,formats & blends,Topical Formula,chembl_name,high,,CHEMBL3989506,TROMANTADINE,,,2,DJ,0,1,0
-way-316606,WAY-316606,formats & blends,Topical Formula,not_looked_up,,,,,,,,,,,
+way-316606,WAY-316606,formats & blends,Topical Formula,pubchem_inchikey,low,,CHEMBL495575,,,,,,0,2,1
 minoxidil,Minoxidil,formats & blends,Topical Formula,chembl_name,high,,CHEMBL802,MINOXIDIL,,,4,CD,1,0,1
-pp405,PP405,formats & blends,Topical Formula,not_looked_up,,,,,,,,,,,
-5-amino-mic,5-Amino/MIC,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-bpc-157-kpv-ghk-cu-transdermal-serum,BPC-157/KPV/GHK-Cu Transdermal Serum,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-cjc-1295-ipamorelin,CJC-1295 / Ipamorelin,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-ghk-cu-methylene-blue-tallow-balm,GHK-Cu + Methylene Blue Tallow Balm,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-glow,GLOW,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-herc-mtb,Herc (mtb),formats & blends,Blend,not_looked_up,,,,,,,,,,,
-klow,KLOW,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-lgd-4033-yk-11,LGD-4033 + YK-11,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-lipo-mic-prime,Lipo MIC Prime,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-lipo-mic-nad,Lipo-MIC + NAD+,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-lipo-nex,Lipo-Nex,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-mnt-pmp,MNT (pmp),formats & blends,Blend,not_looked_up,,,,,,,,,,,
-rad-140-yk-11,RAD-140 + YK-11,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-betamethasone-gentamicin-clotrimazole,Betamethasone + Gentamicin + Clotrimazole,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-bilberry-forte,Bilberry Forte,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-bpc-157-and-tb-500-blend,BPC-157 and TB-500 blend,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-brainmax,BrainMax,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-cjc-1295-no-dac-and-ipamorelin-blend,CJC-1295 no DAC and Ipamorelin blend,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-corvalol,Corvalol,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-cytoflavin,Cytoflavin,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-dexamethasone-neomycin-polymyxin-b,Dexamethasone + Neomycin + Polymyxin B,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-fosfogliv,Fosfogliv,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-framycetin-gramicidin-dexamethasone,Framycetin + Gramicidin + Dexamethasone,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-genferon,Genferon,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-glycine-gotu-kola-ginkgo-biloba-b-vitamins,Glycine + Gotu Kola + Ginkgo Biloba + B Vitamins,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-gpl-femme,GPL Femme,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-gpl-man,GPL Man,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-hepa-health,Hepa-Health,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-interferon-alfa-2b-diphenhydramine,Interferon Alfa-2b + Diphenhydramine,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-levocetirizine-montelukast,Levocetirizine + Montelukast,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-lovelas-forte,Lovelas Forte,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-modafinil-armodafinil,Modafinil + Armodafinil,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-neurobion,Neurobion,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-peptide-complex-pro-01,Peptide Complex Pro 01,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-peptide-complex-pro-02,Peptide Complex Pro 02,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-peptide-complex-pro-03,Peptide Complex Pro 03,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-peptide-complex-pro-04,Peptide Complex Pro 04,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-peptide-complex-pro-06,Peptide Complex Pro 06,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-peptide-complex-pro-07,Peptide Complex Pro 07,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-peptide-complex-pro-11,Peptide Complex Pro 11,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-peptide-complex-pro-13,Peptide Complex Pro 13,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-piracetam-cinnarizine,Piracetam + Cinnarizine,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-polyethylene-glycol-400-propylene-glycol,Polyethylene Glycol 400 + Propylene Glycol,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-revilab-anti-a-g-e,Revilab Anti-A.G.E.,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-revilab-sl-01,Revilab SL 01,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-revilab-sl-02,Revilab SL 02,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-revilab-sl-03,Revilab SL 03,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-revilab-sl-04,Revilab SL 04,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-revilab-sl-05,Revilab SL 05,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-revilab-sl-06,Revilab SL 06,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-revilab-sl-07,Revilab SL 07,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-revilab-sl-08,Revilab SL 08,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-revilab-sl-09,Revilab SL 09,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-revilab-sl-10,Revilab SL 10,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-selank-semax,Selank + Semax,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-spermstrong,Spermstrong,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-tenofovir-disoproxil-fumarate-emtricitabine-efavirenz,Tenofovir Disoproxil Fumarate + Emtricitabine + Efavirenz,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-testogenon,Testogenon,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-tobramycin-dexamethasone,Tobramycin + Dexamethasone,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-trehalose-sodium-hyaluronate,Trehalose + Sodium Hyaluronate,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-unithiol-calcium-pantothenate,Unithiol + Calcium Pantothenate,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-vinpocetine-piracetam,Vinpocetine + Piracetam,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-wolverine-stack,Wolverine Stack,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-adapalene-benzoyl-peroxide,Adapalene + Benzoyl Peroxide,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-amoxicillin-clavulanate,Amoxicillin + Clavulanate,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-aspirin-atorvastatin,Aspirin + Atorvastatin,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-avanafil-dapoxetine,Avanafil + Dapoxetine,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-azelastine-fluticasone-propionate,Azelastine + Fluticasone Propionate,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-bacitracin-zinc-neomycin-polymyxin-b,Bacitracin Zinc + Neomycin + Polymyxin B,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-bempedoic-acid-ezetimibe,Bempedoic Acid + Ezetimibe,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-budesonide-formoterol,Budesonide + Formoterol,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-calcium-carbonate-vitamin-d3,Calcium Carbonate + Vitamin D3,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-citicoline-piracetam,Citicoline + Piracetam,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-clopidogrel-aspirin,Clopidogrel + Aspirin,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-cyproterone-acetate-ethinylestradiol,Cyproterone Acetate + Ethinylestradiol,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-dextromethorphan-bupropion,Dextromethorphan + Bupropion,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-emtricitabine-tenofovir-alafenamide,Emtricitabine + Tenofovir Alafenamide,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-fluticasone-furoate-azelastine,Fluticasone Furoate + Azelastine,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-furosemide-amiloride,Furosemide + Amiloride,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-glimepiride-metformin,Glimepiride + Metformin,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-glutathione-kojic-acid,Glutathione + Kojic Acid,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-glutathione-kojic-acid-glycolic-acid,Glutathione + Kojic Acid + Glycolic Acid,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-hydroquinone-octinoxate-oxybenzone,Hydroquinone + Octinoxate + Oxybenzone,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-hydroquinone-tretinoin-fluocinolone-acetonide,Hydroquinone + Tretinoin + Fluocinolone Acetonide,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-hydroquinone-tretinoin-mometasone,Hydroquinone + Tretinoin + Mometasone,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-levodopa-carbidopa,Levodopa + Carbidopa,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-lisinopril-hydrochlorothiazide,Lisinopril + Hydrochlorothiazide,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-losartan-hydrochlorothiazide,Losartan + Hydrochlorothiazide,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-minoxidil-aminexil,Minoxidil + Aminexil,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-minoxidil-finasteride,Minoxidil + Finasteride,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-olmesartan-amlodipine-hydrochlorothiazide,Olmesartan + Amlodipine + Hydrochlorothiazide,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-olmesartan-medoxomil-azelnidipine,Olmesartan Medoxomil + Azelnidipine,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-olmesartan-medoxomil-hydrochlorothiazide,Olmesartan Medoxomil + Hydrochlorothiazide,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-olmesartan-medoxomil-metoprolol,Olmesartan Medoxomil + Metoprolol,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-pioglitazone-metformin,Pioglitazone + Metformin,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-pregabalin-nortriptyline-methylcobalamin,Pregabalin + Nortriptyline + Methylcobalamin,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-rabeprazole-domperidone,Rabeprazole + Domperidone,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-sildenafil-dapoxetine,Sildenafil + Dapoxetine,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-sildenafil-duloxetine,Sildenafil + Duloxetine,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-sildenafil-fluoxetine,Sildenafil + Fluoxetine,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-sildenafil-tadalafil,Sildenafil + Tadalafil,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-sodium-valproate-valproic-acid,Sodium Valproate + Valproic Acid,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-sulfamethoxazole-trimethoprim,Sulfamethoxazole + Trimethoprim,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-tadalafil-dapoxetine,Tadalafil + Dapoxetine,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-telmisartan-cilnidipine-chlorthalidone,Telmisartan + Cilnidipine + Chlorthalidone,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-telmisartan-nebivolol,Telmisartan + Nebivolol,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-tenofovir-disoproxil-fumarate-emtricitabine,Tenofovir Disoproxil Fumarate + Emtricitabine,formats & blends,Blend,not_looked_up,,,,,,,,,,,
-vardenafil-dapoxetine,Vardenafil + Dapoxetine,formats & blends,Blend,not_looked_up,,,,,,,,,,,
+pp405,PP405,formats & blends,Topical Formula,pubchem_inchikey,low,,CHEMBL4779727,,,,,,0,0,1
+5-amino-mic,5-Amino/MIC,formats & blends,Blend,no_match,,,,,,,,,,,
+bpc-157-kpv-ghk-cu-transdermal-serum,BPC-157/KPV/GHK-Cu Transdermal Serum,formats & blends,Blend,no_match,,,,,,,,,,,
+cjc-1295-ipamorelin,CJC-1295 / Ipamorelin,formats & blends,Blend,no_match,,,,,,,,,,,
+ghk-cu-methylene-blue-tallow-balm,GHK-Cu + Methylene Blue Tallow Balm,formats & blends,Blend,no_match,,,,,,,,,,,
+glow,GLOW,formats & blends,Blend,no_match,,,,,,,,,,,
+herc-mtb,Herc (mtb),formats & blends,Blend,no_match,,,,,,,,,,,
+klow,KLOW,formats & blends,Blend,no_match,,,,,,,,,,,
+lgd-4033-yk-11,LGD-4033 + YK-11,formats & blends,Blend,no_match,,,,,,,,,,,
+lipo-mic-prime,Lipo MIC Prime,formats & blends,Blend,no_match,,,,,,,,,,,
+lipo-mic-nad,Lipo-MIC + NAD+,formats & blends,Blend,no_match,,,,,,,,,,,
+lipo-nex,Lipo-Nex,formats & blends,Blend,no_match,,,,,,,,,,,
+mnt-pmp,MNT (pmp),formats & blends,Blend,no_match,,,,,,,,,,,
+rad-140-yk-11,RAD-140 + YK-11,formats & blends,Blend,no_match,,,,,,,,,,,
+betamethasone-gentamicin-clotrimazole,Betamethasone + Gentamicin + Clotrimazole,formats & blends,Blend,no_match,,,,,,,,,,,
+bilberry-forte,Bilberry Forte,formats & blends,Blend,no_match,,,,,,,,,,,
+bpc-157-and-tb-500-blend,BPC-157 and TB-500 blend,formats & blends,Blend,no_match,,,,,,,,,,,
+brainmax,BrainMax,formats & blends,Blend,no_match,,,,,,,,,,,
+cjc-1295-no-dac-and-ipamorelin-blend,CJC-1295 no DAC and Ipamorelin blend,formats & blends,Blend,no_match,,,,,,,,,,,
+corvalol,Corvalol,formats & blends,Blend,no_match,,,,,,,,,,,
+cytoflavin,Cytoflavin,formats & blends,Blend,no_match,,,,,,,,,,,
+dexamethasone-neomycin-polymyxin-b,Dexamethasone + Neomycin + Polymyxin B,formats & blends,Blend,no_match,,,,,,,,,,,
+fosfogliv,Fosfogliv,formats & blends,Blend,no_match,,,,,,,,,,,
+framycetin-gramicidin-dexamethasone,Framycetin + Gramicidin + Dexamethasone,formats & blends,Blend,no_match,,,,,,,,,,,
+genferon,Genferon,formats & blends,Blend,no_match,,,,,,,,,,,
+glycine-gotu-kola-ginkgo-biloba-b-vitamins,Glycine + Gotu Kola + Ginkgo Biloba + B Vitamins,formats & blends,Blend,no_match,,,,,,,,,,,
+gpl-femme,GPL Femme,formats & blends,Blend,no_match,,,,,,,,,,,
+gpl-man,GPL Man,formats & blends,Blend,no_match,,,,,,,,,,,
+hepa-health,Hepa-Health,formats & blends,Blend,no_match,,,,,,,,,,,
+interferon-alfa-2b-diphenhydramine,Interferon Alfa-2b + Diphenhydramine,formats & blends,Blend,no_match,,,,,,,,,,,
+levocetirizine-montelukast,Levocetirizine + Montelukast,formats & blends,Blend,no_match,,,,,,,,,,,
+lovelas-forte,Lovelas Forte,formats & blends,Blend,no_match,,,,,,,,,,,
+modafinil-armodafinil,Modafinil + Armodafinil,formats & blends,Blend,no_match,,,,,,,,,,,
+neurobion,Neurobion,formats & blends,Blend,no_match,,,,,,,,,,,
+peptide-complex-pro-01,Peptide Complex Pro 01,formats & blends,Blend,no_match,,,,,,,,,,,
+peptide-complex-pro-02,Peptide Complex Pro 02,formats & blends,Blend,no_match,,,,,,,,,,,
+peptide-complex-pro-03,Peptide Complex Pro 03,formats & blends,Blend,no_match,,,,,,,,,,,
+peptide-complex-pro-04,Peptide Complex Pro 04,formats & blends,Blend,no_match,,,,,,,,,,,
+peptide-complex-pro-06,Peptide Complex Pro 06,formats & blends,Blend,no_match,,,,,,,,,,,
+peptide-complex-pro-07,Peptide Complex Pro 07,formats & blends,Blend,no_match,,,,,,,,,,,
+peptide-complex-pro-11,Peptide Complex Pro 11,formats & blends,Blend,no_match,,,,,,,,,,,
+peptide-complex-pro-13,Peptide Complex Pro 13,formats & blends,Blend,no_match,,,,,,,,,,,
+piracetam-cinnarizine,Piracetam + Cinnarizine,formats & blends,Blend,no_match,,,,,,,,,,,
+polyethylene-glycol-400-propylene-glycol,Polyethylene Glycol 400 + Propylene Glycol,formats & blends,Blend,no_match,,,,,,,,,,,
+revilab-anti-a-g-e,Revilab Anti-A.G.E.,formats & blends,Blend,no_match,,,,,,,,,,,
+revilab-sl-01,Revilab SL 01,formats & blends,Blend,no_match,,,,,,,,,,,
+revilab-sl-02,Revilab SL 02,formats & blends,Blend,no_match,,,,,,,,,,,
+revilab-sl-03,Revilab SL 03,formats & blends,Blend,no_match,,,,,,,,,,,
+revilab-sl-04,Revilab SL 04,formats & blends,Blend,no_match,,,,,,,,,,,
+revilab-sl-05,Revilab SL 05,formats & blends,Blend,no_match,,,,,,,,,,,
+revilab-sl-06,Revilab SL 06,formats & blends,Blend,no_match,,,,,,,,,,,
+revilab-sl-07,Revilab SL 07,formats & blends,Blend,no_match,,,,,,,,,,,
+revilab-sl-08,Revilab SL 08,formats & blends,Blend,no_match,,,,,,,,,,,
+revilab-sl-09,Revilab SL 09,formats & blends,Blend,no_match,,,,,,,,,,,
+revilab-sl-10,Revilab SL 10,formats & blends,Blend,no_match,,,,,,,,,,,
+selank-semax,Selank + Semax,formats & blends,Blend,no_match,,,,,,,,,,,
+spermstrong,Spermstrong,formats & blends,Blend,no_match,,,,,,,,,,,
+tenofovir-disoproxil-fumarate-emtricitabine-efavirenz,Tenofovir Disoproxil Fumarate + Emtricitabine + Efavirenz,formats & blends,Blend,no_match,,,,,,,,,,,
+testogenon,Testogenon,formats & blends,Blend,no_match,,,,,,,,,,,
+tobramycin-dexamethasone,Tobramycin + Dexamethasone,formats & blends,Blend,no_match,,,,,,,,,,,
+trehalose-sodium-hyaluronate,Trehalose + Sodium Hyaluronate,formats & blends,Blend,no_match,,,,,,,,,,,
+unithiol-calcium-pantothenate,Unithiol + Calcium Pantothenate,formats & blends,Blend,no_match,,,,,,,,,,,
+vinpocetine-piracetam,Vinpocetine + Piracetam,formats & blends,Blend,no_match,,,,,,,,,,,
+wolverine-stack,Wolverine Stack,formats & blends,Blend,no_match,,,,,,,,,,,
+adapalene-benzoyl-peroxide,Adapalene + Benzoyl Peroxide,formats & blends,Blend,no_match,,,,,,,,,,,
+amoxicillin-clavulanate,Amoxicillin + Clavulanate,formats & blends,Blend,no_match,,,,,,,,,,,
+aspirin-atorvastatin,Aspirin + Atorvastatin,formats & blends,Blend,no_match,,,,,,,,,,,
+avanafil-dapoxetine,Avanafil + Dapoxetine,formats & blends,Blend,no_match,,,,,,,,,,,
+azelastine-fluticasone-propionate,Azelastine + Fluticasone Propionate,formats & blends,Blend,no_match,,,,,,,,,,,
+bacitracin-zinc-neomycin-polymyxin-b,Bacitracin Zinc + Neomycin + Polymyxin B,formats & blends,Blend,no_match,,,,,,,,,,,
+bempedoic-acid-ezetimibe,Bempedoic Acid + Ezetimibe,formats & blends,Blend,no_match,,,,,,,,,,,
+budesonide-formoterol,Budesonide + Formoterol,formats & blends,Blend,pubchem_not_in_chembl,,,,,,,,,,,
+calcium-carbonate-vitamin-d3,Calcium Carbonate + Vitamin D3,formats & blends,Blend,no_match,,,,,,,,,,,
+citicoline-piracetam,Citicoline + Piracetam,formats & blends,Blend,no_match,,,,,,,,,,,
+clopidogrel-aspirin,Clopidogrel + Aspirin,formats & blends,Blend,no_match,,,,,,,,,,,
+cyproterone-acetate-ethinylestradiol,Cyproterone Acetate + Ethinylestradiol,formats & blends,Blend,no_match,,,,,,,,,,,
+dextromethorphan-bupropion,Dextromethorphan + Bupropion,formats & blends,Blend,no_match,,,,,,,,,,,
+emtricitabine-tenofovir-alafenamide,Emtricitabine + Tenofovir Alafenamide,formats & blends,Blend,pubchem_not_in_chembl,,,,,,,,,,,
+fluticasone-furoate-azelastine,Fluticasone Furoate + Azelastine,formats & blends,Blend,no_match,,,,,,,,,,,
+furosemide-amiloride,Furosemide + Amiloride,formats & blends,Blend,no_match,,,,,,,,,,,
+glimepiride-metformin,Glimepiride + Metformin,formats & blends,Blend,no_match,,,,,,,,,,,
+glutathione-kojic-acid,Glutathione + Kojic Acid,formats & blends,Blend,no_match,,,,,,,,,,,
+glutathione-kojic-acid-glycolic-acid,Glutathione + Kojic Acid + Glycolic Acid,formats & blends,Blend,no_match,,,,,,,,,,,
+hydroquinone-octinoxate-oxybenzone,Hydroquinone + Octinoxate + Oxybenzone,formats & blends,Blend,no_match,,,,,,,,,,,
+hydroquinone-tretinoin-fluocinolone-acetonide,Hydroquinone + Tretinoin + Fluocinolone Acetonide,formats & blends,Blend,no_match,,,,,,,,,,,
+hydroquinone-tretinoin-mometasone,Hydroquinone + Tretinoin + Mometasone,formats & blends,Blend,no_match,,,,,,,,,,,
+levodopa-carbidopa,Levodopa + Carbidopa,formats & blends,Blend,pubchem_not_in_chembl,,,,,,,,,,,
+lisinopril-hydrochlorothiazide,Lisinopril + Hydrochlorothiazide,formats & blends,Blend,pubchem_not_in_chembl,,,,,,,,,,,
+losartan-hydrochlorothiazide,Losartan + Hydrochlorothiazide,formats & blends,Blend,no_match,,,,,,,,,,,
+minoxidil-aminexil,Minoxidil + Aminexil,formats & blends,Blend,no_match,,,,,,,,,,,
+minoxidil-finasteride,Minoxidil + Finasteride,formats & blends,Blend,no_match,,,,,,,,,,,
+olmesartan-amlodipine-hydrochlorothiazide,Olmesartan + Amlodipine + Hydrochlorothiazide,formats & blends,Blend,no_match,,,,,,,,,,,
+olmesartan-medoxomil-azelnidipine,Olmesartan Medoxomil + Azelnidipine,formats & blends,Blend,no_match,,,,,,,,,,,
+olmesartan-medoxomil-hydrochlorothiazide,Olmesartan Medoxomil + Hydrochlorothiazide,formats & blends,Blend,no_match,,,,,,,,,,,
+olmesartan-medoxomil-metoprolol,Olmesartan Medoxomil + Metoprolol,formats & blends,Blend,no_match,,,,,,,,,,,
+pioglitazone-metformin,Pioglitazone + Metformin,formats & blends,Blend,no_match,,,,,,,,,,,
+pregabalin-nortriptyline-methylcobalamin,Pregabalin + Nortriptyline + Methylcobalamin,formats & blends,Blend,no_match,,,,,,,,,,,
+rabeprazole-domperidone,Rabeprazole + Domperidone,formats & blends,Blend,no_match,,,,,,,,,,,
+sildenafil-dapoxetine,Sildenafil + Dapoxetine,formats & blends,Blend,no_match,,,,,,,,,,,
+sildenafil-duloxetine,Sildenafil + Duloxetine,formats & blends,Blend,no_match,,,,,,,,,,,
+sildenafil-fluoxetine,Sildenafil + Fluoxetine,formats & blends,Blend,no_match,,,,,,,,,,,
+sildenafil-tadalafil,Sildenafil + Tadalafil,formats & blends,Blend,no_match,,,,,,,,,,,
+sodium-valproate-valproic-acid,Sodium Valproate + Valproic Acid,formats & blends,Blend,no_match,,,,,,,,,,,
+sulfamethoxazole-trimethoprim,Sulfamethoxazole + Trimethoprim,formats & blends,Blend,pubchem_inchikey,low,,CHEMBL58061,CO-TRIMOXAZOLE,,,3,,2,0,0
+tadalafil-dapoxetine,Tadalafil + Dapoxetine,formats & blends,Blend,no_match,,,,,,,,,,,
+telmisartan-cilnidipine-chlorthalidone,Telmisartan + Cilnidipine + Chlorthalidone,formats & blends,Blend,no_match,,,,,,,,,,,
+telmisartan-nebivolol,Telmisartan + Nebivolol,formats & blends,Blend,no_match,,,,,,,,,,,
+tenofovir-disoproxil-fumarate-emtricitabine,Tenofovir Disoproxil Fumarate + Emtricitabine,formats & blends,Blend,no_match,,,,,,,,,,,
+vardenafil-dapoxetine,Vardenafil + Dapoxetine,formats & blends,Blend,no_match,,,,,,,,,,,
 dmso,DMSO,formats & blends,Solvent,chembl_synonym,low,,CHEMBL504,DIMETHYL SULFOXIDE,CHEMBL504,route_indication/has_preliminary,4,GM,1,1,0
 ethanol,Ethanol,formats & blends,Solvent,chembl_synonym,medium,,CHEMBL545,ALCOHOL,CHEMBL545,route_indication/limited_only,4,DV,0,0,1
-peg-400,PEG-400,formats & blends,Solvent,not_looked_up,,,,,,,,,,,
+peg-400,PEG-400,formats & blends,Solvent,no_match,,,,,,,,,,,

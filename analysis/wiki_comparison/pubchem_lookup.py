@@ -6,8 +6,8 @@ so a run can be stopped and resumed.
 This is a lookup **by name**, which invariant 15 forbids for anything that
 enters the database. It is allowed here only because nothing here does: the
 result is a read-only comparison, and every PubChem match is labelled low
-confidence in comparison.csv. Five PubChem matches were wrong on review
-(REJECTED in compare.py).
+confidence in comparison.csv. Eight PubChem matches were wrong on review
+(REJECTED in placing.py).
 
 PubChem throttles hard: after a burst it answers 429 to every request for
 well over ten minutes. This goes at under one request a second and stops after
