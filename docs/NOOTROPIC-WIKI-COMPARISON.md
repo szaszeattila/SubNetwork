@@ -3,7 +3,9 @@
 2026-10-11. **Measurement; adopts nothing.** No membership policy was changed.
 The figures are from `analysis/wiki_comparison/comparison.csv` against the
 active build of 2026-10-11 and ChEMBL 37; where they disagree with
-[../CLAUDE.md](../CLAUDE.md)'s Status, Status is right.
+[../CLAUDE.md](../CLAUDE.md)'s Status, Status is right. The sections from
+*Against the Phase 1 floor (D21)* on, added 2026-10-13, are measured against
+the `phase1-admission` branch's build instead, and say so.
 
 The first question was the user's: of the compounds
 [scientificsean.wiki](https://www.scientificsean.wiki/) lists — a community wiki
@@ -348,6 +350,245 @@ it. A molecule identity not keyed on a ChEMBL parent for GtoPdb's and PDSP's
 own compounds, which is a schema change. PDSP resolved by structure, which
 needs RDKit, and D12 reopened. And the similarity harness regraded, because a
 catalogue twice the size changes every target's prevalence.
+
+## Against the Phase 1 floor (D21)
+
+2026-10-13, the user's question: compare the `phase1-admission` branch, whose
+D21 ([COHORT-2.md](COHORT-2.md) on that branch) lowers the indication route's
+floor from Phase 3 to Phase 1, against the wiki. The same placement was run
+against that branch's build (selection policy 3.0.0, 2,452 entries) into
+`comparison_d21.csv`; the placement itself does not depend on the build, so
+every difference below is membership.
+
+| section | before | with D21 | of |
+|---|---:|---:|---:|
+| Cognition & nootropic | 104 | 171 | 412 |
+| Peptides & bioregulators | 9 | 21 | 220 |
+| Metabolic & performance | 20 | 39 | 178 |
+| Cardiovascular & metabolic | 47 | 68 | 109 |
+| Anti-infective & immune | 33 | 52 | 119 |
+| Psychiatric & neuro-clinical | 213 | 239 | 352 |
+| Psychedelics & entactogens | 18 | 25 | 175 |
+| Hormones, GI & derm | 36 | 56 | 134 |
+| Other clinical | 9 | 24 | 65 |
+| Nutrients & botanicals | 3 | 7 | 29 |
+| formats & blends | 32 | 56 | 391 |
+| **all** | **524 (24%)** | **758 (35%)** | **2,184** |
+
+**The branch does exactly what `admission_rules.py` predicted.** 758 wiki
+compounds and a catalogue grown by 1,117, against a prediction of 758 and
+1,117. 234 came in, all by the indication route, and none left. 36 members
+already in by ATC N alone (aniracetam, oxiracetam, pramiracetam, adrafinil,
+ipidacrine, meclofenoxate, tofisopam among them) now also qualify by
+indication, and pentoxifylline and rolipram are members rather than retained
+seeds. No existing member's evidence status changed.
+
+**Most of the newcomers draw something.** Of the 234, 152 have a Supported
+claim, 34 only Preliminary, 12 only the broader layer or limited evidence, and
+36 have no eligible evidence. The nootropic section's 67 are the
+clinical-failure compounds the earlier section named: the ampakines
+(farampator, mibampator, TAK-653, CX-516), the nicotinic and muscarinic
+agonists (GTS-21, ABT-089, ABT-126, TC-5619, ispronicline, talsaclidine,
+MK-7622, TAK-071), huperzine A, irdabisant, masupirdine, tesofensine — mostly
+Supported. The ones with nothing to draw are the ones whose ChEMBL record is
+the trial and not the pharmacology: nefiracetam, fasoracetam, CX-717, NSI-189,
+phosphatidylserine. Seven psychedelics came in (LSD, 5-MeO-DMT, ibogaine,
+mephedrone, methylone), and so did the HDAC inhibitors and clenbuterol,
+which the earlier section warned would be drawn by their oncology and β2
+targets.
+
+### What is left, and why
+
+| ChEMBL has it, outside the catalogue | no target data | measured only | curated mechanism | all |
+|---|---:|---:|---:|---:|
+| no indication in ChEMBL at all | 220 | 242 | 18 | 480 |
+| indications, none in scope, none approved | 38 | 44 | 50 | 132 |
+| approved, for something outside the scope | 6 | 5 | 103 | 114 |
+| an in-scope indication below Phase 1 | 0 | 2 | 4 | 6 |
+| **all** | **264** | **293** | **175** | **732** |
+
+Beside these, 241 are identified and absent from ChEMBL and 453 are not
+identified, unchanged, since D21 reads ChEMBL alone.
+
+**D21 has spent the clinical lever.** 726 of the 732 have no in-scope
+indication in ChEMBL at any phase, so no phase floor reaches them: dropping it
+altogether adds 6 wiki compounds for 29 entries. Two thirds of what is left
+has no ChEMBL indication of any kind. That is the racetams (phenylpiracetam,
+coluracetam, aloracetam), unifiram and sunifiram, the stimulant analogues
+(flmodafinil, ethylphenidate, 4F-MPH, 3,4-CTMP), and most of the psychedelics.
+A further 246 are drugs developed or approved for something else, including
+sibutramine, vincamine, metrifonate and the GLP-1 agonists.
+
+Each route measured above, applied to the D21 build:
+
+| route, on top of D21 | wiki added | wiki covered | catalogue grows by |
+|---|---:|---:|---:|
+| GtoPdb: the primary target is a brain target | 12 | 770 (35%) | 123 |
+| **ChEMBL curated mechanism at a brain target** | 34 | 792 (36%) | 289 |
+| PDSP Ki: an exact Ki at a brain target | 55 | 813 (37%) | 494 |
+| GtoPdb: any interaction at a brain target | 81 | 839 (38%) | 1,144 |
+| ChEMBL curated, or any GtoPdb interaction, at one | 96 | 854 (39%) | 1,342 |
+| ChEMBL: ≤ 1 µM at a brain target, in 2+ publications | 86 | 844 (39%) | 7,653 |
+| any ATC code | 161 | 919 (42%) | 2,227 |
+| curated mechanism, any target | 175 | 933 (43%) | 3,956 |
+| any indication, phase ≥ 1 | 248 | 1,006 (46%) | 6,409 |
+| GtoPdb ligand, any target | 262 | 1,020 (47%) | 5,825 |
+| every ChEMBL placement (ceiling) | 732 | 1,490 (68%) | |
+
+"Brain target" is the 184-protein stand-in defined above. D21 took most of
+what the target routes used to add: the curated-or-GtoPdb route added 163
+before it and adds 96 now, for 1,342 entries. The cheapest remaining step is
+ChEMBL's own curated mechanism at a brain target, which adds 34 for 289 entries,
+every one with a curated direction.
+
+## Sources that could close the rest
+
+The user's follow-up question: which public sources could narrow the gap?
+Measured where it was cheap, and otherwise checked for licence and access. The
+gap has four parts, and each needs a different kind of source:
+
+1. **A clinical record ChEMBL lacks**, for the 480 ChEMBL compounds with no
+   indication at all.
+2. **Target data**, for the 264 with none in ChEMBL.
+3. **An identity outside ChEMBL**, for the 241 it does not have, with target
+   data as well.
+4. **Not one substance** — 453 blends, extracts and products. No source turns
+   these into nodes.
+
+### Clinical records
+
+**ClinicalTrials.gov, read directly, finds trials ChEMBL has not made into
+indications, and most of them are not what the scope means.** ChEMBL's
+indications come from the registry, but only where a curator has taken a
+trial's condition as the drug's indication. `ctgov_route.py` asks the
+registry instead, for every wiki compound outside the catalogue, by name.
+It keeps a study only when an intervention name contains the compound's name
+as whole words. It reads the condition's MeSH ids against the adopted scope,
+applying the scope's rules to all 31,110 MeSH 2026 descriptors; on the 2,869
+the saved scope holds, the two agree on all of them.
+
+| wiki compounds outside the catalogue, names over four characters | in ChEMBL | not in ChEMBL |
+|---|---:|---:|
+| an in-scope trial at Phase 1 or later | 126 | 19 |
+| an in-scope trial at Early Phase 1 | 1 | 1 |
+| an in-scope trial, phase "not applicable" only | 21 | 7 |
+| trials, none in scope | 146 | 29 |
+| no trial naming it | 373 | 151 |
+| all | 667 | 207 |
+
+Taken as a rule, that would add 145 of the wiki's compounds, from 758 (35%)
+to 903 (41%); what it would add to the catalogue outside the wiki was not
+measured. **Read compound by compound, it is mostly the scope's soft edges
+and co-medication.** Tallied across those compounds' trials, the in-scope
+conditions are led by stroke (43), Brain Neoplasms (35), Pain (26),
+Hereditary Sensory and Autonomic Neuropathies (21, not reviewed, and an odd
+heading to lead with) and X-linked bulbo-spinal atrophy (15: Kennedy's
+disease, trialled with the anti-androgens). What they admit is anti-androgens, aromatase inhibitors,
+statins, insulins, enoxaparin, antibiotics trialled in meningitis, kinase
+inhibitors in glioma, and supplements (lysine, gelatin, iodine, beta-carotene)
+with depression or cognition endpoints. A trial's condition is not a drug's
+indication; ChEMBL's curation is what makes the difference, and this reads
+around it. The 65 names of four characters or fewer were set apart, since
+ALA, MDA and NAD+ match far too much.
+
+**The wiki's distinctive tail is not in the registry either.** Semax,
+noopept, bromantane, dihexa, sunifiram, coluracetam, flmodafinil, bemethyl and
+picamilon have no registered trial; selank has two that do not name it as an
+intervention. The registry's useful finds are few: **cerebrolysin** (40
+trials, mostly stroke, Phase 2–4, which needs an identity ChEMBL does not
+give it and is a hydrolysate, not one substance), **psilocin** (four,
+alongside psilocybin), phenylpiracetam's single Phase 1 sleep-deprivation
+trial, metadoxine, SAGE-324 and GB-115. As an admission source it would need
+a curator's judgement per trial, which is what ChEMBL already supplies.
+
+**Wikidata's ATC codes add almost nothing.** Wikidata carries 4,454 ATC
+statements, 558 of them N codes. Only 18 sit on a ChEMBL parent ChEMBL gives
+no N code, mostly a stereoisomer or a form ((R,R)-tramadol, cidoxepin,
+Z-flupentixol). Three are wiki gap compounds: DMAE, pipotiazine (the earlier
+finding again), and JWH-018, a synthetic cannabinoid with no WHO ATC code,
+which looks like a Wikidata mistake and was not traced.
+
+**National approvals are the real gap for the Russian drugs, and no open
+source for them was found.** Phenotropil (phenylpiracetam), bemitil, ladasten
+(bromantane), noopept, semax, selank, cortexin and cerebrolysin are or have
+been registered medicines in Russia, and ChEMBL records no indication for
+any of the ones it has. The Russian State Register (GRLS) is a public website, but
+no bulk export or licence for one was found, and a 2022 tender set out to move
+it onto another government platform. DrugCentral publishes approval lists for FDA, EMA and PMDA
+(Japan) as CSV, but not for Russia, and its download page names no licence.
+Admitting by a foreign approval would also be a new admission route, D01's
+to change.
+
+### Target data
+
+**PubChem BioAssay adds nothing for the tail.** It was sampled with twenty
+of the wiki's distinctive compounds. Semax, selank, dihexa, BPC-157, bemethyl,
+fladrafinil and the designer benzodiazepines have no results at all.
+Phenylpiracetam, fasoracetam and sunifiram have 700–900 each, and they are
+the NIH screening library's inactive HTS results. The only target-level
+actives are 25I-NBOMe's three 5-HT2 Ki values, from a 2022 paper ChEMBL
+already holds (CHEMBL5108009, the same three activities). Licence aside (public, but set by
+each depositor), PubChem is ChEMBL plus screening negatives here.
+
+**PDSP Ki is the one measured source that reaches new compounds.** At a
+brain target it covers 55 of the wiki's gap compounds that ChEMBL has, and 9
+the wiki matcher did not place in ChEMBL, by name (5-APB, 6-APB,
+desoxypipradrol, ethylone, methiopropamine, MT-2; DMT among the 9 is in
+ChEMBL and a matcher miss). It is free to download and has no formal licence
+text. Its compounds carry names, CAS numbers and SMILES, so placing them by
+identifier needs RDKit to turn SMILES into InChIKeys. D12 deferred it.
+
+**BindingDB is the largest source not yet measured.** Data its own staff
+curate is CC BY 3.0; what it imports from ChEMBL is CC BY-SA 3.0 and is
+ChEMBL again (invariant 5: 97% republished in the legacy pipeline). It is
+keyed on InChIKey, and comes as a TSV or SDF dump. Its curated part is
+patents and articles ChEMBL has not taken, which is where NPS and
+medicinal-chemistry series would be, if anywhere. Measuring it is a download and
+the same script as PDSP.
+
+**GtoPdb reaches 6 compounds outside ChEMBL** (AC-90179, LY503430, T-495,
+muscarinic toxins 3 and 7, T440). It is already pinned.
+
+**The aggregators repackage what is here.** Papyrus (CC BY-SA 4.0), ExCAPE-DB,
+Probes & Drugs (CC BY-SA 4.0), Pharos and the Broad Repurposing Hub assemble
+ChEMBL, GtoPdb, BindingDB, PubChem and DrugCentral. Probes & Drugs' compound
+sets are the one useful part: reviewed probe and drug lists with InChIKeys,
+which could serve as an admission list for tool compounds. Text-mined
+resources (STITCH) and those with non-commercial or unstated terms (TTD, CTD,
+DrugBank) do not fit an open CC BY-SA project.
+
+### What no source reaches
+
+**Semax, selank, the Khavinson peptides, BPC-157, TB-500, dihexa, the
+racetams' mechanism and the designer benzodiazepines** have no receptor-level
+data in any open, identifier-keyed source checked: not ChEMBL, GtoPdb, PDSP,
+or PubChem BioAssay. Their literature exists, much of it in Russian journals
+ChEMBL does not abstract. The only way in is curation by hand: a claim this
+project writes, citing the paper, under a provenance of its own. That is a
+policy question, not a source, and it collides with "prefer data that can be
+refreshed rather than hand-curated".
+
+### Ranked, by what each would add per unit of work
+
+1. **ChEMBL's curated mechanism at a brain target** — no new source, a route.
+   34 wiki compounds, 289 entries, all drawing a directed line. Needs the
+   brain-target set decided and versioned.
+2. **PDSP Ki, resolved by structure** — about 55 + 9 wiki compounds, about 500
+   entries; needs RDKit, an identity not keyed on a ChEMBL parent for the 9,
+   and D12 reopened. The psychedelic and NPS section is where it reaches.
+3. **BindingDB's curated part** — unmeasured; the one plausible source of new
+   measurements for NPS and research compounds. Measure before deciding.
+4. **ClinicalTrials.gov read directly** — 145 wiki compounds by the numbers,
+   but mostly off-scope drugs carried in by a trial's secondary condition;
+   useful only as a list of candidates for review (cerebrolysin, psilocin),
+   not as a rule.
+5. **A foreign-approval route** (GRLS, PMDA via DrugCentral) — the right
+   answer for the Russian drugs, but no open bulk source was found and it is a
+   new admission rule.
+
+Every source here gives the 241 compounds outside ChEMBL either no data or a
+name match. Admitting them is the schema change named above, a molecule
+identity not keyed on a ChEMBL parent, before it is a source question.
 
 ## A catalogue finding on the way
 

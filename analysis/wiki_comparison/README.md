@@ -22,6 +22,9 @@ and says whether it is in `db/cohort1.db` and, if not, what ChEMBL holds for it.
 | `pubchem_cache.json` | what PubChem answered, `[]` for a name it does not know |
 | `need_pubchem.json` | names still not looked up (generated) |
 | `comparison.csv` | one row per wiki compound: match tier and confidence, ChEMBL parents, catalogue entry and status, and for the rest ChEMBL's max phase, ATC level 1, curated mechanisms, publication targets and whether GtoPdb lists it |
+| `comparison_d21.csv` | the same against the `phase1-admission` build (D21, selection policy 3.0.0, 2,452 entries) |
+| `ctgov_route.py` | the wiki compounds outside the catalogue asked of ClinicalTrials.gov directly, by name: is any registered trial for an in-scope condition at Phase 1 or later |
+| `ctgov_cache.json` | what the registry answered: per name, the matching studies' NCT id, phases and condition MeSH ids |
 
 ```bash
 curl -sL https://www.scientificsean.wiki/compounds/table -o "$TMPDIR/table.html"
@@ -42,6 +45,18 @@ them, stay out of the repository: they are other sites' content.
 
 `--data-root` names the checkout that holds `db/cohort1.db` and `db/cache/`
 (both gitignored), for running from a worktree with no build of its own.
+`--csv` names the comparison file, so a second build can be placed without
+overwriting the first; `--pdsp` the PDSP CSV when the data root has none.
+Against the D21 build, from this worktree:
+
+```bash
+W=analysis/wiki_comparison
+python3 $W/compare.py --data-root ../phase1-admission --csv $W/comparison_d21.csv
+python3 $W/admission_rules.py --data-root ../phase1-admission --csv $W/comparison_d21.csv
+python3 $W/brain_targets.py --data-root ../phase1-admission --csv $W/comparison_d21.csv \
+    --pdsp ../../../db/pdsp_ki_database.csv
+python3 $W/ctgov_route.py --csv $W/comparison_d21.csv --mesh ../../../db/cache/mesh/desc2026.gz  # ~1 h cold
+```
 ChEMBL is read from `$CHEMBL_SQLITE_PATH` as everywhere else.
 
 **Matching by name is what invariant 15 refuses for the database, and it is

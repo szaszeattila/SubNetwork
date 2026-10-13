@@ -8,7 +8,7 @@ and what each tier's confidence means, is in placing.py. A name reaching
 several ChEMBL parents keeps all of them; REJECTED there lists the matches
 found wrong on review, and the reason stays on the row.
 
-    python3 analysis/wiki_comparison/compare.py [--data-root DIR]
+    python3 analysis/wiki_comparison/compare.py [--data-root DIR] [--csv OUT]
 
 --data-root is the checkout holding db/cohort1.db and db/cache/ (both
 gitignored), for running from a worktree that has no build of its own.
@@ -26,6 +26,7 @@ from placing import HERE, ROOT, Placer
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-root", type=pathlib.Path, default=ROOT)
+    ap.add_argument("--csv", type=pathlib.Path, default=HERE / "comparison.csv")
     args = ap.parse_args()
 
     wiki = list(csv.DictReader(open(HERE / "wiki_compounds.csv", encoding="utf-8")))
@@ -71,7 +72,7 @@ def main() -> int:
         out.append(row)
 
     (HERE / "need_pubchem.json").write_text(json.dumps(need_pubchem, indent=0))
-    with open(HERE / "comparison.csv", "w", newline="", encoding="utf-8") as fh:
+    with open(args.csv, "w", newline="", encoding="utf-8") as fh:
         wr = csv.DictWriter(fh, fieldnames=list(out[0].keys()))
         wr.writeheader()
         wr.writerows(out)

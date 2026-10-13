@@ -12,7 +12,8 @@ components. That last step reads target_components as a list of proteins,
 never as a binding claim about them: it decides which proteins are in the set,
 and no molecule's claim is moved.
 
-    python3 analysis/wiki_comparison/brain_targets.py [--data-root DIR] [--brain-set atc-n|catalogue]
+    python3 analysis/wiki_comparison/brain_targets.py [--data-root DIR] [--csv FILE] [--pdsp CSV]
+        [--brain-set atc-n|catalogue]
 """
 import argparse
 import collections
@@ -29,7 +30,9 @@ from placing import CHEMBL, HERE, ROOT, Placer, norm
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-root", type=pathlib.Path, default=ROOT)
+    ap.add_argument("--csv", type=pathlib.Path, default=HERE / "comparison.csv")
     ap.add_argument("--brain-set", choices=("atc-n", "catalogue"), default="atc-n")
+    ap.add_argument("--pdsp", type=pathlib.Path, help="the PDSP Ki CSV; default <data-root>/db/pdsp_ki_database.csv")
     args = ap.parse_args()
     data = args.data_root
     pl = Placer(data)
@@ -129,7 +132,7 @@ def main() -> int:
                 if m:
                     gene_acc[m.group(1)].add(line.split("|")[1])
     pdsp_names = set()
-    for row in csv.DictReader(open(data / "db" / "pdsp_ki_database.csv", encoding="utf-8", errors="replace")):
+    for row in csv.DictReader(open(args.pdsp or data / "db" / "pdsp_ki_database.csv", encoding="utf-8", errors="replace")):
         accs = gene_acc.get(row["Unigene"].strip(), set())
         if len(accs) == 1 and accs & brain and not row["ki Note"].strip() and row["ki Val"].strip():
             pdsp_names.add(row[" Ligand Name"].strip())
@@ -151,7 +154,7 @@ def main() -> int:
     }
     routes["curated or GtoPdb (any)"] = curated | gt_any_p
 
-    wiki = list(csv.DictReader(open(HERE / "comparison.csv", encoding="utf-8")))
+    wiki = list(csv.DictReader(open(args.csv, encoding="utf-8")))
     members = sum(1 for r in wiki if r["in_catalogue"])
     outside = [r for r in wiki if r["chembl_parents"] and not r["in_catalogue"]]
     ps_of = lambda r: {P(by_id[c]) for c in r["chembl_parents"].split("|") if c in by_id}  # noqa: E731

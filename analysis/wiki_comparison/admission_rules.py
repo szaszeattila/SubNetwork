@@ -9,7 +9,7 @@ judged on a ChEMBL parent with its salts and forms folded on, as the build
 does; the scoped-phase rules use the same scope and max_phase_for_ind as
 route_indication, with only the floor moved.
 
-    python3 analysis/wiki_comparison/admission_rules.py [--data-root DIR]
+    python3 analysis/wiki_comparison/admission_rules.py [--data-root DIR] [--csv FILE]
 """
 import argparse
 import collections
@@ -28,6 +28,7 @@ from cohort import scope as scope_mod  # noqa: E402
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-root", type=pathlib.Path, default=ROOT)
+    ap.add_argument("--csv", type=pathlib.Path, default=HERE / "comparison.csv")
     args = ap.parse_args()
 
     policy = json.loads((ROOT / "config" / "cohort1_selection.json").read_text())
@@ -74,7 +75,7 @@ def main() -> int:
         "publication data at any protein": lambda p: p in published,
     }
 
-    wiki = list(csv.DictReader(open(HERE / "comparison.csv", encoding="utf-8")))
+    wiki = list(csv.DictReader(open(args.csv, encoding="utf-8")))
     members = sum(1 for r in wiki if r["in_catalogue"])
     outside = [r for r in wiki if r["chembl_parents"] and not r["in_catalogue"]]
     hits = lambda r, rule: any(rule(P(by_id[c])) for c in r["chembl_parents"].split("|") if c in by_id)  # noqa: E731
