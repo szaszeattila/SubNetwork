@@ -352,7 +352,7 @@ describe("GtoPdb directions", () => {
 
   test("the catalogue line keeps its counts and leaves the credits to About", () => {
     const h = loadViewer(withGtopdb(measuredOnly(), [])).filtersHTML();
-    assert.match(h, /Catalogue: \d+ molecules, \d+ targets, \d+ drawable claims\./);
+    assert.match(h, /Catalogue: \d+ molecules, \d+ ChEMBL target records, \d+ drawable claims\./);
     assert.match(h, /Sources and licences are under About/);
     assert.doesNotMatch(h, /CC BY-SA|ODbL|Guide to Pharmacology/);
   });

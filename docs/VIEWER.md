@@ -1166,6 +1166,64 @@ reason — emptying inside the click would detach the row before the handler tha
 reads its `data-select` ever saw it. **About**, the third, closes the same way
 (`closeDetails`), and Escape dismisses it before it would clear the selection.
 
+**The canvas counts what the filters keep, against the whole catalogue**
+(2026-10-13, at the user's request). A box at the top left of the canvas reads
+*Filters keep 1,834 of 2,452 molecules and 2,454 of 2,758 targets* at the
+defaults (built 2026-10-12), and with *Hide single-molecule targets* on adds a
+second line, *Drawn: 1,767 molecules and 1,487 targets*. Two rules shape it:
+
+- **"Kept" is the claim filters' answer and "drawn" the canvas control's**, read
+  in `catalogueGraph` before and after the periphery is pruned, so turning the
+  canvas control on never moves the first line — the same line between "in the
+  picture" and "drawn" that the periphery section above holds.
+- **Targets are counted in canvas nodes, both totals and kept.** A protein in
+  four species is one node (D20), so the catalogue's 3,359 ChEMBL target records
+  are 2,758 targets here (`catalogueTotals`). Counting records beside a canvas
+  of proteins would have given a "kept" figure no reader could check against
+  the picture. The Display options line, which already said "3,359 targets",
+  now says "ChEMBL target records", and the box's tooltip names both figures:
+  two numbers both labelled "targets" are what invariant 13 forbids. At
+  Supported and direct human only the box reads 1,497 molecules, which is the
+  Status block's "1,497 entries have a Supported claim" by another route.
+
+**A filter change says it is working before it starts.** At the open defaults
+a filter change rewrites ~4,300 nodes and ~19,000 edges into vis and re-solves
+them, all on the main thread: 8.4–8.9 s in headless Chrome, of which the page's
+own recompute (claims, controls, panel) is about 120 ms in the vm harness. Run straight from the
+click, none of it left the browser a frame, so not even the pressed button
+showed until it was over. `refreshAfterFilters` now repaints the controls and
+puts *Applying the filters…* with a spinner in the counts box, and runs the
+rebuild from a timeout queued inside a `requestAnimationFrame` callback: the
+browser paints straight after those callbacks, so that frame is on screen
+before the work starts and stays there while the main thread is held. A
+re-solve then says *Laying out the network… 50%* from vis's
+`stabilizationProgress`, wherever the browser gets a frame between batches, and
+the line clears in `settleGraph`, or straight after the rebuild where nothing
+was re-solved (line colour). Clicks while one is queued fold into it, and a
+layout settling meanwhile leaves the queued change's line up. Reset goes the
+same way.
+
+The line is in the counts box rather than in `#load-status`, which was the
+first place it went: that is centred on the canvas, and Display options — open
+whenever a filter is clicked — sits over the middle of the canvas at z-index 50
+against its 30. The first screenshot of the change showed nothing.
+
+**The solver's batch size was tried and left alone.** The browser paints only
+between vis's batches (`updateInterval`, 100 ticks for a re-solve, about 4 s
+each in headless Chrome), so 10 looked like the way to a live progress line,
+and it made the re-solve 4.6× faster — because the solve stopped after 40 ticks
+instead of 200. With the `SETTLE_MS` backstop pushed out to a minute, the same
+10-tick batches ran all 200 ticks and the progress line counted up in 5% steps;
+at 100 the solve ran all 200 in each of three runs with the backstop as it is.
+So the backstop, which exists for a solve that never reports back, cut short
+one that was reporting, and the batch size stays at 100. Left open: whether it
+also cuts a 100-tick re-solve short on a machine where a batch finishes inside
+a second — unmeasured. Re-arming it on each `stabilizationProgress` would keep
+it a backstop and allow short batches; that changes how far every re-solve
+runs, and was not done here. (Settled positions could not be compared: two
+identical runs with `Math.random` seeded alike differed by a mean of 1,873
+canvas units, so a position difference is not evidence of anything here.)
+
 **The page says what it is not, permanently, and credits its sources in one
 place** (2026-10-09, at the user's request, before hosting it on a server;
 [HOSTING-REVIEW.md](HOSTING-REVIEW.md)). "Exploratory and educational, not

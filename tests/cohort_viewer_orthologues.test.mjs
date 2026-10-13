@@ -78,6 +78,16 @@ function twoProteinCatalogue() {
 }
 
 describe("D20: one protein in several species folds into one shared target", () => {
+  // The canvas's count is in nodes, and a protein is one node: two records of
+  // one protein are one target there, and the tooltip names the records.
+  test("the canvas counts a protein once, and names its records apart", () => {
+    const folded = loadViewer(orthologueCatalogue({ withOrthologue: true }));
+    assert.match(folded.graphCountsHTML(), /<b>1<\/b> of 1 targets$/);
+    assert.match(folded.graphCountsTitle(), /2 ChEMBL target records are 1 targets here/);
+    const apart = loadViewer(orthologueCatalogue({ withOrthologue: false }));
+    assert.match(apart.graphCountsHTML(), /<b>2<\/b> of 2 targets$/);
+  });
+
   test("a matched orthologue folds the rat record into the human one, at √2", () => {
     const v = loadViewer(orthologueCatalogue({ withOrthologue: true }));
     const row = v.sharedTargets(1).find((r) => r.molecule.id === 2);

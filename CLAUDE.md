@@ -534,7 +534,7 @@ the `class_wikipedia` table: 523 through the Wikidata item carrying the
 descriptor, and 87 whose item has no article through the main article its
 English category declares (Xanthines to *Xanthine*).
 
-The pipeline suite is 496 tests and the node suites are 695 (466 cohort
+The pipeline suite is 496 tests and the node suites are 701 (472 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`
@@ -708,6 +708,16 @@ behaviour a rule here describes.
   from ChEMBL's own `action_type` definitions, shown in a box beside the
   legend and never inside it** — the legend scrolls and would clip it. A
   test reads the palette and fails for a colour added without one.
+- **The canvas's count box states what the claim filters keep against the
+  whole catalogue, in canvas nodes (a protein once across species, D20),
+  and what is drawn only on a second line** — the canvas control never
+  moves the first. ChEMBL's record count is named "target records"
+  wherever it appears, never "targets" (invariant 13).
+- **A filter change paints its busy line before the rebuild starts**
+  (`refreshAfterFilters`: a timeout queued in a frame callback), in the
+  count box and not `#load-status`, which the open Display options covers.
+  The re-solve's batch size stays at 100: lowered, the `SETTLE_MS`
+  backstop ended the solve early (docs/VIEWER.md).
 
 **Panels and wording**
 

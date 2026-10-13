@@ -701,6 +701,30 @@ describe("the canvas control thins the picture without thinning the catalogue", 
     assert.ok(v.gapStatement(v.lookupMolecule(1)) === null);
   });
 
+  // The count on the canvas: what the claim filters keep, out of the whole
+  // catalogue, and - only with the canvas control on - what of that is drawn.
+  test("the canvas counts what the filters keep against the whole catalogue", () => {
+    const v = loadViewer(catalogue());
+    v.setFilter("tier", "supported");
+    v.setFilter("basis", "human_direct");
+    // Caffeine and theophylline, at the two targets they are Supported at.
+    assert.equal(v.graphCountsHTML(),
+                 "Filters keep <b>2</b> of 5 molecules and <b>2</b> of 3 targets");
+    v.setFilter("tier", "supported_preliminary");
+    assert.match(v.graphCountsHTML(), /<b>2<\/b> of 5 molecules and <b>3<\/b> of 3 targets$/);
+  });
+
+  test("the canvas control adds what is drawn, and moves no kept count", () => {
+    const v = loadViewer(catalogue());
+    v.setFilter("tier", "supported_preliminary");
+    const kept = v.graphCountsHTML();
+    v.setFilter("periphery", "hide");
+    const h = v.graphCountsHTML();
+    assert.ok(h.startsWith(kept + "<br>"), h);
+    // Acetylcholinesterase, caffeine's alone, is kept and not drawn.
+    assert.match(h, /Drawn: <b>3<\/b> molecules and <b>2<\/b> targets, single-molecule targets hidden/);
+  });
+
   test("it says what it took, including the molecules it emptied", () => {
     const v = loadViewer(catalogue());
     v.setFilter("tier", "supported_preliminary");
