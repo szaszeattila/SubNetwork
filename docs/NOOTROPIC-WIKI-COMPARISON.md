@@ -287,6 +287,68 @@ mechanism at a brain target (NEXT-STEPS §3) — add the wiki's clinical-failure
 compounds and leave its distinctive long tail out. That tail is what the shops
 sell, and nobody has measured what it does.
 
+## A route defined by brain targets
+
+The user's next question: admit anything linked to a brain target, with no
+clinical phase, and from outside ChEMBL where possible. `brain_targets.py`
+measures it.
+
+**What a brain target is has to be decided first, and the catalogue cannot
+supply it.** The curated targets of every member are 516 human proteins, and
+they are not a brain set: members admitted by a pain, angina or MS indication
+bring COX-1 and -2, PDE5, the glucocorticoid and oestrogen receptors, H2, the
+proton pump and tubulin. With that set, 44 of the additions were the wiki's
+hormones and GI drugs. The stand-in used below is narrower: 184 proteins at
+which a drug with an ATC N code, outside the local-anaesthetic and
+simple-analgesic branches, has a curated claim. It still includes some
+peripheral proteins. An expression signal (HPA, the unbuilt backfill under
+*Not done*) would be the principled set, but expression says where a protein
+is, not that a drug acting on it acts in the brain.
+
+| route (ChEMBL compounds), at the 184 | wiki added | wiki covered | of 2,184 | catalogue grows by |
+|---|---:|---:|---:|---:|
+| GtoPdb: the primary target is one | 24 | 548 | 25% | 155 |
+| ChEMBL curated mechanism at one | 82 | 606 | 28% | 445 |
+| PDSP Ki: an exact Ki at one | 72 | 596 | 27% | 538 |
+| GtoPdb: any interaction at one | 121 | 645 | 30% | 1,247 |
+| **ChEMBL curated, or any GtoPdb interaction** | 163 | 687 | 31% | 1,541 |
+| ChEMBL: ≤ 1 µM at one, in 2+ publications | 116 | 640 | 29% | 7,740 |
+| ChEMBL: any exact published value at one | 333 | 857 | 39% | 132,906 |
+
+With the 516-protein set the same routes read 33–45% of the wiki and grow the
+catalogue by 612 to 277,640.
+
+**The evidence bar decides the size, not the phase.** A curated bar, ChEMBL's
+mechanism or a GtoPdb interaction, adds about 1,500 entries. Every one of them
+would draw at least one line, many with a curated direction. That is the
+coherent version of the idea and doubles the catalogue. A measured bar is
+another kind of catalogue. Replication at 1 µM adds 7,740, mostly
+medicinal-chemistry series measured at one receptor. Any published value adds
+132,906. The 72-entry PDSP figure is a floor: its ligands are placed by name,
+because without RDKit its SMILES cannot be turned into InChIKeys.
+
+**It reaches the wiki's research compounds and not its distinctive tail.** Of
+the 163 wiki additions, 70 are nootropics, 34 psychiatric drugs and 13
+psychedelics: ampakines, nicotinic and muscarinic agonists, H3 and 5-HT6
+antagonists, tool compounds. The tail stays out. ChEMBL's records for the
+racetams, noopept, bromantane and phenylpiracetam hold no value at any of these
+proteins. And the sources that go beyond ChEMBL hardly reach the 683 wiki
+entries ChEMBL lacks: GtoPdb has 239 ligands at the 184 proteins with no
+ChEMBL record, and 6 of them are wiki entries (AC-90179, LY503430, T-495,
+muscarinic toxins 3 and 7, T440). PDSP's names match 9 (5-APB, 6-APB,
+desoxypipradrol, ethylone, methiopropamine and others). One of those, DMT, is
+in ChEMBL as CHEMBL12420 and was missed by the wiki matcher, so "not in
+ChEMBL" includes some misses. Semax, selank, dihexa, the Khavinson peptides and
+the designer benzodiazepines have no receptor-level data in any of the three.
+
+**What adopting it would take.** A new route in
+`config/cohort1_selection.json` with the target set versioned beside it. GtoPdb
+read at build time rather than as a backfill, since membership would depend on
+it. A molecule identity not keyed on a ChEMBL parent for GtoPdb's and PDSP's
+own compounds, which is a schema change. PDSP resolved by structure, which
+needs RDKit, and D12 reopened. And the similarity harness regraded, because a
+catalogue twice the size changes every target's prevalence.
+
 ## A catalogue finding on the way
 
 **Pipotiazine is not a member; its palmitate ester is, with no evidence.**

@@ -15,6 +15,7 @@ and says whether it is in `db/cohort1.db` and, if not, what ChEMBL holds for it.
 | `placing.py` | how a name or InChIKey is placed at a ChEMBL parent, its tiers and confidence, and `REJECTED` |
 | `compare.py` | places each wiki name and writes `comparison.csv`; prints the summary table |
 | `admission_rules.py` | how many of the wiki's ChEMBL placements each looser admission rule would let in, beside how much it would grow the catalogue |
+| `brain_targets.py` | the same for routes defined by a brain-target set: ChEMBL mechanisms, GtoPdb interactions, PDSP Ki values and ChEMBL measurements, and the wiki compounds outside ChEMBL that GtoPdb or PDSP reach |
 | `prepare_lists.py` | turns raw downloads of six other public lists into name files, and records how each was retrieved |
 | `compare_lists.py` | sets those lists beside the wiki and the catalogue; `SAME_AS_WIKI` is its reviewed equivalences |
 | `pubchem_lookup.py` | name → InChIKey through PubChem for the names nothing else placed; resumable |
@@ -29,6 +30,7 @@ python3 analysis/wiki_comparison/compare.py          # writes need_pubchem.json
 python3 analysis/wiki_comparison/pubchem_lookup.py   # slow, and PubChem throttles
 python3 analysis/wiki_comparison/compare.py
 python3 analysis/wiki_comparison/admission_rules.py   # ~2 min: scans every ChEMBL activity
+python3 analysis/wiki_comparison/brain_targets.py     # ~3 min; --brain-set catalogue for the wider set
 
 # the other lists: download them as prepare_lists.py's docstring says, into RAW
 python3 analysis/wiki_comparison/prepare_lists.py RAW LISTS
