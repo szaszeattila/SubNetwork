@@ -283,11 +283,22 @@ narrowed without asking:
 - **69 new members qualify only through the Pain tree** — Pain itself, myalgia,
   arthralgia, low back pain, stable angina, abdominal pain. D02 accepted that
   breadth with visible admission reasons.
-- **About 80 qualify only through a nervous-system tumour heading** — Brain
-  Neoplasms (60), Diffuse Intrinsic Pontine Glioma (18), neurofibromatosis —
-  which the core rule keeps because each has a C10 placement outside the
-  excluded oncology class. These are mostly cancer drugs trialled in glioma
-  (ipilimumab, pazopanib, cabazitaxel).
+- **72 qualify only through a tumour heading**: Brain Neoplasms alone (54),
+  Diffuse Intrinsic Pontine Glioma alone (13), the two together (3) and
+  Pituitary Neoplasms (2). Counting neurofibromatosis 1 and 2, the
+  tumour-predisposition syndromes, makes 80. These are mostly cancer drugs
+  trialled in glioma (ipilimumab, pazopanib, cabazitaxel), plus imaging
+  agents. The headings are in scope because D02's core rule removes a
+  descriptor only when *every* C10 placement is in an excluded class, and
+  Brain Neoplasms also sits at C10.228.140.211 under Brain Diseases, outside
+  the excluded C10.551 Nervous System Neoplasms. DIPG, Pituitary Neoplasms,
+  Brain Stem Neoplasms and Pinealoma inherit the same placement. At Phase 3
+  this admitted 12 members by tumour alone (lomustine, procarbazine,
+  nivolumab, pembrolizumab among them).
+  *Counted* by the qualifying headings with any C04 placement, each judged
+  by name: Myasthenia Gravis carries C04 only as a paraneoplastic syndrome,
+  and Sturge-Weber Syndrome and Tuberous Sclerosis are neurocutaneous
+  syndromes, so none of those three counts as a tumour heading.
 
 Seven more qualify only through Erectile Dysfunction, which MeSH also files
 under F03.
@@ -326,10 +337,6 @@ In the order they bear on the picture.
    still unadmitted, by a rule still to be written; see
    [COHORT-BOUNDARY-REVIEW.md](COHORT-BOUNDARY-REVIEW.md) for the curated-route
    proposal it should start from.
-9. **D21's scope edges.** At Phase 1 the Pain tree admits 69 members by pain
-   alone (angina and myalgia among them) and the tumour headings about 80
-   cancer drugs. Both were accepted at Phase 3 in D02; whether "brain
-   indication" should exclude them at the lower floor is the user's call.
 6. **Report the alfuzosin mechanism to ChEMBL.** Drafted 2026-10-10 in
    [CHEMBL-ERROR-REPORT-ALFUZOSIN.md](CHEMBL-ERROR-REPORT-ALFUZOSIN.md) and not
    sent. The action is withheld locally in the meantime
@@ -344,3 +351,8 @@ In the order they bear on the picture.
 8. **Complexes and families across species** (a rat GABA-A assembly against
    the human one) are still separate targets under D20, and so still separate
    nodes on the canvas, where single proteins are now one.
+9. **D21's scope edges.** At Phase 1 the Pain tree admits 69 members by pain
+   alone (angina and myalgia among them), and the tumour headings 72 (80 with
+   neurofibromatosis), mostly cancer drugs trialled in glioma. Both edges
+   were accepted at Phase 3 in D02. Whether "brain indication" should exclude
+   them at the lower floor is the user's call.
