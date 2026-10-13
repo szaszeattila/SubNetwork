@@ -1,5 +1,5 @@
 #!/bin/sh
-# Refuse to push any branch but main, or a commit carrying a home path, a
-# personal address or a session link (scripts/privacy_check.py). This
-# repository is public; unfinished work stays local.
+# Refuse to push a commit carrying a home path, a personal address or a
+# session link (scripts/privacy_check.py), on any branch. This repository is
+# public, and so is every branch pushed to it.
 exec python3 "$(git rev-parse --show-toplevel)/scripts/privacy_check.py" --pre-push "$1"
