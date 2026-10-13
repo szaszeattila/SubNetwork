@@ -386,12 +386,18 @@ reappeared under a snapshot commit instead of its own.
 
 ### Pushing
 
-**Unfinished work stays on this machine** (the user's decision, 2026-10-10).
-Work happens on local branches and worktrees. Only `main` is pushed, and only
-finished work is merged into it. Nothing pushed can be taken back: a deleted
-branch's commits stay reachable by their hashes, and a fork keeps its own copy.
-A local branch is also not backed up anywhere, so a worktree's branch is
-merged or kept before the worktree is removed.
+**Worktree branches are published** (the user's decision, 2026-10-12). Work
+happens on branches and worktrees, and each branch is pushed to GitHub as it
+goes, so that work in progress is visible and backed up. Only finished work is
+merged into `main`, when the user asks. Nothing pushed can be taken back: a
+deleted branch's commits stay reachable by their hashes, and a fork keeps its
+own copy. A worktree's branch is merged or pushed before the worktree is
+removed.
+
+Until 2026-10-12 the rule was the reverse: only `main` was pushed and
+unfinished work stayed on this machine, enforced by the pre-push hook. The user
+reversed it because a branch kept only locally has no backup and cannot be
+seen.
 
 Two hooks hold this, once a clone has run:
 
@@ -402,9 +408,8 @@ git config core.hooksPath .githooks
 - **pre-commit** searches what is staged, and the author and committer
   identities, for a home-directory path, a gmail address, a claude.ai session
   link or a job directory (`scripts/privacy_check.py`).
-- **pre-push** refuses any branch but `main` (tags are allowed), and searches
-  every commit the push would publish: its files, its message and its
-  identities. It checks every commit, not just the tip, because a leak fixed
+- **pre-push** searches every commit a push would publish, on any branch or
+  tag: its files, its message and its identities. It checks every commit, not just the tip, because a leak fixed
   by a later commit is still public in the earlier one.
 
 Both read text, gzip members and a PDF's compressed streams. A match is

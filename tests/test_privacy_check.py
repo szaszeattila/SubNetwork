@@ -1,6 +1,6 @@
 """Tests for scripts/privacy_check.py, which keeps a home path, a personal
-address and a session link out of this public repository, and every branch but
-main on this machine.
+address and a session link out of this public repository, on every branch
+pushed.
 
 The check is the only thing between those and GitHub, so it is tested against
 each place a leak has hidden: plain text, a gzip member, a PDF's compressed
@@ -146,11 +146,17 @@ class PrePush(GitCase):
         self.commit("a.txt", "fine\n")
         self.assertEqual(privacy_check.pre_push(self.repo, "origin", self.push_lines("HEAD")), [])
 
-    def test_any_other_branch_is_refused_unscanned(self):
+    def test_a_clean_push_of_another_branch_passes(self):
         self.commit("a.txt", "fine\n")
         found = privacy_check.pre_push(self.repo, "origin",
                                        self.push_lines("HEAD", "refs/heads/wip"))
-        self.assertEqual([where for where, _ in found], ["refs/heads/wip"])
+        self.assertEqual(found, [])
+
+    def test_a_leak_on_another_branch_is_refused(self):
+        sha = self.commit("a.txt", "see " + HOME_PATH + "\n")
+        found = privacy_check.pre_push(self.repo, "origin",
+                                       self.push_lines("HEAD", "refs/heads/wip"))
+        self.assertEqual(found, [(f"commit {sha[:7]}: a.txt", "home directory")])
 
     def test_a_tag_may_be_pushed(self):
         self.commit("a.txt", "fine\n")

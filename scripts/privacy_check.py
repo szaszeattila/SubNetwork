@@ -1,5 +1,5 @@
 """Refuse a commit or a push that would publish a home path, a personal
-address or a session link, and a push of anything but main.
+address or a session link.
 
 This repository is public, and so is every commit pushed to it. It began on
 2026-10-10 as one snapshot of a private working copy, whose history carries
@@ -14,9 +14,9 @@ run it, once a clone has `git config core.hooksPath .githooks`:
 A file is searched as text, inside gzip members, and inside a PDF's compressed
 streams, where a rendered link to a local file hides. A push is searched commit
 by commit, files, message and identities alike, because a leak fixed in a later
-commit is still public in the earlier one. A push also refuses every branch but
-main: unfinished work stays on this machine (CLAUDE.md, *Repository and
-pushing*). Exits 1 naming each finding. A match is fixed and committed, never
+commit is still public in the earlier one. Any branch may be pushed, a
+worktree's included, and each is searched the same way (CLAUDE.md, *Repository
+and pushing*). Exits 1 naming each finding. A match is fixed and committed, never
 waved through: `--no-verify` skips the hooks, and is not for that.
 """
 
@@ -44,7 +44,6 @@ FORBIDDEN = {
 # Each pattern is spelled so that its own source text does not match it, or
 # this file would refuse itself.
 
-PUSHABLE = "refs/heads/main"
 ZERO = "0" * 40
 
 _PDF_STREAM = re.compile(rb"stream\r?\n(.*?)\r?\nendstream", re.S)
@@ -150,9 +149,6 @@ def pre_push(root: pathlib.Path, remote: str, lines: list[str]) -> list[tuple[st
         _lref, lsha, rref, rsha = line.split()
         if lsha == ZERO:
             continue  # deleting a remote ref publishes nothing
-        if rref != PUSHABLE and not rref.startswith("refs/tags/"):
-            found.append((rref, "branch other than main (unfinished work stays local)"))
-            continue
         exclude = [f"--remotes={remote}"]
         if rsha != ZERO and subprocess.run(["git", "-C", str(root), "cat-file", "-e", rsha],
                                            capture_output=True).returncode == 0:

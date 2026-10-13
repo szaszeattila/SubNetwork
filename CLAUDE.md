@@ -201,8 +201,8 @@ scripts/export_cohort.py  CLI: db/cohort1.db -> viz/*.data.js + viz/evidence/
 scripts/cohort_report.py  CLI: the active build's results; --write/--check-status
 scripts/deploy_cloudflare.sh  deploy the page (docs/PUBLISHING.md)
 scripts/privacy_check.py, .githooks/  keep a home path, a personal address or a
-                          session link out of this public repository, and
-                          every branch but main on this machine
+                          session link out of this public repository, on
+                          every branch pushed
 scripts/cohort/           the pipeline - scope, selection, targets, evidence,
                           classes, store, build, validate, export, report, status
 viz/index.html            the page: self-contained, vendored vis-network
@@ -887,20 +887,20 @@ began on 2026-10-10 as one snapshot of a private working copy,
 from before the snapshot, which carries a personal address and session links,
 and is never pushed here.
 
-**Unfinished work stays local** (the user's decision, 2026-10-10). This
-overrides the default of pushing a session's branch:
+**Worktree branches are published** (the user's decision, 2026-10-12,
+replacing "unfinished work stays local" of 2026-10-10):
 
-- **Never push a branch other than `main`**, a worktree's branch included.
-  Commit to it and leave it on this machine. Merging into `main` and pushing
-  happen when the user asks. A deleted branch's commits stay reachable by
-  their hashes, so a push cannot be taken back.
-- **A local branch has no backup.** Before a worktree is removed, its branch
-  is merged or kept, never deleted unmerged.
+- **A session commits to its worktree's branch and pushes that branch** to
+  GitHub, where it is public like everything else. Merging into `main` and
+  pushing `main` still happen only when the user asks. A deleted branch's
+  commits stay reachable by their hashes, so a push cannot be taken back.
+- **Before a worktree is removed, its branch is merged or pushed**, never
+  deleted while it exists nowhere else.
 - **Never write a home path, a personal address, a claude.ai session link or
   a job directory into the repository**, in a file or a commit message, and
   commit as the GitHub no-reply address. The hooks in `.githooks/` refuse all
-  of these, and pre-push refuses every branch but `main`
-  (`scripts/privacy_check.py`). Each clone enables them once with
+  of these, and pre-push searches every commit a push of any branch would
+  publish (`scripts/privacy_check.py`). Each clone enables them once with
   `git config core.hooksPath .githooks`. Never `--no-verify`.
 - **A contributor's pull request is merged here like any other change**,
   keeping its commits and author ([CONTRIBUTING.md](CONTRIBUTING.md)).

@@ -47,9 +47,9 @@ in CLAUDE.md) alone; it is kept unchanged as a rollback path. Documents go in
 ## How changes arrive here
 
 This repository is where the project is developed. A pull request is reviewed
-and merged here, and keeps its own commits and its author. Only `main` is
-published; work in progress is not pushed as branches, so open a pull request
-against `main`.
+and merged here, and keeps its own commits and its author. Work in progress
+is published as branches, and finished work is merged into `main`; open a pull
+request against `main`.
 
 ## Licence
 
