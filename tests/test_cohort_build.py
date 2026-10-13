@@ -265,17 +265,22 @@ class SelectionTest(unittest.TestCase):
         self.assertEqual(m.admission_reason, "route_atc_n")
         self.assertEqual(m.qualifying_indications, ())
 
-    def test_the_indication_route_needs_phase_three_on_that_indication(self):
-        add_molecule(self.conn, 2, "CHEMBL_B", "PHASE 2 ONLY", max_phase=4.0)
-        add_indication(self.conn, 10, 2, "D_CORE", 2.0)
+    def test_the_indication_route_needs_phase_one_on_that_indication(self):
+        # D21 lowered the floor from Phase 3 to Phase 1. Early Phase 1 (0.5)
+        # is below it.
+        add_molecule(self.conn, 2, "CHEMBL_B", "EARLY PHASE 1 ONLY", max_phase=4.0)
+        add_indication(self.conn, 10, 2, "D_CORE", 0.5)
         members = self.run_selection()["members"]
         self.assertNotIn(2, members)   # not a seed, not admitted
 
-        add_molecule(self.conn, 3, "CHEMBL_C", "PHASE 3", max_phase=1.0)
-        add_indication(self.conn, 11, 3, "D_CORE", 3.0)
+        add_molecule(self.conn, 3, "CHEMBL_C", "PHASE 1", max_phase=1.0)
+        add_indication(self.conn, 11, 3, "D_CORE", 1.0)
         m = self.run_selection()["members"][3]
         self.assertTrue(m.in_cohort)
         self.assertEqual(m.admission_reason, "route_indication")
+
+    def test_the_floor_is_read_from_the_policy(self):
+        self.assertEqual(policy()["admission_routes"]["indication"]["min_phase"], 1)
 
     def test_an_indication_carries_the_trials_its_phase_is_read_off(self):
         # ChEMBL files one ClinicalTrials reference per drug_indication whose
@@ -332,11 +337,11 @@ class SelectionTest(unittest.TestCase):
         self.assertEqual(m.approved_elsewhere, ("acne", "Asthma"))
 
     def test_the_molecule_level_max_phase_is_not_the_admission_test(self):
-        # An Approved drug whose only in-scope indication sits at Phase 1 does
-        # not qualify through the indication route: the threshold is on the
-        # indication, not on the highest phase across unrelated diseases.
+        # An Approved drug whose only in-scope indication sits at Early Phase 1
+        # does not qualify through the indication route: the threshold is on
+        # the indication, not on the highest phase across unrelated diseases.
         add_molecule(self.conn, 4, "CHEMBL_D", "APPROVED ELSEWHERE", max_phase=4.0)
-        add_indication(self.conn, 12, 4, "D_CORE", 1.0)
+        add_indication(self.conn, 12, 4, "D_CORE", 0.5)
         self.assertNotIn(4, self.run_selection()["members"])
 
     def test_missing_and_unknown_indication_phases_cannot_qualify(self):
@@ -363,9 +368,9 @@ class SelectionTest(unittest.TestCase):
         add_indication(self.conn, 14, 6, "D_PAIN", 0.5)
         self.assertNotIn(6, self.run_selection()["members"])
 
-    def test_a_pain_indication_at_phase_three_does_admit(self):
-        add_molecule(self.conn, 7, "CHEMBL_F", "PAIN PHASE 3")
-        add_indication(self.conn, 15, 7, "D_PAIN", 3.0)
+    def test_a_pain_indication_at_phase_one_does_admit(self):
+        add_molecule(self.conn, 7, "CHEMBL_F", "PAIN PHASE 1")
+        add_indication(self.conn, 15, 7, "D_PAIN", 1.0)
         m = self.run_selection()["members"][7]
         self.assertTrue(m.in_cohort)
         self.assertEqual(m.scope_reasons, ("general_pain",))

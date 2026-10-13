@@ -263,6 +263,48 @@ record ([VIEWER.md](VIEWER.md), *One protein, one node*). Still a grouping and
 never a move: each record keeps its own claims, rarity and links, and the
 score is untouched.
 
+### D21 — an in-scope indication qualifies from Phase 1
+
+**Decision (user, 2026-10-12).** "Lets expand the molecule set by letting in
+all molecules with a brain indication that have reached phase 1 or above."
+The indication route's floor drops from Phase 3 (D01) to Phase 1:
+`admission_routes.indication.min_phase` is 1, selection policy 3.0.0. Nothing
+else moves. The scope is D02's and D16's, read off the same pinned MeSH
+classification; the phase is still the qualifying *indication's*, never the
+molecule's highest across unrelated diseases; Early Phase 1 (0.5), Unknown (−1)
+and a missing phase still cannot qualify, and still never disqualify an ATC N
+match. Worked in the `phase1-admission` worktree.
+
+**What "brain indication" was read as.** The adopted scope, unchanged, so one
+floor applies to every in-scope descriptor. Two edges of that scope, accepted
+at Phase 3 in D02, carry further at Phase 1, and are measured here rather than
+narrowed without asking:
+
+- **69 new members qualify only through the Pain tree** — Pain itself, myalgia,
+  arthralgia, low back pain, stable angina, abdominal pain. D02 accepted that
+  breadth with visible admission reasons.
+- **About 80 qualify only through a nervous-system tumour heading** — Brain
+  Neoplasms (60), Diffuse Intrinsic Pontine Glioma (18), neurofibromatosis —
+  which the core rule keeps because each has a C10 placement outside the
+  excluded oncology class. These are mostly cancer drugs trialled in glioma
+  (ipilimumab, pazopanib, cabazitaxel).
+
+Seven more qualify only through Erectile Dysfunction, which MeSH also files
+under F03.
+
+**What it did.** The cohort goes from 1,330 to 2,449 members and the catalogue
+from 1,335 to 2,452: 1,119 new members, all by the indication route, none
+lost. Pentoxifylline and rolipram, seeds outside the cohort until now, are
+members; loperamide (Pain at Early Phase 1), mibefradil and theobromine
+remain seeds only. Of the new members 110 stopped at Phase 1, 557 at Phase 2
+and 132 at Phase 3 across every disease, and 318 are approved — for something
+outside the scope and trialled at Phase 1 or 2 within it (an antidiabetic in
+Alzheimer's, an anticancer drug in glioma). They are 838 small molecules, 87
+of unknown type, 71 proteins, 67 antibodies and 56 others (D03 filters none).
+The most common qualifying headings among them are Alzheimer Disease (131),
+Parkinson Disease (87), Brain Neoplasms (84), Schizophrenia (70) and Major
+Depressive Disorder (68).
+
 ---
 
 ## Open
@@ -279,10 +321,15 @@ In the order they bear on the picture.
    mixed where the curators' words differ.
 4. **Primary-only for evidence, all rows for direction** (the user's call on
    2026-09-27). Worth revisiting if a second error like vilazodone's appears.
-5. **New molecules** — the second step. GtoPdb's ligands outside the cohort,
-   admitted by a rule still to be written; see
+5. **New molecules** — the second step. D21 added 1,119 by lowering the
+   indication route's phase floor. GtoPdb's ligands outside the cohort are
+   still unadmitted, by a rule still to be written; see
    [COHORT-BOUNDARY-REVIEW.md](COHORT-BOUNDARY-REVIEW.md) for the curated-route
    proposal it should start from.
+9. **D21's scope edges.** At Phase 1 the Pain tree admits 69 members by pain
+   alone (angina and myalgia among them) and the tumour headings about 80
+   cancer drugs. Both were accepted at Phase 3 in D02; whether "brain
+   indication" should exclude them at the lower floor is the user's call.
 6. **Report the alfuzosin mechanism to ChEMBL.** Drafted 2026-10-10 in
    [CHEMBL-ERROR-REPORT-ALFUZOSIN.md](CHEMBL-ERROR-REPORT-ALFUZOSIN.md) and not
    sent. The action is withheld locally in the meantime

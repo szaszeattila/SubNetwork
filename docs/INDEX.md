@@ -23,7 +23,7 @@ one of the two.
 | --- | --- |
 | what the project is and every rule it follows | [../CLAUDE.md](../CLAUDE.md) |
 | why the viewer does something, before you change it | [VIEWER.md](VIEWER.md) |
-| the membership policy actually in force | [COHORT-1-DECISIONS.md](COHORT-1-DECISIONS.md) |
+| the membership policy actually in force | [COHORT-1-DECISIONS.md](COHORT-1-DECISIONS.md), with the phase floor lowered by D21 in [COHORT-2.md](COHORT-2.md) |
 | what that policy produced, measured | [COHORT-1-IMPLEMENTATION.md](COHORT-1-IMPLEMENTATION.md) |
 | what cohort 2 is, and what it has added so far | [COHORT-2.md](COHORT-2.md) |
 | why a data rule exists before you change it | [DATA-QUALITY-LOG.md](DATA-QUALITY-LOG.md) |
@@ -41,7 +41,7 @@ one of the two.
 | --- | --- | --- |
 | [COHORT-1-DECISIONS.md](COHORT-1-DECISIONS.md) | the adopted selection and evidence policy, decision by decision (D01–D16) | policy, not counts |
 | [COHORT-1-IMPLEMENTATION.md](COHORT-1-IMPLEMENTATION.md) | what the adopted policy built, with the two analysis defects it corrects, the limitations and the rollback commands | measured at build time; **Status supersedes** |
-| [COHORT-2.md](COHORT-2.md) | cohort 2's decisions: GtoPdb's action as a direction (D17), its primary targets as curated support (D18), partial agonism as half an opposite (D19), one protein as one target across species (D20), and what is open | measured 2026-09-27 against the active build |
+| [COHORT-2.md](COHORT-2.md) | cohort 2's decisions: GtoPdb's action as a direction (D17), its primary targets as curated support (D18), partial agonism as half an opposite (D19), one protein as one target across species (D20), the indication route's floor lowered to Phase 1 (D21), and what is open | measured 2026-09-27 against the active build |
 | [VIEWER.md](VIEWER.md) | why the page draws, scores and words things as it does — the reasoning behind CLAUDE.md's viewer rules | measured when each rule was made; **Status supersedes** |
 | [DATA-QUALITY-LOG.md](DATA-QUALITY-LOG.md) | why every invariant exists — what went wrong, how it was found, what was measured | historical incidents, each dated |
 

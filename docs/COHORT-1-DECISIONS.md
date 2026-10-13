@@ -75,6 +75,11 @@ but do not disqualify an ATC-N match. Keep indication-specific phase separate
 from the highest phase across unrelated indications. The old 995 count is
 not the adopted catalogue size because D02 and D03 change its scope.
 
+**The phase floor is superseded by D21** (2026-10-12, in
+[COHORT-2.md](COHORT-2.md)): an in-scope indication now qualifies from Phase 1.
+Early Phase 1, Unknown and missing phases still cannot, and everything else
+above stands.
+
 ### D02 — Indication and ATC boundaries
 
 Choose S0 core scope or explicit extensions for CNS oncology, peripheral/

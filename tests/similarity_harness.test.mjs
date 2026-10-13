@@ -20,12 +20,19 @@ import {
   patchConstant, viewerSource, CONSTANTS,
 } from "../analysis/similarity_harness/harness.mjs";
 
-// Measured on the chembl_37 build of 2026-09-16 at 0.4985 / 35.9%. The floors
-// sit a little under that: they are here to catch a regression, not to pin the
+// Measured on the chembl_37 build of 2026-09-16 at 0.4985 / 35.9%, and on the
+// D21 build of 2026-10-12 at 0.4607 / 32.7% / top-5 61.3%. The floors sit a
+// little under the latest: they are here to catch a regression, not to pin the
 // third decimal of a number that moves whenever the catalogue is rebuilt.
-const MRR_FLOOR = 0.47;
-const TOP1_FLOOR = 0.33;
-const TOP5_FLOOR = 0.60;
+//
+// D21's fall is the answer key's, not the ranking's. It admitted 1,119
+// molecules with no ATC N code, so one ranked above a class-mate is a miss
+// however apt (adipiplon above a benzodiazepine, carfentanil above an opioid).
+// With those 1,119 skipped in each list the same build grades 0.5121 / 38.7%,
+// what it graded before them (docs/COHORT-2.md, D21).
+const MRR_FLOOR = 0.44;
+const TOP1_FLOOR = 0.31;
+const TOP5_FLOOR = 0.58;
 
 const has = payloadExists();
 const skip = has ? false : "viz/graph.data.js is not built; run scripts/export_cohort.py";

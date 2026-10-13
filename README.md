@@ -22,7 +22,7 @@ says nothing about taking drugs together.
 - **MeSH, UniProt, ClinicalTrials.gov and Wikidata**: drug classes, protein
   identities across species, trial status, and Wikipedia links.
 
-The catalogue holds about 1,300 molecules and 2,600 targets. The exact figures,
+The catalogue holds about 2,450 molecules and 3,350 targets. The exact figures,
 generated from the build, are in **Status** in [CLAUDE.md](CLAUDE.md).
 
 "Similar" here means sharing targets, weighted by evidence, discounted by how

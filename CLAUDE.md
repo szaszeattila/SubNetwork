@@ -541,9 +541,15 @@ Three browser measurements sit outside the block because they were taken once,
 in Chrome, against a 4.03 MB payload: parse and index in 216 ms, selecting a
 molecule in 0.1 ms, loading an evidence shard in 10 ms. Parse and index were
 unchanged at the later 4.4 MB (159 ms in the vm harness, which is not the
-browser and is quoted only as a before-and-after). The last Wikipedia backfill
-had 0 failed lookups and 15 dropped as ambiguous (invariant 15) — facts about
-that run, not the database, so not generated. Full build numbers, the two
+browser and is quoted only as a before-and-after). D21 nearly doubled the
+payload to 8.3 MB, and the browser has not been timed against it. The last
+Wikipedia backfill had 0 failed lookups and 23 dropped as ambiguous (2
+molecules, 20 targets, 1 class; invariant 15) — facts about that run, not the
+database, so not generated. The ATC grade above fell with D21 because the
+1,119 molecules it admitted carry no ATC N code: one ranked above a class-mate
+is a miss however apt. Skipped in each list, the same build grades 38.7% and
+MRR 0.5121, as before them
+([docs/SIMILARITY-HARNESS.md](docs/SIMILARITY-HARNESS.md) §11). Full build numbers, the two
 analysis defects the build corrects, the limitations and the rollback commands
 are in [docs/COHORT-1-IMPLEMENTATION.md](docs/COHORT-1-IMPLEMENTATION.md).
 
