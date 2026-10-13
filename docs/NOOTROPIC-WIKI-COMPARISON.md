@@ -200,6 +200,93 @@ PsychonautWiki's API includes class pages (*Benzodiazepines*, *2C-x*) as
 substances, and they are counted as entries; TripSit's aliases are used for
 matching.
 
+## Where the wiki's list probably comes from
+
+2026-10-12, the user's question. **The wiki does not say**, so this is an
+inference from what the list contains, and it is unconfirmed. Its home and
+*About* pages say it is run by Scientific Sean LLC, that "nothing here is written by a
+doctor, medical professional, or scientist in any capacity", "Powered by Claude", and grows
+"continuously"; neither describes how a compound gets on the list. Its
+*Suppliers* page lists 14 partner outlets, some through affiliate links:
+research-peptide and research-chemical shops (RUO, Kimera Chems, Moglabs,
+WorldwideBioResearch, Limitless Biochem, Peptira, AllAmericanAmino), RUPharma
+for Russian medicines and Khavinson bioregulators, PCT.Zone for prescription
+drugs, Nootropics Depot, iHerb and Amazon for supplements.
+
+That catalogue fits the parts of the list no other public list has. The
+Khavinson products named by organ, cerebrolysin and cortexin, semax, selank,
+bemethyl and bromantane are RUPharma's and Limitless's lines. Dihexa, 9-Me-BC,
+TAK-653, J-147, BPC-157, KPV and BAM15 are the research shops' named examples.
+The peptide and blend sections, 213 of 220 and 352 of 391 on no other list,
+read like product listings rather than substances. The rest fits public lists
+taken whole: the wiki holds 94–96% of each list that means *nootropic* in the
+supplement-user's sense. And the clinical sections fit what a prescription
+outlet stocks, which would explain why they are selective rather than
+systematic (alprazolam and not diazepam). If that is right, the list is a
+catalogue of **what can be bought**, with pages written about each item. That
+is why the share of it that ChEMBL knows about falls off with each section.
+The operator's listed contact could confirm it; nothing here depends on it.
+
+## What it would take to admit most of it
+
+The user's follow-up: what sources or rules would bring most of these
+compounds into the network, for instance a Phase 1 floor in place of Phase 3.
+`admission_rules.py` applies each rule to the wiki's ChEMBL placements and to
+ChEMBL as a whole, so the cost is stated beside the gain.
+
+| rule | wiki added | wiki covered | of 2,184 | catalogue grows by |
+|---|---:|---:|---:|---:|
+| *today* (ATC N, or in-scope indication at Phase 3) | — | 524 | 24% | — |
+| in-scope indication, phase ≥ 2 | 183 | 707 | 32% | 787 |
+| **in-scope indication, phase ≥ 1** | 234 | 758 | 35% | 1,117 |
+| in-scope indication, any phase | 240 | 764 | 35% | 1,146 |
+| any indication, phase ≥ 1 | 482 | 1,006 | 46% | 7,526 |
+| any ATC code | 245 | 769 | 35% | 2,556 |
+| curated mechanism (any target) | 314 | 838 | 38% | 4,617 |
+| GtoPdb ligand | 387 | 911 | 42% | 6,229 |
+| in-scope phase ≥ 1, or curated, or GtoPdb | 568 | 1,092 | 50% | 9,632 |
+| publication data at any protein | 568 | 1,092 | 50% | 618,102 |
+| every ChEMBL placement (ceiling) | 966 | 1,490 | 68% | |
+
+**A Phase 1 floor is a small lever.** It roughly doubles the indication route
+(1,117 more entries, most of them Phase 2) and takes the wiki from 24% to 35%.
+That is because 726 of the 966 wiki compounds ChEMBL has but the catalogue does
+not have no in-scope indication at any phase: 183 stop at Phase 2, 51 at Phase 1 and 6 at
+Early Phase 1. Its 67 nootropic additions are the clinical failures —
+nefiracetam, fasoracetam, the ampakines (CX-516, CX-717, farampator, TAK-653),
+GTS-21, ABT-089, huperzine A, masupirdine — plus choline, uridine and
+phosphatidylserine, which have in-scope trials.
+
+**Dropping the scope buys more than dropping the phase, at seven times the
+size**: any indication at Phase 1 reaches 46% and adds 7,526 entries, nearly
+all of them developed for something other than the brain. A curated-mechanism or GtoPdb route reaches 38–42%,
+and the three together reach exactly half the wiki for about 9,600 entries.
+Only a rule with no curation in it at all, publication data at any protein,
+reaches the same half, by adding six hundred thousand screening compounds.
+
+**No ChEMBL rule reaches more than 68%.** 694 entries are not in ChEMBL: 241 are
+real substances absent from it, and 453 are blends, extracts and products. The
+other sources that could hold them:
+
+- **The identified 241** (semax, dihexa, the NBOMes, designer benzodiazepines):
+  PubChem and FDA UNII give them an identity, but neither carries a curated
+  target claim. Where binding data exists, it is in **BindingDB** and the
+  **PDSP Ki database**, the two sources D12 deferred. For the psychedelics in
+  particular, PDSP is the one with the most data. Admitting them needs a molecule
+  identity not keyed on a ChEMBL parent, which is a schema change.
+- **Peptides** (the Khavinson set, BPC-157, TB-500): there are sequences in
+  UniProt and peptide databases, and almost no receptor-level data anywhere.
+  They would be entries that draw nothing.
+- **Blends, extracts and products**: not one substance, so not a node. A
+  product could at most point to its ingredients, which is a different
+  feature.
+
+So most of the wiki can be brought in only by a rule that is not about the
+brain. The rules that are — a lower phase floor inside the scope, a curated
+mechanism at a brain target (NEXT-STEPS §3) — add the wiki's clinical-failure
+compounds and leave its distinctive long tail out. That tail is what the shops
+sell, and nobody has measured what it does.
+
 ## A catalogue finding on the way
 
 **Pipotiazine is not a member; its palmitate ester is, with no evidence.**
