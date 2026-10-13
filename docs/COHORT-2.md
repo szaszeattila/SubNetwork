@@ -316,6 +316,39 @@ The most common qualifying headings among them are Alzheimer Disease (131),
 Parkinson Disease (87), Brain Neoplasms (84), Schizophrenia (70) and Major
 Depressive Disorder (68).
 
+The ATC grade fell with D21 (38.7% to 32.7% top-1), and so did the MeSH
+grade. Neither is the ranking getting worse: the newcomers mostly carry no
+label either judge can credit, so one ranked above a class-mate counts as a
+miss however apt. Skipped in each list, the ranking among the old catalogue
+grades as it did before ([SIMILARITY-HARNESS.md](SIMILARITY-HARNESS.md) §11).
+
+### D22 — MeSH actions read from MeSH, not through PubChem
+
+**Decision (user, 2026-10-13).** "adopt B2 and complete the open items". The
+MeSH pharmacological actions are read from each molecule's own MeSH record,
+reached by identifier and never through PubChem. The steps, each tried only
+where the one before placed nothing:
+
+1. FDA UNII;
+2. the CAS number FDA lists for it;
+3. a stereoisomer mixture, for a structure ChEMBL draws flat;
+4. the MeSH ID on the Wikidata item carrying the ChEMBL ID.
+
+**Why.** PubChem blocked the D21 backfill after about 400 requests, twice. Its
+compound-to-MeSH links are made by name, which is how tafamidis carried
+triamcinolone's actions. The new route uses identifiers at every step and runs
+offline from pinned files and one cached Wikidata pass.
+
+**What it did.** On the 1,335-entry build, 848 molecules carry actions against
+PubChem's 787, 760 identical. On D21's catalogue, 1,194 of 2,452 do. Tarenflurbil
+lost flurbiprofen's COX actions, the 11 links PubChem's name-matching made in
+error are gone, and 20 molecules PubChem reached are left without actions. The MeSH
+answer key moved with it, so MeSH grades before and after are not comparable.
+The measurements and the refused alternative (matching a skeleton while
+ignoring stereochemistry, which put esmethadone on methadone's record) are in
+[MESH-ACTIONS-ROUTE-B.md](MESH-ACTIONS-ROUTE-B.md) and DATA-QUALITY-LOG,
+2026-10-13.
+
 ---
 
 ## Open

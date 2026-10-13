@@ -67,7 +67,7 @@ python3 scripts/resolve_cohort_trials.py             # ClinicalTrials.gov, ~20 s
 python3 scripts/resolve_cohort_protein_class.py      # offline
 python3 scripts/resolve_cohort_approved_elsewhere.py # offline
 python3 scripts/resolve_cohort_classes.py            # offline
-python3 scripts/resolve_cohort_pharm_actions.py      # MeSH, FDA UNII, PubChem, ~20 min cold
+python3 scripts/resolve_cohort_pharm_actions.py      # MeSH, FDA UNII, Wikidata, a few minutes
 python3 scripts/resolve_cohort_mesh_structure.py     # MeSH, FDA UNII, ~35 s
 python3 scripts/resolve_cohort_wikipedia.py          # Wikidata and Wikipedia
 python3 scripts/resolve_cohort_gtopdb_actions.py     # GtoPdb 2026.3, see below
@@ -110,7 +110,7 @@ newer file, except GtoPdb.
 | Backfill | What it reads | Why it can differ |
 | --- | --- | --- |
 | trials | ClinicalTrials.gov API | trial statuses change |
-| pharm actions | PubChem, MeSH `desc2026`, FDA UNII | PubChem's links change; UNII is served only as "latest" |
+| pharm actions | MeSH `desc2026` and `supp2026`, FDA UNII, Wikidata | Wikidata items change, and its answers are cached in `db/cache/wikidata/`; UNII is served only as "latest" |
 | mesh structure | MeSH `desc2026` and `supp2026`, FDA UNII | as above |
 | wikipedia | Wikidata, Wikipedia | articles and items change |
 | orthologues | UniProt's reviewed human proteome | streamed from the current release, not 2026_03 |

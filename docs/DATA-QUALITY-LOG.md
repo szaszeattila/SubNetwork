@@ -39,13 +39,110 @@ alone.
 
 | Source | Role | Caveat |
 |---|---|---|
-| **PubChem** | compound identity, SMILES, CAS numbers | CAS numbers are the only join key into PDSP |
+| **PubChem** | compound identity, SMILES, CAS numbers (legacy pipeline only since 2026-10-13) | CAS numbers are the only join key into PDSP; links compounds to MeSH by name; blocks an address that keeps asking while throttled |
+| **FDA UNII records** | a substance's identity by structure, and its CAS number, which is how a molecule reaches its own MeSH record | registers stereo-defined forms and racemates as such, where ChEMBL often draws no stereochemistry; no InChIKey for most biologics |
+| **Wikidata** | an item joining a ChEMBL ID to a Wikipedia article and to a MeSH ID | community-edited; used only by exact identifier, and agreed with FDA's route on 729 of 735 molecules where both answer |
 | **ChEMBL** | primary: curated mechanisms + Ki/Kd/IC50 binding assays, functional assays | needs pagination; needs `standard_relation` checking; has real curation errors |
 | **UniProt** | protein identity, function, tissue specificity; its reviewed human proteome is what D20 aligns non-human records against | `protein_name:` search is relevance-ranked, not exact; the "stream" download is always the current release, so the copy is pinned |
 | **DGIdb** | cross-validation that an edge exists | no measurements of its own |
 | **BindingDB** | target *discovery* | ~97% of what it returns here is republished ChEMBL/PDSP; REST endpoint unreliable |
 | **PDSP Ki DB** | independent Ki measurements, strong for CNS | bulk CSV only, no query API, no per-row citation link |
 | **GtoPdb** | curated action (agonist, antagonist, …) on the receptor, channel and enzyme families this project is about | a ligand's Type can be carried onto secondary targets it was only screened at (vilazodone); anonymous bulk access announced to end |
+
+---
+
+## 2026-10-13 — MeSH actions read from MeSH, and PubChem left behind
+
+**What happened.** D21 nearly doubled the catalogue, and the backfill that
+reads MeSH pharmacological actions through PubChem could not finish. PubChem
+answered about 400 requests and then refused this machine, twice, at a pace
+(~180 a minute) that had run 2,400 requests without trouble in September. Its
+throttling header then read every meter Green and still answered "too many
+requests per second or blacklisted": the address was on a temporary block. The
+script's own five quick retries, a probe loop asking every minute for two hours,
+and each restart the moment a probe got through kept it there. After a night,
+68 requests got through before the next block.
+
+**The lessons about a rate-limited source,** kept because the next one will
+behave the same way:
+
+- Read the source's own signal (`X-Throttling-Control` here) rather than
+  inferring the limit from failures.
+- On a block, stop. Retrying into it, or polling to see whether it has lifted,
+  are the requests that keep it in place.
+- Resume hours later, with one probe.
+
+**What changed instead.** The question became whether the actions need PubChem
+at all. PubChem's route also links a compound to MeSH **by name**, the source of
+the tafamidis/"FX006" error (2026-09-26), which a judge had to catch. NLM's own
+MeSH files carry each record's `PharmacologicalActionList`, and a molecule's own
+record can be reached by identifier, the route the structure classes already
+take. `resolve_cohort_pharm_actions.py` now places each molecule on one MeSH
+record, each step tried only where the one before placed nothing:
+
+1. **UNII.** The InChIKey reaches the FDA UNII registered with exactly that
+   structure, and the UNII reaches the MeSH record carrying it.
+2. **CAS.** Where the UNIIs reach no record, the CAS numbers FDA lists for
+   them are tried, because older MeSH records carry a CAS number where newer
+   ones carry the UNII (GABA, budesonide). As a fallback only: used alongside
+   the UNII, a CAS number a second record shares refused eplerenone and
+   lacosamide.
+3. **A mixture of stereoisomers.** Where ChEMBL draws no stereochemistry and
+   FDA has no flat structure to match, the FDA substance registered as a
+   mixture of that skeleton's stereoisomers (a racemate, written as two
+   InChIKeys sharing the first block) is used. This places methylphenidate,
+   nebivolol and pentazocine. A molecule drawn *with* stereochemistry never
+   reaches this step.
+4. **Wikidata.** Where no FDA step places the molecule on exactly one record,
+   the MeSH ID on the Wikidata item carrying its ChEMBL ID is used. This
+   reaches antibodies, proteins and peptides (exenatide, teriparatide), which
+   FDA files without a structure.
+
+Two records at any step is a refusal (invariant 6).
+
+**What was measured before it was adopted**, on the 1,335-entry build whose
+PubChem backfill had completed (`analysis/mesh_route_b/`,
+[MESH-ACTIONS-ROUTE-B.md](MESH-ACTIONS-ROUTE-B.md)):
+
+- **Coverage.** 848 molecules carry actions against PubChem's 787. 760 are
+  identical, 7 differ, 20 are PubChem's alone and 81 the new route's alone.
+- **None of the 11 links the judge set aside reappears,** because no step makes
+  a name-based link.
+- **Tarenflurbil loses flurbiprofen's COX actions,** one of the two open MeSH
+  findings. PubChem had carried them across from the racemate's record.
+- **Every molecule the stereo-mixture step placed that PubChem also covers
+  agrees with PubChem** (7 of 7). So does every one the Wikidata step placed
+  (12 of 12).
+- **Wikidata and the UNII route name the same record for 729 of 735
+  molecules.** The 6 others are a molecule filed as a narrower concept of
+  another record (armodafinil within *Modafinil*), and the UNII route's answer
+  stands there.
+
+**What was measured and refused.** Matching on the InChIKey's first block, the
+skeleton with stereochemistry ignored, reaches 30 more molecules, but:
+
+- it put lucerastat on miglustat's record, a different molecule differing only
+  in stereochemistry;
+- it gave esmethadone methadone's opioid actions, though esmethadone was
+  developed for its low opioid activity.
+
+That is the error shape invariant 6 exists to stop. The stereo-mixture rule is
+the narrow version that keeps the gains without the errors.
+
+**What it costs.** 20 molecules PubChem reached are now without actions:
+
+- 9 carry a UNII no MeSH record holds (semagacestat, relugolix);
+- 4 are flat structures whose stereoisomer mixtures reach no single record
+  (doxepin, menthol);
+- 4 are in neither FDA's file nor Wikidata (liraglutide, ziconotide);
+- 2 are drawn with a different defined stereochemistry by ChEMBL and FDA
+  (benfotiamine, dextrose);
+- 1 has a record with no action (samidorphan).
+
+And the harness's second judge moved, since its answer key is built
+from these actions: the same 1,335-entry ranking grades 47.4% top-1 and MRR
+0.6060 against PubChem's key, and 50.4% and 0.6335 against the new one. Those
+are two keys, not a better ranking.
 
 ---
 

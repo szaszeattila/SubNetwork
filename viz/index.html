@@ -890,8 +890,9 @@ function lookupCondition(meshId) { return conditionIndex().get(meshId) || null; 
 // antidepressants (imipramine type)") say what family its name was assigned
 // from. The MeSH pharmacological actions ("Antidepressive Agents, Tricyclic")
 // say what NLM's indexers record it as doing, and are the only class source
-// here that speaks to the question this page asks; they are backfilled from
-// PubChem by scripts/resolve_cohort_pharm_actions.py. The MeSH structure
+// here that speaks to the question this page asks; they are read from each
+// molecule's own MeSH record, reached by FDA's UNII or through Wikidata, by
+// scripts/resolve_cohort_pharm_actions.py. The MeSH structure
 // classes ("Xanthines", "Dibenzazepines") say what it is built like, and are
 // backfilled through FDA's UNII by scripts/resolve_cohort_mesh_structure.py.
 // Structure and action are kept apart because they disagree usefully:
@@ -2978,7 +2979,8 @@ const HELP = {
        "system drugs.",
   mesh_pa: "What the drug does, as the National Library of Medicine's indexers record " +
            "it (MeSH pharmacological actions), e.g. Antidepressive Agents, Tricyclic. " +
-           "Linked through PubChem. Click one to see every molecule filed under it.",
+           "Linked by FDA's structure identifier, or through Wikidata. Click one to " +
+           "see every molecule filed under it.",
   mesh_struct: "What the molecule is built like, as the National Library of Medicine " +
                "files it (MeSH chemical classes), e.g. Xanthines. Linked by FDA's " +
                "structure identifier.",
@@ -3373,9 +3375,8 @@ function aboutSourcesHTML() {
   }
   items.push(
     link("https://www.nlm.nih.gov/mesh/", "MeSH") + (d.mesh ? " " + esc(d.mesh) : "") +
-      ", courtesy of the U.S. National Library of Medicine, reached through " +
-      link("https://pubchem.ncbi.nlm.nih.gov/", "PubChem") +
-      " and the FDA's UNII registry: drug classes. MeSH is a registered mark of the " +
+      ", courtesy of the U.S. National Library of Medicine, reached through the " +
+      "FDA's UNII registry and Wikidata: drug classes. MeSH is a registered mark of the " +
       "NLM, which does not endorse this project; this is not the most current MeSH. " +
       licenceLink("NLM's terms") + ".",
     link("https://clinicaltrials.gov/", "ClinicalTrials.gov") +
@@ -3386,7 +3387,8 @@ function aboutSourcesHTML() {
     link("https://www.uniprot.org/", "UniProt") + (d.uniprot ? " " + esc(d.uniprot) : "") +
       ": protein sequences, to match a protein across species. " +
       licenceLink("CC BY 4.0") + ".",
-    link("https://www.wikidata.org/", "Wikidata") + ": Wikipedia links only. " +
+    link("https://www.wikidata.org/", "Wikidata") + ": Wikipedia links, and a " +
+      "molecule's MeSH record where the FDA's registry does not reach it. " +
       licenceLink("CC0 1.0") + ".");
   return items.map(function (li) { return "<li>" + li + "</li>"; }).join("") +
     "<li>No other database of measurements (PDSP, BindingDB) is assessed.</li>";

@@ -4599,7 +4599,7 @@ describe("a name stem can be searched for and opened", () => {
 });
 
 describe("a MeSH pharmacological action can be searched for and opened", () => {
-  // What NLM's indexers record a drug as doing, backfilled from PubChem. An
+  // What NLM's indexers record a drug as doing, read from its MeSH record. An
   // action also holds the molecules filed under the narrower actions below it,
   // so "Antidepressive Agents" gathers the tricyclics and the SSRIs.
   function withActions() {

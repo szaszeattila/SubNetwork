@@ -627,5 +627,31 @@ the exception.
 The floors in `tests/similarity_harness.test.mjs` were re-set under the new
 figures. The instrument was not changed: grading only among labelled molecules
 would also raise every earlier figure, and it should be decided as a change of
-instrument, not slipped in beside a catalogue change. The MeSH judge labels
-most of the newcomers and is the fairer of the two here.
+instrument, not slipped in beside a catalogue change.
+
+The MeSH judge does not escape this. It labels about 280 of the 1,117
+newcomers (1,028 labelled molecules against 745), and graded the same way it
+tells the same story:
+
+| the D21 build, MeSH key | scoreable | top-1 | MRR |
+|---|---|---|---|
+| as graded | 865 | 45.0% | 0.5945 |
+| only the old catalogue's molecules asked | 641 | 44.6% | 0.5961 |
+| ...and the newcomers skipped in each list | 621 | 50.2% | 0.6341 |
+| the 1,335 build, same key | 621 | 50.4% | 0.6335 |
+
+## 12. The MeSH key changed with its source (2026-10-13)
+
+The MeSH actions stopped coming through PubChem on 2026-10-13. They are read
+from each molecule's own MeSH record now ([MESH-ACTIONS-ROUTE-B.md](MESH-ACTIONS-ROUTE-B.md)).
+Since section 10's answer key is built from them, the judge changed, not the
+ranking. On the one 1,335-entry build:
+
+| key | labelled | scoreable | top-1 | top-10 | MRR |
+|---|---|---|---|---|---|
+| PubChem's actions | 699 | 588 | 47.4% | 85.5% | 0.6060 |
+| MeSH's own records | 745 | 621 | 50.4% | 86.8% | 0.6335 |
+
+The ATC grade of that build is 38.7% and 0.5119 under both. A MeSH grade
+taken before 2026-10-13 is therefore not comparable with one taken after,
+including every MeSH figure in section 10.
