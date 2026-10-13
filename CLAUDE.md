@@ -219,6 +219,8 @@ analysis/probe/           50 settled drug relationships put to the ranking, and
                           what went wrong where it misses. A diagnostic, never a
                           tuning target; read-only.
 analysis/cohort1/         the read-only analysis behind COHORT-REPORT.md
+analysis/mesh_route_b/    MeSH actions through the FDA UNII against the PubChem
+                          route (docs/MESH-ACTIONS-ROUTE-B.md); read-only
 docs/                     the reasoning; docs/INDEX.md is the index
 README.md, CONTRIBUTING.md, SECURITY.md, CITATION.cff  for people arriving at
                           the repository; this file stays the rulebook
