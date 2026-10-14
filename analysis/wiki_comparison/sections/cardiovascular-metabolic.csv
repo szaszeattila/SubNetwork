@@ -1,0 +1,110 @@
+name,wiki_class,column,with_d21,match_tier,confidence,chembl_parents,chembl_names,catalogue_status,max_phase,atc_level1,curated_mechanisms,publication_targets,gtopdb,note,slug
+Acetazolamide,Diuretic,in catalogue,member,chembl_name,high,CHEMBL20,ACETAZOLAMIDE,route_indication/has_supported,4,S,8,42,1,,acetazolamide
+Alfuzosin,Cardiovascular,in catalogue,member,chembl_name,high,CHEMBL709,ALFUZOSIN,route_indication/has_supported,4,G,1,15,1,,alfuzosin
+Alprostadil,Cardiovascular,in catalogue,member,chembl_name,high,CHEMBL495,ALPROSTADIL,route_indication/has_supported,4,CG,2,14,1,,alprostadil
+Amlodipine,Cardiovascular,in catalogue,member,chembl_name,high,CHEMBL1491,AMLODIPINE,route_indication/has_supported,4,C,3,38,1,,amlodipine
+Apixaban,Anticoagulant,in catalogue,member,chembl_name,high,CHEMBL231779,APIXABAN,route_indication/has_supported,4,B,1,5,1,,apixaban
+Atenolol,Beta-Blocker,in catalogue,member,chembl_name,high,CHEMBL24,ATENOLOL,route_indication/has_supported,4,C,1,7,1,,atenolol
+Atorvastatin,Statin,in catalogue,member,chembl_name,high,CHEMBL1487,ATORVASTATIN,route_indication/has_supported,4,C,1,16,1,,atorvastatin
+Avanafil,PDE5,in catalogue,member,chembl_name,high,CHEMBL1963681,AVANAFIL,route_indication/has_supported,4,G,1,2,1,,avanafil
+Cilostazol,Anticoagulant,in catalogue,member,chembl_name,high,CHEMBL799,CILOSTAZOL,route_indication/has_supported,4,B,1,8,1,,cilostazol
+Clonidine,Cardiovascular,in catalogue,member,chembl_name,high,CHEMBL134,CLONIDINE,both_routes/has_supported,4,CNS,2,20,1,,clonidine
+Clopidogrel,Anticoagulant,in catalogue,member,chembl_name,high,CHEMBL1771,CLOPIDOGREL,route_indication/has_supported,4,B,4,15,1,,clopidogrel
+Eplerenone,Diuretic,in catalogue,member,chembl_name,high,CHEMBL1095097,EPLERENONE,route_indication/has_supported,4,C,1,5,1,,eplerenone
+Evolocumab,Cardiovascular,in catalogue,member,chembl_name,high,CHEMBL2364655,EVOLOCUMAB,route_indication/has_supported,4,C,1,0,0,,evolocumab
+HCTZ,Diuretic,in catalogue,member,pubchem_inchikey,low,CHEMBL435,HYDROCHLOROTHIAZIDE,route_indication/has_supported,4,C,1,8,1,,hctz
+Inosine,Cardiovascular,in catalogue,member,chembl_name,high,CHEMBL1556,INOSINE,route_indication/has_preliminary,3,DGJS,0,0,1,,inosine
+Insulin Human (Regular),Insulin,in catalogue,member,chembl_squashed,low,CHEMBL1201631,INSULIN HUMAN,route_indication/has_supported,4,A,1,0,0,,insulin-human-regular
+Ivabradine,Cardiovascular,in catalogue,member,chembl_name,high,CHEMBL471737,IVABRADINE,route_indication/has_supported,4,C,2,8,1,,ivabradine
+Lisinopril,Cardiovascular,in catalogue,member,chembl_name,high,CHEMBL1237,LISINOPRIL ANHYDROUS,route_indication/has_supported,4,C,1,2,1,,lisinopril
+Losartan,ARB,in catalogue,member,chembl_name,high,CHEMBL191,LOSARTAN,route_indication/has_supported,4,C,1,20,1,,losartan
+Metoprolol,Beta-Blocker,in catalogue,member,chembl_name,high,CHEMBL13,METOPROLOL,route_indication/has_supported,4,C,3,12,1,,metoprolol
+Metoprolol Succinate,Beta-Blocker,in catalogue,member,chembl_name,high,CHEMBL13,METOPROLOL,route_indication/has_supported,4,C,3,12,1,,metoprolol-succinate
+Midodrine,Cardiovascular,in catalogue,member,chembl_name,high,CHEMBL1201212,MIDODRINE,route_indication/has_supported,4,C,1,2,1,,midodrine
+Nebivolol,Beta-Blocker,in catalogue,member,chembl_name,high,CHEMBL434394,NEBIVOLOL,route_indication/has_supported,4,C,2,31,1,,nebivolol
+Nimodipine,Cardiovascular,in catalogue,member,chembl_name,high,CHEMBL1428,NIMODIPINE,route_indication/has_supported,4,C,2,25,1,,nimodipine
+Nitroglycerin,Cardiovascular,in catalogue,member,chembl_name,high,CHEMBL730,NITROGLYCERIN,route_indication/has_supported,4,C,1,0,1,,nitroglycerin
+Olmesartan Medoxomil,ARB,in catalogue,member,chembl_name,high,CHEMBL1200692,OLMESARTAN MEDOXOMIL,route_indication/has_supported,4,C,1,9,1,,olmesartan-medoxomil
+Papaverine,Vasodilator,in catalogue,member,chembl_name,high,CHEMBL19224,PAPAVERINE,route_indication/has_supported,3,AG,0,16,1,,papaverine
+Pentoxifylline,Cardiovascular,in catalogue,member,chembl_name,high,CHEMBL628,PENTOXIFYLLINE,seed_only/has_supported,4,C,2,3,1,,pentoxifylline
+Phenylephrine,Cardiovascular,in catalogue,member,chembl_name,high,CHEMBL1215,PHENYLEPHRINE,route_indication/has_supported,4,CRS,2,16,1,,phenylephrine
+Pioglitazone,Antidiabetic,in catalogue,member,chembl_name,high,CHEMBL595,PIOGLITAZONE,route_indication/has_supported,4,A,1,19,1,,pioglitazone
+Prazosin,Cardiovascular,in catalogue,member,chembl_name,high,CHEMBL2,PRAZOSIN,route_indication/has_supported,4,C,1,38,1,,prazosin
+Propranolol,Beta-Blocker,in catalogue,member,chembl_name,high,CHEMBL27,PROPRANOLOL,route_indication/has_supported,4,C,2,34,1,,propranolol
+Ramipril,Cardiovascular,in catalogue,member,chembl_name,high,CHEMBL1168,RAMIPRIL,route_indication/has_supported,4,C,1,2,1,,ramipril
+Risedronate Sodium,Bone,in catalogue,member,chembl_name,high,CHEMBL923,RISEDRONIC ACID,route_indication/has_supported,4,M,1,7,1,,risedronate-sodium
+Rivaroxaban,Anticoagulant,in catalogue,member,chembl_name,high,CHEMBL198362,RIVAROXABAN,route_indication/has_supported,4,B,1,5,1,,rivaroxaban
+Rosuvastatin,Statin,in catalogue,member,chembl_name,high,CHEMBL1496,ROSUVASTATIN,route_indication/has_supported,4,C,1,7,1,,rosuvastatin
+Sildenafil,PDE5,in catalogue,member,chembl_name,high,CHEMBL192,SILDENAFIL,route_indication/has_supported,4,G,1,31,1,,sildenafil
+Sitagliptin,Antidiabetic,in catalogue,member,chembl_name,high,CHEMBL1422,SITAGLIPTIN,route_indication/has_supported,4,A,3,10,1,,sitagliptin
+Tadalafil,PDE5,in catalogue,member,chembl_name,high,CHEMBL779,TADALAFIL,route_indication/has_supported,4,G,1,13,1,,tadalafil
+Tamsulosin,Cardiovascular,in catalogue,member,chembl_name,high,CHEMBL836,TAMSULOSIN,route_indication/has_supported,4,G,1,23,1,,tamsulosin
+Telmisartan,ARB,in catalogue,member,chembl_name,high,CHEMBL1017,TELMISARTAN,route_indication/has_supported,4,C,1,33,1,,telmisartan
+Torsemide,Diuretic,in catalogue,member,chembl_name,high,CHEMBL1148,TORSEMIDE,route_indication/has_supported,4,C,1,1,1,,torsemide
+Udenafil,Cardiovascular,in catalogue,member,chembl_name,high,CHEMBL2103849,UDENAFIL,route_indication/has_supported,3,G,1,1,1,,udenafil
+Valsartan,ARB,in catalogue,member,chembl_name,high,CHEMBL1069,VALSARTAN,route_indication/has_supported,4,C,1,6,1,,valsartan
+Vardenafil,PDE5,in catalogue,member,chembl_name,high,CHEMBL1520,VARDENAFIL,route_indication/has_supported,4,G,1,16,1,,vardenafil
+Verapamil,Cardiovascular,in catalogue,member,chembl_name,high,CHEMBL6966,VERAPAMIL,route_indication/has_supported,4,C,1,44,1,,verapamil
+Warfarin,Anticoagulant,in catalogue,member,chembl_name,high,CHEMBL1464,WARFARIN,route_indication/has_supported,4,B,2,5,1,,warfarin
+Acarbose,Antidiabetic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL404271,ACARBOSE,,4,A,2,14,0,,acarbose
+Acipimox,Cardiovascular,"ChEMBL, has target data",member,chembl_name,high,CHEMBL345714,ACIPIMOX,,4,C,1,1,1,,acipimox
+Amiodarone,Cardiovascular,"ChEMBL, has target data",,chembl_name,high,CHEMBL633,AMIODARONE,,4,C,1,47,1,,amiodarone
+Avasimibe,Lipid-Lowering,"ChEMBL, has target data",,chembl_name,high,CHEMBL101309,AVASIMIBE,,2,,0,5,0,,avasimibe
+Bempedoic Acid,Cardiovascular,"ChEMBL, has target data",,chembl_name,high,CHEMBL3545313,BEMPEDOIC ACID,,4,C,1,0,1,,bempedoic-acid
+Benidipine,Cardiovascular,"ChEMBL, has target data",,chembl_name,high,CHEMBL2074972,BENIDIPINE,,3,C,1,21,0,,benidipine
+Bisoprolol,Beta-Blocker,"ChEMBL, has target data",,chembl_name,high,CHEMBL645,BISOPROLOL,,4,C,1,4,1,,bisoprolol
+Brinzolamide,Diuretic,"ChEMBL, has target data",,chembl_name,high,CHEMBL220491,BRINZOLAMIDE,,4,S,1,29,1,,brinzolamide
+Canagliflozin,Antidiabetic,"ChEMBL, has target data",,chembl_name,high,CHEMBL2048484,CANAGLIFLOZIN ANHYDROUS,,4,A,1,10,1,,canagliflozin
+Candesartan,ARB,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1016,CANDESARTAN,,3,C,1,11,1,,candesartan
+Captopril,Cardiovascular,"ChEMBL, has target data",,chembl_name,high,CHEMBL1560,CAPTOPRIL,,4,C,1,18,1,,captopril
+Carvedilol,Beta-Blocker,"ChEMBL, has target data",member,chembl_name,high,CHEMBL723,CARVEDILOL,,4,C,4,50,1,,carvedilol
+Cilnidipine,Cardiovascular,"ChEMBL, has target data",,chembl_name,high,CHEMBL452076,CILNIDIPINE,,3,C,1,10,1,,cilnidipine
+Dapagliflozin,Antidiabetic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL429910,DAPAGLIFLOZIN,,4,A,2,5,1,,dapagliflozin
+Dorzolamide,Diuretic,"ChEMBL, has target data",,chembl_name,high,CHEMBL218490,DORZOLAMIDE,,4,S,1,34,1,,dorzolamide
+Doxazosin,Antihypertensive,"ChEMBL, has target data",member,chembl_name,high,CHEMBL707,DOXAZOSIN,,4,C,1,31,1,,doxazosin
+Empagliflozin,Antidiabetic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL2107830,EMPAGLIFLOZIN,,4,A,1,3,1,,empagliflozin
+Enalapril,Cardiovascular,"ChEMBL, has target data",member,chembl_name,high,CHEMBL578,ENALAPRIL,,4,C,1,3,1,,enalapril
+Ezetimibe,Cardiovascular,"ChEMBL, has target data",,chembl_name,high,CHEMBL1138,EZETIMIBE,,4,C,1,15,1,,ezetimibe
+Fenofibrate,Cardiovascular,"ChEMBL, has target data",member,chembl_name,high,CHEMBL672,FENOFIBRATE,,4,C,1,13,1,,fenofibrate
+Finerenone,Cardiovascular,"ChEMBL, has target data",,chembl_name,high,CHEMBL2181927,FINERENONE,,4,C,1,1,0,,finerenone
+Flecainide,Cardiovascular,"ChEMBL, has target data",member,chembl_name,high,CHEMBL652,FLECAINIDE,,4,C,1,8,1,,flecainide
+Furosemide,Diuretic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL35,FUROSEMIDE,,4,C,1,23,1,,furosemide
+Insulin Aspart,Insulin,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1201496,INSULIN ASPART,,4,A,1,0,0,,insulin-aspart
+Insulin Detemir,Insulin,"ChEMBL, has target data",,chembl_name,high,CHEMBL2104391,INSULIN DETEMIR,,4,A,1,0,0,,insulin-detemir
+Insulin Glargine,Insulin,"ChEMBL, has target data",,chembl_name,high,CHEMBL1201497,INSULIN GLARGINE,,4,A,1,0,1,,insulin-glargine
+Insulin Lispro,Insulin,"ChEMBL, has target data",,chembl_name,high,CHEMBL1201538,INSULIN LISPRO,,4,A,1,0,0,,insulin-lispro
+Nortadalafil,PDE5,"ChEMBL, has target data",,chembl_name,high,CHEMBL342008,NORTADALAFIL,,,,0,1,0,,nortadalafil
+Pindolol,Beta-Blocker,"ChEMBL, has target data",member,chembl_name,high,CHEMBL500,PINDOLOL,,4,C,2,11,1,,pindolol
+Pitavastatin,Statin,"ChEMBL, has target data",,chembl_name,high,CHEMBL1201753,PITAVASTATIN,,4,C,3,6,1,,pitavastatin
+Rilmenidine,Antihypertensive,"ChEMBL, has target data",,chembl_name,high,CHEMBL289480,RILMENIDINE,,4,C,1,8,1,,rilmenidine
+Riociguat,Cardiovascular,"ChEMBL, has target data",member,chembl_name,high,CHEMBL2107834,RIOCIGUAT,,4,C,1,2,1,,riociguat
+Saroglitazar,Cardiovascular,"ChEMBL, has target data",,chembl_name,high,CHEMBL4297530,SAROGLITAZAR,,3,,2,9,1,,saroglitazar
+Saxagliptin,Antidiabetic,"ChEMBL, has target data",,chembl_name,high,CHEMBL385517,SAXAGLIPTIN ANHYDROUS,,4,A,1,5,1,,saxagliptin
+Silodosin,Cardiovascular,"ChEMBL, has target data",member,chembl_name,high,CHEMBL24778,SILODOSIN,,4,G,1,14,1,,silodosin
+Spironolactone,Cardiovascular,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1393,SPIRONOLACTONE,,4,C,1,14,1,,spironolactone
+Terazosin,Cardiovascular,"ChEMBL, has target data",member,chembl_name,high,CHEMBL611,TERAZOSIN,,4,G,1,20,1,,terazosin
+Timolol,Beta-Blocker,"ChEMBL, has target data",member,chembl_name,high,CHEMBL499,TIMOLOL,,4,CS,4,8,1,,timolol
+Trimetazidine,Cardiovascular,"ChEMBL, has target data",member,chembl_name,high,CHEMBL203266,TRIMETAZIDINE,,4,C,0,5,0,,trimetazidine
+Tyra-300,Bone,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL5595500,,,,,0,11,0,,tyra-300
+Vildagliptin,Antidiabetic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL142703,VILDAGLIPTIN,,4,A,1,8,1,,vildagliptin
+Voglibose,Antidiabetic,"ChEMBL, has target data",,chembl_name,high,CHEMBL476960,VOGLIBOSE,,4,A,1,5,0,,voglibose
+Acetergamine,Vasodilator,"ChEMBL, no target data",,chembl_name,high,CHEMBL3989419,ACETERGAMINE,,2,,0,0,0,,acetergamine
+Alagebrium,Cardiovascular,"ChEMBL, no target data",,chembl_name,high,CHEMBL2111081,ALAGEBRIUM,,2,,0,0,0,,alagebrium
+Alifedrine,Cardiovascular,"ChEMBL, no target data",,chembl_name,high,CHEMBL2104023,ALIFEDRINE,,2,,0,0,0,,alifedrine
+Aminotadalafil,PDE5,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL1774619,,,,,0,0,0,,aminotadalafil
+Atiprosin,Antihypertensive,"ChEMBL, no target data",,chembl_name,high,CHEMBL2111172,ATIPROSIN,,2,,0,0,0,,atiprosin
+Enoxaparin,Anticoagulant,"ChEMBL, no target data",,chembl_name,high,CHEMBL1201685,ENOXAPARIN,,,,0,0,0,,enoxaparin
+Mirodenafil,PDE5,"ChEMBL, no target data",,chembl_name,high,CHEMBL4297518,MIRODENAFIL,,2,,0,0,1,,mirodenafil
+Proroxan,Antihypertensive,"ChEMBL, no target data",,chembl_name,high,CHEMBL1395610,PROROXAN,,2,,0,0,0,,proroxan
+S107,Cardiovascular,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL2440854,,,,,0,0,0,,s107
+Sulodexide,Anticoagulant,"ChEMBL, no target data",member,chembl_name,high,CHEMBL2108086,SULODEXIDE,,3,B,0,0,0,,sulodexide
+Acetildenafil,PDE5,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII TP0E2BW57H,acetildenafil
+Hericenone B,Cardiovascular,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,hericenone-b
+N-Ethyl Tadalafil,PDE5,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII LZ3D5U624B,n-ethyl-tadalafil
+Red Yeast Rice,Statin,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII 43CAU2Q6DY,red-yeast-rice
+Adrenaline (Epinephrine),Cardiovascular,unidentified,,no_match,,,,,,,,,,,adrenaline-epinephrine
+ATR-258,Antidiabetic,unidentified,,no_match,,,,,,,,,,,atr-258
+Horny Goat Weed (Epimedium),PDE5,unidentified,,no_match,,,,,,,,,,,horny-goat-weed-epimedium
+Insulin Human (30/70 Biphasic),Insulin,unidentified,,no_match,,,,,,,,,,,insulin-human-30-70-biphasic
+Insulin Isophane (NPH),Insulin,unidentified,,no_match,,,,,,,,,,,insulin-isophane-nph
+N-Isopropyl Tadalafil,PDE5,unidentified,,no_match,,,,,,,,,,,n-isopropyl-tadalafil

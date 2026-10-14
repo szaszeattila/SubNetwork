@@ -1,0 +1,120 @@
+name,wiki_class,column,with_d21,match_tier,confidence,chembl_parents,chembl_names,catalogue_status,max_phase,atc_level1,curated_mechanisms,publication_targets,gtopdb,note,slug
+Aciclovir,Antiviral,in catalogue,member,chembl_synonym,medium,CHEMBL184,ACYCLOVIR,route_indication/has_supported,4,DJS,2,4,1,,aciclovir
+Albendazole,Antiparasitic,in catalogue,member,chembl_name,high,CHEMBL1483,ALBENDAZOLE,route_indication/has_supported_broader_only,4,P,2,1,0,,albendazole
+Amoxicillin,Antibiotic,in catalogue,member,chembl_name,high,CHEMBL1082,AMOXICILLIN,route_indication/has_supported_broader_only,4,J,1,5,1,,amoxicillin
+Azathioprine,Immunosuppressant,in catalogue,member,chembl_name,high,CHEMBL1542,AZATHIOPRINE,route_indication/has_supported,4,L,4,2,1,,azathioprine
+Azithromycin,Antibiotic,in catalogue,member,chembl_name,high,CHEMBL529,AZITHROMYCIN,route_indication/has_preliminary,4,JS,1,0,1,,azithromycin
+Bevacizumab,Antineoplastic,in catalogue,member,chembl_name,high,CHEMBL1201583,BEVACIZUMAB,route_indication/has_supported,4,LS,1,0,0,,bevacizumab
+Ceftriaxone,Antibiotic,in catalogue,member,chembl_name,high,CHEMBL161,CEFTRIAXONE,route_indication/has_supported_broader_only,4,J,1,10,1,,ceftriaxone
+Clindamycin,Antibiotic,in catalogue,member,chembl_name,high,CHEMBL1753,CLINDAMYCIN,route_indication/has_preliminary,4,DGJ,1,2,1,,clindamycin
+Dexamethasone,Corticosteroid,in catalogue,member,chembl_name,high,CHEMBL384467,DEXAMETHASONE,route_indication/has_supported,4,ACDHRS,1,12,1,,dexamethasone
+Doxycycline,Antibiotic,in catalogue,member,chembl_name,high,CHEMBL1433,DOXYCYCLINE ANHYDROUS,route_indication/has_supported,4,AJ,14,7,1,,doxycycline
+Everolimus,Immunomodulator,in catalogue,member,chembl_name,high,CHEMBL1908360,EVEROLIMUS,route_indication/has_supported,4,L,1,5,1,,everolimus
+Fluconazole,Antifungal,in catalogue,member,chembl_name,high,CHEMBL106,FLUCONAZOLE,route_indication/has_supported,4,DJ,1,14,0,,fluconazole
+Hydroxychloroquine Sulfate,Antiparasitic,in catalogue,member,chembl_name,high,CHEMBL1535,HYDROXYCHLOROQUINE,route_indication/has_supported,4,P,3,6,1,,hydroxychloroquine-sulfate
+Inosine pranobex,Immunomodulator,in catalogue,member,chembl_name,high,CHEMBL1556,INOSINE,route_indication/has_preliminary,3,DGJS,0,0,1,,inosine-pranobex
+Methotrexate,Antineoplastic,in catalogue,member,chembl_name,high,CHEMBL34259,METHOTREXATE,route_indication/has_supported,4,L,2,31,1,,methotrexate
+Methylprednisolone,Corticosteroid,in catalogue,member,chembl_name,high,CHEMBL650,METHYLPREDNISOLONE,route_indication/has_supported,4,DH,1,7,1,,methylprednisolone
+Metronidazole,Antibiotic,in catalogue,member,chembl_name,high,CHEMBL137,METRONIDAZOLE,route_indication/has_preliminary,4,ADGJP,2,1,1,,metronidazole
+Minocycline,Antibiotic,in catalogue,member,chembl_name,high,CHEMBL1434,MINOCYCLINE,route_indication/has_preliminary,4,ADJ,1,4,0,,minocycline
+Mometasone Furoate,Corticosteroid,in catalogue,member,chembl_name,high,CHEMBL1161,MOMETASONE FUROATE,route_indication/has_supported,4,DR,1,8,0,,mometasone-furoate
+Moxifloxacin,Antibiotic,in catalogue,member,chembl_name,high,CHEMBL32,MOXIFLOXACIN,route_indication/has_supported,4,JS,2,6,1,,moxifloxacin
+Nitazoxanide,Antiparasitic,in catalogue,member,chembl_name,high,CHEMBL1401,NITAZOXANIDE,route_indication/has_supported_broader_only,4,P,2,47,0,,nitazoxanide
+Nitric Oxide,Antiviral,in catalogue,member,chembl_name,high,CHEMBL1200689,NITRIC OXIDE,route_indication/has_supported,4,R,1,0,0,,nitric-oxide
+Nystatin,Antifungal,in catalogue,member,chembl_name,high,CHEMBL5465559,NYSTATIN,route_indication/has_preliminary,4,ADG,1,2,0,,nystatin
+Paclitaxel,Antineoplastic,in catalogue,member,chembl_name,high,CHEMBL428647,PACLITAXEL,route_indication/has_supported,4,L,1,12,1,,paclitaxel
+Prednisolone,Corticosteroid,in catalogue,member,chembl_name,high,CHEMBL131,PREDNISOLONE,route_indication/has_supported,4,ACDHRS,1,11,1,,prednisolone
+Rapamycin,Immunomodulator,in catalogue,member,chembl_synonym,medium,CHEMBL413,SIROLIMUS,route_indication/has_supported,4,LS,1,29,1,,rapamycin
+Ribavirin,Antiviral,in catalogue,member,chembl_name,high,CHEMBL1643,RIBAVIRIN,route_indication/has_supported,4,J,3,5,1,,ribavirin
+Rifaximin,Antibiotic,in catalogue,member,chembl_name,high,CHEMBL1617,RIFAXIMIN,route_indication/has_supported,4,AD,1,34,1,,rifaximin
+Tacrolimus,Immunomodulator,in catalogue,member,chembl_name,high,CHEMBL269732,TACROLIMUS ANHYDROUS,route_indication/has_supported,4,DL,1,24,1,,tacrolimus
+Triamcinolone,Corticosteroid,in catalogue,member,chembl_name,high,CHEMBL1451,TRIAMCINOLONE,route_indication/has_supported,4,ACDHRS,1,4,1,,triamcinolone
+Triamcinolone Acetonide,Corticosteroid,in catalogue,member,chembl_name,high,CHEMBL1504,TRIAMCINOLONE ACETONIDE,route_indication/has_supported,4,,1,3,1,,triamcinolone-acetonide
+Valacyclovir,Antiviral,in catalogue,member,chembl_name,high,CHEMBL1349,VALACYCLOVIR,route_indication/has_supported,4,J,1,0,1,,valacyclovir
+Voriconazole,Antifungal,in catalogue,member,chembl_name,high,CHEMBL638,VORICONAZOLE,route_indication/has_supported_broader_only,4,J,1,8,0,,voriconazole
+Acediasulfone,Antibacterial,"ChEMBL, has target data",,chembl_name,high,CHEMBL48396,ACEDIASULFONE,,2,,0,2,0,,acediasulfone
+Adecatumumab,Antineoplastic,"ChEMBL, has target data",,chembl_name,high,CHEMBL2108018,ADECATUMUMAB,,2,,1,0,0,,adecatumumab
+Alisertib,Antineoplastic,"ChEMBL, has target data",,chembl_name,high,CHEMBL483158,ALISERTIB,,3,,1,20,1,,alisertib
+Alovudine,Antiviral,"ChEMBL, has target data",,chembl_name,high,CHEMBL105318,ALOVUDINE,,2,,0,1,0,,alovudine
+Amlexanox,Immunomodulator,"ChEMBL, has target data",,chembl_name,high,CHEMBL1096,AMLEXANOX,,4,AR,1,11,1,,amlexanox
+Apremilast,Immunomodulator,"ChEMBL, has target data",member,chembl_name,high,CHEMBL514800,APREMILAST,,4,L,1,3,1,,apremilast
+Atevirdine,Antiviral,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL280527,ATEVIRDINE MESYLATE,,2,,1,2,0,,atevirdine
+Axitinib,Antineoplastic,"ChEMBL, has target data",,chembl_name,high,CHEMBL1289926,AXITINIB,,4,L,1,108,1,,axitinib
+Azoximer Bromide,Immunomodulator,"ChEMBL, has target data",,chembl_name,high,CHEMBL4650378,AZOXIMER BROMIDE,,2,,1,0,0,,azoximer-bromide
+Bafetinib,Antineoplastic,"ChEMBL, has target data",,chembl_name,high,CHEMBL206834,BAFETINIB,,2,,2,32,1,,bafetinib
+Betamethasone,Corticosteroid,"ChEMBL, has target data",member,chembl_name,high,CHEMBL632,BETAMETHASONE,,4,ACDHRS,1,2,1,,betamethasone
+Cefixime,Antibiotic,"ChEMBL, has target data",,chembl_name,high,CHEMBL1541,CEFIXIME,,4,J,1,1,1,,cefixime
+Cefotaxime,Antibiotic,"ChEMBL, has target data",,chembl_name,high,CHEMBL1730,CEFOTAXIME,,4,J,1,9,1,,cefotaxime
+Cefpodoxime,Antibiotic,"ChEMBL, has target data",,chembl_name,high,CHEMBL1672,CEFPODOXIME,,4,J,1,2,1,,cefpodoxime
+Cephalexin,Antibiotic,"ChEMBL, has target data",,chembl_name,high,CHEMBL1727,CEPHALEXIN ANHYDROUS,,4,J,2,4,1,,cephalexin
+Ciclosporin,Immunosuppressant,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL160,CYCLOSPORINE,,4,LS,1,40,1,,ciclosporin
+Ciprofloxacin,Antibiotic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL8,CIPROFLOXACIN,,4,JS,4,7,1,,ciprofloxacin
+Clarithromycin,Antibiotic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1741,CLARITHROMYCIN,,4,J,1,6,1,,clarithromycin
+Clobetasol propionate,Corticosteroid,"ChEMBL, has target data",,chembl_name,high,CHEMBL1159650,CLOBETASOL PROPIONATE,,4,D,1,11,1,,clobetasol-propionate
+Dapansutrile,Immunomodulator,"ChEMBL, has target data",,chembl_name,high,CHEMBL3989943,DAPANSUTRILE,,2,,1,2,1,,dapansutrile
+Entecavir,Antiviral,"ChEMBL, has target data",,chembl_name,high,CHEMBL713,ENTECAVIR ANHYDROUS,,4,J,1,1,0,,entecavir
+Erdafitinib,Antineoplastic,"ChEMBL, has target data",,chembl_name,high,CHEMBL3545376,ERDAFITINIB,,4,L,1,16,0,,erdafitinib
+Erythromycin,Antibiotic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL532,ERYTHROMYCIN,,4,DJS,4,13,1,,erythromycin
+Famciclovir,Antiviral,"ChEMBL, has target data",member,chembl_name,high,CHEMBL880,FAMCICLOVIR,,4,JS,1,1,1,,famciclovir
+Fenbendazole,Antiparasitic,"ChEMBL, has target data",,chembl_name,high,CHEMBL37161,FENBENDAZOLE,,2,P,2,2,0,,fenbendazole
+Fludrocortisone,Corticosteroid,"ChEMBL, has target data",,chembl_name,high,CHEMBL1201388,FLUDROCORTISONE,,2,,0,2,1,,fludrocortisone
+Fosfomycin,Antibiotic,"ChEMBL, has target data",,chembl_name,high,CHEMBL1757,FOSFOMYCIN,,4,JS,1,2,1,,fosfomycin
+Hydrocortisone Acetate,Corticosteroid,"ChEMBL, has target data",,chembl_name,high,CHEMBL1091,HYDROCORTISONE ACETATE,,4,,1,4,0,,hydrocortisone-acetate
+Imiquimod,Antiviral,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1282,IMIQUIMOD,,4,D,1,8,1,,imiquimod
+Interferon alfa-2b,Immunomodulator,"ChEMBL, has target data",,chembl_name,high,CHEMBL1201558,INTERFERON ALFA-2B,,4,L,1,0,0,,interferon-alfa-2b
+Interferon Gamma,Immunomodulator,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL1201564,INTERFERON GAMMA-1B,,4,L,1,0,0,,interferon-gamma
+Itraconazole,Antifungal,"ChEMBL, has target data",member,chembl_name,high,CHEMBL64391,ITRACONAZOLE,,4,J,1,15,0,,itraconazole
+Ivermectin,Antiparasitic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL6067487,IVERMECTIN,,4,DP,2,11,0,,ivermectin
+Ketoconazole,Antifungal,"ChEMBL, has target data",member,chembl_name,high,CHEMBL157101,KETOCONAZOLE,,4,DGHJ,1,55,1,,ketoconazole
+Lenalidomide,Antineoplastic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL848,LENALIDOMIDE,,4,L,2,4,1,,lenalidomide
+Lenvatinib,Antineoplastic,"ChEMBL, has target data",,chembl_name,high,CHEMBL1289601,LENVATINIB,,4,L,1,37,1,,lenvatinib
+Levofloxacin,Antibiotic,"ChEMBL, has target data",,chembl_name,high,CHEMBL33,LEVOFLOXACIN ANHYDROUS,,4,JS,2,2,1,,levofloxacin
+MCC950,Immunomodulator,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL3183703,,,,,0,3,1,,mcc950
+Mebendazole,Antiparasitic,"ChEMBL, has target data",,chembl_name,high,CHEMBL685,MEBENDAZOLE,,4,P,2,4,1,,mebendazole
+Methyluracil,Immunomodulator,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL1650614,,,,,0,1,0,,methyluracil
+Midecamycin,Antibiotic,"ChEMBL, has target data",,chembl_name,high,CHEMBL444963,MIDECAMYCIN,,2,J,0,1,1,,midecamycin
+Mupirocin,Antibiotic,"ChEMBL, has target data",,chembl_name,high,CHEMBL719,MUPIROCIN,,4,DR,4,4,1,,mupirocin
+Nitrofurantoin,Antibiotic,"ChEMBL, has target data",,chembl_name,high,CHEMBL572,NITROFURANTOIN,,4,J,2,3,1,,nitrofurantoin
+Nitroxoline,Antibiotic,"ChEMBL, has target data",,chembl_name,high,CHEMBL1454910,NITROXOLINE,,4,J,0,19,1,,nitroxoline
+Norfloxacin,Antibiotic,"ChEMBL, has target data",,chembl_name,high,CHEMBL9,NORFLOXACIN,,4,JS,2,4,1,,norfloxacin
+Oclacitinib,Immunomodulator,"ChEMBL, has target data",,chembl_name,high,CHEMBL2103874,OCLACITINIB,,2,,1,4,1,,oclacitinib
+Ofloxacin,Antibiotic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL4,OFLOXACIN,,4,JS,1,2,1,,ofloxacin
+Omalizumab,Monoclonal Antibody,"ChEMBL, has target data",,chembl_name,high,CHEMBL1201589,OMALIZUMAB,,4,R,1,0,0,,omalizumab
+Oseltamivir,Antiviral,"ChEMBL, has target data",,chembl_name,high,CHEMBL1229,OSELTAMIVIR,,4,J,2,11,1,,oseltamivir
+Oxaliplatin,Antineoplastic,"ChEMBL, has target data",,chembl_name,high,CHEMBL414804,OXALIPLATIN,,4,L,1,0,1,,oxaliplatin
+Palbociclib,Antineoplastic,"ChEMBL, has target data",,chembl_name,high,CHEMBL189963,PALBOCICLIB,,4,L,2,45,1,,palbociclib
+Penicillin G,Antibiotic,"ChEMBL, has target data",,chembl_name,high,CHEMBL29,PENICILLIN G,,4,JS,3,6,1,,penicillin-g
+Pimecrolimus,Immunomodulator,"ChEMBL, has target data",,chembl_name,high,CHEMBL1200686,PIMECROLIMUS,,4,D,1,2,1,,pimecrolimus
+Praziquantel,Antiparasitic,"ChEMBL, has target data",,chembl_name,high,CHEMBL976,PRAZIQUANTEL,,4,P,2,2,0,,praziquantel
+Rimantadine,Antiviral,"ChEMBL, has target data",,chembl_name,high,CHEMBL959,RIMANTADINE,,4,J,1,5,0,,rimantadine
+Sorafenib,Antineoplastic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1336,SORAFENIB,,4,L,7,149,1,,sorafenib
+Sulfacetamide,Antibiotic,"ChEMBL, has target data",,chembl_name,high,CHEMBL455,SULFACETAMIDE,,4,DS,2,2,1,,sulfacetamide
+Sunitinib,Antineoplastic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL535,SUNITINIB,,4,L,15,337,1,,sunitinib
+Tenofovir Disoproxil Fumarate,Antiviral,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1538,TENOFOVIR DISOPROXIL,,4,J,5,1,0,,tenofovir-disoproxil-fumarate
+Terbinafine,Antifungal,"ChEMBL, has target data",,chembl_name,high,CHEMBL822,TERBINAFINE,,4,D,2,2,0,,terbinafine
+Tetracycline,Antibiotic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1440,TETRACYCLINE,,4,ADJS,3,5,0,,tetracycline
+Thymopentin,Immunomodulator,"ChEMBL, has target data",,chembl_name,high,CHEMBL156025,THYMOPENTIN,,3,L,0,1,0,,thymopentin
+Tilorone,Antiviral,"ChEMBL, has target data",,chembl_name,high,CHEMBL47298,TILORONE,,2,J,0,2,0,,tilorone
+Tobramycin,Antibiotic,"ChEMBL, has target data",,chembl_name,high,CHEMBL1747,TOBRAMYCIN,,4,JS,2,2,1,,tobramycin
+Tofacitinib,Immunomodulator,"ChEMBL, has target data",member,chembl_name,high,CHEMBL221959,TOFACITINIB,,4,L,1,47,1,,tofacitinib
+Umifenovir,Antiviral,"ChEMBL, has target data",,chembl_name,high,CHEMBL1214598,UMIFENOVIR,,3,J,1,20,1,,umifenovir
+Zidesamtinib,Antineoplastic,"ChEMBL, has target data",,chembl_name,high,CHEMBL5314497,ZIDESAMTINIB,,2,,0,1,0,,zidesamtinib
+Acivicin,Antineoplastic,"ChEMBL, no target data",,chembl_name,high,CHEMBL1231101,ACIVICIN,,2,,0,0,1,,acivicin
+Alestramustine,Antineoplastic,"ChEMBL, no target data",,chembl_name,high,CHEMBL2106670,ALESTRAMUSTINE,,2,,0,0,0,,alestramustine
+Atrimustine,Antineoplastic,"ChEMBL, no target data",,chembl_name,high,CHEMBL2106381,ATRIMUSTINE,,2,,0,0,0,,atrimustine
+Methylprednisolone aceponate,Corticosteroid,"ChEMBL, no target data",,chembl_name,high,CHEMBL1697782,METHYLPREDNISOLONE ACEPONATE,,2,D,0,0,0,,methylprednisolone-aceponate
+Monolaurin,Antiviral,"ChEMBL, no target data",,chembl_synonym,medium,CHEMBL6068618,GLYCERYL LAURATE,,0.5,,0,0,0,,monolaurin
+Riamilovir,Antiviral,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL1618116,,,,,0,0,1,,riamilovir
+Vusolimogene oderparepvec,Antineoplastic,"ChEMBL, no target data",,chembl_name,high,CHEMBL4650271,VUSOLIMOGENE ODERPAREPVEC,,3,,0,0,0,,vusolimogene-oderparepvec
+Glucosaminylmuramyl Dipeptide,Immunomodulator,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,glucosaminylmuramyl-dipeptide
+Broncho-Munal,Immunomodulator,unidentified,,no_match,,,,,,,,,,,broncho-munal
+Derinat,Immunomodulator,unidentified,,no_match,,,,,,,,,,,derinat
+Diphtheria and Tetanus Toxoid (adsorbed),Immunomodulator,unidentified,,no_match,,,,,,,,,,,diphtheria-and-tetanus-toxoid-adsorbed
+Grippferon,Immunomodulator,unidentified,,no_match,,,,,,,,,,,grippferon
+Hydrocortisone (Topical),Corticosteroid,unidentified,,no_match,,,,,,,,,,,hydrocortisone-topical
+Imudon,Immunomodulator,unidentified,,no_match,,,,,,,,,,,imudon
+KCF-18,Immunomodulator,unidentified,,no_match,,,,,,,,,,,kcf-18
+Meglumine acridonacetate,Immunomodulator,unidentified,,no_match,,,,,,,,,,,meglumine-acridonacetate
+Staphylococcal Toxoid,Immunomodulator,unidentified,,no_match,,,,,,,,,,,staphylococcal-toxoid
+Uro-Vaxom,Immunomodulator,unidentified,,no_match,,,,,,,,,,,uro-vaxom
+Vitagerpavac,Immunomodulator,unidentified,,no_match,,,,,,,,,,,vitagerpavac

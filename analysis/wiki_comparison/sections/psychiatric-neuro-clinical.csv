@@ -1,0 +1,353 @@
+name,wiki_class,column,with_d21,match_tier,confidence,chembl_parents,chembl_names,catalogue_status,max_phase,atc_level1,curated_mechanisms,publication_targets,gtopdb,note,slug
+Acepromazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL39560,ACEPROMAZINE,route_atc_n/has_preliminary,2,N,0,15,0,,acepromazine
+Acetophenazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL1085,ACETOPHENAZINE,both_routes/has_supported,4,N,1,20,0,,acetophenazine
+Afobazole,Sigma-1 Agonist,in catalogue,member,chembl_synonym,medium,CHEMBL3707307,FABOMOTIZOLE,both_routes/no_eligible_evidence,3,N,0,0,0,,afobazole
+AGN-1135,MAOI,in catalogue,member,chembl_synonym,medium,CHEMBL887,RASAGILINE,both_routes/has_supported,4,N,2,10,1,,agn-1135
+Agomelatine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL10878,AGOMELATINE,both_routes/has_supported,4,N,2,4,1,,agomelatine
+Alaproclate,SSRI,in catalogue,member,chembl_name,high,CHEMBL36591,ALAPROCLATE,route_atc_n/has_preliminary,2,N,0,1,0,,alaproclate
+Alfaxalone,Anesthetic,in catalogue,member,chembl_name,high,CHEMBL190279,ALFAXALONE,route_atc_n/has_supported_broader_only,2,N,0,0,1,,alfaxalone
+Allopregnanolone,Neurosteroid,in catalogue,member,chembl_synonym,medium,CHEMBL207538,BREXANOLONE,both_routes/has_supported,4,N,1,1,1,,allopregnanolone
+Alprazolam,Benzodiazepine,in catalogue,member,chembl_name,high,CHEMBL661,ALPRAZOLAM,both_routes/has_supported,4,N,1,10,1,,alprazolam
+Amibegron,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL1193948,AMIBEGRON,route_indication/has_supported,3,,1,0,1,,amibegron
+Amineptine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL418995,AMINEPTINE,both_routes/has_preliminary,4,N,1,3,0,,amineptine
+Amisulpride,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL243712,AMISULPRIDE,both_routes/has_supported,4,N,2,12,1,,amisulpride
+Amitriptyline,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL629,AMITRIPTYLINE,both_routes/has_supported,4,N,2,47,1,,amitriptyline
+Amoxapine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL1113,AMOXAPINE,both_routes/has_supported,4,N,3,37,1,,amoxapine
+Aripiprazole,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL1112,ARIPIPRAZOLE,both_routes/has_supported,4,N,3,61,1,,aripiprazole
+Asenapine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL3187365,ASENAPINE,both_routes/has_supported,4,N,3,24,0,,asenapine
+Aticaprant,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL1921847,ATICAPRANT,route_indication/has_supported,3,,1,3,1,,aticaprant
+Benperidol,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL297302,BENPERIDOL,both_routes/has_supported,4,N,1,27,1,,benperidol
+Bifemelane,MAOI,in catalogue,member,chembl_name,high,CHEMBL1192517,BIFEMELANE,route_atc_n/has_preliminary,2,N,0,1,1,,bifemelane
+Blonanserin,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL178803,BLONANSERIN,route_indication/has_supported,4,,3,2,1,,blonanserin
+Brexanolone,Neurosteroid,in catalogue,member,chembl_name,high,CHEMBL207538,BREXANOLONE,both_routes/has_supported,4,N,1,1,1,,brexanolone
+Brexpiprazole,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL2105760,BREXPIPRAZOLE,both_routes/has_supported,4,N,3,7,1,,brexpiprazole
+Brilaroxazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL5095172,BRILAROXAZINE,route_indication/has_preliminary,3,,0,0,0,,brilaroxazine
+Bromazepam,Benzodiazepine,in catalogue,member,chembl_name,high,CHEMBL277062,BROMAZEPAM,both_routes/has_supported,4,N,1,2,0,,bromazepam
+Bromperidol,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL28218,BROMPERIDOL,both_routes/has_supported,4,N,1,21,0,,bromperidol
+Bupivacaine,Anesthetic,in catalogue,member,chembl_name,high,CHEMBL1098,BUPIVACAINE,both_routes/has_supported,4,N,2,4,1,,bupivacaine
+Buprenorphine,Opioid,in catalogue,member,chembl_name,high,CHEMBL511142,BUPRENORPHINE,both_routes/has_supported,4,N,4,10,0,,buprenorphine
+Bupropion,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL894,BUPROPION,both_routes/has_supported,4,N,4,7,1,,bupropion
+Butaperazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL1697826,BUTAPERAZINE,route_atc_n/no_eligible_evidence,2,N,0,0,0,,butaperazine
+Butriptyline,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL2110816,BUTRIPTYLINE,both_routes/has_preliminary,4,N,1,11,0,,butriptyline
+Cariprazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL2028019,CARIPRAZINE,both_routes/has_supported,4,N,2,20,1,,cariprazine
+Carisoprodol,Muscle Relaxant,in catalogue,member,chembl_name,high,CHEMBL1233,CARISOPRODOL,route_indication/has_preliminary,4,M,1,1,1,,carisoprodol
+Cetirizine,Antihistamine,in catalogue,member,chembl_name,high,CHEMBL1000,CETIRIZINE,route_indication/has_supported,4,RS,1,10,1,,cetirizine
+Chlordiazepoxide,Benzodiazepine,in catalogue,member,chembl_name,high,CHEMBL451,CHLORDIAZEPOXIDE,both_routes/has_supported,4,N,2,8,1,,chlordiazepoxide
+Chlorproethazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL52125,CHLORPROETHAZINE,route_atc_n/no_eligible_evidence,2,N,0,0,0,,chlorproethazine
+Chlorpromazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL71,CHLORPROMAZINE,both_routes/has_supported,4,N,4,67,1,,chlorpromazine
+Chlorprothixene,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL908,CHLORPROTHIXENE,both_routes/has_supported,4,N,4,31,1,,chlorprothixene
+Citalopram,SSRI,in catalogue,member,chembl_name,high,CHEMBL549,CITALOPRAM,both_routes/has_supported,4,N,1,27,1,,citalopram
+Citramon P,Analgesic,in catalogue,member,pubchem_inchikey,low,CHEMBL112,ACETAMINOPHEN,both_routes/has_supported,4,N,3,18,1,,citramon-p
+Clemastine,Antihistamine,in catalogue,member,chembl_name,high,CHEMBL1626,CLEMASTINE,route_indication/has_supported,4,DR,1,30,1,,clemastine
+Clobazam,Benzodiazepine,in catalogue,member,chembl_name,high,CHEMBL70418,CLOBAZAM,both_routes/has_supported,4,N,1,3,1,,clobazam
+Clomipramine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL415,CLOMIPRAMINE,both_routes/has_supported,4,N,1,45,1,,clomipramine
+Clonazepam,Benzodiazepine,in catalogue,member,chembl_name,high,CHEMBL452,CLONAZEPAM,both_routes/has_supported,4,N,1,3,1,,clonazepam
+Clopenthixol,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL3989892,CLOPENTHIXOL,route_atc_n/no_eligible_evidence,2,N,0,0,0,,clopenthixol
+Clorazepate,Benzodiazepine,in catalogue,member,chembl_synonym,medium,CHEMBL1213252,CLORAZEPIC ACID,both_routes/has_supported,4,N,1,0,1,,clorazepate
+Clotiapine,Antipsychotic,in catalogue,member,chembl_synonym,medium,CHEMBL304902,CLOTHIAPINE,both_routes/has_supported,2,N,3,24,0,,clotiapine
+Clozapine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL42,CLOZAPINE,both_routes/has_supported,4,N,2,82,1,,clozapine
+Codeine,Opioid,in catalogue,member,chembl_name,high,CHEMBL485,CODEINE,both_routes/has_supported,4,NR,3,7,1,,codeine
+Cyamemazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL2104153,CYAMEMAZINE,route_atc_n/no_eligible_evidence,2,N,0,0,1,,cyamemazine
+Cyclobenzaprine,Muscle Relaxant,in catalogue,member,chembl_name,high,CHEMBL669,CYCLOBENZAPRINE,route_indication/has_supported,4,M,2,17,1,,cyclobenzaprine
+Dapoxetine,SSRI,in catalogue,member,chembl_name,high,CHEMBL2110900,DAPOXETINE,route_indication/has_supported,3,G,1,0,1,,dapoxetine
+Desipramine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL72,DESIPRAMINE,both_routes/has_supported,4,N,1,39,1,,desipramine
+Desloratadine,Antihistamine,in catalogue,member,chembl_name,high,CHEMBL1172,DESLORATADINE,route_indication/has_supported,4,R,1,27,1,,desloratadine
+Desvenlafaxine,SNRI,in catalogue,member,chembl_name,high,CHEMBL1118,DESVENLAFAXINE,both_routes/has_supported,4,N,6,7,1,,desvenlafaxine
+DHEA,Neurosteroid,in catalogue,member,chembl_synonym,low,CHEMBL90593,PRASTERONE,route_indication/has_supported,4,AG,1,6,1,,dhea
+Dibenzepin,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL1442422,DIBENZEPIN,both_routes/has_supported,4,N,2,14,0,,dibenzepin
+Dimetacrine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL1328913,DIMETACRINE,route_atc_n/has_preliminary,2,N,0,1,0,,dimetacrine
+Dixyrazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL3275586,DIXYRAZINE,route_atc_n/no_eligible_evidence,-1,N,0,0,0,,dixyrazine
+Dosulepin,Antidepressant,in catalogue,member,chembl_synonym,medium,CHEMBL1492500,DOTHIEPIN,both_routes/has_supported,4,N,2,21,0,,dosulepin
+Doxepin,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL1628227,DOXEPIN,both_routes/has_supported,4,DN,2,30,0,,doxepin
+Droperidol,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL1108,DROPERIDOL,both_routes/has_supported,4,N,2,3,1,,droperidol
+Duloxetine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL1175,DULOXETINE,both_routes/has_supported,4,N,2,38,1,,duloxetine
+Escitalopram,SSRI,in catalogue,member,chembl_name,high,CHEMBL1508,ESCITALOPRAM,both_routes/has_supported,4,N,1,13,1,,escitalopram
+Esmethadone,NMDA Modulator,in catalogue,member,chembl_name,high,CHEMBL350719,ESMETHADONE,route_indication/has_preliminary,3,,0,1,0,,esmethadone
+Esmirtazapine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL1366933,ESMIRTAZAPINE,route_indication/has_supported,3,,4,0,0,,esmirtazapine
+Estazolam,Benzodiazepine,in catalogue,member,chembl_name,high,CHEMBL285674,ESTAZOLAM,both_routes/has_supported,4,N,1,3,1,,estazolam
+Eszopiclone,Hypnotic,in catalogue,member,chembl_name,high,CHEMBL1522,ESZOPICLONE,both_routes/has_supported,4,N,1,2,1,,eszopiclone
+Etizolam,Benzodiazepine,in catalogue,member,chembl_name,high,CHEMBL1289779,ETIZOLAM,route_atc_n/has_preliminary,2,N,0,3,0,,etizolam
+Etoperidone,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL1743259,ETOPERIDONE,route_atc_n/no_eligible_evidence,2,N,0,0,0,,etoperidone
+Fenfluramine,Anticonvulsant,in catalogue,member,chembl_name,high,CHEMBL87493,FENFLURAMINE,both_routes/has_supported,4,AN,3,9,1,,fenfluramine
+Fentanyl,Opioid,in catalogue,member,chembl_name,high,CHEMBL596,FENTANYL,both_routes/has_supported,4,N,3,29,1,,fentanyl
+Fluanisone,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL58792,FLUANISONE,route_atc_n/has_supported_broader_only,2,N,0,2,0,,fluanisone
+Flunitrazepam,Benzodiazepine,in catalogue,member,chembl_name,high,CHEMBL13280,FLUNITRAZEPAM,route_atc_n/has_supported,4,N,1,7,1,,flunitrazepam
+Fluoxetine,SSRI,in catalogue,member,chembl_name,high,CHEMBL41,FLUOXETINE,both_routes/has_supported,4,N,1,43,1,,fluoxetine
+Flupentixol,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL6066864,FLUPENTIXOL,both_routes/has_preliminary,3,N,0,23,0,,flupentixol
+Fluphenazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL726,FLUPHENAZINE,both_routes/has_supported,4,N,1,34,1,,fluphenazine
+Flupirtine,Analgesic,in catalogue,member,chembl_name,high,CHEMBL255044,FLUPIRTINE,both_routes/has_supported,4,N,0,9,1,,flupirtine
+Fluspirilene,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL46516,FLUSPIRILENE,both_routes/has_supported,4,N,1,34,1,,fluspirilene
+Fluvoxamine,SSRI,in catalogue,member,chembl_name,high,CHEMBL814,FLUVOXAMINE,both_routes/has_supported,4,N,1,17,1,,fluvoxamine
+Ganaxolone,Anticonvulsant,in catalogue,member,chembl_name,high,CHEMBL1568698,GANAXOLONE,both_routes/has_supported,4,N,1,0,1,,ganaxolone
+Gepirone,Serotonergic,in catalogue,member,chembl_name,high,CHEMBL284092,GEPIRONE,both_routes/has_supported,4,N,2,4,1,,gepirone
+Haloperidol,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL54,HALOPERIDOL,both_routes/has_supported,4,N,4,83,1,,haloperidol
+Heroin,Opioid,in catalogue,member,pubchem_inchikey,low,CHEMBL459324,DIACETYLMORPHINE,both_routes/has_supported,3,N,1,0,1,,heroin
+Hydrocodone,Opioid,in catalogue,member,chembl_name,high,CHEMBL1457,HYDROCODONE,route_indication/has_supported,4,R,2,5,1,,hydrocodone
+Hydromorphone,Opioid,in catalogue,member,chembl_name,high,CHEMBL398707,HYDROMORPHONE,both_routes/has_supported,4,N,1,3,1,,hydromorphone
+Hydroxyzine,Antihistamine,in catalogue,member,chembl_name,high,CHEMBL896,HYDROXYZINE,both_routes/has_supported,4,N,2,20,1,,hydroxyzine
+Iloperidone,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL14376,ILOPERIDONE,both_routes/has_supported,4,N,2,33,1,,iloperidone
+Imipramine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL11,IMIPRAMINE,both_routes/has_supported,4,N,4,57,1,,imipramine
+Imipramine Oxide,Antidepressant,in catalogue,member,chembl_synonym,medium,CHEMBL1614644,IMIPRAMINOXIDE,route_atc_n/no_eligible_evidence,2,N,0,0,0,,imipramine-oxide
+Iprindole,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL126224,IPRINDOLE,both_routes/has_preliminary,4,N,0,23,0,,iprindole
+Iproclozide,MAOI,in catalogue,member,chembl_name,high,CHEMBL91238,IPROCLOZIDE,route_atc_n/no_eligible_evidence,2,N,0,0,0,,iproclozide
+Iproniazid,MAOI,in catalogue,member,chembl_name,high,CHEMBL92401,IPRONIAZID,both_routes/has_supported,4,N,1,6,0,,iproniazid
+Isocarboxazid,MAOI,in catalogue,member,chembl_name,high,CHEMBL1201168,ISOCARBOXAZID,both_routes/has_supported,4,N,1,2,1,,isocarboxazid
+Ketotifen,Antihistamine,in catalogue,member,chembl_name,high,CHEMBL534,KETOTIFEN,route_indication/has_supported,4,RS,1,16,1,,ketotifen
+Lamotrigine,Anticonvulsant,in catalogue,member,chembl_name,high,CHEMBL741,LAMOTRIGINE,both_routes/has_supported,4,N,1,13,1,,lamotrigine
+Levomepromazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL1764,LEVOMEPROMAZINE,both_routes/has_supported,4,N,1,12,1,,levomepromazine
+Levomilnacipran,SNRI,in catalogue,member,chembl_name,high,CHEMBL99946,LEVOMILNACIPRAN,both_routes/has_supported,4,N,2,4,1,,levomilnacipran
+Levosulpiride,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL267044,LEVOSULPIRIDE,route_atc_n/has_supported,2,N,2,8,1,,levosulpiride
+Lidocaine,Anesthetic,in catalogue,member,chembl_name,high,CHEMBL79,LIDOCAINE,both_routes/has_supported,4,CDNRS,2,7,1,,lidocaine
+Lithium Carbonate,Mood Stabilizer,in catalogue,member,chembl_name,high,CHEMBL1200826,LITHIUM CARBONATE,route_indication/has_supported,4,,2,0,0,,lithium-carbonate
+Lithium Citrate,Mood Stabilizer,in catalogue,member,chembl_name,high,CHEMBL1201170,LITHIUM CITRATE ANHYDROUS,route_indication/has_supported,4,,2,0,0,,lithium-citrate
+Lofepramine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL87708,LOFEPRAMINE,both_routes/has_supported,4,N,0,26,1,,lofepramine
+Lorazepam,Benzodiazepine,in catalogue,member,chembl_name,high,CHEMBL580,LORAZEPAM,both_routes/has_supported,4,N,1,3,1,,lorazepam
+Loxapine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL831,LOXAPINE,both_routes/has_supported,4,N,9,43,1,,loxapine
+Lumateperone,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL3306803,LUMATEPERONE,both_routes/has_supported,4,N,3,10,0,,lumateperone
+Lurasidone,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL1237021,LURASIDONE,both_routes/has_supported,4,N,2,29,1,,lurasidone
+Maprotiline,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL21731,MAPROTILINE,both_routes/has_supported,4,N,1,23,1,,maprotiline
+Medifoxamine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL85231,MEDIFOXAMINE,both_routes/no_eligible_evidence,4,N,0,0,0,,medifoxamine
+Melitracen,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL110094,MELITRACEN,both_routes/has_preliminary,3,N,0,26,0,,melitracen
+Melperone,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL1531134,MELPERONE,both_routes/has_preliminary,3,N,0,9,0,,melperone
+Mesoridazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL1088,MESORIDAZINE,both_routes/has_supported,4,N,2,11,1,,mesoridazine
+Metamizole,Analgesic,in catalogue,member,chembl_name,high,CHEMBL461522,METAMIZOLE,both_routes/has_supported,4,N,1,1,0,,metamizole
+Methadone,Opioid,in catalogue,member,chembl_name,high,CHEMBL651,METHADONE,both_routes/has_supported,4,N,1,10,1,,methadone
+Methocarbamol,Muscle Relaxant,in catalogue,member,chembl_name,high,CHEMBL1201117,METHOCARBAMOL,route_indication/has_supported,4,M,1,0,1,,methocarbamol
+Mianserin,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL6437,MIANSERIN,both_routes/has_supported,4,N,0,45,1,,mianserin
+Midazolam,Benzodiazepine,in catalogue,member,chembl_name,high,CHEMBL655,MIDAZOLAM,both_routes/has_supported,4,N,2,9,1,,midazolam
+Milnacipran,SNRI,in catalogue,member,chembl_name,high,CHEMBL259209,MILNACIPRAN,both_routes/has_supported,4,N,2,8,1,,milnacipran
+Minaprine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL278819,MINAPRINE,both_routes/has_supported,4,N,10,8,0,,minaprine
+Mirtazapine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL654,MIRTAZAPINE,both_routes/has_supported,4,N,3,20,1,,mirtazapine
+Moclobemide,MAOI,in catalogue,member,chembl_name,high,CHEMBL86304,MOCLOBEMIDE,both_routes/has_supported,4,N,1,8,1,,moclobemide
+Molindone,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL460,MOLINDONE,both_routes/has_supported,4,N,2,14,1,,molindone
+Moperone,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL2104700,MOPERONE,route_atc_n/has_preliminary,2,N,0,1,0,,moperone
+Morphine,Opioid,in catalogue,member,chembl_name,high,CHEMBL70,MORPHINE,both_routes/has_supported,4,AN,1,19,1,,morphine
+Mosapramine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL2106650,MOSAPRAMINE,route_atc_n/has_preliminary,2,N,0,1,0,,mosapramine
+Naloxone,Opioid,in catalogue,member,chembl_name,high,CHEMBL80,NALOXONE,route_indication/has_supported,4,AV,2,14,1,,naloxone
+Naltrexone,Opioid,in catalogue,member,chembl_name,high,CHEMBL19019,NALTREXONE,both_routes/has_supported,4,N,2,13,1,,naltrexone
+Nefazodone,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL623,NEFAZODONE,both_routes/has_supported,4,N,4,40,1,,nefazodone
+Nialamide,MAOI,in catalogue,member,chembl_name,high,CHEMBL1256841,NIALAMIDE,both_routes/has_supported,4,N,1,1,0,,nialamide
+Nomifensine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL273575,NOMIFENSINE,both_routes/has_supported,4,N,1,15,1,,nomifensine
+Nortriptyline,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL445,NORTRIPTYLINE,both_routes/has_supported,4,N,2,37,1,,nortriptyline
+Olanzapine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL715,OLANZAPINE,both_routes/has_supported,4,N,6,47,0,,olanzapine
+Oxaflozane,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL2106996,OXAFLOZANE,route_atc_n/has_preliminary,2,N,0,4,0,,oxaflozane
+Oxazepam,Benzodiazepine,in catalogue,member,chembl_name,high,CHEMBL568,OXAZEPAM,both_routes/has_supported,4,N,1,2,1,,oxazepam
+Oxycodone,Opioid,in catalogue,member,chembl_name,high,CHEMBL656,OXYCODONE,both_routes/has_supported,4,N,3,10,1,,oxycodone
+Oxymorphone,Opioid,in catalogue,member,chembl_name,high,CHEMBL963,OXYMORPHONE,both_routes/has_supported,4,N,1,10,1,,oxymorphone
+Oxypertine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL2107011,OXYPERTINE,both_routes/has_preliminary,4,N,0,18,0,,oxypertine
+Paliperidone,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL1621,PALIPERIDONE,both_routes/has_supported,4,N,2,18,1,,paliperidone
+Paracetamol,Analgesic,in catalogue,member,chembl_synonym,medium,CHEMBL112,ACETAMINOPHEN,both_routes/has_supported,4,N,3,18,1,,paracetamol
+Paroxetine,SSRI,in catalogue,member,chembl_name,high,CHEMBL490,PAROXETINE,both_routes/has_supported,4,N,3,46,1,,paroxetine
+Penfluridol,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL47050,PENFLURIDOL,route_atc_n/has_preliminary,2,N,0,25,0,,penfluridol
+Pentobarbital,Barbiturate,in catalogue,member,chembl_name,high,CHEMBL448,PENTOBARBITAL,both_routes/has_supported,4,N,2,2,1,,pentobarbital
+Perazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL1697766,PERAZINE,both_routes/has_preliminary,3,N,0,1,0,,perazine
+Periciazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL251940,PERICIAZINE,both_routes/has_preliminary,4,N,0,20,1,,periciazine
+Perphenazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL567,PERPHENAZINE,both_routes/has_supported,4,N,1,30,1,,perphenazine
+Pethidine,Opioid,in catalogue,member,chembl_synonym,medium,CHEMBL607,MEPERIDINE,both_routes/has_supported,4,N,1,9,1,,pethidine
+Phenazopyridine,Analgesic,in catalogue,member,chembl_name,high,CHEMBL1242,PHENAZOPYRIDINE,route_indication/has_supported,4,G,1,26,0,,phenazopyridine
+Phenelzine,MAOI,in catalogue,member,chembl_name,high,CHEMBL1089,PHENELZINE,both_routes/has_supported,4,N,1,13,1,,phenelzine
+Phenobarbital,Barbiturate,in catalogue,member,chembl_name,high,CHEMBL40,PHENOBARBITAL,both_routes/has_supported,4,N,0,0,1,,phenobarbital
+Pimavanserin,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL2111101,PIMAVANSERIN,both_routes/has_supported,4,N,1,17,1,,pimavanserin
+Pimozide,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL1423,PIMOZIDE,both_routes/has_supported,4,N,2,59,1,,pimozide
+Pipamperone,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL440294,PIPAMPERONE,both_routes/has_preliminary,3,N,0,10,1,,pipamperone
+Pivagabine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL1870796,PIVAGABINE,route_atc_n/limited_only,2,N,0,0,0,,pivagabine
+Pomaglumetad methionil,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL2110730,POMAGLUMETAD METHIONIL ANHYDROUS,route_indication/has_supported,3,,2,0,0,,pomaglumetad-methionil
+Primidone,Anticonvulsant,in catalogue,member,chembl_name,high,CHEMBL856,PRIMIDONE,both_routes/has_supported,4,N,2,0,1,,primidone
+Procaine,Anesthetic,in catalogue,member,chembl_name,high,CHEMBL569,PROCAINE,route_atc_n/has_supported,4,CNS,1,3,1,,procaine
+Prochlorperazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL728,PROCHLORPERAZINE,both_routes/has_supported,4,N,3,29,1,,prochlorperazine
+Promazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL564,PROMAZINE,both_routes/has_supported,4,N,2,37,1,,promazine
+Promethazine,Antihistamine,in catalogue,member,chembl_name,high,CHEMBL643,PROMETHAZINE,route_indication/has_supported,4,DR,1,36,1,,promethazine
+Propofol,Anesthetic,in catalogue,member,chembl_name,high,CHEMBL526,PROPOFOL,both_routes/has_supported,4,N,1,5,1,,propofol
+Prothipendyl,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL2111030,PROTHIPENDYL,both_routes/no_eligible_evidence,4,N,0,0,0,,prothipendyl
+Protriptyline,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL668,PROTRIPTYLINE,both_routes/has_supported,4,N,2,17,1,,protriptyline
+Proxymetacaine,Anesthetic,in catalogue,member,chembl_synonym,medium,CHEMBL1196,PROPARACAINE,route_indication/has_supported,4,S,1,4,1,,proxymetacaine
+Quetiapine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL716,QUETIAPINE,both_routes/has_supported,4,N,3,33,1,,quetiapine
+Quinupramine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL107360,QUINUPRAMINE,route_atc_n/has_preliminary,2,N,0,12,0,,quinupramine
+Ramelteon,Hypnotic,in catalogue,member,chembl_name,high,CHEMBL1218,RAMELTEON,both_routes/has_supported,4,N,1,3,1,,ramelteon
+Rasagiline,MAOI,in catalogue,member,chembl_name,high,CHEMBL887,RASAGILINE,both_routes/has_supported,4,N,2,10,1,,rasagiline
+Reboxetine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL14370,REBOXETINE,both_routes/has_supported,4,N,1,14,0,,reboxetine
+Remoxipride,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL22242,REMOXIPRIDE,both_routes/has_supported,4,N,2,13,0,,remoxipride
+Risperidone,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL85,RISPERIDONE,both_routes/has_supported,4,N,3,52,1,,risperidone
+Rizatriptan,Antimigraine,in catalogue,member,chembl_name,high,CHEMBL905,RIZATRIPTAN,both_routes/has_supported,4,N,2,10,1,,rizatriptan
+Rolipram,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL63,ROLIPRAM,seed_only/has_supported,2,,1,8,1,,rolipram
+Ropivacaine,Anesthetic,in catalogue,member,chembl_name,high,CHEMBL1077896,ROPIVACAINE,both_routes/has_supported,4,N,1,1,1,,ropivacaine
+SAGE-718,Neurosteroid,in catalogue,member,chembl_synonym,medium,CHEMBL5095095,DALZANEMDOR,route_indication/has_preliminary,3,,0,4,0,,sage-718
+Secobarbital,Barbiturate,in catalogue,member,chembl_name,high,CHEMBL447,SECOBARBITAL,route_atc_n/has_supported,4,N,1,0,1,,secobarbital
+Sertindole,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL12713,SERTINDOLE,both_routes/has_supported,4,N,3,44,1,,sertindole
+Sertraline,SSRI,in catalogue,member,chembl_name,high,CHEMBL809,SERTRALINE,both_routes/has_supported,4,N,1,51,1,,sertraline
+Sodium Valproate,Anticonvulsant,in catalogue,member,chembl_synonym,medium,CHEMBL109,VALPROIC ACID,both_routes/has_supported,4,N,3,16,1,,sodium-valproate
+Sufentanil,Opioid,in catalogue,member,chembl_name,high,CHEMBL658,SUFENTANIL,both_routes/has_supported,4,N,1,5,1,,sufentanil
+Sulpiride,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL26,SULPIRIDE,both_routes/has_supported,4,N,1,34,1,,sulpiride
+Sultopride,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL277945,SULTOPRIDE,route_atc_n/has_preliminary,2,N,0,8,0,,sultopride
+Sumatriptan,Antimigraine,in catalogue,member,chembl_name,high,CHEMBL128,SUMATRIPTAN,both_routes/has_supported,4,N,4,18,1,,sumatriptan
+Temazepam,Benzodiazepine,in catalogue,member,chembl_name,high,CHEMBL967,TEMAZEPAM,both_routes/has_supported,4,N,1,3,1,,temazepam
+Thiopropazate,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL1697851,THIOPROPAZATE,both_routes/no_eligible_evidence,2,N,0,0,0,,thiopropazate
+Thioproperazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL609109,THIOPROPERAZINE,route_atc_n/has_preliminary,2,N,0,25,0,,thioproperazine
+Thioridazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL479,THIORIDAZINE,both_routes/has_supported,4,N,6,45,1,,thioridazine
+Tianeptine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL1289110,TIANEPTINE,both_routes/has_preliminary,3,N,0,4,1,,tianeptine
+Tiapride,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL84158,TIAPRIDE,both_routes/has_supported,3,N,2,4,0,,tiapride
+Tiotixene,Antipsychotic,in catalogue,member,chembl_synonym,medium,CHEMBL1201,THIOTHIXENE,both_routes/has_supported,4,N,4,28,1,,tiotixene
+Tizanidine,Muscle Relaxant,in catalogue,member,chembl_name,high,CHEMBL1079,TIZANIDINE,route_indication/has_supported,4,M,1,6,1,,tizanidine
+Toloxatone,MAOI,in catalogue,member,chembl_name,high,CHEMBL18116,TOLOXATONE,both_routes/has_supported,4,N,1,5,0,,toloxatone
+Tolperisone,Muscle Relaxant,in catalogue,member,chembl_name,high,CHEMBL1076211,TOLPERISONE,route_indication/has_preliminary,3,M,0,3,0,,tolperisone
+Topiramate,Anticonvulsant,in catalogue,member,chembl_name,high,CHEMBL220492,TOPIRAMATE,both_routes/has_supported,4,N,6,32,1,,topiramate
+Tramadol,Opioid,in catalogue,member,chembl_name,high,CHEMBL1237044,TRAMADOL,both_routes/has_supported,4,N,1,9,1,,tramadol
+Tranylcypromine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL3989843,TRANYLCYPROMINE,both_routes/has_supported,4,N,1,21,0,,tranylcypromine
+Triazolam,Benzodiazepine,in catalogue,member,chembl_name,high,CHEMBL646,TRIAZOLAM,both_routes/has_supported,4,N,1,9,1,,triazolam
+Trifluoperazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL422,TRIFLUOPERAZINE,both_routes/has_supported,4,N,3,48,1,,trifluoperazine
+Trifluperidol,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL15023,TRIFLUPERIDOL,both_routes/has_preliminary,4,N,0,6,0,,trifluperidol
+Triflupromazine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL570,TRIFLUPROMAZINE,both_routes/has_supported,4,N,2,19,1,,triflupromazine
+Trimethadione,Anticonvulsant,in catalogue,member,chembl_name,high,CHEMBL695,TRIMETHADIONE,both_routes/has_supported,4,N,1,0,1,,trimethadione
+Trimipramine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL644,TRIMIPRAMINE,both_routes/has_supported,4,N,6,15,1,,trimipramine
+Ulotaront,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL4650337,ULOTARONT,route_indication/has_supported,3,,2,4,0,,ulotaront
+Venlafaxine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL637,VENLAFAXINE,both_routes/has_supported,4,N,3,12,1,,venlafaxine
+Veralipride,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL2105581,VERALIPRIDE,both_routes/has_supported,4,N,1,22,0,,veralipride
+Vilazodone,SSRI,in catalogue,member,chembl_name,high,CHEMBL439849,VILAZODONE,both_routes/has_supported,4,N,2,21,1,,vilazodone
+Vortioxetine,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL2104993,VORTIOXETINE,both_routes/has_supported,4,N,3,22,1,,vortioxetine
+Zaleplon,Hypnotic,in catalogue,member,chembl_name,high,CHEMBL1521,ZALEPLON,both_routes/has_supported,4,N,1,3,1,,zaleplon
+Zimeldine,SSRI,in catalogue,member,chembl_name,high,CHEMBL37744,ZIMELDINE,both_routes/has_supported,4,N,1,18,0,,zimeldine
+Ziprasidone,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL708,ZIPRASIDONE,both_routes/has_supported,4,N,6,37,1,,ziprasidone
+Zolpidem,Hypnotic,in catalogue,member,chembl_name,high,CHEMBL911,ZOLPIDEM,both_routes/has_supported,4,N,1,13,1,,zolpidem
+Zopiclone,Hypnotic,in catalogue,member,chembl_name,high,CHEMBL135400,ZOPICLONE,both_routes/has_supported,4,N,1,2,1,,zopiclone
+Zotepine,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL285802,ZOTEPINE,both_routes/has_supported_broader_only,2,N,0,38,1,,zotepine
+Zuclopenthixol,Antipsychotic,in catalogue,member,chembl_name,high,CHEMBL53904,ZUCLOPENTHIXOL,both_routes/has_preliminary,3,N,0,17,1,,zuclopenthixol
+Zuranolone,Antidepressant,in catalogue,member,chembl_name,high,CHEMBL4105630,ZURANOLONE,both_routes/has_supported,4,N,1,0,1,,zuranolone
+24(S)-Hydroxycholesterol,Neurosteroid,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL171804,,,,,0,4,1,,24-s-hydroxycholesterol
+3α-Androstanediol,Neurosteroid,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL335062,ANDROSTANDIOL,,,,0,2,0,,3-androstanediol
+5α-Dihydroprogesterone,Neurosteroid,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL407717,,,,,0,3,0,,5-dihydroprogesterone
+7-Hydroxymitragynine,Opioid,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL61630,,,,,0,8,0,,7-hydroxymitragynine
+Alimemazine,Antihistamine,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL829,METHYLPROMAZINE,,4,R,1,15,1,,alimemazine
+Alniditan,Antimigraine,"ChEMBL, has target data",,chembl_name,high,CHEMBL88240,ALNIDITAN,,2,,0,2,1,,alniditan
+Androstadienone,Neurosteroid,"ChEMBL, has target data",,unii_connectivity,low,CHEMBL141998,,,,,0,1,0,,androstadienone
+Androstenediol,Neurosteroid,"ChEMBL, has target data",,chembl_name,high,CHEMBL440283,ANDROSTENEDIOL,,-1,,0,6,0,,androstenediol
+Androstenol,Neurosteroid,"ChEMBL, has target data",,chembl_name,high,CHEMBL142348,ANDROSTENOL,,,,0,2,1,,androstenol
+Androsterone,Neurosteroid,"ChEMBL, has target data",,chembl_name,high,CHEMBL87285,ANDROSTERONE,,,,0,6,0,,androsterone
+Apimostinel,NMDA Modulator,"ChEMBL, has target data",member,chembl_name,high,CHEMBL3989872,APIMOSTINEL,,2,,1,0,0,,apimostinel
+Aptiganel,NMDA Modulator,"ChEMBL, has target data",,chembl_name,high,CHEMBL92484,APTIGANEL,,2,,0,1,0,,aptiganel
+Asimadoline,Opioid,"ChEMBL, has target data",,chembl_name,high,CHEMBL1190199,ASIMADOLINE,,3,,1,4,1,,asimadoline
+Atagabalin,Gabapentinoid,"ChEMBL, has target data",member,chembl_name,high,CHEMBL593430,ATAGABALIN,,2,,1,1,0,,atagabalin
+Atibeprone,Antidepressant,"ChEMBL, has target data",,chembl_name,high,CHEMBL19004,ATIBEPRONE,,2,,0,2,0,,atibeprone
+AV-101,NMDA Modulator,"ChEMBL, has target data",member,chembl_name,high,CHEMBL3545351,AV-101,,3,,1,0,0,,av-101
+Axomadol,Opioid,"ChEMBL, has target data",member,chembl_name,high,CHEMBL3989680,AXOMADOL,,2,,3,0,0,,axomadol
+AZD-1134,Serotonergic,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL602674,,,,,0,1,0,,azd-1134
+AZD-3783,Serotonergic,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL602875,,,,,0,2,0,,azd-3783
+AZD-7268,Opioid,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1946618,AZD-7268,,2,,1,2,1,,azd-7268
+Bilastine,Antihistamine,"ChEMBL, has target data",,chembl_name,high,CHEMBL1742423,BILASTINE,,4,RS,1,0,1,,bilastine
+Carpipramine,Antipsychotic,"ChEMBL, has target data",,chembl_name,high,CHEMBL2110775,CARPIPRAMINE,,2,,0,14,0,,carpipramine
+Cerlapirdine,Serotonergic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL2103880,CERLAPIRDINE,,2,,1,1,1,,cerlapirdine
+Chloropyramine,Antihistamine,"ChEMBL, has target data",,chembl_name,high,CHEMBL1194287,CHLOROPYRAMINE,,2,DR,0,12,0,,chloropyramine
+Clorgyline,MAOI,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL8706,CLORGILINE,,2,,0,10,1,,clorgyline
+Cyproheptadine,Antihistamine,"ChEMBL, has target data",member,chembl_name,high,CHEMBL516,CYPROHEPTADINE,,4,R,1,29,1,,cyproheptadine
+Deoxycorticosterone,Neurosteroid,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL1200542,DESOXYCORTICOSTERONE ACETATE,,4,H,1,0,0,,deoxycorticosterone
+DHEA Sulfate,Neurosteroid,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL259898,PRASTERONE SULFURIC ACID,,-1,,0,1,0,,dhea-sulfate
+Drotaverine,Muscle Relaxant,"ChEMBL, has target data",,chembl_name,high,CHEMBL551978,DROTAVERINE,,3,A,1,11,0,,drotaverine
+Ebastine,Antihistamine,"ChEMBL, has target data",,chembl_name,high,CHEMBL305660,EBASTINE,,4,R,1,25,0,,ebastine
+Eliprodil,NMDA Modulator,"ChEMBL, has target data",member,chembl_name,high,CHEMBL28564,ELIPRODIL,,2,,0,5,0,,eliprodil
+Elzasonan,Serotonergic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL3185463,ELZASONAN,,2,,2,0,0,,elzasonan
+Epiandrosterone,Neurosteroid,"ChEMBL, has target data",,chembl_name,high,CHEMBL272195,EPIANDROSTERONE,,,,0,5,0,,epiandrosterone
+Etiocholanolone,Neurosteroid,"ChEMBL, has target data",,chembl_name,high,CHEMBL85799,ETIOCHOLANOLONE,,,,0,4,0,,etiocholanolone
+Galmic,Anticonvulsant,"ChEMBL, has target data",,chembl_name,high,CHEMBL1187471,GALMIC,,,,0,1,1,,galmic
+Galnon,Anticonvulsant,"ChEMBL, has target data",,chembl_name,high,CHEMBL2309599,GALNON,,,,0,3,0,,galnon
+Harmaline,MAOI,"ChEMBL, has target data",,chembl_name,high,CHEMBL340807,HARMALINE,,,,0,10,1,,harmaline
+Harmine,MAOI,"ChEMBL, has target data",,chembl_name,high,CHEMBL269538,HARMINE,,1,,0,38,0,,harmine
+Hydroxydione,Anesthetic,"ChEMBL, has target data",,unii_connectivity,low,CHEMBL3137790|CHEMBL4760675|CHEMBL6150275,,,,,0,2,0,,hydroxydione
+Hyperforin,Antidepressant,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL1237210,,,,,0,9,0,,hyperforin
+Indeloxazine,Serotonergic,"ChEMBL, has target data",,chembl_name,high,CHEMBL2105022,INDELOXAZINE,,2,,0,9,0,,indeloxazine
+Lanicemine,NMDA Modulator,"ChEMBL, has target data",member,chembl_name,high,CHEMBL467084,LANICEMINE,,2,,1,0,1,,lanicemine
+Levocetirizine,Antihistamine,"ChEMBL, has target data",,chembl_name,high,CHEMBL1201191,LEVOCETIRIZINE,,4,R,1,1,1,,levocetirizine
+Loratadine,Antihistamine,"ChEMBL, has target data",member,chembl_name,high,CHEMBL998,LORATADINE,,4,R,1,23,1,,loratadine
+Nemonapride,Antipsychotic,"ChEMBL, has target data",,chembl_name,high,CHEMBL20734,NEMONAPRIDE,,2,,0,33,1,,nemonapride
+Norbinaltorphimine,Opioid,"ChEMBL, has target data",,chembl_name,high,CHEMBL573214,NORBINALTORPHIMINE,,,,0,10,1,,norbinaltorphimine
+NS-2359,Antidepressant,"ChEMBL, has target data",member,chembl_name,high,CHEMBL4297385,NS-2359,,2,,1,0,0,,ns-2359
+Olopatadine,Antihistamine,"ChEMBL, has target data",,chembl_name,high,CHEMBL1189432,OLOPATADINE,,4,RS,1,2,1,,olopatadine
+OPC-14523,Sigma-1 Agonist,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL294144,,,,,0,1,0,,opc-14523
+Org 34517,Neurosteroid,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL3545391,ORG-34517,,2,,1,0,0,,org-34517
+Perospirone,Antipsychotic,"ChEMBL, has target data",,chembl_name,high,CHEMBL1472975,PEROSPIRONE,,2,,0,13,1,,perospirone
+Pipotiazine,Antipsychotic,"ChEMBL, has target data",,chembl_name,high,CHEMBL398880,PIPOTIAZINE,,,,0,12,1,,pipotiazine
+Pirlindole,Antidepressant,"ChEMBL, has target data",,chembl_name,high,CHEMBL32350,PIRLINDOLE,,2,,0,13,1,,pirlindole
+Pregnenolone,Neurosteroid,"ChEMBL, has target data",member,chembl_name,high,CHEMBL253363,PREGNENOLONE,,1,,0,3,1,,pregnenolone
+Ralmitaront,Antipsychotic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL4594376,RALMITARONT,,2,,0,1,1,,ralmitaront
+Rislenemdaz,NMDA Modulator,"ChEMBL, has target data",member,chembl_name,high,CHEMBL2068839,RISLENEMDAZ,,2,,1,1,0,,rislenemdaz
+Robalzotan,Serotonergic,"ChEMBL, has target data",,chembl_name,high,CHEMBL1628569,ROBALZOTAN,,2,,1,0,1,,robalzotan
+SB-649868,Orexin Antagonist,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1272307,SB-649868,,2,,2,4,1,,sb-649868
+Sepranolone,Neurosteroid,"ChEMBL, has target data",member,chembl_name,high,CHEMBL2057301,SEPRANOLONE,,2,,0,3,0,,sepranolone
+Siramesine,Sigma-1 Agonist,"ChEMBL, has target data",,chembl_name,high,CHEMBL61479,SIRAMESINE,,2,,0,8,0,,siramesine
+SR-17018,Opioid,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL4452384,,,,,0,1,0,,sr-17018
+Tandospirone,Serotonergic,"ChEMBL, has target data",,chembl_name,high,CHEMBL274047,TANDOSPIRONE,,2,,0,4,1,,tandospirone
+Tetrahydropalmatine,Analgesic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL487182,TETRAHYDROPALMATINE,,2,,0,5,0,,tetrahydropalmatine
+Traxoprodil,NMDA Modulator,"ChEMBL, has target data",member,chembl_name,high,CHEMBL17350,TRAXOPRODIL,,2,,1,4,1,,traxoprodil
+U-47700,Opioid,"ChEMBL, has target data",,unii_connectivity,low,CHEMBL2311130|CHEMBL277572,,,,,0,1,1,,u-47700
+Vabicaserin,Serotonergic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL2110670,VABICASERIN,,2,,3,1,0,,vabicaserin
+WAY-100635,Serotonergic,"ChEMBL, has target data",,chembl_squashed,low,CHEMBL31354,"WAY-100,635",,,,0,10,1,,way-100635
+Zelquistinel,Antidepressant,"ChEMBL, has target data",member,chembl_name,high,CHEMBL5314944,ZELQUISTINEL,,2,,0,2,0,,zelquistinel
+"(2R,6R)-Hydroxynorketamine",Antidepressant,"ChEMBL, no target data",member,chembl_synonym,medium,CHEMBL4650718,"HYDROXYNORKETAMINE, (2R,6R)",,1,,0,0,0,,2r-6r-hydroxynorketamine
+4-Methylpregabalin,Analgesic,"ChEMBL, no target data",,pubchem_connectivity,low,CHEMBL190602|CHEMBL365562,,,,,0,0,0,,4-methylpregabalin
+ADX71441,GABA-B PAM,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL5408692,,,,,0,0,0,,adx71441
+Allotetrahydrocorticosterone,Neurosteroid,"ChEMBL, no target data",,pubchem_connectivity,low,CHEMBL1908040,,,,,0,0,0,,allotetrahydrocorticosterone
+Alphadolone,Anesthetic,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL2104019,ALFADOLONE,,2,,0,0,0,,alphadolone
+Androstenone,Neurosteroid,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL1309552,,,,,0,0,0,,androstenone
+Arketamine,Antidepressant,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL467505,,,,,0,0,1,,arketamine
+Azepindole,Antidepressant,"ChEMBL, no target data",,chembl_name,high,CHEMBL10758,AZEPINDOLE,,2,,0,0,0,,azepindole
+Azipramine,Antidepressant,"ChEMBL, no target data",,chembl_name,high,CHEMBL2110761,AZIPRAMINE,,2,,0,0,0,,azipramine
+Bamaluzole,Anticonvulsant,"ChEMBL, no target data",,chembl_name,high,CHEMBL2103990,BAMALUZOLE,,2,,0,0,0,,bamaluzole
+Clocapramine,Antipsychotic,"ChEMBL, no target data",,chembl_name,high,CHEMBL2104103,CLOCAPRAMINE,,2,,0,0,0,,clocapramine
+Deramciclane,Serotonergic,"ChEMBL, no target data",,chembl_name,high,CHEMBL2104698,DERAMCICLANE,,2,,0,0,1,,deramciclane
+Desomorphine,Opioid,"ChEMBL, no target data",,chembl_name,high,CHEMBL2106274,DESOMORPHINE,,2,,0,0,0,,desomorphine
+Diclazepam,Benzodiazepine,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL268248,,,,,0,0,0,,diclazepam
+Epipregnanolone,Neurosteroid,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL1908049,,,,,0,0,0,,epipregnanolone
+Estratetraenol,Neurosteroid,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL1080216,,,,,0,0,0,,estratetraenol
+Ethylmorphine,Opioid,"ChEMBL, no target data",,chembl_name,high,CHEMBL1712170,ETHYLMORPHINE,,-1,RS,0,0,0,,ethylmorphine
+Flubromazepam,Benzodiazepine,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL3274851,,,,,0,0,0,,flubromazepam
+Gidazepam,Benzodiazepine,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL1565882,,,,,0,0,0,,gidazepam
+Itruvone,Antidepressant,"ChEMBL, no target data",member,chembl_name,high,CHEMBL5095069,ITRUVONE,,2,,0,0,0,,itruvone
+MAP4343,Antidepressant,"ChEMBL, no target data",,pubchem_connectivity,low,CHEMBL4762471,,,,,0,0,0,,map4343
+Mesembrine,SSRI,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL2008762,,,,,0,0,0,,mesembrine
+MIJ821,NMDA Modulator,"ChEMBL, no target data",member,chembl_synonym,medium,CHEMBL5095074,ONFASPRODIL,,2,,0,0,0,,mij821
+Minaxolone,Anesthetic,"ChEMBL, no target data",,chembl_name,high,CHEMBL2105209,MINAXOLONE,,2,,0,0,1,,minaxolone
+MK-0777,GABA-A PAM,"ChEMBL, no target data",member,chembl_name,high,CHEMBL200177,MK-0777,,2,,0,0,1,,mk-0777
+Org 20599,Anesthetic,"ChEMBL, no target data",,pubchem_connectivity,low,CHEMBL3137825,,,,,0,0,0,,org-20599
+Org 21465,Anesthetic,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL1790261,,,,,0,0,0,,org-21465
+Phenazepam,Benzodiazepine,"ChEMBL, no target data",,chembl_name,high,CHEMBL1709464,PHENAZEPAM,,,,0,0,0,,phenazepam
+Pipofezine,Antidepressant,"ChEMBL, no target data",,chembl_name,high,CHEMBL1886755,PIPOFEZINE,,2,,0,0,0,,pipofezine
+Pregnanolone,Neurosteroid,"ChEMBL, no target data",,chembl_synonym,medium,CHEMBL210952,ELTANOLONE,,2,,0,0,0,,pregnanolone
+Pregnenolone Sulfate,Neurosteroid,"ChEMBL, no target data",,chembl_name,high,CHEMBL141573,PREGNENOLONE SULFATE,,,,0,0,0,,pregnenolone-sulfate
+Pyrazolam,Benzodiazepine,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL3246831,,,,,0,0,0,,pyrazolam
+Quifenadine,Antihistamine,"ChEMBL, no target data",,chembl_name,high,CHEMBL1187694,QUIFENADINE,,2,R,0,0,0,,quifenadine
+Renanolone,Anesthetic,"ChEMBL, no target data",,chembl_name,high,CHEMBL1908048,RENANOLONE,,2,,0,0,0,,renanolone
+SOMCL-668,Antidepressant,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL3325902,,,,,0,0,0,,somcl-668
+Suritozole,GABA-A Modulator,"ChEMBL, no target data",,chembl_name,high,CHEMBL278764,SURITOZOLE,,2,,0,0,0,,suritozole
+Teniloxazine,Antidepressant,"ChEMBL, no target data",,chembl_name,high,CHEMBL2105438,TENILOXAZINE,,2,,0,0,0,,teniloxazine
+THDOC,Neurosteroid,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL3140372,,,,,0,0,0,,thdoc
+Timiperone,Antipsychotic,"ChEMBL, no target data",,chembl_name,high,CHEMBL2107117,TIMIPERONE,,2,,0,0,0,,timiperone
+Tisolagiline,MAOI,"ChEMBL, no target data",,chembl_name,high,CHEMBL5314546,TISOLAGILINE,,2,,0,0,0,,tisolagiline
+AC-90179,Antipsychotic,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII H0EVX3PS4B,ac-90179
+Acetylfentanyl,Opioid,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII 6DZ28538KS,acetylfentanyl
+Adarigiline,MAOI,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII YRT54V76ZY,adarigiline
+Androstadienol,Neurosteroid,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,androstadienol
+AWD 52-39,Serotonergic,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,awd-52-39
+AZD-2327,Opioid,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII 3Q7J827527,azd-2327
+B-193,Serotonergic,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,b-193
+Clonazolam,Benzodiazepine,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII HJH52YYC1X,clonazolam
+Deschloroetizolam,Benzodiazepine,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII 69HF7J354D,deschloroetizolam
+Flualprazolam,Benzodiazepine,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII FWF5L8D2BE,flualprazolam
+Flubromazolam,Benzodiazepine,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII 1BF1HN5GWD,flubromazolam
+Flunitrazolam,Benzodiazepine,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII OK0I6HTR1Y,flunitrazolam
+Lithium Sulfate,Mood Stabilizer,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII 919XA137JK,lithium-sulfate
+Metizolam,Benzodiazepine,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,metizolam
+Nifoxipam,Benzodiazepine,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII 9O6C9M3CH6,nifoxipam
+SAGE-324,Neurosteroid,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII 9J768D78HM,sage-324
+Validol,Sedative,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,validol
+ZZL-7,Antidepressant,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,zzl-7
+ATHX-105,Serotonergic,unidentified,,no_match,,,,,,,,,,,athx-105
+Atropine (ophthalmic),Anticholinergic,unidentified,,no_match,,,,,,,,,,,atropine-ophthalmic
+Banisteriopsis caapi,MAOI,unidentified,,no_match,,,,,,,,,,,banisteriopsis-caapi
+BnH-015B,NMDA Modulator,unidentified,,no_match,,,,,,,,,,,bnh-015b
+EMLA Cream,Anesthetic,unidentified,,no_match,,,,,,,,,,,emla-cream
+ENT-A011,Neurosteroid,unidentified,,no_match,,,,,,,,,,,ent-a011
+Lidocaine 5% Medicated Plaster,Anesthetic,unidentified,,no_match,,,,,,,,,,,lidocaine-5-medicated-plaster
+MIN-101 (Roluperidone),Antipsychotic,unidentified,,no_match,,,,,,,,,,,min-101-roluperidone
+Olanzapine and Samidorphan,Antipsychotic,unidentified,,no_match,,,,,,,,,,,olanzapine-and-samidorphan
+p-Fluoro-Deprenyl,MAOI,unidentified,,no_match,,,,,,,,,,,p-fluoro-deprenyl
+Pentalgin,Analgesic,unidentified,,no_match,,,,,,,,,,,pentalgin
+Pentalgin Neo,Analgesic,unidentified,,no_match,,,,,,,,,,,pentalgin-neo
+Teoritin,Antihistamine,unidentified,,no_match,,,,,,,,,,,teoritin

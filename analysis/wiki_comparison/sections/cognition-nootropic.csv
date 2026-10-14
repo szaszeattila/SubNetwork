@@ -1,0 +1,413 @@
+name,wiki_class,column,with_d21,match_tier,confidence,chembl_parents,chembl_names,catalogue_status,max_phase,atc_level1,curated_mechanisms,publication_targets,gtopdb,note,slug
+Adrafinil,Eugeroic,in catalogue,member,chembl_name,high,CHEMBL93077,ADRAFINIL,route_atc_n/has_preliminary,2,N,0,2,0,,adrafinil
+Almorexant,Sleep Support,in catalogue,member,chembl_name,high,CHEMBL455136,ALMOREXANT,route_indication/has_supported,3,,1,2,1,,almorexant
+Amantadine,Dopaminergic,in catalogue,member,chembl_name,high,CHEMBL660,AMANTADINE,both_routes/has_supported,4,N,2,7,1,,amantadine
+Amphetamine,ADHD,in catalogue,member,chembl_name,high,CHEMBL405,AMPHETAMINE,both_routes/has_supported,4,N,8,12,1,,amphetamine
+Aniracetam,Racetam,in catalogue,member,chembl_name,high,CHEMBL36994,ANIRACETAM,route_atc_n/has_preliminary,2,N,0,0,1,,aniracetam
+Armodafinil,Eugeroic,in catalogue,member,chembl_name,high,CHEMBL1201192,ARMODAFINIL,both_routes/has_supported,4,N,1,4,0,,armodafinil
+Atomoxetine,ADHD,in catalogue,member,chembl_name,high,CHEMBL641,ATOMOXETINE,both_routes/has_supported,4,N,1,21,1,,atomoxetine
+Baclofen,Anxiolytic,in catalogue,member,chembl_name,high,CHEMBL701,BACLOFEN,route_indication/has_supported,4,M,1,3,1,,baclofen
+Bethanechol,Cholinergic,in catalogue,member,chembl_name,high,CHEMBL1482,BETHANECHOL,route_atc_n/has_supported,4,N,2,4,1,,bethanechol
+Bifeprunox,Dopaminergic,in catalogue,member,chembl_name,high,CHEMBL218166,BIFEPRUNOX,route_indication/has_supported,3,,2,5,0,,bifeprunox
+Bitopertin,Glutamatergic,in catalogue,member,chembl_name,high,CHEMBL1171829,BITOPERTIN,route_indication/has_supported,3,,1,1,0,,bitopertin
+BPN14770,Memory,in catalogue,member,chembl_synonym,medium,CHEMBL4541964,ZATOLMILAST,route_indication/has_supported,3,,1,4,0,,bpn14770
+Brivaracetam,Racetam,in catalogue,member,chembl_name,high,CHEMBL607400,BRIVARACETAM,both_routes/has_supported,4,N,1,0,1,,brivaracetam
+Bromocriptine,Dopaminergic,in catalogue,member,chembl_name,high,CHEMBL493,BROMOCRIPTINE,both_routes/has_supported,4,GN,1,37,1,,bromocriptine
+Buspirone,Anxiolytic,in catalogue,member,chembl_name,high,CHEMBL49,BUSPIRONE,both_routes/has_supported,4,N,1,27,1,,buspirone
+Cabergoline,Dopaminergic,in catalogue,member,chembl_name,high,CHEMBL1201087,CABERGOLINE,both_routes/has_supported,4,GN,1,17,1,,cabergoline
+Caffeine,Stimulant,in catalogue,member,chembl_name,high,CHEMBL113,CAFFEINE,both_routes/has_supported,4,DN,2,23,1,,caffeine
+Carbachol,Cholinergic,in catalogue,member,chembl_name,high,CHEMBL965,CARBAMOYLCHOLINE,both_routes/has_supported,4,NS,1,17,1,,carbachol
+CDP-Choline,Cholinergic,in catalogue,member,chembl_synonym,medium,CHEMBL1231700,CITICOLINE,both_routes/limited_only,3,N,0,0,0,,cdp-choline
+Centanafadine,ADHD,in catalogue,member,chembl_name,high,CHEMBL3301621,CENTANAFADINE,route_indication/has_supported,3,,1,3,1,,centanafadine
+Cevimeline,Cholinergic,in catalogue,member,chembl_name,high,CHEMBL168815,CEVIMELINE,route_atc_n/has_supported,4,N,2,4,1,,cevimeline
+Chamomile,Anxiolytic,in catalogue,member,chembl_name,high,CHEMBL2108918,CHAMOMILE,route_indication/no_eligible_evidence,3,,0,0,0,,chamomile
+Choline Bitartrate,Cholinergic,in catalogue,member,chembl_name,high,CHEMBL2105935,CHOLINE BITARTRATE,route_indication/no_eligible_evidence,3,,0,0,0,,choline-bitartrate
+Cocaine,Stimulant,in catalogue,member,chembl_name,high,CHEMBL370805,COCAINE,both_routes/has_supported,4,NRS,1,14,1,,cocaine
+Creatine,Memory,in catalogue,member,chembl_name,high,CHEMBL283800,CREATINE,route_indication/has_preliminary,3,,0,0,1,,creatine
+Cytisine,Cholinergic,in catalogue,member,chembl_synonym,medium,CHEMBL497939,CYTISINICLINE,both_routes/has_supported,3,N,1,5,1,,cytisine
+D-Cycloserine,Memory,in catalogue,member,chembl_synonym,medium,CHEMBL771,CYCLOSERINE,route_indication/has_supported_broader_only,4,J,2,3,1,,d-cycloserine
+Daridorexant,Sleep Support,in catalogue,member,chembl_name,high,CHEMBL4297590,DARIDOREXANT,both_routes/has_supported,4,N,3,2,1,,daridorexant
+Dexmedetomidine,Sleep Support,in catalogue,member,chembl_name,high,CHEMBL778,DEXMEDETOMIDINE,both_routes/has_supported,4,N,1,7,1,,dexmedetomidine
+Dexmethylphenidate,ADHD,in catalogue,member,chembl_name,high,CHEMBL827,DEXMETHYLPHENIDATE,both_routes/has_supported,4,N,2,3,1,,dexmethylphenidate
+Dextroamphetamine,ADHD,in catalogue,member,chembl_name,high,CHEMBL612,DEXTROAMPHETAMINE,both_routes/has_supported,4,N,12,11,1,,dextroamphetamine
+Dihydroergocryptine,Dopaminergic,in catalogue,member,chembl_name,high,CHEMBL1743263,DIHYDROERGOCRYPTINE,route_atc_n/has_preliminary,-1,N,0,8,0,,dihydroergocryptine
+Donepezil,Cholinergic,in catalogue,member,chembl_name,high,CHEMBL502,DONEPEZIL,both_routes/has_supported,4,N,1,40,1,,donepezil
+Edaravone,Neuroprotection,in catalogue,member,chembl_name,high,CHEMBL290916,EDARAVONE,both_routes/has_preliminary,4,N,1,5,0,,edaravone
+Emoxypine,Neuroprotection,in catalogue,member,chembl_name,high,CHEMBL3338326,EMOXYPINE,route_indication/no_eligible_evidence,3,,0,0,0,,emoxypine
+Encenicline,Cholinergic,in catalogue,member,chembl_name,high,CHEMBL2151572,ENCENICLINE,route_indication/has_supported,3,,1,2,1,,encenicline
+Etifoxine,Anxiolytic,in catalogue,member,chembl_name,high,CHEMBL2106227,ETIFOXINE,both_routes/has_supported,3,N,1,0,1,,etifoxine
+Fasedienol,Anxiolytic,in catalogue,member,chembl_name,high,CHEMBL5095042,FASEDIENOL,route_indication/no_eligible_evidence,3,,0,0,1,,fasedienol
+Fencamfamine,Stimulant,in catalogue,member,chembl_synonym,medium,CHEMBL7010,FENCAMFAMIN,route_atc_n/no_eligible_evidence,2,N,0,0,0,,fencamfamine
+Fenethylline,Stimulant,in catalogue,member,chembl_name,high,CHEMBL2111152,FENETHYLLINE,route_atc_n/no_eligible_evidence,2,N,0,0,0,,fenethylline
+Fenozolone,Stimulant,in catalogue,member,chembl_name,high,CHEMBL2104907,FENOZOLONE,route_atc_n/no_eligible_evidence,2,N,0,0,0,,fenozolone
+Fingolimod,Neuroprotection,in catalogue,member,chembl_name,high,CHEMBL314854,FINGOLIMOD,route_indication/has_supported,4,L,2,9,1,,fingolimod
+Flibanserin,Anxiolytic,in catalogue,member,chembl_name,high,CHEMBL231068,FLIBANSERIN,route_indication/has_supported,4,G,1,14,1,,flibanserin
+GABA,Anxiolytic,in catalogue,member,pubchem_inchikey,low,CHEMBL96,GAMMA-AMINOBUTYRIC ACID,route_atc_n/has_supported,1,N,0,15,1,,gaba
+Gabapentin,Anxiolytic,in catalogue,member,chembl_name,high,CHEMBL940,GABAPENTIN,both_routes/has_supported,4,N,1,4,1,,gabapentin
+Gabapentin enacarbil,Anxiolytic,in catalogue,member,chembl_name,high,CHEMBL1628502,GABAPENTIN ENACARBIL,route_indication/has_supported,4,,1,0,1,,gabapentin-enacarbil
+Galantamine,Cholinergic,in catalogue,member,chembl_name,high,CHEMBL659,GALANTAMINE,both_routes/has_supported,4,N,1,11,1,,galantamine
+Ginkgo Biloba,Neuroprotection,in catalogue,member,chembl_synonym,medium,CHEMBL2108466,GINKGO,both_routes/no_eligible_evidence,4,N,0,0,0,,ginkgo-biloba
+Guanfacine,ADHD,in catalogue,member,chembl_name,high,CHEMBL862,GUANFACINE,route_indication/has_supported,4,C,1,13,1,,guanfacine
+Homotaurine,Neuroprotection,in catalogue,member,chembl_synonym,medium,CHEMBL149082,TRAMIPROSATE,route_indication/has_supported,3,,1,1,0,,homotaurine
+Ibudilast,Neuroprotection,in catalogue,member,chembl_name,high,CHEMBL19449,IBUDILAST,route_indication/has_supported,4,R,4,10,1,,ibudilast
+Idalopirdine,Memory,in catalogue,member,chembl_name,high,CHEMBL3286580,IDALOPIRDINE,route_indication/has_supported,3,,1,7,1,,idalopirdine
+Intepirdine,Memory,in catalogue,member,chembl_name,high,CHEMBL1083390,INTEPIRDINE,route_indication/has_supported,3,,1,6,1,,intepirdine
+Ipidacrine,Cholinergic,in catalogue,member,chembl_name,high,CHEMBL130880,IPIDACRINE,route_atc_n/has_preliminary,2,N,0,4,0,,ipidacrine
+Istradefylline,Dopaminergic,in catalogue,member,chembl_name,high,CHEMBL431770,ISTRADEFYLLINE,both_routes/has_supported,4,N,1,11,1,,istradefylline
+Ketamine,Mood Support,in catalogue,member,chembl_name,high,CHEMBL742,KETAMINE,both_routes/has_supported,4,N,1,3,1,,ketamine
+L-DOPA,Dopaminergic,in catalogue,member,pubchem_inchikey,low,CHEMBL1009,LEVODOPA,both_routes/has_supported,4,N,1,5,1,,l-dopa
+Latrepirdine,Memory,in catalogue,member,chembl_name,high,CHEMBL589390,LATREPIRDINE,route_indication/has_supported,3,,0,13,0,,latrepirdine
+Lemborexant,Sleep Support,in catalogue,member,chembl_name,high,CHEMBL3545367,LEMBOREXANT,both_routes/has_supported,4,N,2,3,1,,lemborexant
+Linopirdine,Cholinergic,in catalogue,member,chembl_name,high,CHEMBL319111,LINOPIRDINE,route_atc_n/has_preliminary,2,N,0,0,1,,linopirdine
+Lisdexamfetamine,ADHD,in catalogue,member,chembl_name,high,CHEMBL1201222,LISDEXAMFETAMINE,both_routes/has_supported,4,N,3,0,1,,lisdexamfetamine
+Lisuride,Dopaminergic,in catalogue,member,chembl_name,high,CHEMBL157138,LISURIDE,both_routes/has_supported,3,GN,0,12,1,,lisuride
+Lithium,Neuroprotection,in catalogue,member,chembl_name,high,CHEMBL1201333,LITHIUM,both_routes/no_eligible_evidence,3,N,0,0,0,,lithium
+Mebicar,Anxiolytic,in catalogue,member,chembl_name,high,CHEMBL3707390,MEBICAR,route_atc_n/has_preliminary,-1,N,0,1,0,,mebicar
+Meclofenoxate,Cholinergic,in catalogue,member,chembl_name,high,CHEMBL64545,MECLOFENOXATE,route_atc_n/has_preliminary,2,N,0,0,0,,meclofenoxate
+Melatonin,Sleep Support,in catalogue,member,chembl_name,high,CHEMBL45,MELATONIN,both_routes/has_supported,4,N,1,13,1,,melatonin
+Memantine,Neuroprotection,in catalogue,member,chembl_name,high,CHEMBL807,MEMANTINE,both_routes/has_supported,4,N,1,7,1,,memantine
+Methamphetamine,ADHD,in catalogue,member,chembl_name,high,CHEMBL1201201,METHAMPHETAMINE,both_routes/has_supported,4,N,1,6,0,,methamphetamine
+Methylphenidate,ADHD,in catalogue,member,chembl_name,high,CHEMBL796,METHYLPHENIDATE,both_routes/has_supported,4,N,4,4,1,,methylphenidate
+Modafinil,Eugeroic,in catalogue,member,chembl_name,high,CHEMBL1373,MODAFINIL,both_routes/has_supported,4,N,1,10,1,,modafinil
+Nicotine,Cholinergic,in catalogue,member,chembl_name,high,CHEMBL3,NICOTINE,both_routes/has_supported,4,N,2,24,1,,nicotine
+Opipramol,Anxiolytic,in catalogue,member,chembl_name,high,CHEMBL370753,OPIPRAMOL,both_routes/has_preliminary,3,N,0,23,1,,opipramol
+Oxiracetam,Racetam,in catalogue,member,chembl_name,high,CHEMBL36633,OXIRACETAM,route_atc_n/limited_only,3,N,0,0,0,,oxiracetam
+Pemoline,Stimulant,in catalogue,member,chembl_name,high,CHEMBL1177,PEMOLINE,both_routes/has_preliminary,4,N,1,1,0,,pemoline
+Phenibut,Anxiolytic,in catalogue,member,chembl_name,high,CHEMBL315818,PHENIBUT,route_atc_n/has_preliminary,-1,N,0,0,0,,phenibut
+Pilocarpine,Cholinergic,in catalogue,member,chembl_name,high,CHEMBL550,PILOCARPINE,both_routes/has_supported,4,NS,4,13,1,,pilocarpine
+Piracetam,Racetam,in catalogue,member,chembl_name,high,CHEMBL36715,PIRACETAM,both_routes/has_preliminary,4,N,0,0,1,,piracetam
+Piritinol,Cholinergic,in catalogue,member,chembl_synonym,medium,CHEMBL488093,PYRITINOL,both_routes/no_eligible_evidence,4,N,0,0,0,,piritinol
+Pitolisant,Eugeroic,in catalogue,member,chembl_name,high,CHEMBL462605,PITOLISANT,both_routes/has_supported,4,N,2,16,1,,pitolisant
+Pramipexole,Dopaminergic,in catalogue,member,chembl_name,high,CHEMBL301265,PRAMIPEXOLE,both_routes/has_supported,4,N,1,20,1,,pramipexole
+Pramiracetam,Racetam,in catalogue,member,chembl_name,high,CHEMBL159776,PRAMIRACETAM,route_atc_n/limited_only,2,N,0,0,0,,pramiracetam
+Pregabalin,Anxiolytic,in catalogue,member,chembl_name,high,CHEMBL1059,PREGABALIN,both_routes/has_supported,4,N,1,6,1,,pregabalin
+Prolintane,Stimulant,in catalogue,member,chembl_name,high,CHEMBL2111047,PROLINTANE,route_atc_n/no_eligible_evidence,2,N,0,0,0,,prolintane
+Propentofylline,Neuroprotection,in catalogue,member,chembl_name,high,CHEMBL1079905,PROPENTOFYLLINE,route_atc_n/has_preliminary,2,N,0,3,0,,propentofylline
+Ropinirole,Dopaminergic,in catalogue,member,chembl_name,high,CHEMBL589,ROPINIROLE,both_routes/has_supported,4,N,1,20,1,,ropinirole
+Selegiline,Dopaminergic,in catalogue,member,chembl_name,high,CHEMBL972,SELEGILINE,both_routes/has_supported,4,N,2,11,1,,selegiline
+Seltorexant,Sleep Support,in catalogue,member,chembl_name,high,CHEMBL3597971,SELTOREXANT,route_indication/has_supported,3,,1,3,0,,seltorexant
+Serdexmethylphenidate,ADHD,in catalogue,member,chembl_name,high,CHEMBL4301162,SERDEXMETHYLPHENIDATE,route_indication/has_supported,4,,4,0,0,,serdexmethylphenidate
+Sodium Phenylbutyrate,HDAC Inhibitor,in catalogue,member,chembl_name,high,CHEMBL1469,PHENYLBUTANOIC ACID,route_indication/has_supported,4,A,1,5,1,,sodium-phenylbutyrate
+Solriamfetol,Eugeroic,in catalogue,member,chembl_name,high,CHEMBL4297620,SOLRIAMFETOL,both_routes/no_eligible_evidence,4,N,1,0,0,,solriamfetol
+Suvorexant,Sleep Support,in catalogue,member,chembl_name,high,CHEMBL1083659,SUVOREXANT,both_routes/has_supported,4,N,1,7,1,,suvorexant
+Tacrine,Cholinergic,in catalogue,member,chembl_name,high,CHEMBL95,TACRINE,both_routes/has_supported,4,N,1,42,1,,tacrine
+Theobromine,Stimulant,in catalogue,member,chembl_name,high,CHEMBL1114,THEOBROMINE,seed_only/has_supported_broader_only,3,CR,0,0,0,,theobromine
+Theophylline,Stimulant,in catalogue,member,chembl_name,high,CHEMBL190,THEOPHYLLINE ANHYDROUS,route_indication/has_supported,4,R,9,16,1,,theophylline
+Tofisopam,Anxiolytic,in catalogue,member,chembl_name,high,CHEMBL404216,TOFISOPAM,route_atc_n/has_preliminary,2,N,0,3,0,,tofisopam
+Trazodone,Sleep Support,in catalogue,member,chembl_name,high,CHEMBL621,TRAZODONE,both_routes/has_supported,4,N,3,22,1,,trazodone
+Tryptophan,Mood Support,in catalogue,member,chembl_name,high,CHEMBL54976,TRYPTOPHAN,both_routes/has_supported,4,N,0,1,1,,tryptophan
+Varenicline,Cholinergic,in catalogue,member,chembl_name,high,CHEMBL1076903,VARENICLINE,both_routes/has_supported,4,NS,2,5,0,,varenicline
+Viloxazine,ADHD,in catalogue,member,chembl_name,high,CHEMBL306700,VILOXAZINE,both_routes/has_supported,4,N,1,11,1,,viloxazine
+Vinpocetine,Neuroprotection,in catalogue,member,chembl_name,high,CHEMBL71752,VINPOCETINE,both_routes/has_supported,4,N,0,15,1,,vinpocetine
+Xaliproden,Neuroprotection,in catalogue,member,chembl_name,high,CHEMBL1512580,XALIPRODEN,both_routes/has_supported,3,N,1,0,0,,xaliproden
+Xanomeline,Cholinergic,in catalogue,member,chembl_name,high,CHEMBL21536,XANOMELINE,route_indication/has_supported,4,,4,26,1,,xanomeline
+Xelstrym,ADHD,in catalogue,member,chembl_synonym,medium,CHEMBL612,DEXTROAMPHETAMINE,both_routes/has_supported,4,N,12,11,1,,xelstrym
+Yohimbine,Stimulant,in catalogue,member,chembl_name,high,CHEMBL15245,YOHIMBINE,route_indication/has_supported,3,G,0,32,1,,yohimbine
+"3,4-CTMP",Stimulant,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL1179011,,,,,0,3,0,,3-4-ctmp
+4-Hydroxyamphetamine,Amphetamine,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL1546,HYDROXYAMPHETAMINE,,4,,1,2,0,,4-hydroxyamphetamine
+4F-MPH,Stimulant,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL1253289,,,,,0,1,0,,4f-mph
+"7,8-DHF",BDNF,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL75267,"7,8-DIHYDROXYFLAVONE",,,,0,5,0,,7-8-dhf
+ABT-089,Cholinergic,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL127071,POZANICLINE,,2,,2,1,0,,abt-089
+ABT-126,Cholinergic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL3545231,ABT-126,,2,,1,0,0,,abt-126
+AC-260584,Cholinergic,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL2022960,,,,,0,3,1,,ac-260584
+Adatanserin,Anxiolytic,"ChEMBL, has target data",,chembl_name,high,CHEMBL2111138,ADATANSERIN,,2,,0,3,0,,adatanserin
+Agmatine,Mood Support,"ChEMBL, has target data",,chembl_name,high,CHEMBL58343,AGMATINE,,,,0,2,1,,agmatine
+Alvameline,Cholinergic,"ChEMBL, has target data",,chembl_name,high,CHEMBL131428,ALVAMELINE,,2,,0,2,0,,alvameline
+Amfonelic Acid,Dopaminergic,"ChEMBL, has target data",,chembl_name,high,CHEMBL35337,AMFONELIC ACID,,2,,0,3,0,,amfonelic-acid
+Apigenin,Anxiolytic,"ChEMBL, has target data",,chembl_name,high,CHEMBL28,APIGENIN,,,,0,63,1,,apigenin
+AQW051,Cholinergic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL3545232,AQW051,,2,,1,0,0,,aqw051
+ASP-4345,Dopaminergic,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL4558647,,,,,0,1,0,,asp-4345
+AVL-3288,Memory,"ChEMBL, has target data",member,chembl_name,high,CHEMBL429317,AVL-3288,,1,,1,2,0,,avl-3288
+Baicalein,Anxiolytic,"ChEMBL, has target data",,chembl_name,high,CHEMBL8260,BAICALEIN,,2,,0,36,1,,baicalein
+Baicalin,Anxiolytic,"ChEMBL, has target data",,chembl_name,high,CHEMBL485818,BAICALIN,,,,0,8,1,,baicalin
+BAY 60-7550,Neuroprotection,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL370962,,,,,0,1,1,,bay-60-7550
+Belinostat,HDAC Inhibitor,"ChEMBL, has target data",,chembl_name,high,CHEMBL408513,BELINOSTAT,,4,L,1,20,1,,belinostat
+Besipirdine,Memory,"ChEMBL, has target data",,chembl_name,high,CHEMBL29835,BESIPIRDINE,,2,,0,3,0,,besipirdine
+Biochanin A,Neuroprotection,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL131921,BIOCHANIN,,,,0,10,1,,biochanin-a
+CE-123,Stimulant,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL4456176,,,,,0,1,0,,ce-123
+Chlorphentermine,Stimulant,"ChEMBL, has target data",,chembl_name,high,CHEMBL1201269,CHLORPHENTERMINE,,4,,1,7,0,,chlorphentermine
+Choline,Cholinergic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL920,CHOLINE,,4,,1,3,1,,choline
+Clenbuterol,Stimulant,"ChEMBL, has target data",member,chembl_name,high,CHEMBL49080,CLENBUTEROL,,2,R,1,10,1,,clenbuterol
+Conessine,Stimulant,"ChEMBL, has target data",,chembl_name,high,CHEMBL191703,CONESSINE,,2,,0,5,0,,conessine
+Cutamesine,Neuroprotection,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL408867,[11C]SA4503,,,,0,8,0,,cutamesine
+CX-1739,Ampakine,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL3707399,CX1739,,2,,1,0,0,,cx-1739
+CX-516,Ampakine,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL136800,CX516,,2,,0,1,1,,cx-516
+CX-614,Ampakine,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL599662,,,,,0,1,1,,cx-614
+DAA-1097,Neuroprotection,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL205767,,,,,0,2,0,,daa-1097
+Decoglurant,Glutamatergic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL3301593,DECOGLURANT,,2,,2,0,0,,decoglurant
+Dichloropane,Stimulant,"ChEMBL, has target data",,unii_connectivity,low,CHEMBL169471|CHEMBL47210,,,,,0,3,0,,dichloropane
+Dihydrexidine,Dopaminergic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL25856,DIHYDREXIDINE,,2,,0,14,0,,dihydrexidine
+DMAE,Cholinergic,"ChEMBL, has target data",,chembl_synonym,low,CHEMBL1135,DIMETHYLAMINOETHANOL,,2,,0,2,0,,dmae
+E-6801,Memory,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL362628,,,,,0,1,1,,e-6801
+Eglumegad,Anxiolytic,"ChEMBL, has target data",,chembl_name,high,CHEMBL8759,EGLUMETAD,,2,,0,6,1,,eglumegad
+Emapunil,Anxiolytic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL513922,EMAPUNIL,,2,,1,2,1,,emapunil
+EMD-386088,Memory,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL364005,,,,,0,9,1,,emd-386088
+Emraclidine,Cholinergic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL5314557,EMRACLIDINE,,2,,0,3,1,,emraclidine
+Entinostat,HDAC Inhibitor,"ChEMBL, has target data",,chembl_name,high,CHEMBL27759,ENTINOSTAT,,3,L,1,15,1,,entinostat
+Ephedrine,Stimulant,"ChEMBL, has target data",member,chembl_name,high,CHEMBL211456,EPHEDRINE,,4,ACRS,2,2,1,,ephedrine
+Eptastigmine,Cholinergic,"ChEMBL, has target data",,chembl_name,high,CHEMBL433041,EPTASTIGMINE,,2,,0,4,0,,eptastigmine
+Etazolate,Neuroprotection,"ChEMBL, has target data",member,chembl_name,high,CHEMBL356388,ETAZOLATE,,2,,1,1,1,,etazolate
+Ethylphenidate,Stimulant,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL1187932,,,,,0,3,0,,ethylphenidate
+Farampator,Ampakine,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1276138,FARAMPATOR,,2,,1,0,0,,farampator
+Fenobam,Anxiolytic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL239800,FENOBAM ANHYDROUS,,2,,0,4,1,,fenobam
+Filorexant,Sleep Support,"ChEMBL, has target data",member,chembl_name,high,CHEMBL2107822,FILOREXANT,,2,,1,2,1,,filorexant
+Flmodafinil,Eugeroic,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL1672359,,,,,0,2,0,,flmodafinil
+GTS-21,Cholinergic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL134713,GTS-21,,2,,1,3,1,,gts-21
+Honokiol,Anxiolytic,"ChEMBL, has target data",,chembl_name,high,CHEMBL16901,HONOKIOL,,,,0,10,1,,honokiol
+HT-0712,Memory,"ChEMBL, has target data",member,chembl_name,high,CHEMBL4297287,HT-0712,,2,,1,1,0,,ht-0712
+Huperzine A,Cholinergic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL395280,HUPERZINE A,,2,,1,8,1,,huperzine-a
+Hydergine,Dopaminergic,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL2364968,ERGOLOID,,4,C,4,0,0,,hydergine
+Hypericin,Mood Support,"ChEMBL, has target data",,chembl_name,high,CHEMBL286494,HYPERICIN,,3,,0,10,0,,hypericin
+IBMX,Stimulant,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL275084,ISOBUTYLMETHYLXANTHINE,,,,0,13,1,,ibmx
+IFB-088,Neuroprotection,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL2365743,,,,,0,1,1,,ifb-088
+Irdabisant,Eugeroic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1829335,IRDABISANT,,2,,1,9,0,,irdabisant
+Ispronicline,Cholinergic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL188462,ISPRONICLINE,,2,,1,0,0,,ispronicline
+ISRIB,Memory,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL4303573,,,,,0,1,0,,isrib
+JJC8-088,Dopaminergic,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL3918282,,,,,0,7,0,,jjc8-088
+JJC8-091,Dopaminergic,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL3931765,,,,,0,7,0,,jjc8-091
+JNJ-54717793,Sleep Support,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL4786307,,,,,0,2,0,,jnj-54717793
+L-Serine,Neuroprotection,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL11298,SERINE,,3,,0,4,1,,l-serine
+LY2033298,Cholinergic,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL3770346,,,,,0,3,0,,ly2033298
+LY392098,AMPA PAM,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL341748,,,,,0,1,1,,ly392098
+LY404187,AMPA PAM,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL435582,,,,,0,4,1,,ly404187
+LY451646,AMPA PAM,"ChEMBL, has target data",,pubchem_connectivity,low,CHEMBL435582,,,,,0,4,1,,ly451646
+Maritupirdine,5-HT6 antagonist,"ChEMBL, has target data",member,chembl_name,high,CHEMBL592752,MARITUPIRDINE,,2,,0,8,0,,maritupirdine
+Masupirdine,Memory,"ChEMBL, has target data",member,chembl_name,high,CHEMBL4117187,MASUPIRDINE,,3,,1,7,0,,masupirdine
+McN-A-343,Cholinergic,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL40554,,,,,0,8,0,,mcn-a-343
+MCPP,Stimulant,"ChEMBL, has target data",member,chembl_synonym,low,CHEMBL478,CHLOROPHENYLPIPERAZINE,,2,,0,14,1,,mcpp
+Methacholine,Cholinergic,"ChEMBL, has target data",,chembl_name,high,CHEMBL978,METHACHOLINE,,4,V,1,8,1,,methacholine
+Methylnaphthidate,Stimulant,"ChEMBL, has target data",,unii_connectivity,low,CHEMBL1178957|CHEMBL1183494,,,,,0,1,0,,methylnaphthidate
+Methylphenylpiracetam,Racetam,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL2391147,,,,,0,1,0,,methylphenylpiracetam
+Metrifonate,Cholinergic,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL167150,TRICHLORFON,,2,P,1,0,0,,metrifonate
+Mibampator,Ampakine,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1277001,MIBAMPATOR,,2,,1,1,0,,mibampator
+Milameline,Cholinergic,"ChEMBL, has target data",,chembl_name,high,CHEMBL151938,MILAMELINE,,2,,0,3,1,,milameline
+MK-1064,Sleep Support,"ChEMBL, has target data",,chembl_name,high,CHEMBL3338866,MK-1064,,1,,0,3,1,,mk-1064
+MK-7622,Cholinergic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL4078588,MK-7622,,2,,1,4,1,,mk-7622
+MTEP,Anxiolytic,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL292065,,,,,0,5,1,,mtep
+Muscarine,Cholinergic,"ChEMBL, has target data",,chembl_name,high,CHEMBL12587,MUSCARINE,,,,0,9,1,,muscarine
+Muscimol,Anxiolytic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL273481,MUSCIMOL,,1,,0,3,1,,muscimol
+Neboglamine,Mood Support,"ChEMBL, has target data",,chembl_name,high,CHEMBL1255840,NEBOGLAMINE,,2,,1,0,0,,neboglamine
+Nivasorexant,Sleep Support,"ChEMBL, has target data",,chembl_name,high,CHEMBL3892369,NIVASOREXANT,,2,,0,2,1,,nivasorexant
+Norephedrine,Stimulant,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL61006,PHENYLPROPANOLAMINE,,4,R,4,6,0,,norephedrine
+Oleamide,Sleep Support,"ChEMBL, has target data",,chembl_name,high,CHEMBL15927,OLEAMIDE,,,,0,4,1,,oleamide
+Org 25935,Glutamatergic,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL4228124,ORG-25935,,2,,1,1,0,,org-25935
+Org 26576,Ampakine,"ChEMBL, has target data",member,chembl_squashed,low,CHEMBL3707401,MK-8777,,2,,1,0,0,,org-26576
+Oxotremorine,Cholinergic,"ChEMBL, has target data",,chembl_name,high,CHEMBL7634,OXOTREMORINE,,,,0,12,1,,oxotremorine
+P7C3,Neuroprotection,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL2442630,,,,,0,1,0,,p7c3
+P7C3-A20,Neuroprotection,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL2442625,,,,,0,1,0,,p7c3-a20
+Panobinostat,HDAC Inhibitor,"ChEMBL, has target data",member,chembl_name,high,CHEMBL483254,PANOBINOSTAT,,4,L,1,20,1,,panobinostat
+Paraxanthine,Stimulant,"ChEMBL, has target data",,chembl_name,high,CHEMBL1158,PARAXANTHINE,,0.5,,0,1,0,,paraxanthine
+PF-04958242,AMPA PAM,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL5095022,PESAMPATOR,,2,,1,0,0,,pf-04958242
+PF-04995274,Memory,"ChEMBL, has target data",member,chembl_name,high,CHEMBL2152922,PF-04995274,,1,,0,2,1,,pf-04995274
+PF-06827443,Cholinergic,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL4067722,,,,,0,2,0,,pf-06827443
+Phentermine,Stimulant,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1574,PHENTERMINE,,4,A,2,2,1,,phentermine
+Phenylalanine,Dopaminergic,"ChEMBL, has target data",,chembl_name,high,CHEMBL301523,PHENYLALANINE,,3,,0,8,1,,phenylalanine
+Phenylethylamine,Stimulant,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL610,PHENETHYLAMINE,,,,0,9,1,,phenylethylamine
+Piclamilast,Neuroprotection,"ChEMBL, has target data",,chembl_name,high,CHEMBL42126,PICLAMILAST,,2,,0,5,1,,piclamilast
+PNU-120596,Cholinergic,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL257591,,,,,0,2,1,,pnu-120596
+PRE-084,Neuroprotection,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL305881,,,,,0,6,1,,pre-084
+Radafaxine,Dopaminergic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1172928,RADAFAXINE,,2,,0,3,0,,radafaxine
+Romidepsin,HDAC Inhibitor,"ChEMBL, has target data",member,chembl_name,high,CHEMBL343448,ROMIDEPSIN,,4,L,1,17,1,,romidepsin
+RS-67333,Memory,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL85251,,,,,0,4,1,,rs-67333
+Sabcomeline,Cholinergic,"ChEMBL, has target data",,chembl_name,high,CHEMBL134641,SABCOMELINE,,2,,0,5,1,,sabcomeline
+SAM-e,Mood Support,"ChEMBL, has target data",member,chembl_synonym,low,CHEMBL1088977,ADEMETIONINE,,3,A,0,13,0,,sam-e
+Sarcosine,Mood Support,"ChEMBL, has target data",member,chembl_name,high,CHEMBL304383,SARCOSINE,,2,,0,1,1,,sarcosine
+SB-271046,Memory,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL431298,,,,,0,17,1,,sb-271046
+SB-334867,Sleep Support,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL291536,,,,,0,5,1,,sb-334867
+SB-399885,Memory,"ChEMBL, has target data",,chembl_name,high,CHEMBL1210710,SB-399885,,,,0,1,1,,sb-399885
+Sibutramine,Stimulant,"ChEMBL, has target data",,chembl_name,high,CHEMBL1419,SIBUTRAMINE,,4,A,1,11,1,,sibutramine
+Sipagladenant,Dopaminergic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL5314441,SIPAGLADENANT,,2,,1,0,0,,sipagladenant
+SKF-38393,Dopaminergic,"ChEMBL, has target data",,chembl_name,high,CHEMBL286080,SKF-38393,,,,0,6,1,,skf-38393
+SL65.0155,Memory,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL2027925,CAPESEROD,,2,,1,0,1,,sl65-0155
+T-817MA,Neuroprotection,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL4302089,T-817,,2,,0,1,0,,t-817ma
+TAK-071,Cholinergic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL4594351,TAK-071,,2,,1,0,1,,tak-071
+TAK-653,Ampakine,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL4594403,OSAVAMPATOR,,2,,1,0,0,,tak-653
+TAK-925,Eugeroic,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL4650341,DANAVOREXTON,,2,,0,1,0,,tak-925
+Talampanel,Glutamatergic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL61872,TALAMPANEL,,2,,2,0,1,,talampanel
+Talsaclidine,Cholinergic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL2111051,TALSACLIDINE,,2,,3,5,0,,talsaclidine
+TC-5619,Cholinergic,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL1258006,BRADANICLINE,,2,,1,4,1,,tc-5619
+Tesofensine,Stimulant,"ChEMBL, has target data",member,chembl_name,high,CHEMBL3989690,TESOFENSINE,,2,,1,0,0,,tesofensine
+Trichostatin A,HDAC Inhibitor,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL99,TRICHOSTATIN,,1,,0,26,1,,trichostatin-a
+Tropisetron,Cholinergic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL56564,TROPISETRON,,4,A,1,20,1,,tropisetron
+Uridine,Memory,"ChEMBL, has target data",member,chembl_name,high,CHEMBL100259,URIDINE,,3,,0,4,1,,uridine
+Usmarapride,Memory,"ChEMBL, has target data",member,unii_inchikey,high,CHEMBL4297327,SUVN-D4010,,1,,0,3,1,,usmarapride
+Velnacrine,Cholinergic,"ChEMBL, has target data",,chembl_name,high,CHEMBL51934,VELNACRINE,,2,,0,7,0,,velnacrine
+Vincamine,Neuroprotection,"ChEMBL, has target data",,chembl_name,high,CHEMBL1165342,VINCAMINE,,4,C,1,1,1,,vincamine
+Vorinostat,Neuroprotection,"ChEMBL, has target data",member,chembl_name,high,CHEMBL98,VORINOSTAT,,4,L,4,29,1,,vorinostat
+Vornorexant,Sleep Support,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL4638046,,,,,0,2,1,,vornorexant
+VU0467154,Cholinergic,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL3915634,,,,,0,2,1,,vu0467154
+VU0486846,Cholinergic,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL4127762,,,,,0,2,0,,vu0486846
+WAY-181187,Memory,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL392760,,,,,0,6,1,,way-181187
+2-Aminoindane,Stimulant,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL1188176,,,,,0,0,0,,2-aminoindane
+4-FA,Stimulant,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL2009392,,,,,0,0,0,,4-fa
+8-Chlorotheophylline,Stimulant,"ChEMBL, no target data",,chembl_name,high,CHEMBL88611,8-CHLOROTHEOPHYLLINE,,,,0,0,0,,8-chlorotheophylline
+Acaprazine,Anxiolytic,"ChEMBL, no target data",,chembl_name,high,CHEMBL2104046,ACAPRAZINE,,2,,0,0,0,,acaprazine
+Adafenoxate,Cholinergic,"ChEMBL, no target data",,chembl_name,high,CHEMBL2104053,ADAFENOXATE,,2,,0,0,0,,adafenoxate
+Adrogolide,Dopaminergic,"ChEMBL, no target data",,chembl_name,high,CHEMBL2104655,ADROGOLIDE,,2,,0,0,0,,adrogolide
+Alentemol,Dopaminergic,"ChEMBL, no target data",,chembl_name,high,CHEMBL2104081,ALENTEMOL,,2,,0,0,0,,alentemol
+Aloracetam,Racetam,"ChEMBL, no target data",,chembl_name,high,CHEMBL2104637,ALORACETAM,,2,,0,0,0,,aloracetam
+Alpha-Conotoxin MII,Cholinergic,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL4468892,,,,,0,0,0,,alpha-conotoxin-mii
+Alpha-Conotoxin PIA,Cholinergic,"ChEMBL, no target data",,pubchem_connectivity,low,CHEMBL3104238,,,,,0,0,0,,alpha-conotoxin-pia
+Amfecloral,Stimulant,"ChEMBL, no target data",,chembl_synonym,medium,CHEMBL2105544,AMPHECLORAL,,2,,0,0,0,,amfecloral
+ASP2905,Memory,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL3979641,,,,,0,0,0,,asp2905
+BPAP,Dopaminergic,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL490942,,,,,0,0,0,,bpap
+Cebaracetam,Racetam,"ChEMBL, no target data",,chembl_name,high,CHEMBL2105942,CEBARACETAM,,2,,0,0,0,,cebaracetam
+Clobenzorex,Stimulant,"ChEMBL, no target data",,chembl_name,high,CHEMBL1213251,CLOBENZOREX,,4,A,0,0,0,,clobenzorex
+CMS-121,Neuroprotection,"ChEMBL, no target data",member,chembl_name,high,CHEMBL1951865,CMS-121,,1,,0,0,0,,cms-121
+Coluracetam,Racetam,"ChEMBL, no target data",,chembl_name,high,CHEMBL37935,COLURACETAM,,2,,0,0,0,,coluracetam
+Corallocin A,Neuroprotection,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL3930111,,,,,0,0,0,,corallocin-a
+Corallocin B,Neuroprotection,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL3967411,,,,,0,0,0,,corallocin-b
+CX-546,Ampakine,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL1255648,,,,,0,0,1,,cx-546
+CX-717,Ampakine,"ChEMBL, no target data",member,chembl_name,high,CHEMBL4791762,CX-717,,2,,0,0,0,,cx-717
+Cyclazodone,Stimulant,"ChEMBL, no target data",,chembl_name,high,CHEMBL2106536,CYCLAZODONE,,2,,0,0,0,,cyclazodone
+Cytidine,Cholinergic,"ChEMBL, no target data",member,chembl_name,high,CHEMBL95606,CYTIDINE,,3,,0,0,1,,cytidine
+Dimiracetam,Racetam,"ChEMBL, no target data",,chembl_name,high,CHEMBL337612,DIMIRACETAM,,2,,0,0,0,,dimiracetam
+Doliracetam,Racetam,"ChEMBL, no target data",,chembl_name,high,CHEMBL2106519,DOLIRACETAM,,2,,0,0,0,,doliracetam
+Dopamantine,Dopaminergic,"ChEMBL, no target data",,chembl_name,high,CHEMBL2106204,DOPAMANTINE,,2,,0,0,0,,dopamantine
+Dupracetam,Racetam,"ChEMBL, no target data",,chembl_name,high,CHEMBL2104359,DUPRACETAM,,2,,0,0,0,,dupracetam
+Erinacine A,Neuroprotection,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL3797576,,,,,0,0,0,,erinacine-a
+Ethomersol,Stimulant,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL1624784,,,,,0,0,0,,ethomersol
+Etiracetam,Racetam,"ChEMBL, no target data",,chembl_name,high,CHEMBL1400561,ETIRACETAM,,2,,0,0,0,,etiracetam
+Eutropoflavin,BDNF,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL1800922,,,,,0,0,0,,eutropoflavin
+Fasoracetam,Racetam,"ChEMBL, no target data",member,chembl_name,high,CHEMBL2106179,FASORACETAM,,2,,0,0,0,,fasoracetam
+Fenproporex,Stimulant,"ChEMBL, no target data",,chembl_name,high,CHEMBL2105566,FENPROPOREX,,4,,0,0,0,,fenproporex
+Fosigotifator,Neuroprotection,"ChEMBL, no target data",member,chembl_name,high,CHEMBL5315045,FOSIGOTIFATOR,,2,,0,0,0,,fosigotifator
+Gambogic amide,Neuroprotection,"ChEMBL, no target data",,chembl_name,high,CHEMBL444109,GAMBOGIC AMIDE,,,,0,0,0,,gambogic-amide
+GSK1034702,Cholinergic,"ChEMBL, no target data",member,chembl_synonym,medium,CHEMBL5095238,GSK-1034702,,1,,0,0,0,,gsk1034702
+HA-966,Neuroprotection,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL351464,,,,,0,0,0,,ha-966
+Hopantenic Acid,Anxiolytic,"ChEMBL, no target data",,chembl_name,high,CHEMBL2110783,HOPANTENIC ACID,,2,,0,0,0,,hopantenic-acid
+IDRA-21,Ampakine,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL77862,,,,,0,0,1,,idra-21
+L-Clausenamide,Neuroprotection,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL520128,,,,,0,0,0,,l-clausenamide
+L-Threonic Acid,Memory,"ChEMBL, no target data",member,chembl_name,high,CHEMBL2152047,L-THREONIC ACID,,2,,0,0,0,,l-threonic-acid
+Lemairamin,Memory,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL252000,,,,,0,0,0,,lemairamin
+LM22A-4,BDNF,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL4303415,,,,,0,0,0,,lm22a-4
+Mefenorex,Stimulant,"ChEMBL, no target data",,chembl_name,high,CHEMBL2110962,MEFENOREX,,4,A,0,0,0,,mefenorex
+Mesocarb,Dopaminergic,"ChEMBL, no target data",,chembl_name,high,CHEMBL3989800,MESOCARB,,2,,0,0,0,,mesocarb
+MRZ-9547,Dopaminergic,"ChEMBL, no target data",,pubchem_connectivity,low,CHEMBL348639,,,,,0,0,0,,mrz-9547
+Nebracetam,Racetam,"ChEMBL, no target data",,chembl_name,high,CHEMBL2104682,NEBRACETAM,,2,,0,0,0,,nebracetam
+Nefiracetam,Racetam,"ChEMBL, no target data",member,chembl_name,high,CHEMBL260829,NEFIRACETAM,,2,,0,0,0,,nefiracetam
+Neotrofin,Memory,"ChEMBL, no target data",member,chembl_synonym,medium,CHEMBL2104345,LETEPRINIM,,2,,0,0,0,,neotrofin
+NGX267,Cholinergic,"ChEMBL, no target data",,chembl_synonym,medium,CHEMBL4297408,NGX-267,,2,,0,0,0,,ngx267
+Nitromemantine,Neuroprotection,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL5912260,,,,,0,0,0,,nitromemantine
+NM-2-AI,Stimulant,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL1188235,,,,,0,0,0,,nm-2-ai
+NMDA,Neuroprotection,"ChEMBL, no target data",member,pubchem_inchikey,low,CHEMBL291278,N-METHYL-D-ASPARTIC ACID (NMDA),,2,,0,0,1,,nmda
+Nooglutyl,Ampakine,"ChEMBL, no target data",,unii_connectivity,low,CHEMBL1379487,,,,,0,0,0,,nooglutyl
+Noopept,Memory,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL4303687,,,,,0,0,0,,noopept
+NSI-189,Mood Support,"ChEMBL, no target data",member,chembl_name,high,CHEMBL4302505,NSI-189,,2,,0,0,0,,nsi-189
+Ocaperidone,Dopaminergic,"ChEMBL, no target data",,chembl_name,high,CHEMBL2104619,OCAPERIDONE,,2,,0,0,1,,ocaperidone
+PEPA,AMPA PAM,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL1097940,,,,,0,0,0,,pepa
+Phenylethylidenehydrazine,Anxiolytic,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL2235132,BETA-PHENYLETHYLIDENE HYDRAZINE,,,,0,0,0,,phenylethylidenehydrazine
+Phenylpiracetam,Racetam,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL348639,,,,,0,0,0,,phenylpiracetam
+Phosphatidylcholine,Cholinergic,"ChEMBL, no target data",member,chembl_name,high,CHEMBL503481,PHOSPHATIDYLCHOLINE,,3,,0,0,0,,phosphatidylcholine
+Phosphatidylserine,Memory,"ChEMBL, no target data",member,chembl_synonym,medium,CHEMBL4297669,PHOSPHATIDYL SERINE,,2,,0,0,0,,phosphatidylserine
+Picamilon,Anxiolytic,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL4303255,,,,,0,0,0,,picamilon
+PQCA,Cholinergic,"ChEMBL, no target data",,chembl_synonym,low,CHEMBL1800285,MSD-M1PAM,,,,0,0,0,,pqca
+Propylhexedrine,Stimulant,"ChEMBL, no target data",,chembl_name,high,CHEMBL2105275,PROPYLHEXEDRINE,,4,,0,0,0,,propylhexedrine
+Rolziracetam,Racetam,"ChEMBL, no target data",,chembl_name,high,CHEMBL51396,ROLZIRACETAM,,2,,0,0,0,,rolziracetam
+Rosemary Extract,Memory,"ChEMBL, no target data",,chembl_name,high,CHEMBL2074625,ROSEMARY EXTRACT,,,,0,0,0,,rosemary-extract
+S-18986,AMPA PAM,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL320642,,,,,0,0,1,,s-18986
+Sabeluzole,Neuroprotection,"ChEMBL, no target data",,chembl_name,high,CHEMBL549671,SABELUZOLE,,2,,0,0,0,,sabeluzole
+Sapunifiram,Ampakine,"ChEMBL, no target data",,chembl_name,high,CHEMBL72443,SAPUNIFIRAM,,,,0,0,0,,sapunifiram
+Sialic Acid,Memory,"ChEMBL, no target data",,chembl_name,high,CHEMBL152452,SIALIC ACID,,2,,0,0,0,,sialic-acid
+SNAP-37889,Anxiolytic,"ChEMBL, no target data",member,chembl_synonym,medium,CHEMBL4297765,HT-2157,,1,,0,0,0,,snap-37889
+Sunifiram,Ampakine,"ChEMBL, no target data",,chembl_name,high,CHEMBL309176,SUNIFIRAM,,,,0,0,0,,sunifiram
+TAK-137,Ampakine,"ChEMBL, no target data",member,chembl_name,high,CHEMBL4594501,TAK-137,,1,,0,0,0,,tak-137
+TAK-861,Eugeroic,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL6068065,OVEPOREXTON,,2,,0,0,0,,tak-861
+Tetramethoxyluteolin,Neuroprotection,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL327340,TETRAMETHYLLUTEOLIN,,,,0,0,0,,tetramethoxyluteolin
+Theacrine,Stimulant,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL143715,,,,,0,0,0,,theacrine
+Thozalinone,Stimulant,"ChEMBL, no target data",,chembl_name,high,CHEMBL2105457,THOZALINONE,,2,,0,0,0,,thozalinone
+Tulrampator,Ampakine,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL1276826,,,,,0,0,0,,tulrampator
+Unifiram,Ampakine,"ChEMBL, no target data",,chembl_name,high,CHEMBL140717,UNIFIRAM,,,,0,0,0,,unifiram
+Vinburnine,Neuroprotection,"ChEMBL, no target data",,chembl_name,high,CHEMBL1892145,VINBURNINE,,2,C,0,0,1,,vinburnine
+Zylofuramine,Stimulant,"ChEMBL, no target data",,chembl_name,high,CHEMBL3989838,ZYLOFURAMINE,,2,,0,0,0,,zylofuramine
+"1,3-DMAA",Stimulant,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,1-3-dmaa
+2-FA,Stimulant,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,2-fa
+2-FEA,Stimulant,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,2-fea
+2-FMA,Stimulant,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,2-fma
+3-FA,Stimulant,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,3-fa
+3-FEA,Stimulant,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,3-fea
+3-FMA,Stimulant,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,3-fma
+3-FPM,Stimulant,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,3-fpm
+4-FMA,Stimulant,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,4-fma
+Adapromine,Dopaminergic,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,adapromine
+AF710B,Cholinergic,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,af710b
+AN6001,Cholinergic,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,an6001
+ATH-1105,Neuroprotection,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,ath-1105
+AVN-322,5-HT6 antagonist,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII B7DM6S48B2,avn-322
+Bemethyl,Stimulant,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,bemethyl
+Black Cohosh,Mood Support,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII K73E24S6X9,black-cohosh
+Caffeine Sodium Benzoate,Xanthine,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,caffeine-sodium-benzoate
+CE-158,Dopaminergic,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,ce-158
+Desoxypipradrol,Stimulant,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII 49UNK1BV8T,desoxypipradrol
+Ecklonia Cava,Neuroprotection,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII UXX2N5V39P,ecklonia-cava
+Erinacine C,Neuroprotection,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,erinacine-c
+Erinacine P,Neuroprotection,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,erinacine-p
+FK-960,Memory,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII 60MMJ100ZX,fk-960
+Fladrafinil,Eugeroic,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII 5RT6X0M01F,fladrafinil
+Fluorene Myristate,Dopaminergic,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,fluorene-myristate
+Guarana,Stimulant,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII 52U584F1CA,guarana
+HBT1,Ampakine,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,hbt1
+Hemantane,Dopaminergic,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,hemantane
+Hericene A,Neuroprotection,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII D9KLK3KU6Y,hericene-a
+Hericenone C,Neuroprotection,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,hericenone-c
+Hericenone D,Neuroprotection,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,hericenone-d
+Imidazenil,Anxiolytic,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII 7N95V6864R,imidazenil
+Kava,Anxiolytic,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,kava
+LM22B-10,Neuroprotection,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,lm22b-10
+LY503430,AMPA PAM,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,ly503430
+Methiopropamine,Stimulant,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII 64ON2ETH7I,methiopropamine
+Modafiendz,Eugeroic,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII 223VWC34TA,modafiendz
+Phenylpiracetam Hydrazide,Racetam,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII 289199VKN4,phenylpiracetam-hydrazide
+PPAP,Dopaminergic,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,ppap
+PRL-8-53,Memory,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,prl-8-53
+SSR181507,Dopaminergic,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,ssr181507
+T-495,Cholinergic,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,t-495
+T-588,Neuroprotection,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII E2GNU8X2QA,t-588
+T440,Cholinergic,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,t440
+Tabernanthalog,Neuroprotection,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,tabernanthalog
+TAK-994,Eugeroic,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,tak-994
+TC299423,Cholinergic,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,tc299423
+Tolibut,Anxiolytic,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII UJ5N9SJ9NL,tolibut
+"1,4-DMAA",Stimulant,unidentified,,no_match,,,,,,,,,,,1-4-dmaa
+4-PMPD,Dopaminergic,unidentified,,no_match,,,,,,,,,,,4-pmpd
+4F-EPH,Stimulant,unidentified,,no_match,,,,,,,,,,,4f-eph
+522-054,Cholinergic,unidentified,,no_match,,,,,,,,,,,522-054
+9-Me-BC,Dopaminergic,unidentified,,no_match,,,,,,,,,,,9-me-bc
+ACD856,BDNF,unidentified,,no_match,,,,,,,,,,,acd856
+Adamantyl Carbonyl Proline,Memory,unidentified,,no_match,,,,,,,,,,,adamantyl-carbonyl-proline
+Alpha-Conotoxin TxIB,Cholinergic,unidentified,,no_match,,,,,,,,,,,alpha-conotoxin-txib
+Alpha-GPC,Cholinergic,unidentified,,no_match,,,,,,,,,,,alpha-gpc
+AMG 747 (Tilapertin),Glutamatergic,unidentified,,no_match,,,,,,,,,,,amg-747-tilapertin
+Ampasse,Ampakine,unidentified,,no_match,,,,,,,,,,,ampasse
+Amycenone,Neuroprotection,unidentified,,no_match,,,,,,,,,,,amycenone
+Artichoke Extract,Memory,unidentified,,no_match,,,,,,,,,,,artichoke-extract
+CAD-31,Neuroprotection,unidentified,,no_match,,,,,,,,,,,cad-31
+Chaste Tree (Vitex),Mood Support,unidentified,,no_match,,,,,,,,,,,chaste-tree-vitex
+Cocoa Flavanols,Neuroprotection,unidentified,,no_match,,,,,,,,,,,cocoa-flavanols
+Declozindol,Eugeroic,unidentified,,no_match,,,,,,,,,,,declozindol
+HTL0018318,Cholinergic,unidentified,,no_match,,,,,,,,,,,htl0018318
+Hydrafinil,Eugeroic,unidentified,,no_match,,,,,,,,,,,hydrafinil
+IPAP,Dopaminergic,unidentified,,no_match,,,,,,,,,,,ipap
+Jujube,Anxiolytic,unidentified,,no_match,,,,,,,,,,,jujube
+Kratom,Anxiolytic,unidentified,,no_match,,,,,,,,,,,kratom
+Lavender,Anxiolytic,unidentified,,no_match,,,,,,,,,,,lavender
+Lemon Balm,Anxiolytic,unidentified,,no_match,,,,,,,,,,,lemon-balm
+Levoamphetamine,Amphetamine,unidentified,,no_match,,,,,,,,,,,levoamphetamine
+Magnolia Bark,Anxiolytic,unidentified,,no_match,,,,,,,,,,,magnolia-bark
+MPAP,Dopaminergic,unidentified,,no_match,,,,,,,,,,,mpap
+Mucuna Pruriens,Dopaminergic,unidentified,,no_match,,,,,,,,,,,mucuna-pruriens
+N-Acetyl L-Tyrosine (NALT),Dopaminergic,unidentified,,no_match,,,,,,,,,,,n-acetyl-l-tyrosine-nalt
+N-Ethyl-Cypenamine,Stimulant,unidentified,,no_match,,,,,,,,,,,n-ethyl-cypenamine
+N-Methyl-Cyclazodone,Stimulant,unidentified,,no_match,,,,,,,,,,,n-methyl-cyclazodone
+N-Methyl-Cypenamine,Stimulant,unidentified,,no_match,,,,,,,,,,,n-methyl-cypenamine
+NPAP,Dopaminergic,unidentified,,rejected_on_review,,,,,,,,,,"ChEMBL synonym of prajmalium, an unrelated substance",npap
+P7C3-S243,Neuroprotection,unidentified,,no_match,,,,,,,,,,,p7c3-s243
+Passionflower,Anxiolytic,unidentified,,no_match,,,,,,,,,,,passionflower
+PT-1284,Cholinergic,unidentified,,no_match,,,,,,,,,,,pt-1284
+RGPU-95,Racetam,unidentified,,no_match,,,,,,,,,,,rgpu-95
+Sabroxy,Dopaminergic,unidentified,,no_match,,,,,,,,,,,sabroxy
+Scutellaria,Anxiolytic,unidentified,,no_match,,,,,,,,,,,scutellaria
+THN102,Eugeroic,unidentified,,no_match,,,,,,,,,,,thn102
+Valerian Root,Sleep Support,unidentified,,no_match,,,,,,,,,,,valerian-root
+VU319,Cholinergic,unidentified,,no_match,,,,,,,,,,,vu319
+ZJ34,Neuroprotection,unidentified,,no_match,,,,,,,,,,,zj34

@@ -1,0 +1,179 @@
+name,wiki_class,column,with_d21,match_tier,confidence,chembl_parents,chembl_names,catalogue_status,max_phase,atc_level1,curated_mechanisms,publication_targets,gtopdb,note,slug
+Acetyl-L-Carnitine,Mitochondrial,in catalogue,member,chembl_synonym,medium,CHEMBL1697733,ACETYLCARNITINE,both_routes/has_preliminary,3,N,1,1,0,,acetyl-l-carnitine
+CBD,Cannabinoid,in catalogue,member,chembl_squashed,low,CHEMBL190461,CANNABIDIOL,both_routes/has_supported,4,N,1,66,1,,cbd
+CoQ10,Mitochondrial,in catalogue,member,chembl_synonym,medium,CHEMBL454801,UBIDECARENONE,route_indication/limited_only,3,C,1,0,0,,coq10
+Dexpramipexole,Mitochondrial,in catalogue,member,chembl_name,high,CHEMBL249420,DEXPRAMIPEXOLE,route_indication/has_preliminary,3,,0,3,0,,dexpramipexole
+Dronabinol,Cannabinoid,in catalogue,member,chembl_name,high,CHEMBL465,DRONABINOL,route_indication/has_supported,4,A,1,18,1,,dronabinol
+HGH,Growth Hormone,in catalogue,member,chembl_synonym,low,CHEMBL1201621,SOMATROPIN,route_indication/has_supported,4,H,1,0,0,,hgh
+Idebenone,Mitochondrial,in catalogue,member,chembl_name,high,CHEMBL252556,IDEBENONE,both_routes/has_preliminary,4,N,1,9,0,,idebenone
+Metformin,AMPK,in catalogue,member,chembl_name,high,CHEMBL1431,METFORMIN,route_indication/has_supported,4,A,2,2,1,,metformin
+Methylene Blue,Mitochondrial,in catalogue,member,chembl_name,high,CHEMBL191083,METHYLENE BLUE CATION,route_indication/has_supported,4,V,2,9,0,,methylene-blue
+Nabilone,Cannabinoid,in catalogue,member,chembl_name,high,CHEMBL2218896,NABILONE,route_indication/has_supported,4,A,1,7,1,,nabilone
+Olesoxime,Mitochondrial,in catalogue,member,chembl_name,high,CHEMBL3545254,OLESOXIME,route_indication/no_eligible_evidence,3,,0,0,0,,olesoxime
+Omaveloxolone,Mitochondrial,in catalogue,member,chembl_name,high,CHEMBL4303525,OMAVELOXOLONE,both_routes/has_supported,4,N,1,0,0,,omaveloxolone
+Ostarine,SARM,in catalogue,member,chembl_synonym,medium,CHEMBL1738889,ENOBOSARM,route_indication/has_supported,3,,1,2,0,,ostarine
+Palmitoylethanolamide,Cannabinoid,in catalogue,member,chembl_synonym,medium,CHEMBL417675,PALMIDROL,route_indication/has_preliminary,3,,0,2,1,,palmitoylethanolamide
+Resveratrol,Senolytic,in catalogue,member,chembl_name,high,CHEMBL165,RESVERATROL,route_indication/has_supported,3,,0,58,1,,resveratrol
+Rimonabant,Cannabinoid,in catalogue,member,chembl_name,high,CHEMBL111,RIMONABANT,route_indication/has_supported,4,A,1,42,1,,rimonabant
+Rosiglitazone,PPAR Modulator,in catalogue,member,chembl_name,high,CHEMBL121,ROSIGLITAZONE,route_indication/has_supported,4,A,2,33,1,,rosiglitazone
+Testosterone,Anabolic Steroid,in catalogue,member,chembl_name,high,CHEMBL386630,TESTOSTERONE,route_indication/has_supported,4,G,1,17,1,,testosterone
+THC,Cannabinoid,in catalogue,member,pubchem_inchikey,low,CHEMBL465,DRONABINOL,route_indication/has_supported,4,A,1,18,1,,thc
+Vatiquinone,Mitochondrial,in catalogue,member,chembl_name,high,CHEMBL1812161,VATIQUINONE,route_indication/has_supported,3,,1,0,1,,vatiquinone
+2-Arachidonoylglycerol,Cannabinoid,"ChEMBL, has target data",,chembl_name,high,CHEMBL122972,2-ARACHIDONOYLGLYCEROL,,,,0,6,1,,2-arachidonoylglycerol
+AC-262536,SARM,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL3084525,,,,,0,2,0,,ac-262536
+ACP-105,SARM,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL3084681,,,,,0,2,0,,acp-105
+AICAR,AMPK,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL483849,,,,,0,2,0,,aicar
+ALA,Mitochondrial,"ChEMBL, has target data",,pubchem_connectivity,low,CHEMBL279597|CHEMBL66693,ALANINE|D-ALANINE,,3,,0,1,1,,ala
+Aleglitazar,PPAR Modulator,"ChEMBL, has target data",,chembl_name,high,CHEMBL519504,ALEGLITAZAR,,3,,2,5,1,,aleglitazar
+AM3506,Cannabinoid,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL2180821,,,,,0,3,0,,am3506
+Anadrol,Anabolic Steroid,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL1200585,OXYMETHOLONE,,4,A,1,8,0,,anadrol
+Anandamide,Cannabinoid,"ChEMBL, has target data",,chembl_name,high,CHEMBL15848,ANANDAMIDE,,,,0,13,1,,anandamide
+Anavar,Anabolic Steroid,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL1200436,OXANDROLONE,,4,A,1,1,1,,anavar
+Andarine,SARM,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL125236,,,,,0,1,1,,andarine
+Berberine,AMPK,"ChEMBL, has target data",,chembl_name,high,CHEMBL295124,BERBERINE,,4,,0,29,1,,berberine
+BIA 10-2474,Cannabinoid,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL4460898,,,,,0,2,0,,bia-10-2474
+BMS-564929,SARM,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL229264,,,,,0,3,0,,bms-564929
+Cannabichromene,Cannabinoid,"ChEMBL, has target data",,chembl_name,high,CHEMBL422704,CANNABICHROMENE,,,,0,13,1,,cannabichromene
+Cardarine,PPAR Modulator,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL38943,GW501516,,2,,1,6,1,,cardarine
+CBG,Cannabinoid,"ChEMBL, has target data",member,pubchem_inchikey,low,CHEMBL497318,CANNABIGEROL,,2,,0,20,1,,cbg
+Cordycepin,AMPK,"ChEMBL, has target data",,chembl_name,high,CHEMBL305686,CORDYCEPIN,,1,,0,2,1,,cordycepin
+"CP-55,940",Cannabinoid,"ChEMBL, has target data",,chembl_squashed,low,CHEMBL559612,CP-55940,,,,0,9,1,,cp-55-940
+Dasatinib,Senolytic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1421,DASATINIB ANHYDROUS,,4,L,7,158,1,,dasatinib
+Dianabol,Anabolic Steroid,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL1418176,METHANDROSTENOLONE,,4,AD,1,0,0,,dianabol
+Fisetin,Senolytic,"ChEMBL, has target data",,chembl_name,high,CHEMBL31574,FISETIN,,2,,0,25,1,,fisetin
+GLPG-0492,SARM,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL2178100,GLPG0492,,1,,1,0,0,,glpg-0492
+GSK-2849466,SARM,"ChEMBL, has target data",,chembl_squashed,low,CHEMBL3545046,GSK2849466,,1,,1,0,0,,gsk-2849466
+GSK-2881078,SARM,"ChEMBL, has target data",,chembl_squashed,low,CHEMBL3545174,GSK2881078,,2,,1,0,0,,gsk-2881078
+GW-0742,Mitochondrial,"ChEMBL, has target data",,chembl_squashed,low,CHEMBL38508,,,,,0,5,1,,gw-0742
+HU-308,Cannabinoid,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL3613118,ONTERNABEZ,,1,,0,1,0,,hu-308
+INT131,PPAR Modulator,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1236924,INT131,,2,,1,2,0,,int131
+JWH-018,Synthetic Cannabinoid,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL561013,,,,,0,4,1,,jwh-018
+JWH-210,Cannabinoid,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL549603,,,,,0,2,0,,jwh-210
+JZL195,Cannabinoid,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL606201,,,,,0,5,1,,jzl195
+LGD-2226,SARM,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL436784,,,,,0,1,0,,lgd-2226
+LGD-3303,SARM,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL5170697,,,,,0,1,0,,lgd-3303
+LGD-4033,SARM,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL5170587,VK5211,,2,,1,1,0,,lgd-4033
+Masteron,Anabolic Steroid,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL1201048,DROMOSTANOLONE PROPIONATE,,4,,1,0,1,,masteron
+Meldonium,Mitochondrial,"ChEMBL, has target data",member,chembl_name,high,CHEMBL2104708,MELDONIUM,,2,C,0,1,0,,meldonium
+MitoQ,Mitochondrial,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL1229093,MITOQUINONE CATION,,2,,0,1,0,,mitoq
+MK-677,Growth Hormone,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL13817,IBUTAMOREN,,2,,1,3,1,,mk-677
+Nandrolone,Anabolic Steroid,"ChEMBL, has target data",,chembl_name,high,CHEMBL757,NANDROLONE,,3,,0,3,1,,nandrolone
+NMNH,Mitochondrial,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL2058993,,,,,0,1,0,,nmnh
+OL-135,Cannabinoid,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL177577,,,,,0,5,1,,ol-135
+Oleoylethanolamide,PPAR Modulator,"ChEMBL, has target data",,chembl_name,high,CHEMBL280065,OLEOYLETHANOLAMIDE,,,,0,10,1,,oleoylethanolamide
+Pemafibrate,PPAR Modulator,"ChEMBL, has target data",,chembl_name,high,CHEMBL247951,PEMAFIBRATE,,4,C,1,3,0,,pemafibrate
+PF-04457845,Cannabinoid,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL1651534,REDAFAMDASTAT,,2,,1,4,1,,pf-04457845
+PF-3845,Cannabinoid,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL1651524,,,,,0,2,1,,pf-3845
+PQQ,Mitochondrial,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL1235421,PYRROLOQUINOLINE QUINONE,,,,0,1,0,,pqq
+Pterostilbene,Adaptogen,"ChEMBL, has target data",,chembl_name,high,CHEMBL83527,PTEROSTILBENE,,2,,0,9,1,,pterostilbene
+Quercetin,Senolytic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL50,QUERCETIN,,3,,0,175,1,,quercetin
+RAD-140,SARM,"ChEMBL, has target data",,chembl_name,high,CHEMBL1672635,RAD-140,,2,,0,2,0,,rad-140
+S-23,SARM,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL512283,,,,,0,1,0,,s-23
+Seladelpar,PPAR Modulator,"ChEMBL, has target data",,chembl_name,high,CHEMBL230158,SELADELPAR,,4,A,2,2,1,,seladelpar
+SLU-PP-332,Mitochondrial,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL4208749,,,,,0,3,0,,slu-pp-332
+SLU-PP-915,Mitochondrial,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL5629871,,,,,0,3,0,,slu-pp-915
+Sonlicromanol,Mitochondrial,"ChEMBL, has target data",,chembl_name,high,CHEMBL4802153,SONLICROMANOL,,3,,1,0,0,,sonlicromanol
+SR-9009,Mitochondrial,"ChEMBL, has target data",,chembl_squashed,low,CHEMBL1961796,SR9009,,,,0,3,1,,sr-9009
+SR-9011,Mitochondrial,"ChEMBL, has target data",,chembl_squashed,low,CHEMBL1961797,SR9011,,,,0,3,1,,sr-9011
+Testosterone Undecanoate,Anabolic Steroid,"ChEMBL, has target data",member,chembl_name,high,CHEMBL2107067,TESTOSTERONE UNDECANOATE,,4,,1,0,0,,testosterone-undecanoate
+Tetrahydrocannabiphorol,Cannabinoid,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL5171161,,,,,0,2,0,,tetrahydrocannabiphorol
+Tetrahydrocannabivarin,Cannabinoid,"ChEMBL, has target data",,chembl_name,high,CHEMBL2387541,TETRAHYDROCANNABIVARIN,,2,,0,14,1,,tetrahydrocannabivarin
+Tetrahydromagnolol,CB2 Agonist,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL32362,,,,,0,2,0,,tetrahydromagnolol
+Trenbolone,Anabolic Steroid,"ChEMBL, has target data",,chembl_name,high,CHEMBL197309,TRENBOLONE,,,,0,1,0,,trenbolone
+TUDCA,Mitochondrial,"ChEMBL, has target data",member,pubchem_inchikey,low,CHEMBL272427,TAURURSODIOL,,4,A,1,5,1,,tudca
+URB597,Cannabinoid,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL184238,URB-597,,1,,0,8,1,,urb597
+Urolithin A,Mitochondrial,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL1836264,,,,,0,1,0,,urolithin-a
+"WIN 55,212-2",Cannabinoid,"ChEMBL, has target data",,chembl_squashed,low,CHEMBL188,WIN-552122,,,,0,6,1,,win-55-212-2
+Winstrol,Anabolic Steroid,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL2079587,STANOZOLOL,,4,A,1,0,1,,winstrol
+American Ginseng,Adaptogen,"ChEMBL, no target data",member,chembl_synonym,medium,CHEMBL2109196,"GINSENG, AMERICAN",,3,,0,0,0,,american-ginseng
+Ashwagandha,Adaptogen,"ChEMBL, no target data",member,chembl_synonym,medium,CHEMBL4288984,WITHANOLIDE D,,3,,0,0,0,,ashwagandha
+Astragaloside IV,Adaptogen,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL3121562,,,,,0,0,0,,astragaloside-iv
+BAM15,Mitochondrial,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL3627755,,,,,0,0,0,,bam15
+Bromantane,Adaptogen,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL4303520,,,,,0,0,0,,bromantane
+Deazaflavin,Mitochondrial,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL1905125,,,,,0,0,0,,deazaflavin
+Decylubiquinone,Mitochondrial,"ChEMBL, no target data",,chembl_name,high,CHEMBL217894,DECYLUBIQUINONE,,,,0,0,0,,decylubiquinone
+Dong Quai,Adaptogen,"ChEMBL, no target data",member,chembl_synonym,medium,CHEMBL4288984,WITHANOLIDE D,,3,,0,0,0,,dong-quai
+Echinacea,Adaptogen,"ChEMBL, no target data",,chembl_synonym,medium,CHEMBL4297943,"ECHINACEA, UNSPECIFIED",,3,,0,0,0,,echinacea
+Eleuthero,Adaptogen,"ChEMBL, no target data",,chembl_name,high,CHEMBL2108194,ELEUTHERO,,-1,,0,0,0,,eleuthero
+Equipoise,Anabolic Steroid,"ChEMBL, no target data",,chembl_synonym,medium,CHEMBL2106059,BOLDENONE UNDECYLENATE,,2,,0,0,0,,equipoise
+Ginger,Adaptogen,"ChEMBL, no target data",,chembl_name,high,CHEMBL2108465,GINGER,,3,,0,0,0,,ginger
+Ginseng,Adaptogen,"ChEMBL, no target data",member,chembl_synonym,medium,CHEMBL2108467,"GINSENG, ASIAN",,2,,0,0,0,,ginseng
+Ginsenoside Rg1,Adaptogen,"ChEMBL, no target data",,chembl_name,high,CHEMBL501637,GINSENOSIDE RG1,,,,0,0,0,,ginsenoside-rg1
+Gotu Kola,Adaptogen,"ChEMBL, no target data",member,chembl_synonym,medium,CHEMBL5095437,CENTELLA ASIATICA EXTRACT,,3,,0,0,0,,gotu-kola
+Indolepropionamide,Mitochondrial,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL1338144,,,,,0,0,0,,indolepropionamide
+ITPP,Mitochondrial,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL1182171,,,,,0,0,0,,itpp
+J-147,Mitochondrial,"ChEMBL, no target data",member,chembl_synonym,low,CHEMBL2387144,J147,,1,,0,0,0,,j-147
+Milk Thistle,Adaptogen,"ChEMBL, no target data",member,chembl_name,high,CHEMBL2108623,MILK THISTLE,,3,,0,0,0,,milk-thistle
+NAD+,Mitochondrial,"ChEMBL, no target data",,chembl_synonym,low,CHEMBL1234613,NADIDE,,2,,0,0,1,,nad
+NADH,Mitochondrial,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL1234616,,,,,0,0,0,,nadh
+NMN,Mitochondrial,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL610238,BETANMN,,,,0,0,0,,nmn
+Oxaloacetate,Mitochondrial,"ChEMBL, no target data",member,chembl_name,high,CHEMBL1794791,OXALOACETATE,,2,,0,0,1,,oxaloacetate
+Primobolan,Anabolic Steroid,"ChEMBL, no target data",,chembl_synonym,medium,CHEMBL2106880,METHENOLONE ACETATE,,2,A,0,0,0,,primobolan
+Red Clover,Adaptogen,"ChEMBL, no target data",,chembl_synonym,medium,CHEMBL2108933,"CLOVER, RED",,2,,0,0,0,,red-clover
+SBT-272,Mitochondrial,"ChEMBL, no target data",,chembl_synonym,medium,CHEMBL5314506,BEVEMIPRETIDE,,2,,0,0,0,,sbt-272
+SkQ1,Mitochondrial,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL4303517,,,,,0,0,0,,skq1
+Turinabol,Anabolic Steroid,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL519327,,,,,0,0,0,,turinabol
+Urolithin B,Mitochondrial,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL1526978,,,,,0,0,0,,urolithin-b
+Cat's Claw,Adaptogen,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII 9060PRM18Q,cat-s-claw
+Chlodantane,Adaptogen,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,chlodantane
+DADA,Mitochondrial,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,dada
+Ginsenosides,Adaptogen,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII 3K198YD54P,ginsenosides
+GSK-971086,SARM,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII 8TFL50092H,gsk-971086
+GTX-027,SARM,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,gtx-027
+Maitake,Adaptogen,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII A1U5YJI0Z8,maitake
+MDMB-4en-PINACA,Synthetic Cannabinoid,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII K2DZN2TDD6,mdmb-4en-pinaca
+Mitochonic Acid 5,Mitochondrial,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,mitochonic-acid-5
+MitoTEMPO,Mitochondrial,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,mitotempo
+NR,Mitochondrial,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,nr
+RAD-150,SARM,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,rad-150
+Reishi,Adaptogen,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII TKD8LH0X2Z,reishi
+Saffron,Adaptogen,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII E849G4X5YJ,saffron
+Sandalwood,Adaptogen,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII 3641YW25N2,sandalwood
+Superdrol,Anabolic Steroid,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,superdrol
+Tetrahydrocannabinolic acid,Cannabinoid,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,tetrahydrocannabinolic-acid
+Trekrezan,Adaptogen,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,trekrezan
+Tribulus Terrestris,Adaptogen,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,tribulus-terrestris
+YK-11,SARM,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII Z9748J6B0R,yk-11
+5-Amino-1MQ,Mitochondrial,unidentified,,no_match,,,,,,,,,,,5-amino-1mq
+Agaricus Blazei,Adaptogen,unidentified,,no_match,,,,,,,,,,,agaricus-blazei
+Agarikon Mushroom,Adaptogen,unidentified,,no_match,,,,,,,,,,,agarikon-mushroom
+Alpha-Ketoglutarate (AKG),Mitochondrial,unidentified,,no_match,,,,,,,,,,,alpha-ketoglutarate-akg
+Andrographis,Adaptogen,unidentified,,no_match,,,,,,,,,,,andrographis
+Arcarine,SARM,unidentified,,no_match,,,,,,,,,,,arcarine
+ART27-13,Cannabinoid,unidentified,,no_match,,,,,,,,,,,art27-13
+Ashitaba,Adaptogen,unidentified,,no_match,,,,,,,,,,,ashitaba
+Astragalus,Adaptogen,unidentified,,no_match,,,,,,,,,,,astragalus
+Astragalus Polysaccharides,Adaptogen,unidentified,,no_match,,,,,,,,,,,astragalus-polysaccharides
+ATX-304,AMPK,unidentified,,no_match,,,,,,,,,,,atx-304
+Bacopa Monnieri,Adaptogen,unidentified,,no_match,,,,,,,,,,,bacopa-monnieri
+Bitter Melon Extract,Adaptogen,unidentified,,no_match,,,,,,,,,,,bitter-melon-extract
+Boswellia,Adaptogen,unidentified,,no_match,,,,,,,,,,,boswellia
+Catuaba,Adaptogen,unidentified,,no_match,,,,,,,,,,,catuaba
+CBN,Cannabinoid,unidentified,,no_match,,,,,,,,,,,cbn
+Celastrus Paniculatus,Adaptogen,unidentified,,no_match,,,,,,,,,,,celastrus-paniculatus
+Chaga Mushroom,Adaptogen,unidentified,,no_match,,,,,,,,,,,chaga-mushroom
+Cistanche,Adaptogen,unidentified,,no_match,,,,,,,,,,,cistanche
+Clitoria Ternatea,Adaptogen,unidentified,,no_match,,,,,,,,,,,clitoria-ternatea
+Convolvulus Pluricaulis,Adaptogen,unidentified,,no_match,,,,,,,,,,,convolvulus-pluricaulis
+Cordyceps,Adaptogen,unidentified,,no_match,,,,,,,,,,,cordyceps
+Dihydroboldenone,Anabolic Steroid,unidentified,,no_match,,,,,,,,,,,dihydroboldenone
+Fadogia Agrestis,Adaptogen,unidentified,,no_match,,,,,,,,,,,fadogia-agrestis
+Fenugreek,Adaptogen,unidentified,,no_match,,,,,,,,,,,fenugreek
+He Shou Wu,Adaptogen,unidentified,,no_match,,,,,,,,,,,he-shou-wu
+HU-210,Cannabinoid,unidentified,,rejected_on_review,,,,,,,,,,"squashed name reached dexanabinol (HU-211), its enantiomer",hu-210
+Jiaogulan,Adaptogen,unidentified,,no_match,,,,,,,,,,,jiaogulan
+Maca,Adaptogen,unidentified,,no_match,,,,,,,,,,,maca
+MK-777,Growth Hormone,unidentified,,no_match,,,,,,,,,,,mk-777
+Modified GRF 1-29,Growth Hormone,unidentified,,no_match,,,,,,,,,,,modified-grf-1-29
+Nigella Sativa,Adaptogen,unidentified,,no_match,,,,,,,,,,,nigella-sativa
+Olive Leaf Extract,Adaptogen,unidentified,,no_match,,,,,,,,,,,olive-leaf-extract
+OTR-AC,SARM,unidentified,,no_match,,,,,,,,,,,otr-ac
+Rehmannia,Adaptogen,unidentified,,no_match,,,,,,,,,,,rehmannia
+Rhodiola Crenulata,Adaptogen,unidentified,,no_match,,,,,,,,,,,rhodiola-crenulata
+Rhodiola Rosea,Adaptogen,unidentified,,no_match,,,,,,,,,,,rhodiola-rosea
+Sceletium Tortuosum,Adaptogen,unidentified,,no_match,,,,,,,,,,,sceletium-tortuosum
+Schisandra,Adaptogen,unidentified,,no_match,,,,,,,,,,,schisandra
+Shilajit,Adaptogen,unidentified,,no_match,,,,,,,,,,,shilajit
+Suma,Adaptogen,unidentified,,no_match,,,,,,,,,,,suma
+TND-1128,Mitochondrial,unidentified,,no_match,,,,,,,,,,,tnd-1128
+Tongkat Ali,Adaptogen,unidentified,,no_match,,,,,,,,,,,tongkat-ali

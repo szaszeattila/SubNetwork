@@ -1,0 +1,221 @@
+name,wiki_class,column,with_d21,match_tier,confidence,chembl_parents,chembl_names,catalogue_status,max_phase,atc_level1,curated_mechanisms,publication_targets,gtopdb,note,slug
+Exenatide,GLP-1,in catalogue,member,chembl_name,high,CHEMBL414357,EXENATIDE,route_indication/has_supported,4,A,1,2,0,,exenatide
+GV1001,Peptide,in catalogue,member,chembl_synonym,medium,CHEMBL2108308,TERTOMOTIDE,route_indication/no_eligible_evidence,3,,0,0,0,,gv1001
+Liraglutide,GLP-1,in catalogue,member,chembl_name,high,CHEMBL4084119,LIRAGLUTIDE,route_indication/has_supported,4,A,1,1,0,,liraglutide
+Oxytocin,Peptide,in catalogue,member,chembl_name,high,CHEMBL395429,OXYTOCIN,route_indication/has_supported,4,H,1,7,1,,oxytocin
+PT-141,Peptide,in catalogue,member,chembl_synonym,medium,CHEMBL2070241,BREMELANOTIDE,route_indication/has_supported,4,G,2,4,1,,pt-141
+Rapastinel (GLYX-13),Peptide,in catalogue,member,pubchem_connectivity,low,CHEMBL3544917|CHEMBL80459,RAPASTINEL,route_indication/has_supported,3,,1,0,0,,rapastinel-glyx-13
+Semaglutide,Peptide,in catalogue,member,chembl_name,high,CHEMBL2108724,SEMAGLUTIDE,route_indication/has_supported,4,A,1,1,0,,semaglutide
+Trofinetide,Peptide,in catalogue,member,chembl_name,high,CHEMBL197084,TROFINETIDE,both_routes/has_supported_broader_only,4,N,1,0,1,,trofinetide
+Vasopressin,Peptide,in catalogue,member,chembl_name,high,CHEMBL373742,VASOPRESSIN,route_indication/has_supported,4,,1,10,1,,vasopressin
+Abaloparatide,Peptide,"ChEMBL, has target data",,chembl_name,high,CHEMBL3301581,ABALOPARATIDE,,4,H,1,1,0,,abaloparatide
+ACE-031,Peptide,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL2108674,RAMATERCEPT,,2,,1,0,0,,ace-031
+Acyline,Peptide,"ChEMBL, has target data",,chembl_name,high,CHEMBL262747,ACYLINE,,2,,1,2,0,,acyline
+Albiglutide,GLP-1,"ChEMBL, has target data",,chembl_name,high,CHEMBL2107841,ALBIGLUTIDE,,4,A,1,0,1,,albiglutide
+ARA-290,Peptide,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL3545305,CIBINETIDE,,2,,1,0,1,,ara-290
+Barusiban,Peptide,"ChEMBL, has target data",,chembl_name,high,CHEMBL2218898,BARUSIBAN,,2,,1,0,1,,barusiban
+Cagrilintide,Peptide,"ChEMBL, has target data",,chembl_name,high,CHEMBL4802169,CAGRILINTIDE,,3,,0,1,0,,cagrilintide
+Capromorelin,Peptide,"ChEMBL, has target data",,chembl_name,high,CHEMBL113313,CAPROMORELIN,,2,,2,2,0,,capromorelin
+Davunetide,Peptide,"ChEMBL, has target data",member,chembl_name,high,CHEMBL2103826,DAVUNETIDE,,2,,1,0,0,,davunetide
+Demoxytocin,Peptide,"ChEMBL, has target data",,chembl_name,high,CHEMBL435716,DEMOXYTOCIN,,2,H,0,1,0,,demoxytocin
+Dermorphin,Peptide,"ChEMBL, has target data",,chembl_name,high,CHEMBL278789,DERMORPHIN,,,,0,8,0,,dermorphin
+Dulaglutide,GLP-1,"ChEMBL, has target data",member,chembl_name,high,CHEMBL2108027,DULAGLUTIDE,,4,A,1,0,0,,dulaglutide
+GHK,Peptide,"ChEMBL, has target data",,pubchem_connectivity,low,CHEMBL1814493,,,,,0,1,0,,ghk
+GHK-Cu,Copper Peptide,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL1814493,,,,,0,1,0,,ghk-cu
+Ghrelin,Peptide,"ChEMBL, has target data",member,chembl_name,high,CHEMBL500468,GHRELIN,,3,,0,1,0,,ghrelin
+GHRP-6,Peptide,"ChEMBL, has target data",,pubchem_connectivity,low,CHEMBL105462|CHEMBL273376|CHEMBL337618|CHEMBL3910992|CHEMBL433540,,,,,0,3,0,,ghrp-6
+Gonadorelin,Peptide,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1007,GONADORELIN,,4,HV,2,3,0,,gonadorelin
+Hexarelin,Peptide,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL108335,EXAMORELIN,,2,,0,2,1,,hexarelin
+HMG,Peptide,"ChEMBL, has target data",,chembl_synonym,low,CHEMBL2108427,MENOTROPINS,,4,,2,0,1,,hmg
+Larazotide,Peptide,"ChEMBL, has target data",,chembl_name,high,CHEMBL2105646,LARAZOTIDE,,3,,1,0,1,,larazotide
+MID-35,Peptide,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL5078185,,,,,0,2,0,,mid-35
+Muscarinic Toxin 2,Peptide,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL365590,,,,,0,2,0,,muscarinic-toxin-2
+Nelivaptan,Neuropeptide,"ChEMBL, has target data",member,chembl_name,high,CHEMBL582857,NELIVAPTAN,,2,,1,5,1,,nelivaptan
+Orexin-A,Peptide,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL438925,,,,,0,2,0,,orexin-a
+Orexin-B,Peptide,"ChEMBL, has target data",,chembl_squashed,low,CHEMBL413434,OREXIN B,,,,0,2,1,,orexin-b
+Orforglipron,GLP-1,"ChEMBL, has target data",,chembl_name,high,CHEMBL4446782,ORFORGLIPRON,,3,,0,2,1,,orforglipron
+Pramlintide,Peptide,"ChEMBL, has target data",,chembl_name,high,CHEMBL2103758,PRAMLINTIDE,,4,A,3,2,0,,pramlintide
+Retatrutide,Peptide,"ChEMBL, has target data",,chembl_name,high,CHEMBL5095485,RETATRUTIDE,,3,,3,0,0,,retatrutide
+Sermorelin,Peptide,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL1201490,SERMORELIN ACETATE,,4,HV,1,0,0,,sermorelin
+Somatostatin,Peptide,"ChEMBL, has target data",,chembl_name,high,CHEMBL1823872,SOMATOSTATIN,,3,H,1,14,0,,somatostatin
+Survodutide,Peptide,"ChEMBL, has target data",,chembl_name,high,CHEMBL5314776,SURVODUTIDE,,3,,2,0,0,,survodutide
+Taltirelin,Peptide,"ChEMBL, has target data",,chembl_name,high,CHEMBL2107016,TALTIRELIN,,2,,1,0,1,,taltirelin
+Tesamorelin,Peptide,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1237026,TESAMORELIN,,4,H,1,0,1,,tesamorelin
+Thymosin Alpha-1,Peptide,"ChEMBL, has target data",,chembl_squashed,low,CHEMBL2103979,THYMALFASIN,,3,,1,0,0,,thymosin-alpha-1
+Tirzepatide,Peptide,"ChEMBL, has target data",member,chembl_name,high,CHEMBL4297839,TIRZEPATIDE,,4,A,2,2,0,,tirzepatide
+TRH,Peptide,"ChEMBL, has target data",,chembl_synonym,low,CHEMBL1472,PROTIRELIN,,4,V,1,5,1,,trh
+Vosoritide,Peptide,"ChEMBL, has target data",,chembl_name,high,CHEMBL3707276,VOSORITIDE,,4,M,1,0,0,,vosoritide
+AOD-9604,Peptide,"ChEMBL, no target data",member,chembl_synonym,medium,CHEMBL6068615,LAT-8881,,2,,0,0,0,,aod-9604
+BPC-157,Peptide,"ChEMBL, no target data",,chembl_name,high,CHEMBL4297358,BPC-157,,1,,0,0,0,,bpc-157
+Cycloprolylglycine,Peptide,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL360216,CYCLO(PROLYLGLYCYL),,3,,0,0,0,,cycloprolylglycine
+DSIP,Peptide,"ChEMBL, no target data",,chembl_synonym,low,CHEMBL2104403,EMIDELTIDE,,2,,0,0,0,,dsip
+Eloralintide,Peptide,"ChEMBL, no target data",,chembl_name,high,CHEMBL6068462,ELORALINTIDE,,2,,0,0,0,,eloralintide
+Fosgonimeton,Peptide,"ChEMBL, no target data",member,chembl_name,high,CHEMBL5095419,FOSGONIMETON,,3,,0,0,0,,fosgonimeton
+GHRP-2,Peptide,"ChEMBL, no target data",,chembl_synonym,medium,CHEMBL106593,PRALMORELIN,,2,,0,0,1,,ghrp-2
+Goralatide,Bioregulator,"ChEMBL, no target data",,chembl_name,high,CHEMBL420741,GORALATIDE,,2,,0,0,0,,goralatide
+Humanin,Peptide,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL4447799,,,,,0,0,0,,humanin
+Ipamorelin,Peptide,"ChEMBL, no target data",,chembl_name,high,CHEMBL58547,IPAMORELIN,,2,,0,0,0,,ipamorelin
+Kisspeptin,Peptide,"ChEMBL, no target data",,chembl_name,high,CHEMBL4650403,KISSPEPTIN,,2,,0,0,0,,kisspeptin
+LL-37,Peptide,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL530345,CATHELICIDIN,,,,0,0,1,,ll-37
+Matrixyl,Peptide,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL451881,,,,,0,0,0,,matrixyl
+Mazdutide,Peptide,"ChEMBL, no target data",,chembl_name,high,CHEMBL5095358,MAZDUTIDE,,3,,0,0,0,,mazdutide
+MT-1,Peptide,"ChEMBL, no target data",,chembl_squashed,low,CHEMBL5440568,,,,,0,0,0,,mt-1
+Nemifitide,Peptide,"ChEMBL, no target data",,chembl_name,high,CHEMBL2107761,NEMIFITIDE,,2,,0,0,0,,nemifitide
+Petrelintide,Peptide,"ChEMBL, no target data",,chembl_name,high,CHEMBL5314864,PETRELINTIDE,,2,,0,0,0,,petrelintide
+SS-31,Peptide,"ChEMBL, no target data",member,chembl_synonym,low,CHEMBL3833370,ELAMIPRETIDE,,3,,0,0,1,,ss-31
+Thymulin,Peptide,"ChEMBL, no target data",,chembl_synonym,medium,CHEMBL2106455,NONATHYMULIN,,2,,0,0,0,,thymulin
+TP-508,Peptide,"ChEMBL, no target data",,chembl_synonym,medium,CHEMBL2111105,RUSALATIDE,,2,,0,0,0,,tp-508
+Vilon,Peptide,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL365790,,,,,0,0,0,,vilon
+VIP,Peptide,"ChEMBL, no target data",,chembl_synonym,low,CHEMBL525028,VASOACTIVE INTESTINAL PEPTIDE,,3,,0,0,0,,vip
+Adiponectin,Peptide,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII SK7IHQ3VBH,adiponectin
+Adipotide,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,adipotide
+AHK-Cu,Copper Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,ahk-cu
+Argireline,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,argireline
+Biotinoyl GHK,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,biotinoyl-ghk
+Bronchogen,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,bronchogen
+Cartalax,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,cartalax
+Cerebrolysin,Peptide,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII 37KZM6S21G,cerebrolysin
+CJC-1295,Peptide,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII 62RC32V9N7,cjc-1295
+Colivelin,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,colivelin
+Cortagen,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,cortagen
+Decapeptide-12,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,decapeptide-12
+Desacyl Ghrelin,Peptide,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII XEW3CUX2ZE,desacyl-ghrelin
+Dihexa,Peptide,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII 9WYX65A5C2,dihexa
+Epithalon,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,epithalon
+EPObis,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,epobis
+FOXO4-DRI,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,foxo4-dri
+Galanin(1-15),Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,galanin-1-15
+Galanin(2-11),Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,galanin-2-11
+GB-115,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,gb-115
+HER-096,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,her-096
+HGH Fragment 176-191,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,hgh-fragment-176-191
+Imunofan,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,imunofan
+KPV,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,kpv
+Livagen,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,livagen
+Lunasin,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,lunasin
+M617,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,m617
+MGF,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,mgf
+MOTS-c,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,mots-c
+N-Acetyl Epitalon,Peptide,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII UXR7AF6R4F,n-acetyl-epitalon
+N-Acetyl Selank,Peptide,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII J3PM702O93,n-acetyl-selank
+N-Acetyl Semax,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,n-acetyl-semax
+NAX-5055,Peptide,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII 7J6HRA05J2,nax-5055
+Neurotrophin-3,Peptide,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII 02R4V6T25Y,neurotrophin-3
+PACAP,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,pacap
+Palmitoyl Hexapeptide-12,Peptide,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII HO4ZT5S86C,palmitoyl-hexapeptide-12
+Palmitoyl Tetrapeptide-7,Peptide,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII Q41S464P1R,palmitoyl-tetrapeptide-7
+Pinealon,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,pinealon
+PNC-27,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,pnc-27
+Prostamax,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,prostamax
+SANA,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,sana
+Selank,Peptide,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII TS9JR8EP1G,selank
+Semax,Peptide,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII I5FAL2585H,semax
+SNAP-8,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,snap-8
+Spadin,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,spadin
+Spexin,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,spexin
+SYN-AKE,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,syn-ake
+TB-500,Peptide,"identified, not in ChEMBL",,unii_no_structure,,,,,,,,,,UNII QHK6Z47GTG,tb-500
+Vialox,Peptide,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,vialox
+A4 Amyloid Beta,Peptide,unidentified,,no_match,,,,,,,,,,,a4-amyloid-beta
+ACE-167,Peptide,unidentified,,no_match,,,,,,,,,,,ace-167
+ACT-1,Peptide,unidentified,,no_match,,,,,,,,,,,act-1
+Adamax,Peptide,unidentified,,no_match,,,,,,,,,,,adamax
+Antibalder,Copper Peptide,unidentified,,no_match,,,,,,,,,,,antibalder
+ATX-GD-59,Peptide,unidentified,,no_match,,,,,,,,,,,atx-gd-59
+B7-33,Peptide,unidentified,,no_match,,,,,,,,,,,b7-33
+Bonomarlot,Bioregulator,unidentified,,no_match,,,,,,,,,,,bonomarlot
+Bonothyrk,Bioregulator,unidentified,,no_match,,,,,,,,,,,bonothyrk
+Bronchalamin,Bioregulator,unidentified,,no_match,,,,,,,,,,,bronchalamin
+CAC-253,Peptide,unidentified,,no_match,,,,,,,,,,,cac-253
+Cagrisema,GLP-1,unidentified,,no_match,,,,,,,,,,,cagrisema
+Cardiogen,Bioregulator,unidentified,,rejected_on_review,,,,,,,,,,PubChem name reached levocarnitine; Cardiogen is a Khavinson tetrapeptide,cardiogen
+Cerebramin,Bioregulator,unidentified,,no_match,,,,,,,,,,,cerebramin
+Cerebroprotein Hydrolysate,Peptide,unidentified,,no_match,,,,,,,,,,,cerebroprotein-hydrolysate
+Cerluten,Bioregulator,unidentified,,no_match,,,,,,,,,,,cerluten
+Chelohart,Bioregulator,unidentified,,no_match,,,,,,,,,,,chelohart
+Chitomur,Bioregulator,unidentified,,no_match,,,,,,,,,,,chitomur
+Chonluten,Peptide,unidentified,,no_match,,,,,,,,,,,chonluten
+Cortexin,Peptide,unidentified,,no_match,,,,,,,,,,,cortexin
+Crystagen,Peptide,unidentified,,no_match,,,,,,,,,,,crystagen
+DNSP-11,Peptide,unidentified,,no_match,,,,,,,,,,,dnsp-11
+Endoluten,Bioregulator,unidentified,,no_match,,,,,,,,,,,endoluten
+Epiphamin,Bioregulator,unidentified,,no_match,,,,,,,,,,,epiphamin
+FGL,Peptide,unidentified,,no_match,,,,,,,,,,,fgl
+Follistatin 315,Peptide,unidentified,,no_match,,,,,,,,,,,follistatin-315
+Follistatin 344,Peptide,unidentified,,no_match,,,,,,,,,,,follistatin-344
+Galanin-like Peptide (GALP),Peptide,unidentified,,no_match,,,,,,,,,,,galanin-like-peptide-galp
+GDF-11,Peptide,unidentified,,no_match,,,,,,,,,,,gdf-11
+Gepatamin,Bioregulator,unidentified,,no_match,,,,,,,,,,,gepatamin
+GK-2,Peptide,unidentified,,no_match,,,,,,,,,,,gk-2
+Glandokort,Bioregulator,unidentified,,no_match,,,,,,,,,,,glandokort
+Gotratix,Bioregulator,unidentified,,no_match,,,,,,,,,,,gotratix
+GSB-106,Peptide,unidentified,,no_match,,,,,,,,,,,gsb-106
+HCG,Peptide,unidentified,,rejected_on_review,,,,,,,,,,PubChem name reached a small molecule; hCG is a glycoprotein hormone,hcg
+HNG (S14G-Humanin),Neuropeptide,unidentified,,no_match,,,,,,,,,,,hng-s14g-humanin
+Hondramin,Bioregulator,unidentified,,no_match,,,,,,,,,,,hondramin
+Human Relaxin-2,Peptide,unidentified,,no_match,,,,,,,,,,,human-relaxin-2
+IGF-1,Peptide,unidentified,,no_match,,,,,,,,,,,igf-1
+IGF-1 DES,Peptide,unidentified,,no_match,,,,,,,,,,,igf-1-des
+IGF-1 LR3,Peptide,unidentified,,no_match,,,,,,,,,,,igf-1-lr3
+Irisin,Peptide,unidentified,,rejected_on_review,,,,,,,,,,"PubChem name reached iridin, an isoflavone; irisin is a myokine protein",irisin
+Klotho,Protein,unidentified,,no_match,,,,,,,,,,,klotho
+Koramin,Bioregulator,unidentified,,no_match,,,,,,,,,,,koramin
+Libidon,Bioregulator,unidentified,,no_match,,,,,,,,,,,libidon
+MIF-1 (Melanostatin),Neuropeptide,unidentified,,no_match,,,,,,,,,,,mif-1-melanostatin
+MKP,Peptide,unidentified,,rejected_on_review,,,,,,,,,,PubChem name reached potassium phosphate,mkp
+MT-2,Peptide,unidentified,,no_match,,,,,,,,,,,mt-2
+Muscarinic Toxin 3,Peptide,unidentified,,no_match,,,,,,,,,,,muscarinic-toxin-3
+Muscarinic Toxin 7,Peptide,unidentified,,no_match,,,,,,,,,,,muscarinic-toxin-7
+N-Acetyl KPV,Peptide,unidentified,,no_match,,,,,,,,,,,n-acetyl-kpv
+N-PEP-12,Peptide,unidentified,,no_match,,,,,,,,,,,n-pep-12
+N163-166 (MOD6),Peptide,unidentified,,no_match,,,,,,,,,,,n163-166-mod6
+NAX 810-2,Peptide,unidentified,,no_match,,,,,,,,,,,nax-810-2
+Nle1-Angiotensin IV,Peptide,unidentified,,no_match,,,,,,,,,,,nle1-angiotensin-iv
+Ophtalamin,Bioregulator,unidentified,,no_match,,,,,,,,,,,ophtalamin
+Orexin-A Fragment 17-33,Peptide,unidentified,,no_match,,,,,,,,,,,orexin-a-fragment-17-33
+Ovagen,Peptide,unidentified,,no_match,,,,,,,,,,,ovagen
+Ovariamin,Bioregulator,unidentified,,no_match,,,,,,,,,,,ovariamin
+P21,Peptide,unidentified,,no_match,,,,,,,,,,,p21
+Pal-GHK (Palmitoyl Tripeptide-1),Peptide,unidentified,,no_match,,,,,,,,,,,pal-ghk-palmitoyl-tripeptide-1
+Pancragen,Peptide,unidentified,,no_match,,,,,,,,,,,pancragen
+Pancramin,Bioregulator,unidentified,,no_match,,,,,,,,,,,pancramin
+PE-22-28,Peptide,unidentified,,no_match,,,,,,,,,,,pe-22-28
+PEG-MGF,Peptide,unidentified,,no_match,,,,,,,,,,,peg-mgf
+Peptide Complex Pro 05,Bioregulator,unidentified,,no_match,,,,,,,,,,,peptide-complex-pro-05
+Peptide Complex Pro 08,Bioregulator,unidentified,,no_match,,,,,,,,,,,peptide-complex-pro-08
+Peptide Complex Pro 09,Bioregulator,unidentified,,no_match,,,,,,,,,,,peptide-complex-pro-09
+Peptide Complex Pro 10,Bioregulator,unidentified,,no_match,,,,,,,,,,,peptide-complex-pro-10
+Peptide Complex Pro 12,Bioregulator,unidentified,,no_match,,,,,,,,,,,peptide-complex-pro-12
+Peptide Complex Pro 14,Bioregulator,unidentified,,no_match,,,,,,,,,,,peptide-complex-pro-14
+Pielotax,Bioregulator,unidentified,,no_match,,,,,,,,,,,pielotax
+Prostalamin,Bioregulator,unidentified,,no_match,,,,,,,,,,,prostalamin
+Prostatilen,Bioregulator,unidentified,,no_match,,,,,,,,,,,prostatilen
+Renisamin,Bioregulator,unidentified,,no_match,,,,,,,,,,,renisamin
+Retinalamin,Bioregulator,unidentified,,no_match,,,,,,,,,,,retinalamin
+Samprost,Bioregulator,unidentified,,no_match,,,,,,,,,,,samprost
+Sigumir,Bioregulator,unidentified,,no_match,,,,,,,,,,,sigumir
+Stamakort,Bioregulator,unidentified,,no_match,,,,,,,,,,,stamakort
+Suprefort,Bioregulator,unidentified,,no_match,,,,,,,,,,,suprefort
+Suprenamin,Bioregulator,unidentified,,no_match,,,,,,,,,,,suprenamin
+Svetinorm,Bioregulator,unidentified,,no_match,,,,,,,,,,,svetinorm
+Tau Peptide,Bioregulator,unidentified,,no_match,,,,,,,,,,,tau-peptide
+Taxorest,Bioregulator,unidentified,,no_match,,,,,,,,,,,taxorest
+TB-500 Fragment 17-23,Peptide,unidentified,,no_match,,,,,,,,,,,tb-500-fragment-17-23
+Testagen,Peptide,unidentified,,no_match,,,,,,,,,,,testagen
+Testalamin,Bioregulator,unidentified,,no_match,,,,,,,,,,,testalamin
+Testoluten,Bioregulator,unidentified,,no_match,,,,,,,,,,,testoluten
+Thymagen,Peptide,unidentified,,no_match,,,,,,,,,,,thymagen
+Thymalin,Bioregulator,unidentified,,rejected_on_review,,,,,,,,,,PubChem name reached nonathymulin; thymalin is a thymus extract,thymalin
+Thymus Extract,Bioregulator,unidentified,,no_match,,,,,,,,,,,thymus-extract
+Thyreogen,Bioregulator,unidentified,,no_match,,,,,,,,,,,thyreogen
+Timusamin,Bioregulator,unidentified,,no_match,,,,,,,,,,,timusamin
+Tiramin,Bioregulator,unidentified,,no_match,,,,,,,,,,,tiramin
+UBT-251,Peptide,unidentified,,no_match,,,,,,,,,,,ubt-251
+Vasalamin,Bioregulator,unidentified,,no_match,,,,,,,,,,,vasalamin
+VD11,Neuropeptide,unidentified,,no_match,,,,,,,,,,,vd11
+Ventfort,Bioregulator,unidentified,,no_match,,,,,,,,,,,ventfort
+Ventramin,Bioregulator,unidentified,,no_match,,,,,,,,,,,ventramin
+Vesugen,Peptide,unidentified,,no_match,,,,,,,,,,,vesugen
+Visoluten,Bioregulator,unidentified,,no_match,,,,,,,,,,,visoluten
+Vladonix,Bioregulator,unidentified,,no_match,,,,,,,,,,,vladonix
+Zhenoluten,Bioregulator,unidentified,,no_match,,,,,,,,,,,zhenoluten

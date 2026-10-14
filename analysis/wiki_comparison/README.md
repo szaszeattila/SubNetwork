@@ -22,6 +22,8 @@ and says whether it is in `db/cohort1.db` and, if not, what ChEMBL holds for it.
 | `pubchem_cache.json` | what PubChem answered, `[]` for a name it does not know |
 | `need_pubchem.json` | names still not looked up (generated) |
 | `comparison.csv` | one row per wiki compound: match tier and confidence, ChEMBL parents, catalogue entry and status, and for the rest ChEMBL's max phase, ATC level 1, curated mechanisms, publication targets and whether GtoPdb lists it |
+| `sections.py` | splits `comparison.csv` into `sections/`, one file per wiki section, each compound labelled with the column of the *What it found* table it is counted under, and whether it is a member under D21 |
+| `sections/*.csv` | name, wiki class, `column`, `with_d21`, and the placement and ChEMBL fields from `comparison.csv` (generated) |
 | `comparison_d21.csv` | the same against the `phase1-admission` build (D21, selection policy 3.0.0, 2,452 entries) |
 | `ctgov_route.py` | the wiki compounds outside the catalogue asked of ClinicalTrials.gov directly, by name: is any registered trial for an in-scope condition at Phase 1 or later |
 | `ctgov_cache.json` | what the registry answered: per name, the matching studies' NCT id, phases and condition MeSH ids |
@@ -32,6 +34,7 @@ python3 analysis/wiki_comparison/parse_wiki.py "$TMPDIR/table.html"
 python3 analysis/wiki_comparison/compare.py          # writes need_pubchem.json
 python3 analysis/wiki_comparison/pubchem_lookup.py   # slow, and PubChem throttles
 python3 analysis/wiki_comparison/compare.py
+python3 analysis/wiki_comparison/sections.py          # offline, after both comparison files
 python3 analysis/wiki_comparison/admission_rules.py   # ~2 min: scans every ChEMBL activity
 python3 analysis/wiki_comparison/brain_targets.py     # ~3 min; --brain-set catalogue for the wider set
 

@@ -23,6 +23,25 @@ import sys
 from placing import HERE, ROOT, Placer
 
 
+def bucket(r: dict) -> str:
+    """The column of the *What it found* table a comparison row falls under."""
+    if r["in_catalogue"]:
+        return "in catalogue"
+    if r["chembl_parents"]:
+        # int(): the same answer for a row built here and one read back from CSV
+        has = int(r["curated_mechanisms"] or 0) or int(r["publication_targets"] or 0)
+        return "ChEMBL, has target data" if has else "ChEMBL, no target data"
+    if r["match_tier"] in ("unii_not_in_chembl", "unii_no_structure", "pubchem_not_in_chembl"):
+        return "identified, not in ChEMBL"
+    if r["match_tier"] == "not_looked_up":
+        return "not looked up"
+    return "unidentified"
+
+
+ORDER = ["in catalogue", "ChEMBL, has target data", "ChEMBL, no target data",
+         "identified, not in ChEMBL", "unidentified", "not looked up"]
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-root", type=pathlib.Path, default=ROOT)
@@ -77,20 +96,7 @@ def main() -> int:
         wr.writeheader()
         wr.writerows(out)
 
-    def bucket(r):
-        if r["in_catalogue"]:
-            return "in catalogue"
-        if r["chembl_parents"]:
-            has = r["curated_mechanisms"] or r["publication_targets"]
-            return "ChEMBL, has target data" if has else "ChEMBL, no target data"
-        if r["match_tier"] in ("unii_not_in_chembl", "unii_no_structure", "pubchem_not_in_chembl"):
-            return "identified, not in ChEMBL"
-        if r["match_tier"] == "not_looked_up":
-            return "not looked up"
-        return "unidentified"
-
-    order = ["in catalogue", "ChEMBL, has target data", "ChEMBL, no target data",
-             "identified, not in ChEMBL", "unidentified", "not looked up"]
+    order = ORDER
     table = collections.OrderedDict()
     for r in out:
         table.setdefault(r["section"], collections.Counter())[bucket(r)] += 1

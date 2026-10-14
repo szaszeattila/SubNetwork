@@ -1,0 +1,66 @@
+name,wiki_class,column,with_d21,match_tier,confidence,chembl_parents,chembl_names,catalogue_status,max_phase,atc_level1,curated_mechanisms,publication_targets,gtopdb,note,slug
+Allopurinol,Urate-Lowering,in catalogue,member,chembl_name,high,CHEMBL1467,ALLOPURINOL,route_indication/has_supported,4,M,2,9,1,,allopurinol
+Betahistine,Antivertigo,in catalogue,member,chembl_name,high,CHEMBL24441,BETAHISTINE,both_routes/has_supported,4,N,2,2,1,,betahistine
+Disulfiram,Alcohol-Aversive,in catalogue,member,chembl_name,high,CHEMBL964,DISULFIRAM,both_routes/has_supported,4,NP,1,33,1,,disulfiram
+Dynamine,Alkaloid,in catalogue,member,chembl_synonym,medium,CHEMBL354077,AMIFAMPRIDINE,both_routes/has_supported,4,N,2,0,1,,dynamine
+Glycopyrrolate,Antimuscarinic,in catalogue,member,chembl_synonym,medium,CHEMBL1201335,GLYCOPYRRONIUM,route_indication/has_supported,4,ADR,3,8,1,,glycopyrrolate
+Hyaluronidase,Enzyme,in catalogue,member,chembl_name,high,CHEMBL1201636,HYALURONIDASE,route_indication/no_eligible_evidence,4,B,1,0,0,,hyaluronidase
+Nicergoline,Modulators,in catalogue,member,chembl_name,high,CHEMBL1372950,NICERGOLINE,route_indication/has_preliminary,4,C,0,16,0,,nicergoline
+Tranexamic Acid,Antifibrinolytic,in catalogue,member,chembl_name,high,CHEMBL877,TRANEXAMIC ACID,route_indication/has_supported,4,B,1,2,1,,tranexamic-acid
+Trospium chloride,Antimuscarinic,in catalogue,member,chembl_name,high,CHEMBL1888176,TROSPIUM,route_indication/has_supported,4,G,2,7,0,,trospium-chloride
+ABT-239,Modulators,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL351231,,,,,0,3,1,,abt-239
+ADL-5747,Research Chemical,"ChEMBL, has target data",member,chembl_name,high,CHEMBL561339,ADL-5747 FREE BASE,,2,,1,3,1,,adl-5747
+AMN082,Modulators,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL1387826,,,,,0,1,1,,amn082
+Arecoline,Alkaloid,"ChEMBL, has target data",,chembl_name,high,CHEMBL7303,ARECOLINE,,-1,,0,11,1,,arecoline
+AS-601811,Enzyme,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL118319,,,,,0,1,0,,as-601811
+Basimglurant,Modulators,"ChEMBL, has target data",member,chembl_name,high,CHEMBL3301626,BASIMGLURANT,,2,,1,3,1,,basimglurant
+Bavisant,Modulators,"ChEMBL, has target data",member,chembl_name,high,CHEMBL2103862,BAVISANT,,2,,1,1,0,,bavisant
+Ciproxifan,Modulators,"ChEMBL, has target data",,chembl_name,high,CHEMBL14638,CIPROXIFAN,,,,0,10,1,,ciproxifan
+CL-316243,Beta-3 Agonist,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL1204876,,,,,0,5,1,,cl-316243
+Colchicine,Alkaloid,"ChEMBL, has target data",member,chembl_name,high,CHEMBL107,COLCHICINE,,4,M,1,7,1,,colchicine
+Dihydroergocristine,Modulators,"ChEMBL, has target data",,chembl_name,high,CHEMBL601773,DIHYDROERGOCRISTINE,,-1,C,0,2,0,,dihydroergocristine
+Dipraglurant,Modulators,"ChEMBL, has target data",member,chembl_name,high,CHEMBL2346738,DIPRAGLURANT,,2,,1,1,1,,dipraglurant
+E-6837,Research Chemical,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL175835,,,,,0,1,0,,e-6837
+Eltrombopag,Modulators,"ChEMBL, has target data",,chembl_name,high,CHEMBL461101,ELTROMBOPAG,,4,B,2,7,1,,eltrombopag
+Foliglurax,Modulators,"ChEMBL, has target data",member,chembl_name,high,CHEMBL4089083,FOLIGLURAX,,2,,1,2,0,,foliglurax
+GSK189254,Modulators,"ChEMBL, has target data",member,chembl_name,high,CHEMBL517140,GSK189254,,2,,1,2,1,,gsk189254
+Itopride,Prokinetic,"ChEMBL, has target data",,chembl_name,high,CHEMBL2107457,ITOPRIDE,,3,A,2,3,0,,itopride
+JNJ-40411813,Modulators,"ChEMBL, has target data",member,chembl_name,high,CHEMBL3337527,JNJ-40411813,,2,,1,1,0,,jnj-40411813
+LIT-001,Research Chemical,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL4204210,,,,,0,4,1,,lit-001
+LY341495,Modulators,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL432038,,,,,0,14,1,,ly341495
+LY379268,Modulators,"ChEMBL, has target data",,chembl_squashed,low,CHEMBL275079,LY-379268,,,,0,7,1,,ly379268
+Mavoglurant,Modulators,"ChEMBL, has target data",member,chembl_name,high,CHEMBL3087515,MAVOGLURANT,,2,,1,2,1,,mavoglurant
+MEPB,Modulators,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL1738936,,,,,0,1,0,,mepb
+Metergoline,Modulators,"ChEMBL, has target data",,chembl_name,high,CHEMBL19215,METERGOLINE,,2,G,0,21,1,,metergoline
+Mirabegron,Beta-3 Agonist,"ChEMBL, has target data",member,chembl_name,high,CHEMBL2095212,MIRABEGRON,,4,G,1,1,1,,mirabegron
+Pirenzepine,Antimuscarinic,"ChEMBL, has target data",member,chembl_name,high,CHEMBL9967,PIRENZEPINE,,4,A,1,12,1,,pirenzepine
+Prucalopride,Prokinetic,"ChEMBL, has target data",,chembl_name,high,CHEMBL117287,PRUCALOPRIDE,,4,A,2,9,1,,prucalopride
+RO5203648,Modulators,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL3680154,,,,,0,2,0,,ro5203648
+Roxadustat,HIF-PH Inhibitor,"ChEMBL, has target data",,chembl_name,high,CHEMBL2338329,ROXADUSTAT,,4,B,1,10,1,,roxadustat
+S 38093,Modulators,"ChEMBL, has target data",,pubchem_connectivity,low,CHEMBL4575319,,,,,0,3,0,,s-38093
+Sevelamer,Phosphate Binder,"ChEMBL, has target data",,chembl_name,high,CHEMBL5314349,SEVELAMER,,4,V,1,0,0,,sevelamer
+SKF 81297,Research Chemical,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL353335,,,,,0,3,1,,skf-81297
+Sodium Tetradecyl Sulphate,Sclerosant,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL1201345,TETRADECYL SULFURIC ACID,,4,C,1,0,0,,sodium-tetradecyl-sulphate
+TAK-041,Modulators,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL4779773,ZELATRIAZIN,,2,,0,1,1,,tak-041
+TAK-063,Modulators,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL3989972,BALIPODECT,,2,,1,0,0,,tak-063
+TAK-831,Modulators,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL2338801,LUVADAXISTAT,,2,,0,3,0,,tak-831
+Telenzepine,Antimuscarinic,"ChEMBL, has target data",,chembl_name,high,CHEMBL253978,TELENZEPINE,,2,,0,4,0,,telenzepine
+Travoprost,Modulators,"ChEMBL, has target data",,chembl_name,high,CHEMBL1200799,TRAVOPROST,,4,S,1,2,1,,travoprost
+UDCA,Bile Acid,"ChEMBL, has target data",member,pubchem_inchikey,low,CHEMBL1551,URSODIOL,,4,A,1,6,1,,udca
+Adrenochrome,Modulators,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL1314174,,,,,0,0,0,,adrenochrome
+Alpertine,Research Chemical,"ChEMBL, no target data",,chembl_name,high,CHEMBL2104031,ALPERTINE,,2,,0,0,0,,alpertine
+Arecaidine,Alkaloid,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL432561,,,,,0,0,1,,arecaidine
+Compound 7P,Research Chemical,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL3824120,,,,,0,0,0,,compound-7p
+Cyanamide,Alcohol-Aversive,"ChEMBL, no target data",,chembl_name,high,CHEMBL56279,CYANAMIDE,,,,0,0,0,,cyanamide
+Gallein,Modulators,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL4469620,,,,,0,0,0,,gallein
+TAK-418,Modulators,"ChEMBL, no target data",,chembl_name,high,CHEMBL4297835,TAK-418,,1,,0,0,0,,tak-418
+AUT-00063,Modulators,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,aut-00063
+Diacca,Prodrug,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,diacca
+Metadoxine,Modulators,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII EJQ7M98H5J,metadoxine
+MK-3984,Research Chemical,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII NDR4H1Q159,mk-3984
+Unithiol,Modulators,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,unithiol
+3C-PEP,Research Chemical,unidentified,,no_match,,,,,,,,,,,3c-pep
+Astra2959,Modulators,unidentified,,no_match,,,,,,,,,,,astra2959
+Morphodrol,Research Chemical,unidentified,,no_match,,,,,,,,,,,morphodrol
+ORG-43902,Modulators,unidentified,,no_match,,,,,,,,,,,org-43902
+Tenoten,Modulators,unidentified,,no_match,,,,,,,,,,,tenoten

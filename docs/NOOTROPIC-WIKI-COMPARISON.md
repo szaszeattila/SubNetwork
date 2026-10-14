@@ -62,6 +62,11 @@ lifted, and every name has now been asked. 128 of those 363 resolved.
 | formats & blends | 32 | 77 | 53 | 37 | 192 | 391 |
 | **all** | **524** | **658** | **308** | **241** | **453** | **2,184** |
 
+Every compound behind these counts is listed in
+[`analysis/wiki_comparison/sections/`](../analysis/wiki_comparison/sections/),
+one CSV per section, with the column it is counted under, its placement and
+what ChEMBL holds for it, and whether it is a member under D21 (below).
+
 "Has target data" is a crude proxy for whether an entry would draw anything: a
 ChEMBL curated mechanism, or an exact pChEMBL value at a single protein from a
 publication. It does not ask whether that protein has anything to do with the
@@ -458,7 +463,12 @@ gap has four parts, and each needs a different kind of source:
 ### Clinical records
 
 **ClinicalTrials.gov, read directly, finds trials ChEMBL has not made into
-indications, and most of them are not what the scope means.** ChEMBL's
+indications, but most of them would admit drugs the scope was not written to
+admit.** Each passes the scope's test on paper, being filed under an in-scope
+condition. What is trialled is mostly not a drug for a brain disorder: a statin
+in stroke, a kinase inhibitor in glioma, an anti-androgen in Kennedy's disease,
+a supplement with a mood endpoint, or a compound listed as an intervention
+beside the drug actually under test. ChEMBL's
 indications come from the registry, but only where a curator has taken a
 trial's condition as the drug's indication. `ctgov_route.py` asks the
 registry instead, for every wiki compound outside the catalogue, by name.

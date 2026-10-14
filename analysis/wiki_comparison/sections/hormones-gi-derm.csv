@@ -1,0 +1,135 @@
+name,wiki_class,column,with_d21,match_tier,confidence,chembl_parents,chembl_names,catalogue_status,max_phase,atc_level1,curated_mechanisms,publication_targets,gtopdb,note,slug
+Activated Charcoal,Gastrointestinal,in catalogue,member,chembl_synonym,medium,CHEMBL2106049,"CHARCOAL, ACTIVATED",route_indication/no_eligible_evidence,3,A,0,0,0,,activated-charcoal
+Aprepitant,Gastrointestinal,in catalogue,member,chembl_name,high,CHEMBL1471,APREPITANT,route_indication/has_supported,4,A,1,7,1,,aprepitant
+Aspirin,NSAID,in catalogue,member,chembl_name,high,CHEMBL25,ASPIRIN,both_routes/has_supported,4,ABN,1,8,1,,aspirin
+Benfotiamine,Vitamin,in catalogue,member,chembl_name,high,CHEMBL4303665,BENFOTIAMINE,route_indication/has_preliminary,3,A,0,1,0,,benfotiamine
+Celecoxib,NSAID,in catalogue,member,chembl_name,high,CHEMBL118,CELECOXIB,route_indication/has_supported,4,LM,1,64,1,,celecoxib
+Conjugated Estrogens,Hormone,in catalogue,member,chembl_synonym,medium,CHEMBL1201649,"ESTROGENS, CONJUGATED",route_indication/has_supported,4,G,1,0,0,,conjugated-estrogens
+Cyanocobalamin,Vitamin,in catalogue,member,chembl_name,high,CHEMBL2110563,CYANOCOBALAMIN,route_indication/no_eligible_evidence,4,BV,2,0,0,,cyanocobalamin
+Diclofenac,NSAID,in catalogue,member,chembl_name,high,CHEMBL139,DICLOFENAC,route_indication/has_supported,4,DMS,4,29,1,,diclofenac
+Endoxifen,SERM,in catalogue,member,chembl_name,high,CHEMBL1093458,ENDOXIFEN,route_indication/has_supported,3,,0,2,1,,endoxifen
+Epoetin Alfa,Hormone,in catalogue,member,chembl_name,high,CHEMBL1201565,EPOETIN ALFA,route_indication/has_supported,4,,1,0,1,,epoetin-alfa
+Estradiol,Hormone,in catalogue,member,chembl_name,high,CHEMBL135,ESTRADIOL,route_indication/has_supported,4,G,1,37,1,,estradiol
+Estradiol Valerate,Hormone,in catalogue,member,chembl_name,high,CHEMBL1511,ESTRADIOL VALERATE,route_indication/has_supported,4,,1,8,1,,estradiol-valerate
+Etoricoxib,NSAID,in catalogue,member,chembl_name,high,CHEMBL416146,ETORICOXIB,route_indication/has_supported,4,M,1,7,1,,etoricoxib
+Flurbiprofen,NSAID,in catalogue,member,chembl_name,high,CHEMBL563,FLURBIPROFEN,route_indication/has_supported,4,MRS,2,16,1,,flurbiprofen
+Ibuprofen,NSAID,in catalogue,member,chembl_name,high,CHEMBL521,IBUPROFEN,route_indication/has_supported,4,CGMR,3,26,1,,ibuprofen
+Indomethacin,NSAID,in catalogue,member,chembl_name,high,CHEMBL6,INDOMETHACIN,route_indication/has_supported,4,CMS,2,47,1,,indomethacin
+Isotretinoin,Retinoid,in catalogue,member,chembl_name,high,CHEMBL547,ISOTRETINOIN,route_indication/has_supported,4,D,1,3,1,,isotretinoin
+Ketorolac,NSAID,in catalogue,member,chembl_name,high,CHEMBL469,KETOROLAC,route_indication/has_supported,4,MS,1,9,1,,ketorolac
+Lactulose,Gastrointestinal,in catalogue,member,chembl_name,high,CHEMBL296306,LACTULOSE,route_indication/has_preliminary,4,A,1,0,0,,lactulose
+Leucovorin Calcium,Vitamin,in catalogue,member,chembl_name,high,CHEMBL1679,LEUCOVORIN,route_indication/has_preliminary,4,V,0,2,1,,leucovorin-calcium
+Meloxicam,NSAID,in catalogue,member,chembl_name,high,CHEMBL599,MELOXICAM,route_indication/has_supported,4,M,1,7,1,,meloxicam
+Metoclopramide,Gastrointestinal,in catalogue,member,chembl_name,high,CHEMBL86,METOCLOPRAMIDE,route_indication/has_supported,4,A,3,18,1,,metoclopramide
+Montelukast,Respiratory,in catalogue,member,chembl_name,high,CHEMBL787,MONTELUKAST,route_indication/has_supported,4,R,1,21,1,,montelukast
+Nimesulide,NSAID,in catalogue,member,chembl_name,high,CHEMBL56367,NIMESULIDE,route_indication/has_supported,4,M,0,23,1,,nimesulide
+Omeprazole,Gastrointestinal,in catalogue,member,chembl_name,high,CHEMBL1503,OMEPRAZOLE,route_indication/has_supported,4,A,2,17,1,,omeprazole
+Ondansetron,Gastrointestinal,in catalogue,member,chembl_name,high,CHEMBL46,ONDANSETRON,route_indication/has_supported,4,A,2,20,1,,ondansetron
+Oxybutynin,Gastrointestinal,in catalogue,member,chembl_name,high,CHEMBL1231,OXYBUTYNIN,route_indication/has_supported,4,G,4,22,1,,oxybutynin
+Piroxicam,NSAID,in catalogue,member,chembl_name,high,CHEMBL527,PIROXICAM,route_indication/has_supported,4,MS,1,6,1,,piroxicam
+Progesterone,Hormone,in catalogue,member,chembl_name,high,CHEMBL103,PROGESTERONE,route_indication/has_supported,4,G,1,34,1,,progesterone
+Raloxifene,SERM,in catalogue,member,chembl_name,high,CHEMBL81,RALOXIFENE,route_indication/has_supported,4,G,2,45,1,,raloxifene
+Ranitidine,Gastrointestinal,in catalogue,member,chembl_name,high,CHEMBL1790041,RANITIDINE,route_indication/has_supported,4,A,3,17,0,,ranitidine
+Salbutamol,Respiratory,in catalogue,member,chembl_synonym,medium,CHEMBL714,ALBUTEROL,route_indication/has_supported,4,R,2,4,1,,salbutamol
+Salicylic Acid,Dermatological,in catalogue,member,chembl_name,high,CHEMBL424,SALICYLIC ACID,route_indication/has_supported,4,DS,0,13,1,,salicylic-acid
+Sapropterin,Vitamin,in catalogue,member,chembl_name,high,CHEMBL1201774,SAPROPTERIN,route_indication/has_supported,4,A,1,1,1,,sapropterin
+Tamoxifen,SERM,in catalogue,member,chembl_name,high,CHEMBL83,TAMOXIFEN,route_indication/has_supported,4,L,1,42,1,,tamoxifen
+Toremifene,SERM,in catalogue,member,chembl_name,high,CHEMBL1655,TOREMIFENE,route_indication/has_supported,4,L,1,2,1,,toremifene
+4-Hydroxytamoxifen,SERM,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL489,AFIMOXIFENE,,3,,2,2,0,,4-hydroxytamoxifen
+Abiraterone Acetate,Antiandrogen,"ChEMBL, has target data",,chembl_name,high,CHEMBL271227,ABIRATERONE ACETATE,,4,,1,3,1,,abiraterone-acetate
+Adapalene,Retinoid,"ChEMBL, has target data",,chembl_name,high,CHEMBL1265,ADAPALENE,,4,D,1,9,1,,adapalene
+Alfacalcidol,Vitamin,"ChEMBL, has target data",,chembl_name,high,CHEMBL1601669,ALFACALCIDOL,,4,A,1,3,0,,alfacalcidol
+Alpha-Estradiol,Estrogen,"ChEMBL, has target data",,chembl_squashed,low,CHEMBL286452,ALFATRADIOL,,2,,0,3,1,,alpha-estradiol
+Ammonium Lactate,Dermatological,"ChEMBL, has target data",,chembl_name,high,CHEMBL1200747,AMMONIUM LACTATE,,4,,1,0,0,,ammonium-lactate
+Arimidex,Hormone,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL1399,ANASTROZOLE,,4,L,1,4,1,,arimidex
+Arimistane,Hormone,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL5266519,,,,,0,1,0,,arimistane
+Arzoxifene,SERM,"ChEMBL, has target data",,chembl_name,high,CHEMBL226267,ARZOXIFENE,,3,,1,2,0,,arzoxifene
+Azelaic Acid,Dermatological,"ChEMBL, has target data",,chembl_name,high,CHEMBL1238,AZELAIC ACID,,4,D,1,0,1,,azelaic-acid
+Bicalutamide,Antiandrogen,"ChEMBL, has target data",,chembl_name,high,CHEMBL409,BICALUTAMIDE,,4,L,1,10,1,,bicalutamide
+Bimatoprost,Dermatological,"ChEMBL, has target data",,chembl_name,high,CHEMBL1200963,BIMATOPROST,,4,S,1,1,1,,bimatoprost
+Brimonidine,Dermatological,"ChEMBL, has target data",,chembl_name,high,CHEMBL844,BRIMONIDINE,,4,DS,1,9,1,,brimonidine
+Calcipotriol,Dermatological,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL1200666,CALCIPOTRIENE,,4,D,1,11,1,,calcipotriol
+Calcitriol,Vitamin,"ChEMBL, has target data",member,chembl_name,high,CHEMBL846,CALCITRIOL,,4,AD,1,27,1,,calcitriol
+CB-03-01,Antiandrogen,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL3590187,CLASCOTERONE,,4,D,1,1,1,,cb-03-01
+Choriogonadotropin Alfa,Hormone,"ChEMBL, has target data",,chembl_name,high,CHEMBL1201464,CHORIOGONADOTROPIN ALFA,,4,G,1,0,0,,choriogonadotropin-alfa
+Cilomilast,Respiratory,"ChEMBL, has target data",,chembl_name,high,CHEMBL511115,CILOMILAST,,3,,1,6,1,,cilomilast
+Cisapride,Gastrointestinal,"ChEMBL, has target data",,chembl_name,high,CHEMBL1729,CISAPRIDE,,4,A,1,28,1,,cisapride
+Clomifene Citrate,SERM,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL2355051,CLOMIPHENE,,4,G,1,21,1,,clomifene-citrate
+Crisaborole,Dermatological,"ChEMBL, has target data",,chembl_name,high,CHEMBL484785,CRISABOROLE,,4,D,1,10,1,,crisaborole
+Cyproterone Acetate,Antiandrogen,"ChEMBL, has target data",,chembl_name,high,CHEMBL139835,CYPROTERONE ACETATE,,3,G,3,6,1,,cyproterone-acetate
+Danazol,Hormone,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1479,DANAZOL,,4,G,2,10,1,,danazol
+Deoxycholic Acid,Dermatological,"ChEMBL, has target data",member,chembl_name,high,CHEMBL406393,DEOXYCHOLIC ACID,,4,D,1,6,1,,deoxycholic-acid
+Difamilast,Dermatological,"ChEMBL, has target data",,chembl_name,high,CHEMBL3989968,DIFAMILAST,,3,,1,0,0,,difamilast
+Dutasteride,Antiandrogen,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1200969,DUTASTERIDE,,4,G,1,3,1,,dutasteride
+Dyphylline,Respiratory,"ChEMBL, has target data",,chembl_name,high,CHEMBL1752,DYPHYLLINE,,4,R,2,0,1,,dyphylline
+Eflornithine,Dermatological,"ChEMBL, has target data",,chembl_name,high,CHEMBL830,EFLORNITHINE,,4,DLP,1,1,1,,eflornithine
+Elagolix,Hormone,"ChEMBL, has target data",,chembl_name,high,CHEMBL1208155,ELAGOLIX,,4,H,2,4,1,,elagolix
+Enclomiphene,SERM,"ChEMBL, has target data",,chembl_name,high,CHEMBL954,ENCLOMIPHENE,,3,,1,3,1,,enclomiphene
+Enprofylline,Respiratory,"ChEMBL, has target data",,chembl_name,high,CHEMBL279898,ENPROFYLLINE,,2,,0,10,0,,enprofylline
+Enzalutamide,Antiandrogen,"ChEMBL, has target data",,chembl_name,high,CHEMBL1082407,ENZALUTAMIDE,,4,L,1,8,1,,enzalutamide
+Epristeride,Antiandrogen,"ChEMBL, has target data",,chembl_name,high,CHEMBL138225,EPRISTERIDE,,2,,0,3,0,,epristeride
+Esomeprazole,Gastrointestinal,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1201320,ESOMEPRAZOLE,,4,A,3,0,1,,esomeprazole
+Estriol,Estrogen,"ChEMBL, has target data",member,chembl_name,high,CHEMBL193482,ESTRIOL,,4,G,1,11,1,,estriol
+Exemestane,Hormone,"ChEMBL, has target data",,chembl_name,high,CHEMBL1200374,EXEMESTANE,,4,L,1,9,1,,exemestane
+Finasteride,Antiandrogen,"ChEMBL, has target data",,chembl_name,high,CHEMBL710,FINASTERIDE,,4,DG,1,9,1,,finasteride
+Follitropin Alfa,Hormone,"ChEMBL, has target data",,chembl_name,high,CHEMBL1201692,FOLLITROPIN ALFA,,4,G,1,0,0,,follitropin-alfa
+Fulvestrant,Hormone,"ChEMBL, has target data",,chembl_name,high,CHEMBL1358,FULVESTRANT,,4,L,2,12,1,,fulvestrant
+Fursultiamine,Vitamin,"ChEMBL, has target data",,chembl_name,high,CHEMBL1740659,FURSULTIAMINE,,2,,1,0,0,,fursultiamine
+Hydroquinone,Dermatological,"ChEMBL, has target data",,chembl_name,high,CHEMBL537,HYDROQUINONE,,4,D,0,15,0,,hydroquinone
+Hydroxyprogesterone Caproate,Hormone,"ChEMBL, has target data",,chembl_name,high,CHEMBL1200848,HYDROXYPROGESTERONE CAPROATE,,4,G,1,9,0,,hydroxyprogesterone-caproate
+L-Methylfolate,Vitamin,"ChEMBL, has target data",member,chembl_synonym,medium,CHEMBL1231574,LEVOMEFOLIC ACID,,4,,1,1,0,,l-methylfolate
+Letrozole,Hormone,"ChEMBL, has target data",,chembl_name,high,CHEMBL1444,LETROZOLE,,4,L,1,4,1,,letrozole
+Levosalbutamol,Respiratory,"ChEMBL, has target data",,chembl_name,high,CHEMBL1002,LEVOSALBUTAMOL,,4,,2,1,1,,levosalbutamol
+Magnesium Hydroxide,Gastrointestinal,"ChEMBL, has target data",,chembl_name,high,CHEMBL1200718,MAGNESIUM HYDROXIDE,,4,AG,1,0,0,,magnesium-hydroxide
+Megestrol Acetate,Hormone,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1201139,MEGESTROL ACETATE,,4,GL,1,4,0,,megestrol-acetate
+Mesalamine,Gastrointestinal,"ChEMBL, has target data",,chembl_name,high,CHEMBL704,MESALAMINE,,4,A,3,6,1,,mesalamine
+Methimazole,Thyroid,"ChEMBL, has target data",,chembl_name,high,CHEMBL1515,METHIMAZOLE,,4,H,1,4,1,,methimazole
+Mosapride,Gastrointestinal,"ChEMBL, has target data",,chembl_name,high,CHEMBL60889,MOSAPRIDE,,3,A,2,6,1,,mosapride
+Naronapride,Gastrointestinal,"ChEMBL, has target data",,chembl_name,high,CHEMBL2103858,NARONAPRIDE,,2,,1,0,0,,naronapride
+Orlistat,Gastrointestinal,"ChEMBL, has target data",,chembl_name,high,CHEMBL175247,ORLISTAT,,4,A,2,17,1,,orlistat
+Oxymetazoline,Respiratory,"ChEMBL, has target data",member,chembl_name,high,CHEMBL762,OXYMETAZOLINE,,4,DRS,1,24,1,,oxymetazoline
+Pantoprazole,Gastrointestinal,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1502,PANTOPRAZOLE,,4,A,1,9,1,,pantoprazole
+Pirfenidone,Respiratory,"ChEMBL, has target data",member,chembl_name,high,CHEMBL1256391,PIRFENIDONE,,4,L,1,0,1,,pirfenidone
+Potassium Iodide,Thyroid,"ChEMBL, has target data",,chembl_name,high,CHEMBL1141,POTASSIUM IODIDE,,4,RSV,1,1,0,,potassium-iodide
+Ramosetron,Gastrointestinal,"ChEMBL, has target data",,chembl_name,high,CHEMBL1643895,RAMOSETRON,,4,,1,9,1,,ramosetron
+Renzapride,Gastrointestinal,"ChEMBL, has target data",,chembl_name,high,CHEMBL296522,RENZAPRIDE,,3,,2,3,0,,renzapride
+Retinol,Retinoid,"ChEMBL, has target data",,chembl_name,high,CHEMBL986,RETINOL,,4,ADRS,0,5,1,,retinol
+Roflumilast,Respiratory,"ChEMBL, has target data",member,chembl_name,high,CHEMBL193240,ROFLUMILAST,,4,DR,1,7,1,,roflumilast
+RU-58841,Antiandrogen,"ChEMBL, has target data",,chembl_name,high,CHEMBL9337,RU-58841,,,,0,3,0,,ru-58841
+Sobetirome,Thyroid,"ChEMBL, has target data",member,chembl_name,high,CHEMBL107400,SOBETIROME,,2,,0,2,1,,sobetirome
+T3,Thyroid,"ChEMBL, has target data",,chembl_synonym,low,CHEMBL4531334,T3-CLK,,,,0,5,0,,t3
+T4,Thyroid,"ChEMBL, has target data",member,pubchem_inchikey,low,CHEMBL1624,LEVOTHYROXINE,,4,H,1,15,1,,t4
+Tazarotene,Retinoid,"ChEMBL, has target data",,chembl_name,high,CHEMBL1657,TAZAROTENE,,4,D,1,3,1,,tazarotene
+TD-8954,Gastrointestinal,"ChEMBL, has target data",,chembl_synonym,medium,CHEMBL2402904,FELCISETRAG,,2,,1,3,1,,td-8954
+Tegaserod,Gastrointestinal,"ChEMBL, has target data",,chembl_name,high,CHEMBL76370,TEGASEROD,,4,A,1,49,0,,tegaserod
+Tretinoin,Retinoid,"ChEMBL, has target data",member,chembl_name,high,CHEMBL38,TRETINOIN,,4,DL,1,33,1,,tretinoin
+Trimebutine,Gastrointestinal,"ChEMBL, has target data",,chembl_name,high,CHEMBL190044,TRIMEBUTINE,,3,A,0,13,0,,trimebutine
+Urofollitropin,Hormone,"ChEMBL, has target data",,chembl_name,high,CHEMBL1201520,UROFOLLITROPIN,,4,G,1,0,0,,urofollitropin
+Velusetrag,Gastrointestinal,"ChEMBL, has target data",member,chembl_name,high,CHEMBL2087337,VELUSETRAG,,2,,1,2,1,,velusetrag
+WAY-200070,Estrogen,"ChEMBL, has target data",,unii_inchikey,high,CHEMBL188528,,,,,0,6,1,,way-200070
+Xylometazoline,Respiratory,"ChEMBL, has target data",,chembl_name,high,CHEMBL312448,XYLOMETAZOLINE,,4,RS,1,18,1,,xylometazoline
+Y-134,SERM,"ChEMBL, has target data",,pubchem_inchikey,low,CHEMBL178334,,,,,0,2,1,,y-134
+6-Ketoprogesterone,Hormone,"ChEMBL, no target data",,unii_inchikey,high,CHEMBL3138672,,,,,0,0,0,,6-ketoprogesterone
+Acefluranol,SERM,"ChEMBL, no target data",,chembl_name,high,CHEMBL2104694,ACEFLURANOL,,2,,0,0,0,,acefluranol
+Algestone,Hormone,"ChEMBL, no target data",,chembl_synonym,medium,CHEMBL2105960,ALGESTONE ACETONIDE,,2,,0,0,0,,algestone
+Algestone acetonide,Hormone,"ChEMBL, no target data",,chembl_name,high,CHEMBL2105960,ALGESTONE ACETONIDE,,2,,0,0,0,,algestone-acetonide
+Almestrone,Estrogen,"ChEMBL, no target data",,chembl_name,high,CHEMBL2104052,ALMESTRONE,,2,,0,0,0,,almestrone
+Elunetirom,Thyroid,"ChEMBL, no target data",member,unii_inchikey,high,CHEMBL5314909,ABX-002,,1,,0,0,0,,elunetirom
+Glycolic Acid,Dermatological,"ChEMBL, no target data",,chembl_name,high,CHEMBL252557,GLYCOLIC ACID,,2,,0,0,0,,glycolic-acid
+JXL069,Dermatological,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL4779727,,,,,0,0,1,,jxl069
+Pancreatin,Gastrointestinal,"ChEMBL, no target data",,chembl_name,high,CHEMBL2108073,PANCREATIN,,3,,0,0,0,,pancreatin
+Saw Palmetto,Antiandrogen,"ChEMBL, no target data",,chembl_name,high,CHEMBL2108769,SAW PALMETTO,,3,,0,0,0,,saw-palmetto
+Sulbutiamine,Vitamin,"ChEMBL, no target data",,chembl_name,high,CHEMBL1874002,SULBUTIAMINE,,2,A,0,0,0,,sulbutiamine
+T2,Thyroid,"ChEMBL, no target data",,pubchem_inchikey,low,CHEMBL1743303,DIIODOTHYRONINE,,,,0,0,1,,t2
+Topilutamide,Antiandrogen,"ChEMBL, no target data",,chembl_name,high,CHEMBL2107790,TOPILUTAMIDE,,2,,0,0,0,,topilutamide
+DHED,Hormone,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,dhed
+Erythropoietin,Hormone,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,erythropoietin
+Minesapride,Gastrointestinal,"identified, not in ChEMBL",,unii_not_in_chembl,,,,,,,,,,UNII I7V9UD0ND0,minesapride
+Pyrilutamide,Antiandrogen,"identified, not in ChEMBL",,pubchem_not_in_chembl,,,,,,,,,,,pyrilutamide
+17α-Allyl-19-nortestosterone,Hormone,unidentified,,no_match,,,,,,,,,,,17-allyl-19-nortestosterone
+Allohol,Gastrointestinal,unidentified,,no_match,,,,,,,,,,,allohol
+Allyltestosterone,Antiandrogen,unidentified,,no_match,,,,,,,,,,,allyltestosterone
+ASC41,Thyroid,unidentified,,no_match,,,,,,,,,,,asc41
+Keraxidil,Dermatological,unidentified,,no_match,,,,,,,,,,,keraxidil
+Urea 30% ointment,Keratolytic,unidentified,,no_match,,,,,,,,,,,urea-30-ointment
+Zinc Oxide (Sunscreen),Dermatological,unidentified,,no_match,,,,,,,,,,,zinc-oxide-sunscreen
