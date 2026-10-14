@@ -330,6 +330,10 @@ including the text `scripts/cohort/status.py` writes into Status.
 
 ## 4. Better answer keys
 
+![Better answer keys: what a good key needs, the proposed order scored against it, and why the order runs as it does](figures/better-keys.svg)
+
+*The whole of this part in one picture: §4.1 is panel A, §4.2–4.3 are panels B and C. The marks in panel B are a judgement against §4.1's six properties, not a measurement.*
+
 ### 4.1 What a key should satisfy
 
 1. **It asks the page's question.** "May act in similar ways in the brain"
