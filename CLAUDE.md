@@ -124,7 +124,7 @@ python3 scripts/resolve_cohort_approved_elsewhere.py  # molecules.approved_elsew
 python3 scripts/resolve_cohort_classes.py       # ATC codes and USAN stems (offline)
 python3 scripts/resolve_cohort_pharm_actions.py # MeSH pharmacological actions via FDA UNII and Wikidata (minutes)
 python3 scripts/resolve_cohort_mesh_structure.py # MeSH structure classes via FDA UNII (~35 s)
-python3 scripts/resolve_cohort_wikipedia.py    # Wikipedia links via Wikidata; after the MeSH classes
+python3 scripts/resolve_cohort_wikipedia.py    # Wikipedia links via Wikidata and infoboxes; after the MeSH classes
 python3 scripts/resolve_cohort_gtopdb_actions.py # GtoPdb curated actions (pinned 2026.3, cached)
 python3 scripts/resolve_cohort_orthologues.py   # target_orthologues by sequence (~2 min cold, needs parasail)
 
@@ -170,7 +170,16 @@ component accession: every complex, complex group and family stays NULL on
 purpose — the legacy pipeline derived one from members' accessions twice and
 was confidently wrong both times — and so do the one SINGLE PROTEIN ChEMBL files
 against three accessions (`CHEMBL3390824`, lanosterol 14-alpha demethylase) and
-the two targets it gives no accession at all. A MeSH structure class is linked
+the two targets it gives no accession at all. Where a protein's item and its
+gene's item carry different articles, the protein's own is taken (Albumin:
+*Human serum albumin*, not *Serum albumin*), unless the protein item names two
+genes (HSPA1A's carries the *HSPA1B* article). A molecule Wikidata finds no
+article for is linked by the article whose drug or chemical infobox names its
+own parent ChEMBL ID, found through Wikipedia's index of ChEMBL links — never
+through a salt form's ID (ChEMBL files a deuterated drug as a form), and
+refused where that infobox's InChIKey has a different skeleton or two
+articles qualify (PBF-509 to *Taminadenant*, whose Wikidata item is empty;
+[DATA-QUALITY-LOG](docs/DATA-QUALITY-LOG.md), 2026-10-13). A MeSH structure class is linked
 through the one Wikidata item carrying its descriptor, or, where that item has
 no English article (Xanthines), through the main article its English category
 declares — never by its name, and never for a MeSH action, where that route
@@ -348,7 +357,8 @@ protein once in the score; **it is never a claim moved between records** — the
 rat record stays the rat record, with its own claims and its own rarity.
 
 **`wikipedia_url`** on molecules and targets is a backfill through Wikidata, on
-an exact identifier (see **Running it**). **`class_wikipedia`** holds the same
+an exact identifier, and for a molecule Wikidata cannot place, through the
+ChEMBL ID its article's own infobox declares (see **Running it**). **`class_wikipedia`** holds the same
 for MeSH structure classes, in a table of its own because the class backfills
 rewrite their `class_labels` rows; each row records the item, and whether the
 article was the item's own or its category's declared main article
@@ -470,8 +480,9 @@ database carried wrong data as a result.
     enforces, because the only citations that belong there are the ones that
     are not measurements.
 15. **Resolve external links by identifier, never by name.** Wikipedia links
-    go through Wikidata on an exact identifier match, and an ambiguous match
-    is dropped. This is invariant 6 applied to links: a title search answers
+    go through Wikidata on an exact identifier match — or, where Wikidata
+    reaches no article, through the identifier an article's own infobox
+    declares — and an ambiguous match is dropped. This is invariant 6 applied to links: a title search answers
     confidently and wrongly, and a wrong link on a page explaining what a
     protein *is* misinforms more directly than a missing one. Where no
     identifier reaches the right item — the seven protein assemblies, where
@@ -517,14 +528,14 @@ organism-format rows and 4 documented known-bad records are excluded with
 their reasons, and the exclusion accounting reconciles exactly to the
 1,200,625 activity rows scanned. All 15 build checks pass.
 
-What the page loads is 8.41 MB of startup payload in `viz/graph.data.js` and
+What the page loads is 8.42 MB of startup payload in `viz/graph.data.js` and
 0.20 MB in `viz/gtopdb.data.js`, GtoPdb's part, kept apart for its licence;
 and 112.2 MB of per-molecule evidence shards across 2,046 files under
 `viz/evidence/`, fetched one at a time on demand.
 
 `molecules.wikipedia_url` and `targets.wikipedia_url` are backfilled by
-`scripts/resolve_cohort_wikipedia.py` after a build: **1,648 of 2,452
-molecules** and **1,585 of 2,922 single-component targets** link to an English
+`scripts/resolve_cohort_wikipedia.py` after a build: **1,746 of 2,452
+molecules** and **1,599 of 2,922 single-component targets** link to an English
 Wikipedia article. The other 435 multi-component targets — every PROTEIN
 COMPLEX, PROTEIN COMPLEX GROUP and PROTEIN FAMILY, plus one ChEMBL-labelled
 SINGLE PROTEIN carrying 3 accessions — are left NULL rather than resolved to a
@@ -534,7 +545,7 @@ the `class_wikipedia` table: 523 through the Wikidata item carrying the
 descriptor, and 87 whose item has no article through the main article its
 English category declares (Xanthines to *Xanthine*).
 
-The pipeline suite is 496 tests and the node suites are 701 (472 cohort
+The pipeline suite is 512 tests and the node suites are 701 (472 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`
@@ -554,8 +565,9 @@ molecule in 0.1 ms, loading an evidence shard in 10 ms. Parse and index were
 unchanged at the later 4.4 MB (159 ms in the vm harness, which is not the
 browser and is quoted only as a before-and-after). D21 nearly doubled the
 payload to 8.4 MB, and the browser has not been timed against it. The last
-Wikipedia backfill had 0 failed lookups and 23 dropped as ambiguous (2
-molecules, 20 targets, 1 class; invariant 15) — facts about that run, not the
+Wikipedia backfill (2026-10-13) had 0 failed lookups and 10 dropped as
+ambiguous (3 molecules, 6 targets, 1 class; invariant 15), and refused 3
+infobox matches whose structure differs — facts about that run, not the
 database, so not generated. The ATC grade above fell with D21 because the
 1,119 molecules it admitted carry no ATC N code: one ranked above a class-mate
 is a miss however apt. Skipped in each list, the same build grades 38.7% and

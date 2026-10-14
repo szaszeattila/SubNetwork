@@ -51,6 +51,114 @@ alone.
 
 ---
 
+## 2026-10-13 — PBF-509 had an article, and Wikidata could not say so
+
+**What happened.** The user found PBF-509 with no Wikipedia link although
+English Wikipedia has an article on it, *Taminadenant*. The article sits on
+Wikidata item Q133844245, which carries a label and nothing else: no ChEMBL ID,
+no InChIKey, no statement of any kind. No Wikidata item carries
+CHEMBL3694769 or PBF-509's InChIKey at all, so the identifier route had
+nothing to find. The article's own drugbox, though, declares `ChEMBL =
+3694769` and the exact InChIKey.
+
+**How many more.** Of the 804 molecules without a link, 103 have an article
+whose drugbox links their own ChEMBL ID, and they were missing for a reason
+more general than one empty item: **Wikidata and ChEMBL disagree about which
+structure is the drug.** ChEMBL's parent for varenicline, vinblastine,
+clindamycin and atropine is drawn with stereochemistry that the item holding
+the article does not carry, so both identifiers land on an item with no
+article. Warfarin's and methamphetamine's articles sit on a "racemic mixture"
+item with no identifiers. Candesartan cilexetil's, olmesartan medoxomil's and
+dabigatran etexilate's articles are the parent drug's, whose item names the
+active acid. Albuterol, metamizole, chlorprothixene, buprenorphine, glutamic
+acid and methionine were all in this group.
+
+**The route taken.** Wikipedia's external-link index (`list=exturlusage`)
+lists every article linking a ChEMBL compound page, about 10,500 links in 21
+requests. That is a lookup by identifier in the reverse direction, not a title
+search. An article is accepted for a molecule only where Wikidata found no
+article at all (an ambiguous Wikidata answer stays a refusal), and only when:
+
+- a `{{Infobox drug}}`, `{{Drugbox}}` or `{{Chembox}}` on it names the
+  molecule's **own parent** ChEMBL ID in its ChEMBL parameter. A ChEMBL link
+  in a reference or a list of compounds is not a claim about the article.
+- any InChIKey that infobox declares shares the molecule's **skeleton**, the
+  first block. The skeleton rather than the whole key, because the stereo
+  disagreements above are why the route exists. A side with no key (a
+  biologic) matches on the ChEMBL ID alone, as the Wikidata route does.
+- it is the only such article.
+
+Measured against the 1,347 molecules Wikidata had already linked whose ChEMBL
+ID an article's infobox also carries, the infobox route names the same article
+for 1,339. Of the 8 where it differs, the key check catches the worst:
+*Nitrous oxide (medication)*'s drugbox carries **oxygen's** ChEMBL ID
+(CHEMBL1234886), and its InChIKey is nitrous oxide's. It is one of 15
+infoboxes, on already-linked molecules, whose InChIKey contradicts the ChEMBL
+ID beside it. Wikipedia's infobox identifiers are hand-entered, and the
+InChIKey is the check on them.
+
+**Never through a salt form's ID.** 23 more molecules are reached only
+through one of their forms' ChEMBL IDs, and most of those would be right:
+mesna, ipratropium bromide, methylene blue, sodium thiopental, carbachol,
+fluciclovine (18F). Two would not be. ChEMBL files a deuterated drug as a
+form of its parent, so ethyl linoleate would link *Deulinoleate ethyl* and
+tebitorexant *Tebideutorexant*, each a different drug developed for being
+deuterated. An isotope sits in the InChIKey's second block, outside the
+skeleton, so the key check cannot tell them apart, and the cohort database
+holds no structure for a form to check against. The Wikidata route has
+always read the parent's ID alone, for the same reason.
+
+**Result.** 98 molecules linked: the 103 less 3 whose infobox structure
+differs (ribose (pyranose), rocuronium, bryostatin 1, each an infobox drawing
+a salt or a relative under the parent's ID) and 2 with two qualifying
+articles (inositol, vasopressin). PBF-509 links *Taminadenant*.
+
+**Targets: the protein's article before the gene's.** Albumin and FGF1 were
+also unlinked although both have articles. Their protein item and gene item
+each carry a *different* English article (*Human serum albumin* on the
+protein, *Serum albumin* on ALB), and the query read the two as one set and
+refused it as ambiguous. Both are reached by identifier, and a target here is
+keyed by its UniProt accession, which is the protein item's. The protein's own
+article is therefore taken first, and the gene's only where the protein has
+none. That is a fixed precedence between two answers, not a choice between
+them; two articles on one side are still a refusal.
+
+It holds only where the protein item names exactly one gene. The first run
+without that condition linked Heat shock 70 kDa protein 1A to *HSPA1B*:
+HSPA1A and HSPA1B are one sequence, Wikidata files each protein under both
+genes, and the HSPA1A protein item carries the HSPA1B article. With two genes
+the protein is not one-to-one with either, so the disagreement stays a
+refusal; lactoperoxidase, whose article is right, is refused with it. 14
+targets were linked: the D3 dopamine receptor, tyrosine hydroxylase, albumin
+and FGF1 among them. Six stay ambiguous, the α7 nicotinic receptor among them:
+Wikidata files it under CHRNA7 and under the CHRFAM7A fusion gene, each with
+its own article. Under invariant 15, the remedy for one like that is a
+hand-written Wikidata item, and none was written.
+
+The first form of the target query computed the route with a `BIND` inside
+each branch of its `UNION`. That stopped the endpoint's optimiser: a chunk of
+15 accessions took 65 s and was refused with a 504, against 0.2 s without it.
+The route is now computed in the projection, after the join.
+
+**Left as they are, and why:**
+
+- **Human enzymes whose article is the enzyme class** (fatty acid synthase,
+  glycerol kinase, β-glucuronidase). Neither the protein item nor the gene
+  item has an article; English Wikipedia writes about the EC class, which can
+  cover several human isozymes. That is the family-for-member link D06
+  refuses.
+- **Non-human records.** About 1,200 rat, mouse, bovine and other
+  single-protein records have no article of their own; Wikipedia writes about
+  the human protein. 567 of them belong to a protein whose human record is
+  linked and shown in the same panel. 68 proteins are here *only* as
+  non-human records with a D20 human match, and their nodes show no
+  Wikipedia link anywhere. Giving such a record its human orthologue's
+  article would move a fact between records, which D20 has so far refused
+  for claims; it is the user's call, not a backfill's.
+- **Wikidata's empty item.** Q133844245 could be given CHEMBL3694769 and the
+  InChIKey upstream, which would fix it for everyone reading Wikidata. That
+  is an edit to a public database and was not made.
+
 ## 2026-10-13 — MeSH actions read from MeSH, and PubChem left behind
 
 **What happened.** D21 nearly doubled the catalogue, and the backfill that
