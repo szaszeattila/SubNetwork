@@ -61,6 +61,13 @@ def _fake_figures(**overrides):
         "sime_labelled": 487, "sime_classes": 123, "sime_scoreable": 455,
         "sime_top1": 0.457, "sime_mrr": 0.5946,
         "sime_filtered_top1": 0.64, "sime_filtered_mrr": 0.7319,
+        "simo_version": "1.0.0", "simo_labelled": 409, "simo_scoreable": 346,
+        "simo_top1": 0.145, "simo_mrr": 0.262,
+        "simo_filtered_top1": 0.28, "simo_filtered_mrr": 0.3989,
+        "simp_version": "1.0.0", "simp_pairs": 243,
+        "simp_positive_asked": 232, "simp_positive": 0.754,
+        "simp_negative_asked": 160, "simp_negative": 0.981,
+        "simp_opposite_asked": 94, "simp_opposite": 0.904, "simp_ordering": 0.96,
     }
     fig.update(overrides)
     return fig

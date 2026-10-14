@@ -408,8 +408,11 @@ and across levels *(snippet)*. Using ATC as a benchmark is common practice anywa
 
 Each step is its own change, and each reports beside the existing grade,
 never in place of it. Steps 1 and 2 were made on 2026-10-13
-([SIMILARITY-HARNESS.md](SIMILARITY-HARNESS.md) §13–14); steps 3 and 4
-are open.
+([SIMILARITY-HARNESS.md](SIMILARITY-HARNESS.md) §13–14) and steps 3 and 4
+on 2026-10-14 (§15–16). Step 3 departs from the text below in one place:
+OnSIDES carries no MedDRA hierarchy, so the restriction to nervous-system
+and psychiatric terms goes through ADReCS, which states no open licence,
+and a second reading over every term stands beside it.
 
 **Step 1 — repair what is there (no new data).** In `harness.mjs`:
 
@@ -494,6 +497,8 @@ The same applies to each constant SIMILARITY-HARNESS.md lists as unvalidated.
 - **Not measured here:** EPC and OnSIDES coverage of this catalogue, and
   whether any key in §4.2 agrees with ATC or MeSH more often than chance.
   EPC's coverage and the agreement between ATC, MeSH and EPC were measured
-  in step 1 and 2 (SIMILARITY-HARNESS §13–14); OnSIDES's is still not.
+  in step 1 and 2 (SIMILARITY-HARNESS §13–14), OnSIDES's in step 3 (§15:
+  691 of the 2,452 entries have a single-ingredient label, and 409 a
+  nervous-system profile the key can ask about).
   Measuring that agreement between keys belongs in step 1. It is the ceiling
   any ranking can reach against them.

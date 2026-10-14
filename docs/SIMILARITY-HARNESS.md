@@ -773,3 +773,182 @@ mechanism ChEMBL also curates. Only US-labelled drugs are judged (627 of the
 is still step 3, adverse-effect profiles from labels; until it exists, no
 constant should be adopted on the strength of these keys agreeing, since ATC,
 MeSH and EPC can all be reading the same curation.
+
+
+## 15. A judge that shares nothing with the score: label effects (2026-10-14)
+
+Step 3 of [SIMILARITY-LITERATURE.md](SIMILARITY-LITERATURE.md) §4.3. Every
+judge so far can read the curation the score reads: ATC and EPC restate
+mechanisms, and MeSH's actions are often mechanisms. This one reads what
+happened to patients. `scripts/resolve_cohort_label_effects.py` backfills the
+adverse effects drug labels list, from OnSIDES v3.1.1, and `--key onsides`
+makes each molecule's **five nearest label neighbours** its classmates:
+
+- an effect is a molecule's when two of its single-ingredient labels list it,
+  or its only label does;
+- profiles are restricted to MedDRA's nervous-system and psychiatric SOCs,
+  placed through ADReCS since OnSIDES carries no hierarchy
+  ([DATA-QUALITY-LOG](DATA-QUALITY-LOG.md), 2026-10-14); `--key onsides-all`
+  reads every effect, and stands if ADReCS is ruled out;
+- a molecule needs five effects in scope to be asked or judged;
+- similarity is the cosine of IDF-weighted profiles, so an effect on every
+  label (class boilerplate, and OnSIDES's reading of the heading "Nervous
+  system disorders" as an effect) weighs nothing;
+- neighbours six to ten earn half in nDCG;
+- a molecule's own ingredient-mate (haloperidol decanoate for haloperidol) is
+  neither its neighbour nor judged in its list. `grade` now passes the
+  question to `judged` for this; the other keys ignore it.
+
+**It was fixed before it graded anything**, in `onsides_key.json`, and
+committed and pushed as such (9d47202). One rule changed between writing and
+that commit, on the key's coverage alone: "listed on half of a molecule's
+labels" became "on two", because OnSIDES reads a hundredfold more from some
+labels of a drug than from others, and the half rule left diazepam with no
+effect at all. The config says so.
+
+**Read before it graded, the key looks like pharmacology where labels are
+rich.** `analysis/answer_keys/neighbours.mjs` shows morphine's classmates as
+methadone, oxymorphone, meperidine, oxycodone and hydromorphone; diazepam's
+as clonazepam, lorazepam, estazolam and triazolam; sertraline's as the SSRIs;
+sumatriptan's as every other triptan. It is confounded where the doc said it
+would be: memantine is donepezil's label neighbour, by indication.
+
+| the D21 build | asked | scoreable | top-1 | top-10 | MRR | nDCG@10 |
+|---|---|---|---|---|---|---|
+| label, nervous system | 409 | 346 | 14.5% | 49.1% | 0.2620 | 0.1976 |
+| label, nervous system, filtered | | | 28.0% | 61.8% | 0.3989 | 0.3158 |
+| label, every effect | 609 | 507 | 19.3% | 54.4% | 0.3180 | 0.2448 |
+| label, every effect, filtered | | | 31.0% | 62.5% | 0.4234 | 0.3322 |
+
+**The grade is low, and the key is why.** The worst "misses" are mostly the
+key's: ciprofloxacin's ranking puts moxifloxacin first, which is right, while
+its label neighbours are azithromycin and bexarotene; a non-nervous-system
+drug's handful of nervous-system effects is generic. Two measurements say
+how much of the low figure is noise in the key rather than in the ranking.
+
+*Against a shuffle* (`analysis/answer_keys/chance.mjs`, the same lists in
+random order, in closed form):
+
+| key | top-1 | shuffled | ratio | MRR | shuffled | ratio |
+|---|---|---|---|---|---|---|
+| ATC | 32.7% | 4.8% | 6.8 | 0.4607 | 0.1103 | 4.2 |
+| MeSH | 45.0% | 9.4% | 4.8 | 0.5945 | 0.2078 | 2.9 |
+| EPC | 45.7% | 5.1% | 9.0 | 0.5946 | 0.1227 | 4.8 |
+| PE | 37.6% | 6.8% | 5.5 | 0.5154 | 0.1593 | 3.2 |
+| label, nervous system | 14.5% | 1.8% | 8.1 | 0.2620 | 0.0629 | 4.2 |
+| label, every effect | 19.3% | 2.8% | 6.9 | 0.3180 | 0.0768 | 4.1 |
+
+Measured against what a shuffle would score, the ranking does as well under
+the judge that shares nothing with it as under the judges that share its
+curation. The absolute figure is low because the label key gives each
+question five classmates out of hundreds, where a class key gives dozens.
+
+*By profile size*, in tertiles of nervous-system effects: filtered top-1
+19.2% (5–8 effects), 25.0% (9–16), 37.0% (17 or more), with the shuffle flat
+at about 2% throughout. The richer a label, the more the ranking agrees with
+it.
+
+**Agreement with the other keys** (`agreement.mjs`), over the molecules both
+judge: ATC accepts 47% of the label key's neighbour pairs and the label key
+43% of ATC's classmate pairs, about as well as ATC and EPC agree (53% and
+62%). EPC accepts 22%, MeSH 35% (MeSH's classes are broad). The two label
+readings accept 37% and 44% of each other's.
+
+### The constants under five judges
+
+The sweep, one constant at a time, on the same build. MRR change from the
+current setting:
+
+| constant | ATC | MeSH | EPC | label, nervous | label, every |
+|---|---|---|---|---|---|
+| `OPPOSED_PAIR_FACTOR` 1.0 (D15 off) | −0.0287 | −0.0146 | −0.0316 | −0.0260 | −0.0193 |
+| curated-only weight 0.75 → 1.0 | +0.0042 | +0.0086 | +0.0021 | +0.0058 | +0.0035 |
+| replicated-only weight 0.9 → 0.75 | +0.0078 | +0.0079 | +0.0003 | −0.0044 | −0.0039 |
+| family weight 0.5 → 1.0 | +0.0088 | +0.0180 | +0.0169 | +0.0039 | +0.0095 |
+| Preliminary weight 0.5 → 0.25 | −0.0097 | +0.0110 | −0.0106 | +0.0044 | +0.0104 |
+| `SPECIES_EXPONENT` 0.5 → 0.75 | +0.0063 | +0.0042 | +0.0079 | +0.0053 | +0.0003 |
+
+Read row by row, the five judges sort the constants into three kinds:
+
+- **Agreed by every judge.** Switching D15 off is the worst setting on its
+  row under all five, which is the strongest confirmation D15 has had.
+  Raising the curated-only weight to 1.0, the family weight to 1.0 and the
+  species exponent to 0.75 each help under all five, by small amounts. The
+  curated-only weight is section 6's live finding, whose caveat was that its
+  judge flattered curation; a judge that reads no curation agrees, so the
+  caveat no longer covers it, though the gain stays under 0.01 everywhere.
+- **Agreed only by the judges that read curation.** Lowering the
+  replicated-only weight to 0.75 helps under ATC (+0.0078) and MeSH
+  (+0.0079), is flat under EPC, and hurts under both label readings. This is
+  the pattern the label key was built to catch (SIMILARITY-LITERATURE §4.3):
+  a gain the curated judges see and the independent one does not.
+- **Split.** The Preliminary weight at 0.25 helps under MeSH and both label
+  readings and hurts under ATC and EPC, as section 10 found for ATC and MeSH.
+
+The figures for ATC and MeSH are this build's, not section 10's; the
+curated-only gain under ATC is +0.0042 here against +0.0050 there.
+
+**Nothing was changed.** SIMILARITY-LITERATURE §4.1 asks that a constant be
+adopted only when judges of different provenance agree, and that is now
+possible to ask; asking it is a decision about the score, not about the keys,
+and it is not made in the change that built the judge.
+
+## 16. A pre-registered pairwise key (2026-10-14)
+
+Step 4. Section 3 refuses a hand-written key because it can be bent to say
+anything. `analysis/answer_keys/pairs.json` is hand-written, and answers the
+objection by how it was made rather than by what it says:
+
+- **243 pairs**: 116 positives (one mechanism at one target, one direction),
+  80 known-unlike negatives (one indication, different primary mechanisms)
+  and 47 opposites (one target, opposite directions);
+- **each cites its sources**, 207 in all: a DOI whose title was checked
+  against Crossref, or a US label on DailyMed whose setid resolves, with what
+  the source says. ChEMBL and GtoPdb, the score's inputs, were not allowed;
+- **drafted blind**: three subagents, one per area, given only the
+  catalogue's ids and names and forbidden the repository and the ranking,
+  then reviewed here. The edits the review made are listed in the file;
+- **frozen before use**: the pairs and the rules that grade them were
+  committed and pushed (3ed013f) before either graded the ranking;
+- **held out**: `KEYS` does not carry it, so no sweep can tune to it.
+
+It is not independent of the score as the label key is: labels and reviews
+state the mechanisms ChEMBL's curators also read. What it adds is negatives,
+opposites and a fixed set of questions. 44 pairs repeat a relationship the
+probe set had already asked about (`seen`), and 34 whose sourcing or claim is
+weaker carry a `doubt` with the reason (a class-level source, a mechanism a
+label calls unknown, an indication that overlaps rather than matches).
+
+The rules, in the file: each pair is read both ways; a positive is a hit
+within the top 10, and a partner absent from the list is coverage, not a
+miss; a negative or an opposite is clean below the top 10 or absent;
+ordering is the share of (positive, other) pairs within one list in which
+the positive ranks higher, an absent partner last and a tie half.
+
+| first grade, the D21 build | positives within top 10 | median rank | negatives clean | opposites clean | positive above other |
+|---|---|---|---|---|---|
+| every pair | 75.4% of 232 | 4 | 98.1% of 160 | 90.4% of 94 | 96.0% of 93 lists |
+| without `seen` | 77.6% of 156 | 5 | 98.1% of 160 | 92.7% of 82 | 95.8% of 72 |
+| without `doubt` | 77.6% of 210 | 4 | 97.7% of 130 | 91.0% of 78 | 96.8% of 82 |
+
+Every positive direction is reachable: each pair shares at least one target.
+The pairs the probe set had seen grade no better than the rest, so having
+asked about them before did not flatter the key.
+
+**What it found.**
+
+- **D15 misses one opposition.** 7 of the 9 failed opposite directions are
+  flumazenil against the benzodiazepines and zolpidem, at ranks 2 to 8.
+  ChEMBL curates flumazenil as an ALLOSTERIC ANTAGONIST at GABA-A and them as
+  POSITIVE ALLOSTERIC MODULATOR, and `OPPOSED_ACTIONS` names no such pair.
+  The other two are pilocarpine to atropine (rank 9) and morphine to
+  naltrexone (10). Not changed here: it is an entry in a list chosen by
+  argument, and CLAUDE.md's open items say so.
+- **Negatives are kept apart.** 3 of 160 directions fail: lacosamide and
+  levetiracetam rank each other 2nd and 6th, and xanomeline ranks olanzapine
+  10th, which is a real shared target, since olanzapine blocks the muscarinic
+  receptors xanomeline activates.
+- **The worst positives** are tranylcypromine to isocarboxazid (rank 183),
+  lacosamide to oxcarbazepine (108), cabergoline to bromocriptine (102) and
+  propranolol to nadolol (101). `node analysis/answer_keys/pairs.mjs --list`
+  prints them all.

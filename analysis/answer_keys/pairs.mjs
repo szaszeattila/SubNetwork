@@ -3,6 +3,7 @@
 //   node analysis/answer_keys/pairs.mjs            # grade the ranking
 //   node analysis/answer_keys/pairs.mjs --check    # validate the key, grade nothing
 //   node analysis/answer_keys/pairs.mjs --list 20  # and list the worst pairs of each kind
+//   node analysis/answer_keys/pairs.mjs --json     # the shape scripts/cohort/status.py reads
 //
 // pairs.json is a few hundred drug pairs written by hand, each citing its
 // sources: positives (the same mechanism at the same target), known-unlike
@@ -158,7 +159,7 @@ async function main() {
     throw new HarnessError("pairs.json does not validate:\n  " + problems.join("\n  "));
   }
   const counts = Object.fromEntries(KINDS.map((x) => [x, spec.pairs.filter((p) => p.kind === x).length]));
-  console.log(`Pre-registered pairwise key v${spec.version}, frozen ${spec.frozen}: ` +
+  if (!argv.includes("--json")) console.log(`Pre-registered pairwise key v${spec.version}, frozen ${spec.frozen}: ` +
     `${spec.pairs.length} pairs (${KINDS.map((x) => `${counts[x]} ${x}`).join(", ")}), ` +
     `${Object.keys(spec.sources).length} sources`);
   if (argv.includes("--check")) {
@@ -174,8 +175,15 @@ async function main() {
     return lists.get(qi).indexOf(mi) + 1;
   };
   const k = spec.rules.top_k;
-  console.log("=".repeat(72));
   const all = gradePairs(spec, rankIn);
+  if (argv.includes("--json")) {
+    // The shape scripts/cohort/status.py reads; rates are fractions.
+    process.stdout.write(JSON.stringify({
+      version: spec.version, pairs: spec.pairs.length, counts, top_k: k, ...all.summary,
+    }) + "\n");
+    return;
+  }
+  console.log("=".repeat(72));
   report("Every pair, both directions", all.summary, k);
   console.log("");
   report("Without the pairs the probe set had already put to the ranking",

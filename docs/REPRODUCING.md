@@ -73,6 +73,7 @@ python3 scripts/resolve_cohort_wikipedia.py          # Wikidata and Wikipedia
 python3 scripts/resolve_cohort_gtopdb_actions.py     # GtoPdb 2026.3, see below
 python3 scripts/resolve_cohort_orthologues.py        # UniProt, ~2 min cold, needs parasail
 python3 scripts/resolve_cohort_fda_classes.py        # FDA UNII, RxNav; ~50 min cold, cached
+python3 scripts/resolve_cohort_label_effects.py      # OnSIDES, ADReCS; ~15 s after the FDA classes
 python3 scripts/export_cohort.py                     # ~6 s, writes viz/
 ```
 
@@ -116,6 +117,7 @@ newer file, except GtoPdb.
 | wikipedia | Wikidata, Wikipedia | articles and items change |
 | orthologues | UniProt's reviewed human proteome | streamed from the current release, not 2026_03 |
 | fda classes | FDA UNII, NLM RxNav (RxNorm and RxClass) | RxNav is not pinned: its version and the run date go into `build_manifest`, and its answers are cached in `db/cache/rxnav/`; FDA's classes change with the labels |
+| label effects | OnSIDES v3.1.1 from its GitHub release, ADReCS v3.3, and the FDA classes' RxNav cache | both files are pinned by sha256 and refused if they differ; ADReCS is served from one university site with no mirror; a molecule RxNav did not answer for in the FDA backfill is asked here |
 | **gtopdb** | `guidetopharmacology.org/DATA/` | **refuses any release but 2026.3**, see below |
 
 **GtoPdb is the one that can stop you.** It serves only its latest release, at

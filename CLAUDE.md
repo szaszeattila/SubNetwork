@@ -128,6 +128,7 @@ python3 scripts/resolve_cohort_wikipedia.py    # Wikipedia links via Wikidata an
 python3 scripts/resolve_cohort_gtopdb_actions.py # GtoPdb curated actions (pinned 2026.3, cached)
 python3 scripts/resolve_cohort_orthologues.py   # target_orthologues by sequence (~2 min cold, needs parasail)
 python3 scripts/resolve_cohort_fda_classes.py   # FDA EPC/MoA/PE via RxNav, an answer key only (~50 min cold, cached)
+python3 scripts/resolve_cohort_label_effects.py # label adverse effects from OnSIDES, an answer key only; after the FDA classes (~15 s)
 
 python3 scripts/export_cohort.py           # db/cohort1.db -> viz/*.data.js + viz/evidence/
 python3 scripts/cohort_report.py           # the measured results of the active build
@@ -138,7 +139,10 @@ node analysis/similarity_harness/evaluate.mjs   # grade the similarity ranking
 node analysis/similarity_harness/evaluate.mjs --key mesh   # ...against MeSH actions instead of ATC
 node analysis/similarity_harness/evaluate.mjs --key atc-repaired   # ...every ATC level, exclusions, sibling credit
 node analysis/similarity_harness/evaluate.mjs --key epc    # ...FDA's classes (also --key pe)
+node analysis/similarity_harness/evaluate.mjs --key onsides   # ...nearest label neighbours (also onsides-all)
 node analysis/answer_keys/agreement.mjs         # how far the answer keys agree with each other
+node analysis/answer_keys/chance.mjs            # each key's grade beside a shuffle of the same lists
+node analysis/answer_keys/pairs.mjs             # the pre-registered pairwise key; held out of every sweep
 node analysis/similarity_harness/sweep.mjs      # what each scoring constant is worth
 
 python3 -m unittest discover -s tests      # pipeline
@@ -226,14 +230,17 @@ tests/test_cohort_*.py    offline pipeline and backfill tests; test_cohort_statu
                           fails when the generated Status block is stale
 tests/cohort_viewer*.test.mjs  what the page claims; cohort_harness.mjs loads it
 tests/similarity_harness.test.mjs  holds the similarity grade to a floor
+tests/pairs_key.test.mjs  the pairwise key's grader and shape, never its grade
 analysis/similarity_harness/  grades the ranking against ATC level-4 classes
                           (harness, evaluate, sweep). Read-only; adopts nothing.
 analysis/probe/           50 settled drug relationships put to the ranking, and
                           what went wrong where it misses. A diagnostic, never a
                           tuning target; read-only.
 analysis/answer_keys/     what the ATC answer key calls a miss, and whether it
-                          is one (docs/SIMILARITY-LITERATURE.md), and how far
-                          the keys agree with each other. Read-only.
+                          is one (docs/SIMILARITY-LITERATURE.md), how far the
+                          keys agree with each other and with a shuffle, and
+                          pairs.json, the pre-registered pairwise key, held
+                          out of every sweep. Read-only.
 analysis/cohort1/         the read-only analysis behind COHORT-REPORT.md
 analysis/mesh_route_b/    MeSH actions through the FDA UNII against the PubChem
                           route (docs/MESH-ACTIONS-ROUTE-B.md); read-only
@@ -354,6 +361,19 @@ are an answer key and never reach the page:
   (`--key epc`, `--key pe`), not to label it
   ([DATA-QUALITY-LOG](docs/DATA-QUALITY-LOG.md), 2026-10-13).
 
+**`label_effect_molecules`, `label_effects` and `label_effect_terms`** hold the
+adverse effects drug labels list, from OnSIDES, for one purpose: the answer
+key that shares no input with the score (`--key onsides`). Never on the page,
+never evidence, never in the score. A molecule reaches its RxNorm ingredient by
+the FDA classes' route, and **only a label whose products are that one
+ingredient is read**. OnSIDES has no MedDRA hierarchy, so each term is placed
+through ADReCS's: a PT by code, an LLT by its exact name among one PT's
+synonyms, and an LLT naming several PTs **stays its own effect, never resolved
+to one**. Which effects make a profile is the key's decision, in
+`analysis/similarity_harness/onsides_key.json`, not the backfill's. Two
+molecules can share an ingredient (haloperidol and its decanoate) and then
+every row ([DATA-QUALITY-LOG](docs/DATA-QUALITY-LOG.md), 2026-10-14).
+
 **`gtopdb_interactions`** holds GtoPdb's curated **action** (D17): its `Type` and
 `Action` verbatim, and `action_type`, the ChEMBL word they map to through
 `ACTION_MAP` in `scripts/resolve_cohort_gtopdb_actions.py` (NULL where they name
@@ -408,8 +428,11 @@ record where FDA's route does not reach it. Both are matched on an identifier
 this database already holds — never a title search: "ATM", "APP" and "TNF" are
 English words. **FDA's pharmacologic classes**, through **NLM RxNav**
 (RxNorm and RxClass; public domain, unpinned, its version recorded), supply
-an answer key for the similarity harness and nothing the page shows. The
-cohort pipeline no longer reads **PubChem** (2026-10-13).
+an answer key for the similarity harness and nothing the page shows; so do
+**OnSIDES** (v3.1.1, CC BY 4.0, pinned) for the effects labels list and
+**ADReCS** (v3.3, pinned, no open licence stated, read locally) for MedDRA's
+hierarchy, which OnSIDES lacks. The cohort pipeline no longer reads
+**PubChem** (2026-10-13).
 
 **The legacy pipeline** also reads PubChem for identity and the CAS numbers
 that join into PDSP, UniProt for protein identity and tissue specificity, the
@@ -566,8 +589,8 @@ the `class_wikipedia` table: 523 through the Wikidata item carrying the
 descriptor, and 87 whose item has no article through the main article its
 English category declares (Xanthines to *Xanthine*).
 
-The pipeline suite is 530 tests and the node suites are 708 (472 cohort
-viewer, 222 legacy viewer, 14 similarity harness).
+The pipeline suite is 561 tests and the node suites are 721 (472 cohort
+viewer, 222 legacy viewer, 27 similarity harness and answer keys).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`
 against ATC level-4 classes, the WHO's own "chemical, pharmacological or
@@ -592,6 +615,18 @@ Pharmacologic Classes, a curator apart from WHO and ChEMBL (`--key epc`,
 backfilled by `scripts/resolve_cohort_fda_classes.py`), judge 455 of 487
 US-labelled molecules in 123 classes: top-1 45.7% and MRR 0.5946, filtered
 **top-1 64.0% and MRR 0.7319**.
+
+Two more judges are built from no source the score reads. The nervous-system
+and psychiatric effects drug labels list (v1.0.0, `--key onsides`, from
+OnSIDES through `scripts/resolve_cohort_label_effects.py`) make each of 409
+molecules' five nearest label neighbours its classmates: over 346 it grades
+top-1 14.5% and MRR 0.2620, filtered **top-1 28.0% and MRR 0.3989**, low
+because label neighbours are noisy and far above a shuffle of the same lists.
+The pre-registered pairwise key (v1.0.0, held out from every sweep, `node
+analysis/answer_keys/pairs.mjs`) holds 243 sourced pairs: **75.4%** of 232
+positive directions rank within the top 10, **98.1%** of 160 known-unlike and
+**90.4%** of 94 opposite directions stay out of it, and a positive ranks above
+a negative or opposite **96.0%** of the time.
 <!-- END GENERATED: cohort-status -->
 
 Three browser measurements sit outside the block because they were taken once,
@@ -885,20 +920,28 @@ molecules) are in [docs/COHORT-2.md](docs/COHORT-2.md) and come first.
 - **Which curated actions count as opposites is chosen by argument.**
   `OPPOSED_ACTIONS` is nine hand-written pairs, eight of them never examined the
   way PARTIAL AGONIST/INVERSE AGONIST was (removed on a measurement). Each entry
-  is a pharmacological claim, not a number to sweep.
+  is a pharmacological claim, not a number to sweep. The pairwise key found
+  one it lacks: ChEMBL curates flumazenil as an ALLOSTERIC ANTAGONIST and the
+  benzodiazepines and zolpidem as POSITIVE ALLOSTERIC MODULATOR at GABA-A, a
+  pair no entry names, so flumazenil ranks 2nd to 8th in their lists; 7 of
+  the key's 9 failed opposite directions (SIMILARITY-HARNESS §16). Not
+  changed in the change that measured it.
 - **The six scoring constants are unvalidated; the two newer terms were
   measured first.** The one live finding, under both the ATC and the MeSH
   judge: the gap between a curated claim (0.75) and a replicated one (0.9) is
   the setting the ranking feels most — it is why meperidine's nearest neighbour
   is amitriptyline over a hERG screen. Nothing was changed on the strength of
   it: 24 of 217 molecules get worse, and the judge flatters curation.
-  [docs/SIMILARITY-HARNESS.md](docs/SIMILARITY-HARNESS.md). Since 2026-10-13
-  there are four judges beside the headline (the repaired ATC key, MeSH, FDA
-  EPC and PE, §13–14), but every one of them can read the same curation the
-  score does; the first that shares no input with it, label adverse-effect
-  profiles, is step 3 of
-  [docs/SIMILARITY-LITERATURE.md](docs/SIMILARITY-LITERATURE.md) and not
-  built.
+  [docs/SIMILARITY-HARNESS.md](docs/SIMILARITY-HARNESS.md). Since 2026-10-14
+  a judge that shares no input with the score exists, the label key (§15),
+  and it agrees on the direction: curated-only 0.75 to 1.0 raises its MRR by
+  0.0058, beside +0.0042 under ATC. So the finding is not only the judges
+  flattering curation, though under every judge the gain is small. Under
+  every judge, too, switching D15 off is the worst single setting. Lowering
+  the replicated-only weight is the opposite case: it helps under ATC and
+  MeSH and hurts under the label key, a gain only curation sees. A
+  pre-registered pairwise key (§16) is held out of the sweeps for the check
+  after a change.
 - **D20 keeps rarity per record,** so a rodent record, measured on by fewer
   molecules, often stands for its protein in a pair's score. Both obvious fixes
   graded worse ([docs/COHORT-2.md](docs/COHORT-2.md), D20).

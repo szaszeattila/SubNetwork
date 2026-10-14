@@ -302,7 +302,8 @@ def suite_figures() -> dict:
     # to run, and it picks this file up -- so a total here that left it out
     # would be a figure the documented command contradicts, which is precisely
     # the drift this module exists to stop.
-    harness = node_test_count("tests/similarity_harness.test.mjs")
+    harness = (node_test_count("tests/similarity_harness.test.mjs")
+               + node_test_count("tests/pairs_key.test.mjs"))
     return {
         "python_tests": python_test_count(),
         "viewer_cohort_tests": cohort,
@@ -329,9 +330,9 @@ def harness_figures() -> dict:
         raise StatusError(
             f"{GRAPH_DATA.name} is missing, so the similarity ranking cannot "
             "be graded. Run `python3 scripts/export_cohort.py` first.")
-    def run(*args):
+    def run(*args, script="analysis/similarity_harness/evaluate.mjs"):
         proc = subprocess.run(
-            [node, "analysis/similarity_harness/evaluate.mjs", "--json", *args],
+            [node, script, "--json", *args],
             cwd=str(common.ROOT), capture_output=True, text=True,
         )
         if proc.returncode != 0:
@@ -349,7 +350,27 @@ def harness_figures() -> dict:
     # (docs/SIMILARITY-LITERATURE.md, step 1).
     rep = run("--key", "atc-repaired")
     epc = run("--key", "epc")
+    # The first key sharing no input with the score (step 3), and the held-out
+    # pairwise key (step 4), read by its own script since no --key loads it.
+    ons = run("--key", "onsides")
+    pairs = run(script="analysis/answer_keys/pairs.mjs")
     return {
+        "simo_version": ons["version"],
+        "simo_labelled": ons["labelled"],
+        "simo_scoreable": ons["scoreable"],
+        "simo_top1": ons["top1"],
+        "simo_mrr": ons["mrr"],
+        "simo_filtered_top1": ons["filtered"]["top1"],
+        "simo_filtered_mrr": ons["filtered"]["mrr"],
+        "simp_version": pairs["version"],
+        "simp_pairs": pairs["pairs"],
+        "simp_positive_asked": pairs["positive"]["asked"],
+        "simp_positive": pairs["positive"]["rate"],
+        "simp_negative_asked": pairs["negative"]["asked"],
+        "simp_negative": pairs["negative"]["rate"],
+        "simp_opposite_asked": pairs["opposite"]["asked"],
+        "simp_opposite": pairs["opposite"]["rate"],
+        "simp_ordering": pairs["ordering"]["auc"],
         "sime_labelled": epc["labelled"],
         "sime_classes": epc["classes"],
         "sime_scoreable": epc["scoreable"],
@@ -503,7 +524,7 @@ def render_status(fig: dict) -> str:
             suites are {_n(fig['node_tests'])}
             ({_n(fig['viewer_cohort_tests'])} cohort viewer,
             {_n(fig['viewer_legacy_tests'])} legacy viewer,
-            {_n(fig['harness_tests'])} similarity harness).
+            {_n(fig['harness_tests'])} similarity harness and answer keys).
         """),
 
         _para(f"""
@@ -549,6 +570,30 @@ def render_status(fig: dict) -> str:
             {fig['sime_top1'] * 100:.1f}% and MRR {fig['sime_mrr']:.4f},
             filtered **top-1 {fig['sime_filtered_top1'] * 100:.1f}% and MRR
             {fig['sime_filtered_mrr']:.4f}**.
+        """),
+
+        _para(f"""
+            Two more judges are built from no source the score reads. The
+            nervous-system and
+            psychiatric effects drug labels list (v{fig['simo_version']},
+            `--key onsides`, from OnSIDES through
+            `scripts/resolve_cohort_label_effects.py`) make each of
+            {_n(fig['simo_labelled'])} molecules' five nearest label neighbours
+            its classmates: over {_n(fig['simo_scoreable'])} it grades top-1
+            {fig['simo_top1'] * 100:.1f}% and MRR {fig['simo_mrr']:.4f},
+            filtered **top-1 {fig['simo_filtered_top1'] * 100:.1f}% and MRR
+            {fig['simo_filtered_mrr']:.4f}**, low because label neighbours are
+            noisy and far above a shuffle of the same lists. The pre-registered
+            pairwise key (v{fig['simp_version']}, held out from every sweep,
+            `node analysis/answer_keys/pairs.mjs`) holds {_n(fig['simp_pairs'])}
+            sourced pairs: **{fig['simp_positive'] * 100:.1f}%** of
+            {_n(fig['simp_positive_asked'])} positive directions rank within
+            the top 10, **{fig['simp_negative'] * 100:.1f}%** of
+            {_n(fig['simp_negative_asked'])} known-unlike and
+            **{fig['simp_opposite'] * 100:.1f}%** of
+            {_n(fig['simp_opposite_asked'])} opposite directions stay out of
+            it, and a positive ranks above a negative or opposite
+            **{fig['simp_ordering'] * 100:.1f}%** of the time.
         """),
     ]
     return "\n\n".join(paragraphs)

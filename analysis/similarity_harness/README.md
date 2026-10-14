@@ -2,14 +2,17 @@
 
 Grades `viz/index.html`'s own similarity ranking against an answer key nobody
 here wrote. Read-only: it changes no file and adopts no constant. The headline
-key reads only the payload; the repaired ATC key also opens `db/cohort1.db`
-read-only, and refuses one built at a different time from the payload.
+key reads only the payload; the repaired ATC, FDA and label keys also open
+`db/cohort1.db` read-only, and refuse one built at a different time from the
+payload.
 
 ```bash
 node analysis/similarity_harness/evaluate.mjs            # the grade
 node analysis/similarity_harness/evaluate.mjs --json     # what ## Status reads
 node analysis/similarity_harness/evaluate.mjs --key mesh          # MeSH actions
 node analysis/similarity_harness/evaluate.mjs --key atc-repaired  # every ATC level
+node analysis/similarity_harness/evaluate.mjs --key epc           # FDA's classes (also pe)
+node analysis/similarity_harness/evaluate.mjs --key onsides       # label neighbours (also onsides-all)
 node analysis/similarity_harness/sweep.mjs               # every constant
 node analysis/similarity_harness/sweep.mjs evidence_curated --movers
 ```
@@ -22,6 +25,8 @@ grading nothing and printing a number.
 | --- | --- |
 | `harness.mjs` | answer keys, grading, and the constant patching. The reasoning lives at the top of it. |
 | `atc_repaired.json` | the repaired ATC key's exclusion list, versioned, every entry with its reason |
+| `fda_keys.json` | the FDA keys' no-credit mechanism classes, versioned |
+| `onsides_key.json` | the label key's every setting, versioned and fixed before it first graded |
 | `evaluate.mjs` | the grade, the worst-ranked molecules, and the per-class breakdown |
 | `sweep.mjs` | one constant at a time over a grid, with `--movers` |
 
@@ -42,6 +47,15 @@ Three things about it are load-bearing and easy to undo by accident:
   that it is comparable across builds. A change to `atc_repaired.json` is a
   change of instrument: bump its version and say why in
   docs/SIMILARITY-HARNESS.md, never in the same change as a constant it judges.
+  The same holds for `fda_keys.json` and `onsides_key.json`.
+- **The label key judges by neighbours, not classes.** `--key onsides` makes
+  each molecule's five nearest label neighbours (IDF-weighted cosine over the
+  nervous-system and psychiatric effects its labels list) its classmates. It
+  is the one key sharing no input with the score, and the noisiest; read it
+  beside a shuffle of the same lists (`analysis/answer_keys/chance.mjs`).
+- **The pairwise key is not here on purpose.** `analysis/answer_keys/pairs.mjs`
+  grades hand-written, sourced pairs that were frozen before they graded
+  anything, and `KEYS` does not carry them, so no sweep can tune to them.
 - **Molecules with no reachable class peer are counted apart**, never as
   failures. Several constants change what is eligible, so folding coverage into
   the denominator would let a constant raise the grade without improving one

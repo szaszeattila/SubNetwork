@@ -49,6 +49,65 @@ alone.
 | **PDSP Ki DB** | independent Ki measurements, strong for CNS | bulk CSV only, no query API, no per-row citation link |
 | **GtoPdb** | curated action (agonist, antagonist, …) on the receptor, channel and enzyme families this project is about | a ligand's Type can be carried onto secondary targets it was only screened at (vilazodone); anonymous bulk access announced to end |
 | **FDA pharmacologic classes (NLM RxNav)** | FDA's Established Pharmacologic Class, mechanism of action and physiologic effect, as an answer key for the similarity ranking; never shown, never evidence | US-labelled drugs only (627 of 2,452 entries have an EPC); RxNorm files a salt apart from its ingredient, and some ChEMBL forms as ingredients of their own (aminophylline); unpinned, so its version is recorded |
+| **OnSIDES** (v3.1.1, pinned) | the adverse effects drug labels list, read by a model into MedDRA terms, as the one answer key sharing no input with the score; never shown, never evidence | carries no MedDRA hierarchy; what it reads from a label varies a hundredfold between labels of one drug; reads some table headings as effects ("Nervous") |
+| **ADReCS** (v3.3, pinned) | MedDRA's SOC to PT tree with its codes, to say which OnSIDES terms are nervous-system or psychiatric | no open licence stated; read locally as a lookup, nothing of it leaves the database; LLTs only as names among a PT's synonyms |
+
+---
+
+## 2026-10-14 — label effects from OnSIDES, and a hierarchy OnSIDES does not carry
+
+**What was added.** `scripts/resolve_cohort_label_effects.py` writes the
+adverse effects drug labels list into three tables of their own
+(`label_effect_molecules`, `label_effects`, `label_effect_terms`), as the
+data behind the fourth answer key (SIMILARITY-HARNESS §15). A molecule reaches
+its RxNorm ingredient by the FDA classes' route, from the same cache, and
+OnSIDES is keyed by the same ingredient ids. 691 of the 930 molecules with an
+ingredient have a single-ingredient label: 29,215 labels (27,420 US, 2,162 UK,
+1,359 Japanese, 311 EU), 5,343,059 effect rows read, 4,759 distinct terms.
+4,142 labels whose products reach two ingredients are not read, because a
+combination's effects belong to its partner as much as to the drug.
+
+**The hierarchy was the problem.** The key asks for nervous-system and
+psychiatric effects, and OnSIDES gives MedDRA terms with no hierarchy, since
+MedDRA's is licensed. Two routes were measured:
+
+- **Wikidata** (MedDRA ID, P3201, to MeSH, P486, to MeSH trees C10, F01, F03
+  and C23.888.592) reached 1,286 MedDRA ids in all, and 95 nervous-system or
+  psychiatric terms of the 4,800 the catalogue's labels use. It missed
+  *Depression*, *Hallucination*, *Confusion* and every LLT. Rejected.
+- **ADReCS v3.3** publishes MedDRA's SOC, HLGT, HLT and PT tree with its
+  codes. It places 2,416 terms by PT code and 1,885 LLTs by their exact name
+  among one PT's synonyms. 126 LLTs name several PTs ("Convulsion" is a
+  synonym of more than one seizure PT) and are never resolved to one; their
+  SOCs are the ones every candidate shares, which is all the key needs. 332
+  terms are unplaced. Adopted, read locally and pinned by sha256. The site
+  states no open licence, so the `onsides-all` key, which reads every term,
+  stands if it is ruled out.
+
+**The LLT step is a name match**, inside MedDRA's own vocabulary, where an
+LLT name is unique by design. It never reaches a molecule, so invariant 15 is
+not in play, and it is refused wherever it reaches more than one PT.
+
+**Two things OnSIDES does that a reader would not expect.**
+
+- **It reads table headings as effects.** The LLT "Nervous" appears 79,000
+  times, almost certainly from the heading "Nervous system disorders"; "Cl",
+  "P", "Gas" and "NGS" are of the same kind. They sit on nearly every label,
+  so the key's IDF weight gives them almost nothing. They are stored, not
+  removed: deciding what counts is the key's job.
+- **Labels of one drug differ a hundredfold in what it reads from them.**
+  Diazepam's 34 US labels yield a median of 4 effects each (repackager copies
+  of an old-format label), its 13 Japanese labels 49. Fentanyl's run from 17
+  (a UK injection) to over a thousand rows (US). The key's first rule, an
+  effect listed on half of a drug's labels, gave diazepam no effect at all and
+  morphine 6 of 146. It was replaced before the key graded anything by "on two
+  labels, or on the only one", the union OnSIDES's own examples take.
+
+**Two molecules can share an ingredient.** 24 ingredients are reached by two
+or three catalogue parents: a drug and its ester or salt that ChEMBL keeps
+apart and RxNorm files as one drug (haloperidol and haloperidol decanoate,
+prednisolone and three esters, candesartan and its cilexetil). Each gets the
+ingredient's rows; the key never offers one as the other's label neighbour.
 
 ---
 
