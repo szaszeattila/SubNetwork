@@ -1,0 +1,195 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1402" width="1000" height="1402" font-family="Noto Sans, DejaVu Sans, Arial, sans-serif" fill="#20303b">
+  <title>The ATC answer key: how it is built, how it grades the ranking, and what the audit found</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5b6d78"/>
+    </marker>
+    <style>
+      .h1 { font-size: 22px; font-weight: 700; fill: #1d4a63; }
+      .sub { font-size: 12.5px; fill: #5b6d78; }
+      .h2 { font-size: 17px; font-weight: 700; fill: #1d4a63; }
+      .h3 { font-size: 13.5px; font-weight: 700; fill: #245875; }
+      .t { font-size: 13px; }
+      .s { font-size: 11.5px; fill: #3d4f5a; }
+      .b { font-weight: 700; }
+      .m { font-family: DejaVu Sans Mono, Menlo, monospace; font-size: 11.5px; }
+      .w { fill: #ffffff; font-weight: 700; font-size: 12.5px; }
+      .box { fill: #f3f7f9; stroke: #a9bcc6; stroke-width: 1.2; }
+      .warn { fill: #fdf3e4; stroke: #d98a1c; stroke-width: 1.6; }
+      .key { fill: #e7f0f5; stroke: #245875; stroke-width: 1.6; }
+      .line { stroke: #5b6d78; stroke-width: 1.4; fill: none; }
+      .rule { stroke: #c9d6dc; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="1402" fill="#ffffff"/>
+
+  <text x="30" y="40" class="h1">The ATC answer key: how it is built, how it grades, what the audit found</text>
+  <text x="30" y="62" class="sub">Measured against the 2026-10-11 build by analysis/similarity_harness/ and analysis/answer_keys/audit.mjs. Nothing here is adopted.</text>
+
+  <!-- ============ 1. How the key is built ============ -->
+  <line x1="30" y1="82" x2="970" y2="82" class="rule"/>
+  <text x="30" y="106" class="h2">1   How the key is built</text>
+
+  <rect x="30" y="122" width="200" height="96" rx="6" class="box"/>
+  <text x="130" y="148" text-anchor="middle" class="t b">ChEMBL 37</text>
+  <text x="130" y="170" text-anchor="middle" class="m">molecule_atc_</text>
+  <text x="130" y="186" text-anchor="middle" class="m">classification</text>
+  <text x="130" y="206" text-anchor="middle" class="s">every ATC code of every form</text>
+
+  <rect x="270" y="122" width="200" height="96" rx="6" class="warn"/>
+  <text x="370" y="148" text-anchor="middle" class="t b">selection.py</text>
+  <text x="370" y="172" text-anchor="middle" class="m">WHERE level1 = 'N'</text>
+  <text x="370" y="196" text-anchor="middle" class="s">the cohort's admission test,</text>
+  <text x="370" y="211" text-anchor="middle" class="s">reused as the key's filter</text>
+
+  <rect x="510" y="122" width="200" height="96" rx="6" class="box"/>
+  <text x="610" y="148" text-anchor="middle" class="m b">molecules.atc_level5</text>
+  <text x="610" y="172" text-anchor="middle" class="s">stored in the database,</text>
+  <text x="610" y="188" text-anchor="middle" class="s">exported in</text>
+  <text x="610" y="206" text-anchor="middle" class="m">viz/graph.data.js</text>
+
+  <rect x="750" y="122" width="220" height="96" rx="6" class="box"/>
+  <text x="860" y="146" text-anchor="middle" class="t b">harness.mjs labelledSet</text>
+  <text x="860" y="167" text-anchor="middle" class="s">cut each code to level 4</text>
+  <text x="860" y="184" text-anchor="middle" class="s">drop X ("other ...") classes</text>
+  <text x="860" y="201" text-anchor="middle" class="s">drop classes of one member</text>
+
+  <line x1="230" y1="170" x2="268" y2="170" class="line" marker-end="url(#arrow)"/>
+  <line x1="470" y1="170" x2="508" y2="170" class="line" marker-end="url(#arrow)"/>
+  <line x1="710" y1="170" x2="748" y2="170" class="line" marker-end="url(#arrow)"/>
+  <line x1="860" y1="218" x2="860" y2="244" class="line" marker-end="url(#arrow)"/>
+
+  <rect x="30" y="246" width="940" height="44" rx="6" class="key"/>
+  <text x="500" y="267" text-anchor="middle" class="t b">The key: 395 molecules in 64 classes</text>
+  <text x="500" y="283" text-anchor="middle" class="s">30% of the 1,335 catalogue entries; two are classmates if they share a class</text>
+
+  <g transform="translate(0,56)">
+  <!-- ATC code anatomy -->
+  <text x="30" y="262" class="h3">Reading one code</text>
+  <g font-family="DejaVu Sans Mono, Menlo, monospace" font-size="17" font-weight="700" text-anchor="middle">
+    <rect x="30" y="274" width="34" height="32" rx="4" fill="#e7f0f5" stroke="#245875"/><text x="47" y="296" fill="#1d4a63">N</text>
+    <rect x="68" y="274" width="44" height="32" rx="4" fill="#e7f0f5" stroke="#245875"/><text x="90" y="296" fill="#1d4a63">05</text>
+    <rect x="116" y="274" width="34" height="32" rx="4" fill="#e7f0f5" stroke="#245875"/><text x="133" y="296" fill="#1d4a63">A</text>
+    <rect x="154" y="274" width="34" height="32" rx="4" fill="#e7f0f5" stroke="#245875"/><text x="171" y="296" fill="#1d4a63">C</text>
+    <rect x="192" y="274" width="44" height="32" rx="4" fill="#ffffff" stroke="#a9bcc6"/><text x="214" y="296" fill="#5b6d78">02</text>
+  </g>
+  <text x="248" y="287" class="s">thioridazine: nervous system › psycholeptics › antipsychotics ›</text>
+  <text x="248" y="303" class="s"><tspan class="b" fill="#20303b">phenothiazines with piperidine structure</tspan> (level 4: the class) › the drug</text>
+  <path d="M30,316 L30,322 L188,322 L188,316" class="line"/>
+  <text x="30" y="338" class="s">the first five characters are the class; whether two drugs share them decides "right" or "wrong"</text>
+
+  <!-- ============ 2. How it grades ============ -->
+  <line x1="30" y1="362" x2="970" y2="362" class="rule"/>
+  <text x="30" y="386" class="h2">2   How it grades the ranking</text>
+
+  <text x="30" y="414" class="h3">One molecule: walk its list to the first classmate</text>
+  <rect x="30" y="426" width="250" height="30" rx="15" fill="#1d4a63"/>
+  <text x="155" y="446" text-anchor="middle" class="w">THIORIDAZINE · class N05AC</text>
+
+  <g class="t">
+    <text x="30" y="482" class="s">rank</text><text x="80" y="482" class="s">sharedTargets' answer</text><text x="290" y="482" class="s">its class</text><text x="400" y="482" class="s">classmate?</text>
+    <line x1="30" y1="489" x2="520" y2="489" class="rule"/>
+    <text x="44" y="510" text-anchor="middle">1</text><text x="80" y="510">CHLORPROMAZINE</text><text x="290" y="510" class="m">N05AA</text><text x="400" y="510" fill="#c0504d">✗ no</text>
+    <text x="44" y="536" text-anchor="middle">2</text><text x="80" y="536">PROCHLORPERAZINE</text><text x="290" y="536" class="m">N05AB</text><text x="400" y="536" fill="#c0504d">✗ no</text>
+    <text x="44" y="562" text-anchor="middle">3</text><text x="80" y="562">RISPERIDONE</text><text x="290" y="562" class="m">N05AX</text><text x="400" y="562" fill="#7f8b93">— dropped (X)</text>
+    <text x="44" y="588" text-anchor="middle">4</text><text x="80" y="588">HALOPERIDOL</text><text x="290" y="588" class="m">N05AD</text><text x="400" y="588" fill="#c0504d">✗ no</text>
+    <text x="44" y="612" text-anchor="middle" class="s">⋮</text><text x="80" y="612" class="s">116 more molecules</text>
+    <rect x="30" y="620" width="490" height="28" rx="4" fill="#e6f2ea" stroke="#2e7d4f"/>
+    <text x="44" y="639" text-anchor="middle" class="b">121</text><text x="80" y="639" class="b">MESORIDAZINE</text><text x="290" y="639" class="m">N05AC</text><text x="400" y="639" fill="#2e7d4f" class="b">✓ first one</text>
+  </g>
+  <text x="30" y="672" class="s">Rank 121: this molecule scores 1/121 for MRR and a miss for top-1. The ranking's answer,</text>
+  <text x="30" y="688" class="s">chlorpromazine, is a phenothiazine antipsychotic too; ATC files it in a different structure class.</text>
+
+  <!-- right column: all molecules -->
+  <text x="570" y="414" class="h3">All 395: two outcomes, then one grade</text>
+  <rect x="570" y="426" width="400" height="34" rx="6" class="key"/>
+  <text x="770" y="448" text-anchor="middle" class="t b">each of the 395 labelled molecules</text>
+  <path d="M700,460 L700,476 L640,476 L640,490" class="line" marker-end="url(#arrow)"/>
+  <path d="M840,460 L840,476 L900,476 L900,490" class="line" marker-end="url(#arrow)"/>
+
+  <rect x="570" y="492" width="190" height="66" rx="6" fill="#e6f2ea" stroke="#2e7d4f" stroke-width="1.4"/>
+  <text x="665" y="514" text-anchor="middle" class="t b">scoreable: 284</text>
+  <text x="665" y="532" text-anchor="middle" class="s">a classmate somewhere</text>
+  <text x="665" y="547" text-anchor="middle" class="s">in its list</text>
+
+  <rect x="780" y="492" width="190" height="66" rx="6" fill="#eef1f3" stroke="#9aa5ad" stroke-width="1.4"/>
+  <text x="875" y="514" text-anchor="middle" class="t b">unanswerable: 111</text>
+  <text x="875" y="532" text-anchor="middle" class="s">no classmate anywhere;</text>
+  <text x="875" y="547" text-anchor="middle" class="s">kept out of every rate</text>
+
+  <line x1="665" y1="558" x2="665" y2="578" class="line" marker-end="url(#arrow)"/>
+  <rect x="570" y="580" width="400" height="56" rx="6" class="key"/>
+  <text x="770" y="602" text-anchor="middle" class="t b">top-1 38.7% · top-5 66.2% · MRR 0.5119</text>
+  <text x="770" y="622" text-anchor="middle" class="s">over the 284 (MRR is the mean of 1/rank)</text>
+
+  <text x="570" y="672" class="t b">Where the grade is used</text>
+  <text x="570" y="692" class="s">• CLAUDE.md's Status block quotes it</text>
+  <text x="570" y="709" class="s">• tests/similarity_harness.test.mjs holds it to a floor</text>
+  <text x="570" y="726" class="s">• sweep.mjs judges every scoring constant by how it moves it</text>
+
+  <!-- ============ 3. What the audit found ============ -->
+  <line x1="30" y1="750" x2="970" y2="750" class="rule"/>
+  <text x="30" y="774" class="h2">3   What the audit found</text>
+
+  <text x="30" y="802" class="h3">A. The 284 scoreable molecules, by what the ranking put first</text>
+  <!-- bar: 940px / 284 = 3.31 px per molecule -->
+  <rect x="30" y="814" width="364.1" height="38" fill="#2e7d4f"/>
+  <rect x="394.1" y="814" width="278.0" height="38" fill="#8d99a2"/>
+  <rect x="672.1" y="814" width="89.4" height="38" fill="#3b74a8"/>
+  <rect x="761.5" y="814" width="119.2" height="38" fill="#5fa3b5"/>
+  <rect x="880.7" y="814" width="89.3" height="38" fill="#c0504d"/>
+  <text x="212" y="838" text-anchor="middle" class="w">110 a classmate</text>
+  <text x="533" y="838" text-anchor="middle" class="w">84 the key cannot judge</text>
+  <text x="716.8" y="838" text-anchor="middle" class="w">27 sibling</text>
+  <text x="821.1" y="838" text-anchor="middle" class="w">36 MeSH</text>
+  <text x="925.3" y="838" text-anchor="middle" class="w">27 other</text>
+  <path d="M394.1,858 L394.1,864 L970,864 L970,858" class="line"/>
+  <text x="682" y="880" text-anchor="middle" class="s">174 counted as misses</text>
+
+  <g class="s">
+    <rect x="30" y="884" width="14" height="14" fill="#2e7d4f"/>
+    <text x="52" y="896"><tspan class="b" fill="#20303b">Right.</tspan> The top answer shares the level-4 class.</text>
+    <rect x="30" y="908" width="14" height="14" fill="#8d99a2"/>
+    <text x="52" y="920"><tspan class="b" fill="#20303b">Not judgeable.</tspan> The top answer has no N class with a classmate: filed outside N, in an X class, or nowhere.</text>
+    <text x="52" y="936">suvorexant → seltorexant (no ATC code) · naltrexone → naloxone (V03AB) · melatonin → agomelatine (N06AX)</text>
+    <rect x="30" y="948" width="14" height="14" fill="#3b74a8"/>
+    <text x="52" y="960"><tspan class="b" fill="#20303b">Sibling class.</tspan> Same level 3, split at level 4 by structure: thioridazine → chlorpromazine · oxycodone → buprenorphine</text>
+    <rect x="30" y="972" width="14" height="14" fill="#5fa3b5"/>
+    <text x="52" y="984"><tspan class="b" fill="#20303b">MeSH agrees.</tspan> A second judge calls it right: midazolam → nordazepam (hypnotic vs anxiolytic benzodiazepine) · lofexidine → clonidine</text>
+    <rect x="30" y="996" width="14" height="14" fill="#c0504d"/>
+    <text x="52" y="1008"><tspan class="b" fill="#20303b">Other.</tspan> Some real errors (vigabatrin → methylphenidate), some relatives filed apart (zolpidem ↔ diazepam)</text>
+  </g>
+
+  <text x="30" y="1046" class="h3">B. The same ranking, read by three judges</text>
+  <!-- scale: 0-100% over 560px from x=340 -->
+  <line x1="340" y1="1056" x2="340" y2="1152" class="rule"/>
+  <text x="30" y="1076" class="t">as graded today</text>
+  <rect x="340" y="1062" width="216.7" height="20" fill="#245875"/>
+  <text x="564" y="1077" class="t b">38.7%</text>
+  <text x="30" y="1106" class="t">ranked only among judged molecules</text>
+  <rect x="340" y="1092" width="277.8" height="20" fill="#245875"/>
+  <text x="626" y="1107" class="t b">49.6%</text>
+  <text x="30" y="1136" class="t">sibling or MeSH-agreed counted right</text>
+  <rect x="340" y="1122" width="341.0" height="20" fill="#9fbccd"/>
+  <text x="689" y="1137" class="t b">60.9%</text>
+  <text x="740" y="1137" class="s">a lenient reading, not a grade</text>
+  <text x="30" y="1168" class="s">Top-1 in all three rows; the ranking is identical, only the judge changes. None is a bound: some MeSH-agreed answers are wrong,</text>
+  <text x="30" y="1184" class="s">and some "other" answers are right. The current key cannot say where the true figure lies.</text>
+
+  <text x="30" y="1216" class="h3">C. What the key's 64 classes group by — WHO: levels 3–4 are "chemical, pharmacological or therapeutic" subgroups</text>
+  <!-- 940 / 64 = 14.6875 px per class -->
+  <rect x="30" y="1228" width="616.9" height="34" fill="#6d7f8a"/>
+  <rect x="646.9" y="1228" width="235.0" height="34" fill="#2e7d4f"/>
+  <rect x="881.9" y="1228" width="58.8" height="34" fill="#d98a1c"/>
+  <rect x="940.7" y="1228" width="29.3" height="34" fill="#c0504d"/>
+  <text x="338" y="1250" text-anchor="middle" class="w">42 chemical structure</text>
+  <text x="764.4" y="1250" text-anchor="middle" class="w">16 mechanism</text>
+  <text x="911.3" y="1250" text-anchor="middle" class="w">4 use</text>
+  <text x="955.4" y="1250" text-anchor="middle" class="w">2</text>
+  <text x="30" y="1282" class="s">Structure splits one mechanism (five opioid classes, nine antipsychotic classes); use splits one structure (benzodiazepines filed twice);</text>
+  <text x="30" y="1298" class="s">use and "other" classes (orange, red: N02BG, N05CM) group unlike mechanisms. Only 16 classes group drugs by how they work.</text>
+
+  <text x="30" y="1328" class="s"><tspan class="b" fill="#20303b">And a circularity:</tspan> 39 of the 110 right answers are won at a target where both molecules carry a curated mechanism — the key and the score read the same curation.</text>
+  </g>
+</svg>

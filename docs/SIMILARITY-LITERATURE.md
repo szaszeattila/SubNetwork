@@ -203,6 +203,10 @@ activation against inhibition at all.
 
 ## 3. How the answer key is built today
 
+![The ATC answer key: how it is built, how it grades the ranking, and what the audit found](figures/answer-key.svg)
+
+*The whole of this part in one picture. Each panel is spelled out below: §3.1 for 1, §3.1–3.3 for 2, §3.4–3.5 for 3.*
+
 ### 3.1 The ATC key, step by step
 
 1. **ChEMBL's `molecule_atc_classification`** is read by
@@ -256,18 +260,22 @@ into the first of four buckets that holds:
 | shares a **MeSH action** with the query | **36** | 20.7% | flunitrazepam → diazepam and midazolam → nordazepam (benzodiazepines filed as hypnotics against anxiolytics); lofexidine → clonidine; codeine → hydrocodone; caffeine → theophylline (the anhydrous record carries no N code) |
 | none of these | **27** | 15.5% | vigabatrin → methylphenidate (an error); but also zolpidem ↔ diazepam, ipidacrine → neostigmine and carbamazepine → lidocaine (GABA-A modulators, anticholinesterases and sodium-channel blockers the key files apart) |
 
-Three corrections follow from the table without changing the ranking:
+Two other readings of the same ranking follow from the table. Neither
+changes the ranking; each changes only the judge:
 
 - **Ranked only among molecules the key can judge**, the "filtered" setting
   that link-prediction work uses for the same problem ([Bordes et al. 2013,
   NeurIPS](https://papers.nips.cc/paper/2013/hash/1cecc7a77928ca8133fa24680a88d2f9-Abstract.html)):
   **top-1 49.6%, MRR 0.6168**, up from 38.7% and 0.5119.
 - **Counting a sibling-class or MeSH-agreed answer as right**: top-1
-  **60.9%**. That is an upper bound, not a grade. Some of these answers really
-  are wrong in a way ATC gets right, such as rasagiline → moclobemide, an
-  MAO-B inhibitor against an MAO-A one, which MeSH files under one action.
-- The last row is not all errors either. The true top-1 is somewhere between
-  49.6% and 60.9%, and the current key cannot say where.
+  **60.9%**. That is a lenient reading, not a grade.
+
+**Neither figure is a bound.** Some answers counted right in the lenient
+reading are wrong in a way ATC gets right: rasagiline → moclobemide is an MAO-B
+inhibitor against an MAO-A one, and MeSH files both under one action. And some
+answers in the last row of the table are right: zolpidem and diazepam act at the
+same GABA-A site. The current key cannot say where the true top-1 lies. A
+better key can (Part 4).
 
 **One more measurement points at circularity.** Of the 110 top-1 hits, 39
 (35.5%) are won chiefly by a target at which **both** molecules have a
