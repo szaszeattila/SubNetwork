@@ -125,7 +125,7 @@ python3 scripts/resolve_cohort_classes.py       # ATC codes and USAN stems (offl
 python3 scripts/resolve_cohort_pharm_actions.py # MeSH pharmacological actions via FDA UNII and Wikidata (minutes)
 python3 scripts/resolve_cohort_mesh_structure.py # MeSH structure classes via FDA UNII (~35 s)
 python3 scripts/resolve_cohort_wikipedia.py    # Wikipedia links via Wikidata and infoboxes; after the MeSH classes
-python3 scripts/resolve_cohort_gtopdb_actions.py # GtoPdb curated actions (pinned 2026.3, cached)
+python3 scripts/resolve_cohort_gtopdb_actions.py # GtoPdb curated actions (pinned 2026.3.1, cached)
 python3 scripts/resolve_cohort_orthologues.py   # target_orthologues by sequence (~2 min cold, needs parasail)
 
 python3 scripts/export_cohort.py           # db/cohort1.db -> viz/*.data.js + viz/evidence/
@@ -378,7 +378,7 @@ far it got, `indication_refs` for the **ClinicalTrials.gov** NCT ids that phase
 is read off. `indication_refs` also carries DailyMed, EMA, FDA, ATC, USAN and
 INN references, none read here; DailyMed is the one worth revisiting, being the
 label behind 286 of the 515 approved indications with no registered trial.
-**GtoPdb** (IUPHAR/BPS Guide to Pharmacology, release 2026.3) supplies a curated
+**GtoPdb** (IUPHAR/BPS Guide to Pharmacology, release 2026.3.1) supplies a curated
 action on pairs ChEMBL already has (D17); its database is ODbL and its contents
 CC BY-SA 4.0, credited on the page. Everything it contributes is exported to
 its own `viz/gtopdb.data.js` under those terms, never into `graph.data.js`
@@ -507,7 +507,7 @@ hand-written and is never rewritten.
 <!-- Written by `python3 scripts/cohort_report.py --write-status`. Do not edit by hand: `--check-status` fails when this block and the active build disagree, and a rewrite discards whatever was typed here. The prose outside the markers is hand-written and is never touched. -->
 
 Pipeline and viewer both working. Current database, `db/cohort1.db`, built
-2026-10-12 against the `chembl_37` bulk release under selection policy
+2026-10-13 against the `chembl_37` bulk release under selection policy
 `cohort1-selection v3.0.0` and evidence policy `cohort1-evidence v1.1.1`:
 
 **2,452 catalogue entries · 3,359 targets · 127,741 claims · 327,957 observations**
@@ -547,7 +547,7 @@ the `class_wikipedia` table: 523 through the Wikidata item carrying the
 descriptor, and 87 whose item has no article through the main article its
 English category declares (Xanthines to *Xanthine*).
 
-The pipeline suite is 512 tests and the node suites are 701 (472 cohort
+The pipeline suite is 515 tests and the node suites are 701 (472 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`

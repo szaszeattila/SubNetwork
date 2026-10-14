@@ -17,7 +17,7 @@ says nothing about taking drugs together.
 - **ChEMBL 37** (EMBL-EBI): the molecules, their targets, the measurements and
   the curated mechanisms, and how far each molecule got in clinical
   development.
-- **The IUPHAR/BPS Guide to Pharmacology** (release 2026.3): a second curator's
+- **The IUPHAR/BPS Guide to Pharmacology** (release 2026.3.1): a second curator's
   account of how each molecule acts at its main targets.
 - **MeSH, UniProt, ClinicalTrials.gov and Wikidata**: drug classes, protein
   identities across species, trial status, and Wikipedia links.

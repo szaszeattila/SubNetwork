@@ -70,7 +70,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 
 from cohort import common
 
-GTOPDB_VERSION = "2026.3"
+GTOPDB_VERSION = "2026.3.1"
 BASE_URL = "https://www.guidetopharmacology.org/DATA/"
 FILES = ("interactions.csv", "ligands.csv")
 CACHE = common.DB / "cache" / "gtopdb" / GTOPDB_VERSION
@@ -80,7 +80,8 @@ USER_AGENT = "SubNetwork/1.0 (drug-target interaction map; non-commercial)"
 
 # GtoPdb (Type, Action) -> ChEMBL action_type. Written out pair by pair from
 # every combination release 2026.3 holds, so that nothing is mapped by a rule
-# nobody read. None means the pair names no direction.
+# nobody read, and reviewed again for 2026.3.1, which adds one pair
+# (('Antibody', 'Activation'), below). None means the pair names no direction.
 #
 # Choices worth stating:
 # - An Action that names an efficacy outranks the Type: ('Antagonist',
@@ -96,6 +97,10 @@ USER_AGENT = "SubNetwork/1.0 (drug-target interaction map; non-commercial)"
 #   'Slows inactivation', which prolongs the current and is left undirected.
 # - 'Neutral' allosteric ligands (flumazenil), 'Binding', 'Mixed', 'Biphasic',
 #   'Unknown', and a bare 'None' Type, name no direction.
+# - An antibody that activates an enzyme is an ACTIVATOR, as the 'Activator'
+#   Type's 'Activation' is: ('Antibody', 'Activation') is new in 2026.3.1, on
+#   one ligand, denecimig, a factor VIII mimetic, at coagulation factor IX.
+#   'Agonist' is kept for an antibody at a receptor, which GtoPdb says itself.
 ACTION_MAP = {
     ("Activator", "Activation"): "ACTIVATOR",
     ("Activator", "Agonist"): "AGONIST",
@@ -141,6 +146,7 @@ ACTION_MAP = {
     ("Antagonist", "Mixed"): None,
     ("Antagonist", "Non-competitive"): "ANTAGONIST",
     ("Antagonist", "Partial agonist"): "PARTIAL AGONIST",
+    ("Antibody", "Activation"): "ACTIVATOR",
     ("Antibody", "Agonist"): "AGONIST",
     ("Antibody", "Antagonist"): "ANTAGONIST",
     ("Antibody", "Binding"): None,
@@ -201,6 +207,11 @@ def ensure_files(cache=CACHE, version=GTOPDB_VERSION, get=None) -> dict:
     A downloaded file whose own version line is not the pinned one is refused
     and not cached: the URL always serves the latest release, and a different
     release wearing the pinned name is exactly what the pin prevents.
+
+    The bytes are cached as served. GtoPdb sends UTF-8 as text/csv with no
+    charset, so requests' .text decodes it as Latin-1; written back out, that
+    turned every "β" into "Î²" and recorded a sha256 no download of the
+    release could match (docs/DATA-QUALITY-LOG.md, 2026-10-14).
     """
     get = get or (lambda url: requests.get(url, timeout=120,
                                            headers={"User-Agent": USER_AGENT}))
@@ -211,14 +222,14 @@ def ensure_files(cache=CACHE, version=GTOPDB_VERSION, get=None) -> dict:
             print(f"  downloading {BASE_URL}{name} ...")
             r = get(BASE_URL + name)
             r.raise_for_status()
-            got = file_version(r.text)
+            got = file_version(r.content.decode("utf-8"))
             if got != version:
                 raise GtoPdbError(
                     f"{name} is GtoPdb {got}, not the pinned {version}. Review "
                     f"ACTION_MAP against the new release before bumping GTOPDB_VERSION, "
                     f"or place the {version} files in {cache} (docs/REPRODUCING.md).")
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(r.text)
+            path.write_bytes(r.content)
         elif file_version(path.read_text()[:200]) != version:
             raise GtoPdbError(f"cached {path} is not GtoPdb {version}")
         out[name] = path

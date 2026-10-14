@@ -51,6 +51,37 @@ alone.
 
 ---
 
+## 2026-10-14 — GtoPdb's cache was not GtoPdb's file
+
+Bumping the GtoPdb pin to 2026.3.1, the backfill's cached copy had a different
+sha256 from the same files fetched with `curl` a few minutes earlier, and was
+longer (545 bytes in `interactions.csv`, 600 in `ligands.csv`). GtoPdb serves its CSVs as `text/csv` with no charset;
+`requests` then decodes the body as ISO-8859-1, as HTTP's old default says, and
+the backfill wrote that text back out as UTF-8. Every non-ASCII character was
+doubled into two: `(3β,5β,17β)` in a ligand's synonyms became `(3Î²,5Î²,17Î²)`.
+
+**What it would have reached.** Only a dry run read the garbled files, so
+nothing was written. Every field the backfill matches on (InChIKey, ChEMBL id,
+UniProt accession, Type, Action) is ASCII, so no match would have changed. One
+stored field is not: seltorexant's primary-target row at OX2 carries the
+action comment "70–320-fold selective", whose en dash would have been stored
+as three characters of noise. Action comments are not exported, so it would
+have stopped at `gtopdb_interactions`. And the manifest would have recorded
+the sha256 of a file no download of the release reproduces, so the one check
+that says "this is the file GtoPdb published" could never pass.
+
+**2026.3 was not affected.** Its cache is clean UTF-8, with the same 218 and
+210 non-ASCII characters as 2026.3.1's and none of the doubled pairs the
+re-encoding leaves. The code was the same, so the server's answer differed at
+that download, perhaps naming a charset; it cannot be asked now.
+
+**Fixed.** `ensure_files` caches `r.content`, the bytes as served, and decodes
+them as UTF-8 only to read the version line; a test holds a "β" through a
+download. 2026.3.1's cache matches `curl` byte for byte.
+
+**The lesson** is invariant 1's, one layer down: a byte is only GtoPdb's if
+nothing between the server and the disk decided what it meant.
+
 ## 2026-10-13 — PBF-509 had an article, and Wikidata could not say so
 
 **What happened.** The user found PBF-509 with no Wikipedia link although

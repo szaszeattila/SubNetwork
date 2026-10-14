@@ -34,7 +34,11 @@ answered by D18, for primary targets only.
   the MeSH and trial ones, writing `gtopdb_interactions` and the
   `gtopdb_actions` key of `build_manifest`. Release **2026.3** (published
   2026-09-16), pinned by the files' own version line, cached under
-  `db/cache/gtopdb/2026.3/`, sha256 in the manifest.
+  `db/cache/gtopdb/2026.3/`, sha256 in the manifest. Bumped on 2026-10-14 to
+  **2026.3.1** (published 2026-10-12), which changes nothing in this
+  catalogue: its 25 new interaction rows and 40 new ligands are all outside
+  it, and the 2,749 stored rows and 739 claims are identical column for
+  column. Its one new (Type, Action) pair is mapped below.
 - Matched by identifier only. The ligand by exact InChIKey, else by a ChEMBL id
   naming exactly one parent; two routes disagreeing drops the ligand. The target
   by UniProt accession, to one SINGLE PROTEIN record, or — for a multi-subunit
@@ -44,6 +48,8 @@ answered by D18, for primary targets only.
   `action_type` vocabulary so the viewer's `OPPOSED_ACTIONS` reads both
   sources; "Neutral", "Binding", "Mixed" and the like map to no direction. A
   pair a future release adds is stored undirected and listed in the manifest.
+  2026.3.1 added one, ('Antibody', 'Activation'), on denecimig at coagulation
+  factor IX, mapped to ACTIVATOR as ('Activator', 'Activation') is.
 - The export carries a `gtopdb` block; the viewer folds its directions into
   `directionIndex` only where the pair has a claim the filters show, names the
   curator in every sentence about an opposition, and shows GtoPdb's own words
