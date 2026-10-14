@@ -1,0 +1,32 @@
+{
+  "key": "onsides",
+  "version": "1.0.0",
+  "fixed": "2026-10-14",
+  "about": "The adverse-effect answer keys (docs/SIMILARITY-LITERATURE.md, step 3), read from the label_effects tables scripts/resolve_cohort_label_effects.py writes from OnSIDES v3.1.1. Each molecule's profile is the set of effects its labels list; two molecules are compared by the cosine of their IDF-weighted profiles, and a molecule's nearest label neighbours are its classmates. It is the first key that shares no input with the score: label text, not targets and not a curator's mechanism. Every value below was fixed before the key first graded the ranking. A change to this file is a change of instrument: bump the version and say why in docs/SIMILARITY-HARNESS.md.",
+  "scopes": {
+    "onsides": {
+      "socs": {
+        "10029205": "Nervous system disorders",
+        "10037175": "Psychiatric disorders"
+      },
+      "why": "The page's question is the brain, and SIMILARITY-LITERATURE §4.2 asks for the nervous-system and psychiatric organ classes. An effect is in scope when ADReCS files it under either SOC anywhere (MedDRA is multi-axial); an LLT naming several PTs only when every one of them is."
+    },
+    "onsides-all": {
+      "socs": null,
+      "why": "Every effect, placed or not. Peripheral effects carry mechanism too (dry mouth and urinary retention are antimuscarinic), and this reading needs no MedDRA hierarchy, so it stands if ADReCS, which states no open licence, is ruled out."
+    }
+  },
+  "min_labels": 2,
+  "min_effects": 5,
+  "peers": 5,
+  "half_credit_to": 10,
+  "why": {
+    "min_labels": "An effect is the ingredient's when at least two of its single-ingredient labels list it, or its only label does: the union OnSIDES's own examples take, less what one label alone says. A share of labels was the first rule written and was replaced before the key graded anything, because labels differ a hundredfold in what OnSIDES reads from them (diazepam's 34 US labels yield a median of 4 effects, its 13 Japanese labels 49), so a share punished a drug for its thin repackager copies: no effect reached half of diazepam's labels, and 6 of morphine's 146 did.",
+    "min_effects": "A profile of fewer than five effects in scope cannot be told apart from noise, and such a molecule is not asked or judged.",
+    "weighting": "IDF, ln(N / df), over the distinct ingredients with a profile in the scope. An effect on every label weighs nothing: class boilerplate, and OnSIDES's reading of the table heading 'Nervous system disorders' as the LLT 'Nervous'.",
+    "similarity": "Cosine of the IDF-weighted binary profiles, so a long label does not outrank a short one by length.",
+    "peers": "The five nearest ingredients, ties at the fifth included, with a similarity above zero. Their molecules are the query's classmates for top-1 and MRR.",
+    "half_credit_to": "Neighbours sixth to tenth, ties included, earn half in nDCG, as a sibling class does in the repaired ATC key.",
+    "same_ingredient": "Two molecules reaching one RxNorm ingredient (haloperidol and its decanoate) share every label. Neither is the other's neighbour, and neither is judged in the other's list: a shared label is not a finding."
+  }
+}

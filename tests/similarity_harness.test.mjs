@@ -18,9 +18,10 @@ import assert from "node:assert/strict";
 import {
   payloadExists, loadPayload, loadViewer, labelledSet, meshActionSet, grade, byClass,
   patchConstant, viewerSource, CONSTANTS, ndcgAt, atcRepairedKey, readDbClasses,
-  DATABASE, ATC_REPAIRED, HarnessError, fdaKey,
+  DATABASE, ATC_REPAIRED, HarnessError, fdaKey, onsidesKey, labelProfiles, nearestByProfile,
+  ONSIDES_KEY, KEYS,
 } from "../analysis/similarity_harness/harness.mjs";
-import { existsSync, readFileSync, mkdtempSync, rmSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -257,4 +258,108 @@ test("a pharmacokinetic MoA earns no credit in the EPC key; a mechanism earns ha
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+// ---------------------------------------------------------- the label key
+
+test("a label effect counts on two labels, or on a molecule's only label", () => {
+  const labels = new Map([[1, 10], [2, 1]]);
+  const socsOf = new Map([["NERV", new Set(["10029205"])], ["GUT", new Set(["10017947"])]]);
+  const rows = [
+    { parent_molregno: 1, effect: "NERV", n_labels: 2 },
+    { parent_molregno: 1, effect: "GUT", n_labels: 9 },
+    { parent_molregno: 1, effect: "ONE", n_labels: 1 },     // one odd label of ten
+    { parent_molregno: 2, effect: "NERV", n_labels: 1 },    // its only label
+  ];
+  const all = labelProfiles(rows, labels, socsOf, null, 2);
+  assert.deepEqual([...all.get(1)].sort(), ["GUT", "NERV"]);
+  assert.deepEqual([...all.get(2)], ["NERV"]);
+  const cns = labelProfiles(rows, labels, socsOf, new Set(["10029205", "10037175"]), 2);
+  assert.deepEqual([...cns.get(1)], ["NERV"], "a GI effect is out of the nervous-system scope");
+});
+
+test("label neighbours: an effect on every profile weighs nothing, and ties at the cut are kept", () => {
+  const profiles = new Map([
+    ["a", new Set(["all", "x", "y"])],
+    ["b", new Set(["all", "x", "y"])],
+    ["c", new Set(["all", "x"])],
+    ["d", new Set(["all", "y"])],
+    ["e", new Set(["all", "z"])],
+  ]);
+  const n = nearestByProfile(profiles, 1, 3);
+  assert.deepEqual([...n.get("a").peers], ["b"]);
+  assert.deepEqual([...n.get("a").half].sort(), ["c", "d"], "c and d tie, and both are kept");
+  // e shares only the effect every profile has: similarity zero, never a neighbour.
+  assert.equal(n.get("e").peers.size, 0);
+  assert.ok(![...n.get("a").peers, ...n.get("a").half].includes("e"));
+});
+
+test("one ingredient's molecules are never each other's neighbour or judged in each other's list", async () => {
+  // Needs no build: a database and a key config written here.
+  const { DatabaseSync } = await import("node:sqlite");
+  const dir = mkdtempSync(join(tmpdir(), "labelkey-"));
+  const path = join(dir, "t.db"), config = join(dir, "k.json");
+  const spec = JSON.parse(readFileSync(ONSIDES_KEY, "utf8"));
+  writeFileSync(config, JSON.stringify({ ...spec, min_effects: 1, peers: 1, half_credit_to: 2 }));
+  const db = new DatabaseSync(path);
+  db.exec(`CREATE TABLE build_manifest (key TEXT PRIMARY KEY, value TEXT);
+    CREATE TABLE label_effect_molecules (parent_molregno INTEGER, rxcui TEXT, n_labels INTEGER,
+      labels_by_source TEXT);
+    CREATE TABLE label_effects (parent_molregno INTEGER, effect TEXT, n_labels INTEGER, sections TEXT);
+    CREATE TABLE label_effect_terms (term TEXT, term_type TEXT, name TEXT, effect TEXT,
+      placement TEXT, socs TEXT);
+    INSERT INTO build_manifest VALUES ('built_at', 'T');`);
+  // 1 and 2 are a drug and its ester, one ingredient (A); 3 and 4 are others.
+  const mol = db.prepare("INSERT INTO label_effect_molecules VALUES (?, ?, 2, 'US:2')");
+  for (const [m, ing] of [[1, "A"], [2, "A"], [3, "B"], [4, "C"]]) mol.run(m, ing);
+  const eff = db.prepare("INSERT INTO label_effects VALUES (?, ?, 2, 'AR')");
+  // S is on every profile and weighs nothing; 4 shares nothing else.
+  const prof = { 1: ["S", "T", "U"], 2: ["S", "T", "U"], 3: ["S", "T", "W"], 4: ["S", "V"] };
+  for (const [m, es] of Object.entries(prof)) for (const e of es) eff.run(Number(m), e);
+  const term = db.prepare("INSERT INTO label_effect_terms VALUES (?, 'PT', ?, ?, 'pt', '10029205')");
+  for (const e of ["S", "T", "U", "V", "W"]) term.run(e, e, e);
+  db.close();
+  const data = { meta: { built_at: "T" }, fields: { molecules: ["id", "name"] },
+                 molecules: [[1, "drug"], [2, "drug ester"], [3, "b"], [4, "c"]] };
+  try {
+    const key = await onsidesKey(data, "onsides", { path, config });
+    assert.deepEqual([...key.peersOf(1)], [3], "the ester is not the drug's label neighbour");
+    assert.deepEqual([...key.peersOf(3)].sort(), [1, 2], "an ingredient's molecules are peers together");
+    assert.equal(key.judged(2, 1), false, "the ester is not judged in the drug's list");
+    assert.equal(key.judged(2, 3), true);
+    assert.equal(key.judged(2), true);
+    assert.equal(key.gain(1, key.peersOf(1), 4), 0, "no shared effect but the universal one");
+    assert.equal(key.members.size, 0, "a neighbour key has no classes");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+const hasLabels = hasDb && (() => {
+  try {
+    return readFileSync(DATABASE).includes("CREATE TABLE label_effects");
+  } catch { return false; }
+})();
+test("the label keys ask hundreds of questions and never pair a molecule with its own ingredient",
+  { skip: hasLabels ? false : "label_effects is not backfilled" }, async () => {
+    const { data } = fixture();
+    for (const which of ["onsides", "onsides-all"]) {
+      const key = await onsidesKey(data, which);
+      assert.ok(key.labelled.length > 200, `${which} asks only ${key.labelled.length}`);
+      for (const id of key.labelled) {
+        for (const p of key.peersOf(id)) {
+          assert.notEqual(key.ingredientOf.get(p), key.ingredientOf.get(id), `${which} ${id} ${p}`);
+        }
+      }
+    }
+  });
+
+test("the label keys are registered for --key and read their fixed config", () => {
+  const spec = JSON.parse(readFileSync(ONSIDES_KEY, "utf8"));
+  assert.ok(spec.version && spec.fixed, "a key states its version and when it was fixed");
+  for (const k of ["min_labels", "min_effects", "peers", "half_credit_to"]) {
+    assert.equal(typeof spec[k], "number", k);
+    assert.ok(spec.why[k], `${k} states its reason`);
+  }
+  assert.ok(KEYS.onsides && KEYS["onsides-all"]);
 });

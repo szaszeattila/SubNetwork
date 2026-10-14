@@ -6,6 +6,8 @@
 //   node analysis/similarity_harness/evaluate.mjs --key mesh   # MeSH actions as the judge
 //   node analysis/similarity_harness/evaluate.mjs --key atc-repaired   # every ATC level, an
 //                                         # exclusion list and sibling credit (needs db/cohort1.db)
+//   node analysis/similarity_harness/evaluate.mjs --key onsides   # nearest neighbours by the
+//                                         # nervous-system effects on the label (also onsides-all)
 //
 // The per-class table below the headline is the part worth reading. A class at
 // 0% is either a ranking failure or a label that was never a fair question, and
@@ -44,7 +46,9 @@ async function main() {
   console.log(`Similarity ranking, graded against ${KEYS[keyName].title}` +
               (key.version ? ` (v${key.version})` : ""));
   console.log("=".repeat(62));
-  console.log(`answer key   ${key.labelled.length} molecules in ${key.members.size} classes`);
+  console.log(key.members.size
+    ? `answer key   ${key.labelled.length} molecules in ${key.members.size} classes`
+    : `answer key   ${key.labelled.length} molecules, each judged by its nearest label neighbours`);
   console.log(`scoreable    ${g.scoreable}`);
   console.log(`unanswerable ${g.unanswerable}  (no same-class peer anywhere in the list;`);
   console.log(`                  a fact about ChEMBL's coverage, not about the ranking)`);
@@ -54,7 +58,10 @@ async function main() {
   console.log(`top-10       ${pct(g.top10)}`);
   console.log(`MRR          ${g.mrr.toFixed(4)}`);
   console.log(`nDCG@${NDCG_K}      ${g.ndcg.toFixed(4)}` +
-              (key.gain ? "  (a sibling class at level 3 earns half)" : ""));
+              (!key.gain ? "" : keyName.startsWith("onsides")
+                ? "  (the sixth to tenth label neighbours earn half)"
+                : keyName === "epc" ? "  (a shared mechanism of action earns half)"
+                : "  (a sibling class at level 3 earns half)"));
   console.log("");
   console.log("Filtered: the same lists, past only the molecules the key can judge");
   console.log(`  top-1 ${pct(g.filtered.top1)}   top-5 ${pct(g.filtered.top5)}   ` +
@@ -75,7 +82,8 @@ async function main() {
   }
 
   console.log("");
-  console.log("Per class (5 or more members)");
+  console.log(key.members.size ? "Per class (5 or more members)"
+    : "Per class: none, since this key judges by neighbours, not classes");
   console.log("-".repeat(62));
   for (const row of byClass(viewer, key)) {
     const label = key.labelOf ? " " + key.labelOf(row.code).slice(0, 34).padEnd(34) : "";
@@ -95,6 +103,12 @@ async function main() {
     console.log("only US-labelled drugs are judged. EPC and MoA restate mechanism, as");
     console.log("ChEMBL's curated mechanisms do; PE is an effect axis and is coarse");
     console.log("(\"Central Nervous System Stimulation\"). A proxy, not ground truth.");
+  } else if (keyName.startsWith("onsides")) {
+    console.log("Read with the bias stated: label effects share no input with the");
+    console.log("score, which is why this key exists, but labels repeat class");
+    console.log("boilerplate, a drug's effects are confounded by what it is for");
+    console.log("(memantine is donepezil's label neighbour), and only labelled drugs");
+    console.log("are judged. A proxy, not ground truth.");
   } else if (keyName === "atc-repaired") {
     console.log("Read with the bias stated: the exclusions are a judgement, listed with");
     console.log("their reasons in analysis/similarity_harness/atc_repaired.json, and");

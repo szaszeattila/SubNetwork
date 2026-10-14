@@ -347,21 +347,27 @@ export const ATC_REPAIRED = join(ROOT, "analysis", "similarity_harness", "atc_re
  * Returns { byMolecule: Map(parent_molregno -> [{source, code, label}]),
  *           labels: Map("source:code" -> label) }.
  */
-export async function readDbClasses(data, sources, path = DATABASE) {
+async function openDatabase(data, path) {
   if (!existsSync(path)) {
     throw new HarnessError(`${path} is not there; this key is read from the database.`);
   }
   const { DatabaseSync } = await import("node:sqlite");
   const db = new DatabaseSync(path, { readOnly: true });
+  const built = db.prepare("SELECT value FROM build_manifest WHERE key = 'built_at'").get();
+  const want = data.meta && data.meta.built_at;
+  if (!built || !want || built.value !== want) {
+    db.close();
+    throw new HarnessError(
+      `db/cohort1.db was built at ${built && built.value} but viz/graph.data.js ` +
+      `was exported from the build of ${want}. Re-export, or grade the pair ` +
+      "that belongs together.");
+  }
+  return db;
+}
+
+export async function readDbClasses(data, sources, path = DATABASE) {
+  const db = await openDatabase(data, path);
   try {
-    const built = db.prepare("SELECT value FROM build_manifest WHERE key = 'built_at'").get();
-    const want = data.meta && data.meta.built_at;
-    if (!built || !want || built.value !== want) {
-      throw new HarnessError(
-        `db/cohort1.db was built at ${built && built.value} but viz/graph.data.js ` +
-        `was exported from the build of ${want}. Re-export, or grade the pair ` +
-        "that belongs together.");
-    }
     const marks = sources.map(() => "?").join(",");
     const byMolecule = new Map();
     for (const r of db.prepare(
@@ -553,6 +559,191 @@ export async function fdaKey(data, which, { path = DATABASE, config = FDA_KEYS }
   };
 }
 
+export const ONSIDES_KEY = join(ROOT, "analysis", "similarity_harness", "onsides_key.json");
+
+/**
+ * Read one molecule's label profile, in a scope, from label_effects rows.
+ * Exported for the tests: `rows` is [{parent_molregno, effect, n_labels}],
+ * `labels` Map(parent -> its single-ingredient label count), `socsOf`
+ * Map(effect -> Set of SOC codes), `scope` a Set of SOC codes or null for all.
+ * An effect counts when `minLabels` labels list it, or every label a molecule
+ * with fewer has.
+ */
+export function labelProfiles(rows, labels, socsOf, scope, minLabels) {
+  const out = new Map();
+  for (const r of rows) {
+    const total = labels.get(r.parent_molregno);
+    if (!total || r.n_labels < Math.min(minLabels, total)) continue;
+    if (scope) {
+      const socs = socsOf.get(r.effect);
+      if (!socs || ![...socs].some((s) => scope.has(s))) continue;
+    }
+    if (!out.has(r.parent_molregno)) out.set(r.parent_molregno, new Set());
+    out.get(r.parent_molregno).add(r.effect);
+  }
+  return out;
+}
+
+/**
+ * Each profile's nearest neighbours by the cosine of IDF-weighted binary
+ * profiles. `profiles` is Map(unit -> Set of effects); returns Map(unit ->
+ * { peers: Set, half: Set }), the `peers` nearest with ties at the last
+ * included, then up to `halfTo`, also with ties, each above zero.
+ */
+export function nearestByProfile(profiles, peers, halfTo) {
+  const units = [...profiles.keys()];
+  const df = new Map();
+  for (const set of profiles.values()) for (const e of set) df.set(e, (df.get(e) || 0) + 1);
+  const idf = new Map([...df].map(([e, n]) => [e, Math.log(units.length / n)]));
+  const norm = new Map();
+  for (const [u, set] of profiles) {
+    let s = 0;
+    for (const e of set) s += idf.get(e) ** 2;
+    norm.set(u, Math.sqrt(s));
+  }
+  // An inverted index: only units sharing an effect can score above zero.
+  const holders = new Map();
+  for (const [u, set] of profiles) {
+    for (const e of set) {
+      if (!idf.get(e)) continue;
+      if (!holders.has(e)) holders.set(e, []);
+      holders.get(e).push(u);
+    }
+  }
+  const cut = (sorted, k) => {
+    if (sorted.length <= k) return sorted.length;
+    let n = k;
+    while (n < sorted.length && sorted[n][1] === sorted[k - 1][1]) n++;
+    return n;
+  };
+  const out = new Map();
+  for (const [u, set] of profiles) {
+    const dot = new Map();
+    for (const e of set) {
+      const w = idf.get(e);
+      if (!w) continue;
+      for (const v of holders.get(e)) if (v !== u) dot.set(v, (dot.get(v) || 0) + w * w);
+    }
+    const nu = norm.get(u);
+    const sims = [...dot]
+      .map(([v, d]) => [v, nu && norm.get(v) ? d / (nu * norm.get(v)) : 0])
+      .filter(([, s]) => s > 0)
+      .sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1));
+    const p = cut(sims, peers);
+    const h = Math.max(p, cut(sims, halfTo));
+    out.set(u, { peers: new Set(sims.slice(0, p).map(([v]) => v)),
+                 half: new Set(sims.slice(p, h).map(([v]) => v)) });
+  }
+  return out;
+}
+
+/**
+ * Adverse effects on the label as an answer key: docs/SIMILARITY-LITERATURE.md,
+ * step 3, and the first key that shares no input with the score.
+ *
+ * A molecule's profile is the set of effects at least two of its
+ * single-ingredient labels list, or its only label (OnSIDES, through
+ * scripts/resolve_cohort_label_effects.py), in the nervous-system and
+ * psychiatric SOCs for `onsides` and in every SOC for `onsides-all`. Its
+ * classmates are the molecules of the five nearest ingredients by IDF-weighted
+ * cosine; the next five earn half in nDCG. Every value is in onsides_key.json,
+ * fixed before the key first graded the ranking.
+ *
+ * Profiles are compared per RxNorm ingredient, not per molecule: haloperidol
+ * and haloperidol decanoate reach one ingredient and share its labels, so
+ * neither is the other's neighbour, and `judged(m, query)` steps past one in
+ * the other's list. There are no classes, so `members` is empty and the
+ * per-class table has nothing to show.
+ *
+ * Read it with the bias stated (SIMILARITY-LITERATURE §4.2): labels repeat
+ * class boilerplate, which the IDF weight answers only in part, and a drug's
+ * effects are confounded by what it is for.
+ */
+export async function onsidesKey(data, which = "onsides", { path = DATABASE, config = ONSIDES_KEY } = {}) {
+  const spec = JSON.parse(readFileSync(config, "utf8"));
+  const scopeSpec = spec.scopes[which];
+  if (!scopeSpec) throw new HarnessError(`onsides_key.json has no scope ${which}`);
+  const scope = scopeSpec.socs ? new Set(Object.keys(scopeSpec.socs)) : null;
+
+  const db = await openDatabase(data, path);
+  let molecules, rows, terms;
+  try {
+    const have = db.prepare(
+      "SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table' AND name = 'label_effects'").get();
+    if (!have.n) {
+      throw new HarnessError("db/cohort1.db has no label_effects table: run " +
+        "scripts/resolve_cohort_label_effects.py.");
+    }
+    molecules = db.prepare("SELECT parent_molregno, rxcui, n_labels FROM label_effect_molecules").all();
+    rows = db.prepare("SELECT parent_molregno, effect, n_labels FROM label_effects").all();
+    terms = db.prepare("SELECT DISTINCT effect, socs FROM label_effect_terms").all();
+  } finally {
+    db.close();
+  }
+
+  const F = data.fields.molecules;
+  const idI = F.indexOf("id"), nameI = F.indexOf("name");
+  const names = new Map(data.molecules.map((r) => [r[idI], str(data, r[nameI])]));
+
+  // Per ingredient: its label count, and the molecules the payload can rank.
+  const ingredientOf = new Map(), labels = new Map(), moleculesOf = new Map();
+  for (const m of molecules) {
+    if (!names.has(m.parent_molregno)) continue;
+    ingredientOf.set(m.parent_molregno, m.rxcui);
+    labels.set(m.rxcui, m.n_labels);
+    if (!moleculesOf.has(m.rxcui)) moleculesOf.set(m.rxcui, []);
+    moleculesOf.get(m.rxcui).push(m.parent_molregno);
+  }
+  const socsOf = new Map();
+  for (const t of terms) {
+    if (!socsOf.has(t.effect)) socsOf.set(t.effect, new Set());
+    for (const s of (t.socs || "").split("|")) if (s) socsOf.get(t.effect).add(s);
+  }
+  // Rows are per molecule and identical across one ingredient's molecules, so
+  // one molecule's rows stand for the ingredient.
+  const firstOf = new Map([...moleculesOf].map(([ing, ms]) => [ing, Math.min(...ms)]));
+  const ingRows = rows
+    .filter((r) => ingredientOf.has(r.parent_molregno) &&
+                   firstOf.get(ingredientOf.get(r.parent_molregno)) === r.parent_molregno)
+    .map((r) => ({ ...r, parent_molregno: ingredientOf.get(r.parent_molregno) }));
+  const profiles = labelProfiles(ingRows, labels, socsOf, scope, spec.min_labels);
+  for (const [ing, set] of [...profiles]) if (set.size < spec.min_effects) profiles.delete(ing);
+  if (!profiles.size) {
+    throw new HarnessError(`the ${which} key is empty: run scripts/resolve_cohort_label_effects.py.`);
+  }
+  const nearest = nearestByProfile(profiles, spec.peers, spec.half_credit_to);
+
+  const expand = (ings) => {
+    const out = new Set();
+    for (const ing of ings) for (const m of moleculesOf.get(ing)) out.add(m);
+    return out;
+  };
+  const peersOf = (id) => {
+    const n = nearest.get(ingredientOf.get(id));
+    return n ? expand(n.peers) : new Set();
+  };
+  const halfOf = (id) => {
+    const n = nearest.get(ingredientOf.get(id));
+    return n ? expand(n.half) : new Set();
+  };
+  const labelled = [...ingredientOf.keys()]
+    .filter((id) => profiles.has(ingredientOf.get(id)) && peersOf(id).size)
+    .sort((a, b) => a - b);
+  return {
+    name: which, version: spec.version,
+    classesOf: new Map(), members: new Map(), labelled, names,
+    profiles: new Map(labelled.map((id) => [id, profiles.get(ingredientOf.get(id))])),
+    ingredientOf,
+    judged: (m, query) => profiles.has(ingredientOf.get(m)) &&
+      (query === undefined || ingredientOf.get(m) !== ingredientOf.get(query)),
+    peersOf,
+    gain(query, peers, other) {
+      if (peers.has(other)) return 1;
+      return halfOf(query).has(other) ? 0.5 : 0;
+    },
+  };
+}
+
 /**
  * Every answer key by the name `--key` takes. The headline is `atc`, and it
  * stays the headline: a new key reports beside it, never in its place
@@ -564,6 +755,10 @@ export const KEYS = {
   "atc-repaired": { title: "the repaired ATC key", load: (data) => atcRepairedKey(data) },
   epc: { title: "FDA Established Pharmacologic Classes", load: (data) => fdaKey(data, "epc") },
   pe: { title: "FDA physiologic effects", load: (data) => fdaKey(data, "pe") },
+  onsides: { title: "nervous-system and psychiatric effects on the label (OnSIDES)",
+    load: (data) => onsidesKey(data, "onsides") },
+  "onsides-all": { title: "every effect on the label (OnSIDES)",
+    load: (data) => onsidesKey(data, "onsides-all") },
 };
 
 export async function loadKey(name, data) {
@@ -634,7 +829,9 @@ export function grade(viewer, key) {
     mrr += 1 / rank;
 
     const ids = rows.map((r) => r.molecule.id);
-    const kept = ids.filter(judged);
+    // A key may judge a molecule differently per question: the label key
+    // has no opinion of haloperidol decanoate in haloperidol's list.
+    const kept = ids.filter((m) => judged(m, id));
     // A classmate is judged by construction (it is in one of the key's
     // classes), so the filtered list always still holds one.
     const fRank = kept.findIndex((m) => peers.has(m)) + 1;

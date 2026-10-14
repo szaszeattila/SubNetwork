@@ -592,3 +592,47 @@ CREATE TABLE IF NOT EXISTS target_orthologues (
     coverage           REAL,             -- shorter length / longer length
     status             TEXT NOT NULL     -- 'matched', or the rule that refused it
 );
+
+-- The adverse effects drug labels list, from OnSIDES (v3.1.1, pinned; a model's
+-- reading of US, UK, EU and Japanese labels into MedDRA terms), written only by
+-- scripts/resolve_cohort_label_effects.py. An answer key for the similarity
+-- harness and nothing else: never on the page, never evidence about a target,
+-- never part of the score (docs/SIMILARITY-LITERATURE.md, step 3).
+--
+-- A molecule reaches its RxNorm ingredient by the FDA classes' route (InChIKey
+-- -> UNII -> ingredient), and only labels whose products are that one
+-- ingredient are read: a combination's effects are its partner's too. Two
+-- molecules can share an ingredient (haloperidol and haloperidol decanoate),
+-- and then share every row here.
+CREATE TABLE IF NOT EXISTS label_effect_molecules (
+    parent_molregno  INTEGER PRIMARY KEY REFERENCES molecules(parent_molregno),
+    rxcui            TEXT NOT NULL,     -- the RxNorm ingredient
+    n_labels         INTEGER NOT NULL,  -- its single-ingredient labels in OnSIDES
+    labels_by_source TEXT NOT NULL      -- the same, by country ('JP:2|UK:4|US:120')
+);
+
+-- One row per molecule and effect: on how many of the molecule's labels it
+-- appears, and in which sections (OnSIDES's AR adverse reactions, BW boxed
+-- warning, WP warnings and precautions, NA a label not split into sections).
+CREATE TABLE IF NOT EXISTS label_effects (
+    parent_molregno  INTEGER NOT NULL REFERENCES molecules(parent_molregno),
+    effect           TEXT NOT NULL,     -- a MedDRA code: the PT where the term reaches one,
+                                        -- else the OnSIDES term's own (label_effect_terms)
+    n_labels         INTEGER NOT NULL,
+    sections         TEXT NOT NULL,     -- '|' joined, 'AR|WP'
+    PRIMARY KEY (parent_molregno, effect)
+);
+
+-- How each OnSIDES term the catalogue's labels use was placed in MedDRA's
+-- hierarchy, which OnSIDES does not carry: through ADReCS v3.3 (pinned), by PT
+-- code, or for an LLT by its exact name among one PT's synonyms. An LLT naming
+-- several PTs is never resolved to one of them.
+CREATE TABLE IF NOT EXISTS label_effect_terms (
+    term             TEXT PRIMARY KEY,  -- the MedDRA code OnSIDES gives
+    term_type        TEXT NOT NULL,     -- 'PT' | 'LLT'
+    name             TEXT NOT NULL,
+    effect           TEXT NOT NULL,     -- what label_effects counts it as
+    placement        TEXT NOT NULL,     -- 'pt' | 'llt_one' | 'llt_several' | 'unplaced'
+    socs             TEXT               -- '|' joined MedDRA SOC codes; for llt_several those
+                                        -- every candidate PT shares; NULL when unplaced
+);
