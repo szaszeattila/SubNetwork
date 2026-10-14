@@ -48,8 +48,45 @@ alone.
 | **BindingDB** | target *discovery* | ~97% of what it returns here is republished ChEMBL/PDSP; REST endpoint unreliable |
 | **PDSP Ki DB** | independent Ki measurements, strong for CNS | bulk CSV only, no query API, no per-row citation link |
 | **GtoPdb** | curated action (agonist, antagonist, …) on the receptor, channel and enzyme families this project is about | a ligand's Type can be carried onto secondary targets it was only screened at (vilazodone); anonymous bulk access announced to end |
+| **FDA pharmacologic classes (NLM RxNav)** | FDA's Established Pharmacologic Class, mechanism of action and physiologic effect, as an answer key for the similarity ranking; never shown, never evidence | US-labelled drugs only (627 of 2,452 entries have an EPC); RxNorm files a salt apart from its ingredient, and some ChEMBL forms as ingredients of their own (aminophylline); unpinned, so its version is recorded |
 
 ---
+
+## 2026-10-13 — FDA's classes, and theophylline lost to its own salt
+
+**What was added.** `scripts/resolve_cohort_fda_classes.py` writes FDA's
+Established Pharmacologic Class, mechanism of action and physiologic effect
+into `molecule_classes` as `fda_epc`, `fda_moa` and `fda_pe`, as a third
+answer key for the similarity ranking
+([SIMILARITY-LITERATURE.md](SIMILARITY-LITERATURE.md), step 2). The route is
+identifiers only: InChIKey to FDA UNII (the same file the MeSH backfills
+read), UNII to RxNorm, a salt's precise ingredient to its ingredient, and
+the ingredient's classes from RxClass, kept only where FDA's labels (FDASPL)
+or FDA's reference terminology (MED-RT) assert them for the ingredient
+itself. The classes stay in the database; the page does not show them.
+
+**What went wrong first.** The first rule read every identifier a molecule
+has, the parent's and every folded form's, and required them to reach one
+ingredient between them. That dropped 22 molecules as ambiguous, theophylline
+among them: ChEMBL folds aminophylline onto theophylline, and RxNorm files
+aminophylline as an ingredient of its own (RxCUI 689 against 10438). Neither
+source is wrong. A form ChEMBL folds for chemistry can be a product RxNorm
+keeps apart, and that says nothing about which drug the parent is.
+
+**The rule now.** The parent's own structure decides. A form is read only
+where the parent's UNIIs reach no ingredient, and the forms must then agree.
+That leaves 2 dropped, each ambiguous in itself: CHEMBL367149, whose one UNII
+RxNorm maps to two ingredients, and CHEMBL1161681, whose parent carries two
+UNIIs that reach two. 930 molecules reach one ingredient (911 by the parent,
+19 through a form), 627 have an EPC, 787 a MoA and 733 a PE.
+
+**What is not known.** 909 molecules have a UNII that RxNorm does not know
+(1,489 of the 2,879 UNIIs asked); most are presumably substances never
+marketed in the US, which is the key's stated limit, but nobody has looked.
+FDA's MoA mixes how a drug acts with how it is handled: sertraline is a
+*Cytochrome P450 2D6 Inhibitor* as well as a *Serotonin Uptake Inhibitor*.
+The backfill stores both; the answer key ignores the pharmacokinetic ones
+(`analysis/similarity_harness/fda_keys.json`).
 
 ## 2026-10-13 — PBF-509 had an article, and Wikidata could not say so
 

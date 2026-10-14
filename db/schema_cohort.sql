@@ -137,9 +137,10 @@ CREATE TABLE IF NOT EXISTS molecule_atc (
 -- similarity score.
 CREATE TABLE IF NOT EXISTS molecule_classes (
     parent_molregno  INTEGER NOT NULL REFERENCES molecules(parent_molregno),
-    source           TEXT NOT NULL,     -- 'atc' | 'usan' | 'mesh_pa' | 'mesh_struct'
+    source           TEXT NOT NULL,     -- 'atc' | 'usan' | 'mesh_pa' | 'mesh_struct' | 'fda_epc' | 'fda_moa' | 'fda_pe'
     code             TEXT NOT NULL,     -- ATC level-5 code, the stem as ChEMBL writes it ('-pramine'),
-                                        -- or a MeSH descriptor UI ('D000929')
+                                        -- a MeSH descriptor UI ('D000929'), or an FDA
+                                        -- class id from RxClass ('N0000175696')
     subgroup         TEXT NOT NULL DEFAULT '',  -- USAN sub-stem ('-tioxetine'), '' for none; '' for ATC
     label            TEXT,              -- ATC: WHO substance name; USAN: the stem's own annotation
     carriers         TEXT NOT NULL,     -- '|' joined ChEMBL ids of the forms that carry it;
@@ -147,7 +148,10 @@ CREATE TABLE IF NOT EXISTS molecule_classes (
                                         -- MeSH record ('UNII:3G6A5W338E|MeSH:D002110', a CAS after
                                         -- the UNII, or 'Wikidata:Q60235|MeSH:D002110'); for
                                         -- mesh_struct the form matched, its UNII and the molecule's
-                                        -- own MeSH record ('CHEMBL113|UNII:3G6A5W338E|MeSH:D002110')
+                                        -- own MeSH record ('CHEMBL113|UNII:3G6A5W338E|MeSH:D002110');
+                                        -- for fda_epc / fda_moa / fda_pe the UNIIs that reached the
+                                        -- RxNorm ingredient, the ingredient and the sources that
+                                        -- asserted the class ('UNII:QUC7NX6WMB|RxCUI:36437|FDASPL+MEDRT')
     PRIMARY KEY (parent_molregno, source, code, subgroup)
 );
 
@@ -156,8 +160,8 @@ CREATE TABLE IF NOT EXISTS molecule_classes (
 -- the MeSH actions above it. NULL where ChEMBL gives a stem no annotation of
 -- its own, rather than one borrowed from a member.
 CREATE TABLE IF NOT EXISTS class_labels (
-    source           TEXT NOT NULL,     -- 'atc' | 'usan' | 'mesh_pa' | 'mesh_struct'
-    code             TEXT NOT NULL,     -- 'N', 'N06', 'N06A', 'N06AA'; '-pramine'; 'D000929'
+    source           TEXT NOT NULL,     -- 'atc' | 'usan' | 'mesh_pa' | 'mesh_struct' | 'fda_epc' | 'fda_moa' | 'fda_pe'
+    code             TEXT NOT NULL,     -- 'N', 'N06', 'N06A', 'N06AA'; '-pramine'; 'D000929'; 'N0000175696'
     level            INTEGER,           -- ATC level 1-4; MeSH tree depth; NULL for a stem
     label            TEXT,
     parents          TEXT,              -- '|' joined codes of the classes directly above (mesh_pa, mesh_struct)

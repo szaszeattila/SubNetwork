@@ -72,6 +72,7 @@ python3 scripts/resolve_cohort_mesh_structure.py     # MeSH, FDA UNII, ~35 s
 python3 scripts/resolve_cohort_wikipedia.py          # Wikidata and Wikipedia
 python3 scripts/resolve_cohort_gtopdb_actions.py     # GtoPdb 2026.3, see below
 python3 scripts/resolve_cohort_orthologues.py        # UniProt, ~2 min cold, needs parasail
+python3 scripts/resolve_cohort_fda_classes.py        # FDA UNII, RxNav; ~50 min cold, cached
 python3 scripts/export_cohort.py                     # ~6 s, writes viz/
 ```
 
@@ -114,6 +115,7 @@ newer file, except GtoPdb.
 | mesh structure | MeSH `desc2026` and `supp2026`, FDA UNII | as above |
 | wikipedia | Wikidata, Wikipedia | articles and items change |
 | orthologues | UniProt's reviewed human proteome | streamed from the current release, not 2026_03 |
+| fda classes | FDA UNII, NLM RxNav (RxNorm and RxClass) | RxNav is not pinned: its version and the run date go into `build_manifest`, and its answers are cached in `db/cache/rxnav/`; FDA's classes change with the labels |
 | **gtopdb** | `guidetopharmacology.org/DATA/` | **refuses any release but 2026.3**, see below |
 
 **GtoPdb is the one that can stop you.** It serves only its latest release, at
@@ -129,6 +131,10 @@ choices:
   has the cache; or
 - review `ACTION_MAP` against the new release and bump `GTOPDB_VERSION`. That
   is a change to the project, not a reproduction.
+
+**This has happened.** On 2026-10-13 the address served 2026.3.1, and a
+rebuild in a fresh worktree stopped here until the 2026.3 files were copied
+in from an older cache.
 
 GtoPdb said in September 2026 that anonymous downloads will end. If that
 happens, the backfill will need whatever access GtoPdb then requires.
