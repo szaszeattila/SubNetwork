@@ -18,9 +18,12 @@
 // four cholinesterase inhibitors, haloperidol and clozapine, the
 // methylxanthines -- would fix six hand-picked numbers by hand-picking the
 // thing that judges them, and the grade could then be made to say anything.
-// ATC level 4 is the WHO's own grouping of drugs by how they work, it is
-// already in `molecules.atc_level5`, and it was written by people who had never
-// heard of this project.
+// ATC level 4 is the WHO's own grouping, it is already in
+// `molecules.atc_level5`, and it was written by people who had never heard of
+// this project. It is not a grouping by how drugs work: WHO defines levels 3
+// and 4 as "chemical, pharmacological or therapeutic" subgroups, and 42 of the
+// key's 64 classes are chemical-structure groups (docs/SIMILARITY-LITERATURE.md
+// §3.5). `atcRepairedKey` below reads it with that said.
 //
 // *Coverage is counted apart from ordering.* A molecule whose class peers are
 // nowhere in its list is not a molecule the ranking got wrong; it is one ChEMBL
@@ -200,8 +203,11 @@ const str = (data, x) => (typeof x === "number" ? data.strings[x] : x);
  *
  * An ATC code is a nested address -- N06AA09 is nervous system / psychoanaleptic
  * / antidepressant / non-selective monoamine reuptake inhibitor / amitriptyline
- * -- and level 4, the first five characters, is where the WHO groups drugs by
- * how they work.
+ * -- and level 4 is the first five characters. WHO calls level 4 a "chemical,
+ * pharmacological or therapeutic" subgroup, and in this key it is mostly the
+ * first: N05AA and N05AC split the phenothiazines by side chain. This is the
+ * headline key and stays as it is, so that its figure is comparable across
+ * builds; `atcRepairedKey` is the one read with that defect answered.
  *
  * The `X` classes are dropped, and that is not tidying. A fourth-level `X`
  * means "other": N06AX is literally "other antidepressants", and at 29 members
@@ -247,7 +253,10 @@ export function labelledSet(data) {
       "there is nothing to grade.");
   }
   return {
-    classesOf, members, labelled, names,
+    name: "atc", classesOf, members, labelled, names,
+    // A molecule the key places somewhere, a class of one included: it has an
+    // opinion of that molecule, which is that it is not the query's classmate.
+    judged: (id) => classesOf.has(id),
     peersOf(id) {
       const out = new Set();
       for (const code of classesOf.get(id) || []) {
@@ -308,7 +317,8 @@ export function meshActionSet(data, { minDepth = 5 } = {}) {
   }
   const labelOf = (code) => str(data, (labels[code] || [])[1]) || code;
   return {
-    classesOf, members, labelled, names, labelOf,
+    name: "mesh", classesOf, members, labelled, names, labelOf,
+    judged: (id) => classesOf.has(id),
     peersOf(id) {
       const out = new Set();
       for (const code of classesOf.get(id) || []) {
@@ -320,6 +330,249 @@ export function meshActionSet(data, { minDepth = 5 } = {}) {
   };
 }
 
+// ------------------------------------------------ keys read from the database
+
+export const DATABASE = join(ROOT, "db", "cohort1.db");
+export const ATC_REPAIRED = join(ROOT, "analysis", "similarity_harness", "atc_repaired.json");
+
+/**
+ * Class rows from db/cohort1.db, for keys the payload does not carry.
+ *
+ * Every ATC code left the payload when ATC came off the page (2026-09-26), and
+ * the FDA classes were never on it, so these keys read the database, read-only.
+ * The database must be the build the payload was exported from: a key from one
+ * build grading a ranking from another would be a grade of neither, so a
+ * mismatched `built_at` is refused rather than reported.
+ *
+ * Returns { byMolecule: Map(parent_molregno -> [{source, code, label}]),
+ *           labels: Map("source:code" -> label) }.
+ */
+export async function readDbClasses(data, sources, path = DATABASE) {
+  if (!existsSync(path)) {
+    throw new HarnessError(`${path} is not there; this key is read from the database.`);
+  }
+  const { DatabaseSync } = await import("node:sqlite");
+  const db = new DatabaseSync(path, { readOnly: true });
+  try {
+    const built = db.prepare("SELECT value FROM build_manifest WHERE key = 'built_at'").get();
+    const want = data.meta && data.meta.built_at;
+    if (!built || !want || built.value !== want) {
+      throw new HarnessError(
+        `db/cohort1.db was built at ${built && built.value} but viz/graph.data.js ` +
+        `was exported from the build of ${want}. Re-export, or grade the pair ` +
+        "that belongs together.");
+    }
+    const marks = sources.map(() => "?").join(",");
+    const byMolecule = new Map();
+    for (const r of db.prepare(
+      `SELECT parent_molregno, source, code, label FROM molecule_classes
+       WHERE source IN (${marks}) ORDER BY parent_molregno, source, code`).all(...sources)) {
+      if (!byMolecule.has(r.parent_molregno)) byMolecule.set(r.parent_molregno, []);
+      byMolecule.get(r.parent_molregno).push({ source: r.source, code: r.code, label: r.label });
+    }
+    const labels = new Map();
+    for (const r of db.prepare(
+      `SELECT source, code, label FROM class_labels WHERE source IN (${marks})`).all(...sources)) {
+      labels.set(`${r.source}:${r.code}`, r.label);
+    }
+    return { byMolecule, labels };
+  } finally {
+    db.close();
+  }
+}
+
+/**
+ * The repaired ATC key: docs/SIMILARITY-LITERATURE.md, step 1.
+ *
+ * Three changes from `labelledSet`, each answering a defect that section 3.6
+ * lists, and none touching the ranking:
+ *
+ * - **Peers from every ATC level.** The questions are still the molecules with
+ *   an N code, but a peer is anyone sharing a level-4 class at any anatomical
+ *   level. The headline key reads `molecules.atc_level5`, which holds only N
+ *   codes because it is the admission route's record, so a classmate filed
+ *   under S01FA (scopolamine and atropine) was invisible to it.
+ * - **A documented exclusion list** (atc_repaired.json) beside the X rule:
+ *   residual classes filed under another letter, classes grouped by use, and
+ *   classes that are not pharmacological. Each entry carries its reason.
+ * - **Graded credit.** `gain` is 1 for a shared level-4 class and 0.5 for a
+ *   shared level-3 group only, so a sibling-class answer (thioridazine for
+ *   chlorpromazine, N05AC against N05AA) is worth something in nDCG without
+ *   changing what top-1 or MRR count.
+ *
+ * `judged` is any molecule the key places at level 4 or level 3: one it places
+ * only under an excluded class, or under none, is a molecule it has no opinion
+ * of, and the filtered walk steps past it.
+ */
+export async function atcRepairedKey(data, { path = DATABASE, config = ATC_REPAIRED } = {}) {
+  const spec = JSON.parse(readFileSync(config, "utf8"));
+  const ex4 = new Set(Object.keys(spec.excluded_level4 || {}));
+  const ex3 = new Set(Object.keys(spec.excluded_level3 || {}));
+  const { byMolecule, labels } = await readDbClasses(data, ["atc"], path);
+
+  const F = data.fields.molecules;
+  const idI = F.indexOf("id"), nameI = F.indexOf("name");
+  const names = new Map(data.molecules.map((r) => [r[idI], str(data, r[nameI])]));
+
+  const classesOf = new Map(), members = new Map(), groupsOf = new Map(), hasN = new Set();
+  for (const [id, rows] of byMolecule) {
+    if (!names.has(id)) continue;          // only what the payload can rank
+    for (const { code } of rows) {
+      if (code.length < 5) continue;
+      const l4 = code.slice(0, 5), l3 = code.slice(0, 4);
+      if (ex4.has(l4)) continue;
+      // Level 3 credit survives a level-4 X (mirtazapine, N06AX, is still an
+      // antidepressant) but not a level-3 X or a listed level-3 group.
+      if (l3[3] !== "X" && !ex3.has(l3)) {
+        if (!groupsOf.has(id)) groupsOf.set(id, new Set());
+        groupsOf.get(id).add(l3);
+      }
+      if (l4[4] === "X") continue;
+      if (!classesOf.has(id)) classesOf.set(id, new Set());
+      classesOf.get(id).add(l4);
+      if (!members.has(l4)) members.set(l4, new Set());
+      members.get(l4).add(id);
+      if (l4[0] === "N") hasN.add(id);
+    }
+  }
+  for (const [code, set] of [...members]) if (set.size < 2) members.delete(code);
+
+  // A question asks about one of its N classes; a peer may come through any
+  // class the two share, N or not.
+  const labelled = [...hasN]
+    .filter((id) => [...classesOf.get(id)].some((c) => c[0] === "N" && members.has(c)))
+    .sort((a, b) => a - b);
+  if (!labelled.length) {
+    throw new HarnessError("the repaired ATC key is empty: is molecule_classes backfilled? " +
+      "Run scripts/resolve_cohort_classes.py.");
+  }
+  const peersOf = (id) => {
+    const out = new Set();
+    for (const code of classesOf.get(id) || []) {
+      if (!members.has(code)) continue;
+      for (const other of members.get(code)) if (other !== id) out.add(other);
+    }
+    return out;
+  };
+  const shareGroup = (a, b) => {
+    const x = groupsOf.get(a), y = groupsOf.get(b);
+    if (!x || !y) return false;
+    for (const g of x) if (y.has(g)) return true;
+    return false;
+  };
+  return {
+    name: "atc-repaired", version: spec.version,
+    classesOf, members, labelled, names,
+    labelOf: (code) => labels.get(`atc:${code}`) || code,
+    judged: (id) => classesOf.has(id) || groupsOf.has(id),
+    peersOf,
+    gain(query, peers, other) {
+      if (peers.has(other)) return 1;
+      return shareGroup(query, other) ? 0.5 : 0;
+    },
+  };
+}
+
+export const FDA_KEYS = join(ROOT, "analysis", "similarity_harness", "fda_keys.json");
+
+/**
+ * FDA's classes as answer keys: docs/SIMILARITY-LITERATURE.md, step 2.
+ *
+ * A separate curator from WHO and from ChEMBL - FDA's Established Pharmacologic
+ * Class, mechanism of action and physiologic effect, indexed from the US label
+ * and reached by identifier alone (scripts/resolve_cohort_fda_classes.py). It
+ * is not independent of the score's inputs: EPC and MoA restate mechanism, as
+ * ChEMBL's curated mechanisms do. PE is an effect axis and the nearest thing
+ * here to "acts alike" rather than "binds alike".
+ *
+ * `epc`: a classmate shares an EPC (gain 1); a molecule sharing only a MoA
+ * earns 0.5, except through the MoA classes fda_keys.json lists as
+ * pharmacokinetic or empty. `pe`: a classmate shares a PE, no graded credit.
+ * Questions are every molecule with a classmate, as in the MeSH key, since FDA
+ * classes are not limited to the nervous system. Only US-labelled drugs have
+ * any, so coverage is reported as the harness always reports it, apart.
+ */
+export async function fdaKey(data, which, { path = DATABASE, config = FDA_KEYS } = {}) {
+  const spec = JSON.parse(readFileSync(config, "utf8"));
+  const patterns = Object.keys(spec.moa_no_credit_patterns || {});
+  const named = new Set(Object.keys(spec.moa_no_credit_names || {}));
+  const source = which === "pe" ? "fda_pe" : "fda_epc";
+  const { byMolecule, labels } = await readDbClasses(data, [source, "fda_moa"], path);
+
+  const F = data.fields.molecules;
+  const idI = F.indexOf("id"), nameI = F.indexOf("name");
+  const names = new Map(data.molecules.map((r) => [r[idI], str(data, r[nameI])]));
+  const classesOf = new Map(), members = new Map(), moaOf = new Map();
+  for (const [id, rows] of byMolecule) {
+    if (!names.has(id)) continue;
+    for (const { source: s, code, label } of rows) {
+      if (s === source) {
+        if (!classesOf.has(id)) classesOf.set(id, new Set());
+        classesOf.get(id).add(code);
+        if (!members.has(code)) members.set(code, new Set());
+        members.get(code).add(id);
+      } else if (which !== "pe" && !named.has(label) && !patterns.some((p) => label.includes(p))) {
+        if (!moaOf.has(id)) moaOf.set(id, new Set());
+        moaOf.get(id).add(code);
+      }
+    }
+  }
+  for (const [code, set] of [...members]) if (set.size < 2) members.delete(code);
+  const labelled = [...classesOf.keys()]
+    .filter((id) => [...classesOf.get(id)].some((c) => members.has(c)))
+    .sort((a, b) => a - b);
+  if (!labelled.length) {
+    throw new HarnessError(`the ${which} key is empty: run scripts/resolve_cohort_fda_classes.py.`);
+  }
+  const peersOf = (id) => {
+    const out = new Set();
+    for (const code of classesOf.get(id) || []) {
+      if (!members.has(code)) continue;
+      for (const other of members.get(code)) if (other !== id) out.add(other);
+    }
+    return out;
+  };
+  const shareMoa = (a, b) => {
+    const x = moaOf.get(a), y = moaOf.get(b);
+    if (!x || !y) return false;
+    for (const c of x) if (y.has(c)) return true;
+    return false;
+  };
+  return {
+    name: which, version: spec.version,
+    classesOf, members, labelled, names,
+    labelOf: (code) => labels.get(`${source}:${code}`) || code,
+    judged: (id) => classesOf.has(id) || moaOf.has(id),
+    peersOf,
+    ...(which === "pe" ? {} : {
+      gain(query, peers, other) {
+        if (peers.has(other)) return 1;
+        return shareMoa(query, other) ? 0.5 : 0;
+      },
+    }),
+  };
+}
+
+/**
+ * Every answer key by the name `--key` takes. The headline is `atc`, and it
+ * stays the headline: a new key reports beside it, never in its place
+ * (docs/SIMILARITY-LITERATURE.md §4.3).
+ */
+export const KEYS = {
+  atc: { title: "ATC level-4 classes", load: (data) => labelledSet(data) },
+  mesh: { title: "MeSH pharmacological actions", load: (data) => meshActionSet(data) },
+  "atc-repaired": { title: "the repaired ATC key", load: (data) => atcRepairedKey(data) },
+  epc: { title: "FDA Established Pharmacologic Classes", load: (data) => fdaKey(data, "epc") },
+  pe: { title: "FDA physiologic effects", load: (data) => fdaKey(data, "pe") },
+};
+
+export async function loadKey(name, data) {
+  if (!KEYS[name]) {
+    throw new HarnessError(`unknown --key ${name}; use ${Object.keys(KEYS).join(", ")}.`);
+  }
+  return await KEYS[name].load(data);
+}
+
 // ------------------------------------------------------------------- the grade
 
 /**
@@ -329,10 +582,41 @@ export function meshActionSet(data, { minDepth = 5 } = {}) {
  * and it is kept out of every rate rather than scored as a failure. See the
  * third decision at the top of this file: it is the one that stops a sweep
  * rewarding coverage and calling it ranking.
+ *
+ * Two readings sit beside the headline rates, over the same scoreable
+ * molecules, and neither changes them (docs/SIMILARITY-LITERATURE.md, step 1):
+ *
+ * - `filtered`: the same walk past only the molecules the key can judge
+ *   (`key.judged`). A molecule the key has no class for - seltorexant, which
+ *   has no ATC code, above suvorexant's classmates - is neither right nor
+ *   wrong, so it may not stand between a query and its classmate. This is the
+ *   "filtered" setting of link-prediction evaluation (Bordes et al. 2013).
+ * - `ndcg`: nDCG@10 (Jarvelin & Kekalainen 2002), with `key.gain` where a key
+ *   grades its answers (1 for a classmate, 0.5 for a sibling class) and 1 or 0
+ *   where it does not. The ideal ordering is built from the molecules the list
+ *   holds, not from every classmate in the catalogue, so a classmate ChEMBL
+ *   gives nothing to rank costs coverage, never ordering - the same line
+ *   `unanswerable` draws.
  */
+export const NDCG_K = 10;
+
+function dcg(gains, k) {
+  let s = 0;
+  for (let i = 0; i < Math.min(k, gains.length); i++) s += gains[i] / Math.log2(i + 2);
+  return s;
+}
+
+export function ndcgAt(gains, k) {
+  const ideal = dcg([...gains].sort((a, b) => b - a), k);
+  return ideal > 0 ? dcg(gains, k) / ideal : 0;
+}
+
 export function grade(viewer, key) {
   let scoreable = 0, top1 = 0, top5 = 0, top10 = 0, mrr = 0, unanswerable = 0;
+  const f = { top1: 0, top5: 0, top10: 0, mrr: 0 };
+  let ndcg = 0, ndcgF = 0;
   const ranks = new Map();
+  const judged = key.judged || (() => true);
   for (const id of key.labelled) {
     const peers = key.peersOf(id);
     if (!peers.size) continue;
@@ -348,21 +632,44 @@ export function grade(viewer, key) {
     if (rank <= 5) top5++;
     if (rank <= 10) top10++;
     mrr += 1 / rank;
+
+    const ids = rows.map((r) => r.molecule.id);
+    const kept = ids.filter(judged);
+    // A classmate is judged by construction (it is in one of the key's
+    // classes), so the filtered list always still holds one.
+    const fRank = kept.findIndex((m) => peers.has(m)) + 1;
+    if (!fRank) throw new HarnessError(`${key.name}: a classmate of ${id} is not judged`);
+    if (fRank === 1) f.top1++;
+    if (fRank <= 5) f.top5++;
+    if (fRank <= 10) f.top10++;
+    f.mrr += 1 / fRank;
+    const gain = key.gain ? (m) => key.gain(id, peers, m) : (m) => (peers.has(m) ? 1 : 0);
+    ndcg += ndcgAt(ids.map(gain), NDCG_K);
+    ndcgF += ndcgAt(kept.map(gain), NDCG_K);
   }
   return {
     scoreable, unanswerable, ranks,
     top1: top1 / scoreable, top5: top5 / scoreable, top10: top10 / scoreable,
     mrr: mrr / scoreable,
+    ndcg: ndcg / scoreable,
+    filtered: {
+      top1: f.top1 / scoreable, top5: f.top5 / scoreable, top10: f.top10 / scoreable,
+      mrr: f.mrr / scoreable, ndcg: ndcgF / scoreable,
+    },
   };
 }
 
 /** Per-class top-1, which is the diagnostic the aggregate hides. */
 export function byClass(viewer, key, minMembers = 5) {
   const out = [];
+  // In the repaired ATC key a class can hold molecules that are only ever
+  // peers (a non-N member of S01HA); only the questions are counted.
+  const asked = new Set(key.labelled);
   for (const [code, set] of key.members) {
     if (set.size < minMembers) continue;
     let scoreable = 0, hits = 0;
     for (const id of set) {
+      if (!asked.has(id)) continue;
       const peers = key.peersOf(id);
       const rows = viewer.sharedTargets(id);
       if (!rows.some((r) => peers.has(r.molecule.id))) continue;

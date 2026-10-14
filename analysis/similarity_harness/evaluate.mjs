@@ -4,12 +4,14 @@
 //   node analysis/similarity_harness/evaluate.mjs --json
 //   node analysis/similarity_harness/evaluate.mjs --misses 20
 //   node analysis/similarity_harness/evaluate.mjs --key mesh   # MeSH actions as the judge
+//   node analysis/similarity_harness/evaluate.mjs --key atc-repaired   # every ATC level, an
+//                                         # exclusion list and sibling credit (needs db/cohort1.db)
 //
 // The per-class table below the headline is the part worth reading. A class at
 // 0% is either a ranking failure or a label that was never a fair question, and
 // the aggregate cannot tell you which -- only the name of the class can.
 
-import { loadPayload, loadViewer, labelledSet, meshActionSet, grade, byClass, pct,
+import { loadPayload, loadViewer, loadKey, KEYS, grade, byClass, pct, NDCG_K,
   HarnessError } from "./harness.mjs";
 
 const argv = process.argv.slice(2);
@@ -19,12 +21,9 @@ const missLimit = missArg >= 0 ? Number(argv[missArg + 1]) : 12;
 const keyArg = argv.indexOf("--key");
 const keyName = keyArg >= 0 ? argv[keyArg + 1] : "atc";
 
-function main() {
+async function main() {
   const data = loadPayload();
-  if (keyName !== "atc" && keyName !== "mesh") {
-    throw new HarnessError(`unknown --key ${keyName}; use atc or mesh.`);
-  }
-  const key = keyName === "mesh" ? meshActionSet(data) : labelledSet(data);
+  const key = await loadKey(keyName, data);
   const viewer = loadViewer(data);
   const started = Date.now();
   const g = grade(viewer, key);
@@ -36,14 +35,14 @@ function main() {
     process.stdout.write(JSON.stringify({
       labelled: key.labelled.length, classes: key.members.size,
       scoreable: g.scoreable, unanswerable: g.unanswerable,
-      top1: g.top1, top5: g.top5, top10: g.top10, mrr: g.mrr,
+      top1: g.top1, top5: g.top5, top10: g.top10, mrr: g.mrr, ndcg: g.ndcg,
+      filtered: g.filtered, ...(key.version ? { version: key.version } : {}),
     }) + "\n");
     return;
   }
 
-  console.log(keyName === "mesh"
-    ? "Similarity ranking, graded against MeSH pharmacological actions"
-    : "Similarity ranking, graded against ATC level-4 classes");
+  console.log(`Similarity ranking, graded against ${KEYS[keyName].title}` +
+              (key.version ? ` (v${key.version})` : ""));
   console.log("=".repeat(62));
   console.log(`answer key   ${key.labelled.length} molecules in ${key.members.size} classes`);
   console.log(`scoreable    ${g.scoreable}`);
@@ -54,6 +53,13 @@ function main() {
   console.log(`top-5        ${pct(g.top5)}`);
   console.log(`top-10       ${pct(g.top10)}`);
   console.log(`MRR          ${g.mrr.toFixed(4)}`);
+  console.log(`nDCG@${NDCG_K}      ${g.ndcg.toFixed(4)}` +
+              (key.gain ? "  (a sibling class at level 3 earns half)" : ""));
+  console.log("");
+  console.log("Filtered: the same lists, past only the molecules the key can judge");
+  console.log(`  top-1 ${pct(g.filtered.top1)}   top-5 ${pct(g.filtered.top5)}   ` +
+              `top-10 ${pct(g.filtered.top10)}   MRR ${g.filtered.mrr.toFixed(4)}   ` +
+              `nDCG@${NDCG_K} ${g.filtered.ndcg.toFixed(4)}`);
   console.log(`graded in    ${elapsed} ms`);
 
   const misses = [...g.ranks.entries()]
@@ -80,10 +86,20 @@ function main() {
   console.log("");
   if (keyName === "mesh") {
     console.log("Read with the bias stated: MeSH actions come from the literature,");
-    console.log("not from ChEMBL, and are linked through PubChem. Many are");
+    console.log("not from ChEMBL, read from each molecule's own MeSH record. Many are");
     console.log("mechanisms (\"Serotonin Uptake Inhibitors\"), so they reward the");
     console.log("same thing the ranking measures; others are uses (\"Analgesics\").");
     console.log("A second proxy, not ground truth.");
+  } else if (keyName === "epc" || keyName === "pe") {
+    console.log("Read with the bias stated: FDA's classes come from US labels, so");
+    console.log("only US-labelled drugs are judged. EPC and MoA restate mechanism, as");
+    console.log("ChEMBL's curated mechanisms do; PE is an effect axis and is coarse");
+    console.log("(\"Central Nervous System Stimulation\"). A proxy, not ground truth.");
+  } else if (keyName === "atc-repaired") {
+    console.log("Read with the bias stated: the exclusions are a judgement, listed with");
+    console.log("their reasons in analysis/similarity_harness/atc_repaired.json, and");
+    console.log("the classes kept are still mostly chemical-structure groups, which");
+    console.log("the sibling credit answers only in part. A proxy, not ground truth.");
   } else {
     console.log("Read with the bias stated: ATC classes are partly defined by");
     console.log("mechanism, and ChEMBL curates mechanism most thoroughly for");
@@ -92,12 +108,10 @@ function main() {
   }
 }
 
-try {
-  main();
-} catch (err) {
+main().catch((err) => {
   if (err instanceof HarnessError) {
     console.error("similarity harness: " + err.message);
     process.exit(2);
   }
   throw err;
-}
+});

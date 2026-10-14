@@ -4,6 +4,7 @@
 //   node analysis/similarity_harness/sweep.mjs evidence_curated
 //   node analysis/similarity_harness/sweep.mjs evidence_curated --movers
 //   node analysis/similarity_harness/sweep.mjs --key mesh    # MeSH actions as the judge
+//   node analysis/similarity_harness/sweep.mjs --key atc-repaired
 //
 // One at a time is deliberate. A joint optimisation over six constants against
 // a 217-molecule proxy would fit the proxy, and the answer would be six numbers
@@ -16,7 +17,7 @@
 // helps 42 and hurts 24 is a different proposition from one that helps 42 and
 // hurts nobody, however the means compare.
 
-import { loadPayload, loadViewer, labelledSet, meshActionSet, grade, patchConstant,
+import { loadPayload, loadViewer, loadKey, KEYS, grade, patchConstant,
          CONSTANTS, pct, HarnessError } from "./harness.mjs";
 
 const argv = process.argv.slice(2);
@@ -25,16 +26,13 @@ const keyAt = argv.indexOf("--key");
 const keyName = keyAt >= 0 ? argv[keyAt + 1] : "atc";
 const only = argv.filter((a, i) => !a.startsWith("--") && !(keyAt >= 0 && i === keyAt + 1));
 
-function main() {
+async function main() {
   const data = loadPayload();
-  if (keyName !== "atc" && keyName !== "mesh") {
-    throw new HarnessError(`unknown --key ${keyName}; use atc or mesh.`);
-  }
-  const key = keyName === "mesh" ? meshActionSet(data) : labelledSet(data);
+  const key = await loadKey(keyName, data);
 
   const base = grade(loadViewer(data), key);
   console.log("Sweeping against the current build, judged by " +
-              (keyName === "mesh" ? "MeSH pharmacological actions" : "ATC level-4 classes"));
+              KEYS[keyName].title);
   console.log("=".repeat(72));
   console.log(`baseline   scoreable ${base.scoreable}   top-1 ${pct(base.top1)}   ` +
               `top-5 ${pct(base.top5)}   MRR ${base.mrr.toFixed(4)}`);
@@ -95,12 +93,10 @@ function main() {
   console.log("moved, and read the caveat at the foot of evaluate.mjs.");
 }
 
-try {
-  main();
-} catch (err) {
+main().catch((err) => {
   if (err instanceof HarnessError) {
     console.error("similarity harness: " + err.message);
     process.exit(2);
   }
   throw err;
-}
+});

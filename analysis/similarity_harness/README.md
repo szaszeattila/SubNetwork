@@ -1,12 +1,15 @@
 # The similarity harness
 
 Grades `viz/index.html`'s own similarity ranking against an answer key nobody
-here wrote. Read-only: it opens no database, changes no file, and adopts no
-constant.
+here wrote. Read-only: it changes no file and adopts no constant. The headline
+key reads only the payload; the repaired ATC key also opens `db/cohort1.db`
+read-only, and refuses one built at a different time from the payload.
 
 ```bash
 node analysis/similarity_harness/evaluate.mjs            # the grade
 node analysis/similarity_harness/evaluate.mjs --json     # what ## Status reads
+node analysis/similarity_harness/evaluate.mjs --key mesh          # MeSH actions
+node analysis/similarity_harness/evaluate.mjs --key atc-repaired  # every ATC level
 node analysis/similarity_harness/sweep.mjs               # every constant
 node analysis/similarity_harness/sweep.mjs evidence_curated --movers
 ```
@@ -17,7 +20,8 @@ grading nothing and printing a number.
 
 | file | what it is |
 | --- | --- |
-| `harness.mjs` | answer key, grading, and the constant patching. The reasoning lives at the top of it. |
+| `harness.mjs` | answer keys, grading, and the constant patching. The reasoning lives at the top of it. |
+| `atc_repaired.json` | the repaired ATC key's exclusion list, versioned, every entry with its reason |
 | `evaluate.mjs` | the grade, the worst-ranked molecules, and the per-class breakdown |
 | `sweep.mjs` | one constant at a time over a grid, with `--movers` |
 
@@ -32,12 +36,18 @@ Three things about it are load-bearing and easy to undo by accident:
   `X` classes are dropped: `N06AX` is "other antidepressants", a group defined
   by *not* sharing a mechanism, so grading against it awards a point for a
   wrong answer.
+- **A new key or reading reports beside the headline, never in its place.**
+  Every key prints the headline walk, the same walk *filtered* to molecules
+  the key can judge, and nDCG@10; `--key atc` stays the figure in Status, so
+  that it is comparable across builds. A change to `atc_repaired.json` is a
+  change of instrument: bump its version and say why in
+  docs/SIMILARITY-HARNESS.md, never in the same change as a constant it judges.
 - **Molecules with no reachable class peer are counted apart**, never as
   failures. Several constants change what is eligible, so folding coverage into
   the denominator would let a constant raise the grade without improving one
   ranking.
 
-The grade is a proxy. ATC groups partly by mechanism and ChEMBL curates
-mechanism most thoroughly for well-known drugs, so it flatters any weighting
-term that rewards curation — which is exactly the kind of term the open
+The grade is a proxy. ATC groups mostly by chemical structure, partly by
+mechanism, and ChEMBL curates mechanism most thoroughly for well-known drugs,
+so it flatters any weighting term that rewards curation — which is exactly the kind of term the open
 proposals would add. Quote it with that caveat attached.

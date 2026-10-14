@@ -329,26 +329,52 @@ def harness_figures() -> dict:
         raise StatusError(
             f"{GRAPH_DATA.name} is missing, so the similarity ranking cannot "
             "be graded. Run `python3 scripts/export_cohort.py` first.")
-    proc = subprocess.run(
-        [node, "analysis/similarity_harness/evaluate.mjs", "--json"],
-        cwd=str(common.ROOT), capture_output=True, text=True,
-    )
-    if proc.returncode != 0:
-        raise StatusError(
-            "the similarity harness failed:\n" + (proc.stderr or proc.stdout)[-2000:])
-    try:
-        got = json.loads(proc.stdout)
-    except json.JSONDecodeError as exc:
-        raise StatusError(
-            f"the similarity harness printed no JSON ({exc}):\n"
-            + (proc.stdout or proc.stderr)[-2000:]) from exc
+    def run(*args):
+        proc = subprocess.run(
+            [node, "analysis/similarity_harness/evaluate.mjs", "--json", *args],
+            cwd=str(common.ROOT), capture_output=True, text=True,
+        )
+        if proc.returncode != 0:
+            raise StatusError(
+                "the similarity harness failed:\n" + (proc.stderr or proc.stdout)[-2000:])
+        try:
+            return json.loads(proc.stdout)
+        except json.JSONDecodeError as exc:
+            raise StatusError(
+                f"the similarity harness printed no JSON ({exc}):\n"
+                + (proc.stdout or proc.stderr)[-2000:]) from exc
+
+    got = run()
+    # The repaired key reports beside the headline, never in its place
+    # (docs/SIMILARITY-LITERATURE.md, step 1).
+    rep = run("--key", "atc-repaired")
+    epc = run("--key", "epc")
     return {
+        "sime_labelled": epc["labelled"],
+        "sime_classes": epc["classes"],
+        "sime_scoreable": epc["scoreable"],
+        "sime_top1": epc["top1"],
+        "sime_mrr": epc["mrr"],
+        "sime_filtered_top1": epc["filtered"]["top1"],
+        "sime_filtered_mrr": epc["filtered"]["mrr"],
         "sim_labelled": got["labelled"],
         "sim_classes": got["classes"],
         "sim_scoreable": got["scoreable"],
         "sim_unanswerable": got["unanswerable"],
         "sim_top1": got["top1"],
         "sim_mrr": got["mrr"],
+        "sim_filtered_top1": got["filtered"]["top1"],
+        "sim_filtered_mrr": got["filtered"]["mrr"],
+        "simr_version": rep["version"],
+        "simr_labelled": rep["labelled"],
+        "simr_classes": rep["classes"],
+        "simr_scoreable": rep["scoreable"],
+        "simr_top1": rep["top1"],
+        "simr_mrr": rep["mrr"],
+        "simr_ndcg": rep["ndcg"],
+        "simr_filtered_top1": rep["filtered"]["top1"],
+        "simr_filtered_mrr": rep["filtered"]["mrr"],
+        "simr_filtered_ndcg": rep["filtered"]["ndcg"],
     }
 
 
@@ -483,8 +509,8 @@ def render_status(fig: dict) -> str:
         _para(f"""
             The similarity ranking is graded by
             `analysis/similarity_harness/evaluate.mjs` against ATC level-4
-            classes, which are the WHO's own grouping of drugs by how they
-            work and are read from `molecules.atc_level5` rather than written
+            classes, the WHO's own "chemical, pharmacological or therapeutic"
+            subgroups, read from `molecules.atc_level5` rather than written
             here: **top-1 {fig['sim_top1'] * 100:.1f}% and MRR
             {fig['sim_mrr']:.4f}** over {_n(fig['sim_scoreable'])} of
             {_n(fig['sim_labelled'])} labelled molecules in
@@ -492,8 +518,37 @@ def render_status(fig: dict) -> str:
             {_n(fig['sim_unanswerable'])} have no same-class peer anywhere in
             their list, which is a fact about ChEMBL's coverage rather than
             about the ranking, and is kept out of the rates for that reason. It
-            is a proxy and not ground truth — ATC groups partly by mechanism,
-            so the measure flatters any weighting term that rewards curation.
+            is a proxy and not ground truth: most of its classes group by
+            chemical structure, and where it does follow mechanism it reads the
+            same curation the score does, so it flatters any weighting term
+            that rewards curation.
+        """),
+
+        _para(f"""
+            Two readings sit beside that figure and do not replace it. Ranked
+            only among the molecules the key can judge, the same lists grade
+            **top-1 {fig['sim_filtered_top1'] * 100:.1f}% and MRR
+            {fig['sim_filtered_mrr']:.4f}**. The repaired ATC key
+            (v{fig['simr_version']}, `--key atc-repaired`) reads every ATC
+            level for peers, sets aside the residual, use and
+            non-pharmacological classes listed with their reasons in
+            `analysis/similarity_harness/atc_repaired.json`, and gives a
+            sibling class at level 3 half credit: over
+            {_n(fig['simr_scoreable'])} of {_n(fig['simr_labelled'])} questions
+            in {_n(fig['simr_classes'])} classes it grades top-1
+            {fig['simr_top1'] * 100:.1f}%, MRR {fig['simr_mrr']:.4f} and
+            nDCG@10 {fig['simr_ndcg']:.4f}, and filtered **top-1
+            {fig['simr_filtered_top1'] * 100:.1f}%, MRR
+            {fig['simr_filtered_mrr']:.4f} and nDCG@10
+            {fig['simr_filtered_ndcg']:.4f}**. FDA's Established
+            Pharmacologic Classes, a curator apart from WHO and ChEMBL
+            (`--key epc`, backfilled by
+            `scripts/resolve_cohort_fda_classes.py`), judge
+            {_n(fig['sime_scoreable'])} of {_n(fig['sime_labelled'])}
+            US-labelled molecules in {_n(fig['sime_classes'])} classes: top-1
+            {fig['sime_top1'] * 100:.1f}% and MRR {fig['sime_mrr']:.4f},
+            filtered **top-1 {fig['sime_filtered_top1'] * 100:.1f}% and MRR
+            {fig['sime_filtered_mrr']:.4f}**.
         """),
     ]
     return "\n\n".join(paragraphs)

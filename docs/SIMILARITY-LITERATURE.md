@@ -4,6 +4,13 @@ Written 2026-10-13 against commit `86f0614` and the active build of 2026-10-11.
 **A review and a proposal; nothing in it is adopted.** Part 3's measurements
 are reproduced by `node analysis/answer_keys/audit.mjs`, which is read-only.
 
+**Since then (2026-10-13):** steps 1 and 2 of §4.3 are done and report beside
+the headline grade, never in its place. The repaired ATC key, the filtered
+reading, nDCG@10 and the agreement between keys are in
+[SIMILARITY-HARNESS.md](SIMILARITY-HARNESS.md) §13; FDA's classes as a third
+judge in §14. The figures below are those of the 1,335-entry build and are
+left as written; D21 has since grown the catalogue to 2,452 entries.
+
 This document asks two questions. The first is what published research says
 about each choice in the shared-target score, and especially what argues
 against it. The second is whether the answer key that grades the score can
@@ -400,7 +407,9 @@ and across levels *(snippet)*. Using ATC as a benchmark is common practice anywa
 ### 4.3 Proposed order
 
 Each step is its own change, and each reports beside the existing grade,
-never in place of it.
+never in place of it. Steps 1 and 2 were made on 2026-10-13
+([SIMILARITY-HARNESS.md](SIMILARITY-HARNESS.md) §13–14); steps 3 and 4
+are open.
 
 **Step 1 — repair what is there (no new data).** In `harness.mjs`:
 
@@ -484,5 +493,7 @@ The same applies to each constant SIMILARITY-HARNESS.md lists as unvalidated.
   class name.
 - **Not measured here:** EPC and OnSIDES coverage of this catalogue, and
   whether any key in §4.2 agrees with ATC or MeSH more often than chance.
+  EPC's coverage and the agreement between ATC, MeSH and EPC were measured
+  in step 1 and 2 (SIMILARITY-HARNESS §13–14); OnSIDES's is still not.
   Measuring that agreement between keys belongs in step 1. It is the ceiling
   any ranking can reach against them.

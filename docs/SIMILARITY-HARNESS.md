@@ -83,9 +83,13 @@ N  06  A  A  09
 └─────────────── nervous system
 ```
 
-**Level 4 is the useful one.** It is where the WHO groups drugs by how they
-work. Everything in `N06AA` is a tricyclic antidepressant. Everything in `N05BA`
-is a benzodiazepine. These groupings were made by pharmacologists who had never
+**Level 4 is the useful one.** Everything in `N06AA` is a tricyclic
+antidepressant. Everything in `N05BA` is a benzodiazepine. It is not, as this
+section first said, where the WHO groups drugs by how they work: the WHO
+defines levels 3 and 4 as "chemical, pharmacological or therapeutic"
+subgroups, and 42 of the 64 classes here are chemical-structure groups
+([SIMILARITY-LITERATURE.md](SIMILARITY-LITERATURE.md) §3.5; corrected
+2026-10-13, see §13). These groupings were made by pharmacologists who had never
 heard of this project, which is exactly what makes them a fair test.
 
 The database already stores this, in `molecules.atc_level5`. Chop the code to
@@ -655,3 +659,117 @@ ranking. On the one 1,335-entry build:
 The ATC grade of that build is 38.7% and 0.5119 under both. A MeSH grade
 taken before 2026-10-13 is therefore not comparable with one taken after,
 including every MeSH figure in section 10.
+
+## 13. The judge repaired, beside the headline (2026-10-13)
+
+[SIMILARITY-LITERATURE.md](SIMILARITY-LITERATURE.md) §4.3 proposed repairing
+the two keys already in use before adding any. Section 11 had said the
+filtered reading "should be decided as a change of instrument, not slipped in
+beside a catalogue change"; this is that change, made with no catalogue
+change and no constant moved. **The headline is untouched**: `--key atc` is
+read as before and still the figure in Status. Everything below is printed
+beside it.
+
+**Two readings for every key.** `grade` now returns, over the same scoreable
+molecules:
+
+- *filtered*: the same walk past only the molecules the key judges (`judged`:
+  it places them in some class, a class of one included). Seltorexant above
+  suvorexant's classmates is neither right nor wrong under ATC, which has no
+  code for it, so it no longer stands in the way.
+- *nDCG@10*, with the key's graded `gain` where it has one. The ideal
+  ordering is built from what the list holds, not from every classmate in the
+  catalogue, so coverage stays out of the ordering grade as `unanswerable`
+  already keeps it out.
+
+**A repaired ATC key**, `--key atc-repaired`, versioned in
+`analysis/similarity_harness/atc_repaired.json`:
+
+- the questions are still the molecules with an N code, but peers come from
+  every ATC code the catalogue holds, read from `molecule_classes` in the
+  database. The payload stopped carrying them in 2026-09-26, and the page
+  should not carry them for a grader's sake, so the harness opens
+  `db/cohort1.db` read-only and refuses one whose `built_at` is not the
+  payload's;
+- 41 level-4 classes and 7 level-3 groups are set aside beside the X rule,
+  each with its reason: residual classes filed under another letter (N02BG,
+  N05CM), classes by use (the four N07B/N07C classes, antidotes, erectile
+  dysfunction), and classes that are not pharmacology (electrolytes,
+  contrast media). N07BA is excluded although its three members are all
+  nicotinic agonists, because a key that keeps a use class wherever it
+  happens to agree with mechanism is being chosen by its answers;
+- a shared level-3 group earns half in nDCG: thioridazine for chlorpromazine
+  (N05AC against N05AA) is no longer worth what an unrelated drug is worth.
+  Top-1 and MRR still count classmates only.
+
+| the D21 build, 2,452 entries | questions | scoreable | top-1 | top-10 | MRR | nDCG@10 |
+|---|---|---|---|---|---|---|
+| ATC, as graded (the headline) | 395 | 284 | 32.7% | 74.3% | 0.4607 | 0.3388 |
+| ATC, filtered | | | 48.6% | 85.2% | 0.6097 | 0.4709 |
+| repaired ATC | 353 | 259 | 36.3% | 77.2% | 0.4958 | 0.3850 |
+| repaired ATC, filtered | | | 45.6% | 81.9% | 0.5727 | 0.4671 |
+| MeSH | 1,028 | 865 | 45.0% | 86.1% | 0.5945 | 0.4215 |
+| MeSH, filtered | | | 60.1% | 88.9% | 0.7029 | 0.5216 |
+
+Read with three cautions. **The repaired key asks fewer questions**: 25
+molecules filed only under excluded classes (naltrexone, nicotine,
+buprenorphine, dexmedetomidine, ...) are no longer asked, and most of them
+were misses, so part of its rise is questions it should not have been asking,
+not answers it now accepts. The answers it accepts are five, and none lost:
+codeine to hydrocodone (R05DA, cough suppressants), lidocaine to mexiletine
+(C01BB), bromocriptine to lisuride (G02CB), procaine to proparacaine and
+carbachol to acetylcholine. **The two filtered figures are not comparable
+with each other**: the repaired key judges more molecules (any ATC code at
+any level), so more of them stand in the walk, and its filtered grade is the
+lower of the two for that reason. **And no filtered figure is a bound**:
+SIMILARITY-LITERATURE §3.4 lists wrong answers the filter lets through.
+
+`node analysis/answer_keys/agreement.mjs` measures what §5 of that document
+asked step 1 to measure, how far the keys agree with each other, over the
+molecules both judge:
+
+| A, B | both judge | B accepts A's pairs | A accepts B's |
+|---|---|---|---|
+| ATC, MeSH | 290 | 79.2% | 18.8% |
+| ATC, EPC | 165 | 62.0% | 52.5% |
+| repaired ATC, EPC | 626 | 59.2% | 35.3% |
+| MeSH, EPC | 603 | 17.4% | 80.4% |
+| EPC, PE | 681 | 79.9% | 16.7% |
+
+MeSH accepts four in five of ATC's classmate pairs, and ATC one in five of
+MeSH's, because MeSH's classes are broad. ATC and EPC, the two narrowest,
+agree on little more than half of each other's pairs. A constant that moves
+one of them and not the other has not yet been shown to move the ranking.
+
+## 14. A third judge: FDA's classes (2026-10-13)
+
+Step 2 of the same proposal. `scripts/resolve_cohort_fda_classes.py` backfills
+FDA's Established Pharmacologic Class (EPC), mechanism of action (MoA) and
+physiologic effect (PE) through NLM RxNav, by identifier alone (FDA UNII to
+RxNorm ingredient to RxClass); what it reads and the theophylline case that
+shaped its matching rule are in
+[DATA-QUALITY-LOG.md](DATA-QUALITY-LOG.md), 2026-10-13. The classes stay in
+the database: they are an answer key, not something the page shows.
+
+- `--key epc`: a classmate shares an EPC; sharing only a MoA earns half in
+  nDCG, except through the MoA classes `fda_keys.json` lists as
+  pharmacokinetic (CYP450, P-gp, transporters) or empty ("Unknown Cellular or
+  Molecular Interaction", "Enzyme Inhibitors").
+- `--key pe`: a classmate shares a physiologic effect. The nearest thing here
+  to an effect axis, and coarse: "Central Nervous System Stimulation" holds
+  caffeine and naltrexone.
+
+| the same build | questions | scoreable | top-1 | top-10 | MRR | nDCG@10 |
+|---|---|---|---|---|---|---|
+| EPC | 487 | 455 | 45.7% | 84.0% | 0.5946 | 0.5046 |
+| EPC, filtered | | | 64.0% | 88.4% | 0.7319 | 0.6589 |
+| PE | 701 | 598 | 37.6% | 78.8% | 0.5154 | 0.3640 |
+| PE, filtered | | | 53.8% | 85.1% | 0.6498 | 0.4897 |
+
+EPC is a separate curator from WHO and ChEMBL but **not independent of the
+score's inputs**: an EPC such as *Serotonin Reuptake Inhibitor* restates a
+mechanism ChEMBL also curates. Only US-labelled drugs are judged (627 of the
+2,452 entries have an EPC). The first key that shares nothing with the score
+is still step 3, adverse-effect profiles from labels; until it exists, no
+constant should be adopted on the strength of these keys agreeing, since ATC,
+MeSH and EPC can all be reading the same curation.

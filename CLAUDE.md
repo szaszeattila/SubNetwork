@@ -127,6 +127,7 @@ python3 scripts/resolve_cohort_mesh_structure.py # MeSH structure classes via FD
 python3 scripts/resolve_cohort_wikipedia.py    # Wikipedia links via Wikidata and infoboxes; after the MeSH classes
 python3 scripts/resolve_cohort_gtopdb_actions.py # GtoPdb curated actions (pinned 2026.3, cached)
 python3 scripts/resolve_cohort_orthologues.py   # target_orthologues by sequence (~2 min cold, needs parasail)
+python3 scripts/resolve_cohort_fda_classes.py   # FDA EPC/MoA/PE via RxNav, an answer key only (~50 min cold, cached)
 
 python3 scripts/export_cohort.py           # db/cohort1.db -> viz/*.data.js + viz/evidence/
 python3 scripts/cohort_report.py           # the measured results of the active build
@@ -135,6 +136,9 @@ python3 scripts/cohort_report.py --check-status  # exit 1 if that block is stale
 
 node analysis/similarity_harness/evaluate.mjs   # grade the similarity ranking
 node analysis/similarity_harness/evaluate.mjs --key mesh   # ...against MeSH actions instead of ATC
+node analysis/similarity_harness/evaluate.mjs --key atc-repaired   # ...every ATC level, exclusions, sibling credit
+node analysis/similarity_harness/evaluate.mjs --key epc    # ...FDA's classes (also --key pe)
+node analysis/answer_keys/agreement.mjs         # how far the answer keys agree with each other
 node analysis/similarity_harness/sweep.mjs      # what each scoring constant is worth
 
 python3 -m unittest discover -s tests      # pipeline
@@ -228,7 +232,8 @@ analysis/probe/           50 settled drug relationships put to the ranking, and
                           what went wrong where it misses. A diagnostic, never a
                           tuning target; read-only.
 analysis/answer_keys/     what the ATC answer key calls a miss, and whether it
-                          is one (docs/SIMILARITY-LITERATURE.md). Read-only.
+                          is one (docs/SIMILARITY-LITERATURE.md), and how far
+                          the keys agree with each other. Read-only.
 analysis/cohort1/         the read-only analysis behind COHORT-REPORT.md
 analysis/mesh_route_b/    MeSH actions through the FDA UNII against the PubChem
                           route (docs/MESH-ACTIONS-ROUTE-B.md); read-only
@@ -307,12 +312,14 @@ pinned inputs, policies and backfills produced the file.
 
 **Classes — `molecule_classes` and `class_labels` — are for search and display
 only.** They are never evidence about a target and never enter the similarity
-score. Four sources, each writer replacing only its own rows:
+score. Seven sources, each writer replacing only its own rows; the last three
+are an answer key and never reach the page:
 
 - `atc` — every WHO ATC code of any form. Kept in the database, **not on the
   page** (taken off 2026-09-26: ATC files a drug by use). `molecule_atc` and
   `molecules.atc_level5` still hold only the N codes, because they are the
-  admission route's record and the harness's answer key.
+  admission route's record and the harness's headline answer key; the
+  repaired key (`--key atc-repaired`) reads every code from here instead.
 - `usan` — USAN/INN name stems (`-pramine`). Stems and sub-stems are paired
   positionally because a definition can contain the `"; "` that joins them
   (`-triptan`); ChEMBL's bare `-` means no stem.
@@ -337,6 +344,15 @@ score. Four sources, each writer replacing only its own rows:
   this; a molecule reaching two records is dropped (invariant 6). Only the
   structural branches count, and a drug whose own heading is a class for
   another entry is a member of it (ketorolac under *Indomethacin*).
+- `fda_epc`, `fda_moa`, `fda_pe` — FDA's Established Pharmacologic Class,
+  mechanism of action and physiologic effect, by identifiers alone: InChIKey
+  → FDA UNII → RxNorm ingredient → RxClass, from FDA's labels and MED-RT
+  only. **The parent's own structure decides**; a folded form is read only
+  where the parent reaches nothing, because RxNorm files some forms as
+  ingredients of their own (aminophylline, folded onto theophylline). Not in
+  `SURFACED_CLASS_SOURCES`: they exist to grade the ranking
+  (`--key epc`, `--key pe`), not to label it
+  ([DATA-QUALITY-LOG](docs/DATA-QUALITY-LOG.md), 2026-10-13).
 
 **`gtopdb_interactions`** holds GtoPdb's curated **action** (D17): its `Type` and
 `Action` verbatim, and `action_type`, the ChEMBL word they map to through
@@ -390,7 +406,10 @@ sequences D20's orthologue matching aligns against, **ClinicalTrials.gov**
 trial status, and **Wikidata** a Wikipedia link per node and a molecule's MeSH
 record where FDA's route does not reach it. Both are matched on an identifier
 this database already holds — never a title search: "ATM", "APP" and "TNF" are
-English words. The cohort pipeline no longer reads **PubChem** (2026-10-13).
+English words. **FDA's pharmacologic classes**, through **NLM RxNav**
+(RxNorm and RxClass; public domain, unpinned, its version recorded), supply
+an answer key for the similarity harness and nothing the page shows. The
+cohort pipeline no longer reads **PubChem** (2026-10-13).
 
 **The legacy pipeline** also reads PubChem for identity and the CAS numbers
 that join into PDSP, UniProt for protein identity and tissue specificity, the
@@ -507,7 +526,7 @@ hand-written and is never rewritten.
 <!-- Written by `python3 scripts/cohort_report.py --write-status`. Do not edit by hand: `--check-status` fails when this block and the active build disagree, and a rewrite discards whatever was typed here. The prose outside the markers is hand-written and is never touched. -->
 
 Pipeline and viewer both working. Current database, `db/cohort1.db`, built
-2026-10-12 against the `chembl_37` bulk release under selection policy
+2026-10-13 against the `chembl_37` bulk release under selection policy
 `cohort1-selection v3.0.0` and evidence policy `cohort1-evidence v1.1.1`:
 
 **2,452 catalogue entries · 3,359 targets · 127,741 claims · 327,957 observations**
@@ -547,18 +566,32 @@ the `class_wikipedia` table: 523 through the Wikidata item carrying the
 descriptor, and 87 whose item has no article through the main article its
 English category declares (Xanthines to *Xanthine*).
 
-The pipeline suite is 512 tests and the node suites are 701 (472 cohort
-viewer, 222 legacy viewer, 7 similarity harness).
+The pipeline suite is 530 tests and the node suites are 708 (472 cohort
+viewer, 222 legacy viewer, 14 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`
-against ATC level-4 classes, which are the WHO's own grouping of drugs by how
-they work and are read from `molecules.atc_level5` rather than written here:
-**top-1 32.7% and MRR 0.4607** over 284 of 395 labelled molecules in 64
+against ATC level-4 classes, the WHO's own "chemical, pharmacological or
+therapeutic" subgroups, read from `molecules.atc_level5` rather than written
+here: **top-1 32.7% and MRR 0.4607** over 284 of 395 labelled molecules in 64
 classes. The other 111 have no same-class peer anywhere in their list, which
 is a fact about ChEMBL's coverage rather than about the ranking, and is kept
-out of the rates for that reason. It is a proxy and not ground truth — ATC
-groups partly by mechanism, so the measure flatters any weighting term that
+out of the rates for that reason. It is a proxy and not ground truth: most of
+its classes group by chemical structure, and where it does follow mechanism it
+reads the same curation the score does, so it flatters any weighting term that
 rewards curation.
+
+Two readings sit beside that figure and do not replace it. Ranked only among
+the molecules the key can judge, the same lists grade **top-1 48.6% and MRR
+0.6097**. The repaired ATC key (v1.0.0, `--key atc-repaired`) reads every ATC
+level for peers, sets aside the residual, use and non-pharmacological classes
+listed with their reasons in `analysis/similarity_harness/atc_repaired.json`,
+and gives a sibling class at level 3 half credit: over 259 of 353 questions in
+251 classes it grades top-1 36.3%, MRR 0.4958 and nDCG@10 0.3850, and filtered
+**top-1 45.6%, MRR 0.5727 and nDCG@10 0.4671**. FDA's Established
+Pharmacologic Classes, a curator apart from WHO and ChEMBL (`--key epc`,
+backfilled by `scripts/resolve_cohort_fda_classes.py`), judge 455 of 487
+US-labelled molecules in 123 classes: top-1 45.7% and MRR 0.5946, filtered
+**top-1 64.0% and MRR 0.7319**.
 <!-- END GENERATED: cohort-status -->
 
 Three browser measurements sit outside the block because they were taken once,
@@ -859,8 +892,13 @@ molecules) are in [docs/COHORT-2.md](docs/COHORT-2.md) and come first.
   the setting the ranking feels most — it is why meperidine's nearest neighbour
   is amitriptyline over a hERG screen. Nothing was changed on the strength of
   it: 24 of 217 molecules get worse, and the judge flatters curation.
-  [docs/SIMILARITY-HARNESS.md](docs/SIMILARITY-HARNESS.md); FDA Established
-  Pharmacologic Class is the candidate third judge.
+  [docs/SIMILARITY-HARNESS.md](docs/SIMILARITY-HARNESS.md). Since 2026-10-13
+  there are four judges beside the headline (the repaired ATC key, MeSH, FDA
+  EPC and PE, §13–14), but every one of them can read the same curation the
+  score does; the first that shares no input with it, label adverse-effect
+  profiles, is step 3 of
+  [docs/SIMILARITY-LITERATURE.md](docs/SIMILARITY-LITERATURE.md) and not
+  built.
 - **D20 keeps rarity per record,** so a rodent record, measured on by fewer
   molecules, often stands for its protein in a pair's score. Both obvious fixes
   graded worse ([docs/COHORT-2.md](docs/COHORT-2.md), D20).

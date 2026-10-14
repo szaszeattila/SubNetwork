@@ -16,9 +16,13 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  payloadExists, loadPayload, loadViewer, labelledSet, grade, byClass,
-  patchConstant, viewerSource, CONSTANTS,
+  payloadExists, loadPayload, loadViewer, labelledSet, meshActionSet, grade, byClass,
+  patchConstant, viewerSource, CONSTANTS, ndcgAt, atcRepairedKey, readDbClasses,
+  DATABASE, ATC_REPAIRED, HarnessError, fdaKey,
 } from "../analysis/similarity_harness/harness.mjs";
+import { existsSync, readFileSync, mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 // Measured on the chembl_37 build of 2026-09-16 at 0.4985 / 35.9%, and on the
 // D21 build of 2026-10-12 at 0.4607 / 32.7% / top-5 61.3%. The floors sit a
@@ -130,5 +134,127 @@ test("the per-class breakdown covers the classes it claims", { skip }, () => {
     assert.ok(r.members >= 5);
     assert.ok(r.scoreable > 0 && r.scoreable <= r.members);
     assert.ok(r.top1 >= 0 && r.top1 <= 1);
+  }
+});
+
+// ------------------------------------------------- the readings beside the grade
+
+test("nDCG is computed against the ordering the list could have had", () => {
+  // Needs no build. One classmate at rank 1 is perfect; at rank 2 it is
+  // 1/log2(3); a sibling ahead of a classmate is better than nothing ahead of
+  // it and worse than the classmate first.
+  assert.equal(ndcgAt([1, 0, 0], 10), 1);
+  assert.equal(ndcgAt([0, 1, 0], 10).toFixed(4), (1 / Math.log2(3)).toFixed(4));
+  assert.equal(ndcgAt([0, 0, 0], 10), 0);
+  const sib = ndcgAt([0.5, 1, 0], 10), none = ndcgAt([0, 1, 0], 10);
+  assert.ok(sib > none && sib < 1, `sibling-first scored ${sib}`);
+  // Past k nothing counts: a classmate at 11 of 11 is worth 0 at k = 10.
+  assert.equal(ndcgAt([...Array(10).fill(0), 1], 10), 0);
+});
+
+test("the filtered walk only ever moves a classmate up", { skip }, () => {
+  // Filtering removes molecules the key cannot judge and nothing else, so a
+  // classmate can only rise. If any rate fell, the filter removed a classmate.
+  const { viewer, key, data } = fixture();
+  for (const k of [key, meshActionSet(data)]) {
+    const g = grade(viewer, k);
+    for (const m of ["top1", "top5", "top10", "mrr"]) {
+      assert.ok(g.filtered[m] >= g[m], `${k.name}: filtered ${m} ${g.filtered[m]} < ${g[m]}`);
+    }
+    for (const v of [g.ndcg, g.filtered.ndcg]) assert.ok(v > 0 && v <= 1, `nDCG ${v}`);
+  }
+});
+
+const hasDb = has && existsSync(DATABASE);
+const skipDb = hasDb ? false : "db/cohort1.db or viz/graph.data.js is not built";
+
+test("every exclusion in the repaired ATC key states its reason and version", () => {
+  const spec = JSON.parse(readFileSync(ATC_REPAIRED, "utf8"));
+  assert.match(spec.version, /^\d+\.\d+\.\d+$/);
+  for (const group of ["excluded_level4", "excluded_level3"]) {
+    for (const [code, why] of Object.entries(spec[group])) {
+      assert.equal(code.length, group === "excluded_level4" ? 5 : 4, `${code} in ${group}`);
+      assert.ok(typeof why === "string" && why.length > 10, `${code} has no reason`);
+    }
+  }
+});
+
+test("the repaired ATC key asks N questions and holds no excluded class", { skip: skipDb }, async () => {
+  const { data } = fixture();
+  const key = await atcRepairedKey(data);
+  const spec = JSON.parse(readFileSync(ATC_REPAIRED, "utf8"));
+  for (const code of key.members.keys()) {
+    assert.notEqual(code[4], "X", `${code} is an "other ..." class`);
+    assert.ok(!(code in spec.excluded_level4), `${code} is excluded but in the key`);
+    assert.ok(key.members.get(code).size >= 2);
+  }
+  for (const id of key.labelled) {
+    assert.ok([...key.classesOf.get(id)].some((c) => c[0] === "N" && key.members.has(c)),
+      `question ${id} has no N class with a classmate`);
+  }
+  // Reading every level must reach peers the N-only key cannot see.
+  const n = labelledSet(data);
+  let wider = 0;
+  for (const id of key.labelled) if (key.peersOf(id).size > n.peersOf(id).size) wider++;
+  assert.ok(wider > 0, "no question gained a peer from a non-N class");
+  // Gains: a classmate 1, a sibling only 0.5, anything else 0.
+  for (const id of key.labelled.slice(0, 50)) {
+    const peers = key.peersOf(id);
+    for (const p of peers) assert.equal(key.gain(id, peers, p), 1);
+  }
+});
+
+test("a database from another build is refused, not graded", { skip: skipDb }, async () => {
+  const { data } = fixture();
+  const stale = { ...data, meta: { ...data.meta, built_at: "1999-01-01T00:00:00" } };
+  await assert.rejects(() => readDbClasses(stale, ["atc"]), HarnessError);
+});
+
+test("the FDA keys hold no class of one", { skip: skipDb }, async () => {
+  const { data } = fixture();
+  for (const which of ["epc", "pe"]) {
+    let key;
+    try { key = await fdaKey(data, which); } catch (err) {
+      if (err instanceof HarnessError && /is empty/.test(err.message)) return;  // not backfilled
+      throw err;
+    }
+    for (const [code, set] of key.members) assert.ok(set.size >= 2, `${which} ${code}`);
+    for (const id of key.labelled) assert.ok(key.peersOf(id).size > 0);
+    if (which === "pe") assert.equal(key.gain, undefined, "PE has no graded credit");
+  }
+});
+
+test("a pharmacokinetic MoA earns no credit in the EPC key; a mechanism earns half", async () => {
+  // Needs no build: a four-molecule database written here.
+  const { DatabaseSync } = await import("node:sqlite");
+  const dir = mkdtempSync(join(tmpdir(), "fdakey-"));
+  const path = join(dir, "t.db");
+  const db = new DatabaseSync(path);
+  db.exec(`CREATE TABLE build_manifest (key TEXT PRIMARY KEY, value TEXT);
+    CREATE TABLE molecule_classes (parent_molregno INTEGER, source TEXT, code TEXT,
+      subgroup TEXT, label TEXT, carriers TEXT);
+    CREATE TABLE class_labels (source TEXT, code TEXT, level INTEGER, label TEXT, parents TEXT);
+    INSERT INTO build_manifest VALUES ('built_at', 'T');`);
+  const ins = db.prepare("INSERT INTO molecule_classes VALUES (?, ?, ?, '', ?, '')");
+  ins.run(1, "fda_epc", "E1", "Serotonin Reuptake Inhibitor");
+  ins.run(2, "fda_epc", "E1", "Serotonin Reuptake Inhibitor");
+  ins.run(1, "fda_moa", "M1", "Cytochrome P450 2D6 Inhibitors");
+  ins.run(3, "fda_moa", "M1", "Cytochrome P450 2D6 Inhibitors");
+  ins.run(1, "fda_moa", "M2", "Serotonin Uptake Inhibitors");
+  ins.run(4, "fda_moa", "M2", "Serotonin Uptake Inhibitors");
+  db.close();
+  const data = { meta: { built_at: "T" }, fields: { molecules: ["id", "name"] },
+                 molecules: [[1, "a"], [2, "b"], [3, "c"], [4, "d"]] };
+  try {
+    const key = await fdaKey(data, "epc", { path });
+    const peers = key.peersOf(1);
+    assert.deepEqual([...peers], [2]);
+    assert.equal(key.gain(1, peers, 2), 1);
+    assert.equal(key.gain(1, peers, 3), 0, "credit through a CYP2D6-inhibitor MoA");
+    assert.equal(key.gain(1, peers, 4), 0.5);
+    assert.ok(!key.judged(3), "a molecule known only by a pharmacokinetic MoA is not judged");
+    assert.ok(key.judged(4));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
   }
 });

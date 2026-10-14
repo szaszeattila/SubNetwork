@@ -54,6 +54,13 @@ def _fake_figures(**overrides):
         "harness_tests": 7, "node_tests": 411,
         "sim_labelled": 395, "sim_classes": 64, "sim_scoreable": 217,
         "sim_unanswerable": 178, "sim_top1": 0.359447, "sim_mrr": 0.498516,
+        "sim_filtered_top1": 0.486, "sim_filtered_mrr": 0.6097,
+        "simr_version": "1.0.0", "simr_labelled": 353, "simr_classes": 251,
+        "simr_scoreable": 259, "simr_top1": 0.363, "simr_mrr": 0.4958, "simr_ndcg": 0.385,
+        "simr_filtered_top1": 0.456, "simr_filtered_mrr": 0.5727, "simr_filtered_ndcg": 0.4671,
+        "sime_labelled": 487, "sime_classes": 123, "sime_scoreable": 455,
+        "sime_top1": 0.457, "sime_mrr": 0.5946,
+        "sime_filtered_top1": 0.64, "sime_filtered_mrr": 0.7319,
     }
     fig.update(overrides)
     return fig

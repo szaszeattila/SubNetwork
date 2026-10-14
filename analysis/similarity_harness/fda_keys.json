@@ -1,0 +1,27 @@
+{
+  "key": "fda",
+  "version": "1.0.0",
+  "fixed": "2026-10-13",
+  "about": "The FDA answer keys (docs/SIMILARITY-LITERATURE.md, step 2), read from the fda_epc, fda_moa and fda_pe rows scripts/resolve_cohort_fda_classes.py writes. `epc`: two molecules sharing an Established Pharmacologic Class are classmates; sharing only a mechanism-of-action class earns half credit, except through the MoA classes below, which say how a drug is handled or nothing at all, never how it acts in the brain. `pe`: two molecules sharing a physiologic effect are classmates, unfiltered. A change to this file is a change of instrument: bump the version and say why in docs/SIMILARITY-HARNESS.md.",
+  "moa_no_credit_patterns": {
+    "Cytochrome P450": "pharmacokinetic: an enzyme that metabolises the drug or others (sertraline's 'Cytochrome P450 2D6 Inhibitors')",
+    "P-Glycoprotein": "pharmacokinetic: an efflux transporter",
+    "Breast Cancer Resistance Protein": "pharmacokinetic: an efflux transporter",
+    "Organic Anion Transport": "pharmacokinetic: a drug transporter",
+    "Organic Cation Transport": "pharmacokinetic: a drug transporter",
+    "Multidrug and Toxin Extrusion": "pharmacokinetic: a drug transporter",
+    "Bile Salt Export Pump": "pharmacokinetic: a drug transporter",
+    "UDP Glucuronosyltransferase": "pharmacokinetic: a conjugating enzyme",
+    "Glucuronosyltransferase": "pharmacokinetic: a conjugating enzyme"
+  },
+  "moa_no_credit_names": {
+    "Unknown Cellular or Molecular Interaction": "says nothing",
+    "Enzyme Interactions": "says nothing: which enzyme is the whole claim",
+    "Enzyme Inhibitors": "says nothing: which enzyme is the whole claim (caffeine's only MoA)",
+    "Biological Macromolecular Activity": "says nothing",
+    "Receptor Interactions": "says nothing: which receptor is the whole claim",
+    "Acid-Base Activity": "not a mechanism at a target",
+    "Electrolyte Activity": "not a mechanism at a target",
+    "Osmotic Activity": "not a mechanism at a target"
+  }
+}
