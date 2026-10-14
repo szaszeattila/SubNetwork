@@ -8,8 +8,12 @@ are reproduced by `node analysis/answer_keys/audit.mjs`, which is read-only.
 the headline grade, never in its place. The repaired ATC key, the filtered
 reading, nDCG@10 and the agreement between keys are in
 [SIMILARITY-HARNESS.md](SIMILARITY-HARNESS.md) §13; FDA's classes as a third
-judge in §14. The figures below are those of the 1,335-entry build and are
-left as written; D21 has since grown the catalogue to 2,452 entries.
+judge in §14. Steps 3 and 4 followed on 2026-10-14: the label adverse-effect
+key, the first judge sharing no input with the score, in §15, and the
+pre-registered pairwise key in §16. The figure at the top of Part 4 was
+redrawn to show the keys as built and what they found. The other figures
+below are those of the 1,335-entry build and are left as written; D21 has
+since grown the catalogue to 2,452 entries.
 
 This document asks two questions. The first is what published research says
 about each choice in the shared-target score, and especially what argues
@@ -337,9 +341,9 @@ including the text `scripts/cohort/status.py` writes into Status.
 
 ## 4. Better answer keys
 
-![Better answer keys: what a good key needs, the proposed order scored against it, and why the order runs as it does](figures/better-keys.svg)
+![Better answer keys: what a good key needs, the four keys as built with their grades, and what the five judges say about each scoring constant](figures/better-keys.svg)
 
-*The whole of this part in one picture: §4.1 is panel A, §4.2–4.3 are panels B and C. The marks in panel B are a judgement against §4.1's six properties, not a measurement.*
+*This part in one picture, redrawn on 2026-10-14 once all four steps were built: §4.1 is panel A; panel B is §4.3's order as built, each key with its grade on the D21 build and what it showed; panel C is the constant sweep under all five judges ([SIMILARITY-HARNESS.md](SIMILARITY-HARNESS.md) §15). The marks in panel B are a judgement against §4.1's six properties, not a measurement; the label key's mark for property 4 fell to "partly" once built, since it has graded credit but no negatives. The figure first drawn here, the proposal before any step was built, is in this file's history (f48ec0e).*
 
 ### 4.1 What a key should satisfy
 
