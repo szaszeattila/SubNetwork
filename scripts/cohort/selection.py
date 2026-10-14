@@ -7,7 +7,8 @@ member (decision D01):
                      carries an ATC level-5 code whose level1 is 'N'. No
                      indication-phase requirement.
   route_indication   the parent, or a family member, has a drug_indication row
-                     inside the adopted scope with max_phase_for_ind >= 3.
+                     inside the adopted scope with max_phase_for_ind at or above
+                     the policy's min_phase (1 since D21; 3 before it).
 
 Neither route is evidence of anything, and neither looks at evidence: the
 candidate set is fixed here and assessed afterwards, so evidence availability
@@ -315,7 +316,7 @@ def run(conn, policy: dict, descriptors: dict) -> dict:
                                                 e["max_phase_for_ind"] or -99))
                 exclusion = (f"no ATC N code in family; best scoped indication is "
                              f"{best['mesh_heading']} at {best['phase_label']}, below "
-                             f"the Approved/Phase 3 floor")
+                             f"the {common.phase_label(min_phase)} floor")
             elif fam_ind:
                 exclusion = "no ATC N code in family; no scoped indication at any phase"
             else:

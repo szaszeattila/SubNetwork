@@ -39,13 +39,285 @@ alone.
 
 | Source | Role | Caveat |
 |---|---|---|
-| **PubChem** | compound identity, SMILES, CAS numbers | CAS numbers are the only join key into PDSP |
+| **PubChem** | compound identity, SMILES, CAS numbers (legacy pipeline only since 2026-10-13) | CAS numbers are the only join key into PDSP; links compounds to MeSH by name; blocks an address that keeps asking while throttled |
+| **FDA UNII records** | a substance's identity by structure, and its CAS number, which is how a molecule reaches its own MeSH record | registers stereo-defined forms and racemates as such, where ChEMBL often draws no stereochemistry; no InChIKey for most biologics |
+| **Wikidata** | an item joining a ChEMBL ID to a Wikipedia article and to a MeSH ID | community-edited; used only by exact identifier, and agreed with FDA's route on 729 of 735 molecules where both answer |
 | **ChEMBL** | primary: curated mechanisms + Ki/Kd/IC50 binding assays, functional assays | needs pagination; needs `standard_relation` checking; has real curation errors |
 | **UniProt** | protein identity, function, tissue specificity; its reviewed human proteome is what D20 aligns non-human records against | `protein_name:` search is relevance-ranked, not exact; the "stream" download is always the current release, so the copy is pinned |
 | **DGIdb** | cross-validation that an edge exists | no measurements of its own |
 | **BindingDB** | target *discovery* | ~97% of what it returns here is republished ChEMBL/PDSP; REST endpoint unreliable |
 | **PDSP Ki DB** | independent Ki measurements, strong for CNS | bulk CSV only, no query API, no per-row citation link |
 | **GtoPdb** | curated action (agonist, antagonist, …) on the receptor, channel and enzyme families this project is about | a ligand's Type can be carried onto secondary targets it was only screened at (vilazodone); anonymous bulk access announced to end |
+
+---
+
+## 2026-10-14 — GtoPdb's cache was not GtoPdb's file
+
+Bumping the GtoPdb pin to 2026.3.1, the backfill's cached copy had a different
+sha256 from the same files fetched with `curl` a few minutes earlier, and was
+longer (545 bytes in `interactions.csv`, 600 in `ligands.csv`). GtoPdb serves its CSVs as `text/csv` with no charset;
+`requests` then decodes the body as ISO-8859-1, as HTTP's old default says, and
+the backfill wrote that text back out as UTF-8. Every non-ASCII character was
+doubled into two: `(3β,5β,17β)` in a ligand's synonyms became `(3Î²,5Î²,17Î²)`.
+
+**What it would have reached.** Only a dry run read the garbled files, so
+nothing was written. Every field the backfill matches on (InChIKey, ChEMBL id,
+UniProt accession, Type, Action) is ASCII, so no match would have changed. One
+stored field is not: seltorexant's primary-target row at OX2 carries the
+action comment "70–320-fold selective", whose en dash would have been stored
+as three characters of noise. Action comments are not exported, so it would
+have stopped at `gtopdb_interactions`. And the manifest would have recorded
+the sha256 of a file no download of the release reproduces, so the one check
+that says "this is the file GtoPdb published" could never pass.
+
+**2026.3 was not affected.** Its cache is clean UTF-8, with the same 218 and
+210 non-ASCII characters as 2026.3.1's and none of the doubled pairs the
+re-encoding leaves. The code was the same, so the server's answer differed at
+that download, perhaps naming a charset; it cannot be asked now.
+
+**Fixed.** `ensure_files` caches `r.content`, the bytes as served, and decodes
+them as UTF-8 only to read the version line; a test holds a "β" through a
+download. 2026.3.1's cache matches `curl` byte for byte.
+
+**The lesson** is invariant 1's, one layer down: a byte is only GtoPdb's if
+nothing between the server and the disk decided what it meant.
+
+## 2026-10-13 — PBF-509 had an article, and Wikidata could not say so
+
+**What happened.** The user found PBF-509 with no Wikipedia link although
+English Wikipedia has an article on it, *Taminadenant*. The article sits on
+Wikidata item Q133844245, which carries a label and nothing else: no ChEMBL ID,
+no InChIKey, no statement of any kind. No Wikidata item carries
+CHEMBL3694769 or PBF-509's InChIKey at all, so the identifier route had
+nothing to find. The article's own drugbox, though, declares `ChEMBL =
+3694769` and the exact InChIKey.
+
+**How many more.** Of the 804 molecules without a link, 103 have an article
+whose drugbox links their own ChEMBL ID, and they were missing for a reason
+more general than one empty item: **Wikidata and ChEMBL disagree about which
+structure is the drug.** ChEMBL's parent for varenicline, vinblastine,
+clindamycin and atropine is drawn with stereochemistry that the item holding
+the article does not carry, so both identifiers land on an item with no
+article. Warfarin's and methamphetamine's articles sit on a "racemic mixture"
+item with no identifiers. Candesartan cilexetil's, olmesartan medoxomil's and
+dabigatran etexilate's articles are the parent drug's, whose item names the
+active acid. Albuterol, metamizole, chlorprothixene, buprenorphine, glutamic
+acid and methionine were all in this group.
+
+**The route taken.** Wikipedia's external-link index (`list=exturlusage`)
+lists every article linking a ChEMBL compound page, about 10,500 links in 21
+requests. That is a lookup by identifier in the reverse direction, not a title
+search. An article is accepted for a molecule only where Wikidata found no
+article at all (an ambiguous Wikidata answer stays a refusal), and only when:
+
+- a `{{Infobox drug}}`, `{{Drugbox}}` or `{{Chembox}}` on it names the
+  molecule's **own parent** ChEMBL ID in its ChEMBL parameter. A ChEMBL link
+  in a reference or a list of compounds is not a claim about the article.
+- any InChIKey that infobox declares shares the molecule's **skeleton**, the
+  first block. The skeleton rather than the whole key, because the stereo
+  disagreements above are why the route exists. A side with no key (a
+  biologic) matches on the ChEMBL ID alone, as the Wikidata route does.
+- it is the only such article.
+
+Measured against the 1,347 molecules Wikidata had already linked whose ChEMBL
+ID an article's infobox also carries, the infobox route names the same article
+for 1,339. Of the 8 where it differs, the key check catches the worst:
+*Nitrous oxide (medication)*'s drugbox carries **oxygen's** ChEMBL ID
+(CHEMBL1234886), and its InChIKey is nitrous oxide's. It is one of 15
+infoboxes, on already-linked molecules, whose InChIKey contradicts the ChEMBL
+ID beside it. Wikipedia's infobox identifiers are hand-entered, and the
+InChIKey is the check on them.
+
+**Never through a salt form's ID.** 23 more molecules are reached only
+through one of their forms' ChEMBL IDs, and most of those would be right:
+mesna, ipratropium bromide, methylene blue, sodium thiopental, carbachol,
+fluciclovine (18F). Two would not be. ChEMBL files a deuterated drug as a
+form of its parent, so ethyl linoleate would link *Deulinoleate ethyl* and
+tebitorexant *Tebideutorexant*, each a different drug developed for being
+deuterated. An isotope sits in the InChIKey's second block, outside the
+skeleton, so the key check cannot tell them apart, and the cohort database
+holds no structure for a form to check against. The Wikidata route has
+always read the parent's ID alone, for the same reason.
+
+**Result.** 98 molecules linked: the 103 less 3 whose infobox structure
+differs (ribose (pyranose), rocuronium, bryostatin 1, each an infobox drawing
+a salt or a relative under the parent's ID) and 2 with two qualifying
+articles (inositol, vasopressin). PBF-509 links *Taminadenant*.
+
+**Targets: the protein's article before the gene's.** Albumin and FGF1 were
+also unlinked although both have articles. Their protein item and gene item
+each carry a *different* English article (*Human serum albumin* on the
+protein, *Serum albumin* on ALB), and the query read the two as one set and
+refused it as ambiguous. Both are reached by identifier, and a target here is
+keyed by its UniProt accession, which is the protein item's. The protein's own
+article is therefore taken first, and the gene's only where the protein has
+none. That is a fixed precedence between two answers, not a choice between
+them; two articles on one side are still a refusal.
+
+It holds only where the protein item names exactly one gene. The first run
+without that condition linked Heat shock 70 kDa protein 1A to *HSPA1B*:
+HSPA1A and HSPA1B are one sequence, Wikidata files each protein under both
+genes, and the HSPA1A protein item carries the HSPA1B article. With two genes
+the protein is not one-to-one with either, so the disagreement stays a
+refusal; lactoperoxidase, whose article is right, is refused with it. 14
+targets were linked: the D3 dopamine receptor, tyrosine hydroxylase, albumin
+and FGF1 among them. Six stay ambiguous, the α7 nicotinic receptor among them:
+Wikidata files it under CHRNA7 and under the CHRFAM7A fusion gene, each with
+its own article. Under invariant 15, the remedy for one like that is a
+hand-written Wikidata item, and none was written.
+
+The first form of the target query computed the route with a `BIND` inside
+each branch of its `UNION`. That stopped the endpoint's optimiser: a chunk of
+15 accessions took 65 s and was refused with a 504, against 0.2 s without it.
+The route is now computed in the projection, after the join.
+
+**Left as they are, and why:**
+
+- **Human enzymes whose article is the enzyme class** (fatty acid synthase,
+  glycerol kinase, β-glucuronidase). Neither the protein item nor the gene
+  item has an article; English Wikipedia writes about the EC class, which can
+  cover several human isozymes. That is the family-for-member link D06
+  refuses.
+- **Non-human records.** About 1,200 rat, mouse, bovine and other
+  single-protein records have no article of their own; Wikipedia writes about
+  the human protein. 567 of them belong to a protein whose human record is
+  linked and shown in the same panel. 68 proteins are here *only* as
+  non-human records with a D20 human match, and their nodes show no
+  Wikipedia link anywhere. Giving such a record its human orthologue's
+  article would move a fact between records, which D20 has so far refused
+  for claims; it is the user's call, not a backfill's.
+- **Wikidata's empty item.** Q133844245 could be given CHEMBL3694769 and the
+  InChIKey upstream, which would fix it for everyone reading Wikidata. That
+  is an edit to a public database and was not made.
+
+## 2026-10-13 — MeSH actions read from MeSH, and PubChem left behind
+
+**What happened.** D21 nearly doubled the catalogue, and the backfill that
+reads MeSH pharmacological actions through PubChem could not finish. PubChem
+answered about 400 requests and then refused this machine, twice, at a pace
+(~180 a minute) that had run 2,400 requests without trouble in September. Its
+throttling header then read every meter Green and still answered "too many
+requests per second or blacklisted": the address was on a temporary block. The
+script's own five quick retries, a probe loop asking every minute for two hours,
+and each restart the moment a probe got through kept it there. After a night,
+68 requests got through before the next block.
+
+**The lessons about a rate-limited source,** kept because the next one will
+behave the same way:
+
+- Read the source's own signal (`X-Throttling-Control` here) rather than
+  inferring the limit from failures.
+- On a block, stop. Retrying into it, or polling to see whether it has lifted,
+  are the requests that keep it in place.
+- Resume hours later, with one probe.
+
+**What changed instead.** The question became whether the actions need PubChem
+at all. PubChem's route also links a compound to MeSH **by name**, the source of
+the tafamidis/"FX006" error (2026-09-26), which a judge had to catch. NLM's own
+MeSH files carry each record's `PharmacologicalActionList`, and a molecule's own
+record can be reached by identifier, the route the structure classes already
+take. `resolve_cohort_pharm_actions.py` now places each molecule on one MeSH
+record, each step tried only where the one before placed nothing:
+
+1. **UNII.** The InChIKey reaches the FDA UNII registered with exactly that
+   structure, and the UNII reaches the MeSH record carrying it.
+2. **CAS.** Where the UNIIs reach no record, the CAS numbers FDA lists for
+   them are tried, because older MeSH records carry a CAS number where newer
+   ones carry the UNII (GABA, budesonide). As a fallback only: used alongside
+   the UNII, a CAS number a second record shares refused eplerenone and
+   lacosamide.
+3. **A mixture of stereoisomers.** Where ChEMBL draws no stereochemistry and
+   FDA has no flat structure to match, the FDA substance registered as a
+   mixture of that skeleton's stereoisomers (a racemate, written as two
+   InChIKeys sharing the first block) is used. This places methylphenidate,
+   nebivolol and pentazocine. A molecule drawn *with* stereochemistry never
+   reaches this step.
+4. **Wikidata.** Where no FDA step places the molecule on exactly one record,
+   the MeSH ID on the Wikidata item carrying its ChEMBL ID is used. This
+   reaches antibodies, proteins and peptides (exenatide, teriparatide), which
+   FDA files without a structure.
+
+Two records at any step is a refusal (invariant 6).
+
+**What was measured before it was adopted**, on the 1,335-entry build whose
+PubChem backfill had completed (`analysis/mesh_route_b/`,
+[MESH-ACTIONS-ROUTE-B.md](MESH-ACTIONS-ROUTE-B.md)):
+
+- **Coverage.** 848 molecules carry actions against PubChem's 787. 760 are
+  identical, 7 differ, 20 are PubChem's alone and 81 the new route's alone.
+- **None of the 11 links the judge set aside reappears,** because no step makes
+  a name-based link.
+- **Tarenflurbil loses flurbiprofen's COX actions,** one of the two open MeSH
+  findings. PubChem had carried them across from the racemate's record.
+- **Every molecule the stereo-mixture step placed that PubChem also covers
+  agrees with PubChem** (7 of 7). So does every one the Wikidata step placed
+  (12 of 12).
+- **Wikidata and the UNII route name the same record for 729 of 735
+  molecules.** The 6 others are a molecule filed as a narrower concept of
+  another record (armodafinil within *Modafinil*), and the UNII route's answer
+  stands there.
+
+**What was measured and refused.** Matching on the InChIKey's first block, the
+skeleton with stereochemistry ignored, reaches 30 more molecules, but:
+
+- it put lucerastat on miglustat's record, a different molecule differing only
+  in stereochemistry;
+- it gave esmethadone methadone's opioid actions, though esmethadone was
+  developed for its low opioid activity.
+
+That is the error shape invariant 6 exists to stop. The stereo-mixture rule is
+the narrow version that keeps the gains without the errors.
+
+**What it costs.** 20 molecules PubChem reached are now without actions:
+
+- 9 carry a UNII no MeSH record holds (semagacestat, relugolix);
+- 4 are flat structures whose stereoisomer mixtures reach no single record
+  (doxepin, menthol);
+- 4 are in neither FDA's file nor Wikidata (liraglutide, ziconotide);
+- 2 are drawn with a different defined stereochemistry by ChEMBL and FDA
+  (benfotiamine, dextrose);
+- 1 has a record with no action (samidorphan).
+
+And the harness's second judge moved, since its answer key is built
+from these actions: the same 1,335-entry ranking grades 47.4% top-1 and MRR
+0.6060 against PubChem's key, and 50.4% and 0.6335 against the new one. Those
+are two keys, not a better ranking.
+
+---
+
+## 2026-10-11 — "Several publications" for a claim one paper measured
+
+Found by a reader at caffeine and human ADORA1, in the broader basis (ChEMBL's
+*homologous* assignment, relationship type `H`: filed against the human record,
+but ChEMBL could not confirm the protein measured was the human one). The claim
+has four rows from three studies: a 2000 paper's Ki = 29 µM, a 2023 paper's
+AC50 > 30 µM, and two DrugMatrix rows with no value. The panel said
+*Preliminary · Several publications, no two in one endpoint class*, and the
+reader asked, fairly, why three sources were not Supported.
+
+The tier was right: one exact value from one paper. The reason was wrong. It
+was chosen from every study with **any** row, so the bound-only 2023 paper
+counted as a second publication, while replication itself was always counted
+over exact values only. The patent and deposit branches had the same fault,
+counting rows rather than studies with an exact value, and a claim whose exact
+values came from both a patent and a deposit fell through to "one
+publication".
+
+**What changed** (evidence policy 1.1.0 to 1.1.1). A Preliminary reason now
+names only the studies that hold an exact value, with a new
+`patents_and_deposits_only` for the fall-through case. The other studies are
+still listed with the claim and still counted in `n_publications`. The tier
+condition now matches the policy's own definition: an identifiable study
+(publication, patent or deposit) with an exact value. The old code accepted any
+study key at all, so ketoprofen's broader functional claim at SLC22A7 was
+Preliminary on one document with no PubMed id, DOI or patent, beside a paper
+that reported only a bound. It is now Limited, *No identifiable study*.
+
+Measured on the rebuild: the same 80,491 non-GtoPdb claims, 420 reasons
+changed (334 "several publications" to "one publication"; 83 "one
+publication" to deposits, patents, or both; 2 "several publications" to
+deposits or patents only), and that one tier. No Supported claim moved, so no
+score did.
 
 ---
 

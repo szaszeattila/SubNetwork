@@ -1,19 +1,18 @@
 """Offline tests for scripts/resolve_cohort_pharm_actions.py.
 
 These lock in the parts of the MeSH pharmacological-action backfill that need
-no network: parsing a MeSH descriptor file (invariant 15's identifier chain
-from a PubChem concept id to a MeSH descriptor and its ancestors), the
-ambiguity rule that drops a molecule rather than guessing between two
-PubChem compounds that disagree (invariant 6), and that the backfill only
-ever touches its own 'mesh_pa' rows of molecule_classes / class_labels
+no network and no pinned file: parsing a MeSH descriptor file, placing a
+molecule on exactly one MeSH record by identifier (FDA UNII, CAS, a stereoisomer
+mixture, then Wikidata - invariant 15) with a refusal, never a pick, wherever
+more than one record is reached (invariant 6), and that the backfill only ever
+touches its own 'mesh_pa' rows of molecule_classes / class_labels
 (scripts/cohort/classes.py's SOURCES contract - each writer owns its own
 sources).
 
-No network access: `_cached_get` - the one seam that ever calls
-`requests.get` - is stubbed out in every test that reaches it, the same way
-tests/test_cohort_trials.py stubs `_ctgov_get`. This test never opens
-db/cohort1.db; every sqlite fixture here is an in-memory database built from
-db/schema_cohort.sql.
+Every input is a small in-memory fixture: `records` shaped like load_records,
+an `Fda` like load_fda, a `mesh` like load_mesh. Wikidata is reached only
+through an injected `get`. This test never opens db/cohort1.db; every sqlite
+fixture here is an in-memory database built from db/schema_cohort.sql.
 
 Run with: python3 -m unittest discover -s tests
 """
@@ -26,7 +25,6 @@ import sqlite3
 import sys
 import tempfile
 import unittest
-from unittest import mock
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent / "scripts"))
 
@@ -55,8 +53,7 @@ _molregno = itertools.count(1)
 #   D500001 (fixture) a chemical in the D03 branch only - never a
 #           pharmacological action, and its tree number must be ignored
 #
-# Concept ids are the MeSH concept ids fetch_actions would read off a
-# PubChem PUG-View reference (M0001382-shaped).
+# Concept ids are MeSH concept ids (M0001382-shaped).
 
 _DESCRIPTORS = [
     ("D999999", "Therapeutic Uses", ["D27.505.954"], ["M0999999"]),
@@ -166,536 +163,7 @@ class LabelRowsTest(unittest.TestCase):
                            "Central Nervous System Agents", None))
 
 
-class ResolveTest(unittest.TestCase):
-    def setUp(self):
-        self.mesh = _mesh()
-
-    @staticmethod
-    def _fetchers(cids_by_key=None, actions_by_cid=None):
-        cids_by_key = cids_by_key or {}
-        actions_by_cid = actions_by_cid or {}
-        return ((lambda key: cids_by_key.get(key, [])),
-                (lambda cid: actions_by_cid.get(cid, [])))
-
-    def test_one_compound_with_actions_resolves(self):
-        cids_for, actions_for = self._fetchers(
-            {"KEY1": [111]},
-            {111: [("M0000929", "Antidepressive Agents, Tricyclic")]})
-        rows, labels, counts, _ = rcpa.resolve([(1, "KEY1")], self.mesh, cids_for, actions_for)
-        self.assertEqual(rows, [(1, "mesh_pa", "D000929", "",
-                                  "Antidepressive Agents, Tricyclic", "CID:111")])
-        self.assertEqual(counts["resolved"], 1)
-        self.assertNotIn("resolved_over_several_compounds", counts)
-
-    def test_no_inchikey_is_counted_and_skipped(self):
-        cids_for, actions_for = self._fetchers()
-        rows, labels, counts, _ = rcpa.resolve(
-            [(1, None), (2, "")], self.mesh, cids_for, actions_for)
-        self.assertEqual(rows, [])
-        self.assertEqual(counts["no_inchikey"], 2)
-
-    def test_no_pubchem_compound_is_counted(self):
-        cids_for, actions_for = self._fetchers({"KEY1": []})
-        rows, labels, counts, _ = rcpa.resolve([(1, "KEY1")], self.mesh, cids_for, actions_for)
-        self.assertEqual(rows, [])
-        self.assertEqual(counts["no_pubchem_compound"], 1)
-
-    def test_compound_with_no_actions_is_counted(self):
-        cids_for, actions_for = self._fetchers({"KEY1": [111]}, {111: []})
-        rows, labels, counts, _ = rcpa.resolve([(1, "KEY1")], self.mesh, cids_for, actions_for)
-        self.assertEqual(rows, [])
-        self.assertEqual(counts["no_actions"], 1)
-
-    def test_two_compounds_agreeing_are_resolved_with_both_carriers(self):
-        acts = [("M0000929", "Antidepressive Agents, Tricyclic")]
-        cids_for, actions_for = self._fetchers(
-            {"KEY1": [222, 111]}, {111: acts, 222: acts})
-        rows, labels, counts, _ = rcpa.resolve([(1, "KEY1")], self.mesh, cids_for, actions_for)
-        self.assertEqual(rows, [(1, "mesh_pa", "D000929", "",
-                                  "Antidepressive Agents, Tricyclic", "CID:111|CID:222")])
-        self.assertEqual(counts["resolved"], 1)
-        self.assertEqual(counts["resolved_over_several_compounds"], 1)
-
-    def test_two_compounds_disagreeing_are_dropped_as_ambiguous(self):
-        cids_for, actions_for = self._fetchers(
-            {"KEY1": [111, 222]},
-            {111: [("M0000929", "Antidepressive Agents, Tricyclic")],
-             222: [("M0000928", "Antidepressive Agents")]})
-        rows, labels, counts, _ = rcpa.resolve([(1, "KEY1")], self.mesh, cids_for, actions_for)
-        self.assertEqual(rows, [])
-        self.assertEqual(counts["ambiguous_compounds_disagree"], 1)
-        self.assertNotIn("resolved", counts)
-
-    def test_resolved_from_the_one_compound_that_lists_an_action(self):
-        cids_for, actions_for = self._fetchers(
-            {"KEY1": [111, 222]},
-            {111: [], 222: [("M0000929", "Antidepressive Agents, Tricyclic")]})
-        rows, labels, counts, _ = rcpa.resolve([(1, "KEY1")], self.mesh, cids_for, actions_for)
-        # only the compound that actually lists an action carries the row -
-        # the silent one is not counted as a carrier.
-        self.assertEqual(rows, [(1, "mesh_pa", "D000929", "",
-                                  "Antidepressive Agents, Tricyclic", "CID:222")])
-        self.assertEqual(counts["resolved"], 1)
-        # The molecule matched two compounds but only one listed anything, so
-        # that is one source rather than an agreement between two.
-        self.assertNotIn("resolved_over_several_compounds", counts)
-
-    def test_concept_not_in_mesh_year_is_counted_and_dropped(self):
-        cids_for, actions_for = self._fetchers(
-            {"KEY1": [111]}, {111: [("M9999999", "Not In This MeSH Year")]})
-        rows, labels, counts, _ = rcpa.resolve([(1, "KEY1")], self.mesh, cids_for, actions_for)
-        self.assertEqual(rows, [])
-        self.assertEqual(counts["concept_not_in_mesh_year"], 1)
-
-
-class FetchActionsTest(unittest.TestCase):
-    def test_parses_mesh_references_ignores_other_sources_and_dedupes(self):
-        body = json.dumps({"Record": {
-            "RecordType": "CID", "RecordNumber": 5311454,
-            "Reference": [
-                {"ReferenceNumber": 1, "SourceName": "Medical Subject Headings (MeSH)",
-                 "SourceID": "M0001382", "Name": "Anticonvulsants"},
-                # a duplicate of the reference above - must not be repeated
-                {"ReferenceNumber": 2, "SourceName": "Medical Subject Headings (MeSH)",
-                 "SourceID": "M0001382", "Name": "Anticonvulsants"},
-                # a different source entirely - must be ignored
-                {"ReferenceNumber": 3, "SourceName": "ChemIDplus",
-                 "SourceID": "XYZ", "Name": "Something else"},
-                {"ReferenceNumber": 4, "SourceName": "Medical Subject Headings (MeSH)",
-                 "SourceID": "M0002210", "Name": "Central Nervous System Depressants"},
-            ],
-        }})
-        with mock.patch.object(rcpa, "_cached_get",
-                                lambda url, key, refresh=False: (200, body)):
-            actions = rcpa.fetch_actions(5311454)
-        self.assertEqual(actions, [
-            ("M0001382", "Anticonvulsants"),
-            ("M0002210", "Central Nervous System Depressants"),
-        ])
-
-    def test_404_is_no_actions(self):
-        with mock.patch.object(rcpa, "_cached_get",
-                                lambda url, key, refresh=False: (404, "")):
-            self.assertEqual(rcpa.fetch_actions(1), [])
-
-
-# --------------------------------------------------------------- backfill
-#
-# class_labels shipped without its `parents` column at first (it was added
-# for this backfill - see cohort/classes.py's ensure_tables), so the fixture
-# here builds that older shape by hand, the same way
-# tests/test_cohort_trials.py cuts a table's CREATE statement out of the
-# real schema and swaps in an older shape to test the migration path.
-
-OLD_CLASS_LABELS_SQL = """
-CREATE TABLE IF NOT EXISTS class_labels (
-    source  TEXT NOT NULL,
-    code    TEXT NOT NULL,
-    level   INTEGER,
-    label   TEXT,
-    PRIMARY KEY (source, code)
-);
-"""
-
-
-def _cut_table_block(schema, table_name):
-    """(before, after): schema text with the named CREATE TABLE statement
-    sliced out."""
-    lines = schema.splitlines()
-    start = next(i for i, l in enumerate(lines)
-                 if f"CREATE TABLE IF NOT EXISTS {table_name} " in l)
-    end = next(i for i in range(start, len(lines)) if lines[i].strip() == ");")
-    return "\n".join(lines[:start]), "\n".join(lines[end + 1:])
-
-
-def fake_db():
-    """An in-memory cohort database with class_labels in its pre-`parents`
-    shape - the shape ensure_tables() has to migrate away from - and every
-    other table (including molecule_classes) as the real schema has it."""
-    before, after = _cut_table_block(SCHEMA, "class_labels")
-    conn = sqlite3.connect(":memory:")
-    conn.executescript(before + "\n" + OLD_CLASS_LABELS_SQL + "\n" + after)
-    conn.execute("PRAGMA foreign_keys = OFF")
-    return conn
-
-
-def add_molecule(conn, chembl_id, inchikey=None):
-    parent = next(_molregno)
-    conn.execute(
-        "INSERT INTO molecules(parent_molregno, chembl_id, inchikey, in_cohort,"
-        " is_seed, route_atc_n, route_indication, admission_reason)"
-        " VALUES (?,?,?,0,0,0,0,'seed_only')",
-        (parent, chembl_id, inchikey))
-    return parent
-
-
-class BackfillTest(unittest.TestCase):
-    def setUp(self):
-        self.mesh = _mesh()
-        self.conn = fake_db()
-        self.tricyclic = add_molecule(self.conn, "CHEMBL1", inchikey="KEY1")
-        self.no_key = add_molecule(self.conn, "CHEMBL2", inchikey=None)
-
-        # A pre-existing usan row, in class_labels' older (pre-`parents`)
-        # shape - written by a different backfill before this one ever ran,
-        # and which must survive untouched.
-        self.conn.execute(
-            "INSERT INTO molecule_classes(parent_molregno, source, code,"
-            " subgroup, label, carriers) VALUES (?, 'usan', '-pramine', '',"
-            " 'antidepressants (imipramine type)', 'CHEMBL1')", (self.tricyclic,))
-        self.conn.execute(
-            "INSERT INTO class_labels(source, code, level, label)"
-            " VALUES ('usan', '-pramine', NULL, 'antidepressants (imipramine type)')")
-
-    @staticmethod
-    def _fetchers():
-        cids = {"KEY1": [111]}
-        actions = {111: [("M0000929", "Antidepressive Agents, Tricyclic")]}
-        return (lambda key: cids.get(key, [])), (lambda cid: actions.get(cid, []))
-
-    def test_adds_parents_column_writes_mesh_pa_rows_and_leaves_usan_alone(self):
-        cids_for, actions_for = self._fetchers()
-        summary = rcpa.backfill(self.conn, self.mesh, "deadbeef" * 8, cids_for, actions_for)
-
-        cols = {r[1] for r in self.conn.execute("PRAGMA table_info(class_labels)")}
-        self.assertIn("parents", cols)
-
-        usan_classes = self.conn.execute(
-            "SELECT parent_molregno, source, code, subgroup, label, carriers"
-            " FROM molecule_classes WHERE source = 'usan'").fetchall()
-        self.assertEqual(usan_classes, [(self.tricyclic, "usan", "-pramine", "",
-                                          "antidepressants (imipramine type)", "CHEMBL1")])
-        usan_labels = self.conn.execute(
-            "SELECT source, code, level, label, parents FROM class_labels"
-            " WHERE source = 'usan'").fetchall()
-        self.assertEqual(usan_labels, [("usan", "-pramine", None,
-                                         "antidepressants (imipramine type)", None)])
-
-        mesh_rows = self.conn.execute(
-            "SELECT parent_molregno, source, code, subgroup, label, carriers"
-            " FROM molecule_classes WHERE source = 'mesh_pa'").fetchall()
-        self.assertEqual(mesh_rows, [(self.tricyclic, "mesh_pa", "D000929", "",
-                                       "Antidepressive Agents, Tricyclic", "CID:111")])
-
-        mesh_labels = {r[1]: r for r in self.conn.execute(
-            "SELECT source, code, level, label, parents FROM class_labels"
-            " WHERE source = 'mesh_pa'")}
-        self.assertEqual(set(mesh_labels), {"D000929", "D000928", "D011619", "D002491"})
-        self.assertEqual(mesh_labels["D000929"][4], "D000928")
-        self.assertIsNone(mesh_labels["D002491"][4])
-
-        manifest = json.loads(self.conn.execute(
-            "SELECT value FROM build_manifest WHERE key = 'mesh_pharm_actions'"
-        ).fetchone()[0])
-        self.assertEqual(manifest["mesh_sha256"], "deadbeef" * 8)
-        self.assertEqual(manifest["counts"]["resolved"], 1)
-        self.assertEqual(manifest["counts"]["no_inchikey"], 1)
-        self.assertEqual(summary["rows_changed"], 1)
-
-    def test_a_second_identical_run_reports_no_rows_changed(self):
-        cids_for, actions_for = self._fetchers()
-        rcpa.backfill(self.conn, self.mesh, "sha-a", cids_for, actions_for)
-        summary = rcpa.backfill(self.conn, self.mesh, "sha-b", cids_for, actions_for)
-        self.assertEqual(summary["rows_changed"], 0)
-        manifest = json.loads(self.conn.execute(
-            "SELECT value FROM build_manifest WHERE key = 'mesh_pharm_actions'"
-        ).fetchone()[0])
-        # the manifest itself still reflects the second run's own sha, even
-        # though no molecule_classes/class_labels row actually changed
-        self.assertEqual(manifest["mesh_sha256"], "sha-b")
-
-    def test_a_later_atc_usan_write_does_not_touch_mesh_pa_rows(self):
-        cids_for, actions_for = self._fetchers()
-        rcpa.backfill(self.conn, self.mesh, "sha-a", cids_for, actions_for)
-        before = set(self.conn.execute(
-            "SELECT * FROM molecule_classes WHERE source = 'mesh_pa'"))
-        before_labels = set(self.conn.execute(
-            "SELECT * FROM class_labels WHERE source = 'mesh_pa'"))
-
-        classes_mod.write(self.conn, [], [], sources=("atc", "usan"))
-
-        after = set(self.conn.execute(
-            "SELECT * FROM molecule_classes WHERE source = 'mesh_pa'"))
-        after_labels = set(self.conn.execute(
-            "SELECT * FROM class_labels WHERE source = 'mesh_pa'"))
-        self.assertEqual(before, after)
-        self.assertEqual(before_labels, after_labels)
-        # and the usan row IS gone - confirming the mesh_pa rows above
-        # survived because write() only touches its own sources, not
-        # because this call deleted nothing at all.
-        self.assertEqual(self.conn.execute(
-            "SELECT COUNT(*) FROM molecule_classes WHERE source = 'usan'"
-        ).fetchone()[0], 0)
-
-
-# -------------------------------------------------------- record identity
-#
-# PubChem links a compound to MeSH records by name, and a brand name or code
-# that means two things joins both - the module docstring's own examples:
-# DMSO reaching fluocinonide's actions through the brand "Topsym", tafamidis
-# through "FX006" (a triamcinolone product), and LY-411575's chemical name
-# mapping to two unrelated MeSH headings that are parts of it rather than an
-# identity. Judge sets a record aside only on POSITIVE evidence that it is a
-# different substance (invariant 6): a record nothing can compare is kept.
-
-def _identity(blocks=(), uniis=(), own=None):
-    return rcpa.Identity(frozenset(blocks), frozenset(uniis), own)
-
-
-def _records(concept=None, pa=None, rn=None, mapped=None, parents=None):
-    return {"concept": concept or {}, "pa": pa or {}, "rn": rn or {},
-            "mapped": mapped or {}, "parents": parents or {}}
-
-
-class JudgeIdentityOfTest(unittest.TestCase):
-    """identity_of(record, ident): same | different | unknown, read from a
-    record's own UNIIs alone."""
-
-    def test_a_keyed_unii_naming_a_different_chembl_parent_is_different(self):
-        # DMSO linked to fluocinonide's "Topsym" record: the record's UNII
-        # has a structure, and ChEMBL knows that exact structure filed under
-        # a different parent than DMSO.
-        records = _records(rn={"TOPSYM": ["UNII_FLUO"]})
-        unii_key = {"UNII_FLUO": "FLUOCINONIDE_KEY"}
-        blocks_by_key = {"FLUOCINONIDE_KEY": frozenset({"FLUOBLOCK"})}
-        judge = rcpa.Judge(records, unii_key,
-                            lambda k: blocks_by_key.get(k, frozenset()))
-        ident = _identity(blocks={"DMSOBLOCK"})
-        self.assertEqual(judge.identity_of("TOPSYM", ident), "different")
-
-    def test_a_differing_key_whose_parent_blocks_contain_the_molecule_is_same(self):
-        # dexketoprofen trometamol: the salt's own InChIKey block differs
-        # from dexketoprofen's, but ChEMBL files that exact salt structure
-        # under dexketoprofen's own parent/active-moiety block.
-        records = _records(rn={"TROMETAMOL_SALT": ["UNII_SALT"]})
-        unii_key = {"UNII_SALT": "SALT_KEY"}
-        blocks_by_key = {"SALT_KEY": frozenset({"DEXKETOBLOCK"})}
-        judge = rcpa.Judge(records, unii_key,
-                            lambda k: blocks_by_key.get(k, frozenset()))
-        ident = _identity(blocks={"DEXKETOBLOCK"})
-        self.assertEqual(judge.identity_of("TROMETAMOL_SALT", ident), "same")
-
-    def test_a_unii_already_on_the_identity_is_same_regardless_of_structure(self):
-        records = _records(rn={"SOME_RECORD": ["UNII_SELF"]})
-        unii_key = {"UNII_SELF": ""}  # FDA gives it no structure either
-        judge = rcpa.Judge(records, unii_key, lambda k: frozenset())
-        ident = _identity(uniis={"UNII_SELF"})
-        self.assertEqual(judge.identity_of("SOME_RECORD", ident), "same")
-
-    def test_a_no_structure_unii_is_unknown_even_beside_a_differing_one(self):
-        # nabiximols / norgestimate / "Glucose": one keyed UNII with a real,
-        # differing structure, and one FDA gives no structure at all (a
-        # mixture or unspecified form). The no-structure UNII alone is
-        # enough to keep the record uncomparable, whatever the other says.
-        records = _records(rn={"REC": ["UNII_DIFF", "UNII_NOSTRUCT"]})
-        unii_key = {"UNII_DIFF": "OTHER_KEY", "UNII_NOSTRUCT": ""}
-        blocks_by_key = {"OTHER_KEY": frozenset({"OTHERBLOCK"})}
-        judge = rcpa.Judge(records, unii_key,
-                            lambda k: blocks_by_key.get(k, frozenset()))
-        ident = _identity(blocks={"MYBLOCK"})
-        self.assertEqual(judge.identity_of("REC", ident), "unknown")
-
-    def test_a_keyed_unii_chembl_does_not_hold_is_unknown_not_different(self):
-        # hydroxypropyl-beta-cyclodextrin polymer: FDA gives it a structure,
-        # but ChEMBL holds nothing under that InChIKey at all - a record
-        # nothing can compare is kept rather than guessed at.
-        records = _records(rn={"CYCLO": ["UNII_CYCLO"]})
-        unii_key = {"UNII_CYCLO": "CYCLO_KEY"}
-        judge = rcpa.Judge(records, unii_key, lambda k: frozenset())
-        ident = _identity(blocks={"MYBLOCK"})
-        self.assertEqual(judge.identity_of("CYCLO", ident), "unknown")
-
-    def test_no_keyed_unii_at_all_is_unknown(self):
-        judge = rcpa.Judge(_records(rn={"REC": []}), {}, lambda k: frozenset())
-        self.assertEqual(judge.identity_of("REC", _identity()), "unknown")
-
-
-class JudgeVerdictTest(unittest.TestCase):
-    """verdict(record, ident): own | filed_under | same_structure |
-    unidentified keep a record; different_substance |
-    combination_with_another_drug set it aside."""
-
-    def test_the_molecules_own_record_is_own(self):
-        judge = rcpa.Judge(_records(), {}, lambda k: frozenset())
-        ident = _identity(own="D_X")
-        self.assertEqual(judge.verdict("D_X", ident), "own")
-
-    def test_a_heading_the_own_record_is_mapped_to_is_filed_under(self):
-        # prednisolone acetate (the molecule's own SCR) is mapped to the
-        # heading Prednisolone; judging that heading against the molecule
-        # is MeSH itself saying which record the molecule is filed under.
-        records = _records(mapped={"D_PRED_ACETATE": ["D_PREDNISOLONE"]})
-        judge = rcpa.Judge(records, {}, lambda k: frozenset())
-        ident = _identity(own="D_PRED_ACETATE")
-        self.assertEqual(judge.verdict("D_PREDNISOLONE", ident), "filed_under")
-
-    def test_a_tree_parent_of_the_own_record_is_filed_under(self):
-        records = _records(parents={"D_SILYBIN": ["D_SILYMARIN"]})
-        judge = rcpa.Judge(records, {}, lambda k: frozenset())
-        ident = _identity(own="D_SILYBIN")
-        self.assertEqual(judge.verdict("D_SILYMARIN", ident), "filed_under")
-
-    def test_a_no_unii_scr_mapped_to_one_differing_heading_is_different_substance(self):
-        # FX006: tafamidis linked, through the code name, to a no-UNII SCR
-        # mapped to exactly one heading, Triamcinolone Acetonide - a product
-        # name resolving to one different structure.
-        records = _records(
-            rn={"D_TRIAM": ["UNII_TRIAM"]},
-            mapped={"FX006": ["D_TRIAM"]})
-        unii_key = {"UNII_TRIAM": "TRIAM_KEY"}
-        blocks_by_key = {"TRIAM_KEY": frozenset({"TRIAMBLOCK"})}
-        judge = rcpa.Judge(records, unii_key,
-                            lambda k: blocks_by_key.get(k, frozenset()))
-        ident = _identity(blocks={"TAFABLOCK"}, own="TAFAMIDIS_OWN")
-        self.assertEqual(judge.verdict("FX006", ident), "different_substance")
-
-    def test_a_no_unii_scr_mapped_to_two_disagreeing_headings_is_unidentified(self):
-        # LY-411575's chemical name maps to Alanine and Azepines - parts of
-        # the molecule's name, not a single identity, so it is left
-        # unresolved rather than read as a match or a mismatch.
-        records = _records(mapped={"LY411575": ["D_ALANINE", "D_AZEPINES"]})
-        judge = rcpa.Judge(records, {}, lambda k: frozenset())
-        ident = _identity(blocks={"LYBLOCK"}, own="LY_OWN")
-        self.assertEqual(judge.verdict("LY411575", ident), "unidentified")
-
-    def test_a_combination_with_a_heading_that_has_its_own_actions_is_set_aside(self):
-        # "Ambene": phenylbutazone (the molecule) plus aminopyrine, which
-        # MeSH gives its own pharmacological actions - so the combination
-        # record speaks for a second drug, not only for this one.
-        records = _records(
-            mapped={"AMBENE": [rcpa.DRUG_COMBINATIONS, "PHENYLBUTAZONE", "AMINOPYRINE"]},
-            pa={"AMINOPYRINE": frozenset({"D_SOME_ACTION"})})
-        judge = rcpa.Judge(records, {}, lambda k: frozenset())
-        ident = _identity(own="PHENYLBUTAZONE")
-        self.assertEqual(judge.verdict("AMBENE", ident),
-                          "combination_with_another_drug")
-        self.assertIn("combination_with_another_drug", rcpa.SET_ASIDE)
-
-    def test_a_combination_with_an_actionless_excipient_is_kept(self):
-        # brexanolone's infusion product is brexanolone plus a cyclodextrin,
-        # which MeSH gives no action at all - nothing else in it is a drug.
-        records = _records(
-            mapped={"BREX_INF": [rcpa.DRUG_COMBINATIONS, "BREXANOLONE", "CYCLODEXTRIN"]})
-        judge = rcpa.Judge(records, {}, lambda k: frozenset())
-        ident = _identity(own="BREXANOLONE")
-        self.assertNotIn(judge.verdict("BREX_INF", ident), rcpa.SET_ASIDE)
-
-
-class FilterActionsTest(unittest.TestCase):
-    """filter_actions() keeps an action unless every linked record that
-    supplies it was set aside, and names what it set aside as (action
-    descriptor, record, verdict)."""
-
-    def setUp(self):
-        self.mesh = {"concept": {
-            "PA_A": "D_ACT_A", "PA_B": "D_ACT_B", "PA_C": "D_ACT_C",
-            "PA_D": "D_ACT_D", "PA_E": "D_ACT_E",
-        }}
-        records = _records(
-            concept={"C_R1": "R1", "C_R2": "R2", "C_R3": "R3"},
-            pa={"R1": frozenset({"D_ACT_A", "D_ACT_C"}),
-                "R2": frozenset({"D_ACT_B", "D_ACT_C", "D_ACT_D"}),
-                "R3": frozenset({"D_ACT_D"}),
-                "SOME_OTHER_DRUG": frozenset({"D_ACT_X"})},
-            rn={"R2": ["UNII_R2"]},
-            mapped={"R3": [rcpa.DRUG_COMBINATIONS, "R1", "SOME_OTHER_DRUG"]})
-        unii_key = {"UNII_R2": "R2_KEY"}
-        blocks_by_key = {"R2_KEY": frozenset({"OTHERBLOCK"})}
-        self.judge = rcpa.Judge(records, unii_key,
-                                lambda k: blocks_by_key.get(k, frozenset()))
-        self.ident = _identity(blocks={"MYBLOCK"}, own="R1")
-        self.concepts = ["C_R1", "C_R2", "C_R3"]
-
-    def test_verdicts_behind_the_fixture(self):
-        # R1 is the molecule's own record; R2 names a different structure
-        # through its keyed UNII; R3 is a combination with another drug.
-        self.assertEqual(self.judge.verdict("R1", self.ident), "own")
-        self.assertEqual(self.judge.verdict("R2", self.ident), "different_substance")
-        self.assertEqual(self.judge.verdict("R3", self.ident),
-                          "combination_with_another_drug")
-
-    def test_an_action_no_linked_record_supplies_is_kept(self):
-        acts = [("PA_E", "Action E")]
-        kept, aside = rcpa.filter_actions(
-            acts, self.concepts, self.ident, self.mesh, self.judge)
-        self.assertEqual(kept, acts)
-        self.assertEqual(aside, [])
-
-    def test_an_action_only_a_set_aside_record_supplies_is_dropped(self):
-        acts = [("PA_B", "Action B")]  # only R2 (set aside) supplies D_ACT_B
-        kept, aside = rcpa.filter_actions(
-            acts, self.concepts, self.ident, self.mesh, self.judge)
-        self.assertEqual(kept, [])
-        self.assertEqual(aside, [("D_ACT_B", "R2", "different_substance")])
-
-    def test_an_action_from_one_set_aside_and_one_kept_record_is_kept(self):
-        acts = [("PA_C", "Action C")]  # R1 (own, kept) and R2 (set aside)
-        kept, aside = rcpa.filter_actions(
-            acts, self.concepts, self.ident, self.mesh, self.judge)
-        self.assertEqual(kept, acts)
-        self.assertEqual(aside, [])
-
-    def test_an_action_from_two_set_aside_records_is_dropped_and_both_named(self):
-        acts = [("PA_D", "Action D")]  # R2 and R3, both set aside
-        kept, aside = rcpa.filter_actions(
-            acts, self.concepts, self.ident, self.mesh, self.judge)
-        self.assertEqual(kept, [])
-        self.assertEqual(sorted(aside), sorted([
-            ("D_ACT_D", "R2", "different_substance"),
-            ("D_ACT_D", "R3", "combination_with_another_drug"),
-        ]))
-
-
-class ResolveWithRecordFilteringTest(unittest.TestCase):
-    """resolve()'s optional records_for/idents/judge parameters route every
-    compound's actions through filter_actions before the ambiguity check,
-    and report what was set aside."""
-
-    def setUp(self):
-        self.mesh = _mesh()
-
-    def test_a_set_aside_action_is_excluded_and_counted(self):
-        acts = [("M0000929", "Antidepressive Agents, Tricyclic"),
-                ("M0000928", "Antidepressive Agents")]
-        cids_for = lambda key: {"KEY1": [111]}.get(key, [])
-        actions_for = lambda cid: acts if cid == 111 else []
-        records_for = lambda cid: ["C_OWN", "C_OTHER"] if cid == 111 else []
-
-        records = _records(
-            concept={"C_OWN": "R_OWN", "C_OTHER": "R_OTHER"},
-            pa={"R_OWN": frozenset({"D000928"}), "R_OTHER": frozenset({"D000929"})},
-            rn={"R_OTHER": ["UNII_OTHER"]})
-        unii_key = {"UNII_OTHER": "OTHER_KEY"}
-        blocks_by_key = {"OTHER_KEY": frozenset({"OTHERBLOCK"})}
-        judge = rcpa.Judge(records, unii_key,
-                            lambda k: blocks_by_key.get(k, frozenset()))
-        idents = {1: _identity(blocks={"SELFBLOCK"}, own="R_OWN")}
-
-        rows, labels, counts, aside = rcpa.resolve(
-            [(1, "KEY1")], self.mesh, cids_for, actions_for,
-            records_for=records_for, idents=idents, judge=judge)
-
-        # The tricyclic action came only from R_OTHER, set aside as a
-        # different substance; only the own record's action survives.
-        self.assertEqual([r[2] for r in rows], ["D000928"])
-        self.assertEqual(counts["resolved"], 1)
-        self.assertEqual(counts["links_set_aside"], 1)
-        self.assertEqual(counts["molecules_with_a_link_set_aside"], 1)
-        self.assertEqual(aside, [(1, "D000929", "R_OTHER", "different_substance")])
-
-    def test_records_for_none_leaves_resolve_unfiltered(self):
-        # Existing behaviour (ResolveTest above) is unchanged when the new
-        # parameters are simply not supplied.
-        cids_for, actions_for = ResolveTest._fetchers(
-            {"KEY1": [111]},
-            {111: [("M0000929", "Antidepressive Agents, Tricyclic")]})
-        rows, labels, counts, aside = rcpa.resolve(
-            [(1, "KEY1")], self.mesh, cids_for, actions_for)
-        self.assertEqual(rows, [(1, "mesh_pa", "D000929", "",
-                                  "Antidepressive Agents, Tricyclic", "CID:111")])
-        self.assertEqual(aside, [])
-        self.assertNotIn("links_set_aside", counts)
-
+# ------------------------------------------------------------ record loading
 
 class LoadRecordsTest(unittest.TestCase):
     """load_records() reads both the descriptor and supplemental files into
@@ -776,103 +244,542 @@ class LoadRecordsTest(unittest.TestCase):
         self.assertNotIn("S_C", plain["parents"])
 
 
-class OwnRecordTest(unittest.TestCase):
-    """own_record(): the parent's own structure decides it whenever it
-    resolves to exactly one record; the forms are read only once the parent
-    reaches nothing, and two records is refused rather than guessed at
-    (invariant 6)."""
+# ------------------------------------------------------------ fixtures
 
-    def test_the_parent_key_alone_settles_it_forms_are_never_consulted(self):
-        unii_by_key = {"PARENT_KEY": {"U1"}, "FORM_KEY": {"U2"}}
-        by_unii = {"U1": {"REC1"}, "U2": {"REC2"}}
-        self.assertEqual(
-            rcpa.own_record(["PARENT_KEY", "FORM_KEY"], unii_by_key, by_unii), "REC1")
-
-    def test_forms_are_read_only_once_the_parent_reaches_nothing(self):
-        unii_by_key = {"FORM_KEY": {"U2"}}  # no entry for PARENT_KEY at all
-        by_unii = {"U2": {"REC2"}}
-        self.assertEqual(
-            rcpa.own_record(["PARENT_KEY", "FORM_KEY"], unii_by_key, by_unii), "REC2")
-
-    def test_two_records_refuses_rather_than_guesses(self):
-        unii_by_key = {"PARENT_KEY": {"U1", "U2"}}
-        by_unii = {"U1": {"REC1"}, "U2": {"REC2"}}
-        self.assertIsNone(rcpa.own_record(["PARENT_KEY"], unii_by_key, by_unii))
-
-    def test_nothing_found_at_all_is_none(self):
-        self.assertIsNone(rcpa.own_record(["PARENT_KEY"], {}, {}))
+def _records(concept=None, pa=None, rn=None, mapped=None, parents=None):
+    return {"concept": concept or {}, "pa": pa or {}, "rn": rn or {},
+            "mapped": mapped or {}, "parents": parents or {}}
 
 
-class ChemblParentBlocksTest(unittest.TestCase):
-    """chembl_parent_blocks(): InChIKey -> the first blocks of the parent and
-    active moiety ChEMBL files that exact structure under, cached per key."""
+def _fda(unii_by_key=None, cas_of=None, mixtures=None):
+    return rcpa.Fda(unii_by_key or {}, cas_of or {}, mixtures or {})
 
+
+# Real InChIKey shape: 14-character skeleton block, '-', 10-character second
+# block, '-', one protonation character. SKELETON_A flat has no stereo layer.
+FLAT_KEY = "ABCDEFGHIJKLMN-UHFFFAOYSA-N"
+STEREO_KEY = "ABCDEFGHIJKLMN-QWERTYUIOP-N"
+SKELETON = "ABCDEFGHIJKLMN"
+
+
+class RecordsByNumberTest(unittest.TestCase):
+    def test_inverts_registry_numbers_to_the_records_carrying_them(self):
+        records = _records(rn={"R1": ["U1", "56-12-2"], "R2": ["U1"]})
+        by_number = rcpa.records_by_number(records)
+        self.assertEqual(by_number["U1"], {"R1", "R2"})
+        self.assertEqual(by_number["56-12-2"], {"R1"})
+        self.assertNotIn("U9", by_number)
+
+
+# ------------------------------------------------------------------ load_fda
+
+class LoadFdaTest(unittest.TestCase):
+    HEADER = "UNII\tPT\tRN\tINCHIKEY\n"
+
+    def _load(self, rows):
+        with tempfile.TemporaryDirectory() as d:
+            path = pathlib.Path(d) / "UNII_Records.txt"
+            path.write_text(self.HEADER + "".join("\t".join(r) + "\n" for r in rows),
+                            encoding="utf-8")
+            return rcpa.load_fda(path)
+
+    def test_an_exact_key_maps_to_its_unii_and_a_unii_to_its_cas(self):
+        fda = self._load([("UNII1", "drug", "56-12-2", "KEYAAAAAAAAAAA-QWERTYUIOP-N")])
+        self.assertEqual(fda.unii_by_key["KEYAAAAAAAAAAA-QWERTYUIOP-N"], {"UNII1"})
+        self.assertEqual(fda.cas_of["UNII1"], {"56-12-2"})
+
+    def test_two_uniis_registered_with_one_structure_both_kept(self):
+        fda = self._load([("U1", "a", "", "K1AAAAAAAAAAAA-QWERTYUIOP-N"),
+                          ("U2", "b", "", "K1AAAAAAAAAAAA-QWERTYUIOP-N")])
+        self.assertEqual(fda.unii_by_key["K1AAAAAAAAAAAA-QWERTYUIOP-N"], {"U1", "U2"})
+
+    def test_a_cas_is_recorded_even_for_a_substance_with_no_inchikey(self):
+        fda = self._load([("U1", "antibody", "1234-56-7", "")])
+        self.assertEqual(fda.cas_of["U1"], {"1234-56-7"})
+        self.assertEqual(fda.unii_by_key, {})
+
+    def test_joined_keys_sharing_a_first_block_are_a_mixture_under_that_block(self):
+        a = f"{SKELETON}-AAAAAAAAAA-N"
+        b = f"{SKELETON}-BBBBBBBBBB-N"
+        fda = self._load([("UMIX", "racemate", "", f"{a};{b}")])
+        self.assertEqual(fda.mixtures, {SKELETON: {"UMIX"}})
+        # the joined field is also kept as the exact key FDA wrote
+        self.assertEqual(fda.unii_by_key[f"{a};{b}"], {"UMIX"})
+
+    def test_joined_keys_with_different_first_blocks_are_not_a_mixture(self):
+        # A combination product: two different skeletons, not stereoisomers
+        # of one, so it must never stand in for either.
+        fda = self._load([("UCOMBO", "combo", "",
+                           "AAAAAAAAAAAAAA-QWERTYUIOP-N;BBBBBBBBBBBBBB-QWERTYUIOP-N")])
+        self.assertEqual(fda.mixtures, {})
+
+    def test_rows_with_no_unii_are_ignored(self):
+        fda = self._load([("", "nameless", "9-9-9", "KEYAAAAAAAAAAA-QWERTYUIOP-N")])
+        self.assertEqual(fda.unii_by_key, {})
+        self.assertEqual(fda.cas_of, {})
+        self.assertEqual(fda.mixtures, {})
+
+
+# --------------------------------------------------------------------- place
+
+class PlaceTest(unittest.TestCase):
+    """place(keys, chembl_id, by_number, fda, wikidata, known) -> (record,
+    step, carriers). Each fallback is tried only where the one before placed
+    nothing, and more than one record is a refusal."""
+
+    KNOWN = {"R1", "R2", "R3"}
+
+    def _place(self, keys, rn=None, fda=None, wikidata=(), known=None):
+        by_number = rcpa.records_by_number(_records(rn=rn))
+        return rcpa.place(keys, "CHEMBL1", by_number, fda or _fda(), list(wikidata),
+                          self.KNOWN if known is None else known)
+
+    # -- UNII
+
+    def test_a_unii_reaching_one_record_places_it_with_the_unii_step(self):
+        rec, step, carriers = self._place(
+            ["K1"], rn={"R1": ["U1"]}, fda=_fda(unii_by_key={"K1": {"U1"}}))
+        self.assertEqual((rec, step), ("R1", "unii"))
+        self.assertTrue(carriers.endswith("MeSH:R1"))
+        self.assertIn("UNII:U1", carriers)
+
+    def test_the_parent_key_alone_settles_it_a_forms_unii_is_not_consulted(self):
+        fda = _fda(unii_by_key={"PARENT": {"U1"}, "FORM": {"U2"}})
+        rec, step, _ = self._place(["PARENT", "FORM"],
+                                   rn={"R1": ["U1"], "R2": ["U2"]}, fda=fda)
+        self.assertEqual((rec, step), ("R1", "unii"))
+
+    def test_a_forms_key_is_used_when_the_parents_reaches_nothing(self):
+        fda = _fda(unii_by_key={"PARENT": {"U0"}, "FORM": {"U2"}})
+        rec, step, carriers = self._place(["PARENT", "FORM"],
+                                          rn={"R2": ["U2"]}, fda=fda)
+        self.assertEqual((rec, step), ("R2", "unii"))
+        self.assertIn("UNII:U2", carriers)
+
+    def test_two_records_reached_is_a_refusal_never_a_pick(self):
+        fda = _fda(unii_by_key={"K1": {"U1", "U2"}})
+        rec, step, carriers = self._place(["K1"], rn={"R1": ["U1"], "R2": ["U2"]}, fda=fda)
+        self.assertIsNone(rec)
+        self.assertEqual(step, "several_records")
+        self.assertEqual(carriers, "")
+
+    def test_no_record_reached_and_nothing_else_is_no_record(self):
+        rec, step, _ = self._place(["K1"], fda=_fda(unii_by_key={"K1": {"U1"}}))
+        self.assertEqual((rec, step), (None, "no_record"))
+
+    # -- CAS
+
+    def test_cas_places_when_the_uniis_reach_no_record(self):
+        # GABA: the MeSH record carries the CAS number, not the UNII.
+        fda = _fda(unii_by_key={"K1": {"U1"}}, cas_of={"U1": {"56-12-2"}})
+        rec, step, carriers = self._place(["K1"], rn={"R1": ["56-12-2"]}, fda=fda)
+        self.assertEqual((rec, step), ("R1", "cas"))
+        self.assertIn("UNII:U1|CAS:56-12-2", carriers)
+        self.assertTrue(carriers.endswith("MeSH:R1"))
+
+    def test_cas_is_not_tried_when_the_unii_reached_a_record(self):
+        # Eplerenone/lacosamide: the UNII places R1, and a second record R2
+        # also carries a CAS of that UNII. Using the CAS beside the UNII
+        # would refuse a molecule the UNII had settled.
+        fda = _fda(unii_by_key={"K1": {"U1"}}, cas_of={"U1": {"111-11-1"}})
+        rec, step, _ = self._place(["K1"],
+                                   rn={"R1": ["U1"], "R2": ["111-11-1"]}, fda=fda)
+        self.assertEqual((rec, step), ("R1", "unii"))
+
+    def test_a_cas_reaching_two_records_is_refused(self):
+        fda = _fda(unii_by_key={"K1": {"U1"}}, cas_of={"U1": {"111-11-1"}})
+        rec, step, _ = self._place(["K1"],
+                                   rn={"R1": ["111-11-1"], "R2": ["111-11-1"]}, fda=fda)
+        self.assertEqual((rec, step), (None, "several_records"))
+
+    # -- stereoisomer mixture
+
+    def test_a_flat_key_with_no_exact_match_is_placed_through_a_mixture(self):
+        # Methylphenidate: ChEMBL draws it flat, FDA registers the racemate.
+        fda = _fda(mixtures={SKELETON: {"UMIX"}})
+        rec, step, carriers = self._place([FLAT_KEY], rn={"R1": ["UMIX"]}, fda=fda)
+        self.assertEqual((rec, step), ("R1", "stereo_mixture"))
+        self.assertIn("UNII:UMIX", carriers)
+
+    def test_a_key_with_stereo_never_uses_the_mixture_step(self):
+        # Esmethadone must not land on methadone's record just because the
+        # skeletons match.
+        fda = _fda(mixtures={SKELETON: {"UMIX"}})
+        rec, step, _ = self._place([STEREO_KEY], rn={"R1": ["UMIX"]}, fda=fda)
+        self.assertEqual((rec, step), (None, "no_record"))
+
+    def test_an_exact_match_beats_the_mixture_for_a_flat_key(self):
+        fda = _fda(unii_by_key={FLAT_KEY: {"U1"}}, mixtures={SKELETON: {"UMIX"}})
+        rec, step, _ = self._place([FLAT_KEY], rn={"R1": ["U1"], "R2": ["UMIX"]}, fda=fda)
+        self.assertEqual((rec, step), ("R1", "unii"))
+
+    def test_a_mixture_reaching_two_records_is_refused(self):
+        fda = _fda(mixtures={SKELETON: {"UMIX1", "UMIX2"}})
+        rec, step, _ = self._place([FLAT_KEY],
+                                   rn={"R1": ["UMIX1"], "R2": ["UMIX2"]}, fda=fda)
+        self.assertEqual((rec, step), (None, "several_records"))
+
+    # -- Wikidata
+
+    def test_wikidata_places_when_the_fda_steps_place_nothing(self):
+        rec, step, carriers = self._place(["K1"], wikidata=[["Q42", "R3"]])
+        self.assertEqual((rec, step), ("R3", "wikidata"))
+        self.assertIn("Wikidata:Q42", carriers)
+        self.assertTrue(carriers.endswith("MeSH:R3"))
+
+    def test_an_fda_placement_wins_over_a_different_wikidata_record(self):
+        # armodafinil within Modafinil: where both name a record, FDA's stands.
+        fda = _fda(unii_by_key={"K1": {"U1"}})
+        rec, step, carriers = self._place(["K1"], rn={"R1": ["U1"]}, fda=fda,
+                                          wikidata=[["Q42", "R3"]])
+        self.assertEqual((rec, step), ("R1", "unii"))
+        self.assertNotIn("Wikidata", carriers)
+
+    def test_wikidata_naming_two_mesh_ids_is_refused(self):
+        rec, step, _ = self._place([], wikidata=[["Q1", "R1"], ["Q2", "R2"]])
+        self.assertEqual((rec, step), (None, "wikidata_several_records"))
+
+    def test_two_items_naming_the_same_mesh_id_place_with_both_carried(self):
+        rec, step, carriers = self._place([], wikidata=[["Q2", "R1"], ["Q1", "R1"]])
+        self.assertEqual((rec, step), ("R1", "wikidata"))
+        self.assertEqual(carriers, "Wikidata:Q1|Wikidata:Q2|MeSH:R1")
+
+    def test_a_wikidata_mesh_id_unknown_to_the_pinned_files_is_ignored(self):
+        rec, step, _ = self._place(["K1"], wikidata=[["Q42", "D_NOT_THIS_YEAR"]])
+        self.assertEqual((rec, step), (None, "no_record"))
+
+    def test_wikidata_item_without_a_mesh_id_places_nothing(self):
+        rec, step, _ = self._place(["K1"], wikidata=[["Q42", None]])
+        self.assertEqual((rec, step), (None, "no_record"))
+
+    def test_fda_reaching_two_records_and_no_usable_wikidata_is_several_records(self):
+        fda = _fda(unii_by_key={"K1": {"U1", "U2"}})
+        rec, step, _ = self._place(["K1"], rn={"R1": ["U1"], "R2": ["U2"]}, fda=fda,
+                                   wikidata=[["Q42", "D_NOT_THIS_YEAR"]])
+        self.assertEqual((rec, step), (None, "several_records"))
+
+    def test_wikidata_can_settle_what_fda_left_ambiguous(self):
+        fda = _fda(unii_by_key={"K1": {"U1", "U2"}})
+        rec, step, _ = self._place(["K1"], rn={"R1": ["U1"], "R2": ["U2"]}, fda=fda,
+                                   wikidata=[["Q42", "R3"]])
+        self.assertEqual((rec, step), ("R3", "wikidata"))
+
+    def test_no_keys_and_no_wikidata_item_is_named_as_such(self):
+        rec, step, carriers = self._place([])
+        self.assertEqual((rec, step, carriers), (None, "no_inchikey_no_wikidata_item", ""))
+
+
+# ------------------------------------------------------------------- resolve
+
+class ResolveTest(unittest.TestCase):
     def setUp(self):
-        self.chembl = sqlite3.connect(":memory:")
-        self.chembl.executescript("""
-            CREATE TABLE compound_structures (
-                molregno INTEGER, standard_inchi_key TEXT);
-            CREATE TABLE molecule_hierarchy (
-                molregno INTEGER, parent_molregno INTEGER, active_molregno INTEGER);
-        """)
-        self.chembl.executemany(
-            "INSERT INTO compound_structures VALUES (?, ?)", [
-                (1, "QUERYKEY"), (2, "QUERYKEY"),  # two deposits, one structure
-                (10, "PARENTFULLKEYXXXX"), (20, "ACTIVEFULLKEYYYYY"),
-            ])
-        self.chembl.executemany(
-            "INSERT INTO molecule_hierarchy VALUES (?, ?, ?)", [
-                (1, 10, 20), (2, 10, None),
-            ])
+        self.mesh = _mesh()
+        self.fda = _fda(unii_by_key={"K1": {"U1"}, "K2": {"U2"}, "K3": {"U3"}})
+        self.records = _records(
+            concept={"M_R1": "R1"},
+            pa={"R1": frozenset({"D000929", "D000928"})},
+            rn={"R1": ["U1"], "R2": ["U2"], "R3": ["U3"]})
 
-    def test_returns_the_first_blocks_of_parent_and_active_moiety(self):
-        lookup = rcpa.chembl_parent_blocks(self.chembl)
-        self.assertEqual(lookup("QUERYKEY"),
-                          frozenset({"PARENTFULLKEYXXXX"[:14], "ACTIVEFULLKEYYYYY"[:14]}))
+    def _resolve(self, molecules, records=None, wikidata=None):
+        return rcpa.resolve(molecules, self.mesh, records or self.records,
+                            self.fda, wikidata or {})
 
-    def test_a_key_chembl_does_not_hold_is_empty(self):
-        lookup = rcpa.chembl_parent_blocks(self.chembl)
-        self.assertEqual(lookup("NOTHING_LIKE_THIS"), frozenset())
+    def test_rows_carry_the_records_own_actions_and_the_carriers(self):
+        rows, labels, counts = self._resolve([(1, "CHEMBL1", ["K1"])])
+        self.assertEqual(rows, [
+            (1, "mesh_pa", "D000928", "", "Antidepressive Agents", "UNII:U1|MeSH:R1"),
+            (1, "mesh_pa", "D000929", "", "Antidepressive Agents, Tricyclic",
+             "UNII:U1|MeSH:R1"),
+        ])
+        self.assertEqual(counts["resolved"], 1)
+        self.assertEqual(counts["resolved_by_unii"], 1)
 
-    def test_the_result_is_cached_after_the_first_lookup(self):
-        lookup = rcpa.chembl_parent_blocks(self.chembl)
-        first = lookup("QUERYKEY")
-        self.chembl.execute("DELETE FROM compound_structures")
-        # a fresh lookup would find nothing now; the cached one still does.
-        self.assertEqual(lookup("QUERYKEY"), first)
+    def test_labels_include_the_actions_and_their_d27_parents(self):
+        _, labels, _ = self._resolve([(1, "CHEMBL1", ["K1"])])
+        self.assertEqual({l[1] for l in labels},
+                         {"D000929", "D000928", "D011619", "D002491"})
+
+    def test_a_record_with_no_actions_is_counted_and_writes_nothing(self):
+        rows, labels, counts = self._resolve([(1, "CHEMBL2", ["K2"])])
+        self.assertEqual((rows, labels), ([], []))
+        self.assertEqual(counts["record_lists_no_action"], 1)
+        self.assertNotIn("resolved", counts)
+
+    def test_an_action_absent_from_the_mesh_year_is_dropped_and_counted(self):
+        records = _records(pa={"R1": frozenset({"D000929", "D_GONE"})},
+                           rn={"R1": ["U1"]})
+        rows, _, counts = self._resolve([(1, "CHEMBL1", ["K1"])], records=records)
+        self.assertEqual([r[2] for r in rows], ["D000929"])
+        self.assertEqual(counts["action_not_in_mesh_year"], 1)
+        self.assertEqual(counts["resolved"], 1)
+
+    def test_a_record_whose_every_action_is_absent_counts_as_no_action(self):
+        records = _records(pa={"R1": frozenset({"D_GONE"})}, rn={"R1": ["U1"]})
+        rows, _, counts = self._resolve([(1, "CHEMBL1", ["K1"])], records=records)
+        self.assertEqual(rows, [])
+        self.assertEqual(counts["action_not_in_mesh_year"], 1)
+        self.assertEqual(counts["record_lists_no_action"], 1)
+
+    def test_a_refused_placement_is_counted_by_its_step_and_writes_nothing(self):
+        rows, _, counts = self._resolve([(1, "CHEMBL9", ["NOSUCHKEY"]), (2, "CHEMBL8", [])])
+        self.assertEqual(rows, [])
+        self.assertEqual(counts["no_record"], 1)
+        self.assertEqual(counts["no_inchikey_no_wikidata_item"], 1)
+
+    def test_a_wikidata_placement_is_counted_under_its_own_step(self):
+        # R1 is also a concept's descriptor, so it is known to the files.
+        rows, _, counts = self._resolve(
+            [(1, "CHEMBL5", [])], wikidata={"CHEMBL5": [["Q7", "R1"]]})
+        self.assertEqual(counts["resolved_by_wikidata"], 1)
+        self.assertEqual({r[5] for r in rows}, {"Wikidata:Q7|MeSH:R1"})
+
+    def test_rows_are_sorted(self):
+        rows, _, _ = self._resolve([(2, "CHEMBL1", ["K1"]), (1, "CHEMBL1", ["K1"])])
+        self.assertEqual(rows, sorted(rows))
 
 
-class IdentitiesTest(unittest.TestCase):
-    """identities(): every InChIKey block of a molecule, its forms and the
-    active moiety ChEMBL names for each, and the one MeSH record its own
-    UNII reaches."""
+# ------------------------------------------------------------ fetch_wikidata
 
-    def test_blocks_uniis_and_own_across_a_parent_form_and_active_moiety(self):
+def _binding(chembl, item, mesh=None):
+    b = {"chembl": {"value": chembl},
+         "item": {"value": f"http://www.wikidata.org/entity/{item}"}}
+    if mesh:
+        b["mesh"] = {"value": mesh}
+    return b
+
+
+class FetchWikidataTest(unittest.TestCase):
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.cache = pathlib.Path(self._tmp.name) / "sub" / "mesh_by_chembl.json"
+        self.calls = []
+
+    def _get(self, bindings):
+        def get(query):
+            self.calls.append(query)
+            return {"results": {"bindings": bindings}}
+        return get
+
+    def test_parses_bindings_records_empty_for_an_unknown_id_and_writes_the_cache(self):
+        get = self._get([_binding("CHEMBL1", "Q1", "D000001"),
+                         _binding("CHEMBL1", "Q2"),
+                         _binding("CHEMBL1", "Q1", "D000001")])  # duplicate row
+        out = rcpa.fetch_wikidata(["CHEMBL1", "CHEMBL2"], cache_path=self.cache, get=get)
+        self.assertEqual(out, {"CHEMBL1": [["Q1", "D000001"], ["Q2", None]],
+                               "CHEMBL2": []})
+        self.assertEqual(len(self.calls), 1)
+        self.assertIn("CHEMBL1", self.calls[0])
+        self.assertEqual(json.loads(self.cache.read_text()), out)
+
+    def test_a_second_call_with_everything_cached_does_not_ask(self):
+        get = self._get([_binding("CHEMBL1", "Q1", "D000001")])
+        rcpa.fetch_wikidata(["CHEMBL1"], cache_path=self.cache, get=get)
+        again = rcpa.fetch_wikidata(["CHEMBL1"], cache_path=self.cache, get=get)
+        self.assertEqual(len(self.calls), 1)
+        self.assertEqual(again, {"CHEMBL1": [["Q1", "D000001"]]})
+
+    def test_only_ids_missing_from_the_cache_are_asked_about(self):
+        rcpa.fetch_wikidata(["CHEMBL1"], cache_path=self.cache,
+                            get=self._get([_binding("CHEMBL1", "Q1")]))
+        self.calls.clear()
+        out = rcpa.fetch_wikidata(["CHEMBL1", "CHEMBL3"], cache_path=self.cache,
+                                  get=self._get([_binding("CHEMBL3", "Q3", "D000003")]))
+        self.assertEqual(len(self.calls), 1)
+        self.assertNotIn("CHEMBL1", self.calls[0])
+        self.assertEqual(out["CHEMBL3"], [["Q3", "D000003"]])
+        self.assertEqual(out["CHEMBL1"], [["Q1", None]])
+
+    def test_refresh_asks_again_despite_the_cache(self):
+        get = self._get([_binding("CHEMBL1", "Q1", "D000001")])
+        rcpa.fetch_wikidata(["CHEMBL1"], cache_path=self.cache, get=get)
+        rcpa.fetch_wikidata(["CHEMBL1"], cache_path=self.cache, get=get, refresh=True)
+        self.assertEqual(len(self.calls), 2)
+
+    def test_a_failed_request_raises_rather_than_reading_as_no_item(self):
+        def get(query):
+            raise RuntimeError("wikidata down")
+        with self.assertRaises(RuntimeError):
+            rcpa.fetch_wikidata(["CHEMBL1"], cache_path=self.cache, get=get)
+        self.assertFalse(self.cache.exists())
+
+
+# ------------------------------------------------------------- molecule_keys
+
+class MoleculeKeysTest(unittest.TestCase):
+    def test_parent_key_first_then_forms_deduplicated_skipping_missing(self):
         conn = fake_db()
         parent = add_molecule(conn, "CHEMBL_P", inchikey="PKEY")
-        # one non-parent form, filed in ChEMBL under molregno 100
-        conn.execute(
+        bare = add_molecule(conn, "CHEMBL_Q", inchikey=None)
+        # parent's own form row, two salts (one sharing the parent's key, one
+        # with no structure in ChEMBL), and a bare molecule with a single form
+        conn.executemany(
             "INSERT INTO molecule_forms(parent_molregno, molregno, is_parent)"
-            " VALUES (?, 100, 0)", (parent,))
+            " VALUES (?, ?, ?)",
+            [(parent, 100, 1), (parent, 101, 0), (parent, 102, 0), (parent, 103, 0),
+             (bare, 200, 1)])
 
         chembl = sqlite3.connect(":memory:")
-        chembl.executescript("""
-            CREATE TABLE molecule_hierarchy (molregno INTEGER, active_molregno INTEGER);
-            CREATE TABLE compound_structures (molregno INTEGER, standard_inchi_key TEXT);
-        """)
-        chembl.execute("INSERT INTO molecule_hierarchy VALUES (100, 200)")  # salt -> moiety
+        chembl.execute("CREATE TABLE compound_structures"
+                       " (molregno INTEGER, standard_inchi_key TEXT)")
         chembl.executemany("INSERT INTO compound_structures VALUES (?, ?)", [
-            (100, "SKEY"), (200, "AKEY")])
+            (100, "PKEY"), (101, "SALTKEY"), (102, "PKEY"), (103, None)])
+        # molregno 200 has no structure row at all
 
-        records = _records(rn={"REC_OWN": ["UNII_P"]})
-        unii_by_key = {"PKEY": {"UNII_P"}}  # FDA's own UNII for the parent's structure
+        out = {cid: (p, keys) for p, cid, keys in rcpa.molecule_keys(conn, chembl)}
+        self.assertEqual(out["CHEMBL_P"], (parent, ["PKEY", "SALTKEY"]))
+        self.assertEqual(out["CHEMBL_Q"], (bare, []))
 
-        idents = rcpa.identities(conn, chembl, unii_by_key, records)
 
-        self.assertEqual(
-            idents[parent],
-            rcpa.Identity(frozenset({"PKEY", "SKEY", "AKEY"}),
-                          frozenset({"UNII_P"}), "REC_OWN"))
+# --------------------------------------------------------------- backfill
+#
+# class_labels shipped without its `parents` column at first (it was added
+# for this backfill - see cohort/classes.py's ensure_tables), so the fixture
+# here builds that older shape by hand, the same way
+# tests/test_cohort_trials.py cuts a table's CREATE statement out of the
+# real schema and swaps in an older shape to test the migration path.
+
+OLD_CLASS_LABELS_SQL = """
+CREATE TABLE IF NOT EXISTS class_labels (
+    source  TEXT NOT NULL,
+    code    TEXT NOT NULL,
+    level   INTEGER,
+    label   TEXT,
+    PRIMARY KEY (source, code)
+);
+"""
+
+
+def _cut_table_block(schema, table_name):
+    """(before, after): schema text with the named CREATE TABLE statement
+    sliced out."""
+    lines = schema.splitlines()
+    start = next(i for i, l in enumerate(lines)
+                 if f"CREATE TABLE IF NOT EXISTS {table_name} " in l)
+    end = next(i for i in range(start, len(lines)) if lines[i].strip() == ");")
+    return "\n".join(lines[:start]), "\n".join(lines[end + 1:])
+
+
+def fake_db():
+    """An in-memory cohort database with class_labels in its pre-`parents`
+    shape - the shape ensure_tables() has to migrate away from - and every
+    other table (including molecule_classes) as the real schema has it."""
+    before, after = _cut_table_block(SCHEMA, "class_labels")
+    conn = sqlite3.connect(":memory:")
+    conn.executescript(before + "\n" + OLD_CLASS_LABELS_SQL + "\n" + after)
+    conn.execute("PRAGMA foreign_keys = OFF")
+    return conn
+
+
+def add_molecule(conn, chembl_id, inchikey=None):
+    parent = next(_molregno)
+    conn.execute(
+        "INSERT INTO molecules(parent_molregno, chembl_id, inchikey, in_cohort,"
+        " is_seed, route_atc_n, route_indication, admission_reason)"
+        " VALUES (?,?,?,0,0,0,0,'seed_only')",
+        (parent, chembl_id, inchikey))
+    return parent
+
+
+class BackfillTest(unittest.TestCase):
+    def setUp(self):
+        self.mesh = _mesh()
+        self.conn = fake_db()
+        self.tricyclic = add_molecule(self.conn, "CHEMBL1", inchikey="KEY1")
+        self.no_key = add_molecule(self.conn, "CHEMBL2", inchikey=None)
+        self.molecules = [(self.tricyclic, "CHEMBL1", ["KEY1"]),
+                          (self.no_key, "CHEMBL2", [])]
+        self.records = _records(pa={"R1": frozenset({"D000929"})}, rn={"R1": ["U1"]})
+        self.fda = _fda(unii_by_key={"KEY1": {"U1"}})
+
+        # A pre-existing usan row, in class_labels' older (pre-`parents`)
+        # shape - written by a different backfill before this one ever ran,
+        # and which must survive untouched.
+        self.conn.execute(
+            "INSERT INTO molecule_classes(parent_molregno, source, code,"
+            " subgroup, label, carriers) VALUES (?, 'usan', '-pramine', '',"
+            " 'antidepressants (imipramine type)', 'CHEMBL1')", (self.tricyclic,))
+        self.conn.execute(
+            "INSERT INTO class_labels(source, code, level, label)"
+            " VALUES ('usan', '-pramine', NULL, 'antidepressants (imipramine type)')")
+
+    def _backfill(self, extra=None):
+        return rcpa.backfill(self.conn, self.molecules, self.mesh, self.records,
+                             self.fda, {}, extra)
+
+    def test_adds_parents_column_writes_mesh_pa_rows_and_leaves_usan_alone(self):
+        summary = self._backfill({"mesh_sha256": "deadbeef" * 8})
+
+        cols = {r[1] for r in self.conn.execute("PRAGMA table_info(class_labels)")}
+        self.assertIn("parents", cols)
+
+        usan_classes = self.conn.execute(
+            "SELECT parent_molregno, source, code, subgroup, label, carriers"
+            " FROM molecule_classes WHERE source = 'usan'").fetchall()
+        self.assertEqual(usan_classes, [(self.tricyclic, "usan", "-pramine", "",
+                                          "antidepressants (imipramine type)", "CHEMBL1")])
+        usan_labels = self.conn.execute(
+            "SELECT source, code, level, label, parents FROM class_labels"
+            " WHERE source = 'usan'").fetchall()
+        self.assertEqual(usan_labels, [("usan", "-pramine", None,
+                                         "antidepressants (imipramine type)", None)])
+
+        mesh_rows = self.conn.execute(
+            "SELECT parent_molregno, source, code, subgroup, label, carriers"
+            " FROM molecule_classes WHERE source = 'mesh_pa'").fetchall()
+        self.assertEqual(mesh_rows, [(self.tricyclic, "mesh_pa", "D000929", "",
+                                       "Antidepressive Agents, Tricyclic",
+                                       "UNII:U1|MeSH:R1")])
+
+        mesh_labels = {r[1]: r for r in self.conn.execute(
+            "SELECT source, code, level, label, parents FROM class_labels"
+            " WHERE source = 'mesh_pa'")}
+        self.assertEqual(set(mesh_labels), {"D000929", "D000928", "D011619", "D002491"})
+        self.assertEqual(mesh_labels["D000929"][4], "D000928")
+        self.assertIsNone(mesh_labels["D002491"][4])
+
+        manifest = json.loads(self.conn.execute(
+            "SELECT value FROM build_manifest WHERE key = 'mesh_pharm_actions'"
+        ).fetchone()[0])
+        self.assertEqual(manifest["mesh_sha256"], "deadbeef" * 8)
+        self.assertEqual(manifest["counts"]["resolved"], 1)
+        self.assertEqual(manifest["counts"]["no_inchikey_no_wikidata_item"], 1)
+        self.assertEqual(summary["rows_changed"], 1)
+        self.assertEqual(summary["molecules"], 2)
+        self.assertEqual(summary["rows"], 1)
+
+    def test_a_second_identical_run_reports_no_rows_changed(self):
+        self._backfill({"mesh_sha256": "sha-a"})
+        summary = self._backfill({"mesh_sha256": "sha-b"})
+        self.assertEqual(summary["rows_changed"], 0)
+        manifest = json.loads(self.conn.execute(
+            "SELECT value FROM build_manifest WHERE key = 'mesh_pharm_actions'"
+        ).fetchone()[0])
+        # the manifest itself still reflects the second run's own sha, even
+        # though no molecule_classes/class_labels row actually changed
+        self.assertEqual(manifest["mesh_sha256"], "sha-b")
+
+    def test_a_later_atc_usan_write_does_not_touch_mesh_pa_rows(self):
+        self._backfill()
+        before = set(self.conn.execute(
+            "SELECT * FROM molecule_classes WHERE source = 'mesh_pa'"))
+        before_labels = set(self.conn.execute(
+            "SELECT * FROM class_labels WHERE source = 'mesh_pa'"))
+
+        classes_mod.write(self.conn, [], [], sources=("atc", "usan"))
+
+        after = set(self.conn.execute(
+            "SELECT * FROM molecule_classes WHERE source = 'mesh_pa'"))
+        after_labels = set(self.conn.execute(
+            "SELECT * FROM class_labels WHERE source = 'mesh_pa'"))
+        self.assertEqual(before, after)
+        self.assertEqual(before_labels, after_labels)
+        # and the usan row IS gone - confirming the mesh_pa rows above
+        # survived because write() only touches its own sources, not
+        # because this call deleted nothing at all.
+        self.assertEqual(self.conn.execute(
+            "SELECT COUNT(*) FROM molecule_classes WHERE source = 'usan'"
+        ).fetchone()[0], 0)
 
 
 if __name__ == "__main__":

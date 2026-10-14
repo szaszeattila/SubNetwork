@@ -143,7 +143,9 @@ CREATE TABLE IF NOT EXISTS molecule_classes (
     subgroup         TEXT NOT NULL DEFAULT '',  -- USAN sub-stem ('-tioxetine'), '' for none; '' for ATC
     label            TEXT,              -- ATC: WHO substance name; USAN: the stem's own annotation
     carriers         TEXT NOT NULL,     -- '|' joined ChEMBL ids of the forms that carry it;
-                                        -- for mesh_pa the PubChem compounds ('CID:2519'); for
+                                        -- for mesh_pa the identifiers that reached the molecule's
+                                        -- MeSH record ('UNII:3G6A5W338E|MeSH:D002110', a CAS after
+                                        -- the UNII, or 'Wikidata:Q60235|MeSH:D002110'); for
                                         -- mesh_struct the form matched, its UNII and the molecule's
                                         -- own MeSH record ('CHEMBL113|UNII:3G6A5W338E|MeSH:D002110')
     PRIMARY KEY (parent_molregno, source, code, subgroup)

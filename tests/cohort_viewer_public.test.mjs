@@ -68,6 +68,70 @@ describe("loading and failing", () => {
   });
 });
 
+// A filter change takes seconds at the open defaults, all of it on the main
+// thread, so the page says it is working before it starts: the status goes up,
+// the rebuild waits a frame and a tick so the browser can paint it, and it
+// comes down when the layout settles.
+describe("a filter change says it is working", () => {
+  const filterClick = (group, value) => ({
+    target: {
+      closest(sel) {
+        if (sel !== "[data-filter]") return null;
+        const attrs = { "data-filter": group, "data-value": value };
+        return { getAttribute(name) { return name in attrs ? attrs[name] : null; } };
+      },
+    },
+  });
+  const runQueued = (v) => {
+    while (v.__frames.length) v.__frames.shift()();
+    for (const t of v.__timers.splice(0)) if (!t.cleared && t.ms === 0) t.fn();
+  };
+
+  // The busy line sits in the counts box at the top left, never on the
+  // centred #load-status: the open Display options popover covers that.
+  const counts = (v) => v.document.getElementById("graph-counts");
+
+  test("the busy line goes up before the rebuild, and down once the layout settles", () => {
+    const v = loadViewer(dated());
+    v.settleGraph();
+    const net = v.__networks[0];
+    const solves = (net.stabilizeCalls || []).length;
+    v.onFilterClick(filterClick("tier", "supported"));
+    assert.equal(v.getBusy(), "Applying the filters…");
+    assert.match(counts(v).innerHTML, /<div class="busy">Applying the filters…<\/div>$/);
+    assert.equal(v.document.getElementById("load-status").hidden, true);
+    // Nothing rebuilt yet: the filter is set, the re-solve has not started.
+    assert.equal(v.getFilters().tier, "supported");
+    assert.equal((net.stabilizeCalls || []).length, solves);
+    runQueued(v);
+    assert.equal((net.stabilizeCalls || []).length, solves + 1);
+    assert.equal(v.getBusy(), "Laying out the network…");
+    net.finishStabilizing({});
+    assert.equal(v.getBusy(), "");
+    assert.doesNotMatch(counts(v).innerHTML, /busy/);
+  });
+
+  test("clicks while one is queued fold into it", () => {
+    const v = loadViewer(dated());
+    v.settleGraph();
+    const frames = v.__frames.length;
+    v.onFilterClick(filterClick("tier", "supported"));
+    v.onFilterClick(filterClick("basis", "human_direct"));
+    assert.equal(v.__frames.length, frames + 1);
+    // A layout finishing meanwhile leaves the queued change's line up.
+    v.settleGraph();
+    assert.equal(v.getBusy(), "Applying the filters…");
+  });
+
+  test("a change that moves nothing on the canvas clears as soon as it is drawn", () => {
+    const v = loadViewer(dated());
+    v.settleGraph();
+    v.onFilterClick(filterClick("lineColor", "evidence"));
+    runQueued(v);
+    assert.equal(v.getBusy(), "");
+  });
+});
+
 describe("the data's date", () => {
   test("the disclaimer carries the build day, and About the trial fetch days too", () => {
     const v = loadViewer(dated());

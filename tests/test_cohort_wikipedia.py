@@ -61,13 +61,16 @@ def add_target(conn, chembl_id, accessions, wikipedia_url=None,
             (chembl_id, accession))
 
 
-def stub(article_map=None, fail_keys=(), log=None):
+def stub(article_map=None, fail_keys=(), log=None, genes=None):
     """A fake `_wikidata_get`. `article_map` maps a literal that must appear
     in the rendered query (quoted, as sparql_literal would render it) to the
-    set of article URLs to return for whichever `?key` row matched it.
+    set of article URLs to return for whichever `?key` row matched it, or to
+    {via: set of URLs} where the query binds ?via (the target query's
+    "protein" or "gene"). `genes` maps a target key to how many genes its
+    protein item names, for the gene-count query (1 where not given).
     `fail_keys` are literals that raise WikidataError instead - simulating an
     endpoint failure distinct from a query that legitimately found nothing."""
-    article_map = article_map or {}
+    article_map, genes = article_map or {}, genes or {}
 
     def _get(query):
         if log is not None:
@@ -75,18 +78,67 @@ def stub(article_map=None, fail_keys=(), log=None):
         for needle in fail_keys:
             if f'"{needle}"' in query:
                 raise rcw.WikidataError("stubbed failure")
+        if "COUNT(DISTINCT ?gene)" in query:
+            return {"results": {"bindings": [
+                {"key": {"value": k}, "genes": {"value": str(genes.get(k, 1))}}
+                for k in re.findall(r'\("([^"]+)" "[^"]+"\)', query)]}}
         bindings = []
         for needle, articles in article_map.items():
             if f'"{needle}"' in query:
-                for article in articles:
-                    bindings.append({"key": {"value": needle},
-                                      "article": {"value": article}})
+                by_via = articles if isinstance(articles, dict) else {None: articles}
+                for via, urls in by_via.items():
+                    for article in urls:
+                        b = {"key": {"value": needle}, "article": {"value": article}}
+                        if via:
+                            b["via"] = {"value": via}
+                        bindings.append(b)
         return {"results": {"bindings": bindings}}
 
     return _get
 
 
+def drugbox_stub(links=None, pages=None, log=None, fail=False):
+    """A fake `_wikipedia_get` for the infobox route: `links` maps a ChEMBL
+    compound URL to the article titles carrying it, as the external-link index
+    lists them, and `pages` maps a title to its wikitext."""
+    links, pages = links or {}, pages or {}
+
+    def _get(params):
+        if log is not None:
+            log.append(params)
+        if fail:
+            raise rcw.WikidataError("stubbed failure")
+        if params.get("list") == "exturlusage":
+            rows = [{"title": t, "url": url} for url, titles in links.items()
+                    if params["euprotocol"] == "https"
+                    and url.startswith(params["euquery"]) for t in titles]
+            return {"query": {"exturlusage": rows}}
+        return {"query": {"pages": [
+            {"title": t, "revisions": [{"slots": {"main": {"content": pages[t]}}}]}
+            if t in pages else {"title": t, "missing": True}
+            for t in params["titles"].split("|")]}}
+    return _get
+
+
+def drugbox(chembl=None, inchikey=None, template="Infobox drug"):
+    lines = [f"{{{{{template}", "| image = x.png"]
+    if chembl:
+        lines.append(f"| ChEMBL = {chembl}")
+    if inchikey:
+        lines.append(f"| StdInChIKey = {inchikey}")
+    return "\n".join(lines) + "\n}}\n'''Drug''' is a drug.{{cite journal | title = T}}"
+
+
+def chembl_url(chembl_id):
+    return "www.ebi.ac.uk/chembl/explore/compound/" + chembl_id.replace("CHEMBL", "ChEMBL")
+
+
 class MoleculeResolutionTest(unittest.TestCase):
+    def setUp(self):
+        # A molecule Wikidata finds no article for goes on to the infobox
+        # route; here it finds none there either.
+        self.enterContext(mock.patch.object(rcw, "_wikipedia_get", drugbox_stub()))
+
     def test_unambiguous_match_is_written(self):
         conn = fake_db()
         add_molecule(conn, "CHEMBL113", inchikey="RYYVLZVUVIJVGH-UHFFFAOYSA-N")
@@ -184,12 +236,141 @@ class MoleculeResolutionTest(unittest.TestCase):
             "https://en.wikipedia.org/wiki/New")
 
 
+PBF509_KEY = "ATFXVNUWQOXRRU-UHFFFAOYSA-N"
+TAMINADENANT = "https://en.wikipedia.org/wiki/Taminadenant"
+
+
+class InfoboxRouteTest(unittest.TestCase):
+    """PBF-509's article, Taminadenant, sits on a Wikidata item with no
+    statements; its drugbox names CHEMBL3694769 and the InChIKey."""
+
+    def resolve(self, conn, links, pages, wikidata=None, log=None, **kw):
+        with mock.patch.object(rcw, "_wikidata_get", stub(wikidata)), \
+             mock.patch.object(rcw, "_wikipedia_get", drugbox_stub(links, pages, log)):
+            return rcw.resolve_molecules(conn, **kw)
+
+    def url(self, conn, chembl_id):
+        return conn.execute("SELECT wikipedia_url FROM molecules WHERE chembl_id = ?",
+                            (chembl_id,)).fetchone()[0]
+
+    def test_pbf509_reaches_taminadenant_through_its_drugbox(self):
+        conn = fake_db()
+        add_molecule(conn, "CHEMBL3694769", inchikey=PBF509_KEY, pref_name="PBF-509")
+        summary = self.resolve(conn, {chembl_url("CHEMBL3694769"): ["Taminadenant"]},
+                               {"Taminadenant": drugbox("3694769", PBF509_KEY)})
+        self.assertEqual((summary["resolved"], summary["by_infobox"]), (1, 1))
+        self.assertEqual(self.url(conn, "CHEMBL3694769"), TAMINADENANT)
+
+    def test_a_stereo_disagreement_keeps_the_skeleton(self):
+        # Varenicline: ChEMBL's parent is drawn with stereo, the article flat.
+        conn = fake_db()
+        add_molecule(conn, "CHEMBL1076903", inchikey="JQSHBVHOMNKWFT-DTORHVGOSA-N")
+        self.resolve(conn, {chembl_url("CHEMBL1076903"): ["Varenicline"]},
+                     {"Varenicline": drugbox("1076903", "JQSHBVHOMNKWFT-UHFFFAOYSA-N")})
+        self.assertEqual(self.url(conn, "CHEMBL1076903"),
+                         "https://en.wikipedia.org/wiki/Varenicline")
+
+    def test_an_infobox_whose_structure_differs_is_refused(self):
+        # "Nitrous oxide (medication)" carries oxygen's ChEMBL ID.
+        conn = fake_db()
+        add_molecule(conn, "CHEMBL1234886", inchikey="MYMOFIZGZYHOMD-UHFFFAOYSA-N")
+        summary = self.resolve(
+            conn, {chembl_url("CHEMBL1234886"): ["Nitrous oxide (medication)"]},
+            {"Nitrous oxide (medication)": drugbox("1234886", "GQPLMRYTRLFLPF-UHFFFAOYSA-N")})
+        self.assertEqual((summary["resolved"], summary["refused"]), (0, 1))
+        self.assertIsNone(self.url(conn, "CHEMBL1234886"))
+
+    def test_a_link_outside_an_infobox_is_not_a_claim_about_the_article(self):
+        conn = fake_db()
+        add_molecule(conn, "CHEMBL3694769", inchikey=PBF509_KEY)
+        text = (drugbox("1", None) + "\n* [https://www.ebi.ac.uk/chembl/explore/"
+                "compound/ChEMBL3694769 PBF-509]")
+        summary = self.resolve(conn, {chembl_url("CHEMBL3694769"): ["Adenosine A2A receptor"]},
+                               {"Adenosine A2A receptor": text})
+        self.assertEqual((summary["resolved"], summary["refused"]), (0, 1))
+
+    def test_a_prefix_of_the_id_is_not_the_id(self):
+        conn = fake_db()
+        add_molecule(conn, "CHEMBL369476", inchikey=PBF509_KEY)
+        summary = self.resolve(conn, {chembl_url("CHEMBL3694769"): ["Taminadenant"]},
+                               {"Taminadenant": drugbox("3694769", PBF509_KEY)})
+        self.assertEqual(summary["resolved"], 0)
+
+    def test_two_articles_are_ambiguous(self):
+        conn = fake_db()
+        add_molecule(conn, "CHEMBL373742", inchikey="KBZOIRJILGZLEJ-LGYYRGKSSA-N")
+        box = drugbox("CHEMBL373742", "KBZOIRJILGZLEJ-LGYYRGKSSA-N")
+        summary = self.resolve(
+            conn, {chembl_url("CHEMBL373742"): ["Vasopressin", "Vasopressin (medication)"]},
+            {"Vasopressin": box, "Vasopressin (medication)": box})
+        self.assertEqual((summary["resolved"], summary["ambiguous"]), (0, 1))
+
+    def test_a_molecule_without_a_key_matches_on_the_id_and_a_chembox_counts(self):
+        conn = fake_db()
+        add_molecule(conn, "CHEMBL1201438")
+        box = ("{{Chembox\n| Section1 = {{Chembox Identifiers\n| ChEMBL = 1201438\n"
+               "| ChEMBL_Ref = {{ebicite|x}}\n}}\n}}")
+        self.resolve(conn, {chembl_url("CHEMBL1201438"): ["Interleukin 2"]},
+                     {"Interleukin 2": box})
+        self.assertEqual(self.url(conn, "CHEMBL1201438"),
+                         "https://en.wikipedia.org/wiki/Interleukin_2")
+
+    def test_wikidata_answers_first_and_is_never_overruled(self):
+        conn = fake_db()
+        add_molecule(conn, "CHEMBL1", inchikey="AAAAAAAAAAAAAA-UHFFFAOYSA-N")
+        add_molecule(conn, "CHEMBL2", inchikey="BBBBBBBBBBBBBB-UHFFFAOYSA-N")
+        log = []
+        summary = self.resolve(
+            conn, {chembl_url("CHEMBL1"): ["Other"], chembl_url("CHEMBL2"): ["Other"]},
+            {"Other": drugbox("1") + drugbox("2")},
+            wikidata={"CHEMBL1": {"https://en.wikipedia.org/wiki/One"},
+                      "CHEMBL2": {"https://en.wikipedia.org/wiki/A",
+                                  "https://en.wikipedia.org/wiki/B"}}, log=log)
+        self.assertEqual(self.url(conn, "CHEMBL1"), "https://en.wikipedia.org/wiki/One")
+        # An ambiguous Wikidata answer stays a refusal, not a cue to look elsewhere.
+        self.assertIsNone(self.url(conn, "CHEMBL2"))
+        self.assertEqual(summary["ambiguous"], 1)
+        self.assertEqual(log, [])
+
+    def test_a_salt_forms_id_is_never_read(self):
+        # Ethyl linoleate's forms include deulinoleate ethyl, a different drug.
+        conn = fake_db()
+        add_molecule(conn, "CHEMBL2106238", inchikey="FMMOOAYVCKXGMF-MURFETPASA-N")
+        conn.execute("INSERT INTO molecule_forms(parent_molregno, molregno, chembl_id,"
+                     " is_parent) SELECT parent_molregno, 999, 'CHEMBL5095415', 0"
+                     " FROM molecules WHERE chembl_id = 'CHEMBL2106238'")
+        summary = self.resolve(
+            conn, {chembl_url("CHEMBL5095415"): ["Deulinoleate ethyl"]},
+            {"Deulinoleate ethyl": drugbox("5095415", "FMMOOAYVCKXGMF-MURFETPASA-N")})
+        self.assertEqual(summary["resolved"], 0)
+
+    def test_a_wikipedia_failure_is_a_failure_not_no_article(self):
+        conn = fake_db()
+        add_molecule(conn, "CHEMBL3694769", inchikey=PBF509_KEY)
+        with mock.patch.object(rcw, "_wikidata_get", stub()), \
+             mock.patch.object(rcw, "_wikipedia_get", drugbox_stub(fail=True)):
+            summary = rcw.resolve_molecules(conn)
+        self.assertEqual((summary["failed"], summary["no_article"]), (1, 0))
+
+    def test_the_index_is_read_by_identifier_prefix_never_by_title(self):
+        conn = fake_db()
+        add_molecule(conn, "CHEMBL3694769", inchikey=PBF509_KEY, pref_name="PBF-509")
+        log = []
+        self.resolve(conn, {chembl_url("CHEMBL3694769"): ["Taminadenant"]},
+                     {"Taminadenant": drugbox("3694769", PBF509_KEY)}, log=log)
+        searches = [p for p in log if p.get("list")]
+        self.assertTrue(searches)
+        self.assertTrue(all(p["list"] == "exturlusage"
+                            and p["euquery"] in rcw.CHEMBL_LINK_PREFIXES for p in searches))
+        self.assertFalse(any("PBF" in str(p) for p in log))
+
+
 class TargetResolutionTest(unittest.TestCase):
     def test_single_component_target_is_resolved(self):
         conn = fake_db()
         add_target(conn, "CHEMBL_T1", ["P00533"])
         with mock.patch.object(rcw, "_wikidata_get",
-                                stub({"CHEMBL_T1": {"https://en.wikipedia.org/wiki/EGFR"}})):
+                                stub({"CHEMBL_T1": {"protein": {"https://en.wikipedia.org/wiki/EGFR"}}})):
             summary = rcw.resolve_targets(conn)
         self.assertEqual(summary["resolved"], 1)
         self.assertEqual(
@@ -231,12 +412,70 @@ class TargetResolutionTest(unittest.TestCase):
         conn = fake_db()
         add_target(conn, "CHEMBL_T2", ["P2"])
         with mock.patch.object(rcw, "_wikidata_get", stub({
-                "CHEMBL_T2": {"https://en.wikipedia.org/wiki/A",
-                              "https://en.wikipedia.org/wiki/B"}})):
+                "CHEMBL_T2": {"protein": {"https://en.wikipedia.org/wiki/A",
+                                          "https://en.wikipedia.org/wiki/B"}}})):
             summary = rcw.resolve_targets(conn)
         self.assertEqual(summary["ambiguous"], 1)
         self.assertIsNone(
             conn.execute("SELECT wikipedia_url FROM targets WHERE chembl_id = 'CHEMBL_T2'").fetchone()[0])
+
+    def test_the_proteins_own_article_comes_before_its_genes(self):
+        # Albumin: "Human serum albumin" on the protein, "Serum albumin" on ALB.
+        conn = fake_db()
+        add_target(conn, "CHEMBL3253", ["P02768"])
+        with mock.patch.object(rcw, "_wikidata_get", stub({"CHEMBL3253": {
+                "protein": {"https://en.wikipedia.org/wiki/Human_serum_albumin"},
+                "gene": {"https://en.wikipedia.org/wiki/Serum_albumin"}}})):
+            summary = rcw.resolve_targets(conn)
+        self.assertEqual((summary["resolved"], summary["ambiguous"]), (1, 0))
+        self.assertEqual(
+            conn.execute("SELECT wikipedia_url FROM targets WHERE chembl_id = 'CHEMBL3253'").fetchone()[0],
+            "https://en.wikipedia.org/wiki/Human_serum_albumin")
+
+    def test_a_protein_two_genes_encode_keeps_the_disagreement_a_refusal(self):
+        # The HSPA1A protein item carries the article "HSPA1B", and Wikidata
+        # files it under both genes.
+        conn = fake_db()
+        add_target(conn, "CHEMBL5460", ["P0DMV8"])
+        with mock.patch.object(rcw, "_wikidata_get", stub({"CHEMBL5460": {
+                "protein": {"https://en.wikipedia.org/wiki/HSPA1B"},
+                "gene": {"https://en.wikipedia.org/wiki/HSPA1A"}}},
+                genes={"CHEMBL5460": 2})):
+            summary = rcw.resolve_targets(conn)
+        self.assertEqual((summary["resolved"], summary["ambiguous"]), (0, 1))
+
+    def test_a_failed_gene_count_is_a_failure(self):
+        conn = fake_db()
+        add_target(conn, "CHEMBL3253", ["P02768"])
+        get = stub({"CHEMBL3253": {
+            "protein": {"https://en.wikipedia.org/wiki/Human_serum_albumin"},
+            "gene": {"https://en.wikipedia.org/wiki/Serum_albumin"}}})
+
+        def failing_count(query):
+            if "COUNT(DISTINCT ?gene)" in query:
+                raise rcw.WikidataError("stubbed failure")
+            return get(query)
+        with mock.patch.object(rcw, "_wikidata_get", failing_count):
+            summary = rcw.resolve_targets(conn)
+        self.assertEqual((summary["resolved"], summary["failed"]), (0, 1))
+
+    def test_the_genes_article_stands_where_the_protein_has_none(self):
+        conn = fake_db()
+        add_target(conn, "CHEMBL226", ["P30542"])
+        with mock.patch.object(rcw, "_wikidata_get", stub({"CHEMBL226": {
+                "gene": {"https://en.wikipedia.org/wiki/ADORA1"}}})):
+            rcw.resolve_targets(conn)
+        self.assertEqual(
+            conn.execute("SELECT wikipedia_url FROM targets WHERE chembl_id = 'CHEMBL226'").fetchone()[0],
+            "https://en.wikipedia.org/wiki/ADORA1")
+
+    def test_two_gene_articles_are_still_ambiguous(self):
+        conn = fake_db()
+        add_target(conn, "CHEMBL_T3", ["P3"])
+        with mock.patch.object(rcw, "_wikidata_get", stub({"CHEMBL_T3": {
+                "gene": {"https://en.wikipedia.org/wiki/A", "https://en.wikipedia.org/wiki/B"}}})):
+            summary = rcw.resolve_targets(conn)
+        self.assertEqual((summary["resolved"], summary["ambiguous"]), (0, 1))
 
 
 def add_class(conn, code, label, source="mesh_struct"):
@@ -449,7 +688,7 @@ class FullResolveTest(unittest.TestCase):
         add_target(conn, "CHEMBL226", ["P30542"])
         with mock.patch.object(rcw, "_wikidata_get", stub({
                 "CHEMBL113": {"https://en.wikipedia.org/wiki/Caffeine"},
-                "CHEMBL226": {"https://en.wikipedia.org/wiki/ADORA1"}})):
+                "CHEMBL226": {"gene": {"https://en.wikipedia.org/wiki/ADORA1"}}})):
             summary = rcw.resolve(conn)
         self.assertEqual(summary["molecules"]["resolved"], 1)
         self.assertEqual(summary["targets"]["resolved"], 1)

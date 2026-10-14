@@ -67,10 +67,10 @@ python3 scripts/resolve_cohort_trials.py             # ClinicalTrials.gov, ~20 s
 python3 scripts/resolve_cohort_protein_class.py      # offline
 python3 scripts/resolve_cohort_approved_elsewhere.py # offline
 python3 scripts/resolve_cohort_classes.py            # offline
-python3 scripts/resolve_cohort_pharm_actions.py      # MeSH, FDA UNII, PubChem, ~20 min cold
+python3 scripts/resolve_cohort_pharm_actions.py      # MeSH, FDA UNII, Wikidata, a few minutes
 python3 scripts/resolve_cohort_mesh_structure.py     # MeSH, FDA UNII, ~35 s
 python3 scripts/resolve_cohort_wikipedia.py          # Wikidata and Wikipedia
-python3 scripts/resolve_cohort_gtopdb_actions.py     # GtoPdb 2026.3, see below
+python3 scripts/resolve_cohort_gtopdb_actions.py     # GtoPdb 2026.3.1, see below
 python3 scripts/resolve_cohort_orthologues.py        # UniProt, ~2 min cold, needs parasail
 python3 scripts/export_cohort.py                     # ~6 s, writes viz/
 ```
@@ -110,25 +110,31 @@ newer file, except GtoPdb.
 | Backfill | What it reads | Why it can differ |
 | --- | --- | --- |
 | trials | ClinicalTrials.gov API | trial statuses change |
-| pharm actions | PubChem, MeSH `desc2026`, FDA UNII | PubChem's links change; UNII is served only as "latest" |
+| pharm actions | MeSH `desc2026` and `supp2026`, FDA UNII, Wikidata | Wikidata items change, and its answers are cached in `db/cache/wikidata/`; UNII is served only as "latest" |
 | mesh structure | MeSH `desc2026` and `supp2026`, FDA UNII | as above |
 | wikipedia | Wikidata, Wikipedia | articles and items change |
 | orthologues | UniProt's reviewed human proteome | streamed from the current release, not 2026_03 |
-| **gtopdb** | `guidetopharmacology.org/DATA/` | **refuses any release but 2026.3**, see below |
+| **gtopdb** | `guidetopharmacology.org/DATA/` | **refuses any release but 2026.3.1**, see below |
 
 **GtoPdb is the one that can stop you.** It serves only its latest release, at
 a fixed address. The backfill reads the version off each file's first line,
-and refuses anything other than 2026.3, because its `ACTION_MAP` was reviewed
+and refuses anything other than 2026.3.1, because its `ACTION_MAP` was reviewed
 against that release. Once GtoPdb publishes a newer release, a fresh clone
-cannot download 2026.3 from that address. To get past this you have two
+cannot download 2026.3.1 from that address. To get past this you have two
 choices:
 
-- obtain `interactions.csv` and `ligands.csv` from release 2026.3 and place
-  them in `db/cache/gtopdb/2026.3/`. Their download page showed no archive of
+- obtain `interactions.csv` and `ligands.csv` from release 2026.3.1 and place
+  them in `db/cache/gtopdb/2026.3.1/`. Their download page showed no archive of
   past releases on 2026-10-10, so this means asking GtoPdb, or someone who
   has the cache; or
 - review `ACTION_MAP` against the new release and bump `GTOPDB_VERSION`. That
   is a change to the project, not a reproduction.
+
+The files are cached exactly as GtoPdb serves them, so a copy from anyone can
+be checked against the sha256 the manifest records. For 2026.3.1 (published
+2026-10-12) these are `c1b81895…1ffa1` for `interactions.csv` and
+`bc858e6a…7a2` for `ligands.csv`; the full values are in the `gtopdb_actions`
+key of `build_manifest`.
 
 GtoPdb said in September 2026 that anonymous downloads will end. If that
 happens, the backfill will need whatever access GtoPdb then requires.

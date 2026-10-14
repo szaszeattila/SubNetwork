@@ -1,9 +1,9 @@
 {
   "policy_id": "cohort1-selection",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "adopted": "2026-09-13",
   "supersedes": "analysis/cohort1/config/cns_indication_scope.json v1.0.0 (report scope, S0 core only)",
-  "decisions": "docs/COHORT-1-DECISIONS.md D01, D02, D03, D04, D05",
+  "decisions": "docs/COHORT-1-DECISIONS.md D01, D02, D03, D04, D05; docs/COHORT-2.md D21",
   "status": "Production selection policy. Unlike the report configuration it supersedes, this file decides catalogue membership.",
 
   "pinned_inputs": {
@@ -39,11 +39,12 @@
     },
     "indication": {
       "id": "route_indication",
-      "rule": "The parent, or any family member, has a drug_indication row whose mesh_id is in the adopted scope AND whose max_phase_for_ind is >= 3.",
+      "rule": "The parent, or any family member, has a drug_indication row whose mesh_id is in the adopted scope AND whose max_phase_for_ind is >= 1.",
       "phase_field": "drug_indication.max_phase_for_ind",
-      "min_phase": 3,
+      "min_phase": 1,
+      "min_phase_history": "3 under selection policy 1.x and 2.x (D01). Lowered to 1 in 3.0.0 (D21, 2026-10-12, at the user's request): every molecule with an in-scope indication that has reached Phase 1 or beyond is a member.",
       "phase_field_reason": "D01: the threshold applies to the qualifying indication, not to molecule_dictionary.max_phase across unrelated diseases.",
-      "missing_phase_treatment": "NULL, -1 (Unknown), 0.5, 1 and 2 cannot qualify through this route. They are recorded as non-qualifying scoped indications so the near-miss is visible, and they never disqualify an ATC-N match.",
+      "missing_phase_treatment": "NULL, -1 (Unknown) and 0.5 (Early Phase 1) cannot qualify through this route. They are recorded as non-qualifying scoped indications so the near-miss is visible, and they never disqualify an ATC-N match.",
       "phase_labels": {"4": "Approved", "3": "Phase 3", "2": "Phase 2", "1": "Phase 1", "0.5": "Early Phase 1", "-1": "Unknown (ChEMBL -1)"}
     }
   },
@@ -71,7 +72,7 @@
         "label": "Pain (as a sign or symptom)",
         "adopted": true,
         "breadth_accepted": "D02 adopts the whole saved Pain tree. Its descendants include the angina descriptors (D000787 Angina Pectoris, D060050 Angina, Stable, D000789 Angina, Unstable, D000788 Angina Pectoris, Variant) and general somatic pain (low back pain, toothache, dysmenorrhea). The boundary review measured this breadth; it is accepted with visible admission reasons rather than silently narrowed to centrally acting analgesics.",
-        "phase_requirement": "Not waived. A pain indication still needs max_phase_for_ind >= 3. Loperamide's saved Pain phase is 0.5, so adding pain does not admit it."
+        "phase_requirement": "Not waived. A pain indication needs the same max_phase_for_ind floor as every other in-scope indication (1 since D21). Loperamide's saved Pain phase is 0.5, so adding pain does not admit it."
       }
     ],
 

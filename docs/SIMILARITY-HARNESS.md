@@ -599,3 +599,59 @@ are recorded so the decision can be made against two judges rather than one.
 **The Preliminary weight is judge-dependent**, helping under one and hurting
 under the other, and should not be moved on either's say-so. The family weight
 points the same way under both but by amounts four times apart.
+
+## 11. A judge that cannot see the newcomers (D21, 2026-10-12)
+
+D21 admitted 1,119 molecules through a Phase 1 or Phase 2 brain indication
+(see [COHORT-2.md](COHORT-2.md)). None of them carries an ATC N code, so none
+is in the ATC answer key, but every one of them can stand in a labelled drug's
+list. One that ranks above the drug's class-mate is graded a miss, however
+apt it is. That is section 4's walk-down, unchanged. Before D21 the 786
+members admitted by indication alone could already intrude the same way. D21
+more than doubled them.
+
+| the same D21 build | scoreable | top-1 | top-10 | MRR |
+|---|---|---|---|---|
+| as graded | 284 | 32.7% | 74.3% | 0.4607 |
+| with the 1,119 skipped in each list | 284 | 38.7% | 77.1% | 0.5121 |
+| the build before D21 | 284 | 38.7% | 77.8% | 0.5119 |
+
+So the whole fall is the judge's. Skipped, the newcomers leave the ranking
+among the old catalogue where it was: their extra weight on each target's
+prevalence moves MRR by +0.0002. The ones ranked first over a class-mate are
+mostly right: adipiplon (a GABA-A partial agonist) for 13 drugs, carfentanil
+for 6, GSK1360707 (a triple reuptake inhibitor), ladostigil, vanoxerine,
+SB-649868 (an orexin antagonist), huperzine A and edrophonium. Busulfan is
+the exception.
+
+The floors in `tests/similarity_harness.test.mjs` were re-set under the new
+figures. The instrument was not changed: grading only among labelled molecules
+would also raise every earlier figure, and it should be decided as a change of
+instrument, not slipped in beside a catalogue change.
+
+The MeSH judge does not escape this. It labels about 280 of the 1,117
+newcomers (1,028 labelled molecules against 745), and graded the same way it
+tells the same story:
+
+| the D21 build, MeSH key | scoreable | top-1 | MRR |
+|---|---|---|---|
+| as graded | 865 | 45.0% | 0.5945 |
+| only the old catalogue's molecules asked | 641 | 44.6% | 0.5961 |
+| ...and the newcomers skipped in each list | 621 | 50.2% | 0.6341 |
+| the 1,335 build, same key | 621 | 50.4% | 0.6335 |
+
+## 12. The MeSH key changed with its source (2026-10-13)
+
+The MeSH actions stopped coming through PubChem on 2026-10-13. They are read
+from each molecule's own MeSH record now ([MESH-ACTIONS-ROUTE-B.md](MESH-ACTIONS-ROUTE-B.md)).
+Since section 10's answer key is built from them, the judge changed, not the
+ranking. On the one 1,335-entry build:
+
+| key | labelled | scoreable | top-1 | top-10 | MRR |
+|---|---|---|---|---|---|
+| PubChem's actions | 699 | 588 | 47.4% | 85.5% | 0.6060 |
+| MeSH's own records | 745 | 621 | 50.4% | 86.8% | 0.6335 |
+
+The ATC grade of that build is 38.7% and 0.5119 under both. A MeSH grade
+taken before 2026-10-13 is therefore not comparable with one taken after,
+including every MeSH figure in section 10.

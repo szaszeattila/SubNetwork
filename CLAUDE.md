@@ -122,10 +122,10 @@ python3 scripts/resolve_cohort_trials.py       # trial_status from ClinicalTrial
 python3 scripts/resolve_cohort_protein_class.py  # target_components.protein_class (offline)
 python3 scripts/resolve_cohort_approved_elsewhere.py  # molecules.approved_elsewhere (offline)
 python3 scripts/resolve_cohort_classes.py       # ATC codes and USAN stems (offline)
-python3 scripts/resolve_cohort_pharm_actions.py # MeSH pharmacological actions via PubChem (~20 min cold)
+python3 scripts/resolve_cohort_pharm_actions.py # MeSH pharmacological actions via FDA UNII and Wikidata (minutes)
 python3 scripts/resolve_cohort_mesh_structure.py # MeSH structure classes via FDA UNII (~35 s)
-python3 scripts/resolve_cohort_wikipedia.py    # Wikipedia links via Wikidata; after the MeSH classes
-python3 scripts/resolve_cohort_gtopdb_actions.py # GtoPdb curated actions (pinned 2026.3, cached)
+python3 scripts/resolve_cohort_wikipedia.py    # Wikipedia links via Wikidata and infoboxes; after the MeSH classes
+python3 scripts/resolve_cohort_gtopdb_actions.py # GtoPdb curated actions (pinned 2026.3.1, cached)
 python3 scripts/resolve_cohort_orthologues.py   # target_orthologues by sequence (~2 min cold, needs parasail)
 
 python3 scripts/export_cohort.py           # db/cohort1.db -> viz/*.data.js + viz/evidence/
@@ -170,7 +170,16 @@ component accession: every complex, complex group and family stays NULL on
 purpose — the legacy pipeline derived one from members' accessions twice and
 was confidently wrong both times — and so do the one SINGLE PROTEIN ChEMBL files
 against three accessions (`CHEMBL3390824`, lanosterol 14-alpha demethylase) and
-the two targets it gives no accession at all. A MeSH structure class is linked
+the two targets it gives no accession at all. Where a protein's item and its
+gene's item carry different articles, the protein's own is taken (Albumin:
+*Human serum albumin*, not *Serum albumin*), unless the protein item names two
+genes (HSPA1A's carries the *HSPA1B* article). A molecule Wikidata finds no
+article for is linked by the article whose drug or chemical infobox names its
+own parent ChEMBL ID, found through Wikipedia's index of ChEMBL links — never
+through a salt form's ID (ChEMBL files a deuterated drug as a form), and
+refused where that infobox's InChIKey has a different skeleton or two
+articles qualify (PBF-509 to *Taminadenant*, whose Wikidata item is empty;
+[DATA-QUALITY-LOG](docs/DATA-QUALITY-LOG.md), 2026-10-13). A MeSH structure class is linked
 through the one Wikidata item carrying its descriptor, or, where that item has
 no English article (Xanthines), through the main article its English category
 declares — never by its name, and never for a MeSH action, where that route
@@ -220,7 +229,11 @@ analysis/probe/           50 settled drug relationships put to the ranking, and
                           tuning target; read-only.
 analysis/wiki_comparison/ a nootropics wiki's compound list placed against
                           ChEMBL and the catalogue, by name. Read-only.
+analysis/answer_keys/     what the ATC answer key calls a miss, and whether it
+                          is one (docs/SIMILARITY-LITERATURE.md). Read-only.
 analysis/cohort1/         the read-only analysis behind COHORT-REPORT.md
+analysis/mesh_route_b/    MeSH actions through the FDA UNII against the PubChem
+                          route (docs/MESH-ACTIONS-ROUTE-B.md); read-only
 docs/                     the reasoning; docs/INDEX.md is the index
 README.md, CONTRIBUTING.md, SECURITY.md, CITATION.cff  for people arriving at
                           the repository; this file stays the rulebook
@@ -305,14 +318,21 @@ score. Four sources, each writer replacing only its own rows:
 - `usan` — USAN/INN name stems (`-pramine`). Stems and sub-stems are paired
   positionally because a definition can contain the `"; "` that joins them
   (`-triptan`); ChEMBL's bare `-` means no stem.
-- `mesh_pa` — MeSH **pharmacological actions**, InChIKey → PubChem → MeSH
-  (pinned `desc2026`), with the D27 hierarchy in `class_labels.parents`. PubChem
-  links a compound to MeSH records **by name**, and a code meaning two things
-  joins both (tafamidis carried triamcinolone's steroid actions through
-  "FX006"), so each supplying record is judged by identifier and set aside only
-  on positive evidence it is another substance; identifiers disagreeing about
-  *form* (salt, hydrate) is not evidence. The set-aside links are listed in
-  `build_manifest`; the rule is in the script's docstring.
+- `mesh_pa` — MeSH **pharmacological actions**: each molecule is placed on
+  **one** MeSH record (pinned `desc2026`/`supp2026`) and takes that record's
+  own action list, with the D27 hierarchy in `class_labels.parents`. Each step
+  is tried only where the one before placed nothing:
+  1. the FDA UNII of its exact structure;
+  2. the CAS number FDA lists for that UNII;
+  3. for a structure ChEMBL draws without stereochemistry, an FDA substance
+     registered as a mixture of that skeleton's stereoisomers;
+  4. the MeSH ID on the Wikidata item carrying its ChEMBL ID.
+
+  Two records at any step is a refusal. A stereo-defined molecule never
+  matches by skeleton: that put esmethadone on methadone's record. It went
+  through PubChem until 2026-10-13, which links compounds to MeSH by name
+  (tafamidis carried triamcinolone's actions through "FX006")
+  ([DATA-QUALITY-LOG](docs/DATA-QUALITY-LOG.md), 2026-10-13).
 - `mesh_struct` — MeSH **chemical-structure** classes, by identifiers alone:
   InChIKey → FDA UNII (FDA registers it from the structure) → the one MeSH
   record carrying that UNII. PubChem's route was measured and rejected for
@@ -341,7 +361,8 @@ protein once in the score; **it is never a claim moved between records** — the
 rat record stays the rat record, with its own claims and its own rarity.
 
 **`wikipedia_url`** on molecules and targets is a backfill through Wikidata, on
-an exact identifier (see **Running it**). **`class_wikipedia`** holds the same
+an exact identifier, and for a molecule Wikidata cannot place, through the
+ChEMBL ID its article's own infobox declares (see **Running it**). **`class_wikipedia`** holds the same
 for MeSH structure classes, in a table of its own because the class backfills
 rewrite their `class_labels` rows; each row records the item, and whether the
 article was the item's own or its category's declared main article
@@ -359,17 +380,19 @@ far it got, `indication_refs` for the **ClinicalTrials.gov** NCT ids that phase
 is read off. `indication_refs` also carries DailyMed, EMA, FDA, ATC, USAN and
 INN references, none read here; DailyMed is the one worth revisiting, being the
 label behind 286 of the 515 approved indications with no registered trial.
-**GtoPdb** (IUPHAR/BPS Guide to Pharmacology, release 2026.3) supplies a curated
+**GtoPdb** (IUPHAR/BPS Guide to Pharmacology, release 2026.3.1) supplies a curated
 action on pairs ChEMBL already has (D17); its database is ODbL and its contents
 CC BY-SA 4.0, credited on the page. Everything it contributes is exported to
 its own `viz/gtopdb.data.js` under those terms, never into `graph.data.js`
 (ChEMBL, CC BY-SA 3.0): no published compatibility joins the ODbL to CC BY-SA,
 so the two stay separate files the page combines when it draws.
-**MeSH** (via **PubChem** and **FDA UNII**) supplies classes, **UniProt**'s reviewed human proteome (release 2026_03) the
+**MeSH** (via **FDA UNII**, and **Wikidata** where FDA files no structure)
+supplies classes, **UniProt**'s reviewed human proteome (release 2026_03) the
 sequences D20's orthologue matching aligns against, **ClinicalTrials.gov**
-trial status, and **Wikidata** nothing
-but a Wikipedia link per node, matched on an identifier this database already
-holds — never a title search: "ATM", "APP" and "TNF" are English words.
+trial status, and **Wikidata** a Wikipedia link per node and a molecule's MeSH
+record where FDA's route does not reach it. Both are matched on an identifier
+this database already holds — never a title search: "ATM", "APP" and "TNF" are
+English words. The cohort pipeline no longer reads **PubChem** (2026-10-13).
 
 **The legacy pipeline** also reads PubChem for identity and the CAS numbers
 that join into PDSP, UniProt for protein identity and tissue specificity, the
@@ -461,8 +484,9 @@ database carried wrong data as a result.
     enforces, because the only citations that belong there are the ones that
     are not measurements.
 15. **Resolve external links by identifier, never by name.** Wikipedia links
-    go through Wikidata on an exact identifier match, and an ambiguous match
-    is dropped. This is invariant 6 applied to links: a title search answers
+    go through Wikidata on an exact identifier match — or, where Wikidata
+    reaches no article, through the identifier an article's own infobox
+    declares — and an ambiguous match is dropped. This is invariant 6 applied to links: a title search answers
     confidently and wrongly, and a wrong link on a page explaining what a
     protein *is* misinforms more directly than a missing one. Where no
     identifier reaches the right item — the seven protein assemblies, where
@@ -485,53 +509,53 @@ hand-written and is never rewritten.
 <!-- Written by `python3 scripts/cohort_report.py --write-status`. Do not edit by hand: `--check-status` fails when this block and the active build disagree, and a rewrite discards whatever was typed here. The prose outside the markers is hand-written and is never touched. -->
 
 Pipeline and viewer both working. Current database, `db/cohort1.db`, built
-2026-10-10 against the `chembl_37` bulk release under selection policy
-`cohort1-selection v2.1.0` and evidence policy `cohort1-evidence v1.1.0`:
+2026-10-13 against the `chembl_37` bulk release under selection policy
+`cohort1-selection v3.0.0` and evidence policy `cohort1-evidence v1.1.1`:
 
-**1,335 catalogue entries · 2,578 targets · 81,019 claims · 210,204 observations**
+**2,452 catalogue entries · 3,359 targets · 127,741 claims · 327,957 observations**
 
-1,330 are cohort-1 members (161 by ATC N alone, 786 by a qualifying indication
-alone, 383 by both) and 5 are seed molecules retained outside the cohort with
-their exclusion reason. 23 of the 28 seeds are admitted. 2,935 claims are
-Supported in the direct human basis — 1,367 by replication across publications
-and 1,568 by curated mechanism, with no claim carrying both — over 2,077
-distinct molecule–target pairs. 849 entries have a Supported claim, 148 only
-Preliminary, 38 only in the broader assignment layer, 37 only retained
-observations, and 263 have no eligible evidence in ChEMBL 37 at all. All of
-them stay searchable.
+2,449 are cohort-1 members (72 by ATC N alone, 1,905 by a qualifying
+indication alone, 472 by both) and 3 are seed molecules retained outside the
+cohort with their exclusion reason. 25 of the 28 seeds are admitted. 5,057
+claims are Supported in the direct human basis — 2,563 by replication across
+publications and 2,494 by curated mechanism, with no claim carrying both —
+over 3,773 distinct molecule–target pairs. 1,497 entries have a Supported
+claim, 262 only Preliminary, 75 only in the broader assignment layer, 56 only
+retained observations, and 562 have no eligible evidence in ChEMBL 37 at all.
+All of them stay searchable.
 
-Behind those claims sit 210,204 retained observations resolving to 14,548
-distinct studies, of which 41,691 rows are counted into a median. 51,074
-bounds are kept with their relations and out of every median; 1,727
-conditional mass-basis conversions are kept and counted into nothing. 13,184
-organism-format rows and 3 documented known-bad records are excluded with
-their reasons, and the exclusion accounting reconciles exactly to the 803,096
-activity rows scanned. All 15 build checks pass.
+Behind those claims sit 327,957 retained observations resolving to 20,916
+distinct studies, of which 67,035 rows are counted into a median. 86,596
+bounds are kept with their relations and out of every median; 2,331
+conditional mass-basis conversions are kept and counted into nothing. 22,698
+organism-format rows and 4 documented known-bad records are excluded with
+their reasons, and the exclusion accounting reconciles exactly to the
+1,200,625 activity rows scanned. All 15 build checks pass.
 
-What the page loads is 5.74 MB of startup payload in `viz/graph.data.js` and
-0.13 MB in `viz/gtopdb.data.js`, GtoPdb's part, kept apart for its licence;
-and 72.3 MB of per-molecule evidence shards across 1,177 files under
+What the page loads is 8.42 MB of startup payload in `viz/graph.data.js` and
+0.20 MB in `viz/gtopdb.data.js`, GtoPdb's part, kept apart for its licence;
+and 112.2 MB of per-molecule evidence shards across 2,046 files under
 `viz/evidence/`, fetched one at a time on demand.
 
 `molecules.wikipedia_url` and `targets.wikipedia_url` are backfilled by
-`scripts/resolve_cohort_wikipedia.py` after a build: **1,050 of 1,335
-molecules** and **1,283 of 2,265 single-component targets** link to an English
-Wikipedia article. The other 311 multi-component targets — every PROTEIN
+`scripts/resolve_cohort_wikipedia.py` after a build: **1,746 of 2,452
+molecules** and **1,599 of 2,922 single-component targets** link to an English
+Wikipedia article. The other 435 multi-component targets — every PROTEIN
 COMPLEX, PROTEIN COMPLEX GROUP and PROTEIN FAMILY, plus one ChEMBL-labelled
 SINGLE PROTEIN carrying 3 accessions — are left NULL rather than resolved to a
 guess. The 2 targets ChEMBL lists with no accession at all are left NULL for
-the same reason. Of the 726 MeSH structure classes, **495** link one too, in
-the `class_wikipedia` table: 415 through the Wikidata item carrying the
-descriptor, and 80 whose item has no article through the main article its
+the same reason. Of the 889 MeSH structure classes, **610** link one too, in
+the `class_wikipedia` table: 523 through the Wikidata item carrying the
+descriptor, and 87 whose item has no article through the main article its
 English category declares (Xanthines to *Xanthine*).
 
-The pipeline suite is 487 tests and the node suites are 695 (466 cohort
+The pipeline suite is 515 tests and the node suites are 701 (472 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`
 against ATC level-4 classes, which are the WHO's own grouping of drugs by how
 they work and are read from `molecules.atc_level5` rather than written here:
-**top-1 38.7% and MRR 0.5119** over 284 of 395 labelled molecules in 64
+**top-1 32.7% and MRR 0.4607** over 284 of 395 labelled molecules in 64
 classes. The other 111 have no same-class peer anywhere in their list, which
 is a fact about ChEMBL's coverage rather than about the ranking, and is kept
 out of the rates for that reason. It is a proxy and not ground truth — ATC
@@ -543,9 +567,16 @@ Three browser measurements sit outside the block because they were taken once,
 in Chrome, against a 4.03 MB payload: parse and index in 216 ms, selecting a
 molecule in 0.1 ms, loading an evidence shard in 10 ms. Parse and index were
 unchanged at the later 4.4 MB (159 ms in the vm harness, which is not the
-browser and is quoted only as a before-and-after). The last Wikipedia backfill
-had 0 failed lookups and 15 dropped as ambiguous (invariant 15) — facts about
-that run, not the database, so not generated. Full build numbers, the two
+browser and is quoted only as a before-and-after). D21 nearly doubled the
+payload to 8.4 MB, and the browser has not been timed against it. The last
+Wikipedia backfill (2026-10-13) had 0 failed lookups and 10 dropped as
+ambiguous (3 molecules, 6 targets, 1 class; invariant 15), and refused 3
+infobox matches whose structure differs — facts about that run, not the
+database, so not generated. The ATC grade above fell with D21 because the
+1,119 molecules it admitted carry no ATC N code: one ranked above a class-mate
+is a miss however apt. Skipped in each list, the same build grades 38.7% and
+MRR 0.5121, as before them
+([docs/SIMILARITY-HARNESS.md](docs/SIMILARITY-HARNESS.md) §11). Full build numbers, the two
 analysis defects the build corrects, the limitations and the rollback commands
 are in [docs/COHORT-1-IMPLEMENTATION.md](docs/COHORT-1-IMPLEMENTATION.md).
 
@@ -693,6 +724,16 @@ behaviour a rule here describes.
   from ChEMBL's own `action_type` definitions, shown in a box beside the
   legend and never inside it** — the legend scrolls and would clip it. A
   test reads the palette and fails for a colour added without one.
+- **The canvas's count box states what the claim filters keep against the
+  whole catalogue, in canvas nodes (a protein once across species, D20),
+  and what is drawn only on a second line** — the canvas control never
+  moves the first. ChEMBL's record count is named "target records"
+  wherever it appears, never "targets" (invariant 13).
+- **A filter change paints its busy line before the rebuild starts**
+  (`refreshAfterFilters`: a timeout queued in a frame callback), in the
+  count box and not `#load-status`, which the open Display options covers.
+  The re-solve's batch size stays at 100: lowered, the `SETTLE_MS`
+  backstop ended the solve early (docs/VIEWER.md).
 
 **Panels and wording**
 
@@ -837,11 +878,17 @@ molecules) are in [docs/COHORT-2.md](docs/COHORT-2.md) and come first.
   brain focus is carried by molecule selection only. Proposed: a
   `resolve_cohort_brain_expression.py` backfill (HPA), drawn as a marker, never
   a filter (invariant 10).
-- **Two MeSH findings are open.** *Gestormone* sits in MeSH's dacuronium record
-  though NIST, NCI and ChemIDplus give progesterone — an NLM error, unreported.
-  And inherited actions cannot be told apart by identifier: tarenflurbil keeps
-  flurbiprofen's *Cyclooxygenase Inhibitors* though it is the enantiomer made
-  for little COX activity.
+- **One MeSH finding is unreported.** *Gestormone* sits in MeSH's dacuronium
+  record though NIST, NCI and ChemIDplus give progesterone — an NLM error. It
+  no longer reaches this catalogue: the actions stopped going through PubChem's
+  name links on 2026-10-13, and tarenflurbil lost flurbiprofen's
+  *Cyclooxygenase Inhibitors* the same way.
+- **20 molecules lost their MeSH actions in that change** — 9 carry a UNII no
+  MeSH record holds (semagacestat), 4 are flat structures whose stereoisomer
+  mixtures reach no single record (doxepin), 4 are in neither FDA's file nor
+  Wikidata (liraglutide), and 2 are drawn with different defined stereochemistry
+  by ChEMBL and FDA (dextrose). Nothing that matches by identifier reaches them
+  ([docs/MESH-ACTIONS-ROUTE-B.md](docs/MESH-ACTIONS-ROUTE-B.md)).
 - **A ChEMBL curation error to report:** alfuzosin filed as an alpha-1
   AGONIST against its own cited label. Withheld here since 2026-10-10; the
   report is drafted in

@@ -34,7 +34,9 @@ The route, an identifier at every step (invariant 15):
      or below MIN_DEPTH, so a xanthine is also a purinone and a purine.
 
 It deliberately does not go through PubChem, which the pharmacological actions
-do. PubChem lists a compound's MeSH records by name and registry matching on
+did until 2026-10-13; they now take this route too, with a CAS, stereoisomer-
+mixture and Wikidata step after it (scripts/resolve_cohort_pharm_actions.py).
+PubChem lists a compound's MeSH records by name and registry matching on
 its side, and for a sample of this catalogue that list included brand names,
 drug combinations and outright wrong compounds (methylprednisolone listed with
 exifone, a benzophenone). Where both routes give one answer they agree on 277

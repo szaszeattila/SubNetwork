@@ -109,6 +109,29 @@
     color: var(--text-dim); font-size: 13px; line-height: 1.5; text-align: center;
   }
   #load-status.failed { color: var(--text); border-color: #d9534f; text-align: left; }
+  /* Work in progress turns, so a filter change that takes seconds to lay out
+     reads as working rather than as a click that did nothing. A transform
+     animation runs on the compositor, so it keeps turning while vis holds the
+     main thread. */
+  #load-status:not(.failed)::before, #graph-counts .busy::before {
+    content: ""; display: inline-block; width: 11px; height: 11px;
+    margin-right: 8px; vertical-align: -1px; box-sizing: border-box;
+    border: 2px solid var(--border); border-top-color: var(--accent);
+    border-radius: 50%; animation: load-spin .8s linear infinite;
+  }
+  @keyframes load-spin { to { transform: rotate(360deg); } }
+  /* What is in the catalogue and what the filters leave of it, on the canvas
+     those filters drew. Top left: the legend has the bottom, the panel toggle
+     the top right. */
+  #graph-counts {
+    position: absolute; left: 8px; top: 8px; z-index: 20; max-width: 55%;
+    background: rgba(23,26,33,.93); border: 1px solid var(--border);
+    border-radius: 6px; padding: 4px 8px; font-size: 11px; line-height: 1.5;
+    color: var(--text-dim); cursor: help;
+  }
+  #graph-counts b { color: var(--text); font-weight: 600; }
+  #graph-counts .busy { color: var(--text); }
+  #graph-counts[hidden] { display: none; }
   #about-body .cite { font-size: 12px; color: var(--text-dim); }
   #filters {
     position: absolute; right: 0; top: 100%; z-index: 50; width: 360px;
@@ -388,6 +411,7 @@
       <noscript><style>#load-status { display: none; }</style>
         <div id="noscript">This page draws the network with JavaScript, which
           is turned off or blocked in this browser.</div></noscript>
+      <div id="graph-counts" role="status" hidden></div>
       <div id="legend"></div>
       <div id="legend-tip" role="tooltip" hidden></div>
       <button id="sidebar-toggle" type="button" aria-controls="sidebar"></button>
@@ -890,8 +914,9 @@ function lookupCondition(meshId) { return conditionIndex().get(meshId) || null; 
 // antidepressants (imipramine type)") say what family its name was assigned
 // from. The MeSH pharmacological actions ("Antidepressive Agents, Tricyclic")
 // say what NLM's indexers record it as doing, and are the only class source
-// here that speaks to the question this page asks; they are backfilled from
-// PubChem by scripts/resolve_cohort_pharm_actions.py. The MeSH structure
+// here that speaks to the question this page asks; they are read from each
+// molecule's own MeSH record, reached by FDA's UNII or through Wikidata, by
+// scripts/resolve_cohort_pharm_actions.py. The MeSH structure
 // classes ("Xanthines", "Dibenzazepines") say what it is built like, and are
 // backfilled through FDA's UNII by scripts/resolve_cohort_mesh_structure.py.
 // Structure and action are kept apart because they disagree usefully:
@@ -2431,6 +2456,28 @@ function prunePeriphery(nodes, edges) {
   };
 }
 
+// Molecules and targets among a set of canvas nodes, in the canvas's own unit:
+// a protein is one target whatever species recorded it (D20), as its node is.
+function nodeCounts(nodes) {
+  let m = 0, t = 0;
+  for (const n of nodes) { if (n.kind === "molecule") m++; else if (n.kind === "target") t++; }
+  return { molecules: m, targets: t };
+}
+
+// The same two counts over the whole catalogue, whatever the filters, so the
+// totals and the filtered figures beside them count one kind of thing. ChEMBL's
+// record count (DATA.counts.targets) is the larger number, and stays in the
+// catalogue line under Display options, named as records.
+let catalogueTotalsCache = null;
+function catalogueTotals() {
+  if (catalogueTotalsCache) return catalogueTotalsCache;
+  const keys = new Set();
+  for (const t of allTargets()) keys.add(targetNodeKey(t));
+  catalogueTotalsCache = { molecules: allMolecules().length, targets: keys.size,
+                           target_records: allTargets().length };
+  return catalogueTotalsCache;
+}
+
 // Built once per filter setting and cached, because a selection must not cost
 // a pass over 16,206 claims - it is the thing the reader does most.
 function catalogueGraph() {
@@ -2472,6 +2519,9 @@ function catalogueGraph() {
   // and byNode describe the canvas that actually exists - a highlight computed
   // over edges that are not drawn would light nothing and report success.
   let nodes = Array.from(byKey.values());
+  // Read before the periphery is pruned: the claim filters decide what is in
+  // the picture, and the canvas control only what of it is drawn.
+  const shown = nodeCounts(nodes);
   let pruned = null;
   if (filters.periphery === "hide") {
     const cut = prunePeriphery(nodes, edges);
@@ -2499,6 +2549,7 @@ function catalogueGraph() {
     return !(u && u === unitOf.get(k.to));
   });
   graphCache = { signature: sig, nodes: nodes, edges: edges, pruned: pruned,
+                 shown: shown, drawn: nodeCounts(nodes),
                  byKey: byKey, byPair: byPair, byNode: byNode, links: links,
                  units: units, unitOf: unitOf };
   return graphCache;
@@ -2978,7 +3029,8 @@ const HELP = {
        "system drugs.",
   mesh_pa: "What the drug does, as the National Library of Medicine's indexers record " +
            "it (MeSH pharmacological actions), e.g. Antidepressive Agents, Tricyclic. " +
-           "Linked through PubChem. Click one to see every molecule filed under it.",
+           "Linked by FDA's structure identifier, or through Wikidata. Click one to " +
+           "see every molecule filed under it.",
   mesh_struct: "What the molecule is built like, as the National Library of Medicine " +
                "files it (MeSH chemical classes), e.g. Xanthines. Linked by FDA's " +
                "structure identifier.",
@@ -3039,19 +3091,23 @@ const TIER_REASONS = {
   },
   multiple_publications_split_across_endpoint_classes: {
     label: "Several publications, no two in one endpoint class",
-    text: "Several papers, but each measured a different kind of value, so none replicates another.",
+    text: "Several papers gave exact values, but each measured a different kind of value, so none replicates another.",
   },
   one_publication: {
     label: "One publication",
-    text: "All the exact values come from one paper.",
+    text: "Only one paper gave an exact value, so nothing replicates it. Any other values are from patents or bulk deposits, which never count as replication.",
   },
   deposited_datasets_only: {
     label: "Bulk deposits only",
-    text: "The data was deposited in bulk rather than published, which never counts as replication.",
+    text: "The exact values were deposited in bulk rather than published, which never counts as replication.",
   },
   patents_only: {
     label: "Patents only",
-    text: "All the data comes from patents, which never count as replication.",
+    text: "The exact values all come from patents, which never count as replication.",
+  },
+  patents_and_deposits_only: {
+    label: "Patents and bulk deposits only",
+    text: "The exact values come from patents and bulk deposits, neither of which ever counts as replication.",
   },
   unresolved_study_provenance: {
     label: "No identifiable study",
@@ -3269,8 +3325,11 @@ function filtersHTML() {
   h += "</div>" + cost("lineColor") + "</div>";
 
   const counts = catalogueCounts();
+  // Records, not targets: the count on the canvas folds a protein's species
+  // into one target (D20), and two numbers both called "targets" would invite
+  // the comparison invariant 13 forbids.
   h += '<div class="ctl small muted">Catalogue: ' + esc(String(counts.molecules || 0)) +
-       " molecules, " + esc(String(counts.targets || 0)) + " targets, " +
+       " molecules, " + esc(String(counts.targets || 0)) + " ChEMBL target records, " +
        esc(String(counts.claims_drawable || 0)) + " drawable claims. " +
        "Sources and licences are under About.</div>";
   return h;
@@ -3369,9 +3428,8 @@ function aboutSourcesHTML() {
   }
   items.push(
     link("https://www.nlm.nih.gov/mesh/", "MeSH") + (d.mesh ? " " + esc(d.mesh) : "") +
-      ", courtesy of the U.S. National Library of Medicine, reached through " +
-      link("https://pubchem.ncbi.nlm.nih.gov/", "PubChem") +
-      " and the FDA's UNII registry: drug classes. MeSH is a registered mark of the " +
+      ", courtesy of the U.S. National Library of Medicine, reached through the " +
+      "FDA's UNII registry and Wikidata: drug classes. MeSH is a registered mark of the " +
       "NLM, which does not endorse this project; this is not the most current MeSH. " +
       licenceLink("NLM's terms") + ".",
     link("https://clinicaltrials.gov/", "ClinicalTrials.gov") +
@@ -3382,7 +3440,8 @@ function aboutSourcesHTML() {
     link("https://www.uniprot.org/", "UniProt") + (d.uniprot ? " " + esc(d.uniprot) : "") +
       ": protein sequences, to match a protein across species. " +
       licenceLink("CC BY 4.0") + ".",
-    link("https://www.wikidata.org/", "Wikidata") + ": Wikipedia links only. " +
+    link("https://www.wikidata.org/", "Wikidata") + ": Wikipedia links, and a " +
+      "molecule's MeSH record where the FDA's registry does not reach it. " +
       licenceLink("CC0 1.0") + ".");
   return items.map(function (li) { return "<li>" + li + "</li>"; }).join("") +
     "<li>No other database of measurements (PDSP, BindingDB) is assessed.</li>";
@@ -7622,6 +7681,9 @@ const SETTLE_MS = 1000;
 const TRANSITION_MS = 600;
 let settleTimer = null;
 let transition = null;
+// True from a re-solve starting until settleGraph, so a filter change knows
+// whether its status line is still owed to the layout or can come down.
+let graphSolving = false;
 
 // A backstop, not the mechanism. If stabilize() never reports back - vis
 // returns early when it has no physics nodes at all - this is what stops the
@@ -7637,9 +7699,20 @@ function cancelSettle() {
   settleTimer = null;
 }
 
+// vis reports after every batch of a solve. The share is of the iteration
+// budget, so it understates how far along a solve is: one that converges early
+// stops short of 100%, and the line then simply clears.
+function onSolveProgress(p) {
+  if (!graphSolving || !p || !(p.total > 0)) return;
+  setBusy("Laying out the network… " + Math.round(100 * p.iterations / p.total) + "%");
+}
+
 function settleGraph() {
   cancelSettle();
+  graphSolving = false;
   setLoadStatus("");
+  // A filter change queued during this solve owns the busy line now.
+  if (!refreshQueued) setBusy("");
   if (!network) return;
   network.setOptions({ physics: false });
   syncLabels();
@@ -7746,6 +7819,14 @@ function graphOptions(initial) {
       // layout converges, and a re-solve that started from the previous
       // positions usually converges long before this. The first layout has
       // nothing to start from, so it gets the larger budget and the fit.
+      //
+      // updateInterval is how many ticks vis runs before yielding, and the
+      // browser paints nothing inside a batch. It is not free to lower: the
+      // SETTLE_MS backstop can only fire between batches, and at 10 it ended
+      // a re-solve after 40 ticks that runs all 200 at 100 (2026-10-13, the
+      // open defaults to Supported, in headless Chrome; docs/VIEWER.md). So a
+      // filter change paints its busy line before the solve starts
+      // (refreshAfterFilters) rather than relying on frames during it.
       stabilization: initial
         ? { iterations: 320, updateInterval: 50, fit: true }
         : { iterations: 200, updateInterval: 100, fit: false },
@@ -8043,6 +8124,7 @@ function renderGraph() {
       // Under every line and node, and inside vis's redraw so the gesture
       // bitmap, which that redraw draws, carries the discs too.
       network.on("beforeDrawing", drawUnits);
+      network.on("stabilizationProgress", onSolveProgress);
     }
     // Before the first solve, so the stabilization's own paint is culled too.
     installEdgeCulling(network);
@@ -8068,6 +8150,8 @@ function renderGraph() {
       const p = pos[n.id];
       if (p) { n.x = p.x; n.y = p.y; }
     }
+    graphSolving = true;
+    setBusy("Laying out the network…");
     network.setOptions({ physics: graphOptions(false).physics });
     visNodes.clear(); visEdges.clear();
     visNodes.add(nodes); visEdges.add(edges);
@@ -8224,6 +8308,56 @@ function renderControls() {
     s.textContent = viewOptionsSummary();
     if (s.setAttribute) s.setAttribute("title", viewOptionsSettings());
   }
+}
+
+function fmtCount(n) {
+  return String(n || 0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+// What the filters keep, against what the catalogue holds, in one unit: canvas
+// nodes, where a protein in four species is one target (D20). "Kept" is the
+// claim filters' answer and "drawn" the canvas control's, stated apart because
+// only the first is a fact about the catalogue (VIEWER.md, the periphery).
+function graphCountsHTML() {
+  const total = catalogueTotals();
+  const g = catalogueGraph();
+  let h = "Filters keep <b>" + fmtCount(g.shown.molecules) + "</b> of " +
+          fmtCount(total.molecules) + " molecules and <b>" + fmtCount(g.shown.targets) +
+          "</b> of " + fmtCount(total.targets) + " targets";
+  if (g.pruned) {
+    h += "<br>Drawn: <b>" + fmtCount(g.drawn.molecules) + "</b> molecules and <b>" +
+         fmtCount(g.drawn.targets) + "</b> targets, single-molecule targets hidden";
+  }
+  return h;
+}
+
+function graphCountsTitle() {
+  const total = catalogueTotals();
+  return "Counted as the canvas draws them: a protein recorded in several species " +
+    "is one target, so the catalogue's " + fmtCount(total.target_records) +
+    " ChEMBL target records are " + fmtCount(total.targets) + " targets here. " +
+    "Molecules and targets the filters leave out are still searchable.";
+}
+
+// What a filter change is doing, under the counts it is changing ("" for
+// nothing). The counts above it are the previous filters' until it clears.
+let busyText = "";
+function setBusy(text) {
+  busyText = text || "";
+  renderGraphCounts();
+}
+function getBusy() { return busyText; }
+
+function renderGraphCounts() {
+  const el = byId("graph-counts");
+  if (!el) return;
+  // An empty catalogue is a failed download (loadProblem), not "0 of 0".
+  el.hidden = !allMolecules().length;
+  if (el.hidden) return;
+  el.innerHTML = graphCountsHTML() +
+    (busyText ? '<div class="busy">' + esc(busyText) + "</div>" : "");
+  if (el.setAttribute) el.setAttribute("aria-busy", busyText ? "true" : "false");
+  if (el.setAttribute) el.setAttribute("title", graphCountsTitle());
 }
 
 function renderPanel() {
@@ -8575,6 +8709,7 @@ function onLegendPointer(event) {
 
 function refresh() {
   renderControls();
+  renderGraphCounts();
   renderLegend();
   renderPanel();
   renderSidebarState(false);
@@ -8966,7 +9101,49 @@ function onFilterClick(event) {
   } else {
     setFilter(group, group === "potency" ? (raw === "" ? null : Number(raw)) : raw);
   }
-  refresh();
+  refreshAfterFilters();
+}
+
+// A filter change rebuilds the picture: the claims are re-filtered, the panel
+// re-ranked, and vis rewrites and re-solves thousands of nodes, which takes
+// seconds at the open defaults and holds the main thread for much of it. Run
+// straight from the click, none of that leaves the browser a frame to paint
+// in, so the button did not even look pressed until it was over. So the
+// control and a busy line are painted first, and the rebuild runs on the
+// next frame; the line stays up until the layout settles (settleGraph) or,
+// where nothing needs laying out, until the rebuild returns. Clicks that land
+// while one is queued are folded into it - it reads the filters when it runs.
+//
+// The line is in the counts box and not #load-status, which is centred on the
+// canvas: Display options is open whenever a filter is clicked, and its popover
+// sits over the middle of the canvas, so a status there was never seen.
+let refreshQueued = false;
+let queuedThen = null;
+
+function afterPaint(fn) {
+  if (typeof requestAnimationFrame !== "function" || typeof setTimeout !== "function") {
+    fn();
+    return;
+  }
+  // A frame callback runs before that frame paints; the timeout after it runs
+  // once it has.
+  requestAnimationFrame(function () { setTimeout(fn, 0); });
+}
+
+function refreshAfterFilters(then) {
+  renderControls();
+  setBusy("Applying the filters…");
+  // Reset's re-selection is kept if a plain filter click follows it.
+  if (then) queuedThen = then;
+  if (refreshQueued) return;
+  refreshQueued = true;
+  afterPaint(function () {
+    const run = queuedThen || refresh;
+    refreshQueued = false;
+    queuedThen = null;
+    run();
+    if (!graphSolving) setBusy("");
+  });
 }
 
 
@@ -9083,8 +9260,10 @@ function init() {
       resetFilters();
       setSearchQuery("");
       if (search) search.value = "";
-      const opening = openingMolecule();
-      select("molecule", opening ? opening.id : null);
+      refreshAfterFilters(function () {
+        const opening = openingMolecule();
+        select("molecule", opening ? opening.id : null);
+      });
     });
   }
   if (typeof window.addEventListener === "function") {

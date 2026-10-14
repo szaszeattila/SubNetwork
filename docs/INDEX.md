@@ -23,7 +23,7 @@ one of the two.
 | --- | --- |
 | what the project is and every rule it follows | [../CLAUDE.md](../CLAUDE.md) |
 | why the viewer does something, before you change it | [VIEWER.md](VIEWER.md) |
-| the membership policy actually in force | [COHORT-1-DECISIONS.md](COHORT-1-DECISIONS.md) |
+| the membership policy actually in force | [COHORT-1-DECISIONS.md](COHORT-1-DECISIONS.md), with the phase floor lowered by D21 in [COHORT-2.md](COHORT-2.md) |
 | what that policy produced, measured | [COHORT-1-IMPLEMENTATION.md](COHORT-1-IMPLEMENTATION.md) |
 | what cohort 2 is, and what it has added so far | [COHORT-2.md](COHORT-2.md) |
 | why a data rule exists before you change it | [DATA-QUALITY-LOG.md](DATA-QUALITY-LOG.md) |
@@ -41,16 +41,17 @@ one of the two.
 | --- | --- | --- |
 | [COHORT-1-DECISIONS.md](COHORT-1-DECISIONS.md) | the adopted selection and evidence policy, decision by decision (D01–D16) | policy, not counts |
 | [COHORT-1-IMPLEMENTATION.md](COHORT-1-IMPLEMENTATION.md) | what the adopted policy built, with the two analysis defects it corrects, the limitations and the rollback commands | measured at build time; **Status supersedes** |
-| [COHORT-2.md](COHORT-2.md) | cohort 2's decisions: GtoPdb's action as a direction (D17), its primary targets as curated support (D18), partial agonism as half an opposite (D19), one protein as one target across species (D20), and what is open | measured 2026-09-27 against the active build |
+| [COHORT-2.md](COHORT-2.md) | cohort 2's decisions: GtoPdb's action as a direction (D17), its primary targets as curated support (D18), partial agonism as half an opposite (D19), one protein as one target across species (D20), the indication route's floor lowered to Phase 1 (D21), MeSH actions read from MeSH rather than through PubChem (D22), and what is open | measured 2026-09-27 against the active build |
 | [VIEWER.md](VIEWER.md) | why the page draws, scores and words things as it does — the reasoning behind CLAUDE.md's viewer rules | measured when each rule was made; **Status supersedes** |
 | [DATA-QUALITY-LOG.md](DATA-QUALITY-LOG.md) | why every invariant exists — what went wrong, how it was found, what was measured | historical incidents, each dated |
+| [MESH-ACTIONS-ROUTE-B.md](MESH-ACTIONS-ROUTE-B.md) | how the MeSH pharmacological actions are read: each molecule placed on its own MeSH record by FDA UNII, CAS, a stereoisomer mixture or Wikidata, instead of through PubChem; the variants measured against PubChem's route, the one refused (matching a skeleton while ignoring stereochemistry), why PubChem blocked the D21 backfill, and how the MeSH judge moved | **adopted 2026-10-13 (D22)**; measured on the 1,335-entry build |
 
 **Procedure — how to do a recurring job.**
 
 | document | what it answers | numbers |
 | --- | --- | --- |
 | [PUBLISHING.md](PUBLISHING.md) | how to deploy the viewer to Cloudflare: staging with `--preview`, production, the deploy record, the headers and who may open it; this GitHub repository: begun 2026-10-10 as one audited snapshot of a private working copy, never its history; every branch pushed (since 2026-10-12; only `main` before), and the hooks that refuse a personal path, address or session link; how it went public (2026-10-10); and, as history, the claude.ai artifact deleted 2026-10-10 (its procedure, refusals and versions 1–28) | Access coverage checked 2026-10-10; refusal counts from 18 session transcripts, as of version 22 |
-| [REPRODUCING.md](REPRODUCING.md) | how to go from a fresh clone to a page that opens: where to download ChEMBL 37 and its checksum, `CHEMBL_SQLITE_PATH`, the build and backfill order, and which backfills read live sources and will not reproduce exactly (GtoPdb refuses any release but 2026.3) | checked against EBI's server 2026-10-10 |
+| [REPRODUCING.md](REPRODUCING.md) | how to go from a fresh clone to a page that opens: where to download ChEMBL 37 and its checksum, `CHEMBL_SQLITE_PATH`, the build and backfill order, and which backfills read live sources and will not reproduce exactly (GtoPdb refuses any release but 2026.3.1) | checked against EBI's server 2026-10-10 |
 | [CHEMBL-ERROR-REPORT-ALFUZOSIN.md](CHEMBL-ERROR-REPORT-ALFUZOSIN.md) | the drafted report to ChEMBL that alfuzosin is filed as an alpha-1 agonist, its evidence, and what to undo when ChEMBL fixes it | checked 2026-10-10; **not yet sent** |
 
 **Measurement — these grade something and adopt nothing.**
@@ -68,6 +69,7 @@ one of the two.
 | [NEXT-STEPS-PROPOSAL.md](NEXT-STEPS-PROPOSAL.md) | what to do next, ranked against the mission's three clauses | proposals; §1a is D15 and §1b is D17, the rest open |
 | [MOLECULE-EXPANSION-BRAINSTORM.md](MOLECULE-EXPANSION-BRAINSTORM.md) | three ways to expand beyond the caffeine seed, dataset priorities, inclusion criteria | brainstorming; predates cohort 1 and describes the 28-molecule seed as current |
 | [COHORT-FOLLOWUP.md](COHORT-FOLLOWUP.md) | unit recovery, the organism-format review, and an alternative selection policy | **recommendations, not adopted production rules** — its own words, and its first heading reads "Decisions supported by the measurements", which means *supported*, not *taken* |
+| [SIMILARITY-LITERATURE.md](SIMILARITY-LITERATURE.md) ([PDF](SIMILARITY-LITERATURE.pdf)) | what published research says for and against each term of the similarity score, how the ATC and MeSH answer keys are built, what the ATC key marks wrong, and a proposed order for better keys (repair, FDA EPC, CNS adverse-effect profiles, a pre-registered pairwise key) | a review of 2026-10-13; every DOI resolved that day; its measurements are `analysis/answer_keys/audit.mjs` against the 2026-10-11 build; nothing adopted |
 | [COHORT-BOUNDARY-REVIEW.md](COHORT-BOUNDARY-REVIEW.md) | that the scope boundary has a soft edge, and a curated neuropharmacology route | proposals; no membership policy was changed |
 | [HOSTING-REVIEW.md](HOSTING-REVIEW.md) | what it would take to host the viewer as a public website: security, the evidence shards, licensing, and the gaps to close first | a review of 2026-10-09, with a status table: the disclaimer, credits, caching, headers, a CSP and shareable links are done; phones and link-preview tags are open, and a second pass of 2026-10-10 lists what the first missed; after the user's annotations, licence links, a data date, how to cite, load failure, staging, the deploy record and one hosted copy are done, and privacy, error reports, browsers, keyboard access and monitoring are open |
 | [HOSTING-REVIEW-ANSWERS.md](HOSTING-REVIEW-ANSWERS.md) | the user's annotations on the hosting review: what each action became, answers to its questions (medical-disclaimer examples, the ODbL, privacy and analytics, the GDPR outside the EU, CYP2D6, two headers), and what making the GitHub repository public would take; and a second round: rewrite the history or publish a fresh copy (fresh copy recommended), which files to make public, and what CITATION.cff, CONTRIBUTING, SECURITY.md and issue templates are; and a third round recording what the user decided on them and what was built | sources fetched 2026-10-10; not legal advice |
@@ -128,3 +130,5 @@ database or to the viewer.
 | [../analysis/similarity_harness/](../analysis/similarity_harness/README.md) | grades the ranking against ATC classes; sweeps the six constants |
 | [../analysis/probe/](../analysis/probe/README.md) | asks the ranking about 50 known drug relationships and says what went wrong |
 | [../analysis/wiki_comparison/](../analysis/wiki_comparison/README.md) | places a nootropics wiki's compound list against ChEMBL 37 and the catalogue |
+| [../analysis/mesh_route_b/](../analysis/mesh_route_b/README.md) | the measurement behind D22: MeSH actions read through FDA UNII and Wikidata against the PubChem route |
+| [../analysis/answer_keys/](../analysis/answer_keys/README.md) | sorts what the ATC key calls a miss into what it cannot judge, sibling classes, MeSH-agreed answers and the rest; grades the ranking filtered to judged molecules |

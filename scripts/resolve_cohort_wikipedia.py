@@ -25,12 +25,15 @@ InChIKey and all 1,331 carry a ChEMBL ID, and (per the legacy build) a
 Wikidata item's own ChEMBL ID can name a different form of the same parent
 than the one this database stores. There is no PubChem CID column in the
 cohort schema (db/schema_cohort.sql), unlike the legacy one, so P662 is not
-tried here.
+tried here. A molecule neither reaches an article for is then matched on the
+ChEMBL ID its article's own infobox declares - see the "molecules: the
+drugbox" comment for the rule and why it never reads a salt form's ID.
 
 Targets match on UniProt accession (P352), then Wikidata's "encoded by"
 (P702) hop to the gene item - both are needed, because English Wikipedia's
 article sits on the protein item for some targets and the gene item for
-others, with no rule saying which.
+others, with no rule saying which. Where both carry one and they differ, the
+protein's own is taken (TARGET_ARTICLE_PRECEDENCE).
 
 Multi-component targets (target_components has more than one row for a
 target - 310 of 2,577 in the build this was written against, not quite the
@@ -93,7 +96,7 @@ WIKIDATA_SPARQL = "https://query.wikidata.org/sparql"
 # documents for the legacy pipeline).
 WIKIDATA_USER_AGENT = (
     "SubNetwork/1.0 (cohort-1 drug-target interaction map; "
-    "https://github.com/; contact via repository)"
+    "https://github.com/szaszeattila/SubNetwork; contact via repository)"
 )
 
 REQUEST_TIMEOUT = 60
@@ -117,7 +120,7 @@ SELECT ?key ?article WHERE {
 }"""
 
 WIKIDATA_TARGET_QUERY = """
-SELECT ?key ?article WHERE {
+SELECT ?key (IF(BOUND(?gene), "gene", "protein") AS ?via) ?article WHERE {
   VALUES (?key ?accession) { %s }
   ?protein wdt:P352 ?accession .
   { ?article schema:about ?protein }
@@ -125,6 +128,30 @@ SELECT ?key ?article WHERE {
   { ?protein wdt:P702 ?gene . ?article schema:about ?gene }
   ?article schema:isPartOf <https://en.wikipedia.org/> .
 }"""
+# ?via is computed in the projection, after the join: a BIND inside each branch
+# of the UNION stops the endpoint's optimiser, and a chunk of 15 that answers in
+# 0.2 s without it timed out at 65 s with it.
+
+# Where the protein item and its gene item each carry an English article and
+# the two differ - "Human serum albumin" on the protein, "Serum albumin" on
+# ALB - the protein's own article is the one for a target keyed by its UniProt
+# accession; the gene is a hop further. Both are reached by identifier, so
+# this is a fixed precedence between two answers, not a guess between them.
+# Read as one set, the two were refused as ambiguous until 2026-10-13, which
+# left Albumin and FGF1 unlinked (docs/DATA-QUALITY-LOG.md).
+#
+# Only where the protein item names exactly one gene (P702). HSPA1A and HSPA1B
+# are one sequence, Wikidata files each protein under both genes, and the
+# HSPA1A protein item carries the article "HSPA1B": with two genes the
+# protein is not one-to-one with either, and the disagreement stays a refusal.
+TARGET_ARTICLE_PRECEDENCE = ("protein", "gene")
+
+WIKIDATA_GENE_COUNT_QUERY = """
+SELECT ?key (COUNT(DISTINCT ?gene) AS ?genes) WHERE {
+  VALUES (?key ?accession) { %s }
+  ?protein wdt:P352 ?accession .
+  OPTIONAL { ?protein wdt:P702 ?gene }
+} GROUP BY ?key"""
 
 
 class WikidataError(RuntimeError):
@@ -191,7 +218,10 @@ def _chunk(rows, size):
 
 def sparql_articles(query_template, rows):
     """Run one SPARQL query per chunk of `rows` and return (found,
-    failed_keys). `found` maps key -> set of article URLs. `failed_keys` is
+    failed_keys). `found` maps key -> {via: set of article URLs}, `via` being
+    the query's ?via binding where it has one (the target query says whether
+    the article is the protein's or the gene's) and None where it has not.
+    `failed_keys` is
     every key touched by a chunk that failed and never resolved via another
     chunk - the same key can appear in two chunks (a molecule tried on both
     InChIKey and ChEMBL ID), so failure is only real once nothing on that
@@ -209,10 +239,28 @@ def sparql_articles(query_template, rows):
             failed_keys.update(keys_in_chunk)
             continue
         for binding in data["results"]["bindings"]:
-            found.setdefault(binding["key"]["value"], set()).add(
+            via = binding.get("via", {}).get("value")
+            found.setdefault(binding["key"]["value"], {}).setdefault(via, set()).add(
                 binding["article"]["value"])
     failed_keys -= set(found)
     return found, failed_keys
+
+
+def every_article(found):
+    """key -> every article found for it, whatever route reached it."""
+    return {k: set().union(*by_via.values()) for k, by_via in found.items()}
+
+
+def preferred_articles(found, precedence):
+    """key -> the articles of the first route in `precedence` that found any,
+    so a lower route is read only where every higher one found nothing."""
+    out = {}
+    for k, by_via in found.items():
+        for via in precedence:
+            if by_via.get(via):
+                out[k] = by_via[via]
+                break
+    return out
 
 
 def apply_results(conn, table, key_column, keys, found, failed, dry_run):
@@ -230,7 +278,7 @@ def apply_results(conn, table, key_column, keys, found, failed, dry_run):
             continue
         if len(articles) > 1:
             ambiguous += 1
-            print(f"    {key}: {len(articles)} English articles on Wikidata, "
+            print(f"    {key}: {len(articles)} English articles, "
                   "skipping rather than picking one")
             continue
         resolved += 1
@@ -259,18 +307,169 @@ def resolve_molecules(conn, dry_run=False, refresh=False, limit=None):
                      f"({sparql_literal(chembl_id)} wdt:P592 {sparql_literal(chembl_id)})"))
 
     found, failed = sparql_articles(WIKIDATA_MOLECULE_QUERY, rows)
+    found = every_article(found)
     keys = [c[0] for c in candidates]
+
+    # The article's own infobox, only where Wikidata found no article at all:
+    # an ambiguous Wikidata answer stays a refusal, and a failed one is retried
+    # on the next run rather than answered some other way.
+    inchikey_of = dict(candidates)
+    unanswered = [k for k in keys if k not in failed and not found.get(k)]
+    by_infobox, refused = {}, collections.Counter()
+    if unanswered:
+        try:
+            by_infobox, refused = infobox_articles(
+                {k: inchikey_of[k] for k in unanswered})
+        except WikidataError as err:
+            print(f"    Wikipedia infobox lookup failed for {len(unanswered)} "
+                  f"molecule(s): {err}")
+            failed |= set(unanswered)
+    found.update(by_infobox)
+
     resolved, ambiguous, no_article = apply_results(
         conn, "molecules", "chembl_id", keys, found, failed, dry_run)
+    n_infobox = sum(1 for urls in by_infobox.values() if len(urls) == 1)
+    n_refused = sum(refused.values())
     print(f"  molecules: {resolved}/{len(keys)} queried linked to Wikipedia"
-          f" ({total} total, {len(keys)} queried)"
+          f" ({n_infobox} by their article's infobox; {total} total,"
+          f" {len(keys)} queried)"
           + (f", {ambiguous} skipped as ambiguous" if ambiguous else "")
+          + (f", {n_refused} infobox matches refused ({dict(refused)})" if n_refused else "")
           + (f", {len(failed)} failed" if failed else "")
           + f", {no_article} with no article")
     return {
         "total": total, "queried": len(keys), "resolved": resolved,
+        "by_infobox": n_infobox, "refused": n_refused,
         "ambiguous": ambiguous, "no_article": no_article, "failed": len(failed),
     }
+
+
+# ------------------------------------------------ molecules: the drugbox
+#
+# Wikidata reaches no article for some molecules that have one, because
+# Wikidata and ChEMBL disagree about which structure is the drug: ChEMBL's
+# parent for varenicline, vinblastine and clindamycin is drawn with
+# stereochemistry the item holding the article does not carry, warfarin's and
+# methamphetamine's articles sit on a "racemic mixture" item with no
+# identifiers at all, and taminadenant's (PBF-509) item is a bare label.
+#
+# What does reach them is the identifier the article itself declares: the
+# ChEMBL parameter of its {{Infobox drug}} or {{Chembox}}, which English
+# Wikipedia renders as a link to the ChEMBL compound page. The wiki's
+# external-link index lists every article carrying one, so this is a lookup
+# by identifier in the other direction, not a title search. An article is
+# accepted only when
+#   - a drug or chemical infobox on it names the molecule's own (parent)
+#     ChEMBL ID in its ChEMBL parameter - a ChEMBL link elsewhere on the page,
+#     in a reference or a list of compounds, is not a claim about the article;
+#   - any InChIKey that infobox declares has the molecule's skeleton (the
+#     first block): the infobox on "Nitrous oxide (medication)" carries
+#     oxygen's ChEMBL ID, and its InChIKey is how that shows. The skeleton
+#     rather than the whole key, because the stereo disagreements above are
+#     the reason the route exists; either side without a key (a biologic)
+#     is matched on the ChEMBL ID alone, as the Wikidata route does;
+#   - it is the only such article; two is a refusal (inositol, vasopressin).
+#
+# Never through a salt form's ChEMBL ID. ChEMBL files a deuterated drug as a
+# form of its parent, and InChIKey's isotope layer sits outside the skeleton
+# block, so a form's ID would link ethyl linoleate to "Deulinoleate ethyl" and
+# tebitorexant to "Tebideutorexant" - different drugs - with nothing here able
+# to tell. The Wikidata route has the same scope for the same reason.
+
+CHEMBL_LINK_PREFIXES = ("www.ebi.ac.uk/chembl/", "www.ebi.ac.uk/chembldb/")
+CHEMBL_IN_URL = re.compile(r"CHEMBL(\d+)(?!\d)", re.I)
+INFOBOX_START = re.compile(r"\{\{\s*(?:infobox[ _]drug|drugbox|chembox)\b", re.I)
+INFOBOX_CHEMBL = re.compile(r"\|\s*ChEMBL\d*\s*=\s*(?:CHEMBL)?\s*(\d+)(?!\d)", re.I)
+INFOBOX_INCHIKEY = re.compile(r"\|\s*(?:Std)?InChIKey\d*\s*=\s*([A-Z]{14}-[A-Z]{10}-[A-Z])\b")
+
+
+def chembl_link_pages():
+    """ChEMBL ID -> titles of English articles linking its compound page,
+    from the wiki's external-link index (about 10,500 links, 500 a request)."""
+    pages: dict[str, set] = {}
+    for protocol in ("https", "http"):
+        for prefix in CHEMBL_LINK_PREFIXES:
+            params = {"action": "query", "list": "exturlusage", "euquery": prefix,
+                      "euprotocol": protocol, "eunamespace": 0, "eulimit": 500}
+            while True:
+                data = _wikipedia_get(params)
+                for row in data.get("query", {}).get("exturlusage", []):
+                    m = CHEMBL_IN_URL.search(row["url"])
+                    if m:
+                        pages.setdefault("CHEMBL" + m.group(1), set()).add(row["title"])
+                if "continue" not in data:
+                    break
+                params = dict(params, **data["continue"])
+    return pages
+
+
+def infoboxes(wikitext):
+    """The text of each drug or chemical infobox on a page, nested templates
+    included."""
+    for m in INFOBOX_START.finditer(wikitext or ""):
+        depth, i = 0, m.start()
+        while i < len(wikitext):
+            if wikitext.startswith("{{", i):
+                depth, i = depth + 1, i + 2
+            elif wikitext.startswith("}}", i):
+                depth, i = depth - 1, i + 2
+                if depth == 0:
+                    break
+            else:
+                i += 1
+        yield wikitext[m.start():i]
+
+
+def infobox_verdict(wikitext, chembl_id, inchikey):
+    """None when an infobox on the page names `chembl_id` and agrees with
+    `inchikey`'s skeleton, else the reason it does not."""
+    number = chembl_id[len("CHEMBL"):]
+    named = False
+    for box in infoboxes(wikitext):
+        if number not in INFOBOX_CHEMBL.findall(box):
+            continue
+        named = True
+        keys = set(INFOBOX_INCHIKEY.findall(box))
+        if not keys or not inchikey or any(
+                k.split("-")[0] == inchikey.split("-")[0] for k in keys):
+            return None
+    return "infobox structure differs" if named else "not in an infobox"
+
+
+def _page_texts(titles):
+    """title -> wikitext for each English article that exists."""
+    out = {}
+    titles = sorted(titles)
+    for start in range(0, len(titles), WIKIPEDIA_CHUNK):
+        data = _wikipedia_get({
+            "action": "query", "prop": "revisions", "rvprop": "content",
+            "rvslots": "main", "titles": "|".join(titles[start:start + WIKIPEDIA_CHUNK])})
+        query = data.get("query", {})
+        back = {n["to"]: n["from"] for n in query.get("normalized", [])}
+        for page in query.get("pages", []):
+            if page.get("missing") or not page.get("revisions"):
+                continue
+            out[back.get(page["title"], page["title"])] = (
+                page["revisions"][0]["slots"]["main"]["content"])
+    return out
+
+
+def infobox_articles(inchikey_by_chembl):
+    """(chembl_id -> set of article URLs whose infobox names it and passes,
+    Counter of refusal reasons) for the molecules given. Raises WikidataError
+    when Wikipedia cannot be read, never returning that as "no article"."""
+    pages = chembl_link_pages()
+    wanted = {cid: pages[cid] for cid in inchikey_by_chembl if cid in pages}
+    texts = _page_texts(set().union(*wanted.values())) if wanted else {}
+    found, refused = {}, collections.Counter()
+    for cid, titles in wanted.items():
+        for title in titles:
+            why = infobox_verdict(texts.get(title), cid, inchikey_by_chembl[cid])
+            if why:
+                refused[why] += 1
+            else:
+                found.setdefault(cid, set()).add(article_url(title))
+    return found, refused
 
 
 def resolve_targets(conn, dry_run=False, refresh=False, limit=None):
@@ -306,6 +505,18 @@ def resolve_targets(conn, dry_run=False, refresh=False, limit=None):
             for chembl_id in candidates]
 
     found, failed = sparql_articles(WIKIDATA_TARGET_QUERY, rows)
+    # The precedence settles a protein/gene disagreement only for a protein
+    # item with one gene; anything else is read as one set, and two
+    # articles there are ambiguous.
+    disagree = [k for k, by_via in found.items()
+                if by_via.get("protein") and by_via.get("gene")
+                and by_via["protein"] != by_via["gene"]]
+    one_gene, count_failed = single_gene_targets(
+        [(k, accession_by_target[k]) for k in disagree])
+    failed |= count_failed
+    settled = {k: v for k, v in found.items() if k not in disagree or k in one_gene}
+    found = {**every_article({k: v for k, v in found.items() if k not in settled}),
+             **preferred_articles(settled, TARGET_ARTICLE_PRECEDENCE)}
     resolved, ambiguous, no_article = apply_results(
         conn, "targets", "chembl_id", candidates, found, failed, dry_run)
     print(f"  targets: {resolved}/{len(candidates)} queried linked to Wikipedia"
@@ -321,6 +532,23 @@ def resolve_targets(conn, dry_run=False, refresh=False, limit=None):
         "queried": len(candidates), "resolved": resolved, "ambiguous": ambiguous,
         "no_article": no_article, "failed": len(failed),
     }
+
+
+def single_gene_targets(pairs):
+    """(keys whose protein item names exactly one gene, keys whose lookup
+    failed) for (target key, accession) pairs."""
+    one, failed = set(), set()
+    rows = [(k, f"({sparql_literal(k)} {sparql_literal(acc)})") for k, acc in pairs]
+    for keys_in_chunk, values in _chunk(rows, WIKIDATA_CHUNK):
+        try:
+            data = _wikidata_get(WIKIDATA_GENE_COUNT_QUERY % " ".join(values))
+        except WikidataError as err:
+            print(f"    Wikidata gene count failed for {len(keys_in_chunk)} key(s): {err}")
+            failed.update(keys_in_chunk)
+            continue
+        one.update(b["key"]["value"] for b in data["results"]["bindings"]
+                   if b["genes"]["value"] == "1")
+    return one, failed
 
 
 def _wikipedia_get(params):
@@ -345,6 +573,10 @@ def _wikipedia_get(params):
                 raise WikidataError(f"Wikipedia rejected the request: {err}") from err
             if attempt < REQUEST_RETRIES - 1:
                 delay = min(3 * (2 ** attempt), MAX_RETRY_DELAY)
+                # A 429 names its own wait, and Wikimedia asks for it to be kept.
+                retry_after = getattr(getattr(err, "response", None), "headers", {}).get("Retry-After")
+                if status == 429 and retry_after and retry_after.isdigit():
+                    delay = max(delay, int(retry_after))
                 print(f"    Wikipedia request failed ({type(err).__name__}), "
                       f"retrying in {delay}s...")
                 time.sleep(delay)
@@ -622,8 +854,10 @@ def print_summary(summary):
     m, t = summary["molecules"], summary["targets"]
     print("\nSummary")
     print("-------")
-    print(f"molecules: {m['resolved']} resolved, {m['no_article']} no article, "
-          f"{m['ambiguous']} ambiguous (dropped), {m['failed']} failed "
+    print(f"molecules: {m['resolved']} resolved ({m['by_infobox']} by their article's "
+          f"infobox), {m['no_article']} no article, "
+          f"{m['ambiguous']} ambiguous (dropped), {m['refused']} infobox matches "
+          f"refused, {m['failed']} failed "
           f"(of {m['queried']} queried, {m['total']} total)")
     print(f"targets:   {t['resolved']} resolved, {t['no_article']} no article, "
           f"{t['ambiguous']} ambiguous (dropped), {t['failed']} failed, "

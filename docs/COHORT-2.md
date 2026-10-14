@@ -34,7 +34,11 @@ answered by D18, for primary targets only.
   the MeSH and trial ones, writing `gtopdb_interactions` and the
   `gtopdb_actions` key of `build_manifest`. Release **2026.3** (published
   2026-09-16), pinned by the files' own version line, cached under
-  `db/cache/gtopdb/2026.3/`, sha256 in the manifest.
+  `db/cache/gtopdb/2026.3/`, sha256 in the manifest. Bumped on 2026-10-14 to
+  **2026.3.1** (published 2026-10-12), which changes nothing in this
+  catalogue: its 25 new interaction rows and 40 new ligands are all outside
+  it, and the 2,749 stored rows and 739 claims are identical column for
+  column. Its one new (Type, Action) pair is mapped below.
 - Matched by identifier only. The ligand by exact InChIKey, else by a ChEMBL id
   naming exactly one parent; two routes disagreeing drops the ligand. The target
   by UniProt accession, to one SINGLE PROTEIN record, or — for a multi-subunit
@@ -44,6 +48,8 @@ answered by D18, for primary targets only.
   `action_type` vocabulary so the viewer's `OPPOSED_ACTIONS` reads both
   sources; "Neutral", "Binding", "Mixed" and the like map to no direction. A
   pair a future release adds is stored undirected and listed in the manifest.
+  2026.3.1 added one, ('Antibody', 'Activation'), on denecimig at coagulation
+  factor IX, mapped to ACTIVATOR as ('Activator', 'Activation') is.
 - The export carries a `gtopdb` block; the viewer folds its directions into
   `directionIndex` only where the pair has a claim the filters show, names the
   curator in every sentence about an opposition, and shows GtoPdb's own words
@@ -263,6 +269,92 @@ record ([VIEWER.md](VIEWER.md), *One protein, one node*). Still a grouping and
 never a move: each record keeps its own claims, rarity and links, and the
 score is untouched.
 
+### D21 — an in-scope indication qualifies from Phase 1
+
+**Decision (user, 2026-10-12).** "Lets expand the molecule set by letting in
+all molecules with a brain indication that have reached phase 1 or above."
+The indication route's floor drops from Phase 3 (D01) to Phase 1:
+`admission_routes.indication.min_phase` is 1, selection policy 3.0.0. Nothing
+else moves. The scope is D02's and D16's, read off the same pinned MeSH
+classification; the phase is still the qualifying *indication's*, never the
+molecule's highest across unrelated diseases; Early Phase 1 (0.5), Unknown (−1)
+and a missing phase still cannot qualify, and still never disqualify an ATC N
+match. Worked in the `phase1-admission` worktree.
+
+**What "brain indication" was read as.** The adopted scope, unchanged, so one
+floor applies to every in-scope descriptor. Two edges of that scope, accepted
+at Phase 3 in D02, carry further at Phase 1, and are measured here rather than
+narrowed without asking:
+
+- **69 new members qualify only through the Pain tree** — Pain itself, myalgia,
+  arthralgia, low back pain, stable angina, abdominal pain. D02 accepted that
+  breadth with visible admission reasons.
+- **72 qualify only through a tumour heading**: Brain Neoplasms alone (54),
+  Diffuse Intrinsic Pontine Glioma alone (13), the two together (3) and
+  Pituitary Neoplasms (2). Counting neurofibromatosis 1 and 2, the
+  tumour-predisposition syndromes, makes 80. These are mostly cancer drugs
+  trialled in glioma (ipilimumab, pazopanib, cabazitaxel), plus imaging
+  agents. The headings are in scope because D02's core rule removes a
+  descriptor only when *every* C10 placement is in an excluded class, and
+  Brain Neoplasms also sits at C10.228.140.211 under Brain Diseases, outside
+  the excluded C10.551 Nervous System Neoplasms. DIPG, Pituitary Neoplasms,
+  Brain Stem Neoplasms and Pinealoma inherit the same placement. At Phase 3
+  this admitted 12 members by tumour alone (lomustine, procarbazine,
+  nivolumab, pembrolizumab among them).
+  *Counted* by the qualifying headings with any C04 placement, each judged
+  by name: Myasthenia Gravis carries C04 only as a paraneoplastic syndrome,
+  and Sturge-Weber Syndrome and Tuberous Sclerosis are neurocutaneous
+  syndromes, so none of those three counts as a tumour heading.
+
+Seven more qualify only through Erectile Dysfunction, which MeSH also files
+under F03.
+
+**What it did.** The cohort goes from 1,330 to 2,449 members and the catalogue
+from 1,335 to 2,452: 1,119 new members, all by the indication route, none
+lost. Pentoxifylline and rolipram, seeds outside the cohort until now, are
+members; loperamide (Pain at Early Phase 1), mibefradil and theobromine
+remain seeds only. Of the new members 110 stopped at Phase 1, 557 at Phase 2
+and 132 at Phase 3 across every disease, and 318 are approved — for something
+outside the scope and trialled at Phase 1 or 2 within it (an antidiabetic in
+Alzheimer's, an anticancer drug in glioma). They are 838 small molecules, 87
+of unknown type, 71 proteins, 67 antibodies and 56 others (D03 filters none).
+The most common qualifying headings among them are Alzheimer Disease (131),
+Parkinson Disease (87), Brain Neoplasms (84), Schizophrenia (70) and Major
+Depressive Disorder (68).
+
+The ATC grade fell with D21 (38.7% to 32.7% top-1), and so did the MeSH
+grade. Neither is the ranking getting worse: the newcomers mostly carry no
+label either judge can credit, so one ranked above a class-mate counts as a
+miss however apt. Skipped in each list, the ranking among the old catalogue
+grades as it did before ([SIMILARITY-HARNESS.md](SIMILARITY-HARNESS.md) §11).
+
+### D22 — MeSH actions read from MeSH, not through PubChem
+
+**Decision (user, 2026-10-13).** "adopt B2 and complete the open items". The
+MeSH pharmacological actions are read from each molecule's own MeSH record,
+reached by identifier and never through PubChem. The steps, each tried only
+where the one before placed nothing:
+
+1. FDA UNII;
+2. the CAS number FDA lists for it;
+3. a stereoisomer mixture, for a structure ChEMBL draws flat;
+4. the MeSH ID on the Wikidata item carrying the ChEMBL ID.
+
+**Why.** PubChem blocked the D21 backfill after about 400 requests, twice. Its
+compound-to-MeSH links are made by name, which is how tafamidis carried
+triamcinolone's actions. The new route uses identifiers at every step and runs
+offline from pinned files and one cached Wikidata pass.
+
+**What it did.** On the 1,335-entry build, 848 molecules carry actions against
+PubChem's 787, 760 identical. On D21's catalogue, 1,194 of 2,452 do. Tarenflurbil
+lost flurbiprofen's COX actions, the 11 links PubChem's name-matching made in
+error are gone, and 20 molecules PubChem reached are left without actions. The MeSH
+answer key moved with it, so MeSH grades before and after are not comparable.
+The measurements and the refused alternative (matching a skeleton while
+ignoring stereochemistry, which put esmethadone on methadone's record) are in
+[MESH-ACTIONS-ROUTE-B.md](MESH-ACTIONS-ROUTE-B.md) and DATA-QUALITY-LOG,
+2026-10-13.
+
 ---
 
 ## Open
@@ -279,8 +371,9 @@ In the order they bear on the picture.
    mixed where the curators' words differ.
 4. **Primary-only for evidence, all rows for direction** (the user's call on
    2026-09-27). Worth revisiting if a second error like vilazodone's appears.
-5. **New molecules** — the second step. GtoPdb's ligands outside the cohort,
-   admitted by a rule still to be written; see
+5. **New molecules** — the second step. D21 added 1,119 by lowering the
+   indication route's phase floor. GtoPdb's ligands outside the cohort are
+   still unadmitted, by a rule still to be written; see
    [COHORT-BOUNDARY-REVIEW.md](COHORT-BOUNDARY-REVIEW.md) for the curated-route
    proposal it should start from.
 6. **Report the alfuzosin mechanism to ChEMBL.** Drafted 2026-10-10 in
@@ -297,3 +390,8 @@ In the order they bear on the picture.
 8. **Complexes and families across species** (a rat GABA-A assembly against
    the human one) are still separate targets under D20, and so still separate
    nodes on the canvas, where single proteins are now one.
+9. **D21's scope edges.** At Phase 1 the Pain tree admits 69 members by pain
+   alone (angina and myalgia among them), and the tumour headings 72 (80 with
+   neurofibromatosis), mostly cancer drugs trialled in glioma. Both edges
+   were accepted at Phase 3 in D02. Whether "brain indication" should exclude
+   them at the lower floor is the user's call.
