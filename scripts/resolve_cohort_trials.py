@@ -81,6 +81,16 @@ primary completion date: it is when the trial stopped running, which is the
 question the page asks of it. A study with neither date (6 of the 200 had no
 completion date) keeps NULLs, and schema_version 3 says they were asked for.
 
+`countries` came fourth (`schema_version = 4`, 2026-10-13), for the user's
+question of which trials ran outside the United States: the distinct
+countries the registry lists a site in, '|'-joined and sorted, NULL where the
+record lists no location at all (common for older and withdrawn trials, and
+not the same as "no site anywhere"). It is the registry's own field, read on
+the NCT id like everything else here, so splitting a molecule's trials into
+US-site and non-US-site ones matches nothing on a name. ClinicalTrials.gov is
+not a US-only registry - a trial run wholly in Russia is registered there -
+which is why the split is made on the sites and never on the registry.
+
 API: GET https://clinicaltrials.gov/api/v2/studies, filter.ids=<comma-joined
 NCT ids>, fields=NCTId,OverallStatus,WhyStopped,HasResults,LastUpdatePostDate,
 StartDate,StartDateType,CompletionDate,CompletionDateType,
@@ -162,13 +172,15 @@ CTGOV_USER_AGENT = (
 CTGOV_FIELDS = ("NCTId,OverallStatus,WhyStopped,HasResults,LastUpdatePostDate,"
                  "StartDate,StartDateType,CompletionDate,CompletionDateType,"
                  "Phase,OutcomeMeasureType,OutcomeMeasureTitle,"
-                 "OutcomeAnalysisPValue,OutcomeAnalysisNonInferiorityType")
+                 "OutcomeAnalysisPValue,OutcomeAnalysisNonInferiorityType,"
+                 "LocationCountry")
 
 # The schema version this build of the script writes. See the module
 # docstring: NULL/1 marks a row from before phases/primary_outcomes existed,
-# 2 one from before the start and completion dates, and a default run
-# re-fetches those rows rather than trusting their NULLs.
-SCHEMA_VERSION = 3
+# 2 one from before the start and completion dates, 3 one from before the
+# site countries, and a default run re-fetches those rows rather than
+# trusting their NULLs.
+SCHEMA_VERSION = 4
 
 REQUEST_TIMEOUT = 60
 REQUEST_RETRIES = 6
@@ -201,6 +213,7 @@ CREATE TABLE IF NOT EXISTS trial_status (
     start_date_type   TEXT,
     completion_date   TEXT,
     completion_date_type TEXT,
+    countries         TEXT,
     schema_version    INTEGER,
     fetched_at        TEXT NOT NULL
 )
@@ -218,6 +231,7 @@ TRIAL_STATUS_MIGRATION_COLUMNS = [
     ("start_date_type", "TEXT"),
     ("completion_date", "TEXT"),
     ("completion_date_type", "TEXT"),
+    ("countries", "TEXT"),
     ("schema_version", "INTEGER"),
 ]
 
@@ -334,6 +348,15 @@ def _extract_primary_outcomes(study):
     return json.dumps(primaries)
 
 
+def _extract_countries(proto):
+    """The distinct countries the study lists a site in, sorted and
+    '|'-joined; None when it lists no location, which is a gap in the record
+    and not a statement that the trial ran nowhere."""
+    locations = (proto.get("contactsLocationsModule") or {}).get("locations") or []
+    countries = sorted({loc["country"] for loc in locations if loc.get("country")})
+    return "|".join(countries) if countries else None
+
+
 def _parse_study(study):
     """One raw study dict -> a trial_status row, or None if it carries no
     nctId at all (defensive - every study the API returns has one)."""
@@ -361,6 +384,7 @@ def _parse_study(study):
         "start_date_type": start.get("type"),
         "completion_date": completion.get("date"),
         "completion_date_type": completion.get("type"),
+        "countries": _extract_countries(proto),
     }
 
 
@@ -462,13 +486,14 @@ def resolve_trials(conn, dry_run=False, refresh=False, limit=None,
                     "(nct_id, overall_status, why_stopped, has_results,"
                     " last_update, phases, primary_outcomes, start_date,"
                     " start_date_type, completion_date, completion_date_type,"
-                    " schema_version, fetched_at)"
-                    " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                    " countries, schema_version, fetched_at)"
+                    " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     (row["nct_id"], row["overall_status"], row["why_stopped"],
                      row["has_results"], row["last_update"], row["phases"],
                      row["primary_outcomes"], row["start_date"],
                      row["start_date_type"], row["completion_date"],
-                     row["completion_date_type"], SCHEMA_VERSION, fetched_at))
+                     row["completion_date_type"], row["countries"],
+                     SCHEMA_VERSION, fetched_at))
         new_aliases = aliased - aliased_seen
         if new_aliases:
             aliased_total += len(new_aliases)

@@ -226,7 +226,7 @@ export const MOLECULE_FIELDS = [
   "molecular_formula", "molecular_weight", "atc_level5", "atc_flags",
   "identity_flags", "seed_name", "gap_reason", "exclusion_reason", "smiles",
   "inchikey", "wikipedia_url", "n_indications_chembl", "synonyms", "aliases",
-  "approved_elsewhere",
+  "approved_elsewhere", "trial_sites", "trial_countries",
 ];
 
 export const TARGET_FIELDS = [
@@ -280,6 +280,7 @@ const INTERNED = new Set([
   "conversion_note", "activity_comment", "phase_label", "mesh_heading",
   "seed_name", "note", "description", "gene_symbol", "mechanism_comment",
   "selectivity_comment", "gtp_type", "gtp_action", "selectivity",
+  "trial_sites", "trial_countries",
 ]);
 
 class Interner {

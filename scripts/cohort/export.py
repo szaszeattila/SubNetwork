@@ -63,7 +63,7 @@ MOLECULE_FIELDS = [
     "molecular_formula", "molecular_weight", "atc_level5", "atc_flags",
     "identity_flags", "seed_name", "gap_reason", "exclusion_reason", "smiles",
     "inchikey", "wikipedia_url", "n_indications_chembl", "synonyms", "aliases",
-    "approved_elsewhere",
+    "approved_elsewhere", "trial_sites", "trial_countries",
 ]
 
 # Reviewed common names, keyed by ChEMBL ID, carried over from the legacy
@@ -202,6 +202,7 @@ INTERNED = {
     "conversion_note", "activity_comment", "phase_label", "mesh_heading",
     "seed_name", "note", "description", "gene_symbol", "mechanism_comment",
     "selectivity_comment", "gtp_type", "gtp_action", "selectivity",
+    "trial_sites", "trial_countries",
 }
 
 # The class sources the page offers: USAN/INN name stems, the MeSH
@@ -242,6 +243,64 @@ def _trial_years(r):
     while out and out[-1] is None:
         out.pop()
     return out
+
+
+# Where a molecule's in-scope trials ran, for the page's trial-sites filter.
+# A trial counts only where the registry's own phase for it is Phase 1 or
+# later - the floor D21 sets for an indication, read here off the trial,
+# because an indication's phase can come from a US Phase 3 while the trial
+# abroad was Early Phase 1. Every in-scope indication's trials are read, not
+# only the qualifying ones, so a member admitted by ATC N still says where its
+# brain trials ran.
+TRIAL_SITE_PHASES = frozenset({"PHASE1", "PHASE2", "PHASE3", "PHASE4"})
+HOME_COUNTRY = "United States"
+
+
+def trial_sites(trials) -> tuple[str | None, str | None]:
+    """(sites, countries outside the US) for one molecule, from its in-scope
+    trials as (phases, countries) pairs of trial_status's '|'-joined columns.
+
+    sites is "us", "both" or "elsewhere" by where the Phase 1+ trials list a
+    site; "unstated" where there are Phase 1+ trials and none lists one; None
+    where there is no Phase 1+ in-scope trial at all - an ATC N member, an
+    approval resting on a label, a trial not fetched. Nothing here is matched
+    on a name: every trial is one ChEMBL cites, read by its NCT id."""
+    us = False
+    abroad: set[str] = set()
+    counted = False
+    for phases, countries in trials:
+        if not phases or not TRIAL_SITE_PHASES & set(phases.split("|")):
+            continue
+        counted = True
+        for c in (countries or "").split("|"):
+            if c == HOME_COUNTRY:
+                us = True
+            elif c:
+                abroad.add(c)
+    if not counted:
+        return None, None
+    sites = ("both" if us and abroad else "us" if us
+             else "elsewhere" if abroad else "unstated")
+    return sites, "|".join(sorted(abroad)) or None
+
+
+def _trial_sites_by_molecule(db) -> dict[int, tuple[str | None, str | None]]:
+    """trial_sites() for every molecule, or {} where the trial backfill has
+    not stored countries (it is a backfill; a build without it says nothing
+    about where any trial ran, rather than calling them all unstated)."""
+    has = db.execute("SELECT 1 FROM sqlite_master WHERE type = 'table'"
+                     " AND name = 'trial_status'").fetchone()
+    if not has or "countries" not in {c[1] for c in db.execute("PRAGMA table_info(trial_status)")}:
+        return {}
+    status = {r["nct_id"]: (r["phases"], r["countries"]) for r in db.execute(
+        "SELECT nct_id, phases, countries FROM trial_status WHERE schema_version >= 4")}
+    per_molecule = collections.defaultdict(dict)
+    for r in db.execute("SELECT parent_molregno, trial_ids FROM molecule_indications"
+                        " WHERE trial_ids IS NOT NULL"):
+        for nct in r["trial_ids"].split("|"):
+            if nct in status:
+                per_molecule[r["parent_molregno"]][nct] = status[nct]
+    return {m: trial_sites(t.values()) for m, t in per_molecule.items()}
 
 
 class Strings:
@@ -383,6 +442,7 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
 
     molecules, molecule_ids = [], []
     status_with_gtopdb = {}
+    sites = _trial_sites_by_molecule(db)
     for r in db.execute("SELECT * FROM molecules ORDER BY parent_molregno"):
         rec = dict(r)
         mid = rec.pop("parent_molregno")
@@ -408,6 +468,7 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
         rec["synonyms"] = [cat_s.intern(n) for n in names]
         rec["aliases"] = [cat_s.intern(a)
                           for a in MOLECULE_ALIASES.get(rec["chembl_id"], [])]
+        rec["trial_sites"], rec["trial_countries"] = sites.get(mid, (None, None))
         molecules.append(_row(rec, MOLECULE_FIELDS, cat_s))
         molecule_ids.append(mid)
 

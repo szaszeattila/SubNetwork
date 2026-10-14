@@ -505,7 +505,7 @@ hand-written and is never rewritten.
 <!-- Written by `python3 scripts/cohort_report.py --write-status`. Do not edit by hand: `--check-status` fails when this block and the active build disagree, and a rewrite discards whatever was typed here. The prose outside the markers is hand-written and is never touched. -->
 
 Pipeline and viewer both working. Current database, `db/cohort1.db`, built
-2026-10-12 against the `chembl_37` bulk release under selection policy
+2026-10-13 against the `chembl_37` bulk release under selection policy
 `cohort1-selection v3.0.0` and evidence policy `cohort1-evidence v1.1.1`:
 
 **2,452 catalogue entries · 3,359 targets · 127,741 claims · 327,957 observations**
@@ -528,7 +528,7 @@ organism-format rows and 4 documented known-bad records are excluded with
 their reasons, and the exclusion accounting reconciles exactly to the
 1,200,625 activity rows scanned. All 15 build checks pass.
 
-What the page loads is 8.42 MB of startup payload in `viz/graph.data.js` and
+What the page loads is 8.55 MB of startup payload in `viz/graph.data.js` and
 0.20 MB in `viz/gtopdb.data.js`, GtoPdb's part, kept apart for its licence;
 and 112.2 MB of per-molecule evidence shards across 2,046 files under
 `viz/evidence/`, fetched one at a time on demand.
@@ -545,7 +545,7 @@ the `class_wikipedia` table: 523 through the Wikidata item carrying the
 descriptor, and 87 whose item has no article through the main article its
 English category declares (Xanthines to *Xanthine*).
 
-The pipeline suite is 512 tests and the node suites are 701 (472 cohort
+The pipeline suite is 526 tests and the node suites are 710 (481 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`
@@ -588,8 +588,11 @@ behaviour a rule here describes.
 
 **What's drawn vs. what's in the catalogue**
 
-- **`claimVisible` decides what's in the picture; only the four claim
-  filters (tier, basis, potency, curated mechanism) may change that.**
+- **`claimVisible` decides what's in the picture; only the five
+  eligibility filters (tier, basis, potency, curated mechanism, and trial
+  sites, which is the molecule's) may change that.** Trial sites reads where
+  a molecule's Phase 1+ in-scope trials ChEMBL cites had sites, by NCT id
+  ([docs/FOREIGN-TRIALS.md](docs/FOREIGN-TRIALS.md), a proposal on this branch).
   Canvas control, viewport culling, line colour and protein-group
   linking answer "drawn/on screen/what colour" instead, invisible to
   panels, ranking, gaps and search.
