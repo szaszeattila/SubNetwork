@@ -3,6 +3,9 @@
 Read-only. **Adopts nothing**, changes no membership, and writes to neither
 database nor the viewer. The findings are in
 [docs/NOOTROPIC-WIKI-COMPARISON.md](../../docs/NOOTROPIC-WIKI-COMPARISON.md).
+D23 ([docs/COHORT-2.md](../../docs/COHORT-2.md)) later entered two sections'
+placements into the catalogue. Nothing here feeds the build: each placement
+was reviewed and written into `config/cohort1_selection.json` as a ChEMBL id.
 
 It takes every compound the [scientificsean.wiki](https://www.scientificsean.wiki/)
 class table lists (2,184 on 2026-10-11), finds each in ChEMBL 37 where it can,

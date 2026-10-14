@@ -656,6 +656,9 @@ const moleculeByChembl = new Map();
 for (const m of molecules) {
   m.synonyms = (m.synonyms || []).map(function (i) { return STR[i]; });
   m.aliases = (m.aliases || []).map(function (i) { return STR[i]; });
+  m.listings = (m.listings || []).map(function (l) {
+    return { source: STR[l[0]], name: STR[l[1]], slug: STR[l[2]] };
+  });
   moleculeById.set(m.id, m);
   moleculeByChembl.set(m.chembl_id, m);
 }
@@ -3007,6 +3010,10 @@ const HELP = {
                    "found a difference, though not which way; above means it did not.",
   development: "The furthest this molecule has got for any condition, not only " +
                "those listed here.",
+  listing: "Why this molecule is in the catalogue: a public list names it, not a " +
+           "brain indication or a nervous-system drug code. A listing says nothing " +
+           "about what the molecule acts on and does not count toward similarity. " +
+           "SubNetwork is not affiliated with the list.",
   components: "The proteins that make up this target. A claim here is about the " +
               "whole target, never passed on to these proteins.",
   wider: "Complexes or families that include this protein. Claims made about " +
@@ -3177,6 +3184,37 @@ function externalLinks(kind, ref) {
     }
   }
   return out;
+}
+
+/* ----------------------------------------------------------------- listings */
+
+// The public lists a molecule can be entered from (D23), keyed as the selection
+// policy keys them. Each entry links to its own page on the list, built from
+// the slug the export carries; the export refuses a source this map lacks, so
+// no listing reaches the page uncredited.
+const LISTING_SOURCES = {
+  sciwiki: {
+    label: "the sci-wiki",
+    home: "https://www.scientificsean.wiki/",
+    page: function (slug) {
+      return "https://www.scientificsean.wiki/compounds/" + encodeURIComponent(slug);
+    },
+  },
+};
+
+// One identity-table row citing the list an entry was entered from, under the
+// list's own name for it. A listed molecule the clinical routes also admit
+// says "Also listed by" instead, because the listing is then not why it is here.
+function listingRowHTML(mol) {
+  const known = (mol.listings || []).filter(function (l) { return LISTING_SOURCES[l.source]; });
+  if (!known.length) return "";
+  const entered = mol.admission_reason === "listed_only";
+  return "<tr><td>" + helpLabel(entered ? "Entered from" : "Also listed by", "listing") +
+    "</td><td>" + known.map(function (l) {
+      const src = LISTING_SOURCES[l.source];
+      return "<div>" + externalLink(src.home, esc(src.label)) + ", as " +
+        externalLink(src.page(l.slug), esc(l.name)) + "</div>";
+    }).join("") + "</td></tr>";
 }
 
 /* -------------------------------------------------------- evidence shards */
@@ -3443,6 +3481,21 @@ function aboutSourcesHTML() {
     link("https://www.wikidata.org/", "Wikidata") + ": Wikipedia links, and a " +
       "molecule's MeSH record where the FDA's registry does not reach it. " +
       licenceLink("CC0 1.0") + ".");
+  // A list is credited only when the payload carries entries from it, the way
+  // GtoPdb is only when its file was merged.
+  const listed = molecules.filter(function (m) {
+    return m.admission_reason === "listed_only" &&
+      m.listings.some(function (l) { return l.source === "sciwiki"; });
+  }).length;
+  if (listed) {
+    items.push(link(LISTING_SOURCES.sciwiki.home, "The sci-wiki") +
+      " (Scientific Sean LLC): " + listed +
+      (listed === 1 ? " molecule is in the catalogue because its cognition and " +
+                      "psychiatric compound lists name it"
+                    : " molecules are in the catalogue because its cognition and " +
+                      "psychiatric compound lists name them") + ", read 2026-10-11. Each links to its page there; only the compound's name " +
+      "is used. SubNetwork is not affiliated with or endorsed by it.");
+  }
   return items.map(function (li) { return "<li>" + li + "</li>"; }).join("") +
     "<li>No other database of measurements (PDSP, BindingDB) is assessed.</li>";
 }
@@ -4506,6 +4559,7 @@ function showMolecule(mol) {
   // for something new, and the two used to read identically.
   h += "<tr><td>" + helpLabel("Development", "development") + "</td><td>" +
        developmentHTML(mol) + "</td></tr>";
+  h += listingRowHTML(mol);
   if (mol.molecular_formula) {
     h += "<tr><td>" + helpLabel("Formula", "formula") + "</td><td>" +
          esc(mol.molecular_formula) + "</td></tr>";

@@ -18,6 +18,12 @@ Identity normalises to the ChEMBL parent molregno. Nothing is matched on a
 name. All molecule types qualify (D03); withdrawal annotations and unresolved
 structures are retained and flagged (D04); the 28 seed molecules are retained
 and labelled separately from clinical membership (D05).
+
+A listed molecule (D23) is retained the way a seed is. The policy's `listings`
+name the ChEMBL ids a public list carries - the sci-wiki's cognition and
+psychiatric sections - reviewed by hand and written down as identifiers, so the
+build reads an id and never a name (invariant 15). A listing puts a parent in
+the catalogue, never in the clinical cohort, and is never evidence.
 """
 
 from __future__ import annotations
@@ -43,6 +49,9 @@ class Member:
     route_indication: bool
     is_seed: bool
     seed_name: str | None
+    # One dict per list naming this parent (D23): source, chembl_id, name,
+    # slug, section, placed_by. Empty for almost every entry.
+    listings: tuple[dict, ...]
     admission_reason: str
     exclusion_reason: str | None
     # annotations
@@ -153,6 +162,8 @@ def run(conn, policy: dict, descriptors: dict) -> dict:
     min_phase = routes["indication"]["min_phase"]
     flagged = {f["code"]: f["flag"] for f in routes["atc_n"]["flagged_subtrees"]}
     seed_pairs = [(name, cid) for name, cid in policy["seeds"]["molecules"]]
+    listed = [dict(e, source=src) for src, lst in policy.get("listings", {}).items()
+              for e in lst["molecules"]]
 
     # ---- route A: ATC N ---------------------------------------------------
     atc_rows = conn.execute("""
@@ -216,18 +227,29 @@ def run(conn, policy: dict, descriptors: dict) -> dict:
             raise common.PolicyError(f"seed {name} ({chembl_id}) is not in {common.CHEMBL_RELEASE}")
         seed_molregnos[chembl_id] = row["molregno"]
     seen |= set(seed_molregnos.values())
+    listed_molregnos = {}
+    for e in listed:
+        row = conn.execute("SELECT molregno FROM molecule_dictionary WHERE chembl_id = ?",
+                           (e["chembl_id"],)).fetchone()
+        if row is None:
+            raise common.PolicyError(f"listed {e['name']} ({e['chembl_id']}) is not in "
+                                     f"{common.CHEMBL_RELEASE}")
+        listed_molregnos[e["chembl_id"]] = row["molregno"]
+    seen |= set(listed_molregnos.values())
 
     parent_of = _parents_for(conn, seen)
     atc_parents = {parent_of[m] for m in atc_molregnos}
     ind_parents = {parent_of[m] for m in ind_molregnos}
     seed_parents = {cid: parent_of[m] for cid, m in seed_molregnos.items()}
+    listed_parents = {cid: parent_of[m] for cid, m in listed_molregnos.items()}
 
-    # Seeds are retained whether or not they qualify clinically (D05), so the
-    # catalogue is the clinical union plus every seed's parent.
+    # Seeds (D05) and listed molecules (D23) are retained whether or not they
+    # qualify clinically, so the catalogue is the clinical union plus both.
     cohort = atc_parents | ind_parents
-    catalogue = sorted(cohort | set(seed_parents.values()))
+    catalogue = sorted(cohort | set(seed_parents.values()) | set(listed_parents.values()))
     common.log(f"  ATC-N parents {len(atc_parents)}, indication parents {len(ind_parents)}, "
-               f"cohort union {len(cohort)}, catalogue with seeds {len(catalogue)}")
+               f"cohort union {len(cohort)}, catalogue with seeds and listed molecules "
+               f"{len(catalogue)}")
 
     families = _families_for(conn, set(catalogue))
     every = set(catalogue) | {m for f in families.values() for m in f}
@@ -252,6 +274,12 @@ def run(conn, policy: dict, descriptors: dict) -> dict:
     seed_by_parent = collections.defaultdict(list)
     for name, chembl_id in seed_pairs:
         seed_by_parent[seed_parents[chembl_id]].append((name, chembl_id))
+    listings_by_parent = collections.defaultdict(list)
+    for e in listed:
+        listings_by_parent[listed_parents[e["chembl_id"]]].append({
+            "source": e["source"], "chembl_id": e["chembl_id"], "name": e["name"],
+            "slug": e["slug"], "section": e.get("section"), "placed_by": e.get("placed_by"),
+        })
 
     anomalies = {}
     for entry in policy["identity"]["anomaly_flags"]:
@@ -299,6 +327,7 @@ def run(conn, policy: dict, descriptors: dict) -> dict:
         in_atc = p in atc_parents
         in_ind = p in ind_parents
         seeds_here = seed_by_parent.get(p, [])
+        listings_here = listings_by_parent.get(p, [])
 
         if in_atc and in_ind:
             admission = "both_routes"
@@ -306,11 +335,13 @@ def run(conn, policy: dict, descriptors: dict) -> dict:
             admission = "route_atc_n"
         elif in_ind:
             admission = "route_indication"
-        else:
+        elif seeds_here:
             admission = "seed_only"
+        else:
+            admission = "listed_only"
 
         exclusion = None
-        if admission == "seed_only":
+        if admission in ("seed_only", "listed_only"):
             if near:
                 best = max(near, key=lambda e: (e["max_phase_for_ind"] is not None,
                                                 e["max_phase_for_ind"] or -99))
@@ -346,6 +377,7 @@ def run(conn, policy: dict, descriptors: dict) -> dict:
             route_indication=in_ind,
             is_seed=bool(seeds_here),
             seed_name=seeds_here[0][0] if seeds_here else None,
+            listings=tuple(listings_here),
             admission_reason=admission,
             exclusion_reason=exclusion,
             atc_level5=atc_l5,
@@ -384,6 +416,8 @@ def run(conn, policy: dict, descriptors: dict) -> dict:
         "atc_n_total": len(atc_parents),
         "indication_total": len(ind_parents),
         "seeds_retained_outside_cohort": len(set(seed_parents.values()) - cohort),
+        "listed_retained_outside_cohort": len(set(listed_parents.values()) - cohort
+                                              - set(seed_parents.values())),
         "catalogue_total": len(catalogue),
     }
     arithmetic["union_check"] = (arithmetic["atc_n_total"] + arithmetic["indication_total"]
@@ -396,6 +430,7 @@ def run(conn, policy: dict, descriptors: dict) -> dict:
         "members": members,
         "arithmetic": arithmetic,
         "seed_parents": seed_parents,
+        "listed_parents": listed_parents,
         "parent_of": parent_of,
         "families": families,
         "records": records,

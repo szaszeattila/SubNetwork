@@ -355,6 +355,95 @@ ignoring stereochemistry, which put esmethadone on methadone's record) are in
 [MESH-ACTIONS-ROUTE-B.md](MESH-ACTIONS-ROUTE-B.md) and DATA-QUALITY-LOG,
 2026-10-13.
 
+### D23 — a molecule the sci-wiki lists is entered, and cites it
+
+**Decision (user, 2026-10-14).** "lets implement the compounds in these lists
+that are in CHEMBL with or without target data … lets cite the wiki as a
+source of entry", of two of the section lists in
+[analysis/wiki_comparison/sections/](../analysis/wiki_comparison/sections/):
+*Cognition & nootropic* and *Psychiatric & neuro-clinical*, from the sci-wiki
+(scientificsean.wiki, read 2026-10-11). Selection policy 3.1.0. Worked in the
+`wiki-comparison` worktree.
+
+**What it is.** A third reason for being in the catalogue, beside the clinical
+routes (D01, D21) and the seeds (D05), and shaped like the seeds:
+`listings.sciwiki` in `config/cohort1_selection.json` names ChEMBL ids, the
+build normalises each to its parent and keeps it whatever the clinical routes
+say, and `in_cohort` stays the clinical routes alone. Such an entry reads
+`admission_reason = 'listed_only'`, carries the exclusion reason a seed would,
+and has a row in the new `molecule_listings` table: the wiki's name for the
+compound, the slug its page is linked by, the section, and how the name was
+placed. A listing is no evidence of anything and never enters the score.
+
+**"With or without target data"** is taken literally: an entry ChEMBL holds no
+eligible evidence for is entered like any other and says so, as 263 clinical
+members already did.
+
+**Only entries outside D21's catalogue are named.** Of the two sections' 764
+rows, 317 already place at a catalogue entry; the clinical route is their
+reason for being here, so they need no listing, and not naming them keeps
+what is copied from the wiki to what the entries need. Another 93 were
+outside the 1,335-entry build the sections were counted against and are D21
+members (`with_d21`); 66 are identified but not in ChEMBL, and 56 not
+identified at all. That leaves 232 in ChEMBL and outside the catalogue.
+
+**Identity is an identifier, written down after review** (invariant 15). The
+names were placed by `analysis/wiki_comparison/placing.py`, by name, which the
+database refuses. So each of the 232 candidate rows was checked against what
+ChEMBL draws at the id, and what is written into the policy is the id; the
+build never reads a name. The 157 placed by an exact ChEMBL preferred name or
+an FDA UNII InChIKey were read over and kept. The 75 placed through a synonym, PubChem or a
+skeleton-only match were each compared with ChEMBL's structure by hand:
+
+- **kept**, 63 of them, among them three skeleton matches whose ChEMBL record
+  is drawn with no stereochemistry and is its only record of the compound
+  (MAP4343, nooglutyl, androstadienone), each with a `review` note;
+- **corrected**, one: *Deoxycorticosterone* had landed on
+  DESOXYCORTICOSTERONE ACETATE through the acetate's synonym list; the free
+  steroid is its own parent, CHEMBL1498;
+- **refused**, 11, each in `considered_and_not_listed` with its reason:
+  *BPAP*, which PubChem's name took to bisphenol AP; five names reaching two or
+  three parents (Dichloropane, Methylnaphthidate, Hydroxydione, U-47700,
+  4-Methylpregabalin), where choosing one would be a guess at a stereoisomer;
+  and five skeleton matches to a record drawn as a different stereoisomer
+  (LY451646 and MRZ-9547, whose racemates are listed under LY404187 and
+  Phenylpiracetam; α-conotoxin PIA; allotetrahydrocorticosterone; Org 20599).
+
+**What the wiki allows, and so what is kept.** Its terms (/about/legal, §13 and
+§18) allow "reading, linking to a page, and quoting a short passage with
+attribution", and refuse "republishing entries, copying the reference in
+bulk" and building "a competing dataset"; they also forbid suggesting an
+endorsement. So an entry keeps what a citation needs: the compound's name, a
+chemical name, and the slug. The URL is built from the slug on the page, the
+wiki's own classes are not copied into the policy, the database or the page,
+and the credit says SubNetwork is not affiliated with it.
+
+**On the page.** A listed entry's identity table has an *Entered from* row:
+"the sci-wiki, as Noopept", the name linking to that compound's page, with a
+hover saying a listing is not evidence and not an affiliation. A listed
+molecule the clinical routes also admit would read *Also listed by*; none does
+yet. About credits the sci-wiki, with the count, only when the payload holds an
+entry from it. Where ChEMBL gives the parent no preferred name (83 of the 221),
+the wiki's name is the label, so a reader sees *Noopept* and not
+CHEMBL4303687; it is attached through the reviewed id and is never a match. The
+wiki's name is searchable on every listed entry.
+
+**What it did.** The catalogue goes from 2,452 to 2,673 entries: 221 listed
+molecules, 144 from the cognition section and 77 from the psychiatric one, and
+none lost; the cohort stays 2,449. Of the 221, 68 have a Supported claim, 61
+only Preliminary ones, 13 only the broader layer, 3 only retained observations,
+and 76 no eligible evidence in ChEMBL 37. The ATC grade goes from 32.7% to
+31.7% top-1 and MRR 0.4607 to 0.4467; with the 221 skipped in each list it is
+32.4% and 0.4589, so most of the fall is a judge that cannot label them
+([SIMILARITY-HARNESS.md](SIMILARITY-HARNESS.md) §13).
+
+**Left open.** The 410 rows of the two sections already in the catalogue carry
+no listing, so their pages do not cite the wiki. And
+`analysis/wiki_comparison/` publishes the wiki's whole compound list with its
+sections and classes (`wiki_compounds.csv`, `comparison.csv`, `sections/`),
+committed before its terms were read; whether that is the "bulk copy" they
+refuse is the user's call.
+
 ---
 
 ## Open
@@ -372,7 +461,10 @@ In the order they bear on the picture.
 4. **Primary-only for evidence, all rows for direction** (the user's call on
    2026-09-27). Worth revisiting if a second error like vilazodone's appears.
 5. **New molecules** — the second step. D21 added 1,119 by lowering the
-   indication route's phase floor. GtoPdb's ligands outside the cohort are
+   indication route's phase floor, and D23 221 by the sci-wiki's two
+   sections; its other nine sections (psychedelics, peptides, botanicals and
+   the rest) are not listed, and the 11 refused names would need a ChEMBL
+   record drawn as the compound they mean. GtoPdb's ligands outside the cohort are
    still unadmitted, by a rule still to be written; see
    [COHORT-BOUNDARY-REVIEW.md](COHORT-BOUNDARY-REVIEW.md) for the curated-route
    proposal it should start from.

@@ -58,15 +58,22 @@ def run(db) -> list[dict]:
           f"{atc_only} ATC-only + {ind_only} indication-only + {both} both = "
           f"{atc_only + ind_only + both}, cohort is {cohort}")
 
-    # 5. No cohort member without a reason, no retained seed without one either.
+    # 5. No cohort member without a reason, no retained seed or listed molecule
+    #    (D23) without one either, and a listed_only entry has its listing.
     unreasoned = _one(db, "SELECT COUNT(*) FROM molecules WHERE in_cohort=1 AND"
-                          " admission_reason = 'seed_only'")
-    seedless = _one(db, "SELECT COUNT(*) FROM molecules WHERE in_cohort=0 AND"
-                        " (is_seed=0 OR exclusion_reason IS NULL)")
+                          " admission_reason IN ('seed_only', 'listed_only')")
+    seedless = _one(db, "SELECT COUNT(*) FROM molecules m WHERE in_cohort=0 AND"
+                        " (exclusion_reason IS NULL OR NOT (is_seed=1 OR EXISTS"
+                        " (SELECT 1 FROM molecule_listings l"
+                        "   WHERE l.parent_molregno = m.parent_molregno)))")
+    unlisted = _one(db, "SELECT COUNT(*) FROM molecules m WHERE admission_reason ="
+                        " 'listed_only' AND NOT EXISTS (SELECT 1 FROM molecule_listings l"
+                        " WHERE l.parent_molregno = m.parent_molregno)")
     check("every entry carries its admission or exclusion reason",
-          unreasoned == 0 and seedless == 0,
+          unreasoned == 0 and seedless == 0 and unlisted == 0,
           f"{unreasoned} members admitted with no route, {seedless} non-members that are "
-          f"not retained seeds with a reason")
+          f"not retained seeds or listed molecules with a reason, {unlisted} listed_only "
+          f"entries with no listing")
 
     # 6. Parent identity: one row per parent, and every form rolls up to one.
     dup_parent = _one(db, "SELECT COUNT(*) FROM (SELECT chembl_id FROM molecules"

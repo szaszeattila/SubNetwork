@@ -7,6 +7,15 @@ active build of 2026-10-11 and ChEMBL 37; where they disagree with
 *Against the Phase 1 floor (D21)* on, added 2026-10-13, are measured against
 the `phase1-admission` branch's build instead, and say so.
 
+**Since 2026-10-14 two of its sections are policy.** The user adopted the
+compounds the *Cognition & nootropic* and *Psychiatric & neuro-clinical*
+sections place in ChEMBL outside the catalogue, and asked for the wiki to be
+cited as their source of entry: D23 in [COHORT-2.md](COHORT-2.md). That did not
+make this document's name matches policy. Each was reviewed against ChEMBL's
+structure and written into `config/cohort1_selection.json` as an id; 221 were
+kept, one corrected and 11 refused, and D23 says which and why. Everything
+below is still the measurement it was.
+
 The first question was the user's: of the compounds
 [scientificsean.wiki](https://www.scientificsean.wiki/) lists — a community wiki
 of nootropics, peptides, psychiatric drugs, psychedelics, supplements and

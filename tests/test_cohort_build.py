@@ -235,6 +235,39 @@ class ScopeTest(unittest.TestCase):
 # Selection: admission routes, identity, seeds
 # ---------------------------------------------------------------------------
 
+class ListingPolicyTest(unittest.TestCase):
+    """The adopted sci-wiki listing (D23) is identifiers, reviewed, and unique."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.lst = policy()["listings"]["sciwiki"]
+
+    def test_every_entry_names_an_id_a_name_and_a_slug_once(self):
+        ms = self.lst["molecules"]
+        for e in ms:
+            self.assertRegex(e["chembl_id"], r"^CHEMBL\d+$")
+            self.assertTrue(e["name"] and e["slug"])
+        self.assertEqual(len({e["chembl_id"] for e in ms}), len(ms))
+        self.assertEqual(len({e["slug"] for e in ms}), len(ms))
+
+    def test_a_skeleton_or_corrected_placement_says_why_it_was_kept(self):
+        for e in self.lst["molecules"]:
+            if e["placed_by"].endswith("_connectivity") or e["placed_by"] == "reviewed":
+                self.assertTrue(e.get("review"), e["name"])
+
+    def test_a_refused_name_is_never_listed(self):
+        listed = {e["name"] for e in self.lst["molecules"]}
+        for r in self.lst["considered_and_not_listed"]:
+            self.assertNotIn(r["name"], listed)
+            self.assertTrue(r["reason"])
+
+    def test_the_wiki_s_classes_are_not_copied(self):
+        # Its terms refuse copying the reference in bulk; a citation needs a
+        # name and a link, not the site's own classification.
+        for e in self.lst["molecules"]:
+            self.assertNotIn("wiki_class", e)
+
+
 class SelectionTest(unittest.TestCase):
 
     def setUp(self):
@@ -253,9 +286,60 @@ class SelectionTest(unittest.TestCase):
         # Seeds are irrelevant to most of these tests; keep one that exists.
         add_molecule(self.conn, 900, "CHEMBL113", "CAFFEINE")
         self.pol["seeds"]["molecules"] = [["caffeine", "CHEMBL113"]]
+        # So are listings (D23), which name ids the fake ChEMBL does not hold.
+        self.pol["listings"]["sciwiki"]["molecules"] = []
 
     def run_selection(self):
         return selection.run(self.conn, self.pol, self.desc)
+
+    def listed(self, *entries):
+        self.pol["listings"]["sciwiki"]["molecules"] = [
+            {"chembl_id": cid, "name": name, "slug": name.lower(),
+             "section": "Cognition & nootropic", "placed_by": "chembl_name"}
+            for name, cid in entries]
+
+    def test_a_listed_molecule_is_retained_outside_the_cohort_with_a_reason(self):
+        add_molecule(self.conn, 120, "CHEMBL_NOOPEPT", None)
+        self.listed(("Noopept", "CHEMBL_NOOPEPT"))
+        m = self.run_selection()["members"][120]
+        self.assertFalse(m.in_cohort)
+        self.assertFalse(m.is_seed)
+        self.assertEqual(m.admission_reason, "listed_only")
+        self.assertIn("no ATC N code", m.exclusion_reason)
+        self.assertEqual([(l["source"], l["name"], l["slug"]) for l in m.listings],
+                         [("sciwiki", "Noopept", "noopept")])
+
+    def test_a_listed_form_folds_onto_its_parent(self):
+        add_molecule(self.conn, 121, "CHEMBL_BASE", "BASE")
+        add_molecule(self.conn, 122, "CHEMBL_BASE_HCL", "BASE HCL", parent=121)
+        self.listed(("Base", "CHEMBL_BASE_HCL"))
+        members = self.run_selection()["members"]
+        self.assertIn(121, members)
+        self.assertNotIn(122, members)
+        self.assertEqual(members[121].listings[0]["chembl_id"], "CHEMBL_BASE_HCL")
+
+    def test_a_listing_never_replaces_a_clinical_route(self):
+        add_molecule(self.conn, 123, "CHEMBL_CLIN", "CLINICAL")
+        add_atc(self.conn, 123, "N06BX99")
+        self.listed(("Clinical", "CHEMBL_CLIN"))
+        sel = self.run_selection()
+        m = sel["members"][123]
+        self.assertTrue(m.in_cohort)
+        self.assertEqual(m.admission_reason, "route_atc_n")
+        self.assertIsNone(m.exclusion_reason)
+        self.assertEqual(len(m.listings), 1)
+        self.assertEqual(sel["arithmetic"]["listed_retained_outside_cohort"], 0)
+
+    def test_a_seed_that_is_also_listed_stays_a_seed(self):
+        self.listed(("Caffeine", "CHEMBL113"))
+        m = self.run_selection()["members"][900]
+        self.assertEqual(m.admission_reason, "seed_only")
+        self.assertEqual(len(m.listings), 1)
+
+    def test_a_listed_id_missing_from_chembl_stops_the_build(self):
+        self.listed(("Ghost", "CHEMBL_NOT_THERE"))
+        with self.assertRaises(common.PolicyError):
+            self.run_selection()
 
     def test_atc_n_admits_with_no_indication_at_all(self):
         add_molecule(self.conn, 1, "CHEMBL_A", "ATC ONLY")

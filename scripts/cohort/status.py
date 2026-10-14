@@ -148,6 +148,8 @@ def db_figures(db_path: pathlib.Path) -> dict:
             "seeds": _one(db, "SELECT COUNT(*) FROM molecules WHERE is_seed=1"),
             "seeds_admitted": _one(
                 db, "SELECT COUNT(*) FROM molecules WHERE is_seed=1 AND in_cohort=1"),
+            "seed_only": routes.get("seed_only", 0),
+            "listed_only": routes.get("listed_only", 0),
 
             "supported_claims": sum(supported.values()),
             "supported_curated": supported.get((1, 0), 0),
@@ -422,9 +424,10 @@ def render_status(fig: dict) -> str:
             {_n(fig['in_cohort'])} are cohort-1 members
             ({_n(fig['route_atc_n'])} by ATC N alone,
             {_n(fig['route_indication'])} by a qualifying indication alone,
-            {_n(fig['route_both'])} by both) and {_n(fig['outside_cohort'])}
-            are seed molecules retained outside the cohort with their
-            exclusion reason. {_n(fig['seeds_admitted'])} of the
+            {_n(fig['route_both'])} by both); outside it, with their
+            exclusion reasons, are {_n(fig['seed_only'])} seed molecules
+            and {_n(fig['listed_only'])} molecules entered because the
+            sci-wiki lists them (D23). {_n(fig['seeds_admitted'])} of the
             {_n(fig['seeds'])} seeds are admitted.
             {_n(fig['supported_claims'])} claims are Supported in the direct
             human basis — {routes} — over {_n(fig['supported_pairs'])}

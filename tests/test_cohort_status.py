@@ -35,7 +35,7 @@ def _fake_figures(**overrides):
         "observations": 210157,
         "in_cohort": 1326, "outside_cohort": 5,
         "route_atc_n": 171, "route_indication": 782, "route_both": 373,
-        "seeds": 28, "seeds_admitted": 23,
+        "seeds": 28, "seeds_admitted": 23, "seed_only": 5, "listed_only": 0,
         "supported_claims": 2411, "supported_curated": 1045,
         "supported_replicated": 1366, "supported_both": 0,
         "supported_pairs": 1962,

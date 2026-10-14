@@ -655,3 +655,28 @@ ranking. On the one 1,335-entry build:
 The ATC grade of that build is 38.7% and 0.5119 under both. A MeSH grade
 taken before 2026-10-13 is therefore not comparable with one taken after,
 including every MeSH figure in section 10.
+
+## 13. The sci-wiki's molecules (D23, 2026-10-14)
+
+D23 entered 221 molecules because the sci-wiki lists them. None is in the ATC
+answer key: carrying an ATC N code would have admitted them already. The
+MeSH key labels 70 of them. Graded the way section 11 graded D21:
+
+| | ATC scoreable | ATC top-1 | ATC top-10 | ATC MRR | MeSH scoreable | MeSH top-1 | MeSH MRR |
+|---|---|---|---|---|---|---|---|
+| the D21 build (2,452) | 284 | 32.7% | 74.3% | 0.4607 | 865 | 45.0% | 0.5945 |
+| D23 as graded (2,673) | 284 | 31.7% | 72.9% | 0.4467 | 914 | 44.0% | 0.5835 |
+| D23, the 221 skipped in each list | 284 | 32.4% | 74.3% | 0.4589 | 913 | 44.1% | 0.5862 |
+
+Most of the ATC fall is again the judge's, but not all of it, unlike D21's:
+skipped, the newcomers still leave −0.3 points of top-1 and −0.0018 of MRR.
+Their only route into a list they are skipped from is the weight they add to
+each target's prevalence, so that is the likely cause; it was not isolated.
+Under the MeSH key the rows differ in who is asked as well as who is ranked,
+so its rows are not one comparison. The newcomers ranked first over an ATC
+class-mate are mostly apt: 7-hydroxymitragynine (a μ-opioid agonist), first
+for three drugs; nemonapride and pipotiazine (antipsychotics), three each;
+carpipramine, two; cutamesine (σ1; ChEMBL names its parent [11C]SA4503), two;
+and others once each, among them norbinaltorphimine, capeserod and
+flmodafinil. The floors in `tests/similarity_harness.test.mjs`
+hold, and were not moved.

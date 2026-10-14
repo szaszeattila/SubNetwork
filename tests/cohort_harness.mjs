@@ -226,7 +226,7 @@ export const MOLECULE_FIELDS = [
   "molecular_formula", "molecular_weight", "atc_level5", "atc_flags",
   "identity_flags", "seed_name", "gap_reason", "exclusion_reason", "smiles",
   "inchikey", "wikipedia_url", "n_indications_chembl", "synonyms", "aliases",
-  "approved_elsewhere",
+  "approved_elsewhere", "listings",
 ];
 
 export const TARGET_FIELDS = [
@@ -362,6 +362,10 @@ export function buildData({ molecules = [], targets = [], claims = [],
     const copy = Object.assign({}, m);
     copy.synonyms = (m.synonyms || []).map((s) => strings.intern(s));
     copy.aliases = (m.aliases || []).map((s) => strings.intern(s));
+    // [source, name, slug] per listing (D23), each interned as the export does.
+    copy.listings = m.listings
+      ? m.listings.map((l) => [l.source, l.name, l.slug].map((x) => strings.intern(x)))
+      : null;
     return encodeRow(copy, MOLECULE_FIELDS, strings);
   });
   const encodedTargets = targets.map((t) => {

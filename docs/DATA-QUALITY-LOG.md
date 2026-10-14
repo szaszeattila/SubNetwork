@@ -51,6 +51,39 @@ alone.
 
 ---
 
+## 2026-10-14 — a list placed by name, entered by identifier
+
+D23 entered the molecules two sections of the sci-wiki list. The list had
+already been placed against ChEMBL by name for a measurement
+(`analysis/wiki_comparison/`), which invariant 15 allows only because nothing
+there reached the database. Entering them reached it, so the 232 placements
+were reviewed one by one against what ChEMBL draws at the id, and only the id
+was written into the policy. What the review found is what a build reading the
+names would have carried:
+
+- **BPAP is two compounds.** PubChem's name service took the wiki's
+  benzofuranyl propylaminopentane, a monoaminergic enhancer, to bisphenol AP,
+  an industrial bisphenol. Refused.
+- **A synonym on a salt's record took the name from its own parent.**
+  ChEMBL lists "Deoxycorticosterone" among the synonyms of DESOXYCORTICOSTERONE
+  ACETATE (CHEMBL1200542), so an exact synonym match landed on the acetate. The
+  free steroid is a parent of its own, CHEMBL1498. Corrected by hand, with the
+  reason beside the entry.
+- **A name that reaches two parents names neither.** Dichloropane,
+  methylnaphthidate, hydroxydione, U-47700 and 4-methylpregabalin each reach two
+  or three ChEMBL parents, drawn as different stereoisomers or flat. Picking
+  one would be a guess at which isomer the wiki means. All refused (invariant 6).
+- **A skeleton match is a different compound when ChEMBL draws the stereo.**
+  Five matches on the InChIKey's first block alone landed on a record drawn as a
+  different stereoisomer, and were refused. LY451646 and MRZ-9547 are single
+  enantiomers that matched their racemates, which are entered anyway under
+  their own names. Three skeleton matches were kept, because ChEMBL's only
+  record draws no stereo at all.
+
+Every refusal is in the policy's `considered_and_not_listed` with its reason,
+and a test fails if a refused name is ever listed. The build never reads a
+name: a listing whose id is not in ChEMBL stops it.
+
 ## 2026-10-14 — GtoPdb's cache was not GtoPdb's file
 
 Bumping the GtoPdb pin to 2026.3.1, the backfill's cached copy had a different

@@ -63,8 +63,14 @@ MOLECULE_FIELDS = [
     "molecular_formula", "molecular_weight", "atc_level5", "atc_flags",
     "identity_flags", "seed_name", "gap_reason", "exclusion_reason", "smiles",
     "inchikey", "wikipedia_url", "n_indications_chembl", "synonyms", "aliases",
-    "approved_elsewhere",
+    "approved_elsewhere", "listings",
 ]
+
+# The public lists a molecule was entered from (D23), by the selection policy's
+# key. Each is credited where its entries are shown, and the URL of an entry's
+# page is built from its slug here rather than stored (invariant 15's habit:
+# keep the identifier, build the link).
+LISTING_SOURCES = {"sciwiki"}
 
 # Reviewed common names, keyed by ChEMBL ID, carried over from the legacy
 # export's map and extended only where ChEMBL's own synonym list does not
@@ -381,13 +387,32 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
         if r["seed_alias"]:
             synonyms[r["parent_molregno"]].append(r["seed_alias"])
 
+    # A listed molecule (D23) carries the list's name for it and the slug its
+    # page is linked by. The name is searchable, and is the label where ChEMBL
+    # gives the parent no preferred name - Noopept rather than CHEMBL4303687 -
+    # which is a label attached through a reviewed identifier, never a match.
+    listings = collections.defaultdict(list)
+    if db.execute("SELECT 1 FROM sqlite_master WHERE type = 'table'"
+                  " AND name = 'molecule_listings'").fetchone():
+        for r in db.execute("SELECT parent_molregno, source, name, slug FROM molecule_listings"
+                            " ORDER BY parent_molregno, source, slug"):
+            if r["source"] not in LISTING_SOURCES:
+                raise common.PolicyError(
+                    f"listing source {r['source']!r} has no credit in the viewer")
+            listings[r["parent_molregno"]].append(r)
+            synonyms[r["parent_molregno"]].append(r["name"])
+
     molecules, molecule_ids = [], []
     status_with_gtopdb = {}
     for r in db.execute("SELECT * FROM molecules ORDER BY parent_molregno"):
         rec = dict(r)
         mid = rec.pop("parent_molregno")
         rec["id"] = mid
-        rec["name"] = rec.pop("pref_name") or rec["chembl_id"]
+        listed = listings.get(mid, [])
+        rec["name"] = (rec.pop("pref_name") or (listed[0]["name"] if listed else None)
+                       or rec["chembl_id"])
+        rec["listings"] = [[cat_s.intern(l["source"]), cat_s.intern(l["name"]),
+                            cat_s.intern(l["slug"])] for l in listed] or None
         stored = (rec["evidence_status"], rec["gap_reason"])
         if build.evidence_status_of(all_tiers.get(mid, [])) != stored:
             raise common.PolicyError(

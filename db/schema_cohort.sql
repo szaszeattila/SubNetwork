@@ -52,8 +52,8 @@ CREATE TABLE IF NOT EXISTS molecules (
     seed_name            TEXT,
     route_atc_n          INTEGER NOT NULL,
     route_indication     INTEGER NOT NULL,
-    admission_reason     TEXT NOT NULL,  -- both_routes / route_atc_n / route_indication / seed_only
-    exclusion_reason     TEXT,           -- why a retained seed is not in the cohort
+    admission_reason     TEXT NOT NULL,  -- both_routes / route_atc_n / route_indication / seed_only / listed_only
+    exclusion_reason     TEXT,           -- why a retained seed or listed molecule is not in the cohort
     scope_reasons        TEXT,           -- '|' joined: core / general_pain / explicit_neuropathic / explicit_fibromyalgia / explicit_cns_heading
     atc_level5           TEXT,
     atc_flags            TEXT,           -- peripheral_site_of_action / general_analgesic
@@ -99,6 +99,24 @@ CREATE TABLE IF NOT EXISTS molecule_forms (
     -- identities survive here.
     seed_alias       TEXT,
     PRIMARY KEY (parent_molregno, molregno)
+);
+
+-- A public list that names this parent (D23), and the reason a `listed_only`
+-- entry is in the catalogue at all. Written from the selection policy's
+-- `listings`, where each entry is a ChEMBL id reviewed by hand: the build reads
+-- the id, never the name. `name` is the list's own name for the compound, kept
+-- so the entry can cite it and be found by it; `slug` is the identifier the
+-- list's page is linked by, and the URL is built from it at display time.
+-- Never evidence, never a similarity input.
+CREATE TABLE IF NOT EXISTS molecule_listings (
+    parent_molregno  INTEGER NOT NULL REFERENCES molecules(parent_molregno),
+    source           TEXT NOT NULL,      -- the policy's key, e.g. 'sciwiki'
+    chembl_id        TEXT NOT NULL,      -- the id the policy names; may be a form, not the parent
+    name             TEXT NOT NULL,
+    slug             TEXT NOT NULL,
+    section          TEXT,               -- the list's section it was read from
+    placed_by        TEXT,               -- how the name was placed at the id before review
+    PRIMARY KEY (parent_molregno, source, slug)
 );
 
 CREATE TABLE IF NOT EXISTS molecule_synonyms (

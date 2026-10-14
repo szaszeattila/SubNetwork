@@ -56,9 +56,12 @@ def write_scope(conn, descriptors, indication_rows) -> None:
 
 
 def write_molecules(conn, members, properties) -> None:
-    rows, forms, syns, inds = [], [], [], []
+    rows, forms, syns, inds, listings = [], [], [], [], []
     for m in members.values():
         p = properties.get(m.parent_molregno, {})
+        for e in m.listings:
+            listings.append((m.parent_molregno, e["source"], e["chembl_id"], e["name"],
+                             e["slug"], e.get("section"), e.get("placed_by")))
         rows.append((
             m.parent_molregno, m.parent_chembl_id, m.pref_name, m.molecule_type,
             m.structure_type, m.max_phase, m.first_approval, int(m.withdrawn_any_family),
@@ -107,6 +110,9 @@ def write_molecules(conn, members, properties) -> None:
     conn.executemany(
         "INSERT OR IGNORE INTO molecule_synonyms(parent_molregno, molregno, synonym)"
         " VALUES(?,?,?)", syns)
+    conn.executemany(
+        "INSERT INTO molecule_listings(parent_molregno, source, chembl_id, name, slug,"
+        " section, placed_by) VALUES(?,?,?,?,?,?,?)", listings)
     conn.executemany(
         "INSERT OR REPLACE INTO molecule_indications(parent_molregno, drugind_id,"
         " member_molregno, member_chembl_id, mesh_id, mesh_heading, efo_id, efo_term,"
