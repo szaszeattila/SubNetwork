@@ -28,6 +28,7 @@ one of the two.
 | what cohort 2 is, and what it has added so far | [COHORT-2.md](COHORT-2.md) |
 | why a data rule exists before you change it | [DATA-QUALITY-LOG.md](DATA-QUALITY-LOG.md) |
 | how good the similarity ranking is | [SIMILARITY-DIAGNOSIS.md](SIMILARITY-DIAGNOSIS.md) |
+| what the answer keys that grade it are (ATC levels, FDA's classes through RxNav, OnSIDES label effects, the pre-registered pairs) | [ANSWER-KEYS-PRIMER.md](ANSWER-KEYS-PRIMER.md) ([PDF](ANSWER-KEYS-PRIMER.pdf)) |
 | what to do next | [NEXT-STEPS-PROPOSAL.md](NEXT-STEPS-PROPOSAL.md), then COHORT-2.md's **Open** |
 | how to deploy the viewer (Cloudflare, staging first) | [PUBLISHING.md](PUBLISHING.md), *The Cloudflare copy* |
 | what may be pushed to GitHub, and how the repository goes public | [PUBLISHING.md](PUBLISHING.md), *The GitHub repository* |
@@ -59,6 +60,7 @@ one of the two.
 | document | what it answers | numbers |
 | --- | --- | --- |
 | [SIMILARITY-HARNESS.md](SIMILARITY-HARNESS.md) | how the ranking is graded against ATC level-4 classes, what the constant sweep found, and what was adopted on the strength of it; §13–14 add the filtered reading, nDCG@10, the repaired ATC key, FDA's classes as a third judge and the agreement between keys; §15 the label key from OnSIDES, the first judge sharing no input with the score, and the constants under five judges; §16 the pre-registered pairwise key and its first grade | current, but see trap 4 — it quotes two grades on two question sets |
+| [ANSWER-KEYS-PRIMER.md](ANSWER-KEYS-PRIMER.md) ([PDF](ANSWER-KEYS-PRIMER.pdf)) | an explainer, not a measurement: what ATC and its five levels are, what RxNav, RxNorm and RxClass are and how a molecule reaches FDA's EPC, MoA and PE classes through them, what OnSIDES, MedDRA and ADReCS are and how the label key is built, what pre-registration means and what the pairwise key holds, each key side by side with what it shares with the score, and how to read a grade | written 2026-10-15 against the 2026-10-13 build; its figures are SIMILARITY-HARNESS §13–16's, the pairwise grade and the label neighbours rerun that day; **Status supersedes** |
 | [SIMILARITY-DIAGNOSIS.md](SIMILARITY-DIAGNOSIS.md) | where the ranking is right and wrong against 50 known drug relationships, and why — including that the ATC N key is its hardest slice | measured 2026-09-17 against the active build |
 
 **Proposals — nothing in these is adopted, and listing one is not adopting it.**
