@@ -70,7 +70,7 @@ def run(db_path=None) -> int:
           one(db, "SELECT COUNT(*) FROM molecules WHERE in_cohort=1"))
     print("  retained seeds outside cohort 1:          ",
           one(db, "SELECT COUNT(*) FROM molecules WHERE admission_reason='seed_only'"))
-    print("  listed molecules outside cohort 1 (D23):  ",
+    print("  listed molecules outside cohort 1 (D25):  ",
           one(db, "SELECT COUNT(*) FROM molecules WHERE admission_reason='listed_only'"))
     print("  source forms folded onto those parents:   ",
           one(db, "SELECT COUNT(*) FROM molecule_forms"))
@@ -184,7 +184,7 @@ def run(db_path=None) -> int:
         one(db, "SELECT COUNT(*) FROM molecules WHERE is_seed=1 AND in_cohort=1"),
         one(db, "SELECT COUNT(*) FROM molecules WHERE is_seed=1")))
 
-    section("Listed molecules (D23-D25)")
+    section("Listed molecules (D25-D27)")
     table(db, "SELECT l.source, m.admission_reason, m.evidence_status, COUNT(*) n"
               " FROM molecule_listings l JOIN molecules m USING (parent_molregno)"
               " GROUP BY 1, 2, 3 ORDER BY 1, 2, n DESC")

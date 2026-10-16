@@ -2,7 +2,7 @@
 """Retrieve the Wikipedia categories and Wikidata roles compare_lists.py sets
 beside the wiki, into RAW, for prepare_lists.py to turn into name files.
 
-Added 2026-10-15, when D24 listed the wiki's psychedelics section: the
+Added 2026-10-15, when D26 listed the wiki's psychedelics section: the
 nootropic category and role alone say nothing about a psychedelic. Each list
 is written as RAW/<list>.json, [{"title", "qid", "inchikeys"}], where a
 Wikipedia article carries its Wikidata item's InChIKeys (P235), so that

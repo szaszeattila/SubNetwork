@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Do the listed entries (D23-D25) act on a protein the brain expresses?
+"""Do the listed entries (D25-D27) act on a protein the brain expresses?
 
 The user's test, 2026-10-16: "anything that acts on a brain protein I think is
 fair game" - a SERM acts on oestrogen receptors in the brain. A brain protein

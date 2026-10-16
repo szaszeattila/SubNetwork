@@ -1,4 +1,4 @@
-"""What the export makes of a listed molecule (D23).
+"""What the export makes of a listed molecule (D25).
 
 The list's name labels an entry only where ChEMBL gives the parent no preferred
 name, is searchable either way, and travels with the slug the page builds the
@@ -87,7 +87,7 @@ class ListingExportTest(unittest.TestCase):
         self.assertIsNone(mols[3].get("listings"))
 
     def test_a_substance_index_name_labels_before_a_wikipedia_title_or_a_wikidata_label(self):
-        # D25: Wikidata's label can be a salt's; a Wikipedia title carries a
+        # D27: Wikidata's label can be a salt's; a Wikipedia title carries a
         # disambiguator a label does not need.
         add_molecule(self.conn, 4, "CHEMBL4", None)
         add_listing(self.conn, 4, "cocaine hydrochloride", "Q1", source="wikidata")

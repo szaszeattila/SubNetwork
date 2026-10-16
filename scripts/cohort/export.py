@@ -67,13 +67,13 @@ MOLECULE_FIELDS = [
     "approved_elsewhere", "listings",
 ]
 
-# The public lists a molecule was entered from (D23), by the selection policy's
+# The public lists a molecule was entered from (D25), by the selection policy's
 # key. Each is credited where its entries are shown, and the URL of an entry's
 # page is built from its slug here rather than stored (invariant 15's habit:
 # keep the identifier, build the link).
 LISTING_SOURCES = {"sciwiki", "wikipedia", "wikidata", "tripsit", "psychonautwiki"}
 
-# Whose name labels a listed entry ChEMBL gives no preferred name (D25): a
+# Whose name labels a listed entry ChEMBL gives no preferred name (D27): a
 # substance index's name first, then a Wikipedia title without its
 # disambiguator ("Aleph (psychedelic)"), and Wikidata's label last, since an
 # item can be a salt's ("cocaine hydrochloride").
@@ -403,7 +403,7 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
         if r["seed_alias"]:
             synonyms[r["parent_molregno"]].append(r["seed_alias"])
 
-    # A listed molecule (D23) carries the list's name for it and the slug its
+    # A listed molecule (D25) carries the list's name for it and the slug its
     # page is linked by. The name is searchable, and is the label where ChEMBL
     # gives the parent no preferred name - Noopept rather than CHEMBL4303687 -
     # which is a label attached through a reviewed identifier, never a match.

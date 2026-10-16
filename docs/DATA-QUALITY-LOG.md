@@ -53,20 +53,20 @@ alone.
 
 ## 2026-10-16 — four open lists, and the names that point at the wrong compound
 
-D25 entered every compound Wikipedia, Wikidata, TripSit or PsychonautWiki
+D27 entered every compound Wikipedia, Wikidata, TripSit or PsychonautWiki
 carries that is in ChEMBL and outside the clinical catalogue: 920 list entries
 at 665 parents. Most came with a structure: 715 of Wikipedia's and Wikidata's
 entries were placed by the InChIKey on the article's own Wikidata item, and
 118 more by an FDA UNII InChIKey. TripSit and PsychonautWiki give names only,
 so their entries are where the errors were. 72 placements not made by an
-identifier were reviewed against ChEMBL's structure, as D23's were, and two
+identifier were reviewed against ChEMBL's structure, as D25's were, and two
 identifier placements were reviewed on a read-over:
 
 - **A synonym ChEMBL gives the wrong compound.** ChEMBL lists *2C-B-AN* — a
   2C-B prodrug, brolphetaminil — as a synonym of isoaminile, an antitussive with
   no bromine and no methoxy group; and *G-4*, a homologue of the DOx
   psychedelics, as a synonym of dichlorophen, an antimicrobial. *αMT* matched
-  3-amino-3-deoxythymidine as *AMT* did for D23, and *Aleph*'s squashed name
+  3-amino-3-deoxythymidine as *AMT* did for D25, and *Aleph*'s squashed name
   matched dinitolmide. All refused.
 - **ChEMBL's name for a structure is wrong.** CHEMBL481044 is drawn as
   myristicin (an allyl, a methoxy and a methylenedioxy) and named ELEMICIN,
@@ -83,10 +83,10 @@ identifier placements were reviewed on a read-over:
   (*Beta-D*, *4-D*) reached mescaline by skeleton and were refused too.
 - **A name with no stereochemistry, three ways.** Where ChEMBL holds only
   single enantiomers of a racemate (MT-45, 6-MAPB, 4-methylaminorex, MPMI,
-  DragonFLY and 10 more compounds), refused as D24 refused 5-MAPB. Where TripSit's or
+  DragonFLY and 10 more compounds), refused as D26 refused 5-MAPB. Where TripSit's or
   PsychonautWiki's bare name reached several stereoisomers and Wikipedia's
   article placed the same compound by InChIKey (3,4-CTMP, 4F-MPH, U-47700),
-  corrected to that record. U-47700 was refused in D23 for reaching two
+  corrected to that record. U-47700 was refused in D25 for reaching two
   enantiomers; Wikipedia's item draws one of them, and that is now the
   identifier it enters by.
 
@@ -97,9 +97,9 @@ does not name.
 
 ## 2026-10-15 — the same review, on the psychedelics section
 
-D24 listed the sci-wiki's *Psychedelics & entactogens* section the way D23
+D26 listed the sci-wiki's *Psychedelics & entactogens* section the way D25
 listed two others: 81 placements, the 34 not made by an exact ChEMBL name or an
-FDA UNII InChIKey each compared with ChEMBL's structure. Two kinds of error D23
+FDA UNII InChIKey each compared with ChEMBL's structure. Two kinds of error D25
 had not met:
 
 - **An abbreviation is a name for two compounds.** PubChem's name service took
@@ -118,7 +118,7 @@ in `considered_and_not_listed`.
 
 ## 2026-10-14 — a list placed by name, entered by identifier
 
-D23 entered the molecules two sections of the sci-wiki list. The list had
+D25 entered the molecules two sections of the sci-wiki list. The list had
 already been placed against ChEMBL by name for a measurement
 (`analysis/wiki_comparison/`), which invariant 15 allows only because nothing
 there reached the database. Entering them reached it, so the 232 placements

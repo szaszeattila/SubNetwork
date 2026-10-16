@@ -59,7 +59,7 @@ def run(db) -> list[dict]:
           f"{atc_only + ind_only + both}, cohort is {cohort}")
 
     # 5. No cohort member without a reason, no retained seed or listed molecule
-    #    (D23) without one either, and a listed_only entry has its listing.
+    #    (D25) without one either, and a listed_only entry has its listing.
     unreasoned = _one(db, "SELECT COUNT(*) FROM molecules WHERE in_cohort=1 AND"
                           " admission_reason IN ('seed_only', 'listed_only')")
     seedless = _one(db, "SELECT COUNT(*) FROM molecules m WHERE in_cohort=0 AND"

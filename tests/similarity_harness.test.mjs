@@ -31,11 +31,11 @@ import {
 // With those 1,119 skipped in each list the same build grades 0.5121 / 38.7%,
 // what it graded before them (docs/COHORT-2.md, D21).
 //
-// Since D25 (2026-10-16) the floor grades with every listed_only entry left
-// out of each ranked list (`skippingListed`). D25 entered 545 molecules from
+// Since D27 (2026-10-16) the floor grades with every listed_only entry left
+// out of each ranked list (`skippingListed`). D27 entered 545 molecules from
 // four public lists, none of which can carry an ATC N code, and as graded the
 // ranking fell to 0.4343 / 30.3% while skipping them it rose to 0.4646 / 33.5%
-// -- the D24 build graded 0.4601 / 32.7% the same way. A floor lowered for every
+// -- the D26 build graded 0.4601 / 32.7% the same way. A floor lowered for every
 // list admitted would wear away to nothing; one that skips them still sees
 // what they do to every target's prevalence.
 const MRR_FLOOR = 0.44;

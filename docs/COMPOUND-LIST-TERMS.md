@@ -1,7 +1,7 @@
 # What public compound lists allow, and which others exist
 
 2026-10-14. **A review; adopts nothing, and is not legal advice.** It answers
-three of the user's questions after D23 entered 221 molecules because the
+three of the user's questions after D25 entered 221 molecules because the
 sci-wiki lists them ([COHORT-2.md](COHORT-2.md)): what risk the repository runs
 by keeping the wiki's full list published in `analysis/wiki_comparison/`;
 whether citing the wiki as a source of compounds is a "competing dataset"; and
@@ -14,7 +14,7 @@ passes whose quotes are given as they reported them, and every page that could
 not be reached says so below rather than being guessed. Terms change; reread
 one before relying on it.
 
-The use this document judges every source against is D23's: **a molecule is
+The use this document judges every source against is D25's: **a molecule is
 entered with the list's name for it and a link to the list's own page for it,
 and the list is credited** — nothing the list says about the compound is
 copied, and every claim on the page comes from ChEMBL, GtoPdb or MeSH.
@@ -32,7 +32,7 @@ arrangement of the reference as a whole". Its `robots.txt` refuses AI crawlers
 (ClaudeBot, GPTBot and others) the whole site and allows other agents
 everything but `/admin`, `/api` and `/members`.
 
-**D23's use is inside them, and is not a competing dataset.** The clause
+**D25's use is inside them, and is not a competing dataset.** The clause
 forbids copying *entries* at scale. An entry here takes a name, which is a
 fact, and a link, which the terms allow; none of the wiki's content is copied;
 the 221 are a reviewed tenth of 2,184, each written down as a ChEMBL id; the
@@ -40,7 +40,7 @@ credit says SubNetwork is not affiliated; and the page sends its reader to the
 wiki rather than standing in for it. What would move it toward the clause:
 
 - copying the wiki's sections or classes into the policy, database or page —
-  the arrangement it claims (D23 copies neither);
+  the arrangement it claims (D25 copies neither);
 - admitting the whole list, or any part of it, without review;
 - re-reading the wiki on a schedule to follow it, rather than one reviewed
   listing.
@@ -80,13 +80,13 @@ be kept on disk as the widest one to measure the catalogue against. The list,
 the section files and the full comparison files are in `db/cache/sciwiki/`,
 gitignored, where the scripts now read them; the repository's comparison
 files no longer carry the `section` and `wiki_class` columns. The commits that
-carried them remain on the published branch, reachable by hash. D24 added a
-third section's entries on the same terms as D23's.
+carried them remain on the published branch, reachable by hash. D26 added a
+third section's entries on the same terms as D25's.
 
 ## The lists already compared
 
 The six lists NOOTROPIC-WIKI-COMPARISON.md compared, and the four it did not
-retrieve. None was committed; only counts were. For D23's use every one of them
+retrieve. None was committed; only counts were. For D25's use every one of them
 is at least as permissive as the sci-wiki, except Erowid's.
 
 | source | terms | name + link + credit as a reason for entry | the full list published here | retrieval |
@@ -111,10 +111,10 @@ adaptation of it; share-alike would attach only to what was copied — a
 category, a description — and only to that. This reasoning is untested for
 compilations. ChEMBL's own CC BY-SA 3.0 already governs the data either way.
 
-### Used as reasons for entry since D25
+### Used as reasons for entry since D27
 
 On 2026-10-16 four of these lists became reasons for entry
-([COHORT-2.md](COHORT-2.md) D25), and the two whose terms were quoted secondhand
+([COHORT-2.md](COHORT-2.md) D27), and the two whose terms were quoted secondhand
 were reread at the source on 2026-10-15:
 
 - **TripSit**, [wiki.tripsit.me/wiki/Factsheets](https://wiki.tripsit.me/wiki/Factsheets):

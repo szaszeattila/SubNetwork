@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
-"""Write the open lists' entries into the selection policy (D25).
+"""Write the open lists' entries into the selection policy (D27).
 
 Every compound Wikipedia, Wikidata, TripSit or PsychonautWiki carries that
 compare_lists.py placed at a ChEMBL parent outside the clinical catalogue is
 listed under that list, by the ChEMBL id, with the list's name for it and the
-key its page is linked by. A compound the sci-wiki brought in (D23, D24) that
+key its page is linked by. A compound the sci-wiki brought in (D25, D26) that
 one of the four also carries is cited by the four instead, and its sci-wiki
 entry is dropped; the sci-wiki stays the source only where no open list names
 the compound.
 
-Identity is D23's rule. A placement by an InChIKey the list itself gives (from
+Identity is D25's rule. A placement by an InChIKey the list itself gives (from
 the article's Wikidata item), by an FDA UNII InChIKey, or by an exact ChEMBL
 preferred name is read over and kept. Anything else - a synonym, a squashed
 name, a skeleton-only match, or a name reaching two parents - is in REVIEW,
 decided by hand against ChEMBL's structure, and an entry REVIEW does not name
 stops the script.
 
-Reads LIST_DIR/lists_overlap.csv (compare_lists.py, run against the D24
+Reads LIST_DIR/lists_overlap.csv (compare_lists.py, run against the D26
 build), the raw downloads for page keys, and the active database for which
 parents the clinical routes and the seeds already hold. Prints a summary;
 with --write, rewrites the four listings blocks and the sci-wiki block's
@@ -70,7 +70,7 @@ SOURCE_META = {
         "page": "https://en.wikipedia.org/wiki/{slug}",
         "licence": "CC BY-SA 4.0",
         "retrieved": "2026-10-15",
-        "decision": "docs/COHORT-2.md D25",
+        "decision": "docs/COHORT-2.md D27",
         "rule": "A ChEMBL parent named below enters the catalogue whatever the clinical routes say, because an English Wikipedia article on it is filed in Category:Nootropics; in Category:Psychedelic drugs or a category below it, Category:Entactogens, Dissociative drugs, Deliriants or Cathinones; or in Category:Designer drugs or its subcategories, as analysis/wiki_comparison/fetch_lists.py read them on 2026-10-15. " + _ONLY_OUTSIDE,
         "membership_labelling": _LABEL,
         "identity": _IDENTITY,
@@ -82,7 +82,7 @@ SOURCE_META = {
         "page": "https://www.wikidata.org/wiki/{slug}",
         "licence": "CC0 1.0",
         "retrieved": "2026-10-15",
-        "decision": "docs/COHORT-2.md D25",
+        "decision": "docs/COHORT-2.md D27",
         "rule": "A ChEMBL parent named below enters the catalogue whatever the clinical routes say, because its Wikidata item's subject has role (P2868) or has use (P366) is nootropic, or a psychoactive role (psychedelic drug, hallucinogen, empathogen-entactogen, dissociative, stimulant), as analysis/wiki_comparison/fetch_lists.py read them on 2026-10-15. " + _ONLY_OUTSIDE,
         "membership_labelling": _LABEL,
         "identity": _IDENTITY,
@@ -94,7 +94,7 @@ SOURCE_META = {
         "page": "https://tripsit.me/factsheets/{slug}",
         "licence": "free of charge for non-commercial use, with a link back and a note citing TripSit",
         "retrieved": "2026-10-11",
-        "decision": "docs/COHORT-2.md D25",
+        "decision": "docs/COHORT-2.md D27",
         "rule": "A ChEMBL parent named below enters the catalogue whatever the clinical routes say, because TripSit's factsheets (its getAllDrugs API, read 2026-10-11) carry it. " + _ONLY_OUTSIDE,
         "membership_labelling": _LABEL,
         "identity": _IDENTITY,
@@ -106,7 +106,7 @@ SOURCE_META = {
         "page": "https://psychonautwiki.org/wiki/{slug}",
         "licence": "CC BY 4.0 (semantic data); articles CC BY-SA 4.0",
         "retrieved": "2026-10-11",
-        "decision": "docs/COHORT-2.md D25",
+        "decision": "docs/COHORT-2.md D27",
         "rule": "A ChEMBL parent named below enters the catalogue whatever the clinical routes say, because PsychonautWiki's substance index (its API, read 2026-10-11) carries it. " + _ONLY_OUTSIDE,
         "membership_labelling": _LABEL,
         "identity": _IDENTITY,
@@ -135,9 +135,9 @@ def render_listings(listings: dict) -> str:
     return "\n".join(out)
 
 # Each non-identifier placement, compared with what ChEMBL draws at the id,
-# on D23's and D24's precedents: a name that gives no stereochemistry is
+# on D25's and D26's precedents: a name that gives no stereochemistry is
 # refused where ChEMBL holds only single stereoisomers of it (5-MAPB, MDPV in
-# D24), kept where ChEMBL's only record is drawn flat (nooglutyl in D23), and a
+# D26), kept where ChEMBL's only record is drawn flat (nooglutyl in D25), and a
 # name reaching several parents is placed only where another open list's
 # InChIKey places the same compound.
 # (list, name) -> ("keep", note) | ("correct", chembl_id, note) | ("refuse", note)
@@ -145,9 +145,9 @@ _RACEMATE = "a racemate by its name and the list's flat InChIKey; ChEMBL holds i
 _STEREO = "the list's InChIKey is a stereoisomer ChEMBL does not draw; the skeleton reaches other stereoisomers only"
 _SEVERAL = "reaches several ChEMBL stereoisomers, and no open list's InChIKey says which"
 _ONLY_FLAT = "matched by skeleton at ChEMBL's only record of it, drawn with no stereochemistry"
-_BELLADONNA = "ChEMBL's structureless BELLADONNA record, as D24 placed the sci-wiki's Atropa belladonna"
+_BELLADONNA = "ChEMBL's structureless BELLADONNA record, as D26 placed the sci-wiki's Atropa belladonna"
 _PCP = "ChEMBL's PHENCYCLIDINE, where Wikipedia's and Wikidata's InChIKeys place it too"
-_MDA = "the four-letter synonym of TENAMFETAMINE (MDA), as D24 placed the sci-wiki's MDA"
+_MDA = "the four-letter synonym of TENAMFETAMINE (MDA), as D26 placed the sci-wiki's MDA"
 _ANIL = "ChEMBL synonym of isoaminile, an antitussive; 2C-B-AN is a 2C-B prodrug (brolphetaminil)"
 REVIEW: dict = {
     ("psychonautwiki_all", "Atropa belladonna"): ("keep", _BELLADONNA),
@@ -164,8 +164,8 @@ REVIEW: dict = {
     ("tripsit_all", "PV-10"): ("keep", "ChEMBL draws alpha-pyrrolidinononanophenone at the id, which PV-10 names"),
     ("wikidata_nootropic", "Traneurocin"): ("keep", "ChEMBL's own synonym of cyclo(prolylglycyl); Wikidata's item gives no structure"),
     ("wikipedia_psychoactive", "Dimethylcathinone"): ("keep", "ChEMBL's METAMFEPRAMONE is N,N-dimethylcathinone"),
-    ("wikidata_nootropic", "nooglutil"): ("keep", _ONLY_FLAT + ", as D23 placed the sci-wiki's nooglutyl"),
-    ("wikipedia_nootropics", "Nooglutyl"): ("keep", _ONLY_FLAT + ", as D23 placed the sci-wiki's nooglutyl"),
+    ("wikidata_nootropic", "nooglutil"): ("keep", _ONLY_FLAT + ", as D25 placed the sci-wiki's nooglutyl"),
+    ("wikipedia_nootropics", "Nooglutyl"): ("keep", _ONLY_FLAT + ", as D25 placed the sci-wiki's nooglutyl"),
     ("wikipedia_designer", "Trendione"): ("keep", _ONLY_FLAT),
     ("wikipedia_designer", "AC-262,536"): ("keep", "ChEMBL's only record, drawn as the one bridged-ring isomer the compound is; the list's key leaves the ring stereo undrawn"),
     ("wikidata_psychoactive", "picrotoxin"): ("correct", "CHEMBL1908342", "picrotoxin is a picrotoxinin-picrotin mixture ChEMBL draws eight ways; CHEMBL1908342 is the record ChEMBL names PICROTOXIN"),
@@ -173,10 +173,10 @@ REVIEW: dict = {
     ("tripsit_all", "4-Fluoromethylphenidate"): ("correct", "CHEMBL1253289", "the name reaches two stereoisomers; Wikipedia's article places the compound here by its InChIKey"),
     ("tripsit_all", "U-47700"): ("correct", "CHEMBL277572", "the name reaches two enantiomers; Wikipedia's article places the compound here by its InChIKey"),
     ("psychonautwiki_all", "U-47700"): ("correct", "CHEMBL277572", "the name reaches two enantiomers; Wikipedia's article places the compound here by its InChIKey"),
-    ("psychonautwiki_all", "Dichloropane"): ("refuse", _SEVERAL + ", as D23 found"),
+    ("psychonautwiki_all", "Dichloropane"): ("refuse", _SEVERAL + ", as D25 found"),
     ("wikipedia_designer", "Dichloropane"): ("refuse", _STEREO),
     ("tripsit_all", "RTI-111"): ("refuse", "RTI-111 is dichloropane; " + _SEVERAL),
-    ("psychonautwiki_all", "Methylnaphthidate"): ("refuse", _SEVERAL + ", as D23 found"),
+    ("psychonautwiki_all", "Methylnaphthidate"): ("refuse", _SEVERAL + ", as D25 found"),
     ("tripsit_all", "2C-B-AN"): ("refuse", _ANIL),
     ("wikipedia_designer", "2C-B-AN"): ("refuse", _ANIL),
     ("wikipedia_psychoactive", "2C-B-AN"): ("refuse", _ANIL),
@@ -188,13 +188,13 @@ REVIEW: dict = {
     ("tripsit_all", "6-MAPB"): ("refuse", _RACEMATE),
     ("wikipedia_designer", "6-MAPB"): ("refuse", _RACEMATE),
     ("wikipedia_psychoactive", "6-MAPB"): ("refuse", _RACEMATE),
-    ("wikipedia_designer", "5-MAPB"): ("refuse", _RACEMATE + ", as D24 found"),
-    ("wikipedia_psychoactive", "5-MAPB"): ("refuse", _RACEMATE + ", as D24 found"),
-    ("wikidata_psychoactive", "methylenedioxypyrovalerone"): ("refuse", _RACEMATE + ", as D24 found"),
-    ("wikipedia_designer", "Methylenedioxypyrovalerone"): ("refuse", _RACEMATE + ", as D24 found"),
-    ("wikipedia_psychoactive", "Methylenedioxypyrovalerone"): ("refuse", _RACEMATE + ", as D24 found"),
-    ("wikidata_psychoactive", "Ariadne"): ("refuse", _RACEMATE + ", as D24 found"),
-    ("wikipedia_psychoactive", "Ariadne (drug)"): ("refuse", _RACEMATE + ", as D24 found"),
+    ("wikipedia_designer", "5-MAPB"): ("refuse", _RACEMATE + ", as D26 found"),
+    ("wikipedia_psychoactive", "5-MAPB"): ("refuse", _RACEMATE + ", as D26 found"),
+    ("wikidata_psychoactive", "methylenedioxypyrovalerone"): ("refuse", _RACEMATE + ", as D26 found"),
+    ("wikipedia_designer", "Methylenedioxypyrovalerone"): ("refuse", _RACEMATE + ", as D26 found"),
+    ("wikipedia_psychoactive", "Methylenedioxypyrovalerone"): ("refuse", _RACEMATE + ", as D26 found"),
+    ("wikidata_psychoactive", "Ariadne"): ("refuse", _RACEMATE + ", as D26 found"),
+    ("wikipedia_psychoactive", "Ariadne (drug)"): ("refuse", _RACEMATE + ", as D26 found"),
     ("tripsit_all", "MT-45"): ("refuse", _RACEMATE),
     ("wikipedia_designer", "MT-45"): ("refuse", _RACEMATE),
     ("wikipedia_designer", "4-Fluorophenibut"): ("refuse", _RACEMATE),
@@ -217,8 +217,8 @@ REVIEW: dict = {
     ("wikipedia_designer", "Bolandione"): ("refuse", _STEREO),
     ("wikipedia_designer", "CP 47,497"): ("refuse", _STEREO),
     ("wikipedia_designer", "Fentanyl tropane"): ("refuse", _STEREO),
-    ("wikipedia_designer", "LSZ"): ("refuse", _STEREO + ", as D24 found"),
-    ("wikipedia_psychoactive", "LSZ"): ("refuse", _STEREO + ", as D24 found"),
+    ("wikipedia_designer", "LSZ"): ("refuse", _STEREO + ", as D26 found"),
+    ("wikipedia_psychoactive", "LSZ"): ("refuse", _STEREO + ", as D26 found"),
     ("wikipedia_psychoactive", "CAR-226,086"): ("refuse", _STEREO),
     ("wikipedia_psychoactive", "CS-27349"): ("refuse", _STEREO),
     ("wikipedia_psychoactive", "Tropine benzilate"): ("refuse", _STEREO),

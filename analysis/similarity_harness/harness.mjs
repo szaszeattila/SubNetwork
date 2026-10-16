@@ -357,7 +357,7 @@ export function grade(viewer, key) {
 }
 
 /**
- * The viewer with every listed_only entry (D23-D25) left out of each ranked
+ * The viewer with every listed_only entry (D25-D27) left out of each ranked
  * list. Such an entry can never carry an ATC N code -- one would have admitted
  * it -- so ranked above a class-mate it is a miss the judge cannot tell from a
  * ranking error. It still weighs on every target's prevalence, which is how it

@@ -1,4 +1,4 @@
-// A molecule entered because a public list names it (D23) cites that list on
+// A molecule entered because a public list names it (D25) cites that list on
 // its own panel and in About, and nowhere claims the listing is evidence.
 
 import { test, describe } from "node:test";
@@ -19,7 +19,7 @@ function data({ admission = "listed_only", name = "Noopept", slug = "noopept" } 
   });
 }
 
-describe("a listed molecule (D23)", () => {
+describe("a listed molecule (D25)", () => {
   test("its panel says which list entered it, linked to the compound's page", () => {
     const v = loadViewer(data());
     const html = v.showMolecule(v.lookupMolecule(2));
@@ -70,7 +70,7 @@ describe("About credits the sci-wiki", () => {
   });
 });
 
-// D25: Wikipedia, Wikidata, TripSit and PsychonautWiki, each cited as its
+// D27: Wikipedia, Wikidata, TripSit and PsychonautWiki, each cited as its
 // terms ask, and the open lists named before the sci-wiki.
 function openData() {
   return buildData({
@@ -90,7 +90,7 @@ function openData() {
   });
 }
 
-describe("a molecule an open list entered (D25)", () => {
+describe("a molecule an open list entered (D27)", () => {
   test("its panel links each list's own page, the open lists in a fixed order", () => {
     const v = loadViewer(openData());
     const html = v.showMolecule(v.lookupMolecule(2));

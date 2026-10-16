@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS molecule_forms (
     PRIMARY KEY (parent_molregno, molregno)
 );
 
--- A public list that names this parent (D23), and the reason a `listed_only`
+-- A public list that names this parent (D25), and the reason a `listed_only`
 -- entry is in the catalogue at all. Written from the selection policy's
 -- `listings`, where each entry is a ChEMBL id reviewed by hand: the build reads
 -- the id, never the name. `name` is the list's own name for the compound, kept

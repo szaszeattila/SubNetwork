@@ -236,7 +236,7 @@ class ScopeTest(unittest.TestCase):
 # ---------------------------------------------------------------------------
 
 class ListingPolicyTest(unittest.TestCase):
-    """The adopted listings (D23-D25) are identifiers, reviewed, and unique."""
+    """The adopted listings (D25-D27) are identifiers, reviewed, and unique."""
 
     OPEN = ("wikipedia", "wikidata", "tripsit", "psychonautwiki")
     IDENTIFIER_TIERS = {"inchikey", "unii_inchikey", "chembl_name"}
@@ -282,7 +282,7 @@ class ListingPolicyTest(unittest.TestCase):
                 self.assertTrue(r["reason"])
 
     def test_the_sci_wiki_cites_only_what_no_open_list_names(self):
-        # D25: where Wikipedia, Wikidata, TripSit or PsychonautWiki carries a
+        # D27: where Wikipedia, Wikidata, TripSit or PsychonautWiki carries a
         # compound the sci-wiki brought in, the open list is cited instead.
         opened = {e["chembl_id"] for s in self.OPEN for e in self.listings[s]["molecules"]}
         self.assertFalse(opened & {e["chembl_id"] for e in self.lst["molecules"]})
@@ -312,7 +312,7 @@ class SelectionTest(unittest.TestCase):
         # Seeds are irrelevant to most of these tests; keep one that exists.
         add_molecule(self.conn, 900, "CHEMBL113", "CAFFEINE")
         self.pol["seeds"]["molecules"] = [["caffeine", "CHEMBL113"]]
-        # So are listings (D23, D25), which name ids the fake ChEMBL does not hold.
+        # So are listings (D25, D27), which name ids the fake ChEMBL does not hold.
         for block in self.pol["listings"].values():
             block["molecules"] = []
 

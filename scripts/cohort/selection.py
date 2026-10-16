@@ -19,7 +19,7 @@ name. All molecule types qualify (D03); withdrawal annotations and unresolved
 structures are retained and flagged (D04); the 28 seed molecules are retained
 and labelled separately from clinical membership (D05).
 
-A listed molecule (D23) is retained the way a seed is. The policy's `listings`
+A listed molecule (D25) is retained the way a seed is. The policy's `listings`
 name the ChEMBL ids a public list carries - the sci-wiki's cognition and
 psychiatric sections - reviewed by hand and written down as identifiers, so the
 build reads an id and never a name (invariant 15). A listing puts a parent in
@@ -49,7 +49,7 @@ class Member:
     route_indication: bool
     is_seed: bool
     seed_name: str | None
-    # One dict per list naming this parent (D23): source, chembl_id, name,
+    # One dict per list naming this parent (D25): source, chembl_id, name,
     # slug, section, placed_by. Empty for almost every entry.
     listings: tuple[dict, ...]
     admission_reason: str
@@ -243,7 +243,7 @@ def run(conn, policy: dict, descriptors: dict) -> dict:
     seed_parents = {cid: parent_of[m] for cid, m in seed_molregnos.items()}
     listed_parents = {cid: parent_of[m] for cid, m in listed_molregnos.items()}
 
-    # Seeds (D05) and listed molecules (D23) are retained whether or not they
+    # Seeds (D05) and listed molecules (D25) are retained whether or not they
     # qualify clinically, so the catalogue is the clinical union plus both.
     cohort = atc_parents | ind_parents
     catalogue = sorted(cohort | set(seed_parents.values()) | set(listed_parents.values()))

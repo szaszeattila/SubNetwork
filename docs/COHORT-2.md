@@ -355,7 +355,7 @@ ignoring stereochemistry, which put esmethadone on methadone's record) are in
 [MESH-ACTIONS-ROUTE-B.md](MESH-ACTIONS-ROUTE-B.md) and DATA-QUALITY-LOG,
 2026-10-13.
 
-### D23 — a molecule the sci-wiki lists is entered, and cites it
+### D25 — a molecule the sci-wiki lists is entered, and cites it
 
 **Decision (user, 2026-10-14).** "lets implement the compounds in these lists
 that are in CHEMBL with or without target data … lets cite the wiki as a
@@ -450,10 +450,10 @@ gitignored, and the scripts read them there; the repository keeps the
 comparison files without the wiki's `section` and `wiki_class` columns. The
 commits that carried them stay reachable by hash on the published branch.
 
-### D24 — the sci-wiki's psychedelics section is listed too
+### D26 — the sci-wiki's psychedelics section is listed too
 
 **Decision (user, 2026-10-15).** "also implement the scientific sean compounds
-in psychedelics-entactogens that are in CHEMBL": D23's rule, applied to a third
+in psychedelics-entactogens that are in CHEMBL": D25's rule, applied to a third
 section, *Psychedelics & entactogens*. Selection policy 3.2.0. Worked in the
 `wiki-comparison` worktree.
 
@@ -467,7 +467,7 @@ are already catalogue members by a clinical route and need no listing (MDMA,
 LSD, psilocybin, 5-MeO-DMT, esketamine and the anticholinergic deliriants
 among them); 49 are identified but not in
 ChEMBL, and 20 not identified at all. That leaves 81 candidates, and the same
-review as D23's:
+review as D25's:
 
 - the 47 placed by an exact ChEMBL preferred name or an FDA UNII InChIKey were
   read over and kept;
@@ -502,7 +502,7 @@ entries against other public lists*: 62 of these 75 are on at least one of
 them, against 43 of the cognition section's 144 and 15 of the psychiatric
 section's 77.
 
-### D25 — what Wikipedia, Wikidata, TripSit and PsychonautWiki list is entered, and cites them
+### D27 — what Wikipedia, Wikidata, TripSit and PsychonautWiki list is entered, and cites them
 
 **Decision (user, 2026-10-16),** two comments on the table *The lists against
 the catalogue now* in [NOOTROPIC-WIKI-COMPARISON.md](NOOTROPIC-WIKI-COMPARISON.md):
@@ -512,7 +512,7 @@ their terms"; and of its "entered from the wiki" column, "for these compounds,
 state the non-scientific sean wiki as the sources instead of how its currently
 cited". Selection policy 3.3.0. Worked in the `wiki-comparison` worktree.
 
-**What it is.** D23's rule, applied to four open lists as four more
+**What it is.** D25's rule, applied to four open lists as four more
 `listings` blocks: `wikipedia` (the *Nootropics*, psychoactive and *Designer
 drugs* categories), `wikidata` (nootropic and psychoactive roles), `tripsit`
 (its factsheets) and `psychonautwiki` (its substance index). Each entry is a
@@ -520,7 +520,7 @@ ChEMBL id with the list's name for the compound and the key its page is linked
 by; `admission_reason = 'listed_only'`, never in the cohort, never evidence.
 A parent no clinical route or seed holds is listed under every one of the four
 that carries it. **A compound one of them carries is no longer cited from the
-sci-wiki:** of the 296 entries D23 and D24 listed, the 120 also on an open list
+sci-wiki:** of the 296 entries D25 and D26 listed, the 120 also on an open list
 now cite that list instead, and the sci-wiki block keeps the 176 none of them
 names. Read as "the non-sci-wiki list" in the second comment; the comment's
 column is exactly those 120.
@@ -536,11 +536,11 @@ were compared with ChEMBL's structure: 19 kept, 5 corrected, 50 refused
 ([DATA-QUALITY-LOG](DATA-QUALITY-LOG.md), 2026-10-16). Among the refusals,
 ChEMBL synonyms that name another compound (*2C-B-AN* on isoaminile, *G-4* on
 dichlorophen), deupsilocin folded onto psilocin, and racemates ChEMBL holds
-only as single enantiomers, as D24 refused 5-MAPB.
+only as single enantiomers, as D26 refused 5-MAPB.
 
 **Citing them by their terms**, reread at the source for TripSit and
 PsychonautWiki ([COMPOUND-LIST-TERMS.md](COMPOUND-LIST-TERMS.md), *Used as
-reasons for entry since D25*). Only a name and a page key are kept from any of
+reasons for entry since D27*). Only a name and a page key are kept from any of
 them. The panel's *Entered from* row names each list and links the compound's
 page there — Wikipedia's article, Wikidata's item, TripSit's factsheet,
 PsychonautWiki's page — open lists first. That row is the note "citing TripSit
@@ -562,7 +562,7 @@ observations, and 196 no eligible evidence in ChEMBL 37; 420 have no ChEMBL
 preferred name, so a list's name is their label. The ATC grade goes from 32.0%
 to 30.3% top-1 and MRR 0.4477 to 0.4343, under both floors in
 `tests/similarity_harness.test.mjs`; with all 841 listed entries skipped in
-each list it is 33.5% and 0.4646, above the D24 build's 32.7% and 0.4601 the
+each list it is 33.5% and 0.4646, above the D26 build's 32.7% and 0.4601 the
 same way. So the floors now grade with listed entries skipped
 (`skippingListed`, `evaluate.mjs --skip-listed`), and were not lowered
 ([SIMILARITY-HARNESS.md](SIMILARITY-HARNESS.md) §13).
@@ -588,7 +588,7 @@ removed. It is also weak: HPA detects 17,235 of the 19,217 proteins it
 measures in some brain region.
 
 The sections of NOOTROPIC-WIKI-COMPARISON.md that count the catalogue against
-the lists were measured before D25, and its last section says what changed.
+the lists were measured before D27, and its last section says what changed.
 The myristicin record ChEMBL names ELEMICIN is item 2 of
 [CHEMBL-ERROR-REPORT.md](CHEMBL-ERROR-REPORT.md), not yet sent.
 
@@ -609,8 +609,8 @@ In the order they bear on the picture.
 4. **Primary-only for evidence, all rows for direction** (the user's call on
    2026-09-27). Worth revisiting if a second error like vilazodone's appears.
 5. **New molecules** — the second step. D21 added 1,119 by lowering the
-   indication route's phase floor, D23 221 by the sci-wiki's two
-   sections and D24 75 by its psychedelics section, and D25 545 more from
+   indication route's phase floor, D25 221 by the sci-wiki's two
+   sections and D26 75 by its psychedelics section, and D27 545 more from
 Wikipedia, Wikidata, TripSit and PsychonautWiki; the sci-wiki's other eight sections
    (peptides, botanicals, formats and the rest) are not listed, and the 17
    refused names would need a ChEMBL record drawn as the compound they mean. GtoPdb's ligands outside the cohort are

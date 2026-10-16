@@ -159,7 +159,7 @@ names the action it expects, and a corrected record no longer says it. Then:
 
 ## 2. Myristicin named ELEMICIN
 
-Found by D25's review, when PsychonautWiki's *Myristicin* placed through FDA's
+Found by D27's review, when PsychonautWiki's *Myristicin* placed through FDA's
 UNII InChIKey at a record ChEMBL names ELEMICIN
 ([DATA-QUALITY-LOG.md](DATA-QUALITY-LOG.md), 2026-10-16).
 
@@ -180,7 +180,7 @@ Every line here was checked on 2026-10-16.
 
 Nothing is withheld: the structure, which is right, is the identity, and the
 claims at CHEMBL481044 are measurements of myristicin. The entry is in the
-catalogue because PsychonautWiki lists myristicin (D25), and its panel shows
+catalogue because PsychonautWiki lists myristicin (D27), and its panel shows
 ChEMBL's name, ELEMICIN, with "PsychonautWiki, as Myristicin" beneath it. The
 policy entry's `review` note records the error. Overriding a ChEMBL name has no
 mechanism here, and one error does not justify building one.

@@ -10,14 +10,14 @@ the `phase1-admission` branch's build instead, and say so.
 **Since 2026-10-14 two of its sections are policy.** The user adopted the
 compounds the *Cognition & nootropic* and *Psychiatric & neuro-clinical*
 sections place in ChEMBL outside the catalogue, and asked for the wiki to be
-cited as their source of entry: D23 in [COHORT-2.md](COHORT-2.md). That did not
+cited as their source of entry: D25 in [COHORT-2.md](COHORT-2.md). That did not
 make this document's name matches policy. Each was reviewed against ChEMBL's
 structure and written into `config/cohort1_selection.json` as an id; 221 were
-kept, one corrected and 11 refused, and D23 says which and why. On 2026-10-15
-a third section, *Psychedelics & entactogens*, followed the same way (D24: 75
+kept, one corrected and 11 refused, and D25 says which and why. On 2026-10-15
+a third section, *Psychedelics & entactogens*, followed the same way (D26: 75
 kept, two corrected, six refused). Everything up to *The listed entries
 against other public lists* is still the measurement it was; that last
-section, added 2026-10-15, is measured against the D24 build of 2,748
+section, added 2026-10-15, is measured against the D26 build of 2,748
 entries.
 
 The first question was the user's: of the compounds
@@ -644,8 +644,8 @@ sweep of ATC N codes held only by an ester whose parent compound has no code.
 
 2026-10-15, the user's question: how Wikidata, Wikipedia, TripSit and
 PsychonautWiki compare with the catalogue now that it holds the wiki's three
-sections (D23, D24), and which of the compounds the wiki brought in those
-lists also have. Measured against the D24 build: 2,748 entries, 296 of them
+sections (D25, D26), and which of the compounds the wiki brought in those
+lists also have. Measured against the D26 build: 2,748 entries, 296 of them
 `listed_only`. `compare_lists.py` places every list entry as before and now
 also says whether its ChEMBL parent is one the wiki brought in
 (`molecule_listings`); its per-molecule output, `listed_on_lists.csv`, stays
@@ -688,7 +688,7 @@ psychoactive role: 119 items for the six, against Wikipedia's 1,042 articles.
 | Wikipedia, *Designer drugs* | 967 | 387 | 157 | 90 (9%) | 26 | 64 | 297 |
 
 "By a clinical route" counts members of the cohort and one seed, theobromine,
-on TripSit and Wikidata; "entered from the wiki" is D23 and D24.
+on TripSit and Wikidata; "entered from the wiki" is D25 and D26.
 
 **The catalogue's share of every list has about doubled since 2026-10-11.**
 Against the 1,335-entry build it held 86 of PsychonautWiki's entries, 146 of
@@ -702,7 +702,7 @@ Wikipedia's nootropic list also places better than before (124 in ChEMBL, from
 
 **The psychoactive lists are reached mostly through the wiki.** Of the 88
 Wikipedia psychoactive articles and 90 designer drugs the catalogue holds, 59
-and 64 are listed entries; without D23 and D24 it would hold 29 and 26 — for
+and 64 are listed entries; without D25 and D26 it would hold 29 and 26 — for
 the first MDMA, LSD, psilocybin, DMT, ketamine and the NMDA-antagonist and
 anticholinergic drugs, for the second modafinil and its analogues, six
 benzodiazepine-type drugs, mephedrone and methylone. Both categories are still mostly
@@ -799,17 +799,17 @@ python3 analysis/wiki_comparison/prepare_lists.py db/cache/lists/raw db/cache/li
 python3 analysis/wiki_comparison/compare_lists.py db/cache/lists/names/2026-10-15
 ```
 
-## The lists brought in (D25)
+## The lists brought in (D27)
 
 2026-10-16, the user's two comments on the table above: bring in every
 compound in its "in ChEMBL, outside" column and say where each came from,
 citing each list by its terms; and cite the open list, not the sci-wiki, for
-the compounds in its "entered from the wiki" column. Adopted as D25 in
+the compounds in its "entered from the wiki" column. Adopted as D27 in
 [COHORT-2.md](COHORT-2.md), with the review in
 [DATA-QUALITY-LOG.md](DATA-QUALITY-LOG.md) (2026-10-16) and the citations in
 [COMPOUND-LIST-TERMS.md](COMPOUND-LIST-TERMS.md). `open_listings.py` wrote the
 four lists' entries into the selection policy from `lists_overlap.csv`.
-Measured against the D25 build, 3,293 entries:
+Measured against the D27 build, 3,293 entries:
 
 | list | compounds | in ChEMBL | in the catalogue | by a clinical route | entered from a list | entered from the wiki | in ChEMBL, outside |
 |---|---:|---:|---:|---:|---:|---:|---:|

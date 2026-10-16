@@ -3,7 +3,7 @@
 Read-only. **Adopts nothing**, changes no membership, and writes to neither
 database nor the viewer. The findings are in
 [docs/NOOTROPIC-WIKI-COMPARISON.md](../../docs/NOOTROPIC-WIKI-COMPARISON.md).
-D23 and D24 ([docs/COHORT-2.md](../../docs/COHORT-2.md)) later entered three
+D25 and D26 ([docs/COHORT-2.md](../../docs/COHORT-2.md)) later entered three
 sections' placements into the catalogue. Nothing here feeds the build: each placement
 was reviewed and written into `config/cohort1_selection.json` as a ChEMBL id.
 
@@ -29,9 +29,9 @@ The other sites' lists are kept the same way, in `db/cache/lists/`.
 | `brain_targets.py` | the same for routes defined by a brain-target set: ChEMBL mechanisms, GtoPdb interactions, PDSP Ki values and ChEMBL measurements, and the wiki compounds outside ChEMBL that GtoPdb or PDSP reach |
 | `fetch_lists.py` | retrieves Wikipedia's nootropic, psychoactive and designer-drug categories, with each article's InChIKey through its Wikidata item, and Wikidata's nootropic and psychoactive roles (2026-10-15) |
 | `prepare_lists.py` | turns raw downloads of the other public lists into name files, and records how each was retrieved |
-| `compare_lists.py` | sets those lists beside the wiki and the catalogue, and says which catalogue entries the wiki brought in (D23, D24) each list has; `SAME_AS_WIKI` is its reviewed equivalences |
-| `open_listings.py` | writes the four open lists' entries into `config/cohort1_selection.json` (D25) from `compare_lists.py`'s placements, moving off the sci-wiki whatever they carry; `REVIEW` is every placement decided by hand, and it stops on one it does not name |
-| `listed_brain_proteins.py` | whether each listed entry (D23–D25) has a claim at a protein the Human Protein Atlas detects in a brain region, by UniProt accession; reads `db/cache/hpa/proteinatlas.tsv.zip` (HPA 25.1) and writes its per-entry table beside it |
+| `compare_lists.py` | sets those lists beside the wiki and the catalogue, and says which catalogue entries the wiki brought in (D25, D26) each list has; `SAME_AS_WIKI` is its reviewed equivalences |
+| `open_listings.py` | writes the four open lists' entries into `config/cohort1_selection.json` (D27) from `compare_lists.py`'s placements, moving off the sci-wiki whatever they carry; `REVIEW` is every placement decided by hand, and it stops on one it does not name |
+| `listed_brain_proteins.py` | whether each listed entry (D25–D27) has a claim at a protein the Human Protein Atlas detects in a brain region, by UniProt accession; reads `db/cache/hpa/proteinatlas.tsv.zip` (HPA 25.1) and writes its per-entry table beside it |
 | `pubchem_lookup.py` | name → InChIKey through PubChem for the names nothing else placed; resumable |
 | `pubchem_cache.json` | what PubChem answered, `[]` for a name it does not know |
 | `need_pubchem.json` | names still not looked up (generated) |
@@ -57,7 +57,7 @@ L=db/cache/lists
 python3 analysis/wiki_comparison/fetch_lists.py $L/raw/2026-10-15
 python3 analysis/wiki_comparison/prepare_lists.py $L/raw $L/raw/2026-10-15 $L/names/2026-10-15
 python3 analysis/wiki_comparison/compare_lists.py $L/names/2026-10-15
-python3 analysis/wiki_comparison/open_listings.py $L/names/2026-10-15 $L/raw $L/raw/2026-10-15 --write   # D25; then rebuild
+python3 analysis/wiki_comparison/open_listings.py $L/names/2026-10-15 $L/raw $L/raw/2026-10-15 --write   # D27; then rebuild
 ```
 
 The other lists, and `lists_overlap.csv` and `listed_on_lists.csv` that

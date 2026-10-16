@@ -656,17 +656,17 @@ The ATC grade of that build is 38.7% and 0.5119 under both. A MeSH grade
 taken before 2026-10-13 is therefore not comparable with one taken after,
 including every MeSH figure in section 10.
 
-## 13. The sci-wiki's molecules (D23, 2026-10-14)
+## 13. The sci-wiki's molecules (D25, 2026-10-14)
 
-D23 entered 221 molecules because the sci-wiki lists them. None is in the ATC
+D25 entered 221 molecules because the sci-wiki lists them. None is in the ATC
 answer key: carrying an ATC N code would have admitted them already. The
 MeSH key labels 70 of them. Graded the way section 11 graded D21:
 
 | | ATC scoreable | ATC top-1 | ATC top-10 | ATC MRR | MeSH scoreable | MeSH top-1 | MeSH MRR |
 |---|---|---|---|---|---|---|---|
 | the D21 build (2,452) | 284 | 32.7% | 74.3% | 0.4607 | 865 | 45.0% | 0.5945 |
-| D23 as graded (2,673) | 284 | 31.7% | 72.9% | 0.4467 | 914 | 44.0% | 0.5835 |
-| D23, the 221 skipped in each list | 284 | 32.4% | 74.3% | 0.4589 | 913 | 44.1% | 0.5862 |
+| D25 as graded (2,673) | 284 | 31.7% | 72.9% | 0.4467 | 914 | 44.0% | 0.5835 |
+| D25, the 221 skipped in each list | 284 | 32.4% | 74.3% | 0.4589 | 913 | 44.1% | 0.5862 |
 
 Most of the ATC fall is again the judge's, but not all of it, unlike D21's:
 skipped, the newcomers still leave −0.3 points of top-1 and −0.0018 of MRR.
@@ -681,29 +681,29 @@ and others once each, among them norbinaltorphimine, capeserod and
 flmodafinil. The floors in `tests/similarity_harness.test.mjs`
 hold, and were not moved.
 
-D24 (2026-10-15) listed 75 more, from the wiki's psychedelics section, and the
+D26 (2026-10-15) listed 75 more, from the wiki's psychedelics section, and the
 grade rose a little rather than fell:
 
 | | ATC scoreable | ATC top-1 | ATC top-10 | ATC MRR | MeSH scoreable | MeSH top-1 | MeSH MRR |
 |---|---|---|---|---|---|---|---|
-| D24 as graded (2,748) | 284 | 32.0% | 72.9% | 0.4477 | 928 | 43.5% | 0.5783 |
-| D24, all 296 listed skipped | 284 | 32.7% | 74.3% | 0.4601 | 924 | 43.7% | 0.5830 |
+| D26 as graded (2,748) | 284 | 32.0% | 72.9% | 0.4477 | 928 | 43.5% | 0.5783 |
+| D26, all 296 listed skipped | 284 | 32.7% | 74.3% | 0.4601 | 924 | 43.7% | 0.5830 |
 
 Skipped, the ATC grade is the D21 build's again (32.7%, 0.4607 there), so the
-−0.3 points D23 left behind are gone. As there, a skipped molecule's only
+−0.3 points D25 left behind are gone. As there, a skipped molecule's only
 route into the grade is the weight it adds to its targets' prevalence; why
 the 75 move it back up was not isolated. Two of the
 75 rank first over a MeSH class-mate: 5-MeO-DALT for three molecules and
 brolamfetamine (DOB) for two.
 
-D25 (2026-10-16) entered 545 more from Wikipedia, Wikidata, TripSit and
+D27 (2026-10-16) entered 545 more from Wikipedia, Wikidata, TripSit and
 PsychonautWiki, and moved 120 of the sci-wiki's entries onto those lists'
 citations:
 
 | | ATC scoreable | ATC top-1 | ATC top-10 | ATC MRR | MeSH scoreable | MeSH top-1 | MeSH MRR |
 |---|---|---|---|---|---|---|---|
-| D25 as graded (3,293) | 284 | 30.3% | 71.5% | 0.4343 | 979 | 42.0% | 0.5618 |
-| D25, all 841 listed skipped | 284 | 33.5% | 74.3% | 0.4646 | 972 | 43.3% | 0.5776 |
+| D27 as graded (3,293) | 284 | 30.3% | 71.5% | 0.4343 | 979 | 42.0% | 0.5618 |
+| D27, all 841 listed skipped | 284 | 33.5% | 74.3% | 0.4646 | 972 | 43.3% | 0.5776 |
 
 As graded, both ATC floors failed (MRR 0.44, top-1 31%). Skipped, the grade is
 the best since D21, so the fall is the judge's again, and **the floor test now

@@ -362,7 +362,7 @@ export function buildData({ molecules = [], targets = [], claims = [],
     const copy = Object.assign({}, m);
     copy.synonyms = (m.synonyms || []).map((s) => strings.intern(s));
     copy.aliases = (m.aliases || []).map((s) => strings.intern(s));
-    // [source, name, slug] per listing (D23), each interned as the export does.
+    // [source, name, slug] per listing (D25), each interned as the export does.
     copy.listings = m.listings
       ? m.listings.map((l) => [l.source, l.name, l.slug].map((x) => strings.intern(x)))
       : null;

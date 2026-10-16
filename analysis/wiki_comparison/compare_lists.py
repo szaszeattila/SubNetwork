@@ -9,9 +9,9 @@ when the list gives one, else the name tiers, without PubChem — and two
 entries are the same compound when they reach a common ChEMBL parent or, when
 neither is placed, when their names are equal with punctuation dropped.
 
-Since D23 and D24 a catalogue entry may be there because the wiki lists it
+Since D25 and D26 a catalogue entry may be there because the wiki lists it
 (molecule_listings); `sciwiki_listed` names such entries, and
-LIST_DIR/listed_on_lists.csv says which lists each of them is on. Since D25 the open
+LIST_DIR/listed_on_lists.csv says which lists each of them is on. Since D27 the open
 lists are reasons for entry too, so the summary also counts each list's
 entries a listing entered and those still in ChEMBL and outside.
 
@@ -66,7 +66,7 @@ def main() -> int:
     pl = Placer(args.data_root)
 
     wiki = list(csv.DictReader(open(REFERENCE / "comparison.csv", encoding="utf-8")))
-    # The entries the wiki brought in (D23, D24), by ChEMBL parent.
+    # The entries the wiki brought in (D25, D26), by ChEMBL parent.
     listed = {cid: {"chembl_id": cid, "name": name, "section": section, "evidence_status": ev}
               for cid, name, section, ev in pl.coh.execute(
                   "SELECT m.chembl_id, l.name, l.section, m.evidence_status FROM molecule_listings l "
@@ -107,7 +107,7 @@ def main() -> int:
             in_wiki = bool(set(ids) & wiki_parents) or any(squash(a) in wiki_names for a in alts)
             in_cat = [i for i in ids if i in pl.catalogue]
             in_listing = [i for i in ids if i in listed]
-            # Since D25 an entry may be in the catalogue because this very list
+            # Since D27 an entry may be in the catalogue because this very list
             # (or another open one) names it.
             c["entered_by_a_list"] += any(pl.catalogue[i][0] == "listed_only" for i in in_cat)
             c["outside"] += bool(ids) and not in_cat

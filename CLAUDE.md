@@ -27,7 +27,7 @@ viewer is hosted on Cloudflare; its claude.ai artifact was deleted 2026-10-10.
 The catalogue is built from ChEMBL 37, with GtoPdb laid on it as
 directions (D17) and, at primary targets, curated claims (D18), and the
 molecules entered because a public list names them — Wikipedia, Wikidata,
-TripSit or PsychonautWiki, and the sci-wiki where none of them does (D23–D25);
+TripSit or PsychonautWiki, and the sci-wiki where none of them does (D25–D27);
 its size is stated once, in **Status**, generated from the
 database rather than typed.
 [docs/COHORT-REPORT.md](docs/COHORT-REPORT.md) measured selection policies that
@@ -195,7 +195,7 @@ rebuild.** `SEED_MOLECULES` decides which molecules are labelled seeds and kept
 regardless of the clinical policy, not membership; a seed is never
 grandfathered into the cohort, and both facts are on every entry.
 `listings` does the same for the molecules a public list names, one block per
-list (D23–D25): each is a ChEMBL id written down after a review against
+list (D25–D27): each is a ChEMBL id written down after a review against
 ChEMBL's structure, never a name the build matches, and a refused name stays in
 `considered_and_not_listed` with its reason. The four open lists' blocks are
 written by `analysis/wiki_comparison/open_listings.py`, whose `REVIEW` table
@@ -244,8 +244,8 @@ analysis/probe/           50 settled drug relationships put to the ranking, and
 analysis/wiki_comparison/ a nootropics wiki's compound list placed against
                           ChEMBL and the catalogue, and other public lists
                           beside it, by name. Read-only, except that
-                          open_listings.py writes D25's listings into the
-                          policy; D23's and D24's were reviewed from it by
+                          open_listings.py writes D27's listings into the
+                          policy; D25's and D26's were reviewed from it by
                           hand. The lists themselves are kept in db/cache/,
                           never here.
 analysis/answer_keys/     what the ATC answer key calls a miss, and whether it
@@ -277,7 +277,7 @@ flags, and an `evidence_status`. **`molecule_forms`** keeps every salt, hydrate
 and formulation folded onto the parent, including the id a seed was seeded
 under (theophylline was seeded as `CHEMBL1355736` and lives as `CHEMBL190`), and
 both identities stay searchable. **`molecule_listings`** names the public list
-a molecule was entered from (D23), with the list's name for it and the slug its
+a molecule was entered from (D25), with the list's name for it and the slug its
 page is linked by; such an entry reads `admission_reason = 'listed_only'`, is
 never in the cohort, and its listing is never evidence.
 
@@ -415,7 +415,7 @@ trial status, and **Wikidata** a Wikipedia link per node and a molecule's MeSH
 record where FDA's route does not reach it. Both are matched on an identifier
 this database already holds — never a title search: "ATM", "APP" and "TNF" are
 English words. The cohort pipeline no longer reads **PubChem** (2026-10-13).
-**Public compound lists** are a reason for entry and nothing else (D23–D25),
+**Public compound lists** are a reason for entry and nothing else (D25–D27),
 each cited on its entries with a link to its own page and credited in About in
 the words its terms ask for ([COMPOUND-LIST-TERMS](docs/COMPOUND-LIST-TERMS.md)):
 **Wikipedia**'s nootropic, psychoactive and designer-drug categories (article
@@ -553,7 +553,7 @@ Pipeline and viewer both working. Current database, `db/cohort1.db`, built
 2,449 are cohort-1 members (72 by ATC N alone, 1,905 by a qualifying
 indication alone, 472 by both); outside it, with their exclusion reasons, are
 3 seed molecules and 841 molecules entered because a public list names them
-(D23–D25). 25 of the 28 seeds are admitted. 5,439 claims are Supported in the
+(D25–D27). 25 of the 28 seeds are admitted. 5,439 claims are Supported in the
 direct human basis — 2,885 by replication across publications and 2,554 by
 curated mechanism, with no claim carrying both — over 4,115 distinct
 molecule–target pairs. 1,643 entries have a Supported claim, 561 only
@@ -614,7 +614,7 @@ database, so not generated. The ATC grade above fell with D21 because the
 is a miss however apt. Skipped in each list, the same build grades 38.7% and
 MRR 0.5121, as before them
 ([docs/SIMILARITY-HARNESS.md](docs/SIMILARITY-HARNESS.md) §11). Listed entries
-(D23–D25) can never carry one either: with all of them skipped in each list
+(D25–D27) can never carry one either: with all of them skipped in each list
 the build grades 33.5% and MRR 0.4646, and that is the grade the floor test
 holds (`evaluate.mjs --skip-listed`, §13). Full build numbers, the two
 analysis defects the build corrects, the limitations and the rollback commands
@@ -820,8 +820,8 @@ behaviour a rule here describes.
   into the markup would attribute data a ChEMBL-only page is not showing.
   Both the strip and About link the public repository's issues as the place
   an error goes; About says what a useful report names.
-- **A listed molecule names its lists as its reason for being here (D23,
-  D25), and About credits each list.** The panel's *Entered from* row (*Also
+- **A listed molecule names its lists as its reason for being here (D25,
+  D27), and About credits each list.** The panel's *Entered from* row (*Also
   listed by* where a clinical route admitted it too) names each list and links
   the compound's own page there, built from the slug by `LISTING_SOURCES`,
   under the list's name for it, open lists first — the per-page note citing
