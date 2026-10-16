@@ -31,6 +31,7 @@ The other sites' lists are kept the same way, in `db/cache/lists/`.
 | `prepare_lists.py` | turns raw downloads of the other public lists into name files, and records how each was retrieved |
 | `compare_lists.py` | sets those lists beside the wiki and the catalogue, and says which catalogue entries the wiki brought in (D23, D24) each list has; `SAME_AS_WIKI` is its reviewed equivalences |
 | `open_listings.py` | writes the four open lists' entries into `config/cohort1_selection.json` (D25) from `compare_lists.py`'s placements, moving off the sci-wiki whatever they carry; `REVIEW` is every placement decided by hand, and it stops on one it does not name |
+| `listed_brain_proteins.py` | whether each listed entry (D23–D25) has a claim at a protein the Human Protein Atlas detects in a brain region, by UniProt accession; reads `db/cache/hpa/proteinatlas.tsv.zip` (HPA 25.1) and writes its per-entry table beside it |
 | `pubchem_lookup.py` | name → InChIKey through PubChem for the names nothing else placed; resumable |
 | `pubchem_cache.json` | what PubChem answered, `[]` for a name it does not know |
 | `need_pubchem.json` | names still not looked up (generated) |

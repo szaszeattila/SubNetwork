@@ -941,11 +941,12 @@ molecules) are in [docs/COHORT-2.md](docs/COHORT-2.md) and come first.
   Wikidata (liraglutide), and 2 are drawn with different defined stereochemistry
   by ChEMBL and FDA (dextrose). Nothing that matches by identifier reaches them
   ([docs/MESH-ACTIONS-ROUTE-B.md](docs/MESH-ACTIONS-ROUTE-B.md)).
-- **A ChEMBL curation error to report:** alfuzosin filed as an alpha-1
-  AGONIST against its own cited label. Withheld here since 2026-10-10; the
-  report is drafted in
-  [docs/CHEMBL-ERROR-REPORT-ALFUZOSIN.md](docs/CHEMBL-ERROR-REPORT-ALFUZOSIN.md)
-  and not sent. How many more there are is unmeasured: three
+- **ChEMBL errors to report, as one email:** alfuzosin filed as an alpha-1
+  AGONIST against its own cited label (withheld here since 2026-10-10), and
+  myristicin's record named ELEMICIN (2026-10-16). Both are in
+  [docs/CHEMBL-ERROR-REPORT.md](docs/CHEMBL-ERROR-REPORT.md), not sent; the
+  user wants each new error added there and the email sent once. How many
+  more mechanism errors there are is unmeasured: three
   sweeps found no other, and none of them can see an error of its shape
   ([DATA-QUALITY-LOG](docs/DATA-QUALITY-LOG.md), 2026-10-10). Of the 176
   activities ChEMBL itself flags "Potential transcription error", 156 are

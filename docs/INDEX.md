@@ -52,7 +52,7 @@ one of the two.
 | --- | --- | --- |
 | [PUBLISHING.md](PUBLISHING.md) | how to deploy the viewer to Cloudflare: staging with `--preview`, production, the deploy record, the headers and who may open it; this GitHub repository: begun 2026-10-10 as one audited snapshot of a private working copy, never its history; every branch pushed (since 2026-10-12; only `main` before), and the hooks that refuse a personal path, address or session link; how it went public (2026-10-10); and, as history, the claude.ai artifact deleted 2026-10-10 (its procedure, refusals and versions 1–28) | Access coverage checked 2026-10-10; refusal counts from 18 session transcripts, as of version 22 |
 | [REPRODUCING.md](REPRODUCING.md) | how to go from a fresh clone to a page that opens: where to download ChEMBL 37 and its checksum, `CHEMBL_SQLITE_PATH`, the build and backfill order, and which backfills read live sources and will not reproduce exactly (GtoPdb refuses any release but 2026.3.1) | checked against EBI's server 2026-10-10 |
-| [CHEMBL-ERROR-REPORT-ALFUZOSIN.md](CHEMBL-ERROR-REPORT-ALFUZOSIN.md) | the drafted report to ChEMBL that alfuzosin is filed as an alpha-1 agonist, its evidence, and what to undo when ChEMBL fixes it | checked 2026-10-10; **not yet sent** |
+| [CHEMBL-ERROR-REPORT.md](CHEMBL-ERROR-REPORT.md) | the errors found in ChEMBL, collected into one email to send later: alfuzosin filed as an alpha-1 agonist, and myristicin's record named ELEMICIN; the evidence for each, and what to undo when ChEMBL fixes it | alfuzosin checked 2026-10-10, myristicin 2026-10-16; **not yet sent** |
 
 **Measurement — these grade something and adopt nothing.**
 

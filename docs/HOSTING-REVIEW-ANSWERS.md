@@ -134,7 +134,7 @@ were not re-checked here.
 - There is no root `README.md`; `CLAUDE.md` is written for an assistant.
 - Reproduction assumes `/mnt/data/chembl/` and gitignored data, and nothing
   tells an outsider to download ChEMBL 37. *Done: [REPRODUCING.md](REPRODUCING.md).*
-- `docs/CHEMBL-ERROR-REPORT-ALFUZOSIN.md` is an unsent draft.
+- `docs/CHEMBL-ERROR-REPORT.md` is an unsent draft.
 - Decide whether `CLAUDE.md`, `docs/prompts/` and the archived Zotero notes
   should be public.
 - `requirements.txt` misses `markdown_it` and `reportlab`. *Done.*
@@ -183,7 +183,7 @@ section above. Three asked for a fix and three asked a question.
   Sending it from the user's Gmail was attempted and refused by the session's
   permission rules. Leaving it as a Gmail draft was refused too. Both are
   actions the user has to allow or take. The text is in
-  [CHEMBL-ERROR-REPORT-ALFUZOSIN.md](CHEMBL-ERROR-REPORT-ALFUZOSIN.md), ready to
+  [CHEMBL-ERROR-REPORT.md](CHEMBL-ERROR-REPORT.md), ready to
   paste. Once it is sent, record the date there and in
   [COHORT-2.md](COHORT-2.md).
 

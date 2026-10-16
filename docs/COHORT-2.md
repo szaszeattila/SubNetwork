@@ -571,10 +571,26 @@ same way. So the floors now grade with listed entries skipped
 designer-drug categories wholesale where ChEMBL has a structure, which includes
 designer steroids and SARMs (bolandiol, LGD-4033) filed there as designer
 drugs, and a few drugs PsychonautWiki indexes for their effects (efavirenz,
-serotonin, tyrosine). They were entered as asked, and each says why. The
-sections of NOOTROPIC-WIKI-COMPARISON.md that count the catalogue against the
-lists were measured before D25, and its last section says what changed. The
-myristicin record ChEMBL names ELEMICIN is unreported.
+serotonin, tyrosine). **The user's test for them (2026-10-16): "anything that
+acts on a brain protein I think is fair game"**, as a SERM acts on oestrogen
+receptors in the brain. Measured by `listed_brain_proteins.py` against the
+Human Protein Atlas 25.1's brain regions, all of these pass: the SARMs and
+designer steroids act on the androgen receptor, the others on brain receptors
+among many. Of the 841 listed entries, 495 have a claim at a protein HPA
+detects in the brain, 41 have claims and none there, and 305 have no claim to
+test. The 41 are not non-brain drugs: most are psychedelics, opioids and
+neurosteroids whose only claims are at a rat receptor family or complex, which
+D20 maps to no human protein (2C-x and DOx compounds at the rat 5-HT2 family,
+desomorphine at the rat opioid family, arketamine at rat NMDA), and the rest
+lack their main target in ChEMBL (2C-C, 2C-E only at TAAR1, which HPA's RNA
+barely detects). So the test removes nothing it should, and nothing was
+removed. It is also weak: HPA detects 17,235 of the 19,217 proteins it
+measures in some brain region.
+
+The sections of NOOTROPIC-WIKI-COMPARISON.md that count the catalogue against
+the lists were measured before D25, and its last section says what changed.
+The myristicin record ChEMBL names ELEMICIN is item 2 of
+[CHEMBL-ERROR-REPORT.md](CHEMBL-ERROR-REPORT.md), not yet sent.
 
 ---
 
@@ -601,9 +617,11 @@ Wikipedia, Wikidata, TripSit and PsychonautWiki; the sci-wiki's other eight sect
    still unadmitted, by a rule still to be written; see
    [COHORT-BOUNDARY-REVIEW.md](COHORT-BOUNDARY-REVIEW.md) for the curated-route
    proposal it should start from.
-6. **Report the alfuzosin mechanism to ChEMBL.** Drafted 2026-10-10 in
-   [CHEMBL-ERROR-REPORT-ALFUZOSIN.md](CHEMBL-ERROR-REPORT-ALFUZOSIN.md) and not
-   sent. The action is withheld locally in the meantime
+6. **Report ChEMBL's errors, in one email.** Alfuzosin's mechanism (drafted
+   2026-10-10) and the myristicin record named ELEMICIN (added 2026-10-16) are
+   collected in [CHEMBL-ERROR-REPORT.md](CHEMBL-ERROR-REPORT.md), to be sent
+   as one email later, with further errors added as they are found; not
+   sent. Alfuzosin's action is withheld locally in the meantime
    (`CHEMBL_MECHANISM_ACTION_EXCLUSIONS`, DATA-QUALITY-LOG 2026-10-10); the
    entry stops the build when ChEMBL corrects the row, which is when to remove
    it.

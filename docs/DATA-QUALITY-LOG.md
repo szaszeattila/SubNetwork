@@ -72,7 +72,10 @@ identifier placements were reviewed on a read-over:
   myristicin (an allyl, a methoxy and a methylenedioxy) and named ELEMICIN,
   which is the trimethoxy compound. FDA's UNII for myristicin reaches it by
   InChIKey, so the placement is right and the entry is kept with a note; the
-  page shows ChEMBL's name, which is the error. Not reported to ChEMBL yet.
+  page shows ChEMBL's name, which is the error. Elemicin's own structure is
+  CHEMBL458690, unnamed; the name seems to come from a 1999 paper whose
+  "Elemicin" was registered at the myristicin structure. Item 2 of
+  [CHEMBL-ERROR-REPORT.md](CHEMBL-ERROR-REPORT.md), not yet sent.
 - **A deuterated drug folds onto its parent.** ChEMBL files deupsilocin as a
   form of psilocin, so Wikipedia's *Deupsilocin* reached psilocin by exact
   name. Refused: the article is about the deuterated drug, and psilocin is
