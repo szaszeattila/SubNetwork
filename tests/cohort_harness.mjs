@@ -226,7 +226,7 @@ export const MOLECULE_FIELDS = [
   "molecular_formula", "molecular_weight", "atc_level5", "atc_flags",
   "identity_flags", "seed_name", "gap_reason", "exclusion_reason", "smiles",
   "inchikey", "wikipedia_url", "n_indications_chembl", "synonyms", "aliases",
-  "approved_elsewhere",
+  "approved_elsewhere", "approval_status", "max_phase_checked",
 ];
 
 export const TARGET_FIELDS = [
@@ -385,10 +385,19 @@ export function buildData({ molecules = [], targets = [], claims = [],
   // dictionary indices. A fixture that skipped this would be testing a format
   // the exporter never produces.
   const encodedIndications = {};
+  // D23's two optional places follow: the approval basis (interned), and the
+  // unapproved labels as [set id, title, labeler, categories, from, until]
+  // with the three strings interned; both left off when absent, as exported.
+  const opt = (v) => (v === undefined || v === null ? null : strings.intern(v));
   for (const [key, rows] of Object.entries(indications)) {
-    encodedIndications[key] = rows.map((r) => [
-      r[0], strings.intern(r[1]), strings.intern(r[2]), strings.intern(r[3]), r[4],
-      r[5] === undefined || r[5] === null ? null : strings.intern(r[5])]);
+    encodedIndications[key] = rows.map((r) => {
+      const row = [r[0], strings.intern(r[1]), strings.intern(r[2]), strings.intern(r[3]),
+                   r[4], opt(r[5]), opt(r[6]),
+                   r[7] ? r[7].map((l) => [l[0], opt(l[1]), opt(l[2]), opt(l[3]),
+                                           l[4] || null, l[5] || null]) : null];
+      while (row.length > 5 && row[row.length - 1] === null) row.pop();
+      return row;
+    });
   }
   // Trial status as the exporter writes it: nct -> [status, why_stopped?] for
   // a row fetched before phases were recorded, or [status, why_stopped,

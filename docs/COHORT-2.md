@@ -355,6 +355,83 @@ ignoring stereochemistry, which put esmethadone on methadone's record) are in
 [MESH-ACTIONS-ROUTE-B.md](MESH-ACTIONS-ROUTE-B.md) and DATA-QUALITY-LOG,
 2026-10-13.
 
+### D23 — an Approved resting only on unapproved US labels is not one
+
+**Decision (user, 2026-10-15).** Asked how isometheptene was approved for
+migraine, and told it never was: "lets measure how many other drugs are
+actually unapproved, and label it as such in the graph, even if we lose
+molecules from the cohort. we want to be truthful, not just follow chembl".
+Selection policy 3.1.0. Worked in the `unapproved-labels` worktree.
+
+**What ChEMBL's Approved is.** `max_phase_for_ind = 4` on a disease, backed
+by whatever `indication_refs` cites: an FDA or EMA document, a DailyMed label,
+an ATC class, or a Phase 4 trial. A DailyMed label is a published label, not
+an approval. FDA publishes the labels of products sold without one, under the
+marketing category UNAPPROVED DRUG OTHER, with its own notice that "this drug
+has not been found by FDA to be safe and effective". Isometheptene's only
+evidence was five such labels (combination capsules and tablets, marketed
+2011–2018); the labels themselves say FDA rated it only "possibly" effective
+for migraine.
+
+**What was measured.** Every phase-4 record in ChEMBL 37 whose approval rests
+on a label — DailyMed cited, no FDA or EMA document — is 3,770 records citing
+14,015 labels. Each label was read by its set id, from the label page, which
+also serves archived labels where DailyMed's API does not
+(`scripts/check_dailymed_labels.py`). Per record:
+
+| verdict | records | meaning |
+|---|---|---|
+| label | 3,350 | a cited label holds an application (NDA, ANDA, BLA, authorised generic) |
+| monograph | 244 | none does; one is sold under an FDA OTC monograph |
+| unapproved | 141 | every cited label was read, and each is marketed without approval |
+| unresolved | 35 | a label DailyMed no longer serves, or one stating no category |
+
+The 141 cover 64 molecules, mostly vitamins, minerals, topical analgesics and
+old injectables (folic acid, capsaicin, epinephrine, neostigmine); their
+labels are UNAPPROVED DRUG OTHER but for a few EXPORT ONLY and MEDICAL FOOD
+ones. 28 also cite a trial.
+
+**The rule** (`scripts/cohort/labels.py`). An unapproved record cites no
+approval, so it takes the furthest phase the registry records for the trials
+it cites, read by NCT id: none ("Marketed unapproved"), a phase, or a Phase 4
+trial labelled as one rather than as Approved. An ATC class beside the labels
+is not contradicted (5 records): a code normally means approval in some
+country. A molecule's own Approved is taken back only where FDA records no
+approval year for any form and every phase-4 record is unapproved with no
+Phase 4 trial. Membership follows: an indication needs a phase to admit
+(D21). What DailyMed said is committed as `config/cohort1_label_status.json`
+and pinned by sha256 in the selection policy, so the build still reads no
+network, and stops if the file does not describe every label-backed record.
+
+**What was tried and taken back.** A Phase 4 trial alone (no label) was first
+read as no approval too and labelled "Phase 4 trial". Of the three in-scope
+diseases that lost Approved that way, two were approved uses: desipramine for
+major depression and lidocaine for neuralgia (the Lidoderm patch), and
+trial-only records sat under approved uses elsewhere too (oxybate for
+narcolepsy, avalglucosidase alfa for Pompe disease), kept Approved only by
+another record of the same disease. A post-marketing trial usually studies
+the approved use, so it stands as Approved, and the page names it as the
+source on hover.
+
+**What it did.** Two molecules leave the catalogue, each admitted only by
+such a record: isometheptene (Migraine) and sodium citrate (Depressive
+Disorder). The catalogue goes from 2,452 to 2,450 and the cohort from 2,449 to
+2,447. Within scope 15 records on 13 molecules change: 13 read Marketed
+unapproved (neostigmine's myasthenia gravis on two methylsulfate injection
+labels sold unapproved 1973–2016; lidocaine's myalgia, muscle cramp and back
+pain on unapproved patches), alcohol's chronic pain reads Phase 2 and sodium
+bicarbonate's pain Phase 4 trial. In-scope diseases reading Approved go from
+1,114 to 1,101. Outside the scope 28 molecules' approved-elsewhere lists lose
+diseases (biotin and niacinamide all of theirs; lidocaine bursitis,
+osteoarthritis and tendinopathy, keeping cardiac arrhythmias). No member
+loses its molecule-level approval.
+
+**What it does not see.** Only the labels ChEMBL cites: an approved product
+it does not cite is invisible, which is why the page says what ChEMBL rested
+on rather than "never approved". The 35 unresolved keep ChEMBL's Approved; so
+do approvals read off an ATC class alone (293 in-scope records) or a Phase 4
+trial alone (115), named on hover and checked against no regulator.
+
 ---
 
 ## Open

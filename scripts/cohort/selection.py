@@ -37,6 +37,11 @@ class Member:
     structure_type: str | None
     max_phase: float | None
     first_approval: int | None
+    # D23: NULL where ChEMBL's max_phase stands; 'unapproved_marketing' where
+    # its 4 rests only on US labels FDA lists as unapproved, and then
+    # max_phase_checked is the furthest phase a cited trial reached, or None.
+    approval_status: str | None
+    max_phase_checked: float | None
     withdrawn_any_family: bool
     # admission
     route_atc_n: bool
@@ -72,9 +77,11 @@ class Member:
         return self.route_atc_n or self.route_indication
 
 
-def approved_out_of_scope(ind_rows, in_scope) -> dict[int, dict[str, str]]:
+def approved_out_of_scope(ind_rows, in_scope, label_status) -> dict[int, dict[str, str]]:
     """molregno -> {mesh_id: heading} for its approved indications outside scope.
 
+    Approved as D23 reads it: a phase-4 record resting on an unapproved US
+    label, or on a Phase 4 trial alone, is not an approval for its disease.
     Shared by the build and scripts/resolve_cohort_approved_elsewhere.py, so a
     backfilled database and a freshly built one carry the same values.
     """
@@ -83,6 +90,8 @@ def approved_out_of_scope(ind_rows, in_scope) -> dict[int, dict[str, str]]:
         mesh = r["mesh_id"]
         phase = r["max_phase_for_ind"]
         if not mesh or mesh in in_scope or phase is None or float(phase) < 4:
+            continue
+        if not label_status.is_approval(r["drugind_id"], phase):
             continue
         out[r["molregno"]].setdefault(mesh, r["mesh_heading"] or mesh)
     return out
@@ -147,8 +156,13 @@ def _synonyms(conn, molregnos) -> dict[int, list[str]]:
     return {k: sorted(set(v)) for k, v in out.items()}
 
 
-def run(conn, policy: dict, descriptors: dict) -> dict:
-    """Compute the cohort. Returns members plus the audit tables."""
+def run(conn, policy: dict, descriptors: dict, label_status) -> dict:
+    """Compute the cohort. Returns members plus the audit tables.
+
+    `label_status` (scripts/cohort/labels.py) says which phase each phase-4
+    record supports once its references are read (D23); every indication
+    phase below is read through it, never straight off ChEMBL.
+    """
     routes = policy["admission_routes"]
     min_phase = routes["indication"]["min_phase"]
     flagged = {f["code"]: f["flag"] for f in routes["atc_n"]["flagged_subtrees"]}
@@ -198,7 +212,7 @@ def run(conn, policy: dict, descriptors: dict) -> dict:
         if not d or not d.in_scope:
             continue
         scoped.append(r)
-        phase = r["max_phase_for_ind"]
+        phase = label_status.assess(r["drugind_id"], r["max_phase_for_ind"])[0]
         if phase is not None and float(phase) >= min_phase:
             qualifying.append(r)
     ind_molregnos = {r["molregno"] for r in qualifying}
@@ -247,7 +261,7 @@ def run(conn, policy: dict, descriptors: dict) -> dict:
             all_ind_by_mol[r["molregno"]].add(r["mesh_id"])
 
     approved_out = approved_out_of_scope(
-        ind_rows, {k for k, d in descriptors.items() if d.in_scope})
+        ind_rows, {k for k, d in descriptors.items() if d.in_scope}, label_status)
 
     seed_by_parent = collections.defaultdict(list)
     for name, chembl_id in seed_pairs:
@@ -274,7 +288,7 @@ def run(conn, policy: dict, descriptors: dict) -> dict:
         reasons: list[str] = []
         for m, r in fam_ind:
             d = descriptors[r["mesh_id"]]
-            phase = r["max_phase_for_ind"]
+            phase, label, basis = label_status.assess(r["drugind_id"], r["max_phase_for_ind"])
             entry = {
                 "drugind_id": r["drugind_id"],
                 "member_molregno": m,
@@ -284,7 +298,10 @@ def run(conn, policy: dict, descriptors: dict) -> dict:
                 "efo_id": r["efo_id"],
                 "efo_term": r["efo_term"],
                 "max_phase_for_ind": phase,
-                "phase_label": common.phase_label(phase),
+                "phase_label": label,
+                "chembl_max_phase": r["max_phase_for_ind"],
+                "approval_basis": basis,
+                "unapproved_labels": label_status.unapproved_labels(r["drugind_id"]),
                 "scope_reasons": list(d.scope_reasons),
                 "trial_ids": trials.get(r["drugind_id"], ()),
             }
@@ -333,6 +350,9 @@ def run(conn, policy: dict, descriptors: dict) -> dict:
                 if a not in flags:
                     flags.append(a)
 
+        approval_status, max_phase_checked = label_status.molecule_status(
+            fam, rec.get("max_phase"),
+            any(records.get(m, {}).get("first_approval") for m in fam))
         members[p] = Member(
             parent_molregno=p,
             parent_chembl_id=rec.get("chembl_id"),
@@ -341,6 +361,9 @@ def run(conn, policy: dict, descriptors: dict) -> dict:
             structure_type=rec.get("structure_type"),
             max_phase=rec.get("max_phase"),
             first_approval=rec.get("first_approval"),
+            approval_status=approval_status,
+            max_phase_checked=(max_phase_checked if approval_status
+                               else rec.get("max_phase")),
             withdrawn_any_family="withdrawn_in_family" in flags,
             route_atc_n=in_atc,
             route_indication=in_ind,

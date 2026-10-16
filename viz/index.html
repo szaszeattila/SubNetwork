@@ -356,8 +356,11 @@
           at all, and two molecules close here are not substitutes for each
           other. It is a place to start looking, not a verdict.</p>
         <p>"Approved" and trial statuses are as ChEMBL and ClinicalTrials.gov
-          recorded them when this page was built. They may be out of date, and
-          they say nothing about whether a drug is right for anyone.</p>
+          recorded them when this page was built, except where ChEMBL's only
+          evidence of an approval is US labels that FDA lists as marketed
+          without approval: those read "Marketed unapproved", or the phase of
+          the trials ChEMBL cites. They may be out of date, and they say
+          nothing about whether a drug is right for anyone.</p>
         <h4>Known limitations</h4>
         <ul>
           <li>The weights in the similarity score are set by argument, not
@@ -871,9 +874,17 @@ function moleculeIndications(id) {
       return (i === null || i === undefined) ? "" : (STR[i] === undefined ? "" : STR[i]);
     };
     const trials = s(r[5]);
+    // D23: what stands behind ChEMBL's phase 4, and where that was only US
+    // labels FDA lists as marketed without approval, those labels.
+    const labels = (r[7] || []).map(function (l) {
+      return { set_id: l[0], title: s(l[1]), labeler: s(l[2]),
+               categories: s(l[3]) ? s(l[3]).split("|") : [],
+               from: l[4] || null, until: l[5] || null };
+    });
     return { mesh_id: r[0], heading: s(r[1]), phase_label: s(r[2]),
              scope_reasons: s(r[3]), qualifies: r[4],
-             trials: trials ? trials.split("|") : [] };
+             trials: trials ? trials.split("|") : [],
+             basis: s(r[6]) || null, unapproved_labels: labels };
   });
 }
 
@@ -1063,8 +1074,12 @@ function classMembers(c) {
 // than derived from the label, because the label is the build's and a sort that
 // re-derives a rank from a string would go silent on a phase this page has not
 // seen. An unknown label sorts last and keeps its own words.
-const PHASE_RANK = { "Approved": 5, "Phase 3": 4, "Phase 2": 3, "Phase 1": 2,
-                     "Early Phase 1": 1 };
+// "Phase 4 trial" and "Marketed unapproved" are D23's: a disease ChEMBL calls
+// Approved on US labels FDA lists as marketed without approval, with a Phase 4
+// trial cited beside them or none. The first is a trial past Phase 3 and not an
+// approval; the second is no clinical phase at all, and sorts below every one.
+const PHASE_RANK = { "Approved": 5, "Phase 4 trial": 4.5, "Phase 3": 4, "Phase 2": 3,
+                     "Phase 1": 2, "Early Phase 1": 1, "Marketed unapproved": 0.5 };
 
 // One disease, at the furthest phase this molecule reached for it.
 //
@@ -1080,7 +1095,10 @@ const PHASE_RANK = { "Approved": 5, "Phase 3": 4, "Phase 2": 3, "Phase 1": 2,
 //
 // So a disease is one row at its highest phase, the trials from every record
 // behind it are pooled, and the number of records is stated rather than being
-// visible only as a repeat.
+// visible only as a repeat. What stands behind an Approved (D23) is read from
+// the records at that phase only, and unapproved US labels are carried only
+// where no record of the disease is an approval, since one that is answers
+// the question they raise.
 function indicationsByDisease(id) {
   const byMesh = new Map();
   for (const i of moleculeIndications(id)) {
@@ -1088,10 +1106,11 @@ function indicationsByDisease(id) {
     if (!seen) {
       byMesh.set(i.mesh_id, { mesh_id: i.mesh_id, heading: i.heading,
                               phase_label: i.phase_label, qualifies: i.qualifies,
-                              n_records: 1, trials: i.trials.slice() });
+                              n_records: 1, trials: i.trials.slice(), records: [i] });
       continue;
     }
     seen.n_records += 1;
+    seen.records.push(i);
     seen.qualifies = seen.qualifies || i.qualifies;
     for (const t of i.trials) if (seen.trials.indexOf(t) < 0) seen.trials.push(t);
     if ((PHASE_RANK[i.phase_label] || 0) > (PHASE_RANK[seen.phase_label] || 0)) {
@@ -1099,6 +1118,23 @@ function indicationsByDisease(id) {
     }
   }
   const out = Array.from(byMesh.values());
+  for (const d of out) {
+    d.bases = [];
+    d.unapproved_labels = [];
+    for (const r of d.records) {
+      if (r.phase_label === d.phase_label && r.basis && d.bases.indexOf(r.basis) < 0) {
+        d.bases.push(r.basis);
+      }
+      if (d.phase_label !== "Approved") {
+        for (const l of r.unapproved_labels) {
+          if (!d.unapproved_labels.some(function (x) { return x.set_id === l.set_id; })) {
+            d.unapproved_labels.push(l);
+          }
+        }
+      }
+    }
+    delete d.records;
+  }
   out.sort(function (a, b) {
     return (PHASE_RANK[b.phase_label] || 0) - (PHASE_RANK[a.phase_label] || 0) ||
            a.heading.localeCompare(b.heading);
@@ -2998,7 +3034,10 @@ const HELP = {
             "inspect the observations (individual data rows) behind them.",
   indications: "Neurological and pain conditions this drug is approved or tested " +
                "for, how far each got, and its trials on ClinicalTrials.gov. A " +
-               "condition with no trial link usually rests on the drug label instead.",
+               "condition with no trial link usually rests on the drug label instead. " +
+               "Hover over Approved for what ChEMBL read it from. Marketed unapproved: " +
+               "every US label ChEMBL cites for it is one FDA lists as sold without " +
+               "its approval.",
   condition_targets: "Targets that two or more of these molecules act on, most " +
                      "shared first. Compare with the catalogue-wide count: a target " +
                      "almost every drug hits says little about this condition.",
@@ -3357,6 +3396,7 @@ function dataDates() {
   return {
     built: isoDay(catalogueMeta().built_at),
     trialsFrom: isoDay(trials[0]), trialsTo: isoDay(trials[1]),
+    labelsTo: isoDay((metaRecord("label_status").labels_read || {}).last),
     mesh: mesh ? mesh[1] : "",
     uniprot: String(metaRecord("target_orthologues").reference_release || ""),
     gtopdb: GTOPDB.release ? String(GTOPDB.release) : "",
@@ -3437,6 +3477,12 @@ function aboutSourcesHTML() {
       (d.trialsTo ? ", fetched " + esc(trialsFetchedText(d)) : "") +
       ". The NLM does not endorse this project, and a status may have changed since. " +
       licenceLink("NLM's terms") + ".",
+    link("https://dailymed.nlm.nih.gov/", "DailyMed") +
+      ", courtesy of the U.S. National Library of Medicine: the FDA marketing category " +
+      "of each US label ChEMBL cites for an approval" +
+      (d.labelsTo ? ", read " + esc(d.labelsTo) : "") +
+      ", so a label FDA lists as unapproved is not shown as an approval. The NLM does " +
+      "not endorse this project. " + licenceLink("NLM's terms") + ".",
     link("https://www.uniprot.org/", "UniProt") + (d.uniprot ? " " + esc(d.uniprot) : "") +
       ": protein sequences, to match a protein across species. " +
       licenceLink("CC BY 4.0") + ".",
@@ -4084,11 +4130,56 @@ function foldedSection(key, heading, body, anchor) {
 // least one. The link is built from the NCT id rather than stored, which is
 // invariant 15: an identifier resolves to exactly one registry record, and
 // nothing here searches for a study by its name.
+// What ChEMBL read an Approved off (D23, approval_basis), worded for the hover
+// on the phase. Every one of these is an approval as far as anything cited
+// says; the words say how direct that is, from a regulator's own document to a
+// post-marketing trial.
+const APPROVAL_BASIS_WORDS = {
+  regulator: "an FDA or EMA approval document",
+  label: "a US drug label FDA approved",
+  monograph: "a US label sold under an FDA over-the-counter monograph",
+  unresolved: "a US drug label whose marketing category could not be read",
+  atc: "the WHO ATC class the drug is filed in",
+  trial: "a Phase 4 (post-marketing) trial",
+  unsourced: "no reference ChEMBL gives",
+};
+const DAILYMED_URL = "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=";
+
+function approvalBasisTitle(bases) {
+  const words = (bases || []).map(function (b) { return APPROVAL_BASIS_WORDS[b] || b; });
+  return words.length ? "ChEMBL's source: " + words.join("; ") : "";
+}
+
+// The US labels a ChEMBL Approved rested on where FDA lists every one as
+// marketed without its approval (D23). Said as what ChEMBL cites, never as
+// "never approved": another product, one ChEMBL does not cite, could be.
+function unapprovedLabelsHTML(labels) {
+  if (!labels.length) return "";
+  const years = function (d) { return d ? String(d).slice(-4) : null; };
+  const from = labels.map(function (l) { return years(l.from); }).filter(Boolean).sort();
+  const open = labels.some(function (l) { return !l.until; });
+  const until = labels.map(function (l) { return years(l.until); }).filter(Boolean).sort();
+  const span = !from.length ? "" : open ? ", sold since " + from[0]
+    : ", sold " + from[0] + (until[until.length - 1] !== from[0]
+                             ? "–" + until[until.length - 1] : "");
+  const n = labels.length;
+  return '<div class="small">ChEMBL lists this as approved, on ' +
+    (n === 1 ? "one US label" : n + " US labels") + " that FDA lists as marketed " +
+    "without its approval" + esc(span) + ": " +
+    labels.map(function (l) {
+      return link(DAILYMED_URL + encodeURIComponent(l.set_id), l.title || l.set_id) +
+        (l.labeler ? ' <span class="muted">(' + esc(l.labeler) + ")</span>" : "");
+    }).join(", ") + "</div>";
+}
+
 function indicationRowsHTML(rows) {
   return rows.map(function (i) {
+    const basis = i.phase_label === "Approved" ? approvalBasisTitle(i.bases) : "";
     let h = '<div class="ind"><a href="#" data-select="condition" data-id="' +
       esc(i.mesh_id) + '">' + esc(i.heading) + "</a>" +
-      (i.phase_label ? ' <span class="muted">' + esc(i.phase_label) + "</span>" : "");
+      (i.phase_label ? ' <span class="muted"' + (basis ? ' title="' + esc(basis) + '"' : "") +
+                       ">" + esc(i.phase_label) + "</span>" : "");
+    h += unapprovedLabelsHTML(i.unapproved_labels || []);
     const notes = [];
     // Stated rather than left visible only as a repeated disease name, the way
     // a curated claim states how many records its references came from.
@@ -4351,6 +4442,14 @@ function trialTally(ncts) {
 function developmentStatus(mol) {
   const p = mol.max_phase;
   if (p === null || p === undefined) return "not recorded by ChEMBL";
+  // D23: ChEMBL's approval rests only on US labels FDA lists as marketed
+  // without approval, and FDA records no approval year for any form.
+  if (mol.approval_status === "unapproved_marketing") {
+    const c = mol.max_phase_checked;
+    const reached = { 3: "phase 3", 2: "phase 2", 1: "phase 1", 0.5: "early phase 1" }[c];
+    return "sold in the US without FDA approval; ChEMBL's approval rests only on " +
+           "those labels" + (reached ? ", and its trials reached " + reached : "");
+  }
   if (p === 4) {
     return "approved" + (mol.first_approval ? ", first in " + mol.first_approval : "");
   }
@@ -4376,7 +4475,7 @@ const APPROVED_ELSEWHERE_SHOWN = 3;
 
 function developmentHTML(mol) {
   const text = developmentStatus(mol);
-  if (mol.max_phase !== 4) return esc(text);
+  if (mol.max_phase !== 4 || mol.approval_status) return esc(text);
   const listed = indicationsByDisease(mol.id).some(function (i) {
     return i.phase_label === "Approved";
   });

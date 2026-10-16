@@ -44,8 +44,16 @@ CREATE TABLE IF NOT EXISTS molecules (
     pref_name            TEXT,
     molecule_type        TEXT,          -- source category, never used as a filter (D03)
     structure_type       TEXT,          -- 'NONE' is retained and flagged, never invented (D04)
-    max_phase            REAL,          -- molecule-level, across ALL diseases; not the admission test
+    max_phase            REAL,          -- ChEMBL's molecule-level, across ALL diseases; not the admission test
     first_approval       INTEGER,
+    -- D23. NULL where ChEMBL's max_phase stands. 'unapproved_marketing' where
+    -- its 4 rests only on US labels FDA lists as marketed without approval
+    -- (no FDA approval year on any form, and every phase-4 record an unapproved
+    -- one citing no Phase 4 trial); max_phase_checked is then the furthest
+    -- phase the registry records for a trial those records cite, NULL for none.
+    -- Elsewhere max_phase_checked equals max_phase.
+    approval_status      TEXT,
+    max_phase_checked    REAL,
     withdrawn_any_family INTEGER NOT NULL DEFAULT 0,
     in_cohort            INTEGER NOT NULL,
     is_seed              INTEGER NOT NULL,
@@ -195,10 +203,25 @@ CREATE TABLE IF NOT EXISTS molecule_indications (
     mesh_heading      TEXT,
     efo_id            TEXT,
     efo_term          TEXT,
+    -- The phase this catalogue states and admits on, read through what ChEMBL
+    -- cites for it (D23, scripts/cohort/labels.py). It equals ChEMBL's
+    -- (chembl_max_phase below) except at a phase-4 record resting on US labels
+    -- FDA lists as unapproved: it takes the furthest registry phase of the trials
+    -- it cites (a Phase 4 one labelled "Phase 4 trial", never "Approved"), or
+    -- NULL ("Marketed unapproved") where it cites none.
     max_phase_for_ind REAL,
     phase_label       TEXT,
     scope_reasons     TEXT,
     qualifies         INTEGER NOT NULL,   -- 1 when it satisfies the indication route
+    chembl_max_phase  REAL,               -- drug_indication.max_phase_for_ind verbatim
+    -- At a ChEMBL phase-4 record, what stands behind it: regulator / label /
+    -- monograph / unresolved / atc / trial / unsourced (an approval, read off
+    -- that), or unapproved (not one). NULL below phase 4.
+    approval_basis    TEXT,
+    -- JSON array, only where approval_basis is 'unapproved': each cited
+    -- DailyMed label's set id, title, labeler, marketing categories and dates,
+    -- as config/cohort1_label_status.json records them.
+    unapproved_labels TEXT,
     -- ClinicalTrials.gov NCT ids from ChEMBL's indication_refs, '|' joined, NULL
     -- where ChEMBL registers none. The registry entry is what stands behind a
     -- phase annotation, and without it "Phase 3" is an assertion this page could

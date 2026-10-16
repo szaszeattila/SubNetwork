@@ -63,7 +63,7 @@ MOLECULE_FIELDS = [
     "molecular_formula", "molecular_weight", "atc_level5", "atc_flags",
     "identity_flags", "seed_name", "gap_reason", "exclusion_reason", "smiles",
     "inchikey", "wikipedia_url", "n_indications_chembl", "synonyms", "aliases",
-    "approved_elsewhere",
+    "approved_elsewhere", "approval_status", "max_phase_checked",
 ]
 
 # Reviewed common names, keyed by ChEMBL ID, carried over from the legacy
@@ -402,6 +402,10 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
         rec["n_claims_preliminary"] = counts.get("preliminary", 0)
         rec["n_claims_limited"] = counts.get("limited_or_unresolved", 0)
         rec["n_observations"] = obs_counts.get(mid, 0)
+        # Equal to max_phase wherever ChEMBL's stands (D23), so it travels only
+        # where it says something and the row keeps its trailing nulls short.
+        if not rec.get("approval_status"):
+            rec["max_phase_checked"] = None
         names = [n for n in dict.fromkeys(synonyms.get(mid, []))
                  if n and n != rec["chembl_id"]
                  and n.lower() != (rec["name"] or "").lower()]
@@ -484,15 +488,30 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
     # viewer splits them. Ordering is by descending phase so the panel's own
     # order is the export's, and a disease reached at two phases by two forms of
     # one molecule meets its highest first.
+    #
+    # Two more places follow where they say something (D23), and are left off
+    # where they do not: what stands behind a ChEMBL phase 4 (approval_basis),
+    # and, where that is unapproved US labels, the labels - [set id, title,
+    # labeler, '|'-joined categories, marketed from, marketed until] - so the
+    # page can say what ChEMBL's Approved rested on and link each label.
     indications = collections.defaultdict(list)
     for r in db.execute("SELECT parent_molregno, mesh_id, mesh_heading, phase_label,"
-                        " scope_reasons, qualifies, max_phase_for_ind, trial_ids"
+                        " scope_reasons, qualifies, max_phase_for_ind, trial_ids,"
+                        " approval_basis, unapproved_labels"
                         " FROM molecule_indications ORDER BY parent_molregno,"
                         " max_phase_for_ind DESC, mesh_heading, mesh_id"):
-        indications[str(r["parent_molregno"])].append(
-            [r["mesh_id"], cat_s.intern(r["mesh_heading"]),
-             cat_s.intern(r["phase_label"]), cat_s.intern(r["scope_reasons"]),
-             r["qualifies"], cat_s.intern(r["trial_ids"])])
+        row = [r["mesh_id"], cat_s.intern(r["mesh_heading"]),
+               cat_s.intern(r["phase_label"]), cat_s.intern(r["scope_reasons"]),
+               r["qualifies"], cat_s.intern(r["trial_ids"]),
+               cat_s.intern(r["approval_basis"]),
+               [[lab["set_id"], cat_s.intern(lab["title"]), cat_s.intern(lab["labeler"]),
+                 cat_s.intern("|".join(lab["categories"])), lab["marketed_from"],
+                 lab["marketed_until"]]
+                for lab in json.loads(r["unapproved_labels"])]
+               if r["unapproved_labels"] else None]
+        while row[-1] is None:
+            row.pop()
+        indications[str(r["parent_molregno"])].append(row)
 
     # Registry status per trial, from scripts/resolve_cohort_trials.py. That is
     # a backfill run after a build rather than part of one, so a database that

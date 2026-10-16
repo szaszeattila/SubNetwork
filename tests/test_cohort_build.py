@@ -20,8 +20,8 @@ import unittest
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent / "scripts"))
 
-from cohort import (classes as classes_mod, common, evidence, scope as scope_mod,
-                    selection, targets as targets_mod)
+from cohort import (classes as classes_mod, common, evidence, labels as labels_mod,
+                    scope as scope_mod, selection, targets as targets_mod)
 
 
 # ---------------------------------------------------------------------------
@@ -132,6 +132,24 @@ def add_indication_refs(conn, drugind_id, ref_type, ref_id, indref_id=None):
         " VALUES(?,?,?,?,?)",
         (indref_id if indref_id is not None else drugind_id * 100,
          drugind_id, ref_type, ref_id, "https://example.invalid/" + ref_id))
+
+
+def empty_label_status():
+    """config/cohort1_label_status.json for a release with no label-backed record."""
+    return {"chembl_release": common.CHEMBL_RELEASE, "checked": {}, "records": {}}
+
+
+def label_record(verdict, molregno, mesh_id, set_ids, trials=(), trial_phase=None):
+    """One record as scripts/check_dailymed_labels.py writes it."""
+    rec = {"verdict": verdict, "molregno": molregno, "mesh_id": mesh_id,
+           "labels": [{"set_id": s, "title": "T", "labeler": "L",
+                       "categories": ["UNAPPROVED DRUG OTHER"],
+                       "marketed_from": "01/01/2011", "marketed_until": "12/31/2017"}
+                      for s in set_ids],
+           "trials": [{"nct": t, "phases": None} for t in trials]}
+    if verdict == "unapproved":
+        rec["trial_phase"] = trial_phase
+    return rec
 
 
 def descriptor(mesh_id, label, trees, in_core, reasons, boundary=()):
@@ -254,8 +272,10 @@ class SelectionTest(unittest.TestCase):
         add_molecule(self.conn, 900, "CHEMBL113", "CAFFEINE")
         self.pol["seeds"]["molecules"] = [["caffeine", "CHEMBL113"]]
 
-    def run_selection(self):
-        return selection.run(self.conn, self.pol, self.desc)
+    def run_selection(self, label_cfg=None):
+        return selection.run(self.conn, self.pol, self.desc,
+                             labels_mod.LabelStatus(self.conn,
+                                                    cfg=label_cfg or empty_label_status()))
 
     def test_atc_n_admits_with_no_indication_at_all(self):
         add_molecule(self.conn, 1, "CHEMBL_A", "ATC ONLY")
@@ -335,6 +355,117 @@ class SelectionTest(unittest.TestCase):
         self.desc["D_OUT3"] = descriptor("D_OUT3", "Gout", ["C05.1"], False, [])
         m = self.run_selection()["members"][43]
         self.assertEqual(m.approved_elsewhere, ("acne", "Asthma"))
+
+    # ---- D23: what stands behind Approved -----------------------------------
+
+    def _isometheptene(self, trials=(), trial_phase=None, extra_refs=()):
+        # Approved for migraine on US labels alone, every one of them sold as
+        # UNAPPROVED DRUG OTHER: FDA never approved it.
+        add_molecule(self.conn, 70, "CHEMBL_ISO", "ISOMETHEPTENE", max_phase=4.0)
+        add_indication(self.conn, 80, 70, "D_CORE", 4.0, heading="Migraine")
+        add_indication_refs(self.conn, 80, "DailyMed", "set-a", indref_id=8001)
+        add_indication_refs(self.conn, 80, "DailyMed", "set-b", indref_id=8002)
+        if trials:
+            add_indication_refs(self.conn, 80, "ClinicalTrials", ",".join(trials),
+                                indref_id=8003)
+        for i, (t, r) in enumerate(extra_refs):
+            add_indication_refs(self.conn, 80, t, r, indref_id=8010 + i)
+        cfg = empty_label_status()
+        cfg["records"]["80"] = label_record("unapproved", 70, "D_CORE", ["set-a", "set-b"],
+                                            trials, trial_phase)
+        return cfg
+
+    def test_an_approval_resting_only_on_unapproved_labels_admits_nothing(self):
+        sel = self.run_selection(self._isometheptene())
+        self.assertNotIn(70, sel["members"])
+
+    def test_an_unapproved_label_is_stated_as_one_and_takes_back_the_molecules_approval(self):
+        # A seed stays in the catalogue, so its record can be read.
+        self.pol["seeds"]["molecules"].append(["isometheptene", "CHEMBL_ISO"])
+        m = self.run_selection(self._isometheptene())["members"][70]
+        e = m.near_miss_indications[0]
+        self.assertIsNone(e["max_phase_for_ind"])
+        self.assertEqual(e["phase_label"], labels_mod.MARKETED_UNAPPROVED)
+        self.assertEqual(e["approval_basis"], "unapproved")
+        self.assertEqual(e["chembl_max_phase"], 4.0)
+        self.assertEqual([lab["set_id"] for lab in e["unapproved_labels"]], ["set-a", "set-b"])
+        self.assertEqual(m.max_phase, 4.0)                  # ChEMBL's, kept
+        self.assertEqual(m.approval_status, "unapproved_marketing")
+        self.assertIsNone(m.max_phase_checked)
+
+    def test_an_unapproved_record_takes_the_phase_of_the_trials_it_cites(self):
+        m = self.run_selection(self._isometheptene(["NCT01"], 2.0))["members"][70]
+        e = m.qualifying_indications[0]
+        self.assertEqual((e["max_phase_for_ind"], e["phase_label"]), (2.0, "Phase 2"))
+        self.assertEqual(m.approval_status, "unapproved_marketing")
+        self.assertEqual(m.max_phase_checked, 2.0)
+
+    def test_an_atc_class_beside_unapproved_labels_is_not_contradicted(self):
+        cfg = self._isometheptene(extra_refs=[("ATC", "N02CX")])
+        m = self.run_selection(cfg)["members"][70]
+        e = m.qualifying_indications[0]
+        self.assertEqual((e["phase_label"], e["approval_basis"]), ("Approved", "atc"))
+        self.assertIsNone(m.approval_status)
+
+    def test_a_label_with_an_application_is_an_approval(self):
+        add_molecule(self.conn, 71, "CHEMBL_RX", "APPROVED")
+        add_indication(self.conn, 81, 71, "D_CORE", 4.0)
+        add_indication_refs(self.conn, 81, "DailyMed", "set-c", indref_id=8101)
+        cfg = empty_label_status()
+        cfg["checked"]["label"] = [81]
+        e = self.run_selection(cfg)["members"][71].qualifying_indications[0]
+        self.assertEqual((e["max_phase_for_ind"], e["phase_label"], e["approval_basis"]),
+                         (4.0, "Approved", "label"))
+        self.assertIsNone(e["unapproved_labels"] or None)
+
+    def test_a_phase_4_trial_alone_stands_as_an_approval_and_says_so(self):
+        # A post-marketing trial usually studies the approved use: read as no
+        # approval, it put desipramine's major depression and lidocaine's
+        # neuralgia below Approved. It stands, and its basis names it.
+        add_molecule(self.conn, 72, "CHEMBL_P4", "TRIALLED AFTER APPROVAL")
+        add_indication(self.conn, 82, 72, "D_CORE", 4.0)
+        add_indication_refs(self.conn, 82, "ClinicalTrials", "NCT02", indref_id=8201)
+        m = self.run_selection()["members"][72]
+        e = m.qualifying_indications[0]
+        self.assertEqual((e["max_phase_for_ind"], e["phase_label"], e["approval_basis"]),
+                         (4.0, "Approved", "trial"))
+        self.assertIsNone(m.approval_status)
+
+    def test_a_phase_4_trial_beside_unapproved_labels_is_a_trial(self):
+        # The labels say there is no approval behind them, so the trial is read
+        # as what it is, and the molecule keeps ChEMBL's approval somewhere.
+        m = self.run_selection(self._isometheptene(["NCT03"], 4.0))["members"][70]
+        e = m.qualifying_indications[0]
+        self.assertEqual((e["max_phase_for_ind"], e["phase_label"], e["approval_basis"]),
+                         (4.0, labels_mod.PHASE4_TRIAL, "unapproved"))
+        self.assertIsNone(m.approval_status)
+
+    def test_an_unapproved_label_is_not_an_approval_elsewhere(self):
+        cfg = self._isometheptene()
+        add_atc(self.conn, 70, "N02CX01")                    # stays a member by ATC
+        add_indication(self.conn, 83, 70, "D_OUT", 4.0, heading="Asthma")
+        add_indication_refs(self.conn, 83, "DailyMed", "set-d", indref_id=8301)
+        cfg["records"]["83"] = label_record("unapproved", 70, "D_OUT", ["set-d"])
+        m = self.run_selection(cfg)["members"][70]
+        self.assertEqual(m.approved_elsewhere, ())
+
+    def test_an_unchecked_label_backed_record_stops_the_build(self):
+        # A new release, or a policy file from another: never read as approved.
+        cfg = self._isometheptene()
+        del cfg["records"]["80"]
+        with self.assertRaises(common.PolicyError):
+            self.run_selection(cfg)
+
+    def test_a_record_citing_different_labels_stops_the_build(self):
+        cfg = self._isometheptene()
+        cfg["records"]["80"]["labels"].pop()
+        with self.assertRaises(common.PolicyError):
+            self.run_selection(cfg)
+
+    def test_a_checked_record_that_is_no_longer_label_backed_stops_the_build(self):
+        cfg = self._isometheptene(extra_refs=[("FDA", "label.pdf")])
+        with self.assertRaises(common.PolicyError):
+            self.run_selection(cfg)
 
     def test_the_molecule_level_max_phase_is_not_the_admission_test(self):
         # An Approved drug whose only in-scope indication sits at Early Phase 1
@@ -1216,12 +1347,13 @@ class TargetIdentityTest(unittest.TestCase):
         cohort.executemany("INSERT INTO molecule_forms VALUES(?,?)", [(10, 10), (10, 11)])
         cohort.executemany("INSERT INTO indication_scope VALUES(?,?)",
                            [("D_IN", 1), ("D_OUT", 0), ("D_OUT2", 0)])
-        first = backfill_mod.backfill(cohort, chembl)
+        status = labels_mod.LabelStatus(chembl, cfg=empty_label_status())
+        first = backfill_mod.backfill(cohort, chembl, status)
         self.assertTrue(first["column_added"])
         self.assertEqual(dict(cohort.execute(
             "SELECT parent_molregno, approved_elsewhere FROM molecules")),
             {10: "Anxiety", 20: None})
-        again = backfill_mod.backfill(cohort, chembl)
+        again = backfill_mod.backfill(cohort, chembl, status)
         self.assertFalse(again["column_added"])
         self.assertEqual(again["rows_changed"], 0)
 

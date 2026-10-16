@@ -1,9 +1,9 @@
 {
   "policy_id": "cohort1-selection",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "adopted": "2026-09-13",
   "supersedes": "analysis/cohort1/config/cns_indication_scope.json v1.0.0 (report scope, S0 core only)",
-  "decisions": "docs/COHORT-1-DECISIONS.md D01, D02, D03, D04, D05; docs/COHORT-2.md D21",
+  "decisions": "docs/COHORT-1-DECISIONS.md D01, D02, D03, D04, D05; docs/COHORT-2.md D21, D23",
   "status": "Production selection policy. Unlike the report configuration it supersedes, this file decides catalogue membership.",
 
   "pinned_inputs": {
@@ -20,6 +20,12 @@
       "why_not_refetched": "D14 pins this classification. A fresh MeSH fetch would be a different snapshot wearing the same name. This file is used as the ontology of record, and its tree_numbers column is the only ontology input the build reads.",
       "coverage_check": "Every mesh_id present in chembl_37.drug_indication (2,178 distinct, 0 NULL) is classified here. The build asserts this and fails if a descriptor is unclassified, rather than treating an unmapped descriptor as out of scope.",
       "recomputation_check": "The build recomputes in_core_scope from tree_numbers using the v1.0.0 core-root and boundary-exclusion rules and asserts it reproduces the saved column for all 2,869 descriptors. A mismatch fails the build: the base scope must not drift silently while the additions are being layered on."
+    },
+    "label_status": {
+      "path": "config/cohort1_label_status.json",
+      "sha256": "c0f7f48d065646a8b448f2f02d49a0a17ef6554080d73d2a6d34573404ab6d39",
+      "provenance": "D23. Written by scripts/check_dailymed_labels.py from the DailyMed label behind every phase-4 drug_indication record in chembl_37 that cites no FDA or EMA document (3,770 records, 14,015 labels), read by set id, 2026-10-15; the registry phases of the trials its unapproved records cite are read from ClinicalTrials.gov by NCT id.",
+      "why_pinned": "It moves membership. Regenerating it is a different reading of DailyMed, so the build refuses a file this policy does not name: raise the policy version deliberately rather than letting it drift."
     }
   },
 
@@ -39,13 +45,15 @@
     },
     "indication": {
       "id": "route_indication",
-      "rule": "The parent, or any family member, has a drug_indication row whose mesh_id is in the adopted scope AND whose max_phase_for_ind is >= 1.",
-      "phase_field": "drug_indication.max_phase_for_ind",
+      "rule": "The parent, or any family member, has a drug_indication row whose mesh_id is in the adopted scope AND whose phase, read through D23, is >= 1.",
+      "phase_field": "drug_indication.max_phase_for_ind, read through D23 (scripts/cohort/labels.py)",
+      "phase_correction": "D23, selection policy 3.1.0 (2026-10-15, at the user's request: 'we want to be truthful, not just follow chembl'). ChEMBL's phase 4 on a record whose only approval evidence is US labels that FDA lists as marketed without approval is not an approval: the record takes the furthest phase the registry records for a trial it cites, or none, and then cannot qualify. A Phase 4 trial alone, with no label, stays Approved: a post-marketing trial usually studies the approved use.",
       "min_phase": 1,
       "min_phase_history": "3 under selection policy 1.x and 2.x (D01). Lowered to 1 in 3.0.0 (D21, 2026-10-12, at the user's request): every molecule with an in-scope indication that has reached Phase 1 or beyond is a member.",
       "phase_field_reason": "D01: the threshold applies to the qualifying indication, not to molecule_dictionary.max_phase across unrelated diseases.",
       "missing_phase_treatment": "NULL, -1 (Unknown) and 0.5 (Early Phase 1) cannot qualify through this route. They are recorded as non-qualifying scoped indications so the near-miss is visible, and they never disqualify an ATC-N match.",
-      "phase_labels": {"4": "Approved", "3": "Phase 3", "2": "Phase 2", "1": "Phase 1", "0.5": "Early Phase 1", "-1": "Unknown (ChEMBL -1)"}
+      "phase_labels": {"4": "Approved", "3": "Phase 3", "2": "Phase 2", "1": "Phase 1", "0.5": "Early Phase 1", "-1": "Unknown (ChEMBL -1)"},
+      "d23_labels": {"Phase 4 trial": "ChEMBL's 4 where every cited label is unapproved and a cited trial is Phase 4", "Marketed unapproved": "ChEMBL's 4 where every cited label is unapproved and no trial is cited"}
     }
   },
 

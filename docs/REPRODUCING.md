@@ -1,8 +1,10 @@
 # Reproducing the catalogue from a fresh clone
 
 Everything the page opens is generated, and none of it is in git. A fresh
-clone has the code, the two policies in `config/` and the pinned MeSH scope
-classification. It does not have the ChEMBL release, the database, the
+clone has the code, the two policies in `config/`, the pinned MeSH scope
+classification, and `config/cohort1_label_status.json`, what DailyMed said
+about the labels behind ChEMBL's approvals (D23), committed so the build never
+has to ask. It does not have the ChEMBL release, the database, the
 backfills' caches or the exported payload. This document is the path from
 the clone to a page that opens. It was written on 2026-10-10. The download
 location and checksum were checked against EBI's server that day.
@@ -24,8 +26,8 @@ location and checksum were checked against EBI's server that day.
 
 ## 1. Download ChEMBL 37
 
-The build reads ChEMBL 37's SQLite release and nothing else, and it never
-falls back to another release. Use the release's own directory. Do not use
+The build reads ChEMBL 37's SQLite release and the files in `config/`, and it
+never falls back to another release. Use the release's own directory. Do not use
 `latest/`, which will point at a newer release.
 
 ```bash

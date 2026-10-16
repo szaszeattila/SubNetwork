@@ -48,8 +48,57 @@ alone.
 | **BindingDB** | target *discovery* | ~97% of what it returns here is republished ChEMBL/PDSP; REST endpoint unreliable |
 | **PDSP Ki DB** | independent Ki measurements, strong for CNS | bulk CSV only, no query API, no per-row citation link |
 | **GtoPdb** | curated action (agonist, antagonist, …) on the receptor, channel and enzyme families this project is about | a ligand's Type can be carried onto secondary targets it was only screened at (vilazodone); anonymous bulk access announced to end |
+| **DailyMed** | the FDA marketing category of each US label ChEMBL cites for an Approved (D23) | a published label is not an approval: UNAPPROVED DRUG OTHER labels are published too; its API serves only current labels, so archived ones are read from the label page; some labels state no category at all |
 
 ---
+
+## 2026-10-15 — isometheptene was Approved on labels FDA calls unapproved
+
+The user asked how isometheptene was approved for migraine; the page said
+Approved and nothing else. ChEMBL's only evidence was five DailyMed labels,
+and every one gives its marketing category as UNAPPROVED DRUG OTHER, under
+FDA's notice that "this drug has not been found by FDA to be safe and
+effective, and this labeling has not been approved by FDA". They are
+isometheptene / dichloralphenazone / acetaminophen and isometheptene /
+caffeine / acetaminophen products, their marketing ended between 2014 and
+2018, and they say themselves that FDA, on a National Academy of Sciences –
+National Research Council review, classed migraine as only a "possibly"
+effective use.
+
+**The shape is the recurring one.** `max_phase_for_ind = 4` parses as
+Approved and is stored as Approved, and ChEMBL means "a US label names this
+disease" by it as often as "a regulator approved it" — 32,892 DailyMed
+references against 718 FDA and 1,787 EMA behind the release's phase-4
+records. The label's own Marketing Category says which kind of label it is.
+
+**Measured.** 3,770 phase-4 records rest on labels alone; 141 (on 64
+molecules) on labels every one of which is unapproved, 35 on labels that could
+not be read. In this catalogue it moved 15 diseases and two members
+(isometheptene, sodium citrate). D23 in [COHORT-2.md](COHORT-2.md) has the
+counts and the rule.
+
+**Three things that went wrong on the way.**
+
+- **DailyMed's API does not serve archived labels.** `/services/v2/spls/{id}.xml`
+  answers 404 for all five of isometheptene's; the label page
+  (`drugInfo.cfm?setid=`) serves current and archived alike, and is what is
+  read. A set id DailyMed does not hold gets its search page back with status
+  200, which the parser recognises by its bare title rather than counting as a
+  label with no category.
+- **Some current labels state no category at all** — lithium carbonate's has
+  no marketing section in the page or in the SPL itself. A label that states
+  nothing is `unresolved`, never `unapproved`: absence is not an answer,
+  invariant 10's rule.
+- **The first parser matched whole tables**, and a non-greedy match starting at
+  an enclosing layout table swallowed the first marketing table inside it — a
+  label's first product could go unread. A fixture shaped like the real page
+  caught it; the parser now reads from each "Marketing Category" header to the
+  end of its own table, and the cached pages were parsed again.
+
+**And one rule taken back.** A Phase 4 trial alone was also read as no
+approval, and demoted desipramine's major depression and lidocaine's
+neuralgia, both approved uses. A post-marketing trial usually studies the
+approved use; it stays Approved, named on hover.
 
 ## 2026-10-14 — GtoPdb's cache was not GtoPdb's file
 
