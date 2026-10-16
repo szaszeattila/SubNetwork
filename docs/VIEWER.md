@@ -122,11 +122,25 @@ molecules and 10,789 edges, and its banner states the whole cost including the
 43 molecules left with nothing to draw. (Counted per protein node since
 2026-10-10; per record it was 1,036 of 2,063.) It is off by default, and it is a
 *drawing* rule rather than an eligibility rule: `claimVisible` answers "is this
-in the picture" and only the four claim filters may change that answer, while
+in the picture" and only the eligibility filters may change that answer, while
 this one answers "is this drawn". The panel's lists, the similarity ranking,
 the gap statements and search all still read the whole catalogue, so nothing
 becomes unfindable by being undrawn — caffeine's 59 visible claims and 265
 shared-target rows are identical with it on and off.
+
+**Trial sites is the one eligibility filter about the molecule rather than the
+claim** (2026-10-13, a proposal on the `worktree-foreign-trials` branch,
+[FOREIGN-TRIALS.md](FOREIGN-TRIALS.md)). It keeps the molecules whose Phase 1+
+in-scope trials, as ChEMBL cites them, list a site in the US, anywhere, or
+outside the US, and drops every claim of the rest. It is in `claimVisible`
+rather than a drawing rule because the question it answers — "what does the
+picture look like on trials outside the US alone?" — is not answered by a
+canvas that still ranks the dropped molecules as neighbours. Its default moves
+nothing; it is offered only where the payload carries sites; and its banner
+counts the hidden in molecules, split into those with no trial ChEMBL cites
+(an ATC N member, a label) and those whose trials are on the other side, which
+are two different facts. On D21's build the four settings keep 2,452, 1,528,
+2,087 and 1,501 molecules.
 
 **What a frame costs, and the two things that were paying for nothing.** The
 page was slow to zoom and slow to drag, and the reason was not the size of the
@@ -181,7 +195,7 @@ it changes no pixel, which is asserted rather than argued — 13 views across fo
 positions and three zooms paint byte-identical canvases culled and unculled.
 
 It is **not** a filter and must never be described as one. `claimVisible` still
-answers what is in the picture and only the four claim filters may change that
+answers what is in the picture and only the eligibility filters may change that
 answer; the canvas control still answers what is drawn; this answers neither. It
 answers what is on screen, which is a question about the window and not about
 the data, and the panel lists, the ranking, the gap statements and search cannot
@@ -1543,6 +1557,21 @@ phase 3 or later: 9 completed", bitopertin), so whether a disease row is
 history or current reads without opening it. That span counts only dates the
 registry reports as having happened: a planned end, often long past on a
 trial nobody updated, would stretch it to a year nothing reached.
+
+**A trial names the countries it had sites in, beside its id** (2026-10-15, at
+the user's request, on the `worktree-foreign-trials` branch). Trimipramine's
+indications said its Phase 1+ trials ran outside the US only, in Germany, and
+not which trial that was; the line now reads "NCT02374567 (Germany) phase 3,
+2015–2017". The countries are the registry's own `trial_status.countries`
+(`schema_version` 4), exported per trial at a fixed index after the years. Of
+14,829 trials, 10,831 list one country and some up to 47, so three are named,
+the US first because it is the line the trial-sites filter draws, the rest
+counted ("+5 more") with the whole list as the hover. The 1,442 records that
+list no site say "(no sites listed)" — a gap in the record, not "nowhere" — and
+a row fetched before sites were asked for says nothing. It costs 0.31 MB of
+the startup file, nearly all of it the 1,999 distinct joined lists;
+interning each country instead would save about 30 KB, not worth a second
+format.
 
 ChEMBL's "Approved" is **not** US-only, which was said wrongly once in
 conversation: of the 1,376 approved indication records here, 122 rest on an EMA

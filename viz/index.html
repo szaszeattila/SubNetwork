@@ -543,7 +543,7 @@ const INTERNED_FIELDS = {
   name: 1, mechanism_of_action: 1, assay_description: 1, conversion_note: 1,
   activity_comment: 1, phase_label: 1, mesh_heading: 1, seed_name: 1, note: 1,
   description: 1, gene_symbol: 1, mechanism_comment: 1, selectivity_comment: 1,
-  gtp_type: 1, gtp_action: 1, selectivity: 1,
+  gtp_type: 1, gtp_action: 1, selectivity: 1, trial_sites: 1, trial_countries: 1,
 };
 
 function decodeTable(rows, fields, strings) {
@@ -1183,6 +1183,11 @@ const filters = {
   // for them. An eligibility filter like tier and basis: it decides which
   // claims exist for every view, not just for the canvas.
   mechanism: [],
+  // Where a molecule's in-scope Phase 1+ trials had sites: "any" (no
+  // narrowing), "us", "anywhere", "elsewhere" - see trialsAllowed. An
+  // eligibility filter like the four above, but on the molecule: it decides
+  // which molecules' claims exist for every view.
+  trials: "any",
   // The two controls here that are about the *drawing* rather than about which
   // claims are eligible. "show" | "hide" - see catalogueGraph.
   periphery: "show",
@@ -1202,7 +1207,7 @@ function setFilter(key, value) { filters[key] = value; return filters[key]; }
 // two equal.
 function filterDefaults() {
   return { tier: "supported_preliminary", basis: "all", potency: null, mechanism: [],
-           periphery: "show", lineColor: "mechanism", groups: "linked" };
+           trials: "any", periphery: "show", lineColor: "mechanism", groups: "linked" };
 }
 function resetFilters() { applyFilters(filterDefaults()); }
 
@@ -1359,9 +1364,64 @@ function mechanismSummary() {
   return picked.map(mechanismLabel).join(" or ") + " only";
 }
 
+// The molecule's own trial sites, as the export computed them from the trials
+// ChEMBL cites for its in-scope indications (scripts/cohort/export.py,
+// trial_sites): "us", "both", "elsewhere", "unstated" (Phase 1+ trials, none
+// listing a site), or null (no Phase 1+ in-scope trial to place). "anywhere"
+// keeps the unstated ones - they had a trial, the record just says not where.
+const TRIAL_SITES_KEPT = {
+  us: { us: 1, both: 1 },
+  anywhere: { us: 1, both: 1, elsewhere: 1, unstated: 1 },
+  elsewhere: { elsewhere: 1, both: 1 },
+};
+
+// How many catalogue molecules each trial-sites setting keeps, and how many
+// carry a site class at all (`placed`, zero for a payload built without the
+// trial backfill's countries). `only_us` and `only_elsewhere` are the two
+// one-sided halves, for the banner; `none` the molecules with no Phase 1+
+// in-scope trial to place.
+function trialSiteCounts() {
+  const out = { total: 0, placed: 0, us: 0, anywhere: 0, elsewhere: 0,
+                only_us: 0, both: 0, only_elsewhere: 0, unstated: 0, none: 0 };
+  for (const m of moleculeById.values()) {
+    out.total++;
+    const s = m.trial_sites;
+    if (!s) { out.none++; continue; }
+    out.placed++;
+    if (TRIAL_SITES_KEPT.us[s]) out.us++;
+    if (TRIAL_SITES_KEPT.anywhere[s]) out.anywhere++;
+    if (TRIAL_SITES_KEPT.elsewhere[s]) out.elsewhere++;
+    if (s === "us") out.only_us++;
+    else if (s === "both") out.both++;
+    else if (s === "elsewhere") out.only_elsewhere++;
+    else if (s === "unstated") out.unstated++;
+  }
+  return out;
+}
+
+// Whether the page offers the trial-sites control: where any molecule says
+// where its trials ran, or where the filter is already narrowed (by a link),
+// so a narrowed filter can always be put back.
+function trialSitesOffered() {
+  if (filters.trials !== "any") return true;
+  for (const m of moleculeById.values()) if (m.trial_sites) return true;
+  return false;
+}
+
+function moleculeTrialsAllowed(m) {
+  if (filters.trials === "any") return true;
+  const kept = TRIAL_SITES_KEPT[filters.trials];
+  return !!(kept && m && m.trial_sites && kept[m.trial_sites]);
+}
+
+function trialsAllowed(claim) {
+  if (filters.trials === "any") return true;
+  return moleculeTrialsAllowed(lookupMolecule(claim.molecule));
+}
+
 function claimVisible(claim) {
   return tierAllowed(claim) && basisAllowed(claim) && potencyAllowed(claim) &&
-         mechanismAllowed(claim);
+         mechanismAllowed(claim) && trialsAllowed(claim);
 }
 
 // Why a claim is not on screen, in the reader's terms. "Hidden by a filter" is
@@ -1374,6 +1434,7 @@ function hiddenReason(claim) {
   // Two different absences, and the second is the one that must not read as a
   // negative result: this claim carries no curated action at all.
   if (!mechanismAllowed(claim)) return claim.action_type ? "mechanism" : "mechanism_none";
+  if (!trialsAllowed(claim)) return "trials";
   return null;
 }
 
@@ -2443,7 +2504,8 @@ function graphSignature() {
   // drawn and moves nothing in or out of the picture, so a colour change must
   // not cost a rebuild and must not move the layout under the reader.
   return filters.tier + "|" + filters.basis + "|" + String(filters.potency) +
-         "|" + filters.mechanism.slice().sort().join(",") + "|" + filters.periphery +
+         "|" + filters.mechanism.slice().sort().join(",") + "|" + filters.trials +
+         "|" + filters.periphery +
          // groups is in it, unlike lineColor, because the membership lines are
          // springs as well as ink: they change what the layout solves for.
          "|" + filters.groups;
@@ -2457,7 +2519,7 @@ function graphSignature() {
 //
 // It is a *drawing* rule and not an eligibility rule, and the difference is
 // load-bearing. `claimVisible` answers "is this in the picture" and only the
-// four claim filters may change that answer; this one answers "is this drawn".
+// eligibility filters may change that answer; this one answers "is this drawn".
 // So the panel's lists, the similarity ranking, the gap statements and the
 // search all still read the whole catalogue, and nothing becomes unfindable by
 // being undrawn. It is off by default and it states its cost in the banner,
@@ -2947,6 +3009,10 @@ const HELP = {
   potency: "Hide claims weaker than a chosen concentration (lower = stronger " +
            "binding). Claims with no single number to compare are hidden and " +
            "counted separately.",
+  trials: "Keep only molecules with a Phase 1 or later trial for a brain condition, " +
+          "by where its sites were: in the US, anywhere, or outside the US. Read " +
+          "from the trials ChEMBL cites, as ClinicalTrials.gov lists their sites. " +
+          "Molecules in by an ATC code or a label alone have no trial to place.",
   periphery: "Hide targets that only one molecule acts on. They leave the " +
              "picture, not the catalogue: lists, search and similarity still " +
              "include them.",
@@ -3347,6 +3413,20 @@ function filtersHTML() {
   }
   h += "</div>" + cost("mechanism") + "</div>";
 
+  // Counted in molecules, the thing the control keeps or drops, and offered
+  // only where the payload says where any trial ran: a build without the
+  // trial backfill would otherwise offer three settings that empty the canvas.
+  const sites = trialSiteCounts();
+  if (trialSitesOffered()) {
+    h += '<div class="ctl"><h4>' + helpLabel("Trial sites", "trials") + "</h4><div class=\"row\">";
+    h += btn("trials", "any", "Every molecule (" + sites.total + ")", f.trials === "any");
+    h += btn("trials", "us", "US sites (" + sites.us + ")", f.trials === "us");
+    h += btn("trials", "anywhere", "Anywhere (" + sites.anywhere + ")", f.trials === "anywhere");
+    h += btn("trials", "elsewhere", "Outside the US (" + sites.elsewhere + ")",
+             f.trials === "elsewhere");
+    h += "</div>" + cost("trials") + "</div>";
+  }
+
   h += '<div class="ctl"><h4>' + helpLabel("Canvas", "periphery") + "</h4><div class=\"row\">";
   h += btn("periphery", "show", "Draw every target", f.periphery === "show");
   h += btn("periphery", "hide", "Hide single-molecule targets", f.periphery === "hide");
@@ -3473,7 +3553,7 @@ function aboutSourcesHTML() {
       "NLM, which does not endorse this project; this is not the most current MeSH. " +
       licenceLink("NLM's terms") + ".",
     link("https://clinicaltrials.gov/", "ClinicalTrials.gov") +
-      ", courtesy of the U.S. National Library of Medicine: trial status" +
+      ", courtesy of the U.S. National Library of Medicine: trial status and site countries" +
       (d.trialsTo ? ", fetched " + esc(trialsFetchedText(d)) : "") +
       ". The NLM does not endorse this project, and a status may have changed since. " +
       licenceLink("NLM's terms") + ".",
@@ -3545,12 +3625,19 @@ function viewOptionsSettings() {
                 f.basis === "human_direct" ? "direct human" : "including broader assignment",
                 f.potency === null ? "no potency cutoff" : "potency ≤ " + f.potency + " µM",
                 mechanismSummary(),
+                // Named only where the control is offered (see filtersHTML).
+                trialSitesOffered()
+                  ? (f.trials === "us" ? "trials at US sites"
+                     : f.trials === "anywhere" ? "trials anywhere"
+                     : f.trials === "elsewhere" ? "trials outside the US"
+                     : "every molecule")
+                  : "",
                 f.periphery === "hide" ? "single-molecule targets hidden"
                                        : "every target drawn",
                 f.groups === "linked" ? "protein groups linked" : "protein groups separate",
                 f.lineColor === "mechanism" ? "lines coloured by mechanism"
                                             : "lines coloured by evidence"];
-  return bits.join(" · ");
+  return bits.filter(Boolean).join(" · ");
 }
 
 // What a filter is doing, counted from the loaded data, and returned against
@@ -3653,6 +3740,27 @@ function filterBanners() {
       (other + none ? isAre(other + none) + "hidden. " : "") +
       "An absent annotation is ChEMBL not having curated a mechanism, never a " +
       "finding that the molecule does not act this way.");
+  }
+  if (f.trials !== "any") {
+    // Counted in molecules, and the hidden ones split by why, because "no
+    // trial abroad" and "no trial ChEMBL cites at all" are different facts: an
+    // ATC N member or a label-based approval has no trial to place anywhere.
+    const s = trialSiteCounts();
+    const where = f.trials === "us" ? "a site in the US"
+                : f.trials === "elsewhere" ? "a site outside the US"
+                : "a site anywhere, or with no site listed";
+    const kept = s[f.trials];
+    const noTrial = s.none;
+    const otherSide = f.trials === "us" ? s.only_elsewhere + s.unstated
+                    : f.trials === "elsewhere" ? s.only_us + s.unstated : 0;
+    push("trials", "Showing molecules with a <b>Phase 1 or later trial for a brain " +
+         "condition</b> at " + where + ": " + kept + " of " + s.total + ". " +
+         plural(noTrial, "molecule") + " with no such trial ChEMBL cites " +
+         (noTrial === 1 ? "is" : "are") + " hidden" +
+         (otherSide ? ", and " + plural(otherSide, "molecule") + " whose trials " +
+          (f.trials === "us" ? "list no US site" : "list no site outside the US") : "") +
+         ". Sites are ClinicalTrials.gov's for the trials ChEMBL cites; a trial " +
+         "registered only elsewhere is not among them.");
   }
   if (f.lineColor === "mechanism") {
     const g = catalogueGraph();
@@ -4240,11 +4348,13 @@ const TRIAL_STATUS_WORDS = {
 };
 
 // Export row: [status, why_stopped, phases, primary outcomes, start year,
-// end year, planned], strings interned, trailing fields omitted when empty.
-// Outcomes are [[title, [p, ...]], ...] - the trial's primary outcomes only,
-// with the p-values the sponsor reported for them, verbatim. `planned` flags
-// which of the two years the registry gives only as an estimate (1 start,
-// 2 end).
+// end year, planned, countries], strings interned, trailing fields omitted
+// when empty. Outcomes are [[title, [p, ...]], ...] - the trial's primary
+// outcomes only, with the p-values the sponsor reported for them, verbatim.
+// `planned` flags which of the two years the registry gives only as an
+// estimate (1 start, 2 end). Countries are where it lists a site,
+// '|'-joined: null there is a record listing none, and a row too short to
+// reach it was fetched before sites were asked for.
 function trialStatus(nct) {
   const r = (DATA.trial_status || {})[nct];
   if (!r) return null;
@@ -4259,7 +4369,29 @@ function trialStatus(nct) {
     }),
     start: r[4] || null, end: r[5] || null,
     startPlanned: !!(r[6] & 1), endPlanned: !!(r[6] & 2),
+    countries: r.length > 7 ? (s(r[7]) ? s(r[7]).split("|") : []) : undefined,
   };
+}
+
+// Where a trial had sites, beside its id (2026-10-15, at the user's request:
+// trimipramine's indications said its trials ran in Germany, and not which
+// one). The US comes first, since it is the line the trial-sites filter
+// draws; past three the rest are counted and the whole list is the hover. A
+// record listing no site says so, and one fetched before sites were asked for
+// says nothing.
+const TRIAL_SITES_SHOWN = 3;
+const HOME_COUNTRY = "United States";   // the registry's name, as export.py reads it
+
+function trialSitesHTML(t) {
+  if (!t || !t.countries) return "";
+  if (!t.countries.length) return ' <span class="muted">(no sites listed)</span>';
+  const all = t.countries.filter(function (c) { return c === HOME_COUNTRY; })
+    .concat(t.countries.filter(function (c) { return c !== HOME_COUNTRY; }));
+  let text = all.slice(0, TRIAL_SITES_SHOWN).join(", ");
+  if (all.length > TRIAL_SITES_SHOWN) text += " +" + (all.length - TRIAL_SITES_SHOWN) + " more";
+  const hover = all.length > TRIAL_SITES_SHOWN
+    ? ' title="' + esc(all.length + " countries: " + all.join(", ")) + '"' : "";
+  return ' <span class="trial-sites"' + hover + ">(" + esc(text) + ")</span>";
 }
 
 // When a trial ran, in years (2026-09-28, at the user's request): a phase 2
@@ -4375,7 +4507,8 @@ function pText(p) {
 function trialLineHTML(nct) {
   const t = trialStatus(nct);
   const meta = [trialPhaseLabel(t), trialYears(t)].filter(Boolean).join(", ");
-  return trialLink(nct) + (meta ? ' <span class="muted">' + esc(meta) + "</span>" : "") +
+  return trialLink(nct) + trialSitesHTML(t) +
+    (meta ? ' <span class="muted">' + esc(meta) + "</span>" : "") +
     " " + trialStatusHTML(nct) + trialOutcomeHTML(nct, t);
 }
 
@@ -4514,6 +4647,23 @@ function developmentHTML(mol) {
 // 1,078 approved diseases here - because what ChEMBL cites there is a product
 // label rather than a trial, so the section says so instead of letting a
 // missing link read as a missing trial.
+// Where this molecule's Phase 1 or later trials for these conditions had
+// sites, as the trial-sites filter reads it, or "" where there is none to
+// place. The countries outside the US are named, up to six, so "outside the
+// US" can be checked against the trials listed below it.
+function trialSitesSentence(mol) {
+  const s = mol && mol.trial_sites;
+  if (!s) return "";
+  if (s === "unstated") return "Its Phase 1 or later trials list no sites.";
+  const abroad = mol.trial_countries ? String(mol.trial_countries).split("|") : [];
+  const named = abroad.slice(0, 6).map(esc).join(", ") +
+    (abroad.length > 6 ? " and " + (abroad.length - 6) + " more" : "");
+  if (s === "us") return "Its Phase 1 or later trials had sites in the US only.";
+  if (s === "elsewhere") return "Its Phase 1 or later trials had sites outside the US only: " +
+    named + ".";
+  return "Its Phase 1 or later trials had sites in the US and elsewhere: " + named + ".";
+}
+
 function indicationsHTML(mol) {
   const rows = indicationsByDisease(mol.id);
   if (!rows.length) return "";
@@ -4532,6 +4682,8 @@ function indicationsHTML(mol) {
     note += " Phase is the furthest any trial reached, and completed means the " +
       "trial finished, not that it worked.";
   }
+  const sites = trialSitesSentence(mol);
+  if (sites) note += " " + sites;
 
   return foldedSection("indications",
     helpLabel("Indications", "indications") + " (" + rows.length + ")",
@@ -6832,7 +6984,7 @@ function syncLabels() {
 // is not part of the picture, and declining to draw it changes no pixel; this
 // is vis's own node rule applied to the other half of the canvas. It is not a
 // filter and must never be read as one - `claimVisible` still answers what is
-// in the picture and only the four claim filters may change that answer, the
+// in the picture and only the eligibility filters may change that answer, the
 // canvas control still answers what is drawn, and this answers neither. It
 // answers "is this on screen", which is a question about the window rather than
 // about the data, and the panel lists, the ranking, the gap statements and
@@ -8913,7 +9065,7 @@ function clearSelection() {
 //   #class=mesh_pa:D018377          a class, by the key its panel is opened by
 //
 //   &tier=supported  &basis=human_direct  &potency=10  &mech=AGONIST,PARTIAL%20AGONIST
-//   &canvas=hide  &groups=separate  &color=evidence
+//   &trials=elsewhere  &canvas=hide  &groups=separate  &color=evidence
 //
 // A filter is written only where it differs from its default, so a link to the
 // page as it opens is still just #m=CHEMBL113 - and a link names the whole
@@ -8935,6 +9087,7 @@ const LINK_FILTERS = [
   ["tier", "tier", ["supported", "supported_preliminary"]],
   ["basis", "basis", ["human_direct", "all"]],
   ["potency", "potency", [1, 10, 100, 300]],
+  ["trials", "trials", ["any", "us", "anywhere", "elsewhere"]],
   ["periphery", "canvas", ["show", "hide"]],
   ["groups", "groups", ["linked", "separate"]],
   ["lineColor", "color", ["evidence", "mechanism"]],

@@ -527,7 +527,9 @@ CREATE TABLE IF NOT EXISTS trial_status (
     start_date_type   TEXT,      -- its type: ACTUAL, ESTIMATED, or NULL (the registry typed none before 2017)
     completion_date   TEXT,      -- statusModule.completionDateStruct.date verbatim: the whole study's end
     completion_date_type TEXT,   -- ACTUAL / ESTIMATED / NULL; ESTIMATED is a plan, often one long past
-    schema_version    INTEGER,   -- 3 for a row carrying the dates; 2 for one with phases/primary_outcomes
+    countries         TEXT,      -- distinct contactsLocationsModule.locations[].country, sorted, '|'-joined;
+                                  -- NULL when the record lists no site (a gap in it, not "nowhere")
+    schema_version    INTEGER,   -- 4 for a row carrying countries; 3 for one carrying the dates; 2 for one with phases/primary_outcomes
                                   -- and no dates; NULL/1 for one fetched before any of them existed
     fetched_at        TEXT NOT NULL   -- ISO UTC timestamp of this fetch, for --refresh staleness
 );

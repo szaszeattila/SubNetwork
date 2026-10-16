@@ -614,8 +614,11 @@ behaviour a rule here describes.
 
 **What's drawn vs. what's in the catalogue**
 
-- **`claimVisible` decides what's in the picture; only the four claim
-  filters (tier, basis, potency, curated mechanism) may change that.**
+- **`claimVisible` decides what's in the picture; only the five
+  eligibility filters (tier, basis, potency, curated mechanism, and trial
+  sites, which is the molecule's) may change that.** Trial sites reads where
+  a molecule's Phase 1+ in-scope trials ChEMBL cites had sites, by NCT id
+  ([docs/FOREIGN-TRIALS.md](docs/FOREIGN-TRIALS.md), a proposal on this branch).
   Canvas control, viewport culling, line colour and protein-group
   linking answer "drawn/on screen/what colour" instead, invisible to
   panels, ranking, gaps and search.
