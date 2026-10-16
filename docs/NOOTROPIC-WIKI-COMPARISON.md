@@ -13,8 +13,12 @@ sections place in ChEMBL outside the catalogue, and asked for the wiki to be
 cited as their source of entry: D23 in [COHORT-2.md](COHORT-2.md). That did not
 make this document's name matches policy. Each was reviewed against ChEMBL's
 structure and written into `config/cohort1_selection.json` as an id; 221 were
-kept, one corrected and 11 refused, and D23 says which and why. Everything
-below is still the measurement it was.
+kept, one corrected and 11 refused, and D23 says which and why. On 2026-10-15
+a third section, *Psychedelics & entactogens*, followed the same way (D24: 75
+kept, two corrected, six refused). Everything up to *The listed entries
+against other public lists* is still the measurement it was; that last
+section, added 2026-10-15, is measured against the D24 build of 2,748
+entries.
 
 The first question was the user's: of the compounds
 [scientificsean.wiki](https://www.scientificsean.wiki/) lists — a community wiki
@@ -71,10 +75,14 @@ lifted, and every name has now been asked. 128 of those 363 resolved.
 | formats & blends | 32 | 77 | 53 | 37 | 192 | 391 |
 | **all** | **524** | **658** | **308** | **241** | **453** | **2,184** |
 
-Every compound behind these counts is listed in
-[`analysis/wiki_comparison/sections/`](../analysis/wiki_comparison/sections/),
-one CSV per section, with the column it is counted under, its placement and
-what ChEMBL holds for it, and whether it is a member under D21 (below).
+Every compound behind these counts is listed by `sections.py`, one CSV per
+section, with the column it is counted under, its placement and what ChEMBL
+holds for it, and whether it is a member under D21 (below). Since 2026-10-15
+those files, the wiki's list and the full comparison files are kept in
+`db/cache/sciwiki/`, out of the repository, because together they copy the
+wiki's arrangement, which its terms refuse
+([COMPOUND-LIST-TERMS.md](COMPOUND-LIST-TERMS.md)); the repository's
+`comparison.csv` and `comparison_d21.csv` leave out its section and class.
 
 "Has target data" is a crude proxy for whether an entry would draw anything: a
 ChEMBL curated mechanism, or an exact pChEMBL value at a single protein from a
@@ -631,3 +639,162 @@ sweep of ATC N codes held only by an ester whose parent compound has no code.
   thing that would.
 - Its matching misses some names and was wrong on eleven it found; the
   comparison file says which route placed each row.
+
+## The listed entries against other public lists
+
+2026-10-15, the user's question: how Wikidata, Wikipedia, TripSit and
+PsychonautWiki compare with the catalogue now that it holds the wiki's three
+sections (D23, D24), and which of the compounds the wiki brought in those
+lists also have. Measured against the D24 build: 2,748 entries, 296 of them
+`listed_only`. `compare_lists.py` places every list entry as before and now
+also says whether its ChEMBL parent is one the wiki brought in
+(`molecule_listings`); its per-molecule output, `listed_on_lists.csv`, stays
+beside the lists, out of the repository.
+
+**What was compared.** PsychonautWiki and TripSit are the 2026-10-11 downloads,
+both already whole lists of psychoactive substances. Wikipedia and Wikidata
+were refreshed and widened by `fetch_lists.py`, since their nootropic lists
+alone say nothing about the psychedelics section:
+
+| list | what it is |
+| --- | --- |
+| Wikipedia, nootropics | *Category:Nootropics*, its pages only — the 2026-10-11 rule, refreshed |
+| Wikipedia, psychoactive | *Category:Psychedelic drugs* and every category below it (phenethylamines, tryptamines, lysergamides, arylpiperazines), with *Entactogens*, *Dissociative drugs*, *Deliriants* and *Cathinones* |
+| Wikipedia, designer drugs | *Category:Designer drugs* and its four subcategories |
+| Wikidata, nootropic | items whose *subject has role* or *has use* is nootropic — the 2026-10-11 rule, refreshed |
+| Wikidata, psychoactive | the same for psychedelic drug, hallucinogen, empathogen-entactogen, dissociative (two items) and stimulant |
+
+A Wikipedia article is placed through its Wikidata item's InChIKey where the
+item has one (761 of the psychoactive category's articles, 807 of the
+designer-drug one's), and by its title otherwise. Topic articles, templates,
+books, combinations and products were dropped by a reviewed list in
+`prepare_lists.py` (*Arylcyclohexylamine*, *PiHKAL*, *Borax combo*, *Gray
+death*, one person's biography); plants and fungi were kept, as the wiki lists
+them too (*Atropa belladonna*). Wikidata files few compounds under a
+psychoactive role: 119 items for the six, against Wikipedia's 1,042 articles.
+
+### The lists against the catalogue now
+
+| list | compounds | in ChEMBL | also on the wiki | in the catalogue | by a clinical route | entered from the wiki | in ChEMBL, outside |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| PsychonautWiki, all | 373 | 160 | 262 | 141 (38%) | 97 | 44 | 19 |
+| PsychonautWiki, *Nootropic* | 25 | 20 | 24 | 18 (72%) | 16 | 2 | 2 |
+| TripSit, all | 548 | 293 | 270 | 207 (38%) | 161 | 46 | 86 |
+| TripSit, *nootropic* | 28 | 20 | 27 | 19 (68%) | 14 | 5 | 1 |
+| Wikidata, nootropic role | 161 | 140 | 102 | 93 (58%) | 65 | 28 | 47 |
+| Wikidata, psychoactive roles | 115 | 90 | 48 | 46 (40%) | 24 | 22 | 44 |
+| Wikipedia, *Nootropics* | 149 | 124 | 87 | 79 (53%) | 55 | 24 | 45 |
+| Wikipedia, psychoactive | 1,042 | 376 | 134 | 88 (8%) | 29 | 59 | 288 |
+| Wikipedia, *Designer drugs* | 967 | 387 | 157 | 90 (9%) | 26 | 64 | 297 |
+
+"By a clinical route" counts members of the cohort and one seed, theobromine,
+on TripSit and Wikidata; "entered from the wiki" is D23 and D24.
+
+**The catalogue's share of every list has about doubled since 2026-10-11.**
+Against the 1,335-entry build it held 86 of PsychonautWiki's entries, 146 of
+TripSit's, 42 of Wikidata's nootropics and 31 of Wikipedia's; now 141, 207, 93
+and 79. On the harm-reduction lists most of the gain is the wiki's listing (44
+of PsychonautWiki's 55, 46 of TripSit's 61); on the nootropic lists about half
+is (28 of Wikidata's 51, 24 of Wikipedia's 48), and the rest D21's Phase 1
+floor.
+Wikipedia's nootropic list also places better than before (124 in ChEMBL, from
+113), because its articles now come with their items' InChIKeys.
+
+**The psychoactive lists are reached mostly through the wiki.** Of the 88
+Wikipedia psychoactive articles and 90 designer drugs the catalogue holds, 59
+and 64 are listed entries; without D23 and D24 it would hold 29 and 26 — for
+the first MDMA, LSD, psilocybin, DMT, ketamine and the NMDA-antagonist and
+anticholinergic drugs, for the second modafinil and its analogues, six
+benzodiazepine-type drugs, mephedrone and methylone. Both categories are still mostly
+outside: 288 and 297 of their compounds are in ChEMBL and not in the
+catalogue, and 666 and 580 were not placed in ChEMBL at all.
+
+### Which listed entries the lists also have
+
+| | Cognition & nootropic | Psychedelics & entactogens | Psychiatric & neuro-clinical | all |
+|---|---:|---:|---:|---:|
+| listed entries | 144 | 75 | 77 | 296 |
+| on Wikipedia | 31 | 59 | 11 | 101 |
+| on Wikidata | 28 | 18 | 4 | 50 |
+| on TripSit | 11 | 31 | 4 | 46 |
+| on PsychonautWiki | 7 | 33 | 4 | 44 |
+| **on at least one of the four** | **43** | **62** | **15** | **120** |
+| on all four | 0 | 14 | 0 | 14 |
+| on none | 101 | 13 | 62 | 176 |
+
+Nootropics Expert adds two the four lack, paraxanthine and phenylalanine.
+
+**The psychedelics section is the part of the wiki the other lists share.** 62
+of its 75 listed entries are on at least one of the four, and 14 are on all
+four: 2C-B, 2C-C, 2C-E, 2C-I, 2C-P, 2C-T, 2C-T-2, 2C-T-7, 2C-T-21, 3C-E, DOI,
+MDA, mescaline and psilocin. Another 13 are on three, among them 25I-NBOMe,
+DOM, DOC, escaline, proscaline, MDAI, deschloroketamine and cathinone. 24 are
+on Wikipedia or Wikidata and neither harm-reduction list — the tryptamines
+4-HO-DET, 4-HO-MiPT, 5-MeO-DiPT and DiPT, 3-HO-PCP and 4-MeO-PCP, AL-LAD and
+ETH-LAD, DOB, ergine, GBL — and three are on a harm-reduction list only
+(Bromo-DragonFLY, 1,3-butanediol, salvinorin B methoxymethyl ether). The 13
+on none are the section's terpenes and plant constituents (α-pinene,
+β-caryophyllene, limonene, linalool, nootkatone, parthenolide, ursolic acid,
+bilobalide, carvacrol, cycloastragenol) and three it files as psychoactive
+that no list does: brompheniramine, alfetamine and N,N-dimethylphenethylamine.
+
+**A third of the cognition section is on another list, and mostly on the
+encyclopaedia's.** 43 of 144. Four are on three lists: 4-FA, coluracetam,
+noopept and theacrine. 26 are on two, mostly the racetams, ampakines and
+research stimulants the nootropic categories carry (aloracetam, cebaracetam,
+phenylpiracetam, IDRA-21, sunifiram, unifiram, tulrampator, ethylphenidate,
+4F-MPH, 3,4-CTMP, flmodafinil, P7C3, 7,8-DHF). 28 of the 43 are on Wikipedia
+or Wikidata only. The 101 on none are drug-development compounds the wiki
+files as nootropic — CX-546, CX-614, LY404187, SB-271046, PNU-120596, the
+orexin antagonists vornorexant and nivasorexant, the muscarinic agonists
+sabcomeline, milameline and alvameline — with HDAC inhibitors (belinostat,
+entinostat, trichostatin A) and flavonoids and plant extracts (apigenin,
+baicalein, honokiol, hypericin, rosemary extract).
+
+**The psychiatric section is almost entirely the wiki's own.** 15 of 77: the
+designer benzodiazepines (flubromazepam and pyrazolam on three lists,
+phenazepam on two, diclazepam and gidazepam on one), the opioids desomorphine,
+ethylmorphine and 7-hydroxymitragynine, harmine and harmaline, arketamine, and
+three development compounds Wikipedia covers (aptiganel, indeloxazine,
+suritozole). The 62 on none are neurosteroids and pheromone steroids
+(pregnanolone, THDOC, androstenol, estratetraenol), second-generation
+antihistamines (bilastine, ebastine, levocetirizine), antipsychotics and
+antidepressants approved in Japan or Russia (perospirone, timiperone,
+tandospirone, pipofezine, pirlindole) and research ligands (WAY-100635,
+norbinaltorphimine, siramesine).
+
+**Where the lists agree with the wiki, ChEMBL has least.** Of the 120 listed
+entries on another list, 17 have a Supported claim and 55 no eligible evidence;
+of the 176 on none, 65 and 54. The lists share the wiki's recreational and
+research chemicals, which ChEMBL holds a structure for and seldom measures; what
+only the wiki lists is mostly development compounds, which ChEMBL has assayed.
+Agreement between lists says a compound is used, not that it is understood.
+
+**What the harm-reduction lists have that neither the wiki nor the catalogue
+does.** 77 of TripSit's entries are in ChEMBL, outside the catalogue and not on
+the wiki: phenethylamines the wiki skips (2C-G, 2C-T-4, DOET, DOPR, Aleph,
+4-MTA), aminorex, synthetic cannabinoids (AB-FUBINACA, AB-CHMINACA, AM-2201),
+fentanyl analogues and nitazenes, and designer benzodiazepines (bromazolam,
+delorazepam). PsychonautWiki has 12, among them **PCP and salvinorin A**: the
+wiki lists four PCP analogues and salvinorin B's methoxymethyl ether but
+neither parent drug, and no clinical route admits them, so the catalogue holds
+the analogues and not the compounds they are analogues of. Ibotenic acid,
+rolicyclidine and diphenidine are the others of the 12 a reader would look
+for.
+
+**Limits.** PsychonautWiki's and TripSit's entries are placed by name (TripSit's
+aliases help), so a name neither matcher knows reads as "not in ChEMBL".
+PsychonautWiki counts class pages (*2C-x*) as entries. Wikipedia's categories
+take an article wherever an editor filed it, so *Doxylamine* is a deliriant
+there, as it is on the wiki. A connectivity match on a list's InChIKey counts
+as the same compound, which can join enantiomers the wiki keeps apart.
+
+The lists, as downloaded and as name files, and both outputs are in
+`db/cache/lists/` (`raw/` from 2026-10-11, `raw/2026-10-15/`, and
+`names/2026-10-15/`):
+
+```bash
+python3 analysis/wiki_comparison/fetch_lists.py db/cache/lists/raw/2026-10-15
+python3 analysis/wiki_comparison/prepare_lists.py db/cache/lists/raw db/cache/lists/raw/2026-10-15 db/cache/lists/names/2026-10-15
+python3 analysis/wiki_comparison/compare_lists.py db/cache/lists/names/2026-10-15
+```

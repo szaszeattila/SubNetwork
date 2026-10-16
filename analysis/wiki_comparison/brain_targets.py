@@ -24,13 +24,13 @@ import re
 import sqlite3
 import sys
 
-from placing import CHEMBL, HERE, ROOT, Placer, norm
+from placing import CHEMBL, REFERENCE, ROOT, Placer, norm
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-root", type=pathlib.Path, default=ROOT)
-    ap.add_argument("--csv", type=pathlib.Path, default=HERE / "comparison.csv")
+    ap.add_argument("--csv", type=pathlib.Path, default=REFERENCE / "comparison.csv")
     ap.add_argument("--brain-set", choices=("atc-n", "catalogue"), default="atc-n")
     ap.add_argument("--pdsp", type=pathlib.Path, help="the PDSP Ki CSV; default <data-root>/db/pdsp_ki_database.csv")
     args = ap.parse_args()

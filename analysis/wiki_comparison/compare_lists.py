@@ -9,8 +9,13 @@ when the list gives one, else the name tiers, without PubChem — and two
 entries are the same compound when they reach a common ChEMBL parent or, when
 neither is placed, when their names are equal with punctuation dropped.
 
-Read-only. Writes LIST_DIR/lists_overlap.csv (one row per list entry, kept
-out of the repository with the lists) and prints one summary row per list.
+Since D23 and D24 a catalogue entry may be there because the wiki lists it
+(molecule_listings); `sciwiki_listed` names such entries, and
+LIST_DIR/listed_on_lists.csv says which lists each of them is on.
+
+Read-only. Writes LIST_DIR/lists_overlap.csv (one row per list entry) and
+listed_on_lists.csv, both kept out of the repository with the lists, and
+prints one summary row per list, then the listed entries by section.
 
     python3 analysis/wiki_comparison/compare_lists.py LIST_DIR [--data-root DIR]
 """
@@ -20,7 +25,7 @@ import csv
 import pathlib
 import sys
 
-from placing import HERE, ROOT, Placer, squash
+from placing import REFERENCE, ROOT, Placer, squash
 from prepare_lists import alternatives
 
 
@@ -58,7 +63,12 @@ def main() -> int:
     args = ap.parse_args()
     pl = Placer(args.data_root)
 
-    wiki = list(csv.DictReader(open(HERE / "comparison.csv", encoding="utf-8")))
+    wiki = list(csv.DictReader(open(REFERENCE / "comparison.csv", encoding="utf-8")))
+    # The entries the wiki brought in (D23, D24), by ChEMBL parent.
+    listed = {cid: {"chembl_id": cid, "name": name, "section": section, "evidence_status": ev}
+              for cid, name, section, ev in pl.coh.execute(
+                  "SELECT m.chembl_id, l.name, l.section, m.evidence_status FROM molecule_listings l "
+                  "JOIN molecules m USING (parent_molregno) WHERE l.source = 'sciwiki'")}
     wiki_parents = {c for r in wiki for c in r["chembl_parents"].split("|") if c}
     # "N-Acetyl L-Tyrosine (NALT)" also answers to either half.
     wiki_names = {squash(a) for r in wiki for a in alternatives(r["name"]).split(" | ")}
@@ -94,7 +104,11 @@ def main() -> int:
                 alts.append(SAME_AS_WIKI[name])
             in_wiki = bool(set(ids) & wiki_parents) or any(squash(a) in wiki_names for a in alts)
             in_cat = [i for i in ids if i in pl.catalogue]
+            in_listing = [i for i in ids if i in listed]
+            for i in in_listing:
+                listed[i][lst] = 1
             c["entries"] += 1
+            c["listed"] += bool(in_listing)
             c["placed"] += bool(ids)
             c["in_wiki"] += in_wiki
             c["in_catalogue"] += bool(in_cat)
@@ -102,7 +116,7 @@ def main() -> int:
             rows.append({"list": lst, "name": name, "alternatives": " | ".join(alts),
                          "match_tier": tier, "confidence": conf,
                          "chembl_parents": "|".join(ids), "in_wiki": int(in_wiki),
-                         "in_catalogue": "|".join(in_cat)})
+                         "in_catalogue": "|".join(in_cat), "sciwiki_listed": "|".join(in_listing)})
         list_parents = {i for r in rows if r["list"] == lst for i in r["chembl_parents"].split("|") if i}
         list_names = {squash(SAME_AS_WIKI.get(r["name"], r["name"])) for r in rows if r["list"] == lst}
         list_names |= {squash(a) for r in rows if r["list"] == lst for a in r["alternatives"].split(" | ")}
@@ -117,15 +131,31 @@ def main() -> int:
         w = csv.DictWriter(fh, fieldnames=list(rows[0].keys()))
         w.writeheader()
         w.writerows(rows)
-    print("| list | compounds | placed in ChEMBL | also on the wiki | in the catalogue | on neither | wiki entries it has |")
-    print("|---|---:|---:|---:|---:|---:|---:|")
+    lists = [lst for lst, _ in summary]
+    with open(args.list_dir / "listed_on_lists.csv", "w", newline="", encoding="utf-8") as fh:
+        w = csv.DictWriter(fh, fieldnames=["chembl_id", "name", "section", "evidence_status", *lists], restval=0)
+        w.writeheader()
+        w.writerows(sorted(listed.values(), key=lambda e: (e["section"], e["name"].casefold())))
+
+    print("| list | compounds | placed in ChEMBL | also on the wiki | in the catalogue | entered from the wiki | on neither | wiki entries it has |")
+    print("|---|---:|---:|---:|---:|---:|---:|---:|")
     for lst, c in summary:
         pct = lambda n: f"{n} ({100 * n / c['entries']:.0f}%)" if c["entries"] else "0"
         print(f"| {lst} | {c['entries']} | {pct(c['placed'])} | {pct(c['in_wiki'])} | {pct(c['in_catalogue'])} "
-              f"| {pct(c['neither'])} | {c['wiki_covered']} of {len(wiki)} |")
+              f"| {pct(c['listed'])} | {pct(c['neither'])} | {c['wiki_covered']} of {len(wiki)} |")
     by_section = collections.Counter(r["section"] for r in wiki if r["slug"] not in covered_anywhere)
     print(f"\nwiki entries on at least one other list: {len(covered_anywhere)} of {len(wiki)}; "
           f"on none, by section: {dict(by_section.most_common())}")
+
+    # The entries the wiki brought in, by section: how many each list has.
+    sections = sorted({e["section"] for e in listed.values()})
+    print("\n| list | " + " | ".join(sections) + " | all |")
+    print("|---|" + "---:|" * (len(sections) + 1))
+    of = {sec: [e for e in listed.values() if e["section"] == sec] for sec in sections}
+    for lst in lists + ["any"]:
+        has = (lambda e: any(e.get(x) for x in lists)) if lst == "any" else (lambda e: e.get(lst))
+        print(f"| {lst} | " + " | ".join(f"{sum(1 for e in of[sec] if has(e))} of {len(of[sec])}" for sec in sections)
+              + f" | {sum(1 for e in listed.values() if has(e))} of {len(listed)} |")
     return 0
 
 

@@ -680,3 +680,18 @@ carpipramine, two; cutamesine (σ1; ChEMBL names its parent [11C]SA4503), two;
 and others once each, among them norbinaltorphimine, capeserod and
 flmodafinil. The floors in `tests/similarity_harness.test.mjs`
 hold, and were not moved.
+
+D24 (2026-10-15) listed 75 more, from the wiki's psychedelics section, and the
+grade rose a little rather than fell:
+
+| | ATC scoreable | ATC top-1 | ATC top-10 | ATC MRR | MeSH scoreable | MeSH top-1 | MeSH MRR |
+|---|---|---|---|---|---|---|---|
+| D24 as graded (2,748) | 284 | 32.0% | 72.9% | 0.4477 | 928 | 43.5% | 0.5783 |
+| D24, all 296 listed skipped | 284 | 32.7% | 74.3% | 0.4601 | 924 | 43.7% | 0.5830 |
+
+Skipped, the ATC grade is the D21 build's again (32.7%, 0.4607 there), so the
+−0.3 points D23 left behind are gone. As there, a skipped molecule's only
+route into the grade is the weight it adds to its targets' prevalence; why
+the 75 move it back up was not isolated. Two of the
+75 rank first over a MeSH class-mate: 5-MeO-DALT for three molecules and
+brolamfetamine (DOB) for two.

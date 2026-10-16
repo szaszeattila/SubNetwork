@@ -2,9 +2,10 @@
 """Split comparison.csv into one file per wiki section, each compound labelled
 with the column of the *What it found* table it is counted under.
 
-Read-only and offline: it reads comparison.csv and comparison_d21.csv and
-writes sections/<section>.csv, sorted by column in the table's order and then
-by name. `column` is compare.bucket(), the same rule the table is printed by,
+Read-only and offline: it reads comparison.csv and comparison_d21.csv from
+placing.REFERENCE and writes sections/<section>.csv there too, out of the
+repository, since they are the wiki's own arrangement; each is sorted by
+column in the table's order and then by name. `column` is compare.bucket(), the same rule the table is printed by,
 so the counts it prints are the table's rows.
 `with_d21` says whether the compound is a member of the phase1-admission build
 (D21) too, so the files answer both of the document's membership tables.
@@ -17,7 +18,7 @@ import re
 import sys
 
 from compare import ORDER, bucket
-from placing import HERE
+from placing import REFERENCE
 
 FIELDS = ["name", "wiki_class", "column", "with_d21", "match_tier", "confidence",
           "chembl_parents", "chembl_names", "catalogue_status", "max_phase", "atc_level1",
@@ -29,8 +30,8 @@ def slug(section: str) -> str:
 
 
 def main() -> int:
-    rows = list(csv.DictReader(open(HERE / "comparison.csv", encoding="utf-8")))
-    d21 = {r["slug"]: r for r in csv.DictReader(open(HERE / "comparison_d21.csv", encoding="utf-8"))}
+    rows = list(csv.DictReader(open(REFERENCE / "comparison.csv", encoding="utf-8")))
+    d21 = {r["slug"]: r for r in csv.DictReader(open(REFERENCE / "comparison_d21.csv", encoding="utf-8"))}
     if set(d21) != {r["slug"] for r in rows}:
         sys.exit("comparison.csv and comparison_d21.csv do not hold the same compounds")
 
@@ -41,7 +42,7 @@ def main() -> int:
         out["with_d21"] = "member" if d21[r["slug"]]["in_catalogue"] else ""
         by_section.setdefault(r["section"], []).append(out)
 
-    outdir = HERE / "sections"
+    outdir = REFERENCE / "sections"
     outdir.mkdir(exist_ok=True)
     for old in outdir.glob("*.csv"):
         old.unlink()

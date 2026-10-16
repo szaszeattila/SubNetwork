@@ -19,7 +19,7 @@ import pathlib
 import sqlite3
 import sys
 
-from placing import CHEMBL, HERE, ROOT
+from placing import CHEMBL, REFERENCE, ROOT
 
 sys.path.insert(0, str(ROOT / "scripts"))
 from cohort import scope as scope_mod  # noqa: E402
@@ -28,7 +28,7 @@ from cohort import scope as scope_mod  # noqa: E402
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-root", type=pathlib.Path, default=ROOT)
-    ap.add_argument("--csv", type=pathlib.Path, default=HERE / "comparison.csv")
+    ap.add_argument("--csv", type=pathlib.Path, default=REFERENCE / "comparison.csv")
     args = ap.parse_args()
 
     policy = json.loads((ROOT / "config" / "cohort1_selection.json").read_text())

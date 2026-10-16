@@ -3,7 +3,9 @@
 catalogue, and say what ChEMBL holds for the ones outside it.
 
 Read-only and adopts nothing: ChEMBL and db/cohort1.db are opened mode=ro, and
-the output is comparison.csv plus a summary on stdout. How a name is placed,
+the output is comparison.csv plus a summary on stdout. The full file, with the
+wiki's section and class, goes to placing.REFERENCE (db/cache/sciwiki/, out of
+the repository); the copy beside this script leaves those two columns out. How a name is placed,
 and what each tier's confidence means, is in placing.py. A name reaching
 several ChEMBL parents keeps all of them; REJECTED there lists the matches
 found wrong on review, and the reason stays on the row.
@@ -20,7 +22,7 @@ import json
 import pathlib
 import sys
 
-from placing import HERE, ROOT, Placer
+from placing import HERE, REFERENCE, ROOT, Placer, public_copy
 
 
 def bucket(r: dict) -> str:
@@ -45,10 +47,10 @@ ORDER = ["in catalogue", "ChEMBL, has target data", "ChEMBL, no target data",
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-root", type=pathlib.Path, default=ROOT)
-    ap.add_argument("--csv", type=pathlib.Path, default=HERE / "comparison.csv")
+    ap.add_argument("--csv", type=pathlib.Path, default=REFERENCE / "comparison.csv")
     args = ap.parse_args()
 
-    wiki = list(csv.DictReader(open(HERE / "wiki_compounds.csv", encoding="utf-8")))
+    wiki = list(csv.DictReader(open(REFERENCE / "wiki_compounds.csv", encoding="utf-8")))
     pl = Placer(args.data_root)
     ch = pl.ch
 
@@ -95,6 +97,7 @@ def main() -> int:
         wr = csv.DictWriter(fh, fieldnames=list(out[0].keys()))
         wr.writeheader()
         wr.writerows(out)
+    print(f"wrote {args.csv} and {public_copy(args.csv)}")
 
     order = ORDER
     table = collections.OrderedDict()

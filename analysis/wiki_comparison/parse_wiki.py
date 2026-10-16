@@ -3,7 +3,9 @@
 wiki_compounds.csv: one row per compound tile, with the section and class the
 wiki files it under.
 
-The page itself is not kept in the repository; only this list is. Run:
+Neither the page nor the list is kept in the repository: the list, which
+copies the wiki's arrangement, is written to placing.REFERENCE
+(db/cache/sciwiki/, gitignored), and so is a saved page worth keeping. Run:
 
     curl -sL https://www.scientificsean.wiki/compounds/table -o table.html
     python3 analysis/wiki_comparison/parse_wiki.py table.html
@@ -14,7 +16,7 @@ import pathlib
 import re
 import sys
 
-HERE = pathlib.Path(__file__).resolve().parent
+from placing import REFERENCE
 
 
 def parse(text: str) -> list[dict]:
@@ -35,10 +37,11 @@ def parse(text: str) -> list[dict]:
 
 
 def main() -> int:
+    REFERENCE.mkdir(parents=True, exist_ok=True)
     rows = parse(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
     if len({r["slug"] for r in rows}) != len(rows):
         sys.exit("duplicate slugs: the page layout has changed")
-    with open(HERE / "wiki_compounds.csv", "w", newline="", encoding="utf-8") as fh:
+    with open(REFERENCE / "wiki_compounds.csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=["slug", "name", "section", "wiki_class"])
         w.writeheader()
         w.writerows(rows)

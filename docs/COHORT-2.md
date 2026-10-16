@@ -439,12 +439,68 @@ and 76 no eligible evidence in ChEMBL 37. The ATC grade goes from 32.7% to
 
 **Left open.** The 410 rows of the two sections already in the catalogue carry
 no listing, so their pages do not cite the wiki. And
-`analysis/wiki_comparison/` publishes the wiki's whole compound list with its
+`analysis/wiki_comparison/` published the wiki's whole compound list with its
 sections and classes (`wiki_compounds.csv`, `comparison.csv`, `sections/`),
-committed before its terms were read; whether that is the "bulk copy" they
-refuse is the user's call. [COMPOUND-LIST-TERMS.md](COMPOUND-LIST-TERMS.md)
-weighs it, recommends removing the list and its classes before `main`, and
-finds the entries themselves inside the terms.
+committed before its terms were read. [COMPOUND-LIST-TERMS.md](COMPOUND-LIST-TERMS.md)
+weighed it and recommended removing the list and its classes before `main`;
+**the user agreed on 2026-10-15**, and asked that the copy be kept on disk as
+the widest list to measure the catalogue against. The list, the sections and
+the full comparison files now live in `db/cache/sciwiki/`, which is
+gitignored, and the scripts read them there; the repository keeps the
+comparison files without the wiki's `section` and `wiki_class` columns. The
+commits that carried them stay reachable by hash on the published branch.
+
+### D24 — the sci-wiki's psychedelics section is listed too
+
+**Decision (user, 2026-10-15).** "also implement the scientific sean compounds
+in psychedelics-entactogens that are in CHEMBL": D23's rule, applied to a third
+section, *Psychedelics & entactogens*. Selection policy 3.2.0. Worked in the
+`wiki-comparison` worktree.
+
+**What it is.** Nothing new in kind: 75 more entries in `listings.sciwiki`,
+each a ChEMBL id written down after review, `admission_reason = 'listed_only'`,
+a `molecule_listings` row and the *Entered from* row on the page. The policy's
+rule names the third section.
+
+**Which.** Of the section's 175 rows, 106 place at a ChEMBL parent; 25 of those
+are already catalogue members by a clinical route and need no listing (MDMA,
+LSD, psilocybin, 5-MeO-DMT, esketamine and the anticholinergic deliriants
+among them); 49 are identified but not in
+ChEMBL, and 20 not identified at all. That leaves 81 candidates, and the same
+review as D23's:
+
+- the 47 placed by an exact ChEMBL preferred name or an FDA UNII InChIKey were
+  read over and kept;
+- the 34 placed through a synonym, PubChem or a skeleton match were each
+  compared with ChEMBL's structure: 26 **kept** (MDA through the four-letter
+  synonym, ChEMBL's TENAMFETAMINE; *Atropa belladonna* at ChEMBL's
+  structureless BELLADONNA record, with a `review` note);
+- 2 **corrected**: *MDEA*, which PubChem's name took to N-methyldiethanolamine,
+  an abbreviation clash, is CHEMBL126279; *Limonene*, which ChEMBL's synonym
+  put on D-limonene, is CHEMBL15799, ChEMBL's record drawn with no
+  stereochemistry, since the name gives none;
+- 6 **refused**, in `considered_and_not_listed`: 5-MAPB and MDPV, racemates
+  ChEMBL holds only as single enantiomers; Ginkgolide B (eight parents), LSZ
+  (three) and Ariadne (two), skeleton matches where choosing one stereoisomer
+  would be a guess; and *Grayanotoxin*, a family of diterpenes that PubChem's
+  name took to one flat record.
+
+**What it did.** The catalogue goes from 2,673 to 2,748 entries, 296 of them
+listed; the cohort stays 2,449. Of the 75, 9 have a Supported claim, 23 only
+Preliminary ones, 9 only the broader layer, 1 only retained observations, and
+33 no eligible evidence in ChEMBL 37 — the section is mostly research
+chemicals ChEMBL holds a structure for and little else. 49 of the 75 have no
+ChEMBL preferred name, so the wiki's name is their label. The ATC grade goes
+from 31.7% to 32.0% top-1 and MRR 0.4467 to 0.4477; with all 296 skipped in
+each list it is 32.7% and 0.4601, the D21 build's own grade, so what the
+listing costs the ranking is again the judge's
+([SIMILARITY-HARNESS.md](SIMILARITY-HARNESS.md) §13).
+
+How the 296 sit against Wikipedia, Wikidata, TripSit and PsychonautWiki is in
+[NOOTROPIC-WIKI-COMPARISON.md](NOOTROPIC-WIKI-COMPARISON.md), *The listed
+entries against other public lists*: 62 of these 75 are on at least one of
+them, against 43 of the cognition section's 144 and 15 of the psychiatric
+section's 77.
 
 ---
 
@@ -463,10 +519,10 @@ In the order they bear on the picture.
 4. **Primary-only for evidence, all rows for direction** (the user's call on
    2026-09-27). Worth revisiting if a second error like vilazodone's appears.
 5. **New molecules** — the second step. D21 added 1,119 by lowering the
-   indication route's phase floor, and D23 221 by the sci-wiki's two
-   sections; its other nine sections (psychedelics, peptides, botanicals and
-   the rest) are not listed, and the 11 refused names would need a ChEMBL
-   record drawn as the compound they mean. GtoPdb's ligands outside the cohort are
+   indication route's phase floor, D23 221 by the sci-wiki's two
+   sections and D24 75 by its psychedelics section; its other eight sections
+   (peptides, botanicals, formats and the rest) are not listed, and the 17
+   refused names would need a ChEMBL record drawn as the compound they mean. GtoPdb's ligands outside the cohort are
    still unadmitted, by a rule still to be written; see
    [COHORT-BOUNDARY-REVIEW.md](COHORT-BOUNDARY-REVIEW.md) for the curated-route
    proposal it should start from.

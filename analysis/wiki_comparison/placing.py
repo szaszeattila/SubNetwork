@@ -30,6 +30,25 @@ HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 CHEMBL = os.environ.get("CHEMBL_SQLITE_PATH", "/mnt/data/chembl/chembl_37/chembl_37_sqlite/chembl_37.db")
 
+# The wiki's own list, with the section and class it files each compound
+# under, is kept on disk and out of the repository: its terms refuse copying
+# the reference in bulk (docs/COMPOUND-LIST-TERMS.md). db/cache/ is gitignored.
+# Everything that reads a section or class reads it from here; the repository
+# keeps public_copy()'s version of each comparison file.
+REFERENCE = ROOT / "db" / "cache" / "sciwiki"
+WIKI_ONLY = ("section", "wiki_class")
+
+
+def public_copy(path: pathlib.Path) -> pathlib.Path:
+    """Write HERE/<name> from a reference comparison file, without WIKI_ONLY."""
+    rows = list(csv.DictReader(open(path, encoding="utf-8")))
+    out = HERE / path.name
+    with open(out, "w", newline="", encoding="utf-8") as fh:
+        w = csv.DictWriter(fh, fieldnames=[k for k in rows[0] if k not in WIKI_ONLY])
+        w.writeheader()
+        w.writerows({k: v for k, v in r.items() if k not in WIKI_ONLY} for r in rows)
+    return out
+
 # Matches found wrong on review: a name lookup that reached another substance.
 REJECTED = {
     "Irisin": "PubChem name reached iridin, an isoflavone; irisin is a myokine protein",

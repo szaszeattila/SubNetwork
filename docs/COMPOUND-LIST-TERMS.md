@@ -75,6 +75,14 @@ would then say of the wiki's list what it already says of the six others:
 hash and cannot be withdrawn; GitHub support can purge cached views if the wiki
 ever asks. Asking the wiki's owner whether the list may stay would settle it.
 
+**Done 2026-10-15, as recommended.** The user agreed, and asked that the list
+be kept on disk as the widest one to measure the catalogue against. The list,
+the section files and the full comparison files are in `db/cache/sciwiki/`,
+gitignored, where the scripts now read them; the repository's comparison
+files no longer carry the `section` and `wiki_class` columns. The commits that
+carried them remain on the published branch, reachable by hash. D24 added a
+third section's entries on the same terms as D23's.
+
 ## The lists already compared
 
 The six lists NOOTROPIC-WIKI-COMPARISON.md compared, and the four it did not

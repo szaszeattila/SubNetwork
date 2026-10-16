@@ -44,7 +44,7 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 
-from placing import HERE, ROOT, norm
+from placing import HERE, REFERENCE, ROOT, norm
 
 sys.path.insert(0, str(ROOT / "scripts"))
 from cohort import scope as scope_mod  # noqa: E402
@@ -110,7 +110,7 @@ def fetch(name):
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--csv", type=pathlib.Path, default=HERE / "comparison.csv")
+    ap.add_argument("--csv", type=pathlib.Path, default=REFERENCE / "comparison.csv")
     ap.add_argument("--mesh", type=pathlib.Path, default=ROOT / "db" / "cache" / "mesh" / "desc2026.gz")
     args = ap.parse_args()
 

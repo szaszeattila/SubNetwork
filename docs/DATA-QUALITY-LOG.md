@@ -51,6 +51,27 @@ alone.
 
 ---
 
+## 2026-10-15 — the same review, on the psychedelics section
+
+D24 listed the sci-wiki's *Psychedelics & entactogens* section the way D23
+listed two others: 81 placements, the 34 not made by an exact ChEMBL name or an
+FDA UNII InChIKey each compared with ChEMBL's structure. Two kinds of error D23
+had not met:
+
+- **An abbreviation is a name for two compounds.** PubChem's name service took
+  *MDEA*, the entactogen, to N-methyldiethanolamine, an industrial amine with
+  the same initials. ChEMBL draws MDEA at CHEMBL126279. Corrected by hand.
+- **A racemate's name filed on one enantiomer.** ChEMBL lists *Limonene*,
+  *Limonene, dl-* and *Dipentene* — the last two names of the racemate — among
+  D-LIMONENE's synonyms, so the name landed on the (R)-enantiomer; ChEMBL's flat record, CHEMBL15799, is what a name with no
+  stereochemistry means. Corrected. The reverse also happened: 5-MAPB and MDPV
+  are racemates ChEMBL holds only as single enantiomers, and were refused
+  rather than given one.
+
+Ginkgolide B, LSZ and Ariadne reached two to eight stereoisomers by skeleton,
+and *Grayanotoxin* names a family; all four were refused. Six refusals in all,
+in `considered_and_not_listed`.
+
 ## 2026-10-14 — a list placed by name, entered by identifier
 
 D23 entered the molecules two sections of the sci-wiki list. The list had
