@@ -55,6 +55,8 @@ function stubElement() {
 // under this key, so every caller that hands one catalogue to the viewer hands
 // it both, and one without it is a page whose GtoPdb file did not load.
 export const GTOPDB_FILE = Symbol("gtopdb.data.js");
+// DrugCentral's file (D24), carried the same way.
+export const DRUGCENTRAL_FILE = Symbol("drugcentral.data.js");
 
 export function makeSandbox(data, options = {}) {
   const elements = new Map();
@@ -71,6 +73,7 @@ export function makeSandbox(data, options = {}) {
   const ctx = {
     COHORT_DATA: data,
     ...(data && data[GTOPDB_FILE] ? { COHORT_GTOPDB: data[GTOPDB_FILE] } : {}),
+    ...(data && data[DRUGCENTRAL_FILE] ? { COHORT_DRUGCENTRAL: data[DRUGCENTRAL_FILE] } : {}),
     console,
     URL,
     performance: { now: () => 0 },
@@ -226,7 +229,8 @@ export const MOLECULE_FIELDS = [
   "molecular_formula", "molecular_weight", "atc_level5", "atc_flags",
   "identity_flags", "seed_name", "gap_reason", "exclusion_reason", "smiles",
   "inchikey", "wikipedia_url", "n_indications_chembl", "synonyms", "aliases",
-  "approved_elsewhere", "listings",
+  "approved_elsewhere", "approval_status", "max_phase_checked",
+  "trial_sites", "trial_countries", "withdrawals", "listings",
 ];
 
 export const TARGET_FIELDS = [
@@ -280,6 +284,7 @@ const INTERNED = new Set([
   "conversion_note", "activity_comment", "phase_label", "mesh_heading",
   "seed_name", "note", "description", "gene_symbol", "mechanism_comment",
   "selectivity_comment", "gtp_type", "gtp_action", "selectivity",
+  "trial_sites", "trial_countries",
 ]);
 
 class Interner {
@@ -362,6 +367,12 @@ export function buildData({ molecules = [], targets = [], claims = [],
     const copy = Object.assign({}, m);
     copy.synonyms = (m.synonyms || []).map((s) => strings.intern(s));
     copy.aliases = (m.aliases || []).map((s) => strings.intern(s));
+    // D24: withdrawals as [countries, year, classes] with the two strings
+    // interned, as the exporter writes them; left off when absent.
+    copy.withdrawals = m.withdrawals
+      ? m.withdrawals.map((w) => [strings.intern(w[0]), w[1] || null,
+                                  w[2] ? strings.intern(w[2]) : null])
+      : null;
     // [source, name, slug] per listing (D25), each interned as the export does.
     copy.listings = m.listings
       ? m.listings.map((l) => [l.source, l.name, l.slug].map((x) => strings.intern(x)))
@@ -389,23 +400,40 @@ export function buildData({ molecules = [], targets = [], claims = [],
   // dictionary indices. A fixture that skipped this would be testing a format
   // the exporter never produces.
   const encodedIndications = {};
+  // D23's two optional places follow: the approval basis (interned), and the
+  // unapproved labels as [set id, title, labeler, categories, from, until]
+  // with the three strings interned; both left off when absent, as exported.
+  const opt = (v) => (v === undefined || v === null ? null : strings.intern(v));
   for (const [key, rows] of Object.entries(indications)) {
-    encodedIndications[key] = rows.map((r) => [
-      r[0], strings.intern(r[1]), strings.intern(r[2]), strings.intern(r[3]), r[4],
-      r[5] === undefined || r[5] === null ? null : strings.intern(r[5])]);
+    encodedIndications[key] = rows.map((r) => {
+      const row = [r[0], strings.intern(r[1]), strings.intern(r[2]), strings.intern(r[3]),
+                   r[4], opt(r[5]), opt(r[6]),
+                   r[7] ? r[7].map((l) => [l[0], opt(l[1]), opt(l[2]), opt(l[3]),
+                                           l[4] || null, l[5] || null]) : null,
+                   // D24: the ATC classes ('|'-joined) and an unread label's reason
+                   opt(r[8]), opt(r[9])];
+      while (row.length > 5 && row[row.length - 1] === null) row.pop();
+      return row;
+    });
   }
   // Trial status as the exporter writes it: nct -> [status, why_stopped?] for
   // a row fetched before phases were recorded, or [status, why_stopped,
-  // phases, outcomes, start year?, end year?, planned?] after, where outcomes
-  // is null (no results posted) or [[title, [p, ...]], ...]. Strings interned,
-  // p-values verbatim, years and the planned flags passed through.
+  // phases, outcomes, start year?, end year?, planned?, countries?] after,
+  // where outcomes is null (no results posted) or [[title, [p, ...]], ...].
+  // Strings interned, p-values verbatim, years and the planned flags passed
+  // through; countries ('|'-joined, or null for a record listing no site)
+  // interned at index 7.
   const encodedTrials = {};
   for (const [nct, r] of Object.entries(trial_status)) {
     if (r.length > 2) {
       encodedTrials[nct] = [strings.intern(r[0]), r[1] ? strings.intern(r[1]) : null,
         r[2] ? strings.intern(r[2]) : null,
         r[3] === null ? null : r[3].map((o) => [strings.intern(o[0]), o[1]]),
-        ...r.slice(4)];
+        ...r.slice(4, 7)];
+      if (r.length > 7) {
+        while (encodedTrials[nct].length < 7) encodedTrials[nct].push(null);
+        encodedTrials[nct].push(r[7] ? strings.intern(r[7]) : null);
+      }
     } else {
       encodedTrials[nct] = r[1] ? [strings.intern(r[0]), strings.intern(r[1])]
                                 : [strings.intern(r[0])];
@@ -486,6 +514,14 @@ export function buildGtopdb({ actions = [], claims = [], status = {}, release = 
 // A catalogue carrying its GtoPdb file, as the page loads the two together.
 export function withGtopdbFile(data, gtopdb) {
   data[GTOPDB_FILE] = gtopdb;
+  return data;
+}
+
+// A catalogue carrying drugcentral.data.js (D24): molecule id -> [[agency,
+// year], ...]. `generated` must equal the catalogue's for the page to merge it.
+export function withDrugcentralFile(data, approvals, { release = "v56, 2026-09-02",
+                                                       generated = data.generated } = {}) {
+  data[DRUGCENTRAL_FILE] = { format: "cohort1-drugcentral/1", generated, release, approvals };
   return data;
 }
 

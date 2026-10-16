@@ -44,8 +44,18 @@ CREATE TABLE IF NOT EXISTS molecules (
     pref_name            TEXT,
     molecule_type        TEXT,          -- source category, never used as a filter (D03)
     structure_type       TEXT,          -- 'NONE' is retained and flagged, never invented (D04)
-    max_phase            REAL,          -- molecule-level, across ALL diseases; not the admission test
+    max_phase            REAL,          -- ChEMBL's molecule-level, across ALL diseases; not the admission test
     first_approval       INTEGER,
+    -- D23. NULL where ChEMBL's max_phase stands. 'unapproved_marketing' where
+    -- its 4 rests only on US labels FDA lists as marketed without approval
+    -- (no FDA approval year on any form, and every phase-4 record an unapproved
+    -- one citing no Phase 4 trial); 'no_approval_cited' (D24) where every
+    -- phase-4 record has fallen but some on trials or an unread label rather
+    -- than unapproved labels. max_phase_checked is then the furthest phase the
+    -- registry records for a trial those records cite, NULL for none.
+    -- Elsewhere max_phase_checked equals max_phase.
+    approval_status      TEXT,
+    max_phase_checked    REAL,
     withdrawn_any_family INTEGER NOT NULL DEFAULT 0,
     in_cohort            INTEGER NOT NULL,
     is_seed              INTEGER NOT NULL,
@@ -117,6 +127,42 @@ CREATE TABLE IF NOT EXISTS molecule_listings (
     section          TEXT,               -- the list's section it was read from
     placed_by        TEXT,               -- how the name was placed at the id before review
     PRIMARY KEY (parent_molregno, source, slug)
+);
+
+-- D24: ChEMBL's withdrawal records for every form of a molecule, verbatim from
+-- drug_warning (warning_type 'Withdrawn'), one row per record as ChEMBL files
+-- it - one withdrawal for two reasons is two rows. `countries` is ChEMBL's
+-- '; '-joined text, 'Worldwide' for a worldwide withdrawal. Display only: the
+-- page says where an approval was withdrawn beside it; never a membership
+-- input.
+CREATE TABLE IF NOT EXISTS molecule_withdrawals (
+    parent_molregno INTEGER NOT NULL REFERENCES molecules(parent_molregno),
+    warning_id      INTEGER NOT NULL,
+    molregno        INTEGER NOT NULL,
+    chembl_id       TEXT,
+    countries       TEXT,
+    year            INTEGER,
+    warning_class   TEXT,
+    description     TEXT,
+    PRIMARY KEY (parent_molregno, warning_id)
+);
+
+-- D24: which regulators approved a molecule, from DrugCentral's `approval`
+-- table (scripts/resolve_cohort_drugcentral.py, a backfill), matched by the
+-- ChEMBL IDs DrugCentral files for its structure; a structure reaching two
+-- entries, or an entry reached by two structures, is refused. A fact about
+-- the active ingredient, never about a disease: the page names the regulator
+-- beside an Approved read off a WHO ATC class, and says it may not be for that
+-- disease. Exported to viz/drugcentral.data.js, apart for its licence.
+CREATE TABLE IF NOT EXISTS molecule_approvals (
+    parent_molregno INTEGER NOT NULL REFERENCES molecules(parent_molregno),
+    struct_id       INTEGER NOT NULL,   -- DrugCentral's structure id
+    agency          TEXT NOT NULL,      -- verbatim: FDA, EMA, PMDA, ...
+    approved        TEXT,               -- the approval date, ISO, NULL where unrecorded
+    year            INTEGER,
+    applicant       TEXT,
+    orphan          INTEGER,
+    PRIMARY KEY (parent_molregno, agency)
 );
 
 CREATE TABLE IF NOT EXISTS molecule_synonyms (
@@ -213,10 +259,36 @@ CREATE TABLE IF NOT EXISTS molecule_indications (
     mesh_heading      TEXT,
     efo_id            TEXT,
     efo_term          TEXT,
+    -- The phase this catalogue states and admits on, read through what ChEMBL
+    -- cites for it (D23, scripts/cohort/labels.py). It equals ChEMBL's
+    -- (chembl_max_phase below) except at a phase-4 record nothing cited
+    -- approves: US labels FDA lists as unapproved (D23), trials none of which the
+    -- registry calls Phase 4, or a label that cannot be read for a molecule FDA
+    -- records no approval of (D24). It takes the furthest registry phase of the
+    -- trials it cites (a Phase 4 one labelled "Phase 4 trial", never
+    -- "Approved"), or NULL ("Marketed unapproved", "Approval unconfirmed").
     max_phase_for_ind REAL,
     phase_label       TEXT,
     scope_reasons     TEXT,
     qualifies         INTEGER NOT NULL,   -- 1 when it satisfies the indication route
+    chembl_max_phase  REAL,               -- drug_indication.max_phase_for_ind verbatim
+    -- At a ChEMBL phase-4 record, what stands behind it: regulator / label /
+    -- monograph / unresolved / atc / trial / unsourced (an approval, read off
+    -- that), or unapproved / trial_phase / unconfirmed (not one). NULL below
+    -- phase 4. scripts/cohort/labels.py defines each.
+    approval_basis    TEXT,
+    -- JSON array, only where approval_basis is 'unapproved': each cited
+    -- DailyMed label's set id, title, labeler, marketing categories and dates,
+    -- as config/cohort1_label_status.json records them.
+    unapproved_labels TEXT,
+    -- D24, only where approval_basis is 'atc': the WHO ATC classes the record
+    -- cites, '|' joined, each as 'N05BA (anxiolytics: benzodiazepine
+    -- derivatives)' from ChEMBL's atc_classification.
+    atc_classes       TEXT,
+    -- D24, only where approval_basis is 'unresolved' or 'unconfirmed': why its
+    -- labels could not be read - 'no marketing table' (a label older than FDA's
+    -- structured category) and/or 'not served' (by DailyMed or RxNav).
+    unread_reason     TEXT,
     -- ClinicalTrials.gov NCT ids from ChEMBL's indication_refs, '|' joined, NULL
     -- where ChEMBL registers none. The registry entry is what stands behind a
     -- phase annotation, and without it "Phase 3" is an assertion this page could
@@ -522,7 +594,9 @@ CREATE TABLE IF NOT EXISTS trial_status (
     start_date_type   TEXT,      -- its type: ACTUAL, ESTIMATED, or NULL (the registry typed none before 2017)
     completion_date   TEXT,      -- statusModule.completionDateStruct.date verbatim: the whole study's end
     completion_date_type TEXT,   -- ACTUAL / ESTIMATED / NULL; ESTIMATED is a plan, often one long past
-    schema_version    INTEGER,   -- 3 for a row carrying the dates; 2 for one with phases/primary_outcomes
+    countries         TEXT,      -- distinct contactsLocationsModule.locations[].country, sorted, '|'-joined;
+                                  -- NULL when the record lists no site (a gap in it, not "nowhere")
+    schema_version    INTEGER,   -- 4 for a row carrying countries; 3 for one carrying the dates; 2 for one with phases/primary_outcomes
                                   -- and no dates; NULL/1 for one fetched before any of them existed
     fetched_at        TEXT NOT NULL   -- ISO UTC timestamp of this fetch, for --refresh staleness
 );

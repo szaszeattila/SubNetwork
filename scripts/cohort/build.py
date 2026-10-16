@@ -19,7 +19,8 @@ import json
 import sys
 
 from . import classes as classes_mod
-from . import common, evidence, scope as scope_mod, selection, store, targets as targets_mod
+from . import common, evidence, labels as labels_mod, scope as scope_mod, selection, store
+from . import targets as targets_mod
 from . import validate as validate_mod
 
 EXCLUSION_NOTES = {
@@ -92,9 +93,22 @@ def build(stage_only: bool = False) -> int:
 
     conn = common.chembl()
 
+    # ---- what stands behind each Approved (D23) --------------------------
+    label_pin = sel_policy["pinned_inputs"]["label_status"]["sha256"]
+    label_sha = common.sha256(labels_mod.STATUS_FILE)
+    if label_sha != label_pin:
+        raise common.PolicyError(
+            f"{labels_mod.STATUS_FILE.name} has changed: policy pins {label_pin}, file is "
+            f"{label_sha}. It moves membership (D23); raise the policy version "
+            f"deliberately rather than letting it drift.")
+    label_status = labels_mod.LabelStatus(conn)
+    label_summary = label_status.summary()
+    common.log(f"  label status {label_summary['file']} v{label_summary['version']}: "
+               f"phase-4 records by basis {label_summary['bases']}")
+
     # ---- selection -------------------------------------------------------
     common.log("  selecting the catalogue...")
-    sel = selection.run(conn, sel_policy, descriptors)
+    sel = selection.run(conn, sel_policy, descriptors, label_status)
     members = sel["members"]
     member_to_parent = {f["molregno"]: p
                         for p, m in members.items() for f in m.family}
@@ -231,6 +245,7 @@ def build(stage_only: bool = False) -> int:
         "chembl_path": str(common.CHEMBL_DB),
         "selection_policy": json.dumps(common.policy_fingerprint("cohort1_selection.json")),
         "evidence_policy": json.dumps(common.policy_fingerprint("cohort1_evidence.json")),
+        "label_status": json.dumps(label_summary),
         "mesh_classification": json.dumps({
             "file": str(common.MESH_SCOPE_CSV.relative_to(common.ROOT)),
             "sha256": mesh_sha, "descriptors": len(descriptors)}),

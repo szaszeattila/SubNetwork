@@ -356,8 +356,15 @@
           at all, and two molecules close here are not substitutes for each
           other. It is a place to start looking, not a verdict.</p>
         <p>"Approved" and trial statuses are as ChEMBL and ClinicalTrials.gov
-          recorded them when this page was built. They may be out of date, and
-          they say nothing about whether a drug is right for anyone.</p>
+          recorded them when this page was built, except where ChEMBL's only
+          evidence of an approval is US labels that FDA lists as marketed
+          without approval, or trials none of which the registry calls
+          Phase 4: those read "Marketed unapproved", or the phase of the trials
+          ChEMBL cites. An approval ChEMBL reads off a WHO ATC class names the
+          class, and the regulators DrugCentral records approving the drug
+          where it has any; one ChEMBL records withdrawn says where and when.
+          They may be out of date, and they say nothing about whether a drug is
+          right for anyone.</p>
         <h4>Known limitations</h4>
         <ul>
           <li>The weights in the similarity score are set by argument, not
@@ -394,6 +401,8 @@
           and gtopdb.data.js under the
           <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">ODbL 1.0</a>
           with its contents under
+          <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>,
+          and drugcentral.data.js under
           <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>;
           what comes from the other sources keeps their terms. Each file says
           so in its first lines, and the hosted copy serves the full terms as
@@ -431,6 +440,7 @@
 </div>
 <script src="graph.data.js"></script>
 <script src="gtopdb.data.js"></script>
+<script src="drugcentral.data.js"></script>
 <script>
 /* ---------------------------------------------------------------------------
  * SubNetwork cohort-1 viewer.
@@ -540,7 +550,7 @@ const INTERNED_FIELDS = {
   name: 1, mechanism_of_action: 1, assay_description: 1, conversion_note: 1,
   activity_comment: 1, phase_label: 1, mesh_heading: 1, seed_name: 1, note: 1,
   description: 1, gene_symbol: 1, mechanism_comment: 1, selectivity_comment: 1,
-  gtp_type: 1, gtp_action: 1, selectivity: 1,
+  gtp_type: 1, gtp_action: 1, selectivity: 1, trial_sites: 1, trial_countries: 1,
 };
 
 function decodeTable(rows, fields, strings) {
@@ -625,6 +635,17 @@ const GTOPDB = (GTOPDB_FILE && GTOPDB_FILE.generated === DATA.generated) ? GTOPD
 if (GTOPDB_FILE && GTOPDB !== GTOPDB_FILE) {
   console.warn("gtopdb.data.js was exported with a different graph.data.js (" +
                GTOPDB_FILE.generated + " vs " + DATA.generated + "); GtoPdb left out.");
+}
+// DrugCentral's part (D24): which regulators approved each molecule, in its
+// own file for its own licence (CC BY-SA 4.0), merged under the same rule as
+// GtoPdb's - only into the catalogue it was exported with. Without it the
+// page names no regulator for an ATC-backed Approved and says so.
+const DRUGCENTRAL_FILE = (typeof COHORT_DRUGCENTRAL !== "undefined") ? COHORT_DRUGCENTRAL : null;
+const DRUGCENTRAL = (DRUGCENTRAL_FILE && DRUGCENTRAL_FILE.generated === DATA.generated)
+  ? DRUGCENTRAL_FILE : { release: null, approvals: {} };
+if (DRUGCENTRAL_FILE && DRUGCENTRAL !== DRUGCENTRAL_FILE) {
+  console.warn("drugcentral.data.js was exported with a different graph.data.js (" +
+               DRUGCENTRAL_FILE.generated + " vs " + DATA.generated + "); DrugCentral left out.");
 }
 const GTOPDB_STR = GTOPDB.strings || [];
 const gtopdbClaims = decodeTable(GTOPDB.claims || [], (GTOPDB.fields || {}).claims || [], GTOPDB_STR);
@@ -874,9 +895,21 @@ function moleculeIndications(id) {
       return (i === null || i === undefined) ? "" : (STR[i] === undefined ? "" : STR[i]);
     };
     const trials = s(r[5]);
+    // D23: what stands behind ChEMBL's phase 4, and where that was only US
+    // labels FDA lists as marketed without approval, those labels.
+    const labels = (r[7] || []).map(function (l) {
+      return { set_id: l[0], title: s(l[1]), labeler: s(l[2]),
+               categories: s(l[3]) ? s(l[3]).split("|") : [],
+               from: l[4] || null, until: l[5] || null };
+    });
+    // D24: the WHO ATC classes an `atc` Approved was read off, and why the
+    // label behind an `unresolved` or `unconfirmed` one went unread.
+    const atc = s(r[8]);
     return { mesh_id: r[0], heading: s(r[1]), phase_label: s(r[2]),
              scope_reasons: s(r[3]), qualifies: r[4],
-             trials: trials ? trials.split("|") : [] };
+             trials: trials ? trials.split("|") : [],
+             basis: s(r[6]) || null, unapproved_labels: labels,
+             atc_classes: atc ? atc.split("|") : [], unread_reason: s(r[9]) || null };
   });
 }
 
@@ -1066,8 +1099,16 @@ function classMembers(c) {
 // than derived from the label, because the label is the build's and a sort that
 // re-derives a rank from a string would go silent on a phase this page has not
 // seen. An unknown label sorts last and keeps its own words.
-const PHASE_RANK = { "Approved": 5, "Phase 3": 4, "Phase 2": 3, "Phase 1": 2,
-                     "Early Phase 1": 1 };
+// "Phase 4 trial" and "Marketed unapproved" are D23's: a disease ChEMBL calls
+// Approved on US labels FDA lists as marketed without approval, with a Phase 4
+// trial cited beside them or none. The first is a trial past Phase 3 and not an
+// approval; the second is no clinical phase at all, and sorts below every one.
+// "Approval unconfirmed" is D24's: an Approved resting on trials with no
+// phase in the registry, or on a label that could not be read for a drug FDA
+// records no approval of - no phase either, beside "Marketed unapproved".
+const PHASE_RANK = { "Approved": 5, "Phase 4 trial": 4.5, "Phase 3": 4, "Phase 2": 3,
+                     "Phase 1": 2, "Early Phase 1": 1, "Marketed unapproved": 0.5,
+                     "Approval unconfirmed": 0.5 };
 
 // One disease, at the furthest phase this molecule reached for it.
 //
@@ -1083,7 +1124,10 @@ const PHASE_RANK = { "Approved": 5, "Phase 3": 4, "Phase 2": 3, "Phase 1": 2,
 //
 // So a disease is one row at its highest phase, the trials from every record
 // behind it are pooled, and the number of records is stated rather than being
-// visible only as a repeat.
+// visible only as a repeat. What stands behind an Approved (D23) is read from
+// the records at that phase only, and unapproved US labels are carried only
+// where no record of the disease is an approval, since one that is answers
+// the question they raise.
 function indicationsByDisease(id) {
   const byMesh = new Map();
   for (const i of moleculeIndications(id)) {
@@ -1091,10 +1135,11 @@ function indicationsByDisease(id) {
     if (!seen) {
       byMesh.set(i.mesh_id, { mesh_id: i.mesh_id, heading: i.heading,
                               phase_label: i.phase_label, qualifies: i.qualifies,
-                              n_records: 1, trials: i.trials.slice() });
+                              n_records: 1, trials: i.trials.slice(), records: [i] });
       continue;
     }
     seen.n_records += 1;
+    seen.records.push(i);
     seen.qualifies = seen.qualifies || i.qualifies;
     for (const t of i.trials) if (seen.trials.indexOf(t) < 0) seen.trials.push(t);
     if ((PHASE_RANK[i.phase_label] || 0) > (PHASE_RANK[seen.phase_label] || 0)) {
@@ -1102,6 +1147,31 @@ function indicationsByDisease(id) {
     }
   }
   const out = Array.from(byMesh.values());
+  for (const d of out) {
+    d.bases = [];
+    d.unapproved_labels = [];
+    d.atc_classes = [];
+    d.unread_reasons = [];
+    for (const r of d.records) {
+      if (r.phase_label === d.phase_label && r.basis && d.bases.indexOf(r.basis) < 0) {
+        d.bases.push(r.basis);
+      }
+      if (r.phase_label === d.phase_label) {
+        for (const c of r.atc_classes) if (d.atc_classes.indexOf(c) < 0) d.atc_classes.push(c);
+        for (const u of (r.unread_reason ? r.unread_reason.split("|") : [])) {
+          if (d.unread_reasons.indexOf(u) < 0) d.unread_reasons.push(u);
+        }
+      }
+      if (d.phase_label !== "Approved") {
+        for (const l of r.unapproved_labels) {
+          if (!d.unapproved_labels.some(function (x) { return x.set_id === l.set_id; })) {
+            d.unapproved_labels.push(l);
+          }
+        }
+      }
+    }
+    delete d.records;
+  }
   out.sort(function (a, b) {
     return (PHASE_RANK[b.phase_label] || 0) - (PHASE_RANK[a.phase_label] || 0) ||
            a.heading.localeCompare(b.heading);
@@ -1150,6 +1220,11 @@ const filters = {
   // for them. An eligibility filter like tier and basis: it decides which
   // claims exist for every view, not just for the canvas.
   mechanism: [],
+  // Where a molecule's in-scope Phase 1+ trials had sites: "any" (no
+  // narrowing), "us", "anywhere", "elsewhere" - see trialsAllowed. An
+  // eligibility filter like the four above, but on the molecule: it decides
+  // which molecules' claims exist for every view.
+  trials: "any",
   // The two controls here that are about the *drawing* rather than about which
   // claims are eligible. "show" | "hide" - see catalogueGraph.
   periphery: "show",
@@ -1169,7 +1244,7 @@ function setFilter(key, value) { filters[key] = value; return filters[key]; }
 // two equal.
 function filterDefaults() {
   return { tier: "supported_preliminary", basis: "all", potency: null, mechanism: [],
-           periphery: "show", lineColor: "mechanism", groups: "linked" };
+           trials: "any", periphery: "show", lineColor: "mechanism", groups: "linked" };
 }
 function resetFilters() { applyFilters(filterDefaults()); }
 
@@ -1326,9 +1401,64 @@ function mechanismSummary() {
   return picked.map(mechanismLabel).join(" or ") + " only";
 }
 
+// The molecule's own trial sites, as the export computed them from the trials
+// ChEMBL cites for its in-scope indications (scripts/cohort/export.py,
+// trial_sites): "us", "both", "elsewhere", "unstated" (Phase 1+ trials, none
+// listing a site), or null (no Phase 1+ in-scope trial to place). "anywhere"
+// keeps the unstated ones - they had a trial, the record just says not where.
+const TRIAL_SITES_KEPT = {
+  us: { us: 1, both: 1 },
+  anywhere: { us: 1, both: 1, elsewhere: 1, unstated: 1 },
+  elsewhere: { elsewhere: 1, both: 1 },
+};
+
+// How many catalogue molecules each trial-sites setting keeps, and how many
+// carry a site class at all (`placed`, zero for a payload built without the
+// trial backfill's countries). `only_us` and `only_elsewhere` are the two
+// one-sided halves, for the banner; `none` the molecules with no Phase 1+
+// in-scope trial to place.
+function trialSiteCounts() {
+  const out = { total: 0, placed: 0, us: 0, anywhere: 0, elsewhere: 0,
+                only_us: 0, both: 0, only_elsewhere: 0, unstated: 0, none: 0 };
+  for (const m of moleculeById.values()) {
+    out.total++;
+    const s = m.trial_sites;
+    if (!s) { out.none++; continue; }
+    out.placed++;
+    if (TRIAL_SITES_KEPT.us[s]) out.us++;
+    if (TRIAL_SITES_KEPT.anywhere[s]) out.anywhere++;
+    if (TRIAL_SITES_KEPT.elsewhere[s]) out.elsewhere++;
+    if (s === "us") out.only_us++;
+    else if (s === "both") out.both++;
+    else if (s === "elsewhere") out.only_elsewhere++;
+    else if (s === "unstated") out.unstated++;
+  }
+  return out;
+}
+
+// Whether the page offers the trial-sites control: where any molecule says
+// where its trials ran, or where the filter is already narrowed (by a link),
+// so a narrowed filter can always be put back.
+function trialSitesOffered() {
+  if (filters.trials !== "any") return true;
+  for (const m of moleculeById.values()) if (m.trial_sites) return true;
+  return false;
+}
+
+function moleculeTrialsAllowed(m) {
+  if (filters.trials === "any") return true;
+  const kept = TRIAL_SITES_KEPT[filters.trials];
+  return !!(kept && m && m.trial_sites && kept[m.trial_sites]);
+}
+
+function trialsAllowed(claim) {
+  if (filters.trials === "any") return true;
+  return moleculeTrialsAllowed(lookupMolecule(claim.molecule));
+}
+
 function claimVisible(claim) {
   return tierAllowed(claim) && basisAllowed(claim) && potencyAllowed(claim) &&
-         mechanismAllowed(claim);
+         mechanismAllowed(claim) && trialsAllowed(claim);
 }
 
 // Why a claim is not on screen, in the reader's terms. "Hidden by a filter" is
@@ -1341,6 +1471,7 @@ function hiddenReason(claim) {
   // Two different absences, and the second is the one that must not read as a
   // negative result: this claim carries no curated action at all.
   if (!mechanismAllowed(claim)) return claim.action_type ? "mechanism" : "mechanism_none";
+  if (!trialsAllowed(claim)) return "trials";
   return null;
 }
 
@@ -2410,7 +2541,8 @@ function graphSignature() {
   // drawn and moves nothing in or out of the picture, so a colour change must
   // not cost a rebuild and must not move the layout under the reader.
   return filters.tier + "|" + filters.basis + "|" + String(filters.potency) +
-         "|" + filters.mechanism.slice().sort().join(",") + "|" + filters.periphery +
+         "|" + filters.mechanism.slice().sort().join(",") + "|" + filters.trials +
+         "|" + filters.periphery +
          // groups is in it, unlike lineColor, because the membership lines are
          // springs as well as ink: they change what the layout solves for.
          "|" + filters.groups;
@@ -2424,7 +2556,7 @@ function graphSignature() {
 //
 // It is a *drawing* rule and not an eligibility rule, and the difference is
 // load-bearing. `claimVisible` answers "is this in the picture" and only the
-// four claim filters may change that answer; this one answers "is this drawn".
+// eligibility filters may change that answer; this one answers "is this drawn".
 // So the panel's lists, the similarity ranking, the gap statements and the
 // search all still read the whole catalogue, and nothing becomes unfindable by
 // being undrawn. It is off by default and it states its cost in the banner,
@@ -2914,6 +3046,10 @@ const HELP = {
   potency: "Hide claims weaker than a chosen concentration (lower = stronger " +
            "binding). Claims with no single number to compare are hidden and " +
            "counted separately.",
+  trials: "Keep only molecules with a Phase 1 or later trial for a brain condition, " +
+          "by where its sites were: in the US, anywhere, or outside the US. Read " +
+          "from the trials ChEMBL cites, as ClinicalTrials.gov lists their sites. " +
+          "Molecules in by an ATC code or a label alone have no trial to place.",
   periphery: "Hide targets that only one molecule acts on. They leave the " +
              "picture, not the catalogue: lists, search and similarity still " +
              "include them.",
@@ -3001,7 +3137,12 @@ const HELP = {
             "inspect the observations (individual data rows) behind them.",
   indications: "Neurological and pain conditions this drug is approved or tested " +
                "for, how far each got, and its trials on ClinicalTrials.gov. A " +
-               "condition with no trial link usually rests on the drug label instead.",
+               "condition with no trial link usually rests on the drug label instead. " +
+               "Hover over Approved for what ChEMBL read it from, and where ChEMBL " +
+               "records it withdrawn. Marketed unapproved: every US label ChEMBL cites " +
+               "for it is one FDA lists as sold without its approval. A phase below " +
+               "Approved can also be ChEMBL's Approved resting on trials none of which " +
+               "the registry calls Phase 4.",
   condition_targets: "Targets that two or more of these molecules act on, most " +
                      "shared first. Compare with the catalogue-wide count: a target " +
                      "almost every drug hits says little about this condition.",
@@ -3423,6 +3564,20 @@ function filtersHTML() {
   }
   h += "</div>" + cost("mechanism") + "</div>";
 
+  // Counted in molecules, the thing the control keeps or drops, and offered
+  // only where the payload says where any trial ran: a build without the
+  // trial backfill would otherwise offer three settings that empty the canvas.
+  const sites = trialSiteCounts();
+  if (trialSitesOffered()) {
+    h += '<div class="ctl"><h4>' + helpLabel("Trial sites", "trials") + "</h4><div class=\"row\">";
+    h += btn("trials", "any", "Every molecule (" + sites.total + ")", f.trials === "any");
+    h += btn("trials", "us", "US sites (" + sites.us + ")", f.trials === "us");
+    h += btn("trials", "anywhere", "Anywhere (" + sites.anywhere + ")", f.trials === "anywhere");
+    h += btn("trials", "elsewhere", "Outside the US (" + sites.elsewhere + ")",
+             f.trials === "elsewhere");
+    h += "</div>" + cost("trials") + "</div>";
+  }
+
   h += '<div class="ctl"><h4>' + helpLabel("Canvas", "periphery") + "</h4><div class=\"row\">";
   h += btn("periphery", "show", "Draw every target", f.periphery === "show");
   h += btn("periphery", "hide", "Hide single-molecule targets", f.periphery === "hide");
@@ -3472,9 +3627,11 @@ function dataDates() {
   return {
     built: isoDay(catalogueMeta().built_at),
     trialsFrom: isoDay(trials[0]), trialsTo: isoDay(trials[1]),
+    labelsTo: isoDay((metaRecord("label_status").labels_read || {}).last),
     mesh: mesh ? mesh[1] : "",
     uniprot: String(metaRecord("target_orthologues").reference_release || ""),
     gtopdb: GTOPDB.release ? String(GTOPDB.release) : "",
+    drugcentral: DRUGCENTRAL.release ? String(DRUGCENTRAL.release) : "",
   };
 }
 
@@ -3497,6 +3654,7 @@ function aboutVersionText() {
   const d = dataDates();
   const also = [];
   if (d.gtopdb) also.push("GtoPdb " + d.gtopdb);
+  if (d.drugcentral) also.push("DrugCentral " + d.drugcentral);
   if (d.mesh) also.push("MeSH " + d.mesh);
   if (d.uniprot) also.push("UniProt " + d.uniprot);
   return line + (also.length ? " Also " + also.join(", ") + "." : "") +
@@ -3541,6 +3699,15 @@ function aboutSourcesHTML() {
     items.push("GtoPdb's file (gtopdb.data.js) is from a different export than the " +
       "catalogue, so its curated actions are left out of this page.");
   }
+  if (DRUGCENTRAL.release) {
+    items.push(link("https://drugcentral.org/", "DrugCentral") + " " +
+      esc(String(DRUGCENTRAL.release)) + ": which regulators (FDA, EMA, PMDA and others) " +
+      "approved a drug, named where ChEMBL's approval rests on a WHO ATC class. " +
+      licenceLink("CC BY-SA 4.0") + "; kept in its own data file.");
+  } else if (typeof COHORT_DRUGCENTRAL !== "undefined") {
+    items.push("DrugCentral's file (drugcentral.data.js) is from a different export than " +
+      "the catalogue, so no regulator is named on this page.");
+  }
   items.push(
     link("https://www.nlm.nih.gov/mesh/", "MeSH") + (d.mesh ? " " + esc(d.mesh) : "") +
       ", courtesy of the U.S. National Library of Medicine, reached through the " +
@@ -3548,10 +3715,18 @@ function aboutSourcesHTML() {
       "NLM, which does not endorse this project; this is not the most current MeSH. " +
       licenceLink("NLM's terms") + ".",
     link("https://clinicaltrials.gov/", "ClinicalTrials.gov") +
-      ", courtesy of the U.S. National Library of Medicine: trial status" +
+      ", courtesy of the U.S. National Library of Medicine: trial status and site countries" +
       (d.trialsTo ? ", fetched " + esc(trialsFetchedText(d)) : "") +
       ". The NLM does not endorse this project, and a status may have changed since. " +
       licenceLink("NLM's terms") + ".",
+    link("https://dailymed.nlm.nih.gov/", "DailyMed") +
+      ", courtesy of the U.S. National Library of Medicine: the FDA marketing category " +
+      "of each US label ChEMBL cites for an approval" +
+      (d.labelsTo ? ", read " + esc(d.labelsTo) : "") +
+      ", so a label FDA lists as unapproved is not shown as an approval; and " +
+      link("https://lhncbc.nlm.nih.gov/RxNav/", "RxNav") + " by the same label id where " +
+      "DailyMed no longer serves it. The NLM does " +
+      "not endorse this project. " + licenceLink("NLM's terms") + ".",
     link("https://www.uniprot.org/", "UniProt") + (d.uniprot ? " " + esc(d.uniprot) : "") +
       ": protein sequences, to match a protein across species. " +
       licenceLink("CC BY 4.0") + ".",
@@ -3632,12 +3807,19 @@ function viewOptionsSettings() {
                 f.basis === "human_direct" ? "direct human" : "including broader assignment",
                 f.potency === null ? "no potency cutoff" : "potency ≤ " + f.potency + " µM",
                 mechanismSummary(),
+                // Named only where the control is offered (see filtersHTML).
+                trialSitesOffered()
+                  ? (f.trials === "us" ? "trials at US sites"
+                     : f.trials === "anywhere" ? "trials anywhere"
+                     : f.trials === "elsewhere" ? "trials outside the US"
+                     : "every molecule")
+                  : "",
                 f.periphery === "hide" ? "single-molecule targets hidden"
                                        : "every target drawn",
                 f.groups === "linked" ? "protein groups linked" : "protein groups separate",
                 f.lineColor === "mechanism" ? "lines coloured by mechanism"
                                             : "lines coloured by evidence"];
-  return bits.join(" · ");
+  return bits.filter(Boolean).join(" · ");
 }
 
 // What a filter is doing, counted from the loaded data, and returned against
@@ -3740,6 +3922,27 @@ function filterBanners() {
       (other + none ? isAre(other + none) + "hidden. " : "") +
       "An absent annotation is ChEMBL not having curated a mechanism, never a " +
       "finding that the molecule does not act this way.");
+  }
+  if (f.trials !== "any") {
+    // Counted in molecules, and the hidden ones split by why, because "no
+    // trial abroad" and "no trial ChEMBL cites at all" are different facts: an
+    // ATC N member or a label-based approval has no trial to place anywhere.
+    const s = trialSiteCounts();
+    const where = f.trials === "us" ? "a site in the US"
+                : f.trials === "elsewhere" ? "a site outside the US"
+                : "a site anywhere, or with no site listed";
+    const kept = s[f.trials];
+    const noTrial = s.none;
+    const otherSide = f.trials === "us" ? s.only_elsewhere + s.unstated
+                    : f.trials === "elsewhere" ? s.only_us + s.unstated : 0;
+    push("trials", "Showing molecules with a <b>Phase 1 or later trial for a brain " +
+         "condition</b> at " + where + ": " + kept + " of " + s.total + ". " +
+         plural(noTrial, "molecule") + " with no such trial ChEMBL cites " +
+         (noTrial === 1 ? "is" : "are") + " hidden" +
+         (otherSide ? ", and " + plural(otherSide, "molecule") + " whose trials " +
+          (f.trials === "us" ? "list no US site" : "list no site outside the US") : "") +
+         ". Sites are ClinicalTrials.gov's for the trials ChEMBL cites; a trial " +
+         "registered only elsewhere is not among them.");
   }
   if (f.lineColor === "mechanism") {
     const g = catalogueGraph();
@@ -4217,11 +4420,176 @@ function foldedSection(key, heading, body, anchor) {
 // least one. The link is built from the NCT id rather than stored, which is
 // invariant 15: an identifier resolves to exactly one registry record, and
 // nothing here searches for a study by its name.
-function indicationRowsHTML(rows) {
+// What ChEMBL read an Approved off (D23, approval_basis), worded for the hover
+// on the phase. Every one of these is an approval as far as anything cited
+// says; the words say how direct that is, from a regulator's own document to a
+// post-marketing trial.
+//
+// D24 made three of them say more. A trial is now one the registry calls
+// Phase 4, so "Phase 4 trial" is true where it was an assumption. A WHO ATC
+// class is a classification by use and not a regulator, so it is named as the
+// class, with the regulators DrugCentral records approving the drug where it
+// has any (a molecule-level fact, said as one), and otherwise with "no
+// regulator's record is cited" rather than reading as anyone's approval. An
+// unread label says why it went unread, beside FDA's approval year that keeps
+// it standing.
+const APPROVAL_BASIS_WORDS = {
+  regulator: "an FDA or EMA approval document",
+  label: "a US drug label FDA approved",
+  monograph: "a US label sold under an FDA over-the-counter monograph",
+  unresolved: "a US drug label whose marketing category could not be read",
+  atc: "the WHO ATC class the drug is filed in",
+  trial: "a trial the registry records as Phase 4 (post-marketing)",
+  unsourced: "no reference ChEMBL gives",
+};
+const UNREAD_WORDS = {
+  "no marketing table": "a US drug label older than FDA's marketing categories, " +
+                        "which states none",
+  "not served": "a US drug label neither DailyMed nor RxNav still serves",
+};
+const DAILYMED_URL = "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=";
+
+// The regulators DrugCentral records approving a molecule, earliest first, as
+// "EMA (1998), PMDA (2004)"; empty without its file (D24).
+function regulatorApprovals(mol) {
+  return (mol && (DRUGCENTRAL.approvals || {})[String(mol.id)]) || [];
+}
+
+function regulatorsText(list) {
+  return list.map(function (a) { return a[0] + (a[1] ? " (" + a[1] + ")" : ""); }).join(", ");
+}
+
+function approvalBasisWords(basis, d, mol) {
+  if (basis === "atc") {
+    const classes = (d && d.atc_classes) || [];
+    const regs = regulatorApprovals(mol);
+    return (classes.length ? "classified by WHO ATC in " + classes.join(" and ")
+                           : APPROVAL_BASIS_WORDS.atc) + "; " +
+      (regs.length ? "DrugCentral records the drug approved by " + regulatorsText(regs) +
+                     ", not necessarily for this disease"
+                   : "no regulator's record is cited");
+  }
+  if (basis === "unresolved") {
+    const why = ((d && d.unread_reasons) || []).map(function (u) { return UNREAD_WORDS[u] || u; });
+    return (why.length ? why.join(" and ") : APPROVAL_BASIS_WORDS.unresolved) +
+      (mol && mol.first_approval ? "; FDA records the drug approved in " + mol.first_approval
+                                 : "");
+  }
+  return APPROVAL_BASIS_WORDS[basis] || basis;
+}
+
+function approvalBasisTitle(bases, d, mol) {
+  const words = (bases || []).map(function (b) { return approvalBasisWords(b, d, mol); });
+  return words.length ? "ChEMBL's source: " + words.join("; and ") : "";
+}
+
+// Where ChEMBL records an approval withdrawn (D24, drug_warning): "withdrawn
+// worldwide (1984)" where any record says Worldwide, the user's call - a
+// worldwide withdrawal is said as one, not as a list of markets - and
+// otherwise the markets and years, "withdrawn in France, 1990". More than two
+// events are counted, every one on hover with ChEMBL's reasons. Null where
+// ChEMBL records none.
+const WITHDRAWALS_SHOWN = 2;
+
+function withdrawalsOf(mol) {
+  return ((mol && mol.withdrawals) || []).map(function (w) {
+    const s = function (i) { return (i === null || i === undefined) ? "" : (STR[i] || ""); };
+    return { countries: s(w[0]), year: w[1] || null,
+             classes: s(w[2]) ? s(w[2]).split("|") : [] };
+  });
+}
+
+function countryList(text) {
+  const c = String(text || "").split(/;\s*/).filter(Boolean);
+  return c.length <= 1 ? c.join("") : c.slice(0, -1).join(", ") + " and " + c[c.length - 1];
+}
+
+function withdrawalNote(mol) {
+  const events = withdrawalsOf(mol);
+  if (!events.length) return null;
+  const title = "ChEMBL records it withdrawn: " + events.map(function (e) {
+    return (e.countries === "Worldwide" ? "worldwide" : countryList(e.countries)) +
+      (e.year ? ", " + e.year : "") + (e.classes.length ? " (" + e.classes.join(", ") + ")" : "");
+  }).join("; ");
+  const world = events.filter(function (e) { return e.countries === "Worldwide"; });
+  if (world.length) {
+    const year = world.map(function (e) { return e.year; }).filter(Boolean).sort()[0];
+    return { worldwide: true, text: "withdrawn worldwide" + (year ? " (" + year + ")" : ""),
+             title: title };
+  }
+  if (events.length <= WITHDRAWALS_SHOWN) {
+    return { worldwide: false, title: title, text: "withdrawn in " + events.map(function (e) {
+      return countryList(e.countries) + (e.year ? ", " + e.year : "");
+    }).join("; in ") };
+  }
+  const years = events.map(function (e) { return e.year; }).filter(Boolean).sort();
+  return { worldwide: false, title: title,
+           text: "withdrawn in " + events.length + " markets" +
+                 (years.length ? ", " + years[0] + (years[years.length - 1] !== years[0]
+                                                    ? "–" + years[years.length - 1] : "") : "") };
+}
+
+// "Approved, withdrawn worldwide (1984)" or "Approved; withdrawn in France,
+// 1990": the phase as a reader sees it on an Approved row of a withdrawn drug.
+function approvedLabelText(mol) {
+  const w = withdrawalNote(mol);
+  if (!w) return "Approved";
+  return "Approved" + (w.worldwide ? ", " : "; ") + w.text;
+}
+
+// A ChEMBL Approved this page does not state (D24), said in ChEMBL's terms and
+// beside the phase the row now reads: one resting on trials none of which the
+// registry calls Phase 4, or on a label that could not be read for a drug FDA
+// records no approval of.
+function fallenApprovalHTML(bases) {
+  const notes = [];
+  if (bases.indexOf("trial_phase") >= 0) {
+    notes.push("ChEMBL lists this as approved, on trials alone, none of which the " +
+               "registry records as Phase 4.");
+  }
+  if (bases.indexOf("unconfirmed") >= 0) {
+    notes.push("ChEMBL lists this as approved, on a US label that could not be read, " +
+               "and FDA records no approval of the drug.");
+  }
+  return notes.length ? '<div class="small">' + esc(notes.join(" ")) + "</div>" : "";
+}
+
+// The US labels a ChEMBL Approved rested on where FDA lists every one as
+// marketed without its approval (D23). Said as what ChEMBL cites, never as
+// "never approved": another product, one ChEMBL does not cite, could be.
+function unapprovedLabelsHTML(labels) {
+  if (!labels.length) return "";
+  const years = function (d) { return d ? String(d).slice(-4) : null; };
+  const from = labels.map(function (l) { return years(l.from); }).filter(Boolean).sort();
+  const open = labels.some(function (l) { return !l.until; });
+  const until = labels.map(function (l) { return years(l.until); }).filter(Boolean).sort();
+  const span = !from.length ? "" : open ? ", sold since " + from[0]
+    : ", sold " + from[0] + (until[until.length - 1] !== from[0]
+                             ? "–" + until[until.length - 1] : "");
+  const n = labels.length;
+  return '<div class="small">ChEMBL lists this as approved, on ' +
+    (n === 1 ? "one US label" : n + " US labels") + " that FDA lists as marketed " +
+    "without its approval" + esc(span) + ": " +
+    labels.map(function (l) {
+      return link(DAILYMED_URL + encodeURIComponent(l.set_id), l.title || l.set_id) +
+        (l.labeler ? ' <span class="muted">(' + esc(l.labeler) + ")</span>" : "");
+    }).join(", ") + "</div>";
+}
+
+function indicationRowsHTML(rows, mol) {
+  const withdrawn = withdrawalNote(mol);
   return rows.map(function (i) {
+    const approved = i.phase_label === "Approved";
+    const basis = approved ? approvalBasisTitle(i.bases, i, mol) : "";
+    const title = [basis, approved && withdrawn ? withdrawn.title : ""].filter(Boolean)
+      .join(". ");
     let h = '<div class="ind"><a href="#" data-select="condition" data-id="' +
       esc(i.mesh_id) + '">' + esc(i.heading) + "</a>" +
-      (i.phase_label ? ' <span class="muted">' + esc(i.phase_label) + "</span>" : "");
+      (i.phase_label ? ' <span class="muted"' + (title ? ' title="' + esc(title) + '"' : "") +
+                       ">" + esc(approved ? approvedLabelText(mol) : i.phase_label) +
+                       "</span>" : "");
+    h += unapprovedLabelsHTML(i.unapproved_labels || []);
+    if (!approved) h += fallenApprovalHTML(i.bases || []);
     const notes = [];
     // Stated rather than left visible only as a repeated disease name, the way
     // a curated claim states how many records its references came from.
@@ -4282,11 +4650,13 @@ const TRIAL_STATUS_WORDS = {
 };
 
 // Export row: [status, why_stopped, phases, primary outcomes, start year,
-// end year, planned], strings interned, trailing fields omitted when empty.
-// Outcomes are [[title, [p, ...]], ...] - the trial's primary outcomes only,
-// with the p-values the sponsor reported for them, verbatim. `planned` flags
-// which of the two years the registry gives only as an estimate (1 start,
-// 2 end).
+// end year, planned, countries], strings interned, trailing fields omitted
+// when empty. Outcomes are [[title, [p, ...]], ...] - the trial's primary
+// outcomes only, with the p-values the sponsor reported for them, verbatim.
+// `planned` flags which of the two years the registry gives only as an
+// estimate (1 start, 2 end). Countries are where it lists a site,
+// '|'-joined: null there is a record listing none, and a row too short to
+// reach it was fetched before sites were asked for.
 function trialStatus(nct) {
   const r = (DATA.trial_status || {})[nct];
   if (!r) return null;
@@ -4301,7 +4671,29 @@ function trialStatus(nct) {
     }),
     start: r[4] || null, end: r[5] || null,
     startPlanned: !!(r[6] & 1), endPlanned: !!(r[6] & 2),
+    countries: r.length > 7 ? (s(r[7]) ? s(r[7]).split("|") : []) : undefined,
   };
+}
+
+// Where a trial had sites, beside its id (2026-10-15, at the user's request:
+// trimipramine's indications said its trials ran in Germany, and not which
+// one). The US comes first, since it is the line the trial-sites filter
+// draws; past three the rest are counted and the whole list is the hover. A
+// record listing no site says so, and one fetched before sites were asked for
+// says nothing.
+const TRIAL_SITES_SHOWN = 3;
+const HOME_COUNTRY = "United States";   // the registry's name, as export.py reads it
+
+function trialSitesHTML(t) {
+  if (!t || !t.countries) return "";
+  if (!t.countries.length) return ' <span class="muted">(no sites listed)</span>';
+  const all = t.countries.filter(function (c) { return c === HOME_COUNTRY; })
+    .concat(t.countries.filter(function (c) { return c !== HOME_COUNTRY; }));
+  let text = all.slice(0, TRIAL_SITES_SHOWN).join(", ");
+  if (all.length > TRIAL_SITES_SHOWN) text += " +" + (all.length - TRIAL_SITES_SHOWN) + " more";
+  const hover = all.length > TRIAL_SITES_SHOWN
+    ? ' title="' + esc(all.length + " countries: " + all.join(", ")) + '"' : "";
+  return ' <span class="trial-sites"' + hover + ">(" + esc(text) + ")</span>";
 }
 
 // When a trial ran, in years (2026-09-28, at the user's request): a phase 2
@@ -4417,7 +4809,8 @@ function pText(p) {
 function trialLineHTML(nct) {
   const t = trialStatus(nct);
   const meta = [trialPhaseLabel(t), trialYears(t)].filter(Boolean).join(", ");
-  return trialLink(nct) + (meta ? ' <span class="muted">' + esc(meta) + "</span>" : "") +
+  return trialLink(nct) + trialSitesHTML(t) +
+    (meta ? ' <span class="muted">' + esc(meta) + "</span>" : "") +
     " " + trialStatusHTML(nct) + trialOutcomeHTML(nct, t);
 }
 
@@ -4484,8 +4877,26 @@ function trialTally(ncts) {
 function developmentStatus(mol) {
   const p = mol.max_phase;
   if (p === null || p === undefined) return "not recorded by ChEMBL";
+  // D23: ChEMBL's approval rests only on US labels FDA lists as marketed
+  // without approval, and FDA records no approval year for any form.
+  if (mol.approval_status === "unapproved_marketing") {
+    const c = mol.max_phase_checked;
+    const reached = { 3: "phase 3", 2: "phase 2", 1: "phase 1", 0.5: "early phase 1" }[c];
+    return "sold in the US without FDA approval; ChEMBL's approval rests only on " +
+           "those labels" + (reached ? ", and its trials reached " + reached : "");
+  }
+  // D24: every approval ChEMBL records for it has fallen, some on trials the
+  // registry does not call Phase 4 or on an unread label.
+  if (mol.approval_status === "no_approval_cited") {
+    const c = mol.max_phase_checked;
+    const reached = { 3: "phase 3", 2: "phase 2", 1: "phase 1", 0.5: "early phase 1" }[c];
+    return "ChEMBL records it as approved, but nothing it cites is an approval" +
+           (reached ? "; its trials reached " + reached : "");
+  }
   if (p === 4) {
-    return "approved" + (mol.first_approval ? ", first in " + mol.first_approval : "");
+    const w = withdrawalNote(mol);
+    return "approved" + (mol.first_approval ? ", first in " + mol.first_approval : "") +
+      (w ? (w.worldwide ? ", " : "; ") + w.text : "");
   }
   if (p === 3) return "reached phase 3, not approved for any disease";
   if (p === 2) return "reached phase 2, not approved for any disease";
@@ -4509,7 +4920,7 @@ const APPROVED_ELSEWHERE_SHOWN = 3;
 
 function developmentHTML(mol) {
   const text = developmentStatus(mol);
-  if (mol.max_phase !== 4) return esc(text);
+  if (mol.max_phase !== 4 || mol.approval_status) return esc(text);
   const listed = indicationsByDisease(mol.id).some(function (i) {
     return i.phase_label === "Approved";
   });
@@ -4548,6 +4959,23 @@ function developmentHTML(mol) {
 // 1,078 approved diseases here - because what ChEMBL cites there is a product
 // label rather than a trial, so the section says so instead of letting a
 // missing link read as a missing trial.
+// Where this molecule's Phase 1 or later trials for these conditions had
+// sites, as the trial-sites filter reads it, or "" where there is none to
+// place. The countries outside the US are named, up to six, so "outside the
+// US" can be checked against the trials listed below it.
+function trialSitesSentence(mol) {
+  const s = mol && mol.trial_sites;
+  if (!s) return "";
+  if (s === "unstated") return "Its Phase 1 or later trials list no sites.";
+  const abroad = mol.trial_countries ? String(mol.trial_countries).split("|") : [];
+  const named = abroad.slice(0, 6).map(esc).join(", ") +
+    (abroad.length > 6 ? " and " + (abroad.length - 6) + " more" : "");
+  if (s === "us") return "Its Phase 1 or later trials had sites in the US only.";
+  if (s === "elsewhere") return "Its Phase 1 or later trials had sites outside the US only: " +
+    named + ".";
+  return "Its Phase 1 or later trials had sites in the US and elsewhere: " + named + ".";
+}
+
 function indicationsHTML(mol) {
   const rows = indicationsByDisease(mol.id);
   if (!rows.length) return "";
@@ -4566,10 +4994,12 @@ function indicationsHTML(mol) {
     note += " Phase is the furthest any trial reached, and completed means the " +
       "trial finished, not that it worked.";
   }
+  const sites = trialSitesSentence(mol);
+  if (sites) note += " " + sites;
 
   return foldedSection("indications",
     helpLabel("Indications", "indications") + " (" + rows.length + ")",
-    '<div class="small muted">' + note + "</div>" + indicationRowsHTML(rows));
+    '<div class="small muted">' + note + "</div>" + indicationRowsHTML(rows, mol));
 }
 
 // A molecule's classes, as rows of its identity table: the MeSH actions and
@@ -6285,9 +6715,11 @@ function showCondition(c) {
     let body = "";
     for (const r of rows) {
       const n = visibleClaimsFor(r.molecule.id).length;
+      const w = phase === "Approved" ? withdrawalNote(r.molecule) : null;
       body += '<div class="row-item" data-select="molecule" data-id="' +
         esc(String(r.molecule.id)) + '">' + esc(r.molecule.name) +
         '<div class="small muted">' +
+        (w ? '<span title="' + esc(w.title) + '">' + esc(w.text) + "</span> · " : "") +
         (r.trials.length ? esc(trialSummary(r.trials)) : "no linked trial") +
         " · " + (n ? plural(n, "visible claim") : "no claim under these filters") +
         "</div></div>";
@@ -6867,7 +7299,7 @@ function syncLabels() {
 // is not part of the picture, and declining to draw it changes no pixel; this
 // is vis's own node rule applied to the other half of the canvas. It is not a
 // filter and must never be read as one - `claimVisible` still answers what is
-// in the picture and only the four claim filters may change that answer, the
+// in the picture and only the eligibility filters may change that answer, the
 // canvas control still answers what is drawn, and this answers neither. It
 // answers "is this on screen", which is a question about the window rather than
 // about the data, and the panel lists, the ranking, the gap statements and
@@ -8948,7 +9380,7 @@ function clearSelection() {
 //   #class=mesh_pa:D018377          a class, by the key its panel is opened by
 //
 //   &tier=supported  &basis=human_direct  &potency=10  &mech=AGONIST,PARTIAL%20AGONIST
-//   &canvas=hide  &groups=separate  &color=evidence
+//   &trials=elsewhere  &canvas=hide  &groups=separate  &color=evidence
 //
 // A filter is written only where it differs from its default, so a link to the
 // page as it opens is still just #m=CHEMBL113 - and a link names the whole
@@ -8970,6 +9402,7 @@ const LINK_FILTERS = [
   ["tier", "tier", ["supported", "supported_preliminary"]],
   ["basis", "basis", ["human_direct", "all"]],
   ["potency", "potency", [1, 10, 100, 300]],
+  ["trials", "trials", ["any", "us", "anywhere", "elsewhere"]],
   ["periphery", "canvas", ["show", "hide"]],
   ["groups", "groups", ["linked", "separate"]],
   ["lineColor", "color", ["evidence", "mechanism"]],

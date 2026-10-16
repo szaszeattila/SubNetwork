@@ -5984,6 +5984,83 @@ describe("an approved molecule says what it is approved for when the list cannot
   });
 });
 
+describe("an Approved resting only on unapproved US labels is not one (D23)", () => {
+  // Isometheptene was Approved for migraine on five DailyMed labels, every one
+  // marketed as UNAPPROVED DRUG OTHER; FDA never approved it.
+  const LABELS = [
+    ["0844-set", "Nodolor Capsules", "Macoven Pharmaceuticals", "UNAPPROVED DRUG OTHER",
+     "06/28/2011", "12/20/2017"],
+    ["7752-set", "Isometheptene Mucate/Dichloralphenazone/Acetaminophen Capsules",
+     "ECI <Pharmaceuticals>", "UNAPPROVED DRUG OTHER", "02/15/2011", "03/31/2018"],
+  ];
+  function viewer(over, rows) {
+    return loadViewer(buildData({
+      molecules: [molecule(Object.assign({ id: 1, name: "ISOMETHEPTENE", max_phase: 4 }, over))],
+      indications: { 1: rows },
+    }));
+  }
+
+  test("the disease reads Marketed unapproved and names and links the labels", () => {
+    const v = viewer({}, [["D1", "Migraine Disorders", "Marketed unapproved", "core", 0,
+                           null, "unapproved", LABELS]]);
+    const h = v.indicationsHTML(v.lookupMolecule(1));
+    assert.match(h, /Migraine Disorders<\/a> <span class="muted">Marketed unapproved<\/span>/);
+    assert.match(h, /ChEMBL lists this as approved, on 2 US labels that FDA lists as marketed without its approval, sold 2011–2018/);
+    assert.match(h, /href="https:\/\/dailymed\.nlm\.nih\.gov\/dailymed\/drugInfo\.cfm\?setid=0844-set"[^>]*>Nodolor Capsules<\/a>/);
+    assert.match(h, /\(ECI &lt;Pharmaceuticals&gt;\)/, "a labeler is escaped (invariant 11)");
+  });
+
+  test("a label still on sale is said so, not given an end", () => {
+    const open = [["s", "T", "L", "UNAPPROVED DRUG OTHER", "01/01/1973", null]];
+    const v = viewer({}, [["D1", "Myasthenia Gravis", "Marketed unapproved", "core", 0,
+                           null, "unapproved", open]]);
+    assert.match(v.indicationsHTML(v.lookupMolecule(1)), /on one US label .*, sold since 1973:/);
+  });
+
+  test("a disease another record approves carries no label note", () => {
+    const v = viewer({}, [["D1", "Pain", "Approved", "core", 1, null, "regulator"],
+                          ["D1", "Pain", "Marketed unapproved", "core", 0, null,
+                           "unapproved", LABELS]]);
+    const h = v.indicationsHTML(v.lookupMolecule(1));
+    assert.match(h, /title="ChEMBL&#39;s source: an FDA or EMA approval document">Approved/);
+    assert.ok(!/marketed without its approval/.test(h));
+  });
+
+  test("an unapproved record's cited trial sets its phase, and it still says why", () => {
+    const v = viewer({}, [["D1", "Chronic Pain", "Phase 2", "core", 1, "NCT01",
+                           "unapproved", LABELS]]);
+    const h = v.indicationsHTML(v.lookupMolecule(1));
+    assert.match(h, /<span class="muted">Phase 2<\/span>/);
+    assert.match(h, /marketed without its approval/);
+  });
+
+  test("Phase 4 trial sorts between Approved and Phase 3, Marketed unapproved below every phase", () => {
+    const v = viewer({}, [["D1", "A", "Early Phase 1", "core", 0],
+                          ["D2", "B", "Marketed unapproved", "core", 0, null, "unapproved", LABELS],
+                          ["D3", "C", "Phase 3", "core", 1],
+                          ["D4", "D", "Phase 4 trial", "core", 1, null, "unapproved", LABELS]]);
+    assert.deepEqual(v.indicationsByDisease(1).map((i) => i.phase_label),
+                     ["Phase 4 trial", "Phase 3", "Early Phase 1", "Marketed unapproved"]);
+  });
+
+  test("an approval read off a trial or an ATC class says so on hover", () => {
+    const v = viewer({}, [["D1", "Narcolepsy", "Approved", "core", 1, "NCT9", "trial"],
+                          ["D2", "Pain", "Approved", "core", 1, null, "atc"]]);
+    const h = v.indicationsHTML(v.lookupMolecule(1));
+    assert.match(h, /ChEMBL&#39;s source: a trial the registry records as Phase 4 \(post-marketing\)/);
+    assert.match(h, /ChEMBL&#39;s source: the WHO ATC class the drug is filed in; no regulator&#39;s record is cited/);
+  });
+
+  test("a molecule whose only approval was such labels is not called approved", () => {
+    const v = viewer({ approval_status: "unapproved_marketing", max_phase_checked: 2 },
+                     [["D1", "Migraine Disorders", "Phase 2", "core", 1, "NCT1", "unapproved",
+                       LABELS]]);
+    const h = v.showMolecule(v.lookupMolecule(1));
+    assert.match(h, /sold in the US without FDA approval; ChEMBL&#39;s approval rests only on those labels, and its trials reached phase 2/);
+    assert.ok(!/records no condition it is approved for|not listed here/.test(h));
+  });
+});
+
 describe("the columns of Why this score explain themselves", () => {
   test("each header carries a hover explanation, anchored to the table", () => {
     const v = loadViewer(buildData({

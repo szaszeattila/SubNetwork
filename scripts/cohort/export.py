@@ -4,6 +4,8 @@
     viz/gtopdb.data.js      everything GtoPdb contributes (COHORT_GTOPDB): its
                             actions, its `gtopdb`-role claims, and the entry
                             statuses those claims change
+    viz/drugcentral.data.js which regulators approved each molecule, from
+                            DrugCentral (COHORT_DRUGCENTRAL, D24)
     viz/evidence/<id>.js    one molecule's observation rows, studies, curated
                             mechanism detail and retained non-drawable claims,
                             loaded on demand
@@ -64,7 +66,8 @@ MOLECULE_FIELDS = [
     "molecular_formula", "molecular_weight", "atc_level5", "atc_flags",
     "identity_flags", "seed_name", "gap_reason", "exclusion_reason", "smiles",
     "inchikey", "wikipedia_url", "n_indications_chembl", "synonyms", "aliases",
-    "approved_elsewhere", "listings",
+    "approved_elsewhere", "approval_status", "max_phase_checked",
+    "trial_sites", "trial_countries", "withdrawals", "listings",
 ]
 
 # The public lists a molecule was entered from (D25), by the selection policy's
@@ -211,6 +214,13 @@ GTOPDB_NOTICE = (
 )
 GTOPDB_LICENCE = " ".join(GTOPDB_NOTICE)
 GTOPDB_ROLE = "gtopdb"
+DRUGCENTRAL_NOTICE = (
+    "Contains information from DrugCentral (drugcentral.org), under CC BY-SA 4.0,",
+    "https://creativecommons.org/licenses/by-sa/4.0/ - SubNetwork, by Attila Szabo,",
+    "adapted it: regulators' approvals matched to ChEMBL's molecules by ChEMBL ID.",
+    "This adaptation is licensed under CC BY-SA 4.0.",
+)
+DRUGCENTRAL_LICENCE = " ".join(DRUGCENTRAL_NOTICE)
 
 INTERNED = {
     "molecule_type", "structure_type", "admission_reason", "scope_reasons",
@@ -224,6 +234,7 @@ INTERNED = {
     "conversion_note", "activity_comment", "phase_label", "mesh_heading",
     "seed_name", "note", "description", "gene_symbol", "mechanism_comment",
     "selectivity_comment", "gtp_type", "gtp_action", "selectivity",
+    "trial_sites", "trial_countries",
 }
 
 # The class sources the page offers: USAN/INN name stems, the MeSH
@@ -264,6 +275,102 @@ def _trial_years(r):
     while out and out[-1] is None:
         out.pop()
     return out
+
+
+# Where one trial had sites (schema version 4), printed beside its NCT id
+# (2026-10-15, at the user's request: trimipramine's indications said Germany
+# and not which trial). It travels after the years, at a fixed index, so the
+# fields before it are padded rather than dropped; a null there is the
+# registry listing no site, and a row too short to reach it was never asked.
+TRIAL_COUNTRIES_INDEX = 7
+
+
+def _with_trial_countries(row, countries, strings):
+    """row, padded to TRIAL_COUNTRIES_INDEX, with the trial's '|'-joined site
+    countries appended interned, or None where the registry lists none."""
+    return (row + [None] * (TRIAL_COUNTRIES_INDEX - len(row)) +
+            [strings.intern(countries) if countries else None])
+
+
+# Where a molecule's in-scope trials ran, for the page's trial-sites filter.
+# A trial counts only where the registry's own phase for it is Phase 1 or
+# later - the floor D21 sets for an indication, read here off the trial,
+# because an indication's phase can come from a US Phase 3 while the trial
+# abroad was Early Phase 1. Every in-scope indication's trials are read, not
+# only the qualifying ones, so a member admitted by ATC N still says where its
+# brain trials ran.
+TRIAL_SITE_PHASES = frozenset({"PHASE1", "PHASE2", "PHASE3", "PHASE4"})
+HOME_COUNTRY = "United States"
+
+
+def trial_sites(trials) -> tuple[str | None, str | None]:
+    """(sites, countries outside the US) for one molecule, from its in-scope
+    trials as (phases, countries) pairs of trial_status's '|'-joined columns.
+
+    sites is "us", "both" or "elsewhere" by where the Phase 1+ trials list a
+    site; "unstated" where there are Phase 1+ trials and none lists one; None
+    where there is no Phase 1+ in-scope trial at all - an ATC N member, an
+    approval resting on a label, a trial not fetched. Nothing here is matched
+    on a name: every trial is one ChEMBL cites, read by its NCT id."""
+    us = False
+    abroad: set[str] = set()
+    counted = False
+    for phases, countries in trials:
+        if not phases or not TRIAL_SITE_PHASES & set(phases.split("|")):
+            continue
+        counted = True
+        for c in (countries or "").split("|"):
+            if c == HOME_COUNTRY:
+                us = True
+            elif c:
+                abroad.add(c)
+    if not counted:
+        return None, None
+    sites = ("both" if us and abroad else "us" if us
+             else "elsewhere" if abroad else "unstated")
+    return sites, "|".join(sorted(abroad)) or None
+
+
+def _withdrawals_by_molecule(db, strings) -> dict[int, list]:
+    """ChEMBL's withdrawals per molecule (D24), one per market and year.
+
+    ChEMBL files a withdrawal once per warning class, so one market's
+    withdrawal for hepatotoxicity and for dermatological toxicity is two
+    records with the same countries and year: they fold into one event,
+    [countries, year, classes], the classes '|'-joined. Countries are ChEMBL's
+    '; '-joined text, 'Worldwide' for a worldwide withdrawal. Ordered by year.
+    """
+    if not db.execute("SELECT 1 FROM sqlite_master WHERE name = 'molecule_withdrawals'").fetchone():
+        return {}
+    events = collections.defaultdict(dict)
+    for r in db.execute("SELECT parent_molregno, countries, year, warning_class"
+                        " FROM molecule_withdrawals ORDER BY parent_molregno, warning_id"):
+        key = (r["countries"], r["year"])
+        classes = events[r["parent_molregno"]].setdefault(key, [])
+        if r["warning_class"] and r["warning_class"] not in classes:
+            classes.append(r["warning_class"])
+    return {mid: [[strings.intern(c), y, strings.intern("|".join(cl) or None)]
+                  for (c, y), cl in sorted(ev.items(), key=lambda kv: (kv[0][1] or 0, kv[0][0] or ""))]
+            for mid, ev in events.items()}
+
+
+def _trial_sites_by_molecule(db) -> dict[int, tuple[str | None, str | None]]:
+    """trial_sites() for every molecule, or {} where the trial backfill has
+    not stored countries (it is a backfill; a build without it says nothing
+    about where any trial ran, rather than calling them all unstated)."""
+    has = db.execute("SELECT 1 FROM sqlite_master WHERE type = 'table'"
+                     " AND name = 'trial_status'").fetchone()
+    if not has or "countries" not in {c[1] for c in db.execute("PRAGMA table_info(trial_status)")}:
+        return {}
+    status = {r["nct_id"]: (r["phases"], r["countries"]) for r in db.execute(
+        "SELECT nct_id, phases, countries FROM trial_status WHERE schema_version >= 4")}
+    per_molecule = collections.defaultdict(dict)
+    for r in db.execute("SELECT parent_molregno, trial_ids FROM molecule_indications"
+                        " WHERE trial_ids IS NOT NULL"):
+        for nct in r["trial_ids"].split("|"):
+            if nct in status:
+                per_molecule[r["parent_molregno"]][nct] = status[nct]
+    return {m: trial_sites(t.values()) for m, t in per_molecule.items()}
 
 
 class Strings:
@@ -350,7 +457,7 @@ def _backup(out_dir) -> list[str]:
     """Copy the existing startup export aside before replacing it."""
     made = []
     stamp = datetime.datetime.now().strftime("%Y%m%dT%H%M%S")
-    for name in ("graph.data.js", "gtopdb.data.js"):
+    for name in ("graph.data.js", "gtopdb.data.js", "drugcentral.data.js"):
         src = out_dir / name
         if src.exists():
             common.VIZ_BACKUPS.mkdir(parents=True, exist_ok=True)
@@ -420,6 +527,8 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
 
     molecules, molecule_ids = [], []
     status_with_gtopdb = {}
+    sites = _trial_sites_by_molecule(db)
+    withdrawals = _withdrawals_by_molecule(db, cat_s)
     for r in db.execute("SELECT * FROM molecules ORDER BY parent_molregno"):
         rec = dict(r)
         mid = rec.pop("parent_molregno")
@@ -442,12 +551,18 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
         rec["n_claims_preliminary"] = counts.get("preliminary", 0)
         rec["n_claims_limited"] = counts.get("limited_or_unresolved", 0)
         rec["n_observations"] = obs_counts.get(mid, 0)
+        # Equal to max_phase wherever ChEMBL's stands (D23), so it travels only
+        # where it says something and the row keeps its trailing nulls short.
+        if not rec.get("approval_status"):
+            rec["max_phase_checked"] = None
         names = [n for n in dict.fromkeys(synonyms.get(mid, []))
                  if n and n != rec["chembl_id"]
                  and n.lower() != (rec["name"] or "").lower()]
         rec["synonyms"] = [cat_s.intern(n) for n in names]
         rec["aliases"] = [cat_s.intern(a)
                           for a in MOLECULE_ALIASES.get(rec["chembl_id"], [])]
+        rec["trial_sites"], rec["trial_countries"] = sites.get(mid, (None, None))
+        rec["withdrawals"] = withdrawals.get(mid)
         molecules.append(_row(rec, MOLECULE_FIELDS, cat_s))
         molecule_ids.append(mid)
 
@@ -524,15 +639,38 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
     # viewer splits them. Ordering is by descending phase so the panel's own
     # order is the export's, and a disease reached at two phases by two forms of
     # one molecule meets its highest first.
+    #
+    # Two more places follow where they say something (D23), and are left off
+    # where they do not: what stands behind a ChEMBL phase 4 (approval_basis),
+    # and, where that is unapproved US labels, the labels - [set id, title,
+    # labeler, '|'-joined categories, marketed from, marketed until] - so the
+    # page can say what ChEMBL's Approved rested on and link each label.
     indications = collections.defaultdict(list)
+    #
+    # And D24's two: the WHO ATC classes an `atc` Approved was read off, '|'
+    # joined, so the hover can name the class rather than a regulator; and why
+    # the label behind an `unresolved` or `unconfirmed` one went unread.
+    ind_cols = {c[1] for c in db.execute("PRAGMA table_info(molecule_indications)")}
+    d24 = ", atc_classes, unread_reason" if "atc_classes" in ind_cols else ""
     for r in db.execute("SELECT parent_molregno, mesh_id, mesh_heading, phase_label,"
-                        " scope_reasons, qualifies, max_phase_for_ind, trial_ids"
+                        " scope_reasons, qualifies, max_phase_for_ind, trial_ids,"
+                        " approval_basis, unapproved_labels" + d24 +
                         " FROM molecule_indications ORDER BY parent_molregno,"
                         " max_phase_for_ind DESC, mesh_heading, mesh_id"):
-        indications[str(r["parent_molregno"])].append(
-            [r["mesh_id"], cat_s.intern(r["mesh_heading"]),
-             cat_s.intern(r["phase_label"]), cat_s.intern(r["scope_reasons"]),
-             r["qualifies"], cat_s.intern(r["trial_ids"])])
+        r = dict(r)
+        row = [r["mesh_id"], cat_s.intern(r["mesh_heading"]),
+               cat_s.intern(r["phase_label"]), cat_s.intern(r["scope_reasons"]),
+               r["qualifies"], cat_s.intern(r["trial_ids"]),
+               cat_s.intern(r["approval_basis"]),
+               [[lab["set_id"], cat_s.intern(lab["title"]), cat_s.intern(lab["labeler"]),
+                 cat_s.intern("|".join(lab["categories"])), lab["marketed_from"],
+                 lab["marketed_until"]]
+                for lab in json.loads(r["unapproved_labels"])]
+               if r["unapproved_labels"] else None,
+               cat_s.intern(r.get("atc_classes")), cat_s.intern(r.get("unread_reason"))]
+        while row[-1] is None:
+            row.pop()
+        indications[str(r["parent_molregno"])].append(row)
 
     # Registry status per trial, from scripts/resolve_cohort_trials.py. That is
     # a backfill run after a build rather than part of one, so a database that
@@ -557,9 +695,11 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
         cols = {c[1] for c in db.execute("PRAGMA table_info(trial_status)")}
         detailed = {"phases", "primary_outcomes", "schema_version"} <= cols
         dated = detailed and set(TRIAL_DATE_COLUMNS) <= cols
+        sited = dated and "countries" in cols
         select = ("SELECT nct_id, overall_status, why_stopped" +
                   (", phases, primary_outcomes, schema_version" if detailed else "") +
                   ("".join(", " + c for c in TRIAL_DATE_COLUMNS) if dated else "") +
+                  (", countries" if sited else "") +
                   " FROM trial_status ORDER BY nct_id")
         for r in db.execute(select):
             row = [cat_s.intern(r["overall_status"]), cat_s.intern(r["why_stopped"])]
@@ -578,6 +718,8 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
                 row += [cat_s.intern(r["phases"]), outcomes]
                 if dated and (r["schema_version"] or 0) >= 3:
                     row += _trial_years(r)
+                if sited and (r["schema_version"] or 0) >= 4:
+                    row = _with_trial_countries(row, r["countries"], cat_s)
             elif row[1] is None:
                 row.pop()
             trial_status[r["nct_id"]] = row
@@ -806,6 +948,30 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
     }
     n2 = _dump(out_dir / "gtopdb.data.js", "COHORT_GTOPDB", gtopdb, GTOPDB_NOTICE)
 
+    # DrugCentral's regulators (D24), in its own file for its own licence (CC
+    # BY-SA 4.0, where graph.data.js is ChEMBL's 3.0), merged by the page only
+    # into the catalogue it was exported with. Written empty from a database
+    # the backfill has not reached, like GtoPdb's.
+    dc_meta, dc_approvals = {}, {}
+    if db.execute("SELECT 1 FROM sqlite_master WHERE name = 'molecule_approvals'").fetchone():
+        dc_meta = json.loads(manifest.get("drugcentral_approvals") or "{}")
+        for r in db.execute("SELECT parent_molregno, agency, year FROM molecule_approvals"
+                            " ORDER BY parent_molregno, year IS NULL, year, agency"):
+            dc_approvals.setdefault(str(r["parent_molregno"]), []).append(
+                [r["agency"], r["year"]])
+    drugcentral = {
+        "format": "cohort1-drugcentral/1",
+        "licence": DRUGCENTRAL_LICENCE,
+        "generated": generated,
+        "release": (f"v{dc_meta['version']}, {str(dc_meta.get('dated') or '')[:10]}"
+                    if dc_meta.get("version") else None),
+        # molecule id -> [[agency, year], ...], earliest first; a molecule-level
+        # fact (a regulator approved the active ingredient), never a disease's
+        "approvals": dc_approvals,
+    }
+    n3 = _dump(out_dir / "drugcentral.data.js", "COHORT_DRUGCENTRAL", drugcentral,
+               DRUGCENTRAL_NOTICE)
+
     # A single-file export from an earlier format would shadow the shards.
     legacy = out_dir / "evidence.data.js"
     if legacy.exists():
@@ -814,6 +980,8 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
     return {
         "graph_bytes": n1,
         "gtopdb_bytes": n2,
+        "drugcentral_bytes": n3,
+        "drugcentral_molecules": len(dc_approvals),
         "gtopdb_actions": len(gtopdb_actions),
         "gtopdb_claims": len(gtopdb_claims),
         "gtopdb_status_changes": len(status_with_gtopdb),

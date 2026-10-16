@@ -98,7 +98,8 @@ _NO_RESULTS_SECTION = object()
 
 
 def study(nct_id, status=None, why_stopped=None, has_results=False, last_update=None,
-          phases=None, outcomes=_NO_RESULTS_SECTION, start=None, completion=None):
+          phases=None, outcomes=_NO_RESULTS_SECTION, start=None, completion=None,
+          locations=None):
     """`phases` is a list of CT.gov phase strings, or None for a study with no
     phase at all. `outcomes` is a list of raw outcomeMeasure dicts (each with
     its own "type", "title" and optional "analyses"); the sentinel default
@@ -108,7 +109,8 @@ def study(nct_id, status=None, why_stopped=None, has_results=False, last_update=
     (rarer) fact this script must still tell apart from "no results".
     `start` and `completion` are the registry's date structs as sent -
     {"date": ...} or {"date": ..., "type": ...} - or None for a study that
-    carries no such struct at all."""
+    carries no such struct at all. `locations` is the list of raw location
+    dicts ({"country": ...}), or None for a record with no locations module."""
     record = {
         "protocolSection": {
             "identificationModule": {"nctId": nct_id},
@@ -124,6 +126,8 @@ def study(nct_id, status=None, why_stopped=None, has_results=False, last_update=
     }
     if phases is not None:
         record["protocolSection"]["designModule"] = {"phases": phases}
+    if locations is not None:
+        record["protocolSection"]["contactsLocationsModule"] = {"locations": locations}
     if outcomes is not _NO_RESULTS_SECTION:
         record["resultsSection"] = {"outcomeMeasuresModule": {"outcomeMeasures": outcomes}}
     return record
@@ -206,8 +210,22 @@ class ParseStudyTest(unittest.TestCase):
             "why_stopped": "slow accrual", "has_results": 1,
             "last_update": "2024-01-23", "phases": None, "primary_outcomes": None,
             "start_date": None, "start_date_type": None,
-            "completion_date": None, "completion_date_type": None,
+            "completion_date": None, "completion_date_type": None, "countries": None,
         })
+
+    def test_countries_are_the_distinct_site_countries_sorted(self):
+        row = rct._parse_study(study("NCT001", locations=[
+            {"country": "Russia"}, {"country": "United States"},
+            {"country": "Russia"}, {"city": "no country given"}]))
+        self.assertEqual(row["countries"], "Russia|United States")
+
+    def test_a_record_with_no_sites_keeps_countries_null_not_empty(self):
+        # No location is a gap in the record, not a trial that ran nowhere.
+        self.assertIsNone(rct._parse_study(study("NCT001", locations=[]))["countries"])
+        self.assertIsNone(rct._parse_study(study("NCT001"))["countries"])
+
+    def test_the_site_countries_are_asked_for(self):
+        self.assertIn("LocationCountry", rct.CTGOV_FIELDS.split(","))
 
     def test_dates_are_kept_verbatim_beside_their_type(self):
         row = rct._parse_study(study(
@@ -662,7 +680,7 @@ class OldRowsAreRefetchedTest(unittest.TestCase):
         row = conn.execute(
             "SELECT start_date, completion_date, completion_date_type, schema_version"
             " FROM trial_status WHERE nct_id = 'NCT001'").fetchone()
-        self.assertEqual(tuple(row), ("2003-02", "2005-11", "ACTUAL", 3))
+        self.assertEqual(tuple(row), ("2003-02", "2005-11", "ACTUAL", rct.SCHEMA_VERSION))
 
     def test_a_row_already_at_the_current_schema_version_is_not_requeried(self):
         conn = fake_db(trial_status="current")

@@ -19,6 +19,7 @@ db/cohort1.db
 db/staging/
 db/backups/
 viz/gtopdb.data.js
+viz/drugcentral.data.js
 viz/evidence/
 viz/backups/
 

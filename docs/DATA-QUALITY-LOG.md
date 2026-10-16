@@ -48,6 +48,9 @@ alone.
 | **BindingDB** | target *discovery* | ~97% of what it returns here is republished ChEMBL/PDSP; REST endpoint unreliable |
 | **PDSP Ki DB** | independent Ki measurements, strong for CNS | bulk CSV only, no query API, no per-row citation link |
 | **GtoPdb** | curated action (agonist, antagonist, …) on the receptor, channel and enzyme families this project is about | a ligand's Type can be carried onto secondary targets it was only screened at (vilazodone); anonymous bulk access announced to end |
+| **DailyMed** | the FDA marketing category of each US label ChEMBL cites for an Approved (D23) | a published label is not an approval: UNAPPROVED DRUG OTHER labels are published too; its API serves only current labels, so archived ones are read from the label page; some labels state no category at all; a label page can have an empty `<title>` |
+| **RxNav** | the marketing category of a label DailyMed no longer serves, by the same set id (D24) | holds only labels whose NDCs RxNorm still keeps |
+| **DrugCentral** | which regulators (FDA, EMA, PMDA, a few others) approved an active ingredient, and when (D24) | molecule-level, never per disease; a ChEMBL ID can sit on two of its structures, and one structure can carry two catalogue entries' IDs; "YEAR INTRODUCED" is not a regulator; a PostgreSQL dump, read with `pg_restore` |
 
 ---
 
@@ -95,6 +98,40 @@ identifier placements were reviewed on a read-over:
 `analysis/wiki_comparison/open_listings.py`, which stops on any placement it
 does not name.
 
+## 2026-10-16 — a label page with no title was read as no label, and a "Phase 4 trial" was not one
+
+Two of D23's assumptions, both found by measuring the gaps it named
+([D23-GAPS.md](D23-GAPS.md); D24 in [COHORT-2.md](COHORT-2.md)).
+
+**An empty title is not a missing page.** `parse_label` set `found` from the
+page's `<title>`, because DailyMed answers an unknown set id with its search
+page, titled "DailyMed". But 618 real label pages in the release have an empty
+title, and their marketing tables parse. `verdict` treats a label that is not
+`found` as unreadable, so 25 records stood `unresolved` on labels that said
+ANDA, NDA or monograph plainly. It never made a record wrongly *unapproved* -
+`unapproved` needs every label read - so the error only ever left ChEMBL's
+Approved standing for want of a reading, which is the safe direction, and is
+why nothing looked wrong. `found` now means the page names the set id asked
+for: the search page never does, and a label page names its own several times.
+D23's note said the 35 unresolved were mostly "a set id DailyMed no longer
+serves"; the cache showed one. The note was a guess written as a finding.
+
+**ChEMBL's 4 on a trial-only record is not the trial's phase.** D23 kept an
+Approved resting on ClinicalTrials.gov alone, on the reasoning that a Phase 4
+trial is post-marketing, and the hover said "a Phase 4 (post-marketing)
+trial". The registry's phases were already in `trial_status`, and nobody read
+them: of 884 such records in the release, 31 cite a trial the registry calls
+Phase 4. The rest cite Phase 3 (508), Phase 2 (280), Phase 1 (60), Early Phase
+1 (4), or nothing the registry returns a phase for (1). Where ChEMBL got its 4
+is not recorded. They now take their trials' furthest registry phase, the rule
+D23 already applied to unapproved labels.
+
+The lesson is the log's recurring one, applied to this project's own words: a
+hover that says what a source is ("a Phase 4 trial") is a claim, and was
+checked only where it was convenient.
+
+---
+
 ## 2026-10-15 — the same review, on the psychedelics section
 
 D26 listed the sci-wiki's *Psychedelics & entactogens* section the way D25
@@ -115,6 +152,54 @@ had not met:
 Ginkgolide B, LSZ and Ariadne reached two to eight stereoisomers by skeleton,
 and *Grayanotoxin* names a family; all four were refused. Six refusals in all,
 in `considered_and_not_listed`.
+
+## 2026-10-15 — isometheptene was Approved on labels FDA calls unapproved
+
+The user asked how isometheptene was approved for migraine; the page said
+Approved and nothing else. ChEMBL's only evidence was five DailyMed labels,
+and every one gives its marketing category as UNAPPROVED DRUG OTHER, under
+FDA's notice that "this drug has not been found by FDA to be safe and
+effective, and this labeling has not been approved by FDA". They are
+isometheptene / dichloralphenazone / acetaminophen and isometheptene /
+caffeine / acetaminophen products, their marketing ended between 2014 and
+2018, and they say themselves that FDA, on a National Academy of Sciences –
+National Research Council review, classed migraine as only a "possibly"
+effective use.
+
+**The shape is the recurring one.** `max_phase_for_ind = 4` parses as
+Approved and is stored as Approved, and ChEMBL means "a US label names this
+disease" by it as often as "a regulator approved it" — 32,892 DailyMed
+references against 718 FDA and 1,787 EMA behind the release's phase-4
+records. The label's own Marketing Category says which kind of label it is.
+
+**Measured.** 3,770 phase-4 records rest on labels alone; 141 (on 64
+molecules) on labels every one of which is unapproved, 35 on labels that could
+not be read. In this catalogue it moved 15 diseases and two members
+(isometheptene, sodium citrate). D23 in [COHORT-2.md](COHORT-2.md) has the
+counts and the rule.
+
+**Three things that went wrong on the way.**
+
+- **DailyMed's API does not serve archived labels.** `/services/v2/spls/{id}.xml`
+  answers 404 for all five of isometheptene's; the label page
+  (`drugInfo.cfm?setid=`) serves current and archived alike, and is what is
+  read. A set id DailyMed does not hold gets its search page back with status
+  200, which the parser recognises by its bare title rather than counting as a
+  label with no category.
+- **Some current labels state no category at all** — lithium carbonate's has
+  no marketing section in the page or in the SPL itself. A label that states
+  nothing is `unresolved`, never `unapproved`: absence is not an answer,
+  invariant 10's rule.
+- **The first parser matched whole tables**, and a non-greedy match starting at
+  an enclosing layout table swallowed the first marketing table inside it — a
+  label's first product could go unread. A fixture shaped like the real page
+  caught it; the parser now reads from each "Marketing Category" header to the
+  end of its own table, and the cached pages were parsed again.
+
+**And one rule taken back.** A Phase 4 trial alone was also read as no
+approval, and demoted desipramine's major depression and lidocaine's
+neuralgia, both approved uses. A post-marketing trial usually studies the
+approved use; it stays Approved, named on hover.
 
 ## 2026-10-14 — a list placed by name, entered by identifier
 
@@ -673,7 +758,7 @@ identifier at each step. InChIKey goes to the PubChem compound(s); PubChem gives
 the MeSH action *concept* ids it lists for the compound; NLM's own descriptor
 file for a pinned year (`desc2026.gz`, cached in `db/cache/`, its sha256 in
 `build_manifest`) gives each concept's descriptor and tree positions.
-`class_labels.parents` carries the hierarchy inside the action branch (D27),
+`class_labels.parents` carries the hierarchy inside the action branch (MeSH tree D27),
 from depth 4 down, so a drug filed as a tricyclic is also under "Antidepressive
 Agents". The one link that is not ours to check is PubChem's own
 compound-to-MeSH match, which PubChem makes from names and registry numbers.

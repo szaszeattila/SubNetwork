@@ -42,6 +42,7 @@ WRAP = 78
 DOC = common.ROOT / "CLAUDE.md"
 GRAPH_DATA = common.VIZ / "graph.data.js"
 GTOPDB_DATA = common.VIZ / "gtopdb.data.js"
+DRUGCENTRAL_DATA = common.VIZ / "drugcentral.data.js"
 EVIDENCE_DIR = common.VIZ / "evidence"
 TESTS = common.ROOT / "tests"
 
@@ -224,7 +225,7 @@ def db_figures(db_path: pathlib.Path) -> dict:
 
 def export_figures() -> dict:
     """Sizes of what the page actually loads, off the exported files."""
-    for path in (GRAPH_DATA, GTOPDB_DATA):
+    for path in (GRAPH_DATA, GTOPDB_DATA, DRUGCENTRAL_DATA):
         if not path.exists():
             raise StatusError(
                 f"no export at {path}. Run "
@@ -239,6 +240,7 @@ def export_figures() -> dict:
     return {
         "payload_bytes": GRAPH_DATA.stat().st_size,
         "gtopdb_bytes": GTOPDB_DATA.stat().st_size,
+        "drugcentral_bytes": DRUGCENTRAL_DATA.stat().st_size,
         "shard_bytes": sum(p.stat().st_size for p in shards),
         "shard_count": len(shards),
     }
@@ -456,8 +458,10 @@ def render_status(fig: dict) -> str:
 
         _para(f"""
             What the page loads is {_mb(fig['payload_bytes'])} of startup
-            payload in `viz/graph.data.js` and {_mb(fig['gtopdb_bytes'])} in
-            `viz/gtopdb.data.js`, GtoPdb's part, kept apart for its licence;
+            payload in `viz/graph.data.js`, {_mb(fig['gtopdb_bytes'])} in
+            `viz/gtopdb.data.js`, GtoPdb's part, and
+            {_mb(fig['drugcentral_bytes'])} in `viz/drugcentral.data.js`,
+            DrugCentral's, each kept apart for its licence;
             and {_mb(fig['shard_bytes'])} of
             per-molecule evidence shards across {_n(fig['shard_count'])} files
             under `viz/evidence/`, fetched one at a time on demand.

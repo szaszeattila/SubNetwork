@@ -31,6 +31,7 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 
 from cohort import common
+from cohort import labels
 from cohort import selection
 
 
@@ -42,8 +43,12 @@ def _ensure_column(conn):
     return False
 
 
-def backfill(conn, chembl):
-    """Fill approved_elsewhere on an open cohort connection. Returns a summary."""
+def backfill(conn, chembl, label_status=None):
+    """Fill approved_elsewhere on an open cohort connection. Returns a summary.
+
+    `label_status` is read from config/cohort1_label_status.json unless given
+    (D23): an approval is what the build calls one.
+    """
     added = _ensure_column(conn)
     in_scope = {r[0] for r in conn.execute(
         "SELECT mesh_id FROM indication_scope WHERE in_scope = 1")}
@@ -55,9 +60,10 @@ def backfill(conn, chembl):
         families[p].add(p)
     chembl.row_factory = sqlite3.Row
     ind_rows = chembl.execute(
-        "SELECT molregno, max_phase_for_ind, mesh_id, mesh_heading"
+        "SELECT drugind_id, molregno, max_phase_for_ind, mesh_id, mesh_heading"
         " FROM drug_indication ORDER BY drugind_id").fetchall()
-    by_mol = selection.approved_out_of_scope(ind_rows, in_scope)
+    by_mol = selection.approved_out_of_scope(ind_rows, in_scope,
+                                             label_status or labels.LabelStatus(chembl))
     values = {p: selection.approved_for_family(by_mol, sorted(families[p])) for p in parents}
     before = dict(conn.execute("SELECT parent_molregno, approved_elsewhere FROM molecules"))
     conn.executemany("UPDATE molecules SET approved_elsewhere = ? WHERE parent_molregno = ?",

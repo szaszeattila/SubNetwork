@@ -25,7 +25,8 @@ email, a review or a proposal lives in the repository, is listed in
 viewer is hosted on Cloudflare; its claude.ai artifact was deleted 2026-10-10.
 
 The catalogue is built from ChEMBL 37, with GtoPdb laid on it as
-directions (D17) and, at primary targets, curated claims (D18), and the
+directions (D17) and, at primary targets, curated claims (D18), DrugCentral
+naming the regulators behind an approval (D24, display only), and the
 molecules entered because a public list names them — Wikipedia, Wikidata,
 TripSit or PsychonautWiki, and the sci-wiki where none of them does (D25–D27);
 its size is stated once, in **Status**, generated from the
@@ -120,6 +121,15 @@ python3 scripts/build_cohort.py            # stage, validate, activate db/cohort
 python3 scripts/build_cohort.py --stage-only   # build and validate, change nothing
 python3 scripts/build_cohort.py --activate     # activate an existing staged build
 
+# D23/D24, not part of a build: reread the DailyMed labels behind ChEMBL's
+# Approved (RxNav where DailyMed serves none), and the registry phases of the
+# trials behind a trial-only one, and rewrite config/cohort1_label_status.json
+# (cached; ~1 h cold), then pin its new sha256 in the selection policy, raise
+# its version, and rebuild
+python3 scripts/check_dailymed_labels.py fetch
+python3 scripts/check_dailymed_labels.py reparse # after a parser change; reads the cache only
+python3 scripts/check_dailymed_labels.py write   # --dry-run prints the counts only
+
 # backfills: run after a build (a rebuild wipes them), before the export
 python3 scripts/resolve_cohort_trials.py       # trial_status from ClinicalTrials.gov (~20 s)
 python3 scripts/resolve_cohort_protein_class.py  # target_components.protein_class (offline)
@@ -130,6 +140,7 @@ python3 scripts/resolve_cohort_mesh_structure.py # MeSH structure classes via FD
 python3 scripts/resolve_cohort_wikipedia.py    # Wikipedia links via Wikidata and infoboxes; after the MeSH classes
 python3 scripts/resolve_cohort_gtopdb_actions.py # GtoPdb curated actions (pinned 2026.3.1, cached)
 python3 scripts/resolve_cohort_orthologues.py   # target_orthologues by sequence (~2 min cold, needs parasail)
+python3 scripts/resolve_cohort_drugcentral.py   # molecule_approvals from DrugCentral's pinned dump (needs pg_restore)
 
 python3 scripts/export_cohort.py           # db/cohort1.db -> viz/*.data.js + viz/evidence/
 python3 scripts/cohort_report.py           # the measured results of the active build
@@ -165,9 +176,18 @@ stale derived claims and a failed run changes nothing; the export clears
 throughout. Backups land in `db/backups/` and `viz/backups/`; rollback commands
 are in [docs/COHORT-1-IMPLEMENTATION.md](docs/COHORT-1-IMPLEMENTATION.md).
 
-**The build reads ChEMBL alone; every network source is a backfill.** Each one
-changes only its own table or columns, never which molecules, targets or claims
-exist, and each is idempotent with `--dry-run`. Each is identifier-only
+**The build reads ChEMBL and the versioned files in `config/`, never the
+network; every network source is a backfill or a committed file.** The one
+committed file, `config/cohort1_label_status.json` (D23, D24), is what DailyMed
+(or RxNav, by the same set id) says about each US label ChEMBL cites for an
+Approved, and what the registry says of the trials behind an Approved that
+cites trials alone, written by
+`scripts/check_dailymed_labels.py` and pinned by sha256 in the selection
+policy, so neither moves membership but through a reviewed diff; the build
+stops if it does not describe every label-backed and trial-only record in the
+release. Each
+backfill changes only its own table or columns, never which molecules, targets
+or claims exist, and each is idempotent with `--dry-run`. Each is identifier-only
 (invariant 15). A target gets a Wikipedia link only when it has exactly one
 component accession: every complex, complex group and family stays NULL on
 purpose — the legacy pipeline derived one from members' accessions twice and
@@ -187,7 +207,7 @@ through the one Wikidata item carrying its descriptor, or, where that item has
 no English article (Xanthines), through the main article its English category
 declares — never by its name, and never for a MeSH action, where that route
 reaches topics rather than classes. The counts are in **Status**.
-Pinned upstream files (MeSH, FDA UNII, GtoPdb, UniProt's human proteome) are
+Pinned upstream files (MeSH, FDA UNII, GtoPdb, UniProt's human proteome, DrugCentral's dump) are
 cached under `db/cache/` and recorded by sha256 in `build_manifest`.
 
 **To change what is in the catalogue, edit `config/cohort1_selection.json` and
@@ -215,10 +235,13 @@ than importing it, so the page stays one self-contained file with no build step.
 config/cohort1_selection.json  versioned membership policy: scope, routes, phase, seeds,
                           listings
 config/cohort1_evidence.json   versioned trust policy: bases, endpoints, tiers, conversions
+config/cohort1_label_status.json  each label-backed Approved in ChEMBL 37, checked
+                          against DailyMed (D23); generated, committed, pinned
 db/schema_cohort.sql      every table of the cohort database (see Data model)
 db/cache/                 pinned upstream files for the backfills, and the
                           compound lists the analysis compares (gitignored)
 scripts/build_cohort.py   CLI: stage, validate, activate db/cohort1.db
+scripts/check_dailymed_labels.py  CLI: writes config/cohort1_label_status.json
 scripts/resolve_cohort_*.py  the backfills listed under Running it
 scripts/export_cohort.py  CLI: db/cohort1.db -> viz/*.data.js + viz/evidence/
 scripts/cohort_report.py  CLI: the active build's results; --write/--check-status
@@ -231,6 +254,7 @@ scripts/cohort/           the pipeline - scope, selection, targets, evidence,
 viz/index.html            the page: self-contained, vendored vis-network
 viz/graph.data.js         startup payload: catalogue, targets, ChEMBL's claims
 viz/gtopdb.data.js        GtoPdb's part, apart for its licence (ODbL / CC BY-SA 4.0)
+viz/drugcentral.data.js   DrugCentral's regulators, apart for its licence (CC BY-SA 4.0)
 viz/evidence/             per-molecule evidence shards, loaded on demand
 tests/test_cohort_*.py    offline pipeline and backfill tests; test_cohort_status
                           fails when the generated Status block is stale
@@ -284,8 +308,23 @@ never in the cohort, and its listing is never evidence.
 **`molecule_indications`** holds every in-scope disease, qualifying or not, with
 the phase it reached and the ClinicalTrials.gov NCT ids ChEMBL cites
 (`trial_ids`); near misses are kept because "loperamide's pain indication is
-Early Phase 1" is the answer to why it is not a member. `max_phase` is the
-furthest stage across every disease and is not the admission test.
+Early Phase 1" is the answer to why it is not a member. Its phase is ChEMBL's
+read through what ChEMBL cites (D23, `scripts/cohort/labels.py`):
+`approval_basis` says what stands behind a ChEMBL Approved, and one nothing
+cited approves takes the furthest phase of the trials it cites, or none: US
+labels FDA lists as marketed without approval ("Marketed unapproved"), trials
+none of which the registry calls Phase 4, or a label that cannot be read for a
+molecule FDA records no approval year of ("Approval unconfirmed", D24), with
+ChEMBL's own number kept in `chembl_max_phase` and the labels in
+`unapproved_labels`. `atc_classes` names the class an ATC-backed one was read
+off, `unread_reason` why a label went unread.
+A molecule's `max_phase` is ChEMBL's furthest stage across every disease and
+is not the admission test; `approval_status` takes its approval back where
+nothing else stands behind it. **`molecule_withdrawals`** is ChEMBL's own
+`drug_warning` record of where and when a form was withdrawn, and
+**`molecule_approvals`** which regulators approved it, from DrugCentral by
+ChEMBL ID (D24): both display only, and the second a fact about the drug,
+never about a disease.
 `n_indications_chembl` counts every disease ChEMBL has, so the in-scope list can
 say how much of the record it shows. `approved_elsewhere` names phase-4
 diseases outside the scope — display text only, never a membership input.
@@ -342,7 +381,7 @@ score. Four sources, each writer replacing only its own rows:
   (`-triptan`); ChEMBL's bare `-` means no stem.
 - `mesh_pa` — MeSH **pharmacological actions**: each molecule is placed on
   **one** MeSH record (pinned `desc2026`/`supp2026`) and takes that record's
-  own action list, with the D27 hierarchy in `class_labels.parents`. Each step
+  own action list, with the hierarchy of MeSH tree D27 in `class_labels.parents`. Each step
   is tried only where the one before placed nothing:
   1. the FDA UNII of its exact structure;
   2. the CAS number FDA lists for that UNII;
@@ -399,9 +438,16 @@ What each is actually good for, and its caveat, is tabled in
 `/mnt/data/chembl/`: curated mechanisms, binding and functional assays, and the
 clinical side — `drug_indication` for what a molecule is developed for and how
 far it got, `indication_refs` for the **ClinicalTrials.gov** NCT ids that phase
-is read off. `indication_refs` also carries DailyMed, EMA, FDA, ATC, USAN and
-INN references, none read here; DailyMed is the one worth revisiting, being the
-label behind 286 of the 515 approved indications with no registered trial.
+is read off, and the reference types that say what stands behind an Approved.
+**DailyMed** supplies the FDA marketing category of each US label ChEMBL cites
+for one, read by set id into a committed file (D23): a published label is not
+an approval, and isometheptene was Approved for migraine on five labels FDA
+lists as UNAPPROVED DRUG OTHER. NLM's **RxNav** answers by the same set id for
+a label DailyMed no longer serves (D24).
+**DrugCentral** (dump 2026-09-25, CC BY-SA 4.0) supplies which regulators -
+FDA, EMA, PMDA and a few others - approved a molecule, matched by the ChEMBL
+IDs it files, and named beside an Approved ChEMBL read off a WHO ATC class
+(D24). It is exported to its own `viz/drugcentral.data.js`, as GtoPdb's is.
 **GtoPdb** (IUPHAR/BPS Guide to Pharmacology, release 2026.3.1) supplies a curated
 action on pairs ChEMBL already has (D17); its database is ODbL and its contents
 CC BY-SA 4.0, credited on the page. Everything it contributes is exported to
@@ -546,53 +592,54 @@ hand-written and is never rewritten.
 
 Pipeline and viewer both working. Current database, `db/cohort1.db`, built
 2026-10-16 against the `chembl_37` bulk release under selection policy
-`cohort1-selection v3.3.0` and evidence policy `cohort1-evidence v1.1.1`:
+`cohort1-selection v3.5.0` and evidence policy `cohort1-evidence v1.1.1`:
 
-**3,293 catalogue entries · 3,446 targets · 133,692 claims · 342,859 observations**
+**3,291 catalogue entries · 3,446 targets · 133,654 claims · 342,808 observations**
 
-2,449 are cohort-1 members (72 by ATC N alone, 1,905 by a qualifying
+2,447 are cohort-1 members (72 by ATC N alone, 1,903 by a qualifying
 indication alone, 472 by both); outside it, with their exclusion reasons, are
 3 seed molecules and 841 molecules entered because a public list names them
-(D25–D27). 25 of the 28 seeds are admitted. 5,439 claims are Supported in the
-direct human basis — 2,885 by replication across publications and 2,554 by
-curated mechanism, with no claim carrying both — over 4,115 distinct
-molecule–target pairs. 1,643 entries have a Supported claim, 561 only
-Preliminary, 150 only in the broader assignment layer, 72 only retained
+(D25–D27). 25 of the 28 seeds are admitted. 5,438 claims are Supported in the
+direct human basis — 2,884 by replication across publications and 2,554 by
+curated mechanism, with no claim carrying both — over 4,114 distinct
+molecule–target pairs. 1,642 entries have a Supported claim, 561 only
+Preliminary, 150 only in the broader assignment layer, 71 only retained
 observations, and 867 have no eligible evidence in ChEMBL 37 at all. All of
 them stay searchable.
 
-Behind those claims sit 342,859 retained observations resolving to 22,062
-distinct studies, of which 74,620 rows are counted into a median. 89,419
+Behind those claims sit 342,808 retained observations resolving to 22,059
+distinct studies, of which 74,614 rows are counted into a median. 89,379
 bounds are kept with their relations and out of every median; 2,398
-conditional mass-basis conversions are kept and counted into nothing. 24,611
+conditional mass-basis conversions are kept and counted into nothing. 24,609
 organism-format rows and 5 documented known-bad records are excluded with
 their reasons, and the exclusion accounting reconciles exactly to the
-1,255,464 activity rows scanned. All 15 build checks pass.
+1,255,388 activity rows scanned. All 15 build checks pass.
 
-What the page loads is 9.28 MB of startup payload in `viz/graph.data.js` and
-0.21 MB in `viz/gtopdb.data.js`, GtoPdb's part, kept apart for its licence;
-and 119.2 MB of per-molecule evidence shards across 2,627 files under
+What the page loads is 9.78 MB of startup payload in `viz/graph.data.js`, 0.21
+MB in `viz/gtopdb.data.js`, GtoPdb's part, and 0.03 MB in
+`viz/drugcentral.data.js`, DrugCentral's, each kept apart for its licence; and
+119.2 MB of per-molecule evidence shards across 2,625 files under
 `viz/evidence/`, fetched one at a time on demand.
 
 `molecules.wikipedia_url` and `targets.wikipedia_url` are backfilled by
-`scripts/resolve_cohort_wikipedia.py` after a build: **2,528 of 3,293
+`scripts/resolve_cohort_wikipedia.py` after a build: **2,526 of 3,291
 molecules** and **1,637 of 2,990 single-component targets** link to an English
 Wikipedia article. The other 454 multi-component targets — every PROTEIN
 COMPLEX, PROTEIN COMPLEX GROUP and PROTEIN FAMILY, plus one ChEMBL-labelled
 SINGLE PROTEIN carrying 3 accessions — are left NULL rather than resolved to a
 guess. The 2 targets ChEMBL lists with no accession at all are left NULL for
-the same reason. Of the 957 MeSH structure classes, **664** link one too, in
-the `class_wikipedia` table: 574 through the Wikidata item carrying the
+the same reason. Of the 956 MeSH structure classes, **663** link one too, in
+the `class_wikipedia` table: 573 through the Wikidata item carrying the
 descriptor, and 90 whose item has no article through the main article its
 English category declares (Xanthines to *Xanthine*).
 
-The pipeline suite is 532 tests and the node suites are 711 (482 cohort
+The pipeline suite is 592 tests and the node suites are 745 (516 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`
 against ATC level-4 classes, which are the WHO's own grouping of drugs by how
 they work and are read from `molecules.atc_level5` rather than written here:
-**top-1 30.3% and MRR 0.4343** over 284 of 395 labelled molecules in 64
+**top-1 30.3% and MRR 0.4341** over 284 of 395 labelled molecules in 64
 classes. The other 111 have no same-class peer anywhere in their list, which
 is a fact about ChEMBL's coverage rather than about the ranking, and is kept
 out of the rates for that reason. It is a proxy and not ground truth — ATC
@@ -615,7 +662,7 @@ is a miss however apt. Skipped in each list, the same build grades 38.7% and
 MRR 0.5121, as before them
 ([docs/SIMILARITY-HARNESS.md](docs/SIMILARITY-HARNESS.md) §11). Listed entries
 (D25–D27) can never carry one either: with all of them skipped in each list
-the build grades 33.5% and MRR 0.4646, and that is the grade the floor test
+the build grades 33.5% and MRR 0.4644, and that is the grade the floor test
 holds (`evaluate.mjs --skip-listed`, §13). Full build numbers, the two
 analysis defects the build corrects, the limitations and the rollback commands
 are in [docs/COHORT-1-IMPLEMENTATION.md](docs/COHORT-1-IMPLEMENTATION.md).
@@ -632,8 +679,12 @@ behaviour a rule here describes.
 
 **What's drawn vs. what's in the catalogue**
 
-- **`claimVisible` decides what's in the picture; only the four claim
-  filters (tier, basis, potency, curated mechanism) may change that.**
+- **`claimVisible` decides what's in the picture; only the five
+  eligibility filters (tier, basis, potency, curated mechanism, and trial
+  sites, which is the molecule's) may change that.** Trial sites reads where
+  a molecule's Phase 1+ in-scope trials ChEMBL cites had sites, by NCT id
+  ([docs/FOREIGN-TRIALS.md](docs/FOREIGN-TRIALS.md); merged 2026-10-15, and
+  it admits nothing).
   Canvas control, viewport culling, line colour and protein-group
   linking answer "drawn/on screen/what colour" instead, invisible to
   panels, ranking, gaps and search.
@@ -868,6 +919,23 @@ behaviour a rule here describes.
 - **A trial's years are the registry's, and an ESTIMATED date is always
   worded as planned** — 890 status-UNKNOWN trials carry a planned end
   already past, which printed bare reads as the year they ended.
+- **An Approved resting only on unapproved US labels is not one, and says
+  why in ChEMBL's terms, never "never approved"** (D23): the disease reads
+  "Marketed unapproved", or its cited trials' phase, beside the labels
+  themselves, linked by set id — the check sees only the labels ChEMBL
+  cites, and another product could be approved. A Phase 4 trial alone stays
+  Approved: read as no approval, it demoted desipramine's depression and
+  Lidoderm's neuralgia. Every Approved names its source on hover.
+- **A trial-only Approved needs a trial the registry calls Phase 4; an
+  ATC-backed one names the class and never reads as a regulator's; a
+  withdrawal is said beside Approved** (D24). Trials none of which is Phase 4
+  give their furthest registry phase, and the row says ChEMBL's Approved
+  rested on them. An ATC hover names the class, then DrugCentral's
+  regulators as a fact about the drug ("not necessarily for this disease"),
+  or "no regulator's record is cited". ChEMBL's withdrawal reads "Approved,
+  withdrawn worldwide (1984)" where any record says Worldwide (the user's
+  call), else "Approved; withdrawn in France, 1990", more than two events
+  counted, all on hover.
 
 **Rendering correctness (not just performance)**
 
@@ -951,6 +1019,15 @@ molecules) are in [docs/COHORT-2.md](docs/COHORT-2.md) and come first.
   ([DATA-QUALITY-LOG](docs/DATA-QUALITY-LOG.md), 2026-10-10). Of the 176
   activities ChEMBL itself flags "Potential transcription error", 156 are
   counted, in 43 Supported claims - unexamined.
+- **What D23 and D24 still cannot see.** 89 in-scope Approved diseases rest
+  on a WHO ATC class with no regulator DrugCentral names, mostly national
+  European and Japanese authorisations no identifier-keyed source lists;
+  finding them is the user's future action item (COHORT-2 **Open** 10).
+  DrugCentral's disease-level indications confirm 49 of 230 ATC-only diseases
+  through a Wikidata CUI-to-MeSH bridge, measured and not adopted. The label
+  check sees only the labels ChEMBL cites, so an approved product it does not
+  cite is invisible to it ([docs/COHORT-2.md](docs/COHORT-2.md), D23, D24;
+  [docs/D23-GAPS.md](docs/D23-GAPS.md)).
 - **Untriaged proposals.** Unit recovery (30 explicit conversions, and a
   conditional mass-basis rule touching 2,364 records that changes what
   "conditional" means) and the organism-format review, in

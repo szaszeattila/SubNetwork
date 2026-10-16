@@ -16,13 +16,18 @@ under analysis/ - stay under their sources' own terms:
                                       UNII registry
   ClinicalTrials.gov (U.S. National   NLM terms and conditions; trial status
   Library of Medicine)                only
+  DailyMed and RxNav (U.S. National   NLM terms and conditions; the FDA
+  Library of Medicine)                marketing category of a cited label
+  DrugCentral                         CC BY-SA 4.0
   Wikidata                            CC0 1.0
 
-Share-alike terms mean a redistributed derivative of ChEMBL or GtoPdb data must
-carry the same licence and credit its source. The two are kept in separate
-exported files for that reason: everything derived from GtoPdb is in
-viz/gtopdb.data.js, under GtoPdb's terms above, and viz/graph.data.js and
-viz/evidence/ hold none of it. The viewer combines them only when it draws.
+Share-alike terms mean a redistributed derivative of ChEMBL, GtoPdb or
+DrugCentral data must carry the same licence and credit its source. They are
+kept in separate exported files for that reason: everything derived from
+GtoPdb is in viz/gtopdb.data.js, under GtoPdb's terms above, everything from
+DrugCentral is in viz/drugcentral.data.js, under CC BY-SA 4.0, and
+viz/graph.data.js and viz/evidence/ hold none of either. The viewer combines
+them only when it draws.
 
 Documentation
 -------------

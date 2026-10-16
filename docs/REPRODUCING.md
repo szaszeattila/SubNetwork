@@ -1,8 +1,10 @@
 # Reproducing the catalogue from a fresh clone
 
 Everything the page opens is generated, and none of it is in git. A fresh
-clone has the code, the two policies in `config/` and the pinned MeSH scope
-classification. It does not have the ChEMBL release, the database, the
+clone has the code, the two policies in `config/`, the pinned MeSH scope
+classification, and `config/cohort1_label_status.json`, what DailyMed said
+about the labels behind ChEMBL's approvals (D23), committed so the build never
+has to ask. It does not have the ChEMBL release, the database, the
 backfills' caches or the exported payload. This document is the path from
 the clone to a page that opens. It was written on 2026-10-10. The download
 location and checksum were checked against EBI's server that day.
@@ -21,11 +23,19 @@ location and checksum were checked against EBI's server that day.
   extracted database (30.5 GB). You can delete the archive after checking it.
 - **Network access** for the backfills, and nothing else. The build itself
   reads only local files.
+- **PostgreSQL's `pg_restore`**, for the DrugCentral backfill only, which
+  reads two plain tables out of DrugCentral's dump with it; no server and no
+  RDKit are needed. Any recent PostgreSQL client will do (the dump is
+  PostgreSQL 16's custom format; 18.6 reads it). Without root, a conda env
+  from conda-forge is enough: `conda create -p <dir> -c conda-forge
+  postgresql`, then put `<dir>/bin` on `PATH` or set `PG_RESTORE`. To query
+  the whole dump, it restores into PostgreSQL with the `rdkit` extension
+  (conda-forge's `rdkit-postgresql`).
 
 ## 1. Download ChEMBL 37
 
-The build reads ChEMBL 37's SQLite release and nothing else, and it never
-falls back to another release. Use the release's own directory. Do not use
+The build reads ChEMBL 37's SQLite release and the files in `config/`, and it
+never falls back to another release. Use the release's own directory. Do not use
 `latest/`, which will point at a newer release.
 
 ```bash
@@ -72,6 +82,7 @@ python3 scripts/resolve_cohort_mesh_structure.py     # MeSH, FDA UNII, ~35 s
 python3 scripts/resolve_cohort_wikipedia.py          # Wikidata and Wikipedia
 python3 scripts/resolve_cohort_gtopdb_actions.py     # GtoPdb 2026.3.1, see below
 python3 scripts/resolve_cohort_orthologues.py        # UniProt, ~2 min cold, needs parasail
+python3 scripts/resolve_cohort_drugcentral.py        # DrugCentral dump, needs pg_restore, see below
 python3 scripts/export_cohort.py                     # ~6 s, writes viz/
 ```
 
@@ -115,6 +126,7 @@ newer file, except GtoPdb.
 | wikipedia | Wikidata, Wikipedia | articles and items change |
 | orthologues | UniProt's reviewed human proteome | streamed from the current release, not 2026_03 |
 | **gtopdb** | `guidetopharmacology.org/DATA/` | **refuses any release but 2026.3.1**, see below |
+| **drugcentral** | `Drugcentral_2026-09-25.pgdump` (1.4 GB) | **refuses any file but that one**, by sha256 `5afea88f…32dc`; download it from `unmtid-dbs.net/download/` into `db/cache/drugcentral/` |
 
 **GtoPdb is the one that can stop you.** It serves only its latest release, at
 a fixed address. The backfill reads the version off each file's first line,
