@@ -66,3 +66,39 @@ the ranking. `pairs.mjs` grades them under the rules in the same file, and
 the key is **held out**: no `--key` loads it, so no sweep chooses a constant
 by it. Editing a pair or a rule is a new version, recorded in
 docs/SIMILARITY-HARNESS.md, never in the same change as a constant.
+
+```bash
+node analysis/answer_keys/power.mjs              # can each key see the sweep's changes? (~2.5 min)
+node analysis/answer_keys/label_reliability.mjs  # the label key against itself, US against non-US labels
+node analysis/answer_keys/confounding.mjs        # how much of the label key is shared indication
+node analysis/answer_keys/difficulty.mjs         # pairwise negatives that can fail, class skew, hubness
+```
+
+These four are the measurements behind
+[../../docs/ANSWER-KEYS-REVIEW.md](../../docs/ANSWER-KEYS-REVIEW.md), which
+checks the keys against the literature on reference standards.
+
+`power.mjs` grades the six settings of docs/SIMILARITY-HARNESS.md §15 under
+seven keys and compares each question's reciprocal rank before and after: a
+paired bootstrap interval (over questions, and for the class keys over whole
+classes), a sign-flip randomisation test with Holm's correction across every
+cell, and the smallest change each key could detect. The bootstraps are
+seeded, so a rerun prints the same figures.
+
+`label_reliability.mjs` runs `label_halves.py`, which rebuilds every label
+profile under the key's own rules twice, from the US labels and from the UK,
+EU and Japanese ones, out of the cached OnSIDES zip. It reports how many
+nearest neighbours the halves share, and how one half's similarity list and
+the target ranking each grade against the other half: the key's noise
+ceiling.
+
+`confounding.mjs` reads approved indications (phase 4, by MeSH id) from ChEMBL
+37 at `$CHEMBL_SQLITE_PATH`, read-only. It reports how often each key's
+classmate pairs share one, then rebuilds the label key so a neighbour must be
+approved for another disease and grades the ranking against that.
+
+`difficulty.mjs` counts how many of the pairwise key's negative and opposite
+directions share no target and so are clean by construction, and how many
+positives are already class-key classmates; it sets each class key's MRR over
+questions beside its MRR over classes, and measures hubness in the top-10
+lists.

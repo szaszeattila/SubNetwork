@@ -143,6 +143,7 @@ node analysis/similarity_harness/evaluate.mjs --key onsides   # ...nearest label
 node analysis/answer_keys/agreement.mjs         # how far the answer keys agree with each other
 node analysis/answer_keys/chance.mjs            # each key's grade beside a shuffle of the same lists
 node analysis/answer_keys/pairs.mjs             # the pre-registered pairwise key; held out of every sweep
+node analysis/answer_keys/power.mjs             # whether each key can see each sweep change (paired, Holm)
 node analysis/similarity_harness/sweep.mjs      # what each scoring constant is worth
 
 python3 -m unittest discover -s tests      # pipeline
@@ -238,9 +239,11 @@ analysis/probe/           50 settled drug relationships put to the ranking, and
                           tuning target; read-only.
 analysis/answer_keys/     what the ATC answer key calls a miss, and whether it
                           is one (docs/SIMILARITY-LITERATURE.md), how far the
-                          keys agree with each other and with a shuffle, and
+                          keys agree with each other and with a shuffle,
                           pairs.json, the pre-registered pairwise key, held
-                          out of every sweep. Read-only.
+                          out of every sweep, and what the keys can resolve,
+                          how reliable and how confounded they are
+                          (docs/ANSWER-KEYS-REVIEW.md). Read-only.
 analysis/cohort1/         the read-only analysis behind COHORT-REPORT.md
 analysis/mesh_route_b/    MeSH actions through the FDA UNII against the PubChem
                           route (docs/MESH-ACTIONS-ROUTE-B.md); read-only
@@ -941,7 +944,12 @@ molecules) are in [docs/COHORT-2.md](docs/COHORT-2.md) and come first.
   the replicated-only weight is the opposite case: it helps under ATC and
   MeSH and hurts under the label key, a gain only curation sees. A
   pre-registered pairwise key (§16) is held out of the sweeps for the check
-  after a change.
+  after a change. **None of those small signs is yet a finding**
+  ([docs/ANSWER-KEYS-REVIEW.md](docs/ANSWER-KEYS-REVIEW.md) §2): compared
+  paired with Holm's correction, only D15 is detected under every key and the
+  family weight under MeSH alone; the curated-only and replicated-only changes
+  are inside every key's noise, and the smallest change any key can detect is
+  0.011 to 0.021 MRR.
 - **D20 keeps rarity per record,** so a rodent record, measured on by fewer
   molecules, often stands for its protein in a pair's score. Both obvious fixes
   graded worse ([docs/COHORT-2.md](docs/COHORT-2.md), D20).

@@ -952,3 +952,30 @@ asked about them before did not flatter the key.
   lacosamide to oxcarbazepine (108), cabergoline to bromocriptine (102) and
   propranolol to nadolol (101). `node analysis/answer_keys/pairs.mjs --list`
   prints them all.
+
+## 17. What the keys can resolve (2026-10-16)
+
+[ANSWER-KEYS-REVIEW.md](ANSWER-KEYS-REVIEW.md) §2 asked whether the changes in
+§15's table are larger than the keys' own sampling noise.
+`node analysis/answer_keys/power.mjs` compares each question's reciprocal
+rank before and after, under seven keys: a paired bootstrap interval, over
+questions and for the class keys over whole classes, and a sign-flip test with
+Holm's correction across all 42 cells.
+
+| setting | keys whose interval excludes zero | detected after Holm |
+|---|---|---|
+| D15 off | 7 of 7 | 7 |
+| family weight 1.0 | 4 (MeSH, EPC, PE, label every effect) | 1 (MeSH) |
+| curated-only 1.0 | 1 (MeSH) | 0 |
+| replicated-only 0.75 | 1 (MeSH) | 0 |
+| Preliminary 0.25 | 0 | 0 |
+| `SPECIES_EXPONENT` 0.75 | 0 | 0 |
+
+The smallest paired change a key can detect at 5% with 80% power is 0.011
+MRR under MeSH, 0.013 to 0.015 under PE, EPC and the label keys, and 0.019 to
+0.021 under the two ATC keys. **§15's sorting into "agreed by every judge",
+"agreed only by the curated judges" and "split" holds for D15 alone**; the
+other rows are signs inside every key's noise, and the label key's −0.004 on
+the replicated-only weight cannot be told from zero. Detecting a change of
+0.004 would need 4,500 to 7,000 questions. Nothing was changed.
+
