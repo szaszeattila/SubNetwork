@@ -121,7 +121,8 @@ answer key for the similarity ranking
 identifiers only: InChIKey to FDA UNII (the same file the MeSH backfills
 read), UNII to RxNorm, a salt's precise ingredient to its ingredient, and
 the ingredient's classes from RxClass, kept only where FDA's labels (FDASPL)
-or FDA's reference terminology (MED-RT) assert them for the ingredient
+or MED-RT (the Veterans Health Administration's reference terminology,
+which carries FDA's class terms) assert them for the ingredient
 itself. The classes stay in the database; the page does not show them.
 
 **What went wrong first.** The first rule read every identifier a molecule

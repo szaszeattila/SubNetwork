@@ -32,7 +32,8 @@ The route, an identifier at every step (invariant 15):
   5. ingredient -> classes, RxClass `class/byRxcui.json`. Only rows asserted
      for the ingredient itself (the answer also carries its salts' rows), by a
      `has_epc`, `has_moa` or `has_pe` relation, from `FDASPL` (the labels) or
-     `MEDRT` (FDA's reference terminology). DAILYMED repeats FDASPL and is
+     `MEDRT` (the VA's Medication Reference Terminology, which carries FDA's
+     class terms). DAILYMED repeats FDASPL and is
      ignored; so is every other relation (`ci_moa`, `may_treat`, ...) and every
      other class system (ATC, MeSH, VA). One class asserted by both sources is
      one row whose carriers name both.
