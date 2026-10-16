@@ -26,7 +26,9 @@ viewer is hosted on Cloudflare; its claude.ai artifact was deleted 2026-10-10.
 
 The catalogue is built from ChEMBL 37, with GtoPdb laid on it as
 directions (D17) and, at primary targets, curated claims (D18), and the
-molecules entered because the sci-wiki lists them (D23, D24); its size is stated once, in **Status**, generated from the
+molecules entered because a public list names them — Wikipedia, Wikidata,
+TripSit or PsychonautWiki, and the sci-wiki where none of them does (D23–D25);
+its size is stated once, in **Status**, generated from the
 database rather than typed.
 [docs/COHORT-REPORT.md](docs/COHORT-REPORT.md) measured selection policies that
 were **not** adopted, and its totals are historical.
@@ -192,12 +194,15 @@ cached under `db/cache/` and recorded by sha256 in `build_manifest`.
 rebuild.** `SEED_MOLECULES` decides which molecules are labelled seeds and kept
 regardless of the clinical policy, not membership; a seed is never
 grandfathered into the cohort, and both facts are on every entry.
-`listings.sciwiki` does the same for the molecules the sci-wiki lists (D23, D24):
-each is a ChEMBL id written down after a review against ChEMBL's structure,
-never a name the build matches, and a refused name stays in
-`considered_and_not_listed` with its reason. The site's terms allow linking and
-short attributed quotation and refuse bulk copying, so an entry keeps the
-compound's name and page slug and nothing else of the wiki's.
+`listings` does the same for the molecules a public list names, one block per
+list (D23–D25): each is a ChEMBL id written down after a review against
+ChEMBL's structure, never a name the build matches, and a refused name stays in
+`considered_and_not_listed` with its reason. The four open lists' blocks are
+written by `analysis/wiki_comparison/open_listings.py`, whose `REVIEW` table
+holds every placement not made by an InChIKey or an exact ChEMBL name; a
+compound one of them names is never also cited from the sci-wiki. Each block's
+`terms` says what that list allows, and an entry keeps the list's name for the
+compound and the key its page is linked by — nothing else of the list's.
 
 Both suites run offline and need nothing installed beyond `requirements.txt`;
 the one test that runs parasail skips itself without it. The viewer tests load the
@@ -238,9 +243,11 @@ analysis/probe/           50 settled drug relationships put to the ranking, and
                           tuning target; read-only.
 analysis/wiki_comparison/ a nootropics wiki's compound list placed against
                           ChEMBL and the catalogue, and other public lists
-                          beside it, by name. Read-only; D23's and D24's
-                          listings were reviewed from it by hand. The wiki's
-                          own list is kept in db/cache/sciwiki/, never here.
+                          beside it, by name. Read-only, except that
+                          open_listings.py writes D25's listings into the
+                          policy; D23's and D24's were reviewed from it by
+                          hand. The lists themselves are kept in db/cache/,
+                          never here.
 analysis/answer_keys/     what the ATC answer key calls a miss, and whether it
                           is one (docs/SIMILARITY-LITERATURE.md). Read-only.
 analysis/cohort1/         the read-only analysis behind COHORT-REPORT.md
@@ -408,11 +415,20 @@ trial status, and **Wikidata** a Wikipedia link per node and a molecule's MeSH
 record where FDA's route does not reach it. Both are matched on an identifier
 this database already holds — never a title search: "ATM", "APP" and "TNF" are
 English words. The cohort pipeline no longer reads **PubChem** (2026-10-13).
-**The sci-wiki** (scientificsean.wiki, Scientific Sean LLC, read 2026-10-11) is
-a reason for entry and nothing else (D23, D24): which compounds from its
-cognition, psychiatric and psychedelics sections are in the catalogue, cited on each with a link. Its
-terms are not an open licence — linking and short attributed quotes only — so
-nothing of its content is copied, and the page says it is not affiliated.
+**Public compound lists** are a reason for entry and nothing else (D23–D25),
+each cited on its entries with a link to its own page and credited in About in
+the words its terms ask for ([COMPOUND-LIST-TERMS](docs/COMPOUND-LIST-TERMS.md)):
+**Wikipedia**'s nootropic, psychoactive and designer-drug categories (article
+titles; text CC BY-SA 4.0) and **Wikidata**'s nootropic and psychoactive roles
+(CC0), read 2026-10-15; **PsychonautWiki**'s substance index (CC BY 4.0 as
+semantic data) and **TripSit**'s factsheets (free for non-commercial use, with a
+link back and TripSit named as the source on every page showing it), read
+2026-10-11; and **the sci-wiki** (scientificsean.wiki, Scientific Sean LLC, read
+2026-10-11) for what none of those names, from its cognition, psychiatric and
+psychedelics sections. The sci-wiki's terms are not an open licence — linking
+and short attributed quotes only — so nothing of its content is copied. Of
+every list, only the name and the page key are kept, and the page says it is
+affiliated with none of them.
 
 **The legacy pipeline** also reads PubChem for identity and the CAS numbers
 that join into PDSP, UniProt for protein identity and tissue specificity, the
@@ -529,54 +545,54 @@ hand-written and is never rewritten.
 <!-- Written by `python3 scripts/cohort_report.py --write-status`. Do not edit by hand: `--check-status` fails when this block and the active build disagree, and a rewrite discards whatever was typed here. The prose outside the markers is hand-written and is never touched. -->
 
 Pipeline and viewer both working. Current database, `db/cohort1.db`, built
-2026-10-15 against the `chembl_37` bulk release under selection policy
-`cohort1-selection v3.2.0` and evidence policy `cohort1-evidence v1.1.1`:
+2026-10-16 against the `chembl_37` bulk release under selection policy
+`cohort1-selection v3.3.0` and evidence policy `cohort1-evidence v1.1.1`:
 
-**2,748 catalogue entries · 3,427 targets · 130,834 claims · 336,450 observations**
+**3,293 catalogue entries · 3,446 targets · 133,692 claims · 342,859 observations**
 
 2,449 are cohort-1 members (72 by ATC N alone, 1,905 by a qualifying
 indication alone, 472 by both); outside it, with their exclusion reasons, are
-3 seed molecules and 296 molecules entered because the sci-wiki lists them
-(D23). 25 of the 28 seeds are admitted. 5,285 claims are Supported in the
-direct human basis — 2,756 by replication across publications and 2,529 by
-curated mechanism, with no claim carrying both — over 3,984 distinct
-molecule–target pairs. 1,579 entries have a Supported claim, 341 only
-Preliminary, 97 only in the broader assignment layer, 60 only retained
-observations, and 671 have no eligible evidence in ChEMBL 37 at all. All of
+3 seed molecules and 841 molecules entered because a public list names them
+(D23–D25). 25 of the 28 seeds are admitted. 5,439 claims are Supported in the
+direct human basis — 2,885 by replication across publications and 2,554 by
+curated mechanism, with no claim carrying both — over 4,115 distinct
+molecule–target pairs. 1,643 entries have a Supported claim, 561 only
+Preliminary, 150 only in the broader assignment layer, 72 only retained
+observations, and 867 have no eligible evidence in ChEMBL 37 at all. All of
 them stay searchable.
 
-Behind those claims sit 336,450 retained observations resolving to 21,586
-distinct studies, of which 71,065 rows are counted into a median. 88,204
-bounds are kept with their relations and out of every median; 2,387
-conditional mass-basis conversions are kept and counted into nothing. 23,228
+Behind those claims sit 342,859 retained observations resolving to 22,062
+distinct studies, of which 74,620 rows are counted into a median. 89,419
+bounds are kept with their relations and out of every median; 2,398
+conditional mass-basis conversions are kept and counted into nothing. 24,611
 organism-format rows and 5 documented known-bad records are excluded with
 their reasons, and the exclusion accounting reconciles exactly to the
-1,232,639 activity rows scanned. All 15 build checks pass.
+1,255,464 activity rows scanned. All 15 build checks pass.
 
-What the page loads is 8.83 MB of startup payload in `viz/graph.data.js` and
+What the page loads is 9.28 MB of startup payload in `viz/graph.data.js` and
 0.21 MB in `viz/gtopdb.data.js`, GtoPdb's part, kept apart for its licence;
-and 115.9 MB of per-molecule evidence shards across 2,257 files under
+and 119.2 MB of per-molecule evidence shards across 2,627 files under
 `viz/evidence/`, fetched one at a time on demand.
 
 `molecules.wikipedia_url` and `targets.wikipedia_url` are backfilled by
-`scripts/resolve_cohort_wikipedia.py` after a build: **2,001 of 2,748
-molecules** and **1,629 of 2,977 single-component targets** link to an English
-Wikipedia article. The other 448 multi-component targets — every PROTEIN
+`scripts/resolve_cohort_wikipedia.py` after a build: **2,528 of 3,293
+molecules** and **1,637 of 2,990 single-component targets** link to an English
+Wikipedia article. The other 454 multi-component targets — every PROTEIN
 COMPLEX, PROTEIN COMPLEX GROUP and PROTEIN FAMILY, plus one ChEMBL-labelled
 SINGLE PROTEIN carrying 3 accessions — are left NULL rather than resolved to a
 guess. The 2 targets ChEMBL lists with no accession at all are left NULL for
-the same reason. Of the 935 MeSH structure classes, **645** link one too, in
-the `class_wikipedia` table: 557 through the Wikidata item carrying the
-descriptor, and 88 whose item has no article through the main article its
+the same reason. Of the 957 MeSH structure classes, **664** link one too, in
+the `class_wikipedia` table: 574 through the Wikidata item carrying the
+descriptor, and 90 whose item has no article through the main article its
 English category declares (Xanthines to *Xanthine*).
 
-The pipeline suite is 528 tests and the node suites are 708 (479 cohort
+The pipeline suite is 532 tests and the node suites are 711 (482 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`
 against ATC level-4 classes, which are the WHO's own grouping of drugs by how
 they work and are read from `molecules.atc_level5` rather than written here:
-**top-1 32.0% and MRR 0.4477** over 284 of 395 labelled molecules in 64
+**top-1 30.3% and MRR 0.4343** over 284 of 395 labelled molecules in 64
 classes. The other 111 have no same-class peer anywhere in their list, which
 is a fact about ChEMBL's coverage rather than about the ranking, and is kept
 out of the rates for that reason. It is a proxy and not ground truth — ATC
@@ -597,7 +613,10 @@ database, so not generated. The ATC grade above fell with D21 because the
 1,119 molecules it admitted carry no ATC N code: one ranked above a class-mate
 is a miss however apt. Skipped in each list, the same build grades 38.7% and
 MRR 0.5121, as before them
-([docs/SIMILARITY-HARNESS.md](docs/SIMILARITY-HARNESS.md) §11). Full build numbers, the two
+([docs/SIMILARITY-HARNESS.md](docs/SIMILARITY-HARNESS.md) §11). Listed entries
+(D23–D25) can never carry one either: with all of them skipped in each list
+the build grades 33.5% and MRR 0.4646, and that is the grade the floor test
+holds (`evaluate.mjs --skip-listed`, §13). Full build numbers, the two
 analysis defects the build corrects, the limitations and the rollback commands
 are in [docs/COHORT-1-IMPLEMENTATION.md](docs/COHORT-1-IMPLEMENTATION.md).
 
@@ -801,14 +820,18 @@ behaviour a rule here describes.
   into the markup would attribute data a ChEMBL-only page is not showing.
   Both the strip and About link the public repository's issues as the place
   an error goes; About says what a useful report names.
-- **A listed molecule names its list as its reason for being here (D23), and
-  only About credits the list.** The panel's *Entered from* row (*Also
-  listed by* where a clinical route admitted it too) links the compound's own
-  page, built from the slug by `LISTING_SOURCES`, under the list's name for
-  it; the hover says a listing is not evidence and not an affiliation. About
-  credits the sci-wiki with its count, and only when an entry was entered
-  from it. The export refuses a source `LISTING_SOURCES` lacks, so no listing
-  reaches the page uncredited.
+- **A listed molecule names its lists as its reason for being here (D23,
+  D25), and About credits each list.** The panel's *Entered from* row (*Also
+  listed by* where a clinical route admitted it too) names each list and links
+  the compound's own page there, built from the slug by `LISTING_SOURCES`,
+  under the list's name for it, open lists first — the per-page note citing
+  TripSit that its terms ask for is this row. The hover says a listing is not
+  evidence and not an affiliation. About credits each list with its count, in
+  its `credit` worded to its terms, and only when an entry was entered from
+  it. The export refuses a source `LISTING_SOURCES` lacks, so no listing
+  reaches the page uncredited; where ChEMBL gives no name, the label is a
+  substance index's name before a Wikipedia title, and Wikidata's last
+  (`LABEL_ORDER`).
 
 **Search**
 

@@ -11,7 +11,9 @@ neither is placed, when their names are equal with punctuation dropped.
 
 Since D23 and D24 a catalogue entry may be there because the wiki lists it
 (molecule_listings); `sciwiki_listed` names such entries, and
-LIST_DIR/listed_on_lists.csv says which lists each of them is on.
+LIST_DIR/listed_on_lists.csv says which lists each of them is on. Since D25 the open
+lists are reasons for entry too, so the summary also counts each list's
+entries a listing entered and those still in ChEMBL and outside.
 
 Read-only. Writes LIST_DIR/lists_overlap.csv (one row per list entry) and
 listed_on_lists.csv, both kept out of the repository with the lists, and
@@ -105,6 +107,10 @@ def main() -> int:
             in_wiki = bool(set(ids) & wiki_parents) or any(squash(a) in wiki_names for a in alts)
             in_cat = [i for i in ids if i in pl.catalogue]
             in_listing = [i for i in ids if i in listed]
+            # Since D25 an entry may be in the catalogue because this very list
+            # (or another open one) names it.
+            c["entered_by_a_list"] += any(pl.catalogue[i][0] == "listed_only" for i in in_cat)
+            c["outside"] += bool(ids) and not in_cat
             for i in in_listing:
                 listed[i][lst] = 1
             c["entries"] += 1
@@ -137,12 +143,14 @@ def main() -> int:
         w.writeheader()
         w.writerows(sorted(listed.values(), key=lambda e: (e["section"], e["name"].casefold())))
 
-    print("| list | compounds | placed in ChEMBL | also on the wiki | in the catalogue | entered from the wiki | on neither | wiki entries it has |")
-    print("|---|---:|---:|---:|---:|---:|---:|---:|")
+    print("| list | compounds | placed in ChEMBL | also on the wiki | in the catalogue | entered from the wiki "
+          "| entered from a list | in ChEMBL, outside | on neither | wiki entries it has |")
+    print("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|")
     for lst, c in summary:
         pct = lambda n: f"{n} ({100 * n / c['entries']:.0f}%)" if c["entries"] else "0"
         print(f"| {lst} | {c['entries']} | {pct(c['placed'])} | {pct(c['in_wiki'])} | {pct(c['in_catalogue'])} "
-              f"| {pct(c['listed'])} | {pct(c['neither'])} | {c['wiki_covered']} of {len(wiki)} |")
+              f"| {pct(c['listed'])} | {c['entered_by_a_list']} | {c['outside']} | {pct(c['neither'])} "
+              f"| {c['wiki_covered']} of {len(wiki)} |")
     by_section = collections.Counter(r["section"] for r in wiki if r["slug"] not in covered_anywhere)
     print(f"\nwiki entries on at least one other list: {len(covered_anywhere)} of {len(wiki)}; "
           f"on none, by section: {dict(by_section.most_common())}")

@@ -798,3 +798,41 @@ python3 analysis/wiki_comparison/fetch_lists.py db/cache/lists/raw/2026-10-15
 python3 analysis/wiki_comparison/prepare_lists.py db/cache/lists/raw db/cache/lists/raw/2026-10-15 db/cache/lists/names/2026-10-15
 python3 analysis/wiki_comparison/compare_lists.py db/cache/lists/names/2026-10-15
 ```
+
+## The lists brought in (D25)
+
+2026-10-16, the user's two comments on the table above: bring in every
+compound in its "in ChEMBL, outside" column and say where each came from,
+citing each list by its terms; and cite the open list, not the sci-wiki, for
+the compounds in its "entered from the wiki" column. Adopted as D25 in
+[COHORT-2.md](COHORT-2.md), with the review in
+[DATA-QUALITY-LOG.md](DATA-QUALITY-LOG.md) (2026-10-16) and the citations in
+[COMPOUND-LIST-TERMS.md](COMPOUND-LIST-TERMS.md). `open_listings.py` wrote the
+four lists' entries into the selection policy from `lists_overlap.csv`.
+Measured against the D25 build, 3,293 entries:
+
+| list | compounds | in ChEMBL | in the catalogue | by a clinical route | entered from a list | entered from the wiki | in ChEMBL, outside |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| PsychonautWiki, all | 373 | 160 | 159 (43%) | 97 | 62 | 0 | 1 |
+| PsychonautWiki, *Nootropic* | 25 | 20 | 20 (80%) | 16 | 4 | 0 | 0 |
+| TripSit, all | 548 | 293 | 287 (52%) | 161 | 126 | 0 | 6 |
+| TripSit, *nootropic* | 28 | 20 | 20 (71%) | 14 | 6 | 0 | 0 |
+| Wikidata, nootropic role | 161 | 140 | 139 (86%) | 65 | 74 | 0 | 1 |
+| Wikidata, psychoactive roles | 115 | 90 | 87 (76%) | 24 | 63 | 0 | 3 |
+| Wikipedia, *Nootropics* | 149 | 124 | 123 (83%) | 55 | 68 | 0 | 1 |
+| Wikipedia, psychoactive | 1,042 | 376 | 358 (34%) | 29 | 329 | 0 | 18 |
+| Wikipedia, *Designer drugs* | 967 | 387 | 371 (38%) | 26 | 345 | 0 | 16 |
+
+"Entered from a list" counts entries in the catalogue because some list names
+them, this one or another; "entered from the wiki" is now 0 on every one of
+the four, as the second comment asked, since an entry any of them carries is
+cited by them and not by the sci-wiki. **What is still in ChEMBL and outside
+is what the review refused**, 46 entries naming 30 compounds across the lists:
+racemates ChEMBL holds only as single enantiomers (MT-45, 6-MAPB, MDPV,
+4-methylaminorex), names reaching several stereoisomers (dichloropane, LSZ,
+CP 47,497), and the synonyms ChEMBL gives the wrong compound (2C-B-AN, G-4).
+PCP and salvinorin A, which the section above found outside, are in.
+
+The sci-wiki now cites 176 entries, those no open list carries: 101 of the
+cognition section's, 62 of the psychiatric section's and 13 of the
+psychedelics section's, by the section counts above.

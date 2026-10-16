@@ -50,6 +50,7 @@ from __future__ import annotations
 import collections
 import datetime
 import json
+import re
 import shutil
 import sqlite3
 
@@ -70,7 +71,22 @@ MOLECULE_FIELDS = [
 # key. Each is credited where its entries are shown, and the URL of an entry's
 # page is built from its slug here rather than stored (invariant 15's habit:
 # keep the identifier, build the link).
-LISTING_SOURCES = {"sciwiki"}
+LISTING_SOURCES = {"sciwiki", "wikipedia", "wikidata", "tripsit", "psychonautwiki"}
+
+# Whose name labels a listed entry ChEMBL gives no preferred name (D25): a
+# substance index's name first, then a Wikipedia title without its
+# disambiguator ("Aleph (psychedelic)"), and Wikidata's label last, since an
+# item can be a salt's ("cocaine hydrochloride").
+LABEL_ORDER = ("psychonautwiki", "tripsit", "wikipedia", "sciwiki", "wikidata")
+
+
+def listing_label(listed) -> str | None:
+    if not listed:
+        return None
+    best = min(listed, key=lambda l: LABEL_ORDER.index(l["source"]))
+    if best["source"] == "wikipedia":
+        return re.sub(r" \([^)]*\)$", "", best["name"])
+    return best["name"]
 
 # Reviewed common names, keyed by ChEMBL ID, carried over from the legacy
 # export's map and extended only where ChEMBL's own synonym list does not
@@ -409,8 +425,7 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
         mid = rec.pop("parent_molregno")
         rec["id"] = mid
         listed = listings.get(mid, [])
-        rec["name"] = (rec.pop("pref_name") or (listed[0]["name"] if listed else None)
-                       or rec["chembl_id"])
+        rec["name"] = rec.pop("pref_name") or listing_label(listed) or rec["chembl_id"]
         rec["listings"] = [[cat_s.intern(l["source"]), cat_s.intern(l["name"]),
                             cat_s.intern(l["slug"])] for l in listed] or None
         stored = (rec["evidence_status"], rec["gap_reason"])

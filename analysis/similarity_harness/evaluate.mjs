@@ -4,13 +4,14 @@
 //   node analysis/similarity_harness/evaluate.mjs --json
 //   node analysis/similarity_harness/evaluate.mjs --misses 20
 //   node analysis/similarity_harness/evaluate.mjs --key mesh   # MeSH actions as the judge
+//   node analysis/similarity_harness/evaluate.mjs --skip-listed  # listed entries out of each list
 //
 // The per-class table below the headline is the part worth reading. A class at
 // 0% is either a ranking failure or a label that was never a fair question, and
 // the aggregate cannot tell you which -- only the name of the class can.
 
 import { loadPayload, loadViewer, labelledSet, meshActionSet, grade, byClass, pct,
-  HarnessError } from "./harness.mjs";
+  HarnessError, skippingListed } from "./harness.mjs";
 
 const argv = process.argv.slice(2);
 const asJson = argv.includes("--json");
@@ -25,7 +26,7 @@ function main() {
     throw new HarnessError(`unknown --key ${keyName}; use atc or mesh.`);
   }
   const key = keyName === "mesh" ? meshActionSet(data) : labelledSet(data);
-  const viewer = loadViewer(data);
+  const viewer = argv.includes("--skip-listed") ? skippingListed(loadViewer(data)) : loadViewer(data);
   const started = Date.now();
   const g = grade(viewer, key);
   const elapsed = Date.now() - started;

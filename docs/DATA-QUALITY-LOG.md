@@ -51,6 +51,47 @@ alone.
 
 ---
 
+## 2026-10-16 — four open lists, and the names that point at the wrong compound
+
+D25 entered every compound Wikipedia, Wikidata, TripSit or PsychonautWiki
+carries that is in ChEMBL and outside the clinical catalogue: 920 list entries
+at 665 parents. Most came with a structure: 715 of Wikipedia's and Wikidata's
+entries were placed by the InChIKey on the article's own Wikidata item, and
+118 more by an FDA UNII InChIKey. TripSit and PsychonautWiki give names only,
+so their entries are where the errors were. 72 placements not made by an
+identifier were reviewed against ChEMBL's structure, as D23's were, and two
+identifier placements were reviewed on a read-over:
+
+- **A synonym ChEMBL gives the wrong compound.** ChEMBL lists *2C-B-AN* — a
+  2C-B prodrug, brolphetaminil — as a synonym of isoaminile, an antitussive with
+  no bromine and no methoxy group; and *G-4*, a homologue of the DOx
+  psychedelics, as a synonym of dichlorophen, an antimicrobial. *αMT* matched
+  3-amino-3-deoxythymidine as *AMT* did for D23, and *Aleph*'s squashed name
+  matched dinitolmide. All refused.
+- **ChEMBL's name for a structure is wrong.** CHEMBL481044 is drawn as
+  myristicin (an allyl, a methoxy and a methylenedioxy) and named ELEMICIN,
+  which is the trimethoxy compound. FDA's UNII for myristicin reaches it by
+  InChIKey, so the placement is right and the entry is kept with a note; the
+  page shows ChEMBL's name, which is the error. Not reported to ChEMBL yet.
+- **A deuterated drug folds onto its parent.** ChEMBL files deupsilocin as a
+  form of psilocin, so Wikipedia's *Deupsilocin* reached psilocin by exact
+  name. Refused: the article is about the deuterated drug, and psilocin is
+  listed under its own name. Two Wikidata items for deuterated mescaline
+  (*Beta-D*, *4-D*) reached mescaline by skeleton and were refused too.
+- **A name with no stereochemistry, three ways.** Where ChEMBL holds only
+  single enantiomers of a racemate (MT-45, 6-MAPB, 4-methylaminorex, MPMI,
+  DragonFLY and 10 more compounds), refused as D24 refused 5-MAPB. Where TripSit's or
+  PsychonautWiki's bare name reached several stereoisomers and Wikipedia's
+  article placed the same compound by InChIKey (3,4-CTMP, 4F-MPH, U-47700),
+  corrected to that record. U-47700 was refused in D23 for reaching two
+  enantiomers; Wikipedia's item draws one of them, and that is now the
+  identifier it enters by.
+
+19 were kept, 5 corrected and 50 refused, each refusal in its list's
+`considered_and_not_listed`. The decisions are the `REVIEW` table in
+`analysis/wiki_comparison/open_listings.py`, which stops on any placement it
+does not name.
+
 ## 2026-10-15 — the same review, on the psychedelics section
 
 D24 listed the sci-wiki's *Psychedelics & entactogens* section the way D23

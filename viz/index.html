@@ -3188,25 +3188,102 @@ function externalLinks(kind, ref) {
 
 /* ----------------------------------------------------------------- listings */
 
-// The public lists a molecule can be entered from (D23), keyed as the selection
-// policy keys them. Each entry links to its own page on the list, built from
-// the slug the export carries; the export refuses a source this map lacks, so
-// no listing reaches the page uncredited.
+// The public lists a molecule can be entered from (D23, D25), keyed as the
+// selection policy keys them and in the order a panel names them: the open
+// lists first, and the sci-wiki, which since D25 cites only what none of them
+// names. Each entry links to its own page on the list, built from the slug the
+// export carries; the export refuses a source this map lacks, so no listing
+// reaches the page uncredited. `credit` is the list's line in About, worded to
+// its terms (docs/COMPOUND-LIST-TERMS.md), given the count it entered.
 const LISTING_SOURCES = {
+  wikipedia: {
+    label: "Wikipedia",
+    home: "https://en.wikipedia.org/",
+    page: function (slug) {
+      return "https://en.wikipedia.org/wiki/" + encodeURIComponent(slug);
+    },
+    credit: function (n) {
+      return externalLink(this.home, "Wikipedia") + ": " + moleculesBecause(n) +
+        "an English Wikipedia article on " + them(n) + " is filed in its nootropic, " +
+        "psychedelic, other psychoactive or designer-drug categories, read 2026-10-15. " +
+        "Each links to its article; only the article's title is used. Article text " +
+        licenceLink("CC BY-SA 4.0") + ".";
+    },
+  },
+  wikidata: {
+    label: "Wikidata",
+    home: "https://www.wikidata.org/",
+    page: function (slug) {
+      return "https://www.wikidata.org/wiki/" + encodeURIComponent(slug);
+    },
+    credit: function (n) {
+      return externalLink(this.home, "Wikidata") + ": " + moleculesBecause(n) +
+        (n === 1 ? "its item gives it" : "their items give them") +
+        " a nootropic or psychoactive role, read 2026-10-15. Each links to its item; " +
+        "only the item's label is used. " + licenceLink("CC0 1.0") + ".";
+    },
+  },
+  psychonautwiki: {
+    label: "PsychonautWiki",
+    home: "https://psychonautwiki.org/",
+    page: function (slug) {
+      return "https://psychonautwiki.org/wiki/" + encodeURIComponent(slug);
+    },
+    credit: function (n) {
+      return externalLink(this.home, "PsychonautWiki") + ": " + moleculesBecause(n) +
+        "its substance index names " + them(n) + ", read 2026-10-11. Each links to its " +
+        "page; only the substance's name is used, under the index's licence, " +
+        licenceLink("CC BY 4.0") + ".";
+    },
+  },
+  tripsit: {
+    label: "TripSit",
+    home: "https://tripsit.me/factsheets/",
+    page: function (slug) {
+      return "https://tripsit.me/factsheets/" + encodeURIComponent(slug);
+    },
+    credit: function (n) {
+      return externalLink(this.home, "TripSit's factsheets") + ": " + moleculesBecause(n) +
+        "TripSit has a factsheet on " + them(n) + ", read 2026-10-11. Each names TripSit " +
+        "as the source of its listing and links to its factsheet; only the factsheet's " +
+        "name is used, free of charge for non-commercial use as " +
+        externalLink("https://wiki.tripsit.me/wiki/Factsheets", "TripSit's terms") + " allow.";
+    },
+  },
   sciwiki: {
     label: "the sci-wiki",
     home: "https://www.scientificsean.wiki/",
     page: function (slug) {
       return "https://www.scientificsean.wiki/compounds/" + encodeURIComponent(slug);
     },
+    credit: function (n) {
+      return externalLink(this.home, "The sci-wiki") + " (Scientific Sean LLC): " +
+        moleculesBecause(n) + "its cognition, psychiatric and psychedelics compound " +
+        "lists name " + them(n) + " and none of the open lists above does, read " +
+        "2026-10-11. Each links to its page there; only the compound's name is used.";
+    },
   },
 };
 
-// One identity-table row citing the list an entry was entered from, under the
-// list's own name for it. A listed molecule the clinical routes also admit
-// says "Also listed by" instead, because the listing is then not why it is here.
+function moleculesBecause(n) {
+  return n + (n === 1 ? " molecule is" : " molecules are") + " in the catalogue because ";
+}
+
+function them(n) { return n === 1 ? "it" : "them"; }
+
+function knownListings(mol) {
+  const order = Object.keys(LISTING_SOURCES);
+  return (mol.listings || []).filter(function (l) { return LISTING_SOURCES[l.source]; })
+    .sort(function (a, b) { return order.indexOf(a.source) - order.indexOf(b.source); });
+}
+
+// One identity-table row citing the lists an entry was entered from, each
+// under the list's own name for it and naming the list as the source of the
+// listing, which is what TripSit's terms ask of every page showing its
+// information. A listed molecule the clinical routes also admit says "Also
+// listed by" instead, because the listing is then not why it is here.
 function listingRowHTML(mol) {
-  const known = (mol.listings || []).filter(function (l) { return LISTING_SOURCES[l.source]; });
+  const known = knownListings(mol);
   if (!known.length) return "";
   const entered = mol.admission_reason === "listed_only";
   return "<tr><td>" + helpLabel(entered ? "Entered from" : "Also listed by", "listing") +
@@ -3483,18 +3560,21 @@ function aboutSourcesHTML() {
       licenceLink("CC0 1.0") + ".");
   // A list is credited only when the payload carries entries from it, the way
   // GtoPdb is only when its file was merged.
-  const listed = molecules.filter(function (m) {
-    return m.admission_reason === "listed_only" &&
-      m.listings.some(function (l) { return l.source === "sciwiki"; });
-  }).length;
-  if (listed) {
-    items.push(link(LISTING_SOURCES.sciwiki.home, "The sci-wiki") +
-      " (Scientific Sean LLC): " + listed +
-      (listed === 1 ? " molecule is in the catalogue because its cognition and " +
-                      "psychiatric compound lists name it"
-                    : " molecules are in the catalogue because its cognition and " +
-                      "psychiatric compound lists name them") + ", read 2026-10-11. Each links to its page there; only the compound's name " +
-      "is used. SubNetwork is not affiliated with or endorsed by it.");
+  let anyListed = false;
+  Object.keys(LISTING_SOURCES).forEach(function (src) {
+    const n = molecules.filter(function (m) {
+      return m.admission_reason === "listed_only" &&
+        m.listings.some(function (l) { return l.source === src; });
+    }).length;
+    if (n) {
+      items.push(LISTING_SOURCES[src].credit(n));
+      anyListed = true;
+    }
+  });
+  if (anyListed) {
+    items.push("A listing is the reason an entry is here and nothing more: what each " +
+      "molecule acts on comes from the databases above. SubNetwork is not affiliated " +
+      "with or endorsed by any of these lists.");
   }
   return items.map(function (li) { return "<li>" + li + "</li>"; }).join("") +
     "<li>No other database of measurements (PDSP, BindingDB) is assessed.</li>";

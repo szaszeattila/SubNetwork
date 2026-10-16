@@ -184,7 +184,7 @@ def run(db_path=None) -> int:
         one(db, "SELECT COUNT(*) FROM molecules WHERE is_seed=1 AND in_cohort=1"),
         one(db, "SELECT COUNT(*) FROM molecules WHERE is_seed=1")))
 
-    section("Listed molecules (D23)")
+    section("Listed molecules (D23-D25)")
     table(db, "SELECT l.source, m.admission_reason, m.evidence_status, COUNT(*) n"
               " FROM molecule_listings l JOIN molecules m USING (parent_molregno)"
               " GROUP BY 1, 2, 3 ORDER BY 1, 2, n DESC")

@@ -86,6 +86,19 @@ class ListingExportTest(unittest.TestCase):
                          [["sciwiki", "Noopept", "noopept"]])
         self.assertIsNone(mols[3].get("listings"))
 
+    def test_a_substance_index_name_labels_before_a_wikipedia_title_or_a_wikidata_label(self):
+        # D25: Wikidata's label can be a salt's; a Wikipedia title carries a
+        # disambiguator a label does not need.
+        add_molecule(self.conn, 4, "CHEMBL4", None)
+        add_listing(self.conn, 4, "cocaine hydrochloride", "Q1", source="wikidata")
+        add_listing(self.conn, 4, "Aleph (psychedelic)", "Aleph_(psychedelic)", source="wikipedia")
+        add_molecule(self.conn, 5, "CHEMBL5", None)
+        add_listing(self.conn, 5, "Aleph (psychedelic)", "Aleph_(psychedelic)", source="wikipedia")
+        add_listing(self.conn, 5, "ALEPH", "aleph", source="tripsit")
+        mols, strings = run_export(self.conn)
+        self.assertEqual(strings[mols[4]["name"]], "Aleph")
+        self.assertEqual(strings[mols[5]["name"]], "ALEPH")
+
     def test_a_source_the_page_cannot_credit_stops_the_export(self):
         add_listing(self.conn, 3, "Caffeine", "caffeine", source="elsewhere")
         with self.assertRaises(common.PolicyError):

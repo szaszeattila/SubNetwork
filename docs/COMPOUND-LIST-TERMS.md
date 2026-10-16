@@ -111,6 +111,38 @@ adaptation of it; share-alike would attach only to what was copied — a
 category, a description — and only to that. This reasoning is untested for
 compilations. ChEMBL's own CC BY-SA 3.0 already governs the data either way.
 
+### Used as reasons for entry since D25
+
+On 2026-10-16 four of these lists became reasons for entry
+([COHORT-2.md](COHORT-2.md) D25), and the two whose terms were quoted secondhand
+were reread at the source on 2026-10-15:
+
+- **TripSit**, [wiki.tripsit.me/wiki/Factsheets](https://wiki.tripsit.me/wiki/Factsheets):
+  "Use of the data from factsheets, whether copied directly or obtained through
+  the API is free-of-charge for non-commercial purposes. We only require that
+  your application links back to either this page, the Factsheets homepage, or
+  the specific factsheet page of the drug concerned. This should be accompanied
+  with a note citing TripSit as the source for the particular piece(s) of
+  information on every page which uses/displays the information." The page is
+  old; nothing newer was found on tripsit.me, and its GitHub repository still
+  carries no licence. Factsheets are now served at
+  `tripsit.me/factsheets/<name>` (the old `drugs.tripsit.me` redirects there).
+- **PsychonautWiki**, [psychonautwiki.org/wiki/Copyrights](https://psychonautwiki.org/wiki/Copyrights):
+  contributions are CC BY-SA 4.0, and "semantic data" — which the substance
+  index read through its API is — CC BY 4.0, usable "for any purpose, when
+  properly attributed". *Disregard Everything I Say* articles are CC BY-NC-SA
+  4.0 and experience reports their authors'; neither is read.
+
+What each entry does to meet them: its panel names the list and links the
+compound's own page there (an article, an item, a factsheet, a substance page)
+under the list's name for it, which is TripSit's per-page note; About names
+each list with its count and its licence or terms, and says SubNetwork is not
+affiliated with any of them. Only the name and the page key are kept: no
+article text, factsheet dose or effect, or class. Wikipedia's category names
+are kept as the `section` an entry was read from, as facts about where an
+editor filed it. TripSit's condition holds while SubNetwork stays free and
+without advertising.
+
 ## Lists not yet compared
 
 **Worth weighing, best first.**

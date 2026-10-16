@@ -695,3 +695,25 @@ route into the grade is the weight it adds to its targets' prevalence; why
 the 75 move it back up was not isolated. Two of the
 75 rank first over a MeSH class-mate: 5-MeO-DALT for three molecules and
 brolamfetamine (DOB) for two.
+
+D25 (2026-10-16) entered 545 more from Wikipedia, Wikidata, TripSit and
+PsychonautWiki, and moved 120 of the sci-wiki's entries onto those lists'
+citations:
+
+| | ATC scoreable | ATC top-1 | ATC top-10 | ATC MRR | MeSH scoreable | MeSH top-1 | MeSH MRR |
+|---|---|---|---|---|---|---|---|
+| D25 as graded (3,293) | 284 | 30.3% | 71.5% | 0.4343 | 979 | 42.0% | 0.5618 |
+| D25, all 841 listed skipped | 284 | 33.5% | 74.3% | 0.4646 | 972 | 43.3% | 0.5776 |
+
+As graded, both ATC floors failed (MRR 0.44, top-1 31%). Skipped, the grade is
+the best since D21, so the fall is the judge's again, and **the floor test now
+grades with listed entries skipped** (`skippingListed` in `harness.mjs`;
+`evaluate.mjs --skip-listed`) rather than having its floors lowered: a listed
+entry can never carry an ATC N code, so a floor that counted it would have to
+fall with every list admitted. What a listed entry does to the ranking through
+target prevalence is still graded. The generated Status figure stays the
+grade as built. The listed entries ranked first over an ATC class-mate are
+again mostly apt: 7-hydroxymitragynine (μ-opioid) and deprenyl (racemic
+selegiline) three times each, L-655,708 (GABA-A α5 inverse agonist),
+esmodafinil and salvinorin A (κ-opioid) twice; serotonin and phenethylamine,
+both listed by PsychonautWiki or TripSit, once each.

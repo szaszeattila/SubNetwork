@@ -426,8 +426,8 @@ def render_status(fig: dict) -> str:
             {_n(fig['route_indication'])} by a qualifying indication alone,
             {_n(fig['route_both'])} by both); outside it, with their
             exclusion reasons, are {_n(fig['seed_only'])} seed molecules
-            and {_n(fig['listed_only'])} molecules entered because the
-            sci-wiki lists them (D23). {_n(fig['seeds_admitted'])} of the
+            and {_n(fig['listed_only'])} molecules entered because a public
+            list names them (D23–D25). {_n(fig['seeds_admitted'])} of the
             {_n(fig['seeds'])} seeds are admitted.
             {_n(fig['supported_claims'])} claims are Supported in the direct
             human basis — {routes} — over {_n(fig['supported_pairs'])}

@@ -356,6 +356,21 @@ export function grade(viewer, key) {
   };
 }
 
+/**
+ * The viewer with every listed_only entry (D23-D25) left out of each ranked
+ * list. Such an entry can never carry an ATC N code -- one would have admitted
+ * it -- so ranked above a class-mate it is a miss the judge cannot tell from a
+ * ranking error. It still weighs on every target's prevalence, which is how it
+ * can still move the grade. docs/SIMILARITY-HARNESS.md section 13.
+ */
+export function skippingListed(viewer) {
+  const listed = (row) => row.molecule.admission_reason === "listed_only";
+  const shared = (id) => viewer.sharedTargets(id).filter((r) => !listed(r));
+  return new Proxy(viewer, {
+    get: (target, prop) => (prop === "sharedTargets" ? shared : target[prop]),
+  });
+}
+
 /** Per-class top-1, which is the diagnostic the aggregate hides. */
 export function byClass(viewer, key, minMembers = 5) {
   const out = [];

@@ -20,7 +20,7 @@ import unittest
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent / "scripts"))
 
-from cohort import (classes as classes_mod, common, evidence, scope as scope_mod,
+from cohort import (classes as classes_mod, common, evidence, export, scope as scope_mod,
                     selection, targets as targets_mod)
 
 
@@ -236,30 +236,56 @@ class ScopeTest(unittest.TestCase):
 # ---------------------------------------------------------------------------
 
 class ListingPolicyTest(unittest.TestCase):
-    """The adopted sci-wiki listing (D23) is identifiers, reviewed, and unique."""
+    """The adopted listings (D23-D25) are identifiers, reviewed, and unique."""
+
+    OPEN = ("wikipedia", "wikidata", "tripsit", "psychonautwiki")
+    IDENTIFIER_TIERS = {"inchikey", "unii_inchikey", "chembl_name"}
 
     @classmethod
     def setUpClass(cls):
-        cls.lst = policy()["listings"]["sciwiki"]
+        cls.listings = policy()["listings"]
+        cls.lst = cls.listings["sciwiki"]
 
     def test_every_entry_names_an_id_a_name_and_a_slug_once(self):
-        ms = self.lst["molecules"]
-        for e in ms:
-            self.assertRegex(e["chembl_id"], r"^CHEMBL\d+$")
-            self.assertTrue(e["name"] and e["slug"])
-        self.assertEqual(len({e["chembl_id"] for e in ms}), len(ms))
-        self.assertEqual(len({e["slug"] for e in ms}), len(ms))
+        for src, block in self.listings.items():
+            ms = block["molecules"]
+            for e in ms:
+                self.assertRegex(e["chembl_id"], r"^CHEMBL\d+$")
+                self.assertTrue(e["name"] and e["slug"])
+            self.assertEqual(len({e["chembl_id"] for e in ms}), len(ms), src)
+            self.assertEqual(len({e["slug"] for e in ms}), len(ms), src)
+
+    def test_every_source_is_one_the_page_credits(self):
+        # The export refuses a source the viewer has no credit for; the
+        # policy should never name one in the first place.
+        self.assertLessEqual(set(self.listings), export.LISTING_SOURCES)
+        for block in self.listings.values():
+            self.assertIn("{slug}", block["page"])
+            self.assertTrue(block["terms"])
 
     def test_a_skeleton_or_corrected_placement_says_why_it_was_kept(self):
         for e in self.lst["molecules"]:
             if e["placed_by"].endswith("_connectivity") or e["placed_by"] == "reviewed":
                 self.assertTrue(e.get("review"), e["name"])
 
+    def test_an_open_list_placement_not_by_an_identifier_says_why_it_was_kept(self):
+        for src in self.OPEN:
+            for e in self.listings[src]["molecules"]:
+                if e["placed_by"] not in self.IDENTIFIER_TIERS:
+                    self.assertTrue(e.get("review"), (src, e["name"]))
+
     def test_a_refused_name_is_never_listed(self):
-        listed = {e["name"] for e in self.lst["molecules"]}
-        for r in self.lst["considered_and_not_listed"]:
-            self.assertNotIn(r["name"], listed)
-            self.assertTrue(r["reason"])
+        for src, block in self.listings.items():
+            listed = {e["name"] for e in block["molecules"]}
+            for r in block["considered_and_not_listed"]:
+                self.assertNotIn(r["name"], listed, src)
+                self.assertTrue(r["reason"])
+
+    def test_the_sci_wiki_cites_only_what_no_open_list_names(self):
+        # D25: where Wikipedia, Wikidata, TripSit or PsychonautWiki carries a
+        # compound the sci-wiki brought in, the open list is cited instead.
+        opened = {e["chembl_id"] for s in self.OPEN for e in self.listings[s]["molecules"]}
+        self.assertFalse(opened & {e["chembl_id"] for e in self.lst["molecules"]})
 
     def test_the_wiki_s_classes_are_not_copied(self):
         # Its terms refuse copying the reference in bulk; a citation needs a
@@ -286,8 +312,9 @@ class SelectionTest(unittest.TestCase):
         # Seeds are irrelevant to most of these tests; keep one that exists.
         add_molecule(self.conn, 900, "CHEMBL113", "CAFFEINE")
         self.pol["seeds"]["molecules"] = [["caffeine", "CHEMBL113"]]
-        # So are listings (D23), which name ids the fake ChEMBL does not hold.
-        self.pol["listings"]["sciwiki"]["molecules"] = []
+        # So are listings (D23, D25), which name ids the fake ChEMBL does not hold.
+        for block in self.pol["listings"].values():
+            block["molecules"] = []
 
     def run_selection(self):
         return selection.run(self.conn, self.pol, self.desc)
