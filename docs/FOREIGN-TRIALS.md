@@ -1,8 +1,8 @@
 # Trials outside the United States
 
-2026-10-13. **A proposal on the `worktree-foreign-trials` branch; adopts
-nothing.** No membership policy was changed. Figures are from this branch's
-build (selection policy 3.0.0, D21, 2,452 entries) and a fresh trial backfill;
+2026-10-13. **The filter is merged (2026-10-15) and on the page; the
+admission half adopts nothing.** No membership policy was changed. Figures are
+from the `worktree-foreign-trials` branch's build (selection policy 3.0.0, D21, 2,452 entries) and a fresh trial backfill;
 where they disagree with [../CLAUDE.md](../CLAUDE.md)'s Status, Status is right.
 
 The user's annotation on the wiki comparison, at *National approvals are the

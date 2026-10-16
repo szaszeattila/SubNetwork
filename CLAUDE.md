@@ -554,7 +554,7 @@ organism-format rows and 4 documented known-bad records are excluded with
 their reasons, and the exclusion accounting reconciles exactly to the
 1,200,549 activity rows scanned. All 15 build checks pass.
 
-What the page loads is 8.43 MB of startup payload in `viz/graph.data.js` and
+What the page loads is 8.88 MB of startup payload in `viz/graph.data.js` and
 0.20 MB in `viz/gtopdb.data.js`, GtoPdb's part, kept apart for its licence;
 and 112.2 MB of per-molecule evidence shards across 2,044 files under
 `viz/evidence/`, fetched one at a time on demand.
@@ -571,7 +571,7 @@ the `class_wikipedia` table: 522 through the Wikidata item carrying the
 descriptor, and 87 whose item has no article through the main article its
 English category declares (Xanthines to *Xanthine*).
 
-The pipeline suite is 536 tests and the node suites are 708 (479 cohort
+The pipeline suite is 552 tests and the node suites are 721 (492 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`
@@ -618,7 +618,8 @@ behaviour a rule here describes.
   eligibility filters (tier, basis, potency, curated mechanism, and trial
   sites, which is the molecule's) may change that.** Trial sites reads where
   a molecule's Phase 1+ in-scope trials ChEMBL cites had sites, by NCT id
-  ([docs/FOREIGN-TRIALS.md](docs/FOREIGN-TRIALS.md), a proposal on this branch).
+  ([docs/FOREIGN-TRIALS.md](docs/FOREIGN-TRIALS.md); merged 2026-10-15, and
+  it admits nothing).
   Canvas control, viewport culling, line colour and protein-group
   linking answer "drawn/on screen/what colour" instead, invisible to
   panels, ranking, gaps and search.
