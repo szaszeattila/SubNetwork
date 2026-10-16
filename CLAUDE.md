@@ -932,13 +932,15 @@ molecules) are in [docs/COHORT-2.md](docs/COHORT-2.md) and come first.
   activities ChEMBL itself flags "Potential transcription error", 156 are
   counted, in 43 Supported claims - unexamined.
 - **D23 checked the labels, and only the labels.** 35 label-backed Approved
-  records in ChEMBL 37 stay Approved for want of a reading: most cite a set id
-  DailyMed no longer serves, some a label stating no marketing category. An
-  Approved read off an ATC class alone (293 in-scope records) or a Phase 4
-  trial alone (115) is named on hover and not checked against any regulator,
-  and the check sees only the labels ChEMBL cites — an approved product it
-  does not cite is invisible to it
-  ([docs/COHORT-2.md](docs/COHORT-2.md), D23).
+  records in ChEMBL 37 stay Approved for want of a reading. 25 of them are a
+  parser defect: an empty page title read as "not found". An
+  Approved read off an ATC class alone (293 in-scope records) or a trial
+  alone (115) is named on hover and not checked against any regulator. 108
+  of those 115 cite no trial the registry calls Phase 4, though the hover
+  says one. The check sees only the labels ChEMBL cites, so an approved
+  product it does not cite is invisible to it
+  ([docs/COHORT-2.md](docs/COHORT-2.md), D23). Each gap is measured, with a
+  proposed fix, in [docs/D23-GAPS.md](docs/D23-GAPS.md).
 - **Untriaged proposals.** Unit recovery (30 explicit conversions, and a
   conditional mass-basis rule touching 2,364 records that changes what
   "conditional" means) and the organism-format review, in
