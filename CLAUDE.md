@@ -528,7 +528,7 @@ organism-format rows and 4 documented known-bad records are excluded with
 their reasons, and the exclusion accounting reconciles exactly to the
 1,200,625 activity rows scanned. All 15 build checks pass.
 
-What the page loads is 8.55 MB of startup payload in `viz/graph.data.js` and
+What the page loads is 8.85 MB of startup payload in `viz/graph.data.js` and
 0.20 MB in `viz/gtopdb.data.js`, GtoPdb's part, kept apart for its licence;
 and 112.2 MB of per-molecule evidence shards across 2,046 files under
 `viz/evidence/`, fetched one at a time on demand.
@@ -545,7 +545,7 @@ the `class_wikipedia` table: 523 through the Wikidata item carrying the
 descriptor, and 87 whose item has no article through the main article its
 English category declares (Xanthines to *Xanthine*).
 
-The pipeline suite is 526 tests and the node suites are 710 (481 cohort
+The pipeline suite is 528 tests and the node suites are 714 (485 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`

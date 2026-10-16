@@ -114,3 +114,42 @@ describe("the trial-sites filter decides which molecules are in the picture", ()
     assert.doesNotMatch(v.trialSitesSentence(v.lookupMolecule(1)), /<b>/);
   });
 });
+
+describe("each trial names where it had sites, beside its id", () => {
+  // 2026-10-15: trimipramine's indications said its trials ran in Germany,
+  // and not which trial did.
+  function page(trials) {
+    const v = loadViewer(buildData({
+      molecules: [molecule({ id: 1 })],
+      indications: { 1: [["D1", "Depression", "Phase 3", "core", 1,
+                          Object.keys(trials).join("|")]] },
+      trial_status: trials,
+    }));
+    return v.showMolecule(v.lookupMolecule(1));
+  }
+
+  test("one country is named beside the id", () => {
+    const html = page({ NCT02374567: ["COMPLETED", null, "PHASE3", null, 2015, 2017, null, "Germany"] });
+    assert.match(html, /NCT02374567<\/a> <span class="trial-sites">\(Germany\)<\/span> <span class="muted">phase 3, 2015–2017<\/span>/);
+  });
+
+  test("the US comes first, past three the rest are counted and the list is the hover", () => {
+    const html = page({ NCT00000001: ["COMPLETED", null, "PHASE3", null, null, null, null,
+      "Canada|France|Germany|Poland|United States"] });
+    assert.match(html, /title="5 countries: United States, Canada, France, Germany, Poland">\(United States, Canada, France \+2 more\)</);
+  });
+
+  test("a record listing no site says so; one fetched before sites says nothing", () => {
+    const html = page({
+      NCT00000001: ["COMPLETED", null, "PHASE2", null, 2001, 2005, null, null],
+      NCT00000002: ["COMPLETED", null, "PHASE2", null, 2001, 2005],
+    });
+    assert.match(html, /NCT00000001<\/a> <span class="muted">\(no sites listed\)<\/span>/);
+    assert.match(html, /NCT00000002<\/a> <span class="muted">phase 2, 2001–2005<\/span>/);
+  });
+
+  test("a country name is escaped (invariant 11)", () => {
+    const html = page({ NCT00000001: ["COMPLETED", null, "PHASE2", null, null, null, null, "<b>"] });
+    assert.match(html, /\(&lt;b&gt;\)/);
+  });
+});

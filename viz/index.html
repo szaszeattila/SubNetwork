@@ -4257,11 +4257,13 @@ const TRIAL_STATUS_WORDS = {
 };
 
 // Export row: [status, why_stopped, phases, primary outcomes, start year,
-// end year, planned], strings interned, trailing fields omitted when empty.
-// Outcomes are [[title, [p, ...]], ...] - the trial's primary outcomes only,
-// with the p-values the sponsor reported for them, verbatim. `planned` flags
-// which of the two years the registry gives only as an estimate (1 start,
-// 2 end).
+// end year, planned, countries], strings interned, trailing fields omitted
+// when empty. Outcomes are [[title, [p, ...]], ...] - the trial's primary
+// outcomes only, with the p-values the sponsor reported for them, verbatim.
+// `planned` flags which of the two years the registry gives only as an
+// estimate (1 start, 2 end). Countries are where it lists a site,
+// '|'-joined: null there is a record listing none, and a row too short to
+// reach it was fetched before sites were asked for.
 function trialStatus(nct) {
   const r = (DATA.trial_status || {})[nct];
   if (!r) return null;
@@ -4276,7 +4278,29 @@ function trialStatus(nct) {
     }),
     start: r[4] || null, end: r[5] || null,
     startPlanned: !!(r[6] & 1), endPlanned: !!(r[6] & 2),
+    countries: r.length > 7 ? (s(r[7]) ? s(r[7]).split("|") : []) : undefined,
   };
+}
+
+// Where a trial had sites, beside its id (2026-10-15, at the user's request:
+// trimipramine's indications said its trials ran in Germany, and not which
+// one). The US comes first, since it is the line the trial-sites filter
+// draws; past three the rest are counted and the whole list is the hover. A
+// record listing no site says so, and one fetched before sites were asked for
+// says nothing.
+const TRIAL_SITES_SHOWN = 3;
+const HOME_COUNTRY = "United States";   // the registry's name, as export.py reads it
+
+function trialSitesHTML(t) {
+  if (!t || !t.countries) return "";
+  if (!t.countries.length) return ' <span class="muted">(no sites listed)</span>';
+  const all = t.countries.filter(function (c) { return c === HOME_COUNTRY; })
+    .concat(t.countries.filter(function (c) { return c !== HOME_COUNTRY; }));
+  let text = all.slice(0, TRIAL_SITES_SHOWN).join(", ");
+  if (all.length > TRIAL_SITES_SHOWN) text += " +" + (all.length - TRIAL_SITES_SHOWN) + " more";
+  const hover = all.length > TRIAL_SITES_SHOWN
+    ? ' title="' + esc(all.length + " countries: " + all.join(", ")) + '"' : "";
+  return ' <span class="trial-sites"' + hover + ">(" + esc(text) + ")</span>";
 }
 
 // When a trial ran, in years (2026-09-28, at the user's request): a phase 2
@@ -4392,7 +4416,8 @@ function pText(p) {
 function trialLineHTML(nct) {
   const t = trialStatus(nct);
   const meta = [trialPhaseLabel(t), trialYears(t)].filter(Boolean).join(", ");
-  return trialLink(nct) + (meta ? ' <span class="muted">' + esc(meta) + "</span>" : "") +
+  return trialLink(nct) + trialSitesHTML(t) +
+    (meta ? ' <span class="muted">' + esc(meta) + "</span>" : "") +
     " " + trialStatusHTML(nct) + trialOutcomeHTML(nct, t);
 }
 

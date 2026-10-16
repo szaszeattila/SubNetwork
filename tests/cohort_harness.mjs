@@ -393,16 +393,22 @@ export function buildData({ molecules = [], targets = [], claims = [],
   }
   // Trial status as the exporter writes it: nct -> [status, why_stopped?] for
   // a row fetched before phases were recorded, or [status, why_stopped,
-  // phases, outcomes, start year?, end year?, planned?] after, where outcomes
-  // is null (no results posted) or [[title, [p, ...]], ...]. Strings interned,
-  // p-values verbatim, years and the planned flags passed through.
+  // phases, outcomes, start year?, end year?, planned?, countries?] after,
+  // where outcomes is null (no results posted) or [[title, [p, ...]], ...].
+  // Strings interned, p-values verbatim, years and the planned flags passed
+  // through; countries ('|'-joined, or null for a record listing no site)
+  // interned at index 7.
   const encodedTrials = {};
   for (const [nct, r] of Object.entries(trial_status)) {
     if (r.length > 2) {
       encodedTrials[nct] = [strings.intern(r[0]), r[1] ? strings.intern(r[1]) : null,
         r[2] ? strings.intern(r[2]) : null,
         r[3] === null ? null : r[3].map((o) => [strings.intern(o[0]), o[1]]),
-        ...r.slice(4)];
+        ...r.slice(4, 7)];
+      if (r.length > 7) {
+        while (encodedTrials[nct].length < 7) encodedTrials[nct].push(null);
+        encodedTrials[nct].push(r[7] ? strings.intern(r[7]) : null);
+      }
     } else {
       encodedTrials[nct] = r[1] ? [strings.intern(r[0]), strings.intern(r[1])]
                                 : [strings.intern(r[0])];

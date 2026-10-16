@@ -78,7 +78,10 @@ trial at all, or trials only on the other side); the indications section says
 where the molecule's trials ran and names up to six countries; and a link
 carries it as `&trials=elsewhere`. The control is offered only where the
 payload carries sites, so a build without the backfill does not offer three
-settings that empty the canvas.
+settings that empty the canvas. Since 2026-10-15 each trial under a disease
+also names its own countries beside its NCT id ("NCT02374567 (Germany)"), so
+the section's summary sentence can be traced to the trial behind it
+([VIEWER.md](VIEWER.md)).
 
 **It is an eligibility filter, and the viewer's rule changes with it.**
 `claimVisible` used to be decided by four claim filters. This makes five, and

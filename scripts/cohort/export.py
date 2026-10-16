@@ -245,6 +245,21 @@ def _trial_years(r):
     return out
 
 
+# Where one trial had sites (schema version 4), printed beside its NCT id
+# (2026-10-15, at the user's request: trimipramine's indications said Germany
+# and not which trial). It travels after the years, at a fixed index, so the
+# fields before it are padded rather than dropped; a null there is the
+# registry listing no site, and a row too short to reach it was never asked.
+TRIAL_COUNTRIES_INDEX = 7
+
+
+def _with_trial_countries(row, countries, strings):
+    """row, padded to TRIAL_COUNTRIES_INDEX, with the trial's '|'-joined site
+    countries appended interned, or None where the registry lists none."""
+    return (row + [None] * (TRIAL_COUNTRIES_INDEX - len(row)) +
+            [strings.intern(countries) if countries else None])
+
+
 # Where a molecule's in-scope trials ran, for the page's trial-sites filter.
 # A trial counts only where the registry's own phase for it is Phase 1 or
 # later - the floor D21 sets for an indication, read here off the trial,
@@ -578,9 +593,11 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
         cols = {c[1] for c in db.execute("PRAGMA table_info(trial_status)")}
         detailed = {"phases", "primary_outcomes", "schema_version"} <= cols
         dated = detailed and set(TRIAL_DATE_COLUMNS) <= cols
+        sited = dated and "countries" in cols
         select = ("SELECT nct_id, overall_status, why_stopped" +
                   (", phases, primary_outcomes, schema_version" if detailed else "") +
                   ("".join(", " + c for c in TRIAL_DATE_COLUMNS) if dated else "") +
+                  (", countries" if sited else "") +
                   " FROM trial_status ORDER BY nct_id")
         for r in db.execute(select):
             row = [cat_s.intern(r["overall_status"]), cat_s.intern(r["why_stopped"])]
@@ -599,6 +616,8 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
                 row += [cat_s.intern(r["phases"]), outcomes]
                 if dated and (r["schema_version"] or 0) >= 3:
                     row += _trial_years(r)
+                if sited and (r["schema_version"] or 0) >= 4:
+                    row = _with_trial_countries(row, r["countries"], cat_s)
             elif row[1] is None:
                 row.pop()
             trial_status[r["nct_id"]] = row

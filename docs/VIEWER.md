@@ -1558,6 +1558,21 @@ history or current reads without opening it. That span counts only dates the
 registry reports as having happened: a planned end, often long past on a
 trial nobody updated, would stretch it to a year nothing reached.
 
+**A trial names the countries it had sites in, beside its id** (2026-10-15, at
+the user's request, on the `worktree-foreign-trials` branch). Trimipramine's
+indications said its Phase 1+ trials ran outside the US only, in Germany, and
+not which trial that was; the line now reads "NCT02374567 (Germany) phase 3,
+2015–2017". The countries are the registry's own `trial_status.countries`
+(`schema_version` 4), exported per trial at a fixed index after the years. Of
+14,829 trials, 10,831 list one country and some up to 47, so three are named,
+the US first because it is the line the trial-sites filter draws, the rest
+counted ("+5 more") with the whole list as the hover. The 1,442 records that
+list no site say "(no sites listed)" — a gap in the record, not "nowhere" — and
+a row fetched before sites were asked for says nothing. It costs 0.31 MB of
+the startup file, nearly all of it the 1,999 distinct joined lists;
+interning each country instead would save about 30 KB, not worth a second
+format.
+
 ChEMBL's "Approved" is **not** US-only, which was said wrongly once in
 conversation: of the 1,376 approved indication records here, 122 rest on an EMA
 reference alone and 276 on ATC alone.

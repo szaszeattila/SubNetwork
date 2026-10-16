@@ -79,5 +79,22 @@ class TrialSitesByMoleculeTest(unittest.TestCase):
         self.assertEqual(export._trial_sites_by_molecule(self.db(version=3)), {})
 
 
+class TrialCountriesFieldTest(unittest.TestCase):
+    """Each trial's own sites travel at a fixed index of its trial_status row,
+    for the page to print beside the NCT id."""
+
+    def test_padded_to_a_fixed_index_and_interned(self):
+        strings = export.Strings()
+        row = export._with_trial_countries([0, None, 1, None, 2015], "Germany", strings)
+        self.assertEqual(len(row), export.TRIAL_COUNTRIES_INDEX + 1)
+        self.assertEqual(row[:5], [0, None, 1, None, 2015])
+        self.assertEqual(strings.values[row[-1]], "Germany")
+
+    def test_a_record_listing_no_site_is_an_explicit_null(self):
+        row = export._with_trial_countries([0, None, 1, None, 2015, 2017, None],
+                                           None, export.Strings())
+        self.assertEqual(row, [0, None, 1, None, 2015, 2017, None, None])
+
+
 if __name__ == "__main__":
     unittest.main()
