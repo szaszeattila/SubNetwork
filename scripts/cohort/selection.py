@@ -71,6 +71,9 @@ class Member:
     approved_elsewhere: tuple[str, ...]
     family: tuple[dict, ...]
     identity_flags: tuple[str, ...]
+    # D24: ChEMBL's withdrawal records across the family, as filed
+    # (drug_warning, 'Withdrawn'): where and when an approval was withdrawn.
+    withdrawals: tuple[dict, ...] = ()
 
     @property
     def in_cohort(self) -> bool:
@@ -154,6 +157,29 @@ def _synonyms(conn, molregnos) -> dict[int, list[str]]:
             if row["synonyms"]:
                 out[row["molregno"]].append(row["synonyms"])
     return {k: sorted(set(v)) for k, v in out.items()}
+
+
+def _withdrawals(conn, molregnos) -> dict[int, list[dict]]:
+    """ChEMBL's withdrawal records (drug_warning, 'Withdrawn') per form (D24).
+
+    ChEMBL files one row per withdrawal and warning class, so one market's
+    withdrawal for two reasons is two rows with the same countries and year;
+    they are kept apart here, as filed, and the export folds them. The
+    countries are ChEMBL's '; '-joined text, with 'Worldwide' for a worldwide
+    withdrawal. A display fact, never a membership input.
+    """
+    out = collections.defaultdict(list)
+    for chunk in common.chunked(molregnos):
+        q = ("SELECT warning_id, molregno, warning_country, warning_year, warning_class,"
+             " warning_description FROM drug_warning WHERE warning_type = 'Withdrawn'"
+             f" AND molregno IN ({','.join('?' * len(chunk))}) ORDER BY warning_id")
+        for row in conn.execute(q, chunk):
+            out[row["molregno"]].append({
+                "warning_id": row["warning_id"], "molregno": row["molregno"],
+                "countries": row["warning_country"], "year": row["warning_year"],
+                "warning_class": row["warning_class"],
+                "description": row["warning_description"]})
+    return out
 
 
 def run(conn, policy: dict, descriptors: dict, label_status) -> dict:
@@ -247,6 +273,7 @@ def run(conn, policy: dict, descriptors: dict, label_status) -> dict:
     every = set(catalogue) | {m for f in families.values() for m in f}
     records = _records(conn, every)
     synonyms = _synonyms(conn, every)
+    withdrawals = _withdrawals(conn, every)
 
     atc_by_mol = collections.defaultdict(list)
     for r in atc_rows:
@@ -302,6 +329,12 @@ def run(conn, policy: dict, descriptors: dict, label_status) -> dict:
                 "chembl_max_phase": r["max_phase_for_ind"],
                 "approval_basis": basis,
                 "unapproved_labels": label_status.unapproved_labels(r["drugind_id"]),
+                # D24: the class an ATC-backed Approved was read off, and why
+                # a label behind an unresolved or unconfirmed one went unread
+                "atc_classes": (label_status.atc_classes(r["drugind_id"])
+                                if basis == "atc" else []),
+                "unread_reason": (label_status.unread_reason(r["drugind_id"])
+                                  if basis in ("unresolved", "unconfirmed") else None),
                 "scope_reasons": list(d.scope_reasons),
                 "trial_ids": trials.get(r["drugind_id"], ()),
             }
@@ -397,6 +430,8 @@ def run(conn, policy: dict, descriptors: dict, label_status) -> dict:
                                     if records.get(m, {}).get("chembl_id") == c), None),
             } for m in fam),
             identity_flags=tuple(flags),
+            withdrawals=tuple(sorted((w for m in fam for w in withdrawals.get(m, ())),
+                                     key=lambda w: w["warning_id"])),
         )
 
     arithmetic = {

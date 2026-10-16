@@ -7,12 +7,33 @@ WHO ATC class alone (293 in-scope records), and one read off a Phase 4 trial
 alone (115). The user asked for those to be interrogated and for a solution to
 each. This is that: what each gap actually is, measured against the active
 build (2026-10-15, selection policy 3.1.0) and the committed
-`config/cohort1_label_status.json`, and a proposal for each. **Nothing here is
-adopted.**
+`config/cohort1_label_status.json`, and a proposal for each.
 
 The short version: the first gap is mostly a parser defect, the third is
 mostly a wrong assumption about what ChEMBL cites, and only the second needs a
 source this project does not yet read.
+
+## What was adopted (D24, 2026-10-16)
+
+The user annotated this document and the result is decision D24 in
+[COHORT-2.md](COHORT-2.md), which has the numbers as built. In brief:
+
+| proposal | the user's word | outcome |
+|---|---|---|
+| gap 1, rules 1-4 | "adopt these 4 proposals" | built: `found` by set id, RxNav, fda.gov as FDA, the approval-year guard |
+| gap 3, rules 1-2 | "adopt 1 and 2 only, not 3" | built: registry phase for trial-only records, the hover corrected |
+| gap 3, rule 3 | not adopted | the trial's condition and country are not checked |
+| gap 2, rule 1 | "if it was withdrawn worldwide, it should say so" | built: "Approved, withdrawn worldwide (1984)"; elsewhere "Approved; withdrawn in France, 1990" |
+| gap 2, rule 2 | "install postgreSQL and RDKit and implement this" | built: `scripts/resolve_cohort_drugcentral.py`; 139 of 228 ATC-only diseases now name a regulator, 8 of the 80 no-US-trace molecules |
+| gap 2, rule 3 | "measure this" | measured: 49 of 230 confirmed on-label, a floor; not adopted |
+| gap 2, rule 4 | "implement this as well" | recorded in D24 as rejected sources, read as adopting the rejections: each fails invariant 15 or names no approval |
+| gap 2, rule 5 | "sure but lets put finding regulators … as a possible action item in the future" | built: the wording; the action item is COHORT-2's **Open** 10 |
+
+Two of the measurements below changed when built: RxNav holds 134 labels
+DailyMed no longer serves, not one, because the count here was only of the 35
+unresolved records; and gap 3's rule moves two in-scope diseases, not three,
+as the table below says it would, since lithium's depression stays Approved on
+the Lithane label.
 
 ## Records and diseases
 
@@ -210,11 +231,25 @@ where? And does that approval still stand?
    few, because most of them are national European authorisations, which
    neither the EMA nor DrugCentral lists. Licence to check before export, as
    GtoPdb's was.
+   *Measured 2026-10-16 (D24):* restored into PostgreSQL 18.6 with the RDKit
+   cartridge; DrugCentral publishes the dump under CC BY-SA 4.0. It reaches 8
+   of the 80 (7 FDA, 1 PMDA), and 139 of the 228 ATC-only diseases as built.
+   The expectation held.
 3. **Disease level, for the 142 whose molecule is approved somewhere:**
    DrugCentral's indications reportedly separate on-label from off-label use,
    but are keyed by SNOMED CT and UMLS CUI, not MeSH. The identifier bridge
    would be Wikidata items carrying both P2892 (UMLS CUI) and P486 (MeSH).
    Coverage is unmeasured. Same first step as 2.
+   *Measured 2026-10-16 (D24):* indications are keyed by UMLS CUI and
+   relationship (`indication`, `off-label use`, `contraindication`). Through
+   Wikidata's 1:1 CUI-to-MeSH pairs (25,938), 49 of the 230 ATC-only diseases
+   are confirmed on-label: 21 at the same MeSH heading, 14 at a narrower one
+   (Lennox-Gastaut syndrome for Epilepsy), 14 only at a broader one (Pain for
+   Arthralgia, a weak confirmation). 4 are off-label only, 79 have a matched
+   structure whose bridged indications do not match, 91 have indications the
+   bridge cannot map, and 7 reach no single structure. A floor, since the
+   bridge is the limit; every match inspected was correct. With many-to-one
+   bridge entries allowed, 64 are on-label.
 4. **Rejected, with reasons:**
    - **NLM MED-RT `may_treat`** (RxClass): its disease IDs are MeSH, but it
      mixes labelled and off-label uses without saying which, so it is not an

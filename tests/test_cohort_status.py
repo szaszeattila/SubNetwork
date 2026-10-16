@@ -48,7 +48,7 @@ def _fake_figures(**overrides):
         "wiki_molecules": 1051, "single_component": 2265, "wiki_targets": 1280,
         "multi_component": 310, "no_component": 2,
         "multi_single_protein": 1, "multi_single_protein_accessions": 3,
-        "payload_bytes": 4390047, "gtopdb_bytes": 129332, "shard_bytes": 71652390, "shard_count": 1176,
+        "payload_bytes": 4390047, "gtopdb_bytes": 129332, "drugcentral_bytes": 31000, "shard_bytes": 71652390, "shard_count": 1176,
         "python_tests": 219, "viewer_cohort_tests": 182,
         "viewer_legacy_tests": 222, "viewer_tests": 404,
         "harness_tests": 7, "node_tests": 411,

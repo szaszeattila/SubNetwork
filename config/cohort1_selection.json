@@ -1,9 +1,9 @@
 {
   "policy_id": "cohort1-selection",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "adopted": "2026-09-13",
   "supersedes": "analysis/cohort1/config/cns_indication_scope.json v1.0.0 (report scope, S0 core only)",
-  "decisions": "docs/COHORT-1-DECISIONS.md D01, D02, D03, D04, D05; docs/COHORT-2.md D21, D23",
+  "decisions": "docs/COHORT-1-DECISIONS.md D01, D02, D03, D04, D05; docs/COHORT-2.md D21, D23, D24",
   "status": "Production selection policy. Unlike the report configuration it supersedes, this file decides catalogue membership.",
 
   "pinned_inputs": {
@@ -23,8 +23,8 @@
     },
     "label_status": {
       "path": "config/cohort1_label_status.json",
-      "sha256": "c0f7f48d065646a8b448f2f02d49a0a17ef6554080d73d2a6d34573404ab6d39",
-      "provenance": "D23. Written by scripts/check_dailymed_labels.py from the DailyMed label behind every phase-4 drug_indication record in chembl_37 that cites no FDA or EMA document (3,770 records, 14,015 labels), read by set id, 2026-10-15; the registry phases of the trials its unapproved records cite are read from ClinicalTrials.gov by NCT id.",
+      "sha256": "db510dc4830d318be354d3a673d43a889664d796fac4629671d7711ed21d83f9",
+      "provenance": "D23, D24. Written by scripts/check_dailymed_labels.py from the DailyMed label behind every phase-4 drug_indication record in chembl_37 that cites no FDA or EMA document (3,769 records, 14,015 labels), read by set id, 2026-10-15, and reparsed 2026-10-16 with a label found when its page names the set id; RxNav answers by the same set id for the 134 DailyMed no longer serves. The registry phases of the trials cited by its unapproved and unresolved records, and by the 884 records resting on cited trials alone, are read from ClinicalTrials.gov by NCT id, 2026-10-16.",
       "why_pinned": "It moves membership. Regenerating it is a different reading of DailyMed, so the build refuses a file this policy does not name: raise the policy version deliberately rather than letting it drift."
     }
   },
@@ -47,7 +47,7 @@
       "id": "route_indication",
       "rule": "The parent, or any family member, has a drug_indication row whose mesh_id is in the adopted scope AND whose phase, read through D23, is >= 1.",
       "phase_field": "drug_indication.max_phase_for_ind, read through D23 (scripts/cohort/labels.py)",
-      "phase_correction": "D23, selection policy 3.1.0 (2026-10-15, at the user's request: 'we want to be truthful, not just follow chembl'). ChEMBL's phase 4 on a record whose only approval evidence is US labels that FDA lists as marketed without approval is not an approval: the record takes the furthest phase the registry records for a trial it cites, or none, and then cannot qualify. A Phase 4 trial alone, with no label, stays Approved: a post-marketing trial usually studies the approved use.",
+      "phase_correction": "D23, selection policy 3.1.0 (2026-10-15, at the user's request: 'we want to be truthful, not just follow chembl'). ChEMBL's phase 4 on a record whose only approval evidence is US labels that FDA lists as marketed without approval is not an approval: the record takes the furthest phase the registry records for a trial it cites, or none, and then cannot qualify. D24, selection policy 3.2.0 (2026-10-16, the user adopting docs/D23-GAPS.md gaps 1 and 3.1-3.2): a record resting on cited trials alone is Approved only where one of them is Phase 4 in the registry, and otherwise takes their furthest registry phase; a label that cannot be read keeps ChEMBL's Approved only where FDA records an approval year for the molecule; an fda.gov page in the DailyMed slot is an FDA document.",
       "min_phase": 1,
       "min_phase_history": "3 under selection policy 1.x and 2.x (D01). Lowered to 1 in 3.0.0 (D21, 2026-10-12, at the user's request): every molecule with an in-scope indication that has reached Phase 1 or beyond is a member.",
       "phase_field_reason": "D01: the threshold applies to the qualifying indication, not to molecule_dictionary.max_phase across unrelated diseases.",

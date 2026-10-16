@@ -430,7 +430,104 @@ loses its molecule-level approval.
 it does not cite is invisible, which is why the page says what ChEMBL rested
 on rather than "never approved". The 35 unresolved keep ChEMBL's Approved; so
 do approvals read off an ATC class alone (293 in-scope records) or a Phase 4
-trial alone (115), named on hover and checked against no regulator.
+trial alone (115), named on hover and checked against no regulator. D24
+closed or narrowed all three.
+
+### D24 — D23's three gaps, closed where an identifier reaches
+
+**Decision (user, 2026-10-16).** The three gaps were measured and a fix
+proposed for each in [D23-GAPS.md](D23-GAPS.md). The user annotated it:
+adopt gap 1's four proposals; adopt gap 3's first two "only, not 3"; for a
+withdrawal, "if it was withdrawn worldwide, it should say so"; "install
+postgreSQL and RDKit and implement" DrugCentral's regulators; "measure"
+DrugCentral's disease-level indications; and adopt the ATC wording, with
+"finding regulators … as a possible action item in the future". Selection
+policy 3.2.0, label status 2.0.0. Worked in the `d23-gaps` worktree.
+
+**Gap 1, labels that could not be read.** `scripts/check_dailymed_labels.py`
+read `found` off the page title, and 618 label pages have an empty one; a
+page is now the label when it names the set id asked for
+(DATA-QUALITY-LOG, 2026-10-16). A set id DailyMed no longer serves is asked
+of NLM's RxNav by the same id: 134 cited labels, all of which RxNav still
+holds a category for. An fda.gov page in ChEMBL's DailyMed slot (Aucatzyl, a
+BLA) is an FDA document. Of the 35 unresolved records, 23 became `label`, 1
+`monograph`, 2 `unapproved` and 1 `regulator`; 8 remain, the labels older
+than FDA's structured marketing category. They keep ChEMBL's Approved only
+where FDA records an approval year for the molecule, across its forms
+(`molecule_dictionary.first_approval`); all 8 do, so the guard moves nothing
+today. A record it would drop reads "Approval unconfirmed" (basis
+`unconfirmed`). Benzocaine's anaesthesia reads Marketed unapproved: all five
+labels it cites are UNAPPROVED DRUG OTHER. Two in-scope records stay
+unresolved and Approved: ISMO's angina and Lithane's depression, both with
+"older than FDA's marketing categories" and FDA's year on hover.
+
+**Gap 3, trials alone.** D23 assumed a phase-4 record citing only
+ClinicalTrials.gov cites a Phase 4 trial. Of 884 such records in the
+release, the registry calls one of the cited trials Phase 4 in 31. The rest
+take the furthest registry phase among their trials, as an unapproved label
+does (basis `trial_phase`): 508 Phase 3, 280 Phase 2, 60 Phase 1, 4 Early
+Phase 1, and one whose trials the registry returns no phase for, "Approval
+unconfirmed". The phases come through the committed status file, so the
+build still reads no network, and it stops if the file does not describe
+every trial-only record. In scope, 108 of 115 records change and two
+diseases fall to Phase 3: lidocaine's muscle cramp and folic acid's
+depression. Lithium's depression stays Approved on the Lithane label;
+desipramine's major depression and Lidoderm's neuralgia keep theirs on Phase 4
+trials. The hover now says "a trial the registry records as Phase 4", which is
+true, and a fallen row says ChEMBL's Approved rests on trials none of which is.
+The stricter check - the trial's own condition, and its site countries - was
+not adopted.
+
+**Gap 2, an ATC class.** Three parts:
+
+- *Withdrawals.* ChEMBL's `drug_warning` ('Withdrawn') is read into
+  `molecule_withdrawals` (341 records, 91 molecules). Every Approved disease of
+  a withdrawn molecule says so: "Approved; withdrawn in France, 1990", or, the
+  user's choice, "Approved, withdrawn worldwide (1984)" for the five withdrawn
+  worldwide (glafenine, zimeldine, nomifensine, remoxipride, thioridazine).
+  83 Approved in-scope diseases on 54 molecules. Display only.
+- *Regulators, from DrugCentral.* `scripts/resolve_cohort_drugcentral.py`
+  reads the `approval` and `identifier` tables of DrugCentral's pinned dump
+  (2026-09-25, v56, CC BY-SA 4.0) with `pg_restore`, and matches a structure
+  to a catalogue entry by the ChEMBL IDs DrugCentral files for it, refusing a
+  structure that reaches two entries (64 entries) or an entry two structures
+  reach (29). 1,381 entries match; 1,075 carry a regulator's approval (FDA
+  1,040, EMA 292, PMDA 224, 7 others); "YEAR INTRODUCED" (58) names none and
+  is left out. Of the 228 in-scope diseases still resting on an ATC class
+  alone, 139 (122 molecules) now name a regulator on hover, as a fact about
+  the drug and not about the disease. Of the 80 molecules with no US trace,
+  8 do - 7 approved by FDA without a ChEMBL approval year, 1 by PMDA - which is
+  what D23-GAPS expected: their approvals are national European ones, which
+  DrugCentral does not list. Exported to `viz/drugcentral.data.js`, apart for
+  its licence like GtoPdb's.
+- *Wording.* An ATC-backed Approved reads "classified by WHO ATC in N05BA
+  (anxiolytics: benzodiazepine derivatives)", then the regulators, or "no
+  regulator's record is cited".
+
+**Measured, not adopted: DrugCentral's indications.** Its `omop_relationship`
+separates on-label from off-label use, keyed by UMLS CUI. Bridged to MeSH
+through Wikidata items carrying both (P2892 and P486, 1:1 pairs only, run
+2026-10-16), it confirms 49 of the 230 ATC-only diseases on-label: 21 exact,
+14 at a narrower MeSH heading, 14 only at a broader one (Pain for Arthralgia).
+That is a floor: 91 more have DrugCentral indications the bridge does not map
+(Schizophrenia for Psychotic Disorders, Major depressive disorder). Every
+match inspected was right. Not adopted: the user asked for a measurement, and
+a disease-level check would move phases, a membership question.
+
+**Rejected sources**, recorded so they are not proposed again: NLM MED-RT
+`may_treat` mixes labelled and off-label uses without saying which; EMA's
+medicines spreadsheet names substances and diseases only as text (invariant
+15) and lists central authorisations only; openFDA labels give indications as
+free text; Health Canada's DPD and PMDA offer no identifier-keyed list.
+
+**What it did.** Membership does not move: 2,450 entries, 2,447 members. In-
+scope diseases reading Approved go from 1,101 to 1,098. No molecule loses its
+molecule-level approval.
+
+**What stays unchecked.** National authorisations outside the US, EU and
+Japan: no public identifier-keyed source was found, and the page says "no
+regulator's record is cited" rather than reading as one. Finding them is an
+open item.
 
 ---
 
@@ -472,3 +569,12 @@ In the order they bear on the picture.
    neurofibromatosis), mostly cancer drugs trialled in glioma. Both edges
    were accepted at Phase 3 in D02. Whether "brain indication" should exclude
    them at the lower floor is the user's call.
+10. **Finding the regulators D24 could not** (the user's future action item,
+    2026-10-16). 89 in-scope ATC-only diseases name no regulator, 72 of the
+    80 molecules with no US trace among them, mostly national European or
+    Japanese authorisations (bromazepam, sulpiride, dosulepin, clotiazepam,
+    piribedil). Any source must be keyed by an identifier this database
+    holds (invariant 15), which rules out the four D24 rejected. Two leads
+    worth measuring: national registers that publish ATC code with an
+    identifier, and DrugCentral's own UMLS-to-MeSH identifiers as a second
+    bridge for its indications.

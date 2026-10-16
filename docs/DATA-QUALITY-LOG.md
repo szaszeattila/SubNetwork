@@ -48,7 +48,43 @@ alone.
 | **BindingDB** | target *discovery* | ~97% of what it returns here is republished ChEMBL/PDSP; REST endpoint unreliable |
 | **PDSP Ki DB** | independent Ki measurements, strong for CNS | bulk CSV only, no query API, no per-row citation link |
 | **GtoPdb** | curated action (agonist, antagonist, …) on the receptor, channel and enzyme families this project is about | a ligand's Type can be carried onto secondary targets it was only screened at (vilazodone); anonymous bulk access announced to end |
-| **DailyMed** | the FDA marketing category of each US label ChEMBL cites for an Approved (D23) | a published label is not an approval: UNAPPROVED DRUG OTHER labels are published too; its API serves only current labels, so archived ones are read from the label page; some labels state no category at all |
+| **DailyMed** | the FDA marketing category of each US label ChEMBL cites for an Approved (D23) | a published label is not an approval: UNAPPROVED DRUG OTHER labels are published too; its API serves only current labels, so archived ones are read from the label page; some labels state no category at all; a label page can have an empty `<title>` |
+| **RxNav** | the marketing category of a label DailyMed no longer serves, by the same set id (D24) | holds only labels whose NDCs RxNorm still keeps |
+| **DrugCentral** | which regulators (FDA, EMA, PMDA, a few others) approved an active ingredient, and when (D24) | molecule-level, never per disease; a ChEMBL ID can sit on two of its structures, and one structure can carry two catalogue entries' IDs; "YEAR INTRODUCED" is not a regulator; a PostgreSQL dump, read with `pg_restore` |
+
+---
+
+## 2026-10-16 — a label page with no title was read as no label, and a "Phase 4 trial" was not one
+
+Two of D23's assumptions, both found by measuring the gaps it named
+([D23-GAPS.md](D23-GAPS.md); D24 in [COHORT-2.md](COHORT-2.md)).
+
+**An empty title is not a missing page.** `parse_label` set `found` from the
+page's `<title>`, because DailyMed answers an unknown set id with its search
+page, titled "DailyMed". But 618 real label pages in the release have an empty
+title, and their marketing tables parse. `verdict` treats a label that is not
+`found` as unreadable, so 25 records stood `unresolved` on labels that said
+ANDA, NDA or monograph plainly. It never made a record wrongly *unapproved* -
+`unapproved` needs every label read - so the error only ever left ChEMBL's
+Approved standing for want of a reading, which is the safe direction, and is
+why nothing looked wrong. `found` now means the page names the set id asked
+for: the search page never does, and a label page names its own several times.
+D23's note said the 35 unresolved were mostly "a set id DailyMed no longer
+serves"; the cache showed one. The note was a guess written as a finding.
+
+**ChEMBL's 4 on a trial-only record is not the trial's phase.** D23 kept an
+Approved resting on ClinicalTrials.gov alone, on the reasoning that a Phase 4
+trial is post-marketing, and the hover said "a Phase 4 (post-marketing)
+trial". The registry's phases were already in `trial_status`, and nobody read
+them: of 884 such records in the release, 31 cite a trial the registry calls
+Phase 4. The rest cite Phase 3 (508), Phase 2 (280), Phase 1 (60), Early Phase
+1 (4), or nothing the registry returns a phase for (1). Where ChEMBL got its 4
+is not recorded. They now take their trials' furthest registry phase, the rule
+D23 already applied to unapproved labels.
+
+The lesson is the log's recurring one, applied to this project's own words: a
+hover that says what a source is ("a Phase 4 trial") is a claim, and was
+checked only where it was convenient.
 
 ---
 

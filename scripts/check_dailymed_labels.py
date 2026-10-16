@@ -81,8 +81,8 @@ def _text(fragment: str) -> str:
     return re.sub(r"\s+", " ", html.unescape(_TAG.sub(" ", fragment))).strip()
 
 
-def parse_label(page: str) -> dict:
-    """What a DailyMed label page says about how its products are marketed.
+def parse_label(page: str, set_id: str) -> dict:
+    """What the DailyMed page served for `set_id` says about how its products are marketed.
 
     Every product on a label has a "Marketing Information" table whose header
     row is Marketing Category / Application Number or Monograph Citation /
@@ -90,8 +90,14 @@ def parse_label(page: str) -> dict:
     rows are returned in page order, de-duplicated. A label that states no
     category - some current ones carry no marketing section at all, in the
     page or in the SPL itself - returns none, and is never read as
-    unapproved. `found` is False on DailyMed's search page, which is what
-    the address serves for a set id it does not hold.
+    unapproved.
+
+    `found` says the page is that label: it names the set id it was asked
+    for. For a set id it does not hold, DailyMed serves its search page,
+    titled "DailyMed", which never names one; a label page names its own
+    several times. `found` was first read off the title, and 618 label pages
+    have an empty one, so 25 records stood unresolved on labels that parse
+    (docs/DATA-QUALITY-LOG.md, 2026-10-16).
     """
     m = re.search(r"<title>(.*?)</title>", page, re.S | re.I)
     title = _text(m.group(1)) if m else ""
@@ -112,8 +118,8 @@ def parse_label(page: str) -> dict:
             if row not in seen:
                 seen.add(row)
                 rows.append(dict(zip(("category", "application", "start", "end"), row)))
-    return {"found": title is not None, "title": title, "labeler": labeler,
-            "marketing": rows}
+    return {"found": set_id.lower() in page.lower(), "title": title,
+            "labeler": labeler, "marketing": rows}
 
 
 # ---------------------------------------------------------------- fetch
@@ -168,7 +174,7 @@ def fetch(set_ids: list[str], refresh: bool = False) -> dict:
             if status == 200:
                 path.write_bytes(gzip.compress(page.encode("utf-8")))
             fetched = dt.datetime.now(dt.timezone.utc)
-        rec = parse_label(page) if status == 200 else {
+        rec = parse_label(page, set_id) if status == 200 else {
             "found": False, "title": None, "labeler": None, "marketing": []}
         rec["http_status"] = status
         rec["fetched_at"] = fetched.strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -182,8 +188,71 @@ def fetch(set_ids: list[str], refresh: bool = False) -> dict:
             if done % 250 == 0:
                 _save_labels(labels)
                 print(f"  {done}/{len(todo)}", flush=True)
+    ask_rxnav({s: labels[s] for s in set_ids if s in labels})
     _save_labels(labels)
     return labels
+
+
+# A set id DailyMed no longer serves can still be in RxNorm, which keeps the
+# NDCs of a label and their FDA marketing category after DailyMed drops the
+# page. NLM's RxNav answers by the same set id, so it is the same identifier
+# asked of a second NLM index, never a search (invariant 15). Only a label
+# DailyMed did not find is asked; its answer is cached as served.
+RXNAV_URL = "https://rxnav.nlm.nih.gov/REST/ndcproperties.json?id={}&ndcstatus=ALL"
+RXNAV_DIR = CACHE / "rxnav"
+
+
+def parse_rxnav(doc: dict, set_id: str) -> list[dict]:
+    """The marketing rows RxNav holds for one set id, in the shape `parse_label` returns."""
+    def date(yyyymmdd):
+        s = str(yyyymmdd or "")
+        return f"{s[4:6]}/{s[6:8]}/{s[:4]}" if len(s) == 8 else None
+
+    rows, seen = [], set()
+    for p in (doc.get("ndcPropertyList") or {}).get("ndcProperty") or []:
+        if (p.get("splSetIdItem") or "").lower() != set_id.lower():
+            continue
+        props = collections.defaultdict(list)
+        for c in (p.get("propertyConceptList") or {}).get("propertyConcept") or []:
+            props[c["propName"]].append(c["propValue"])
+        for cat in props.get("MARKETING_CATEGORY", []):
+            app = (props.get("NDA") or props.get("ANDA") or props.get("BLA") or [None])[0]
+            row = (cat.strip().upper(), app,
+                   date((props.get("MARKETING_EFFECTIVE_TIME_LOW") or [None])[0]),
+                   date((props.get("MARKETING_EFFECTIVE_TIME_HIGH") or [None])[0]))
+            if row not in seen:
+                seen.add(row)
+                rows.append(dict(zip(("category", "application", "start", "end"), row)))
+    return rows
+
+
+def ask_rxnav(labels: dict) -> None:
+    """Ask RxNav for every label DailyMed did not find; cached, never asked twice."""
+    RXNAV_DIR.mkdir(parents=True, exist_ok=True)
+    missing = sorted(s for s, rec in labels.items() if not rec.get("found"))
+    session = requests.Session()
+    session.headers["User-Agent"] = USER_AGENT
+    for set_id in missing:
+        path = RXNAV_DIR / f"{set_id}.json"
+        if not path.exists():
+            r = session.get(RXNAV_URL.format(set_id), timeout=60)
+            r.raise_for_status()
+            path.write_text(r.text)
+            time.sleep(0.2)
+        labels[set_id]["rxnav"] = parse_rxnav(json.loads(path.read_text() or "{}"), set_id)
+    print(f"{len(missing)} labels DailyMed does not serve asked of RxNav; "
+          f"{sum(1 for s in missing if labels[s]['rxnav'])} hold a marketing category there")
+
+
+def marketing_rows(rec: dict | None) -> tuple[list[dict], str | None]:
+    """A label's marketing rows and where they were read: DailyMed's page, else RxNav."""
+    if not rec:
+        return [], None
+    if rec.get("found"):
+        return rec.get("marketing") or [], "DailyMed"
+    if rec.get("rxnav"):
+        return rec["rxnav"], "RxNav"
+    return [], None
 
 
 def reparse() -> dict:
@@ -192,7 +261,8 @@ def reparse() -> dict:
     for set_id, rec in labels.items():
         path = HTML_DIR / f"{set_id}.html.gz"
         if path.exists():
-            new = parse_label(gzip.decompress(path.read_bytes()).decode("utf-8", "replace"))
+            new = parse_label(gzip.decompress(path.read_bytes()).decode("utf-8", "replace"),
+                              set_id)
             rec.update(new)
     _save_labels(labels)
     return labels
@@ -214,11 +284,11 @@ def verdict(set_ids: list[str], labels: dict) -> str:
     cats = []
     unreadable = False
     for s in set_ids:
-        rec = labels.get(s)
-        if not rec or not rec.get("found") or not rec["marketing"]:
+        rows, _ = marketing_rows(labels.get(s))
+        if not rows:
             unreadable = True
             continue
-        cats.extend(m["category"] for m in rec["marketing"])
+        cats.extend(m["category"] for m in rows)
     kinds = {labels_mod.category_kind(c) for c in cats}
     if "application" in kinds:
         return "label"
@@ -231,13 +301,19 @@ def verdict(set_ids: list[str], labels: dict) -> str:
 
 def _label_detail(set_id: str, labels: dict) -> dict:
     rec = labels.get(set_id) or {}
-    rows = rec.get("marketing") or []
+    rows, source = marketing_rows(rec)
     starts = [r["start"] for r in rows if r["start"]]
     ends = [r["end"] for r in rows if r["end"]]
     return {
         "set_id": set_id,
         "title": rec.get("title"),
         "labeler": rec.get("labeler"),
+        # where the category was read, and for a label that states none, why:
+        # DailyMed serves it with no marketing table (a label older than FDA's
+        # structured category), or serves no such label and RxNav has none
+        "read_from": source,
+        "unread": (None if rows else "no marketing table" if rec.get("found")
+                   else "not served"),
         "categories": sorted({r["category"] for r in rows}),
         # the earliest start and, only where every product has ended, the
         # latest end: a label still on sale has no end
@@ -272,6 +348,7 @@ def trial_phases(ncts: list[str]) -> dict[str, str | None]:
 def write(dry_run: bool = False) -> int:
     conn = common.chembl()
     records = labels_mod.label_backed_records(conn)
+    trial_only = labels_mod.trial_only_records(conn)
     conn.close()
     labels = _load_labels()
     by_verdict: dict[str, list[int]] = collections.defaultdict(list)
@@ -290,21 +367,36 @@ def write(dry_run: bool = False) -> int:
                 "trials": rec["trials"],
             }
 
-    ncts = sorted({t for d in detail.values() if d["verdict"] == "unapproved"
-                   for t in d["trials"]})
+    # A record whose approval rests on trials alone keeps it only where one of
+    # them is Phase 4 in the registry (D24); its trials' phases are recorded
+    # here for the same reason an unapproved record's are: the build reads no
+    # network.
+    trial_detail = {str(rid): {"molregno": rec["molregno"], "mesh_id": rec["mesh_id"],
+                               "trials": rec["trials"]}
+                    for rid, rec in sorted(trial_only.items())}
+
+    # Every record that can fall carries its trials' registry phases: an
+    # unapproved one, an unresolved one (which falls where FDA records no
+    # approval year), and a trial-only one.
+    phased = list(detail.values()) + list(trial_detail.values())
+    ncts = sorted({t for d in phased for t in d["trials"]})
     phases = trial_phases(ncts) if ncts and not dry_run else {}
     missing = [t for t in ncts if t not in phases]
-    for d in detail.values():
-        if d["verdict"] != "unapproved":
-            continue
+    for d in phased:
         d["trials"] = [{"nct": t, "phases": phases.get(t)} for t in d["trials"]]
         ps = [REGISTRY_PHASE[p] for t in d["trials"] if t["phases"]
               for p in t["phases"].split("|") if p in REGISTRY_PHASE]
         d["trial_phase"] = max(ps) if ps else None
+    by_trial_phase = collections.Counter(
+        "no registry phase" if d["trial_phase"] is None else
+        "Phase 4" if d["trial_phase"] >= 4 else common.phase_label(d["trial_phase"])
+        for d in trial_detail.values())
 
     counts = {v: len(ids) for v, ids in sorted(by_verdict.items())}
     print(f"{len(records)} phase-4 records rest on DailyMed labels with no FDA or EMA "
           f"document: {counts}")
+    print(f"{len(trial_detail)} rest on cited trials alone, by the furthest registry "
+          f"phase among them: {dict(sorted(by_trial_phase.items()))}")
     unknown = collections.Counter(
         m["category"] for rec in labels.values() for m in rec.get("marketing") or []
         if labels_mod.category_kind(m["category"]) is None)
@@ -319,16 +411,19 @@ def write(dry_run: bool = False) -> int:
                if s in labels]
     out = {
         "policy_id": "cohort1-label-status",
-        "version": "1.0.0",
-        "decision": "D23 (docs/COHORT-2.md)",
+        "version": "2.0.0",
+        "decision": "D23, D24 (docs/COHORT-2.md)",
         "chembl_release": common.CHEMBL_RELEASE,
         "generated_by": "scripts/check_dailymed_labels.py",
-        "labels_read": {"from": "DailyMed label pages, by the set id ChEMBL cites",
+        "labels_read": {"from": "DailyMed label pages, by the set id ChEMBL cites; "
+                                "RxNav by the same set id where DailyMed serves none",
                         "first": min(fetched) if fetched else None,
                         "last": max(fetched) if fetched else None},
         "summary": counts,
+        "trial_only_summary": dict(sorted(by_trial_phase.items())),
         "checked": {v: by_verdict[v] for v in ("label", "monograph")},
         "records": detail,
+        "trial_only": trial_detail,
     }
     labels_mod.STATUS_FILE.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n")
     print(f"wrote {labels_mod.STATUS_FILE.relative_to(ROOT)}")

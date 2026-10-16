@@ -6047,8 +6047,8 @@ describe("an Approved resting only on unapproved US labels is not one (D23)", ()
     const v = viewer({}, [["D1", "Narcolepsy", "Approved", "core", 1, "NCT9", "trial"],
                           ["D2", "Pain", "Approved", "core", 1, null, "atc"]]);
     const h = v.indicationsHTML(v.lookupMolecule(1));
-    assert.match(h, /ChEMBL&#39;s source: a Phase 4 \(post-marketing\) trial/);
-    assert.match(h, /ChEMBL&#39;s source: the WHO ATC class the drug is filed in/);
+    assert.match(h, /ChEMBL&#39;s source: a trial the registry records as Phase 4 \(post-marketing\)/);
+    assert.match(h, /ChEMBL&#39;s source: the WHO ATC class the drug is filed in; no regulator&#39;s record is cited/);
   });
 
   test("a molecule whose only approval was such labels is not called approved", () => {

@@ -4,6 +4,8 @@
     viz/gtopdb.data.js      everything GtoPdb contributes (COHORT_GTOPDB): its
                             actions, its `gtopdb`-role claims, and the entry
                             statuses those claims change
+    viz/drugcentral.data.js which regulators approved each molecule, from
+                            DrugCentral (COHORT_DRUGCENTRAL, D24)
     viz/evidence/<id>.js    one molecule's observation rows, studies, curated
                             mechanism detail and retained non-drawable claims,
                             loaded on demand
@@ -64,7 +66,7 @@ MOLECULE_FIELDS = [
     "identity_flags", "seed_name", "gap_reason", "exclusion_reason", "smiles",
     "inchikey", "wikipedia_url", "n_indications_chembl", "synonyms", "aliases",
     "approved_elsewhere", "approval_status", "max_phase_checked",
-    "trial_sites", "trial_countries",
+    "trial_sites", "trial_countries", "withdrawals",
 ]
 
 # Reviewed common names, keyed by ChEMBL ID, carried over from the legacy
@@ -190,6 +192,13 @@ GTOPDB_NOTICE = (
 )
 GTOPDB_LICENCE = " ".join(GTOPDB_NOTICE)
 GTOPDB_ROLE = "gtopdb"
+DRUGCENTRAL_NOTICE = (
+    "Contains information from DrugCentral (drugcentral.org), under CC BY-SA 4.0,",
+    "https://creativecommons.org/licenses/by-sa/4.0/ - SubNetwork, by Attila Szabo,",
+    "adapted it: regulators' approvals matched to ChEMBL's molecules by ChEMBL ID.",
+    "This adaptation is licensed under CC BY-SA 4.0.",
+)
+DRUGCENTRAL_LICENCE = " ".join(DRUGCENTRAL_NOTICE)
 
 INTERNED = {
     "molecule_type", "structure_type", "admission_reason", "scope_reasons",
@@ -300,6 +309,29 @@ def trial_sites(trials) -> tuple[str | None, str | None]:
     return sites, "|".join(sorted(abroad)) or None
 
 
+def _withdrawals_by_molecule(db, strings) -> dict[int, list]:
+    """ChEMBL's withdrawals per molecule (D24), one per market and year.
+
+    ChEMBL files a withdrawal once per warning class, so one market's
+    withdrawal for hepatotoxicity and for dermatological toxicity is two
+    records with the same countries and year: they fold into one event,
+    [countries, year, classes], the classes '|'-joined. Countries are ChEMBL's
+    '; '-joined text, 'Worldwide' for a worldwide withdrawal. Ordered by year.
+    """
+    if not db.execute("SELECT 1 FROM sqlite_master WHERE name = 'molecule_withdrawals'").fetchone():
+        return {}
+    events = collections.defaultdict(dict)
+    for r in db.execute("SELECT parent_molregno, countries, year, warning_class"
+                        " FROM molecule_withdrawals ORDER BY parent_molregno, warning_id"):
+        key = (r["countries"], r["year"])
+        classes = events[r["parent_molregno"]].setdefault(key, [])
+        if r["warning_class"] and r["warning_class"] not in classes:
+            classes.append(r["warning_class"])
+    return {mid: [[strings.intern(c), y, strings.intern("|".join(cl) or None)]
+                  for (c, y), cl in sorted(ev.items(), key=lambda kv: (kv[0][1] or 0, kv[0][0] or ""))]
+            for mid, ev in events.items()}
+
+
 def _trial_sites_by_molecule(db) -> dict[int, tuple[str | None, str | None]]:
     """trial_sites() for every molecule, or {} where the trial backfill has
     not stored countries (it is a backfill; a build without it says nothing
@@ -403,7 +435,7 @@ def _backup(out_dir) -> list[str]:
     """Copy the existing startup export aside before replacing it."""
     made = []
     stamp = datetime.datetime.now().strftime("%Y%m%dT%H%M%S")
-    for name in ("graph.data.js", "gtopdb.data.js"):
+    for name in ("graph.data.js", "gtopdb.data.js", "drugcentral.data.js"):
         src = out_dir / name
         if src.exists():
             common.VIZ_BACKUPS.mkdir(parents=True, exist_ok=True)
@@ -459,6 +491,7 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
     molecules, molecule_ids = [], []
     status_with_gtopdb = {}
     sites = _trial_sites_by_molecule(db)
+    withdrawals = _withdrawals_by_molecule(db, cat_s)
     for r in db.execute("SELECT * FROM molecules ORDER BY parent_molregno"):
         rec = dict(r)
         mid = rec.pop("parent_molregno")
@@ -489,6 +522,7 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
         rec["aliases"] = [cat_s.intern(a)
                           for a in MOLECULE_ALIASES.get(rec["chembl_id"], [])]
         rec["trial_sites"], rec["trial_countries"] = sites.get(mid, (None, None))
+        rec["withdrawals"] = withdrawals.get(mid)
         molecules.append(_row(rec, MOLECULE_FIELDS, cat_s))
         molecule_ids.append(mid)
 
@@ -572,11 +606,18 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
     # labeler, '|'-joined categories, marketed from, marketed until] - so the
     # page can say what ChEMBL's Approved rested on and link each label.
     indications = collections.defaultdict(list)
+    #
+    # And D24's two: the WHO ATC classes an `atc` Approved was read off, '|'
+    # joined, so the hover can name the class rather than a regulator; and why
+    # the label behind an `unresolved` or `unconfirmed` one went unread.
+    ind_cols = {c[1] for c in db.execute("PRAGMA table_info(molecule_indications)")}
+    d24 = ", atc_classes, unread_reason" if "atc_classes" in ind_cols else ""
     for r in db.execute("SELECT parent_molregno, mesh_id, mesh_heading, phase_label,"
                         " scope_reasons, qualifies, max_phase_for_ind, trial_ids,"
-                        " approval_basis, unapproved_labels"
+                        " approval_basis, unapproved_labels" + d24 +
                         " FROM molecule_indications ORDER BY parent_molregno,"
                         " max_phase_for_ind DESC, mesh_heading, mesh_id"):
+        r = dict(r)
         row = [r["mesh_id"], cat_s.intern(r["mesh_heading"]),
                cat_s.intern(r["phase_label"]), cat_s.intern(r["scope_reasons"]),
                r["qualifies"], cat_s.intern(r["trial_ids"]),
@@ -585,7 +626,8 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
                  cat_s.intern("|".join(lab["categories"])), lab["marketed_from"],
                  lab["marketed_until"]]
                 for lab in json.loads(r["unapproved_labels"])]
-               if r["unapproved_labels"] else None]
+               if r["unapproved_labels"] else None,
+               cat_s.intern(r.get("atc_classes")), cat_s.intern(r.get("unread_reason"))]
         while row[-1] is None:
             row.pop()
         indications[str(r["parent_molregno"])].append(row)
@@ -866,6 +908,30 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
     }
     n2 = _dump(out_dir / "gtopdb.data.js", "COHORT_GTOPDB", gtopdb, GTOPDB_NOTICE)
 
+    # DrugCentral's regulators (D24), in its own file for its own licence (CC
+    # BY-SA 4.0, where graph.data.js is ChEMBL's 3.0), merged by the page only
+    # into the catalogue it was exported with. Written empty from a database
+    # the backfill has not reached, like GtoPdb's.
+    dc_meta, dc_approvals = {}, {}
+    if db.execute("SELECT 1 FROM sqlite_master WHERE name = 'molecule_approvals'").fetchone():
+        dc_meta = json.loads(manifest.get("drugcentral_approvals") or "{}")
+        for r in db.execute("SELECT parent_molregno, agency, year FROM molecule_approvals"
+                            " ORDER BY parent_molregno, year IS NULL, year, agency"):
+            dc_approvals.setdefault(str(r["parent_molregno"]), []).append(
+                [r["agency"], r["year"]])
+    drugcentral = {
+        "format": "cohort1-drugcentral/1",
+        "licence": DRUGCENTRAL_LICENCE,
+        "generated": generated,
+        "release": (f"v{dc_meta['version']}, {str(dc_meta.get('dated') or '')[:10]}"
+                    if dc_meta.get("version") else None),
+        # molecule id -> [[agency, year], ...], earliest first; a molecule-level
+        # fact (a regulator approved the active ingredient), never a disease's
+        "approvals": dc_approvals,
+    }
+    n3 = _dump(out_dir / "drugcentral.data.js", "COHORT_DRUGCENTRAL", drugcentral,
+               DRUGCENTRAL_NOTICE)
+
     # A single-file export from an earlier format would shadow the shards.
     legacy = out_dir / "evidence.data.js"
     if legacy.exists():
@@ -874,6 +940,8 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
     return {
         "graph_bytes": n1,
         "gtopdb_bytes": n2,
+        "drugcentral_bytes": n3,
+        "drugcentral_molecules": len(dc_approvals),
         "gtopdb_actions": len(gtopdb_actions),
         "gtopdb_claims": len(gtopdb_claims),
         "gtopdb_status_changes": len(status_with_gtopdb),

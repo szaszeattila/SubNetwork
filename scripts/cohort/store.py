@@ -56,8 +56,13 @@ def write_scope(conn, descriptors, indication_rows) -> None:
 
 
 def write_molecules(conn, members, properties) -> None:
-    rows, forms, syns, inds = [], [], [], []
+    rows, forms, syns, inds, withdrawn = [], [], [], [], []
     for m in members.values():
+        chembl_of = {f["molregno"]: f["chembl_id"] for f in m.family}
+        for w in m.withdrawals:
+            withdrawn.append((m.parent_molregno, w["warning_id"], w["molregno"],
+                              chembl_of.get(w["molregno"]), w["countries"], w["year"],
+                              w["warning_class"], w["description"]))
         p = properties.get(m.parent_molregno, {})
         rows.append((
             m.parent_molregno, m.parent_chembl_id, m.pref_name, m.molecule_type,
@@ -89,7 +94,9 @@ def write_molecules(conn, members, properties) -> None:
                              e["phase_label"], _join(e["scope_reasons"]), qualifies,
                              _join(e.get("trial_ids", ())), e.get("chembl_max_phase"),
                              e.get("approval_basis"),
-                             json.dumps(labels, ensure_ascii=False) if labels else None))
+                             json.dumps(labels, ensure_ascii=False) if labels else None,
+                             _join(e.get("atc_classes") or ()) or None,
+                             e.get("unread_reason")))
 
     conn.executemany(
         "INSERT INTO molecules(parent_molregno, chembl_id, pref_name, molecule_type,"
@@ -108,11 +115,15 @@ def write_molecules(conn, members, properties) -> None:
         "INSERT OR IGNORE INTO molecule_synonyms(parent_molregno, molregno, synonym)"
         " VALUES(?,?,?)", syns)
     conn.executemany(
+        "INSERT INTO molecule_withdrawals(parent_molregno, warning_id, molregno,"
+        " chembl_id, countries, year, warning_class, description)"
+        " VALUES(?,?,?,?,?,?,?,?)", withdrawn)
+    conn.executemany(
         "INSERT OR REPLACE INTO molecule_indications(parent_molregno, drugind_id,"
         " member_molregno, member_chembl_id, mesh_id, mesh_heading, efo_id, efo_term,"
         " max_phase_for_ind, phase_label, scope_reasons, qualifies, trial_ids,"
-        " chembl_max_phase, approval_basis, unapproved_labels)"
-        " VALUES(" + ",".join("?" * 16) + ")", inds)
+        " chembl_max_phase, approval_basis, unapproved_labels, atc_classes, unread_reason)"
+        " VALUES(" + ",".join("?" * 18) + ")", inds)
 
 
 def write_atc(conn, members, atc_by_mol, records) -> None:

@@ -358,9 +358,13 @@
         <p>"Approved" and trial statuses are as ChEMBL and ClinicalTrials.gov
           recorded them when this page was built, except where ChEMBL's only
           evidence of an approval is US labels that FDA lists as marketed
-          without approval: those read "Marketed unapproved", or the phase of
-          the trials ChEMBL cites. They may be out of date, and they say
-          nothing about whether a drug is right for anyone.</p>
+          without approval, or trials none of which the registry calls
+          Phase 4: those read "Marketed unapproved", or the phase of the trials
+          ChEMBL cites. An approval ChEMBL reads off a WHO ATC class names the
+          class, and the regulators DrugCentral records approving the drug
+          where it has any; one ChEMBL records withdrawn says where and when.
+          They may be out of date, and they say nothing about whether a drug is
+          right for anyone.</p>
         <h4>Known limitations</h4>
         <ul>
           <li>The weights in the similarity score are set by argument, not
@@ -397,6 +401,8 @@
           and gtopdb.data.js under the
           <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">ODbL 1.0</a>
           with its contents under
+          <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>,
+          and drugcentral.data.js under
           <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>;
           what comes from the other sources keeps their terms. Each file says
           so in its first lines, and the hosted copy serves the full terms as
@@ -434,6 +440,7 @@
 </div>
 <script src="graph.data.js"></script>
 <script src="gtopdb.data.js"></script>
+<script src="drugcentral.data.js"></script>
 <script>
 /* ---------------------------------------------------------------------------
  * SubNetwork cohort-1 viewer.
@@ -628,6 +635,17 @@ const GTOPDB = (GTOPDB_FILE && GTOPDB_FILE.generated === DATA.generated) ? GTOPD
 if (GTOPDB_FILE && GTOPDB !== GTOPDB_FILE) {
   console.warn("gtopdb.data.js was exported with a different graph.data.js (" +
                GTOPDB_FILE.generated + " vs " + DATA.generated + "); GtoPdb left out.");
+}
+// DrugCentral's part (D24): which regulators approved each molecule, in its
+// own file for its own licence (CC BY-SA 4.0), merged under the same rule as
+// GtoPdb's - only into the catalogue it was exported with. Without it the
+// page names no regulator for an ATC-backed Approved and says so.
+const DRUGCENTRAL_FILE = (typeof COHORT_DRUGCENTRAL !== "undefined") ? COHORT_DRUGCENTRAL : null;
+const DRUGCENTRAL = (DRUGCENTRAL_FILE && DRUGCENTRAL_FILE.generated === DATA.generated)
+  ? DRUGCENTRAL_FILE : { release: null, approvals: {} };
+if (DRUGCENTRAL_FILE && DRUGCENTRAL !== DRUGCENTRAL_FILE) {
+  console.warn("drugcentral.data.js was exported with a different graph.data.js (" +
+               DRUGCENTRAL_FILE.generated + " vs " + DATA.generated + "); DrugCentral left out.");
 }
 const GTOPDB_STR = GTOPDB.strings || [];
 const gtopdbClaims = decodeTable(GTOPDB.claims || [], (GTOPDB.fields || {}).claims || [], GTOPDB_STR);
@@ -881,10 +899,14 @@ function moleculeIndications(id) {
                categories: s(l[3]) ? s(l[3]).split("|") : [],
                from: l[4] || null, until: l[5] || null };
     });
+    // D24: the WHO ATC classes an `atc` Approved was read off, and why the
+    // label behind an `unresolved` or `unconfirmed` one went unread.
+    const atc = s(r[8]);
     return { mesh_id: r[0], heading: s(r[1]), phase_label: s(r[2]),
              scope_reasons: s(r[3]), qualifies: r[4],
              trials: trials ? trials.split("|") : [],
-             basis: s(r[6]) || null, unapproved_labels: labels };
+             basis: s(r[6]) || null, unapproved_labels: labels,
+             atc_classes: atc ? atc.split("|") : [], unread_reason: s(r[9]) || null };
   });
 }
 
@@ -1078,8 +1100,12 @@ function classMembers(c) {
 // Approved on US labels FDA lists as marketed without approval, with a Phase 4
 // trial cited beside them or none. The first is a trial past Phase 3 and not an
 // approval; the second is no clinical phase at all, and sorts below every one.
+// "Approval unconfirmed" is D24's: an Approved resting on trials with no
+// phase in the registry, or on a label that could not be read for a drug FDA
+// records no approval of - no phase either, beside "Marketed unapproved".
 const PHASE_RANK = { "Approved": 5, "Phase 4 trial": 4.5, "Phase 3": 4, "Phase 2": 3,
-                     "Phase 1": 2, "Early Phase 1": 1, "Marketed unapproved": 0.5 };
+                     "Phase 1": 2, "Early Phase 1": 1, "Marketed unapproved": 0.5,
+                     "Approval unconfirmed": 0.5 };
 
 // One disease, at the furthest phase this molecule reached for it.
 //
@@ -1121,9 +1147,17 @@ function indicationsByDisease(id) {
   for (const d of out) {
     d.bases = [];
     d.unapproved_labels = [];
+    d.atc_classes = [];
+    d.unread_reasons = [];
     for (const r of d.records) {
       if (r.phase_label === d.phase_label && r.basis && d.bases.indexOf(r.basis) < 0) {
         d.bases.push(r.basis);
+      }
+      if (r.phase_label === d.phase_label) {
+        for (const c of r.atc_classes) if (d.atc_classes.indexOf(c) < 0) d.atc_classes.push(c);
+        for (const u of (r.unread_reason ? r.unread_reason.split("|") : [])) {
+          if (d.unread_reasons.indexOf(u) < 0) d.unread_reasons.push(u);
+        }
       }
       if (d.phase_label !== "Approved") {
         for (const l of r.unapproved_labels) {
@@ -3101,9 +3135,11 @@ const HELP = {
   indications: "Neurological and pain conditions this drug is approved or tested " +
                "for, how far each got, and its trials on ClinicalTrials.gov. A " +
                "condition with no trial link usually rests on the drug label instead. " +
-               "Hover over Approved for what ChEMBL read it from. Marketed unapproved: " +
-               "every US label ChEMBL cites for it is one FDA lists as sold without " +
-               "its approval.",
+               "Hover over Approved for what ChEMBL read it from, and where ChEMBL " +
+               "records it withdrawn. Marketed unapproved: every US label ChEMBL cites " +
+               "for it is one FDA lists as sold without its approval. A phase below " +
+               "Approved can also be ChEMBL's Approved resting on trials none of which " +
+               "the registry calls Phase 4.",
   condition_targets: "Targets that two or more of these molecules act on, most " +
                      "shared first. Compare with the catalogue-wide count: a target " +
                      "almost every drug hits says little about this condition.",
@@ -3480,6 +3516,7 @@ function dataDates() {
     mesh: mesh ? mesh[1] : "",
     uniprot: String(metaRecord("target_orthologues").reference_release || ""),
     gtopdb: GTOPDB.release ? String(GTOPDB.release) : "",
+    drugcentral: DRUGCENTRAL.release ? String(DRUGCENTRAL.release) : "",
   };
 }
 
@@ -3502,6 +3539,7 @@ function aboutVersionText() {
   const d = dataDates();
   const also = [];
   if (d.gtopdb) also.push("GtoPdb " + d.gtopdb);
+  if (d.drugcentral) also.push("DrugCentral " + d.drugcentral);
   if (d.mesh) also.push("MeSH " + d.mesh);
   if (d.uniprot) also.push("UniProt " + d.uniprot);
   return line + (also.length ? " Also " + also.join(", ") + "." : "") +
@@ -3546,6 +3584,15 @@ function aboutSourcesHTML() {
     items.push("GtoPdb's file (gtopdb.data.js) is from a different export than the " +
       "catalogue, so its curated actions are left out of this page.");
   }
+  if (DRUGCENTRAL.release) {
+    items.push(link("https://drugcentral.org/", "DrugCentral") + " " +
+      esc(String(DRUGCENTRAL.release)) + ": which regulators (FDA, EMA, PMDA and others) " +
+      "approved a drug, named where ChEMBL's approval rests on a WHO ATC class. " +
+      licenceLink("CC BY-SA 4.0") + "; kept in its own data file.");
+  } else if (typeof COHORT_DRUGCENTRAL !== "undefined") {
+    items.push("DrugCentral's file (drugcentral.data.js) is from a different export than " +
+      "the catalogue, so no regulator is named on this page.");
+  }
   items.push(
     link("https://www.nlm.nih.gov/mesh/", "MeSH") + (d.mesh ? " " + esc(d.mesh) : "") +
       ", courtesy of the U.S. National Library of Medicine, reached through the " +
@@ -3561,7 +3608,9 @@ function aboutSourcesHTML() {
       ", courtesy of the U.S. National Library of Medicine: the FDA marketing category " +
       "of each US label ChEMBL cites for an approval" +
       (d.labelsTo ? ", read " + esc(d.labelsTo) : "") +
-      ", so a label FDA lists as unapproved is not shown as an approval. The NLM does " +
+      ", so a label FDA lists as unapproved is not shown as an approval; and " +
+      link("https://lhncbc.nlm.nih.gov/RxNav/", "RxNav") + " by the same label id where " +
+      "DailyMed no longer serves it. The NLM does " +
       "not endorse this project. " + licenceLink("NLM's terms") + ".",
     link("https://www.uniprot.org/", "UniProt") + (d.uniprot ? " " + esc(d.uniprot) : "") +
       ": protein sequences, to match a protein across species. " +
@@ -4242,20 +4291,134 @@ function foldedSection(key, heading, body, anchor) {
 // on the phase. Every one of these is an approval as far as anything cited
 // says; the words say how direct that is, from a regulator's own document to a
 // post-marketing trial.
+//
+// D24 made three of them say more. A trial is now one the registry calls
+// Phase 4, so "Phase 4 trial" is true where it was an assumption. A WHO ATC
+// class is a classification by use and not a regulator, so it is named as the
+// class, with the regulators DrugCentral records approving the drug where it
+// has any (a molecule-level fact, said as one), and otherwise with "no
+// regulator's record is cited" rather than reading as anyone's approval. An
+// unread label says why it went unread, beside FDA's approval year that keeps
+// it standing.
 const APPROVAL_BASIS_WORDS = {
   regulator: "an FDA or EMA approval document",
   label: "a US drug label FDA approved",
   monograph: "a US label sold under an FDA over-the-counter monograph",
   unresolved: "a US drug label whose marketing category could not be read",
   atc: "the WHO ATC class the drug is filed in",
-  trial: "a Phase 4 (post-marketing) trial",
+  trial: "a trial the registry records as Phase 4 (post-marketing)",
   unsourced: "no reference ChEMBL gives",
+};
+const UNREAD_WORDS = {
+  "no marketing table": "a US drug label older than FDA's marketing categories, " +
+                        "which states none",
+  "not served": "a US drug label neither DailyMed nor RxNav still serves",
 };
 const DAILYMED_URL = "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=";
 
-function approvalBasisTitle(bases) {
-  const words = (bases || []).map(function (b) { return APPROVAL_BASIS_WORDS[b] || b; });
-  return words.length ? "ChEMBL's source: " + words.join("; ") : "";
+// The regulators DrugCentral records approving a molecule, earliest first, as
+// "EMA (1998), PMDA (2004)"; empty without its file (D24).
+function regulatorApprovals(mol) {
+  return (mol && (DRUGCENTRAL.approvals || {})[String(mol.id)]) || [];
+}
+
+function regulatorsText(list) {
+  return list.map(function (a) { return a[0] + (a[1] ? " (" + a[1] + ")" : ""); }).join(", ");
+}
+
+function approvalBasisWords(basis, d, mol) {
+  if (basis === "atc") {
+    const classes = (d && d.atc_classes) || [];
+    const regs = regulatorApprovals(mol);
+    return (classes.length ? "classified by WHO ATC in " + classes.join(" and ")
+                           : APPROVAL_BASIS_WORDS.atc) + "; " +
+      (regs.length ? "DrugCentral records the drug approved by " + regulatorsText(regs) +
+                     ", not necessarily for this disease"
+                   : "no regulator's record is cited");
+  }
+  if (basis === "unresolved") {
+    const why = ((d && d.unread_reasons) || []).map(function (u) { return UNREAD_WORDS[u] || u; });
+    return (why.length ? why.join(" and ") : APPROVAL_BASIS_WORDS.unresolved) +
+      (mol && mol.first_approval ? "; FDA records the drug approved in " + mol.first_approval
+                                 : "");
+  }
+  return APPROVAL_BASIS_WORDS[basis] || basis;
+}
+
+function approvalBasisTitle(bases, d, mol) {
+  const words = (bases || []).map(function (b) { return approvalBasisWords(b, d, mol); });
+  return words.length ? "ChEMBL's source: " + words.join("; and ") : "";
+}
+
+// Where ChEMBL records an approval withdrawn (D24, drug_warning): "withdrawn
+// worldwide (1984)" where any record says Worldwide, the user's call - a
+// worldwide withdrawal is said as one, not as a list of markets - and
+// otherwise the markets and years, "withdrawn in France, 1990". More than two
+// events are counted, every one on hover with ChEMBL's reasons. Null where
+// ChEMBL records none.
+const WITHDRAWALS_SHOWN = 2;
+
+function withdrawalsOf(mol) {
+  return ((mol && mol.withdrawals) || []).map(function (w) {
+    const s = function (i) { return (i === null || i === undefined) ? "" : (STR[i] || ""); };
+    return { countries: s(w[0]), year: w[1] || null,
+             classes: s(w[2]) ? s(w[2]).split("|") : [] };
+  });
+}
+
+function countryList(text) {
+  const c = String(text || "").split(/;\s*/).filter(Boolean);
+  return c.length <= 1 ? c.join("") : c.slice(0, -1).join(", ") + " and " + c[c.length - 1];
+}
+
+function withdrawalNote(mol) {
+  const events = withdrawalsOf(mol);
+  if (!events.length) return null;
+  const title = "ChEMBL records it withdrawn: " + events.map(function (e) {
+    return (e.countries === "Worldwide" ? "worldwide" : countryList(e.countries)) +
+      (e.year ? ", " + e.year : "") + (e.classes.length ? " (" + e.classes.join(", ") + ")" : "");
+  }).join("; ");
+  const world = events.filter(function (e) { return e.countries === "Worldwide"; });
+  if (world.length) {
+    const year = world.map(function (e) { return e.year; }).filter(Boolean).sort()[0];
+    return { worldwide: true, text: "withdrawn worldwide" + (year ? " (" + year + ")" : ""),
+             title: title };
+  }
+  if (events.length <= WITHDRAWALS_SHOWN) {
+    return { worldwide: false, title: title, text: "withdrawn in " + events.map(function (e) {
+      return countryList(e.countries) + (e.year ? ", " + e.year : "");
+    }).join("; in ") };
+  }
+  const years = events.map(function (e) { return e.year; }).filter(Boolean).sort();
+  return { worldwide: false, title: title,
+           text: "withdrawn in " + events.length + " markets" +
+                 (years.length ? ", " + years[0] + (years[years.length - 1] !== years[0]
+                                                    ? "–" + years[years.length - 1] : "") : "") };
+}
+
+// "Approved, withdrawn worldwide (1984)" or "Approved; withdrawn in France,
+// 1990": the phase as a reader sees it on an Approved row of a withdrawn drug.
+function approvedLabelText(mol) {
+  const w = withdrawalNote(mol);
+  if (!w) return "Approved";
+  return "Approved" + (w.worldwide ? ", " : "; ") + w.text;
+}
+
+// A ChEMBL Approved this page does not state (D24), said in ChEMBL's terms and
+// beside the phase the row now reads: one resting on trials none of which the
+// registry calls Phase 4, or on a label that could not be read for a drug FDA
+// records no approval of.
+function fallenApprovalHTML(bases) {
+  const notes = [];
+  if (bases.indexOf("trial_phase") >= 0) {
+    notes.push("ChEMBL lists this as approved, on trials alone, none of which the " +
+               "registry records as Phase 4.");
+  }
+  if (bases.indexOf("unconfirmed") >= 0) {
+    notes.push("ChEMBL lists this as approved, on a US label that could not be read, " +
+               "and FDA records no approval of the drug.");
+  }
+  return notes.length ? '<div class="small">' + esc(notes.join(" ")) + "</div>" : "";
 }
 
 // The US labels a ChEMBL Approved rested on where FDA lists every one as
@@ -4280,14 +4443,20 @@ function unapprovedLabelsHTML(labels) {
     }).join(", ") + "</div>";
 }
 
-function indicationRowsHTML(rows) {
+function indicationRowsHTML(rows, mol) {
+  const withdrawn = withdrawalNote(mol);
   return rows.map(function (i) {
-    const basis = i.phase_label === "Approved" ? approvalBasisTitle(i.bases) : "";
+    const approved = i.phase_label === "Approved";
+    const basis = approved ? approvalBasisTitle(i.bases, i, mol) : "";
+    const title = [basis, approved && withdrawn ? withdrawn.title : ""].filter(Boolean)
+      .join(". ");
     let h = '<div class="ind"><a href="#" data-select="condition" data-id="' +
       esc(i.mesh_id) + '">' + esc(i.heading) + "</a>" +
-      (i.phase_label ? ' <span class="muted"' + (basis ? ' title="' + esc(basis) + '"' : "") +
-                       ">" + esc(i.phase_label) + "</span>" : "");
+      (i.phase_label ? ' <span class="muted"' + (title ? ' title="' + esc(title) + '"' : "") +
+                       ">" + esc(approved ? approvedLabelText(mol) : i.phase_label) +
+                       "</span>" : "");
     h += unapprovedLabelsHTML(i.unapproved_labels || []);
+    if (!approved) h += fallenApprovalHTML(i.bases || []);
     const notes = [];
     // Stated rather than left visible only as a repeated disease name, the way
     // a curated claim states how many records its references came from.
@@ -4583,8 +4752,18 @@ function developmentStatus(mol) {
     return "sold in the US without FDA approval; ChEMBL's approval rests only on " +
            "those labels" + (reached ? ", and its trials reached " + reached : "");
   }
+  // D24: every approval ChEMBL records for it has fallen, some on trials the
+  // registry does not call Phase 4 or on an unread label.
+  if (mol.approval_status === "no_approval_cited") {
+    const c = mol.max_phase_checked;
+    const reached = { 3: "phase 3", 2: "phase 2", 1: "phase 1", 0.5: "early phase 1" }[c];
+    return "ChEMBL records it as approved, but nothing it cites is an approval" +
+           (reached ? "; its trials reached " + reached : "");
+  }
   if (p === 4) {
-    return "approved" + (mol.first_approval ? ", first in " + mol.first_approval : "");
+    const w = withdrawalNote(mol);
+    return "approved" + (mol.first_approval ? ", first in " + mol.first_approval : "") +
+      (w ? (w.worldwide ? ", " : "; ") + w.text : "");
   }
   if (p === 3) return "reached phase 3, not approved for any disease";
   if (p === 2) return "reached phase 2, not approved for any disease";
@@ -4687,7 +4866,7 @@ function indicationsHTML(mol) {
 
   return foldedSection("indications",
     helpLabel("Indications", "indications") + " (" + rows.length + ")",
-    '<div class="small muted">' + note + "</div>" + indicationRowsHTML(rows));
+    '<div class="small muted">' + note + "</div>" + indicationRowsHTML(rows, mol));
 }
 
 // A molecule's classes, as rows of its identity table: the MeSH actions and
@@ -6402,9 +6581,11 @@ function showCondition(c) {
     let body = "";
     for (const r of rows) {
       const n = visibleClaimsFor(r.molecule.id).length;
+      const w = phase === "Approved" ? withdrawalNote(r.molecule) : null;
       body += '<div class="row-item" data-select="molecule" data-id="' +
         esc(String(r.molecule.id)) + '">' + esc(r.molecule.name) +
         '<div class="small muted">' +
+        (w ? '<span title="' + esc(w.title) + '">' + esc(w.text) + "</span> · " : "") +
         (r.trials.length ? esc(trialSummary(r.trials)) : "no linked trial") +
         " · " + (n ? plural(n, "visible claim") : "no claim under these filters") +
         "</div></div>";

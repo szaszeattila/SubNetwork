@@ -55,6 +55,8 @@ function stubElement() {
 // under this key, so every caller that hands one catalogue to the viewer hands
 // it both, and one without it is a page whose GtoPdb file did not load.
 export const GTOPDB_FILE = Symbol("gtopdb.data.js");
+// DrugCentral's file (D24), carried the same way.
+export const DRUGCENTRAL_FILE = Symbol("drugcentral.data.js");
 
 export function makeSandbox(data, options = {}) {
   const elements = new Map();
@@ -71,6 +73,7 @@ export function makeSandbox(data, options = {}) {
   const ctx = {
     COHORT_DATA: data,
     ...(data && data[GTOPDB_FILE] ? { COHORT_GTOPDB: data[GTOPDB_FILE] } : {}),
+    ...(data && data[DRUGCENTRAL_FILE] ? { COHORT_DRUGCENTRAL: data[DRUGCENTRAL_FILE] } : {}),
     console,
     URL,
     performance: { now: () => 0 },
@@ -227,7 +230,7 @@ export const MOLECULE_FIELDS = [
   "identity_flags", "seed_name", "gap_reason", "exclusion_reason", "smiles",
   "inchikey", "wikipedia_url", "n_indications_chembl", "synonyms", "aliases",
   "approved_elsewhere", "approval_status", "max_phase_checked",
-  "trial_sites", "trial_countries",
+  "trial_sites", "trial_countries", "withdrawals",
 ];
 
 export const TARGET_FIELDS = [
@@ -364,6 +367,12 @@ export function buildData({ molecules = [], targets = [], claims = [],
     const copy = Object.assign({}, m);
     copy.synonyms = (m.synonyms || []).map((s) => strings.intern(s));
     copy.aliases = (m.aliases || []).map((s) => strings.intern(s));
+    // D24: withdrawals as [countries, year, classes] with the two strings
+    // interned, as the exporter writes them; left off when absent.
+    copy.withdrawals = m.withdrawals
+      ? m.withdrawals.map((w) => [strings.intern(w[0]), w[1] || null,
+                                  w[2] ? strings.intern(w[2]) : null])
+      : null;
     return encodeRow(copy, MOLECULE_FIELDS, strings);
   });
   const encodedTargets = targets.map((t) => {
@@ -396,7 +405,9 @@ export function buildData({ molecules = [], targets = [], claims = [],
       const row = [r[0], strings.intern(r[1]), strings.intern(r[2]), strings.intern(r[3]),
                    r[4], opt(r[5]), opt(r[6]),
                    r[7] ? r[7].map((l) => [l[0], opt(l[1]), opt(l[2]), opt(l[3]),
-                                           l[4] || null, l[5] || null]) : null];
+                                           l[4] || null, l[5] || null]) : null,
+                   // D24: the ATC classes ('|'-joined) and an unread label's reason
+                   opt(r[8]), opt(r[9])];
       while (row.length > 5 && row[row.length - 1] === null) row.pop();
       return row;
     });
@@ -499,6 +510,14 @@ export function buildGtopdb({ actions = [], claims = [], status = {}, release = 
 // A catalogue carrying its GtoPdb file, as the page loads the two together.
 export function withGtopdbFile(data, gtopdb) {
   data[GTOPDB_FILE] = gtopdb;
+  return data;
+}
+
+// A catalogue carrying drugcentral.data.js (D24): molecule id -> [[agency,
+// year], ...]. `generated` must equal the catalogue's for the page to merge it.
+export function withDrugcentralFile(data, approvals, { release = "v56, 2026-09-02",
+                                                       generated = data.generated } = {}) {
+  data[DRUGCENTRAL_FILE] = { format: "cohort1-drugcentral/1", generated, release, approvals };
   return data;
 }
 
