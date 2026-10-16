@@ -442,7 +442,9 @@ no listing, so their pages do not cite the wiki. And
 `analysis/wiki_comparison/` publishes the wiki's whole compound list with its
 sections and classes (`wiki_compounds.csv`, `comparison.csv`, `sections/`),
 committed before its terms were read; whether that is the "bulk copy" they
-refuse is the user's call.
+refuse is the user's call. [COMPOUND-LIST-TERMS.md](COMPOUND-LIST-TERMS.md)
+weighs it, recommends removing the list and its classes before `main`, and
+finds the entries themselves inside the terms.
 
 ---
 

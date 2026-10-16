@@ -165,7 +165,8 @@ lists themselves are not kept here, being other sites' content.
 
 Examine.com (behind a bot checkpoint), Erowid (its robots.txt requires written
 permission to scrape), DrugBank (licensed) and the r/Nootropics wiki (403) were
-not retrieved.
+not retrieved. What each list's terms allow, and lists not compared here, are
+in [COMPOUND-LIST-TERMS.md](COMPOUND-LIST-TERMS.md).
 
 | list | compounds | placed in ChEMBL | also on the wiki | in the catalogue | on neither | wiki entries it has |
 |---|---:|---:|---:|---:|---:|---:|
