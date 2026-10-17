@@ -74,7 +74,7 @@ describe("the trial-sites filter decides which molecules are in the picture", ()
     assert.equal(b.length, 1);
     assert.equal(b[0].kind, "cost");
     assert.match(b[0].text, /: 2 of 5\./);
-    assert.match(b[0].text, /1 molecule with no such trial ChEMBL cites is hidden/);
+    assert.match(b[0].text, /Hidden: 1 molecule with no such trial ChEMBL cites/);
     assert.match(b[0].text, /2 molecules whose trials list no US site/);
   });
 
@@ -99,11 +99,11 @@ describe("the trial-sites filter decides which molecules are in the picture", ()
   test("the indications note says where the trials ran and names the countries", () => {
     const v = loadViewer(sited());
     assert.equal(v.trialSitesSentence(v.lookupMolecule(3)),
-      "Its Phase 1 or later trials had sites outside the US only: Iran, Russia.");
+      "Its Phase 1+ trials ran outside the US only: Iran, Russia.");
     assert.equal(v.trialSitesSentence(v.lookupMolecule(1)),
-      "Its Phase 1 or later trials had sites in the US and elsewhere: Russia.");
+      "Its Phase 1+ trials ran in the US and elsewhere: Russia.");
     assert.equal(v.trialSitesSentence(v.lookupMolecule(2)),
-      "Its Phase 1 or later trials had sites in the US only.");
+      "Its Phase 1+ trials ran in the US only.");
     assert.equal(v.trialSitesSentence(v.lookupMolecule(5)), "");
   });
 

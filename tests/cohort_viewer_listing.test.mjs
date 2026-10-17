@@ -58,7 +58,7 @@ describe("a listed molecule (D25)", () => {
 describe("About credits the sci-wiki", () => {
   test("only when an entry was entered from it, with the count", () => {
     const h = loadViewer(data()).aboutSourcesHTML();
-    assert.match(h, /The sci-wiki<\/a> \(Scientific Sean LLC\): 1 molecule is in the catalogue because its cognition, psychiatric and psychedelics compound lists name it and none of the open lists above does,/);
+    assert.match(h, /The sci-wiki<\/a> \(Scientific Sean LLC\): 1 molecule is here because its cognition, psychiatric or psychedelics lists name it and none of the open lists above does/);
     assert.match(h, /not affiliated with or endorsed by any of these lists/);
     assert.doesNotMatch(loadViewer(buildData({ molecules: [molecule({ id: 1 })] }))
       .aboutSourcesHTML(), /sci-wiki|not affiliated/);
@@ -112,9 +112,9 @@ describe("a molecule an open list entered (D27)", () => {
 
   test("About credits each list with its count and licence or terms", () => {
     const h = loadViewer(openData()).aboutSourcesHTML();
-    assert.match(h, />Wikipedia<\/a>: 1 molecule is in the catalogue because an English Wikipedia article on it/);
+    assert.match(h, />Wikipedia<\/a>: 1 molecule is here because its English article is in Wikipedia's/);
     assert.match(h, /Article text <a [^>]*creativecommons\.org\/licenses\/by-sa\/4\.0/);
-    assert.match(h, />Wikidata<\/a>: 1 molecule is in the catalogue because its item gives it/);
+    assert.match(h, />Wikidata<\/a>: 1 molecule is here because its item gives it/);
     assert.match(h, />PsychonautWiki<\/a>: 1 molecule .*creativecommons\.org\/licenses\/by\/4\.0/);
     assert.match(h, />TripSit's factsheets<\/a>: 1 molecule .*non-commercial use as <a href="https:\/\/wiki\.tripsit\.me\/wiki\/Factsheets"/);
     assert.doesNotMatch(h, /sci-wiki/);
