@@ -23,14 +23,14 @@ describe("an ATC-backed Approved names the class, not a regulator (D24)", () => 
   test("with no regulator on record it says none is cited", () => {
     const v = viewer({}, [["D1", "Anxiety", "Approved", "core", 1, null, "atc", null, N05BA]]);
     assert.match(v.indicationsHTML(v.lookupMolecule(1)),
-                 /title="ChEMBL&#39;s source: classified by WHO ATC in N05BA \(anxiolytics: benzodiazepine derivatives\); no regulator&#39;s record is cited">Approved/);
+                 /title="ChEMBL&#39;s source: WHO ATC class N05BA \(anxiolytics: benzodiazepine derivatives\); no regulator&#39;s record is cited">Approved/);
   });
 
   test("DrugCentral's regulators are named, as a fact about the drug", () => {
     const v = viewer({}, [["D1", "Anxiety", "Approved", "core", 1, null, "atc", null, N05BA]],
                      { 1: [["EMA", 1998], ["PMDA", 2004]] });
     assert.match(v.indicationsHTML(v.lookupMolecule(1)),
-                 /DrugCentral records the drug approved by EMA \(1998\), PMDA \(2004\), not necessarily for this disease/);
+                 /approved by EMA \(1998\), PMDA \(2004\) per DrugCentral, not necessarily for this disease/);
   });
 
   test("a DrugCentral file from another export is not merged, and About says so", () => {
@@ -58,7 +58,7 @@ describe("a trial-only Approved stands only on a Phase 4 trial (D24)", () => {
                            "trial_phase"]]);
     const h = v.indicationsHTML(v.lookupMolecule(1));
     assert.match(h, /Muscle Cramp<\/a> <span class="muted">Phase 3<\/span>/);
-    assert.match(h, /ChEMBL lists this as approved, on trials alone, none of which the registry records as Phase 4\./);
+    assert.match(h, /ChEMBL&#39;s Approved rests on trials alone, none of them Phase 4\./);
   });
 
   test("a genuine Phase 3 carries no such note", () => {
@@ -72,14 +72,14 @@ describe("a trial-only Approved stands only on a Phase 4 trial (D24)", () => {
     assert.deepEqual(v.indicationsByDisease(1).map((i) => i.phase_label),
                      ["Early Phase 1", "Approval unconfirmed"]);
     assert.match(v.indicationsHTML(v.lookupMolecule(1)),
-                 /on a US label that could not be read, and FDA records no approval of the drug/);
+                 /rests on an unreadable US label, and FDA records no approval of the drug/);
   });
 
   test("a molecule every approval of which fell is not called approved", () => {
     const v = viewer({ approval_status: "no_approval_cited", max_phase_checked: 3 },
                      [["D1", "Pain", "Phase 3", "core", 1, "NCT1", "trial_phase"]]);
     assert.match(v.showMolecule(v.lookupMolecule(1)),
-                 /ChEMBL records it as approved, but nothing it cites is an approval; its trials reached phase 3/);
+                 /approved per ChEMBL, but nothing it cites is an approval; trials reached phase 3/);
   });
 });
 
@@ -89,7 +89,7 @@ describe("an unread label says why, beside FDA's approval year (D24)", () => {
                      [["D1", "Depressive Disorder", "Approved", "core", 1, null, "unresolved",
                        null, null, "no marketing table"]]);
     assert.match(v.indicationsHTML(v.lookupMolecule(1)),
-                 /ChEMBL&#39;s source: a US drug label older than FDA&#39;s marketing categories, which states none; FDA records the drug approved in 1970/);
+                 /ChEMBL&#39;s source: a US drug label older than FDA&#39;s marketing categories; FDA approved the drug in 1970/);
   });
 });
 
@@ -102,7 +102,7 @@ describe("a withdrawal ChEMBL records is said beside Approved (D24)", () => {
                                      ["Worldwide", 1983, "neurotoxicity"]] }, rows);
     const h = v.indicationsHTML(v.lookupMolecule(1));
     assert.match(h, />Approved, withdrawn worldwide \(1983\)<\/span>/);
-    assert.match(h, /ChEMBL records it withdrawn: Sweden, 1982; worldwide, 1983 \(neurotoxicity\)/);
+    assert.match(h, /Withdrawn, per ChEMBL: Sweden, 1982; worldwide, 1983 \(neurotoxicity\)/);
     assert.match(h, /<span class="muted">Phase 2<\/span>/, "only an Approved row says it");
     assert.match(v.showMolecule(v.lookupMolecule(1)), /approved, withdrawn worldwide \(1983\)/);
   });
