@@ -319,7 +319,7 @@ describe("D20: the pair panel names the fold and shows the Species column", () =
     // The folded block points back at the counted one.
     assert.ok(h.includes(
       "the same protein as Mu-type opioid receptor (human) above, in another " +
-      "species, so it is counted there, once"),
+      "species, counted there once"),
       "expected the folded block's own note");
 
     // The counted block states how many species and the multiplier.

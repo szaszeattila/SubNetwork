@@ -137,7 +137,7 @@ describe("the three filters are independent and each answers for itself", () => 
     const gap = v.gapStatement(mol);
     assert.equal(gap.kind, "hidden_by_filters");
     const banners = v.filterBanners().map((b) => b.text).join(" ");
-    assert.match(banners, /broader layer is hidden/);
+    assert.match(banners, /broader claim is hidden/);
     assert.match(banners, /Include broader assignment/);
   });
 
@@ -160,8 +160,8 @@ describe("the three filters are independent and each answers for itself", () => 
     assert.equal(v.potencyAllowed(curated), false);
     assert.equal(v.hiddenReason(curated), "potency_no_value");
     const banner = v.filterBanners().map((b) => b.text).join(" ");
-    assert.match(banner, /no comparable value/);
-    assert.match(banner, /for want of one, not as failures/);
+    assert.match(banner, /hides \d+ weaker claim/);
+    assert.match(banner, /for want of a comparable value/);
   });
 
   test("potency never removes an entry from the catalogue or from search", () => {
@@ -256,7 +256,7 @@ describe("every entry stays searchable, including the ones with no edge", () => 
     const gap = v.gapStatement(hits[0].molecule);
     assert.equal(gap.kind, "no_eligible_evidence");
     assert.match(gap.text, /ChEMBL 37/);
-    assert.match(gap.text, /not the same as an absence of pharmacology/);
+    assert.match(gap.text, /not an absence of pharmacology/);
   });
 
   test("a retained seed outside the cohort is found and shown like any other entry", () => {
@@ -731,7 +731,7 @@ describe("the canvas control thins the picture without thinning the catalogue", 
     v.setFilter("periphery", "hide");
     const banner = v.filterBanners().map((b) => b.text).join(" ");
     assert.match(banner, /Canvas thinned/);
-    assert.match(banner, /still in the panel, the similarity ranking and the search/);
+    assert.match(banner, /All stay in the panels, the similarity ranking and search/);
   });
 });
 
@@ -934,7 +934,7 @@ describe("an edge on the canvas opens the pair behind it", () => {
     // Caffeine's acetylcholinesterase claim is Preliminary and hidden by default.
     const h = v.showEdge(v.lookupMolecule(1), v.lookupTarget("CHEMBLT3"), null);
     assert.match(h, /No line under the current filters/);
-    assert.match(h, /every claim between them is hidden by them/);
+    assert.match(h, /which hide every claim between these two/);
     // And it is still shown, because it exists: the filter says what it took.
     assert.match(h, /Hidden by the current filters/);
   });
@@ -1067,7 +1067,7 @@ describe("evidence loads on demand and reconciles to what it claims", () => {
     const html = v.observationRowHTML(bound, ev.studies);
     assert.match(html, /&gt; 100 nM/);
     assert.ok(!/counted<\/span>/.test(html.replace("not counted", "")));
-    assert.match(html, /no effect up to this concentration/);
+    assert.match(html, /no effect seen up to this concentration/);
   });
 
   test("a conditional mass conversion is labelled as conditional", () => {
@@ -1085,7 +1085,7 @@ describe("evidence loads on demand and reconciles to what it claims", () => {
     v.registerEvidence(shard());
     const html = v.showRetained(v.lookupMolecule(1), v.evidenceFor(1));
     assert.match(html, /censored_only/);
-    assert.match(html, /none is drawn as a line/);
+    assert.match(html, /None is drawn/);
     assert.match(html, /retained claims<\/h3>/);
     // And the retained claim is not in the drawable set.
     assert.ok(!v.allClaims().some((c) => c.id === 99 && c.tier !== "limited_or_unresolved"));
@@ -1094,8 +1094,8 @@ describe("evidence loads on demand and reconciles to what it claims", () => {
   test("a missing shard is a missing file, not an absence of evidence", () => {
     const v = loadViewer(catalogue());
     const html = v.claimEvidenceHTML(v.allClaims()[0], null, true);
-    assert.match(html, /could not be loaded/);
-    assert.match(html, /not an absence of evidence/);
+    assert.match(html, /did not load/);
+    assert.match(html, /not missing evidence/);
   });
 
   test("a shard still in flight says so instead", () => {
@@ -1148,7 +1148,7 @@ describe("a retained claim says what else the pair holds", () => {
     // The token is still there, inside the explanation, because it is what the
     // database stores and the thing to grep for - and not beside the label,
     // which would be one fact wearing two headings.
-    assert.match(html, /The build records this reason as invalid_units_only/);
+    assert.match(html, /Recorded as invalid_units_only/);
     assert.ok(!/>invalid_units_only \(1\)/.test(html));
   });
 
@@ -1197,7 +1197,7 @@ describe("a retained claim says what else the pair holds", () => {
     assert.equal((html.match(/class="claim-block"/g) || []).length, 2);
     assert.match(html, /1 claim drawn as this line/);
     assert.match(html, /1 retained, backing no line/);
-    assert.match(html, /Retained: no part of this line. It meets neither the Supported/);
+    assert.match(html, /Retained: meets neither the Supported/);
     assert.match(html, /Supported · multiple studies/);
     assert.match(html, /No resolvable value/);
     // They are listed, never added: the pair is one shared target (invariant 13).
@@ -1666,7 +1666,7 @@ describe("the panel says what it is counting", () => {
     assert.ok(!/1 trial:/.test(html), "a single trial is linked, not folded");
     // Why a condition has no link is in the section's hover rather than a
     // count in the note, and the row itself is never marked as untrialled.
-    assert.match(html, /no trial link usually rests on the drug label/);
+    assert.match(html, /No trial link usually means a drug label/);
   });
 
   test("a trial says whether it is ongoing, completed or stopped early", () => {
@@ -1694,7 +1694,7 @@ describe("the panel says what it is counting", () => {
     assert.match(html, /<summary>4 trials: 1 ongoing, 1 completed, 1 stopped early, 1 status not fetched<\/summary>/);
     assert.match(html, /withdrawn before enrolling/);
     // Completed is never presented as success.
-    assert.match(html, /completed means the trial finished, not that it worked/);
+    assert.match(html, /completed means finished, not successful/);
   });
 
   test("each trial says its own phase and what it reported on its main goal", () => {
@@ -1715,11 +1715,11 @@ describe("the panel says what it is counting", () => {
     });
     const v = loadViewer(data);
     const html = v.showMolecule(v.lookupMolecule(1));
-    assert.match(html, /<summary>4 trials, 2 at phase 3 or later: /);
+    assert.match(html, /<summary>4 trials, 2 at phase 3\+: /);
     assert.match(html, /NCT00000002<\/a> <span class="muted">phase 2\/3<\/span>/);
     assert.match(html, /Seizure &lt;rate&gt;: p &lt; 0.0001/);
     assert.match(html, /NCT00000001<\/a> <span class="muted">phase 2<\/span>[^]*?no results posted/);
-    assert.match(html, /results posted<\/a>, no test of the main goal reported/);
+    assert.match(html, /results posted<\/a>, no test of the main goal</);
     // Highest phase first; an unfetched trial sorts last and claims nothing.
     const order = [...new Set([...html.matchAll(/study\/(NCT\d+)/g)].map((m) => m[1]))];
     assert.deepEqual(plain(order), ["NCT00000002", "NCT00000003", "NCT00000001", "NCT00000004"]);
@@ -1755,7 +1755,7 @@ describe("the panel says what it is counting", () => {
     assert.match(html, /NCT00000006<\/a> <span class="trial-status/);
     // The folded summary spans only what happened: 1999 to 2009, not to the
     // planned 2012 or 2029.
-    assert.match(html, /<summary>6 trials, 1999–2009, 1 at phase 3 or later: /);
+    assert.match(html, /<summary>6 trials, 1999–2009, 1 at phase 3\+: /);
     // Within a phase the latest first, by end year (planned or not); undated last.
     const order = [...new Set([...html.matchAll(/study\/(NCT\d+)/g)].map((m) => m[1]))];
     assert.deepEqual(plain(order), ["NCT00000002", "NCT00000003", "NCT00000001",
@@ -1798,7 +1798,7 @@ describe("the panel says what it is counting", () => {
     const html = v.showMolecule(v.lookupMolecule(1));
     assert.match(html, /<\/span> \(1\)</, "two records read as two diseases");
     assert.ok(!/Phase 2/.test(html), "the lower phase is shown as a second row");
-    assert.match(html, /2 ChEMBL records, at the furthest phase any of them reached/);
+    assert.match(html, /2 ChEMBL records, furthest phase shown/);
     assert.match(html, /<summary>2 trials: /);
   });
 
@@ -1915,7 +1915,7 @@ describe("the panel says what it is counting", () => {
     assert.match(html, /Below the line/, "a near miss is dropped rather than shown");
     assert.ok(!/more indications/.test(html), "the list is still capped");
     // What share of the record is shown, said once.
-    assert.match(html, /Neurological and pain conditions only: 15 of the 20 ChEMBL records/);
+    assert.match(html, /Neurological and pain conditions only: 15 of ChEMBL's 20\./);
   });
 
   test("a target panel lists its components and says on hover they are not claims", () => {
@@ -1930,7 +1930,7 @@ describe("the panel says what it is counting", () => {
     const v = loadViewer(data);
     const html = v.showTarget(v.lookupTarget("T1"));
     assert.ok(!/Context only/.test(html));
-    assert.match(html, /never passed on to these proteins/);
+    assert.match(html, /never passed on to them/);
     assert.match(html, />G1 </);
   });
 
@@ -2001,8 +2001,8 @@ describe("banners state the cost of every control that hides something", () => {
     const v = loadViewer(catalogue());
     v.setFilter("basis", "all");
     const banner = v.filterBanners().map((b) => b.text).join(" ");
-    assert.match(banner, /broader assignment.*as well as direct human/s);
-    assert.match(banner, /never pooled with direct results/);
+    assert.match(banner, /Including the <b>broader assignment<\/b> layer/);
+    assert.match(banner, /never pooled with direct human results/);
   });
 
   test("the button counts what is hidden and its tooltip names every setting", () => {
@@ -2154,9 +2154,9 @@ describe("the curated mechanism is a first-class thing to filter on", () => {
     v.setFilter("basis", "human_direct");
     v.toggleMechanism("ANTAGONIST");
     const banner = v.filterBanners().map((b) => b.text).join(" ");
-    assert.match(banner, /claims with <b>antagonist<\/b> only/);
+    assert.match(banner, /<b>antagonist<\/b> only/);
     assert.match(banner, /2 claims with no curated action at all/);
-    assert.match(banner, /never a finding that the molecule does not act this way/);
+    assert.match(banner, /not that the molecule does not act this way/);
     // Two tokens are named, not summed into one word.
     v.toggleMechanism("AGONIST");
     assert.match(v.filterBanners().map((b) => b.text).join(" "), /antagonist or agonist/);
@@ -2247,7 +2247,7 @@ describe("line colour answers one question at a time", () => {
     v.setFilter("lineColor", "mechanism");
     const banner = v.filterBanners().map((b) => b.text).join(" ");
     assert.match(banner, /2 of 4 drawn edges have one/);
-    assert.match(banner, /none was curated, not that the molecule does nothing/);
+    assert.match(banner, /none curated, not no effect/);
   });
 });
 
@@ -2640,8 +2640,8 @@ describe("every heading that offers an explanation has one", () => {
     const html = v.claimBlockHTML(v.allClaims().find((c) => c.id === 2), ev);
     assert.equal((html.match(/15095008/g) || []).length, 2, "one link, one href");
     // And the folding is stated rather than only being visible as its absence.
-    assert.match(html, /files this mechanism as 2 records/);
-    assert.match(html, /listed once rather than once per record/);
+    assert.match(html, /once per form of the molecule \(2 records\)/);
+    assert.match(html, /each reference listed once/);
     assert.match(html, /References[\s\S]*\(2\)/);
   });
 
@@ -2770,7 +2770,7 @@ describe("a family and its own proteins say how they relate", () => {
     const v = loadViewer(familyCatalogue());
     const h = v.showEdge(v.lookupMolecule(1), v.lookupTarget("T_FAM"));
     assert.match(h, /The proteins in it/);
-    assert.match(h, /2 of which are also drawn as lines/);
+    assert.match(h, /2 also have a line of/);
     assert.match(h, /data-select="edge" data-id="1" data-other="T_A1"/);
   });
 
@@ -2826,7 +2826,7 @@ describe("a family overlap is not a second share of its own proteins", () => {
     assert.equal(fam.subsumed, true);
     const h = v.showPair(v.lookupMolecule(1), v.lookupMolecule(2));
     assert.match(h, /1 family claim repeats proteins already shared here/);
-    assert.match(h, /not counted as another shared target/);
+    assert.match(h, /all shared above, so not counted again/);
   });
 
   test("the compression is stated on the ranked row rather than silent", () => {
@@ -3383,7 +3383,7 @@ describe("direction is read at the protein, not at the target record", () => {
     // A page that announces a demotion and shows nothing explaining it is the
     // shape this project keeps trying not to have.
     assert.match(pair, /quartered/);
-    assert.match(pair, /curated on two different records/);
+    assert.match(pair, /Curated on two different records/);
     assert.match(pair, /OPRM1/);
     assert.match(pair, /MORPHINE AGONIST \(ChEMBL\) at Mu opioid receptor \(human\)/);
     assert.match(pair, /NALTREXONE ANTAGONIST \(ChEMBL\) at Opioid receptors; mu\/kappa\/delta \(human\)/);
@@ -4593,7 +4593,7 @@ describe("a name stem can be searched for and opened", () => {
     assert.match(html, /<h3>antidepressants \(imipramine type\)<\/h3>/);
     assert.match(html, /Molecules[^]*?\(2\)/);
     assert.match(html, /data-select="target" data-id="T1">Serotonin transporter[^]*?2 of these 2 molecules/);
-    assert.match(html, /Not a statement about their targets/);
+    assert.match(html, /says nothing about their targets/);
     assert.match(v.showClass(v.lookupClass("usan:-oxetine")),
                  /FLUOXETINE<div class="small muted">-tioxetine: antidepressants \(fluoxetine type\): thioether derivatives/);
   });
@@ -5536,9 +5536,9 @@ describe("the legend explains each mechanism on hover", () => {
     assert.deepEqual(rows.map((r) => r[1]),
       ["antagonist (1)", "other curated action (1)", "no curated mechanism (1)"]);
     assert.equal(rows[0][2], v.actionHelp("ANTAGONIST"));
-    assert.match(rows[1][2], /no colour of its own\. Here: hydrolytic enzyme \(1\)\./,
+    assert.match(rows[1][2], /no colour of its own here: hydrolytic enzyme \(1\)\./,
                  "the catch-all names what it holds");
-    assert.match(rows[2][2], /Not a sign that it has no effect/);
+    assert.match(rows[2][2], /Not a sign of no effect/);
   });
 
   test("a claim naming two actions is both of them, never an 'other' action", () => {
@@ -5953,19 +5953,19 @@ describe("an approved molecule says what it is approved for when the list cannot
   test("an approval outside the listed conditions is named", () => {
     const v = approved({ approved_elsewhere: "Anxiety" }, phase3);
     const html = v.showMolecule(v.lookupMolecule(1));
-    assert.match(html, /approved<div class="small muted">for Anxiety, a condition not listed here<\/div>/);
+    assert.match(html, /approved<div class="small muted">for Anxiety \(not listed here\)<\/div>/);
   });
 
   test("past three names the rest are counted, and every name is on hover", () => {
     const v = approved({ approved_elsewhere: "A|B|C|D|E" }, phase3);
     const html = v.showMolecule(v.lookupMolecule(1));
-    assert.match(html, /title="A, B, C, D, E">for A, B, C and 2 more, conditions not listed here/);
+    assert.match(html, /title="A, B, C, D, E">for A, B, C and 2 more \(not listed here\)/);
   });
 
   test("an approval ChEMBL files under no condition says so", () => {
     const v = approved({}, phase3);
     assert.match(v.showMolecule(v.lookupMolecule(1)),
-                 /ChEMBL records no condition it is approved for/);
+                 /ChEMBL names no condition it is approved for/);
   });
 
   test("nothing is added where a listed condition is itself approved", () => {
@@ -6005,7 +6005,7 @@ describe("an Approved resting only on unapproved US labels is not one (D23)", ()
                            null, "unapproved", LABELS]]);
     const h = v.indicationsHTML(v.lookupMolecule(1));
     assert.match(h, /Migraine Disorders<\/a> <span class="muted">Marketed unapproved<\/span>/);
-    assert.match(h, /ChEMBL lists this as approved, on 2 US labels that FDA lists as marketed without its approval, sold 2011–2018/);
+    assert.match(h, /ChEMBL's Approved rests on 2 US labels FDA lists as unapproved, sold 2011–2018/);
     assert.match(h, /href="https:\/\/dailymed\.nlm\.nih\.gov\/dailymed\/drugInfo\.cfm\?setid=0844-set"[^>]*>Nodolor Capsules<\/a>/);
     assert.match(h, /\(ECI &lt;Pharmaceuticals&gt;\)/, "a labeler is escaped (invariant 11)");
   });
@@ -6023,7 +6023,7 @@ describe("an Approved resting only on unapproved US labels is not one (D23)", ()
                            "unapproved", LABELS]]);
     const h = v.indicationsHTML(v.lookupMolecule(1));
     assert.match(h, /title="ChEMBL&#39;s source: an FDA or EMA approval document">Approved/);
-    assert.ok(!/marketed without its approval/.test(h));
+    assert.ok(!/FDA lists as unapproved/.test(h));
   });
 
   test("an unapproved record's cited trial sets its phase, and it still says why", () => {
@@ -6031,7 +6031,7 @@ describe("an Approved resting only on unapproved US labels is not one (D23)", ()
                            "unapproved", LABELS]]);
     const h = v.indicationsHTML(v.lookupMolecule(1));
     assert.match(h, /<span class="muted">Phase 2<\/span>/);
-    assert.match(h, /marketed without its approval/);
+    assert.match(h, /FDA lists as unapproved/);
   });
 
   test("Phase 4 trial sorts between Approved and Phase 3, Marketed unapproved below every phase", () => {
@@ -6047,7 +6047,7 @@ describe("an Approved resting only on unapproved US labels is not one (D23)", ()
     const v = viewer({}, [["D1", "Narcolepsy", "Approved", "core", 1, "NCT9", "trial"],
                           ["D2", "Pain", "Approved", "core", 1, null, "atc"]]);
     const h = v.indicationsHTML(v.lookupMolecule(1));
-    assert.match(h, /ChEMBL&#39;s source: a trial the registry records as Phase 4 \(post-marketing\)/);
+    assert.match(h, /ChEMBL&#39;s source: a trial the registry calls Phase 4 \(post-marketing\)/);
     assert.match(h, /ChEMBL&#39;s source: the WHO ATC class the drug is filed in; no regulator&#39;s record is cited/);
   });
 
@@ -6056,8 +6056,8 @@ describe("an Approved resting only on unapproved US labels is not one (D23)", ()
                      [["D1", "Migraine Disorders", "Phase 2", "core", 1, "NCT1", "unapproved",
                        LABELS]]);
     const h = v.showMolecule(v.lookupMolecule(1));
-    assert.match(h, /sold in the US without FDA approval; ChEMBL&#39;s approval rests only on those labels, and its trials reached phase 2/);
-    assert.ok(!/records no condition it is approved for|not listed here/.test(h));
+    assert.match(h, /sold in the US without FDA approval, ChEMBL&#39;s only grounds for Approved; trials reached phase 2/);
+    assert.ok(!/names no condition it is approved for|not listed here/.test(h));
   });
 });
 
@@ -6074,7 +6074,7 @@ describe("the columns of Why this score explain themselves", () => {
       assert.match(h, new RegExp('<th><span class="help" tabindex="0">' + col +
                                  '<span class="help-text">'), col);
     }
-    assert.match(h, /How few molecules in the catalogue act on this target/);
+    assert.match(h, /1 when almost no molecule acts on this target/);
     assert.match(h, /<div class="score-wrap"><table class="score-table">/);
     assert.match(viewerHtml(), /\.score-wrap \{ position: relative; \}/);
   });
