@@ -1838,7 +1838,7 @@ describe("the panel says what it is counting", () => {
       molecules: [molecule({ id: 3, max_phase: 4, n_indications_chembl: 0 })],
     }));
     assert.match(v3.showMolecule(v3.lookupMolecule(3)),
-                 /ChEMBL records no condition it is approved for/);
+                 /ChEMBL names no condition it is approved for/);
   });
 
   test("the claim and similarity sections fold, and fold with their counts on them", () => {
