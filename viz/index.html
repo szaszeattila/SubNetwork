@@ -4893,6 +4893,15 @@ function developmentStatus(mol) {
     return "ChEMBL records it as approved, but nothing it cites is an approval" +
            (reached ? "; its trials reached " + reached : "");
   }
+  // A phase ChEMBL files no disease under at all (2026-10-17, at the user's
+  // request): 163 entries here, every one ChEMBL puts at phase 2 or 3 carrying
+  // an INN or USAN, and cyclazodone's only source is the INN list, with no trial
+  // registered. "Reached phase 2" asserts a trial nothing here cites, so the
+  // line says what ChEMBL records and that it cites nothing for it.
+  if (mol.n_indications_chembl === 0) {
+    const named = { 3: "phase 3", 2: "phase 2", 1: "phase 1", 0.5: "early phase 1" }[p];
+    if (named) return "ChEMBL records " + named + " but cites no trial or disease for it";
+  }
   if (p === 4) {
     const w = withdrawalNote(mol);
     return "approved" + (mol.first_approval ? ", first in " + mol.first_approval : "") +

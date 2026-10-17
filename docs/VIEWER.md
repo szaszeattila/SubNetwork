@@ -1697,6 +1697,22 @@ at all, and the row says *ChEMBL records no condition it is approved for*
 instead of implying one. Nothing is added where a listed condition is itself
 approved.
 
+**And a phase with nothing behind it says so** (2026-10-17, at the user's
+request). Cyclazodone read *reached phase 2, not approved for any disease* over
+an empty Indications section. ChEMBL 37 gives it `max_phase` 2 with no
+`drug_indication` row, no mechanism and no activity, and its only source record
+is the WHO INN list; ClinicalTrials.gov registers no study under either of its
+INNs and PubMed holds no human study. That is ChEMBL's pattern rather than one
+record: 2,752 parents in the release are phase 2 with no indication and the INN
+list as their only drug source, and about 1,900 more add USAN. Here 163 entries
+carry a phase below 4 and no disease at all, and every one ChEMBL itself puts at
+phase 2 or 3 has an INN or USAN. The row now reads *ChEMBL records phase 2 but
+cites no trial or disease for it*: it keeps ChEMBL's number, because a name
+being recommended is some sign of development, and stops saying the molecule
+reached a phase nothing here shows. A molecule whose diseases all sit outside
+the scope keeps *reached*, since ChEMBL does file a phase under a disease for
+it, and an Approved with no condition keeps the line above.
+
 Bromazepam itself no longer needs the line. The finding behind it was that
 MeSH files **Anxiety** under Behavior (F01) and not Mental Disorders (F03),
 and ChEMBL uses that heading for 182 indication records. So Anxiety,

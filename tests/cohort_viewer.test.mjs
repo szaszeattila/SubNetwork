@@ -1817,6 +1817,30 @@ describe("the panel says what it is counting", () => {
     assert.match(v2.showMolecule(v2.lookupMolecule(2)), /approved, first in 1948/);
   });
 
+  test("a phase ChEMBL files no disease under says it cites nothing for it", () => {
+    // Cyclazodone is phase 2 in ChEMBL 37 with no drug_indication row, and its
+    // only source is the INN list: "reached phase 2" asserted a trial nothing
+    // cites (2026-10-17).
+    const v = loadViewer(buildData({
+      molecules: [molecule({ id: 1, max_phase: 2, n_indications_chembl: 0 })],
+    }));
+    const html = v.showMolecule(v.lookupMolecule(1));
+    assert.match(html, /ChEMBL records phase 2 but cites no trial or disease for it/);
+    assert.ok(!/reached phase 2/.test(html));
+    // A molecule with diseases, none of them listed here, keeps "reached".
+    const v2 = loadViewer(buildData({
+      molecules: [molecule({ id: 2, max_phase: 3, n_indications_chembl: 4 })],
+    }));
+    assert.match(v2.showMolecule(v2.lookupMolecule(2)),
+                 /reached phase 3, not approved for any disease/);
+    // An approval with no condition keeps its own line (2026-09-27).
+    const v3 = loadViewer(buildData({
+      molecules: [molecule({ id: 3, max_phase: 4, n_indications_chembl: 0 })],
+    }));
+    assert.match(v3.showMolecule(v3.lookupMolecule(3)),
+                 /ChEMBL records no condition it is approved for/);
+  });
+
   test("the claim and similarity sections fold, and fold with their counts on them", () => {
     // The heading becomes the summary rather than sitting above one, so a
     // folded section is the h2 the panel already had with a triangle on it -

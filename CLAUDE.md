@@ -633,7 +633,7 @@ the `class_wikipedia` table: 573 through the Wikidata item carrying the
 descriptor, and 90 whose item has no article through the main article its
 English category declares (Xanthines to *Xanthine*).
 
-The pipeline suite is 592 tests and the node suites are 745 (516 cohort
+The pipeline suite is 592 tests and the node suites are 746 (517 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`
@@ -915,7 +915,10 @@ behaviour a rule here describes.
 - **A trial states status, phase and p-values verbatim, never failure
   or rejection, and "Approved" names the condition it is for or says
   ChEMBL records none** — no identifier-keyed source holds the former,
-  and 327 of 900 approved entries needed the latter.
+  and 327 of 900 approved entries needed the latter. A phase ChEMBL files
+  under no disease at all reads "ChEMBL records phase 2 but cites no trial
+  or disease for it", never "reached": cyclazodone's phase 2 rests on its
+  INN listing alone (2026-10-17).
 - **A trial's years are the registry's, and an ESTIMATED date is always
   worded as planned** — 890 status-UNKNOWN trials carry a planned end
   already past, which printed bare reads as the year they ended.
