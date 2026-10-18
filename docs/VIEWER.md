@@ -832,6 +832,47 @@ measured against a local payload of 4,287 canvas nodes at the open defaults,
 not the published build; the solve is not reproducible run to run even with
 `Math.random` seeded, so each figure is one run unless it says two.
 
+**And the middle was a knot of unrelated hubs** (the same day, reported as "a
+lot of unrelated proteins bunched together with molecules around them"). With
+the grid gone the centre could be read, and what it held was the 40
+most-measured proteins, nearly all of them inside the inner 5% of the canvas:
+hERG (331 molecules), ADRA1A, DRD2 and DRD3, the three monoamine transporters,
+the opioid receptors, the CYPs, COX-1, the bile-salt pump, the progesterone and
+androgen receptors. Every mass in the solver was 1, so a protein with three
+hundred lines was pulled toward the middle by three hundred springs, and all of
+them ended up there side by side, joined by nothing but the promiscuous
+molecules that touch them all (1,609 of the 1,770 pairs among the innermost 60
+targets share a molecule), which sat in a ring round the knot.
+
+`physicsMasses` gives each body a mass of its spring count to the power
+`HUB_MASS_EXPONENT` — ForceAtlas2's degree weighting, in vis's terms. vis
+multiplies repulsion by both masses and divides each body's forces by its own,
+so hubs repel one another hard and are dragged little by their own lines. It
+was judged on two things at once, because pulling hubs apart is easy and
+pulling a hub away from what it is related to is the failure: how far apart
+the 40 hubs sit (median distance to the next hub, over the median radius R),
+and how related a node is to its nearest neighbour of the same kind on the
+canvas (Jaccard of their sets of lines, over nodes with two lines or more).
+
+| exponent | hub spacing / R | nearest protein / molecule relatedness | R |
+|---|---|---|---|
+| none | 0.024–0.025 | 0.089–0.100 / 0.074–0.077 | ~1,280 |
+| 0.35 (adopted) | 0.034–0.039 | 0.083–0.099 / 0.078–0.087 | ~1,900 |
+| 0.5 | 0.041–0.052 | 0.084–0.091 / 0.071–0.077 | ~2,300 |
+| 0.5, repulsion −10000 | 0.038–0.051 | 0.083–0.090 / 0.070–0.076 | ~1,890 |
+| 0.75 | 0.069 | 0.076 / 0.066 | 3,297 |
+| 1 | 0.156 | 0.050 / 0.040 | 4,478 |
+
+Ranges are three seeds, single figures one. 0.35 breaks the knot and is the one
+setting that does not cost relatedness; past 0.5 hubs leave for the edge with
+their molecules strung out behind them. (The same measure puts the layout as
+shipped before this morning at 0.046 / 0.045: the spacing pass and the
+stronger repulsion had already doubled it.) The layout is about 45% wider again,
+the first solve's spacing pass now has 262 nodes to move rather than 826 because
+the weighting has done most of it, and a filter change still settles in 8.9 s.
+"Hubs in the inner 5%" was measured too and is too noisy to quote: 13 to 21 of
+40 for the same setting on three seeds.
+
 **Selecting a complex lights its own subunits** (2026-09-25, at the user's
 request), wherever they are drawn, so what a receptor is made of can be read off
 the canvas without opening its Components list. They are lit and not treated as

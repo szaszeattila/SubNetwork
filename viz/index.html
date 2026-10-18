@@ -8418,6 +8418,37 @@ function physicsPlan(g) {
            frozenEdges: frozenEdges };
 }
 
+// How heavy each body is to the solver: its number of springs to the power
+// HUB_MASS_EXPONENT. vis multiplies repulsion by both bodies' masses and divides
+// every force on a body by its own, so a heavy node is pushed hard by other
+// heavy nodes and dragged little by its own springs. With every mass 1, the
+// most-measured proteins - hERG, ADRA1A, the monoamine transporters, the CYPs,
+// COX-1, the progesterone and androgen receptors - were each pulled into the
+// middle by their hundreds of lines and sat there side by side, related by
+// nothing but the promiscuous molecules joining them, with those molecules in a
+// ring round the knot. Weighted, each hub keeps a stretch of canvas of its own
+// with its molecules round it: what ForceAtlas2 does with degree. A unit's
+// anchor counts its proxy springs and keeps the heavier of that and its size.
+// 0.35 moves the 40 most-measured proteins about half as far apart again and
+// leaves the nearest neighbour on the canvas at least as related as before;
+// 0.5 parts them further at a small cost to that, and 1 throws hubs to the
+// edge with their molecules strung out after them (2026-10-18, docs/VIEWER.md).
+const HUB_MASS_EXPONENT = 0.35;
+
+function physicsMasses(g, plan) {
+  const springs = new Map();
+  const add = function (k) { springs.set(k, (springs.get(k) || 0) + 1); };
+  for (const e of g.edges.concat(g.links)) {
+    if (plan.frozenEdges.has(e.id)) continue;
+    add(e.from); add(e.to);
+  }
+  for (const p of plan.proxies) { add(p.from); add(p.to); }
+  const out = new Map();
+  for (const n of g.nodes) out.set(n.key, Math.max(1, Math.pow(springs.get(n.key) || 0, HUB_MASS_EXPONENT)));
+  for (const a of plan.anchors) out.set(a.id, Math.max(1, Math.pow(springs.get(a.id) || 0, HUB_MASS_EXPONENT)));
+  return out;
+}
+
 // The packing: a sunflower spiral, first node at the centre, each further one a
 // golden angle round and a square root out, which fills a disc evenly for any
 // count. Offsets from the anchor, in the unit's own node order.
@@ -8669,11 +8700,15 @@ function renderGraph() {
     return;
   }
   const plan = physicsPlan(g);
+  const mass = physicsMasses(g, plan);
   const nodes = g.nodes.map(function (node) {
     const row = Object.assign({ id: node.key, label: nodeLabel(node) }, nodeStyle(node));
     if (plan.frozenNodes.has(node.key)) { row.physics = false; row.size = UNIT_NODE_SIZE; }
+    else row.mass = mass.get(node.key);
     return row;
-  }).concat(plan.anchors);
+  }).concat(plan.anchors.map(function (a) {
+    return Object.assign({}, a, { mass: Math.max(a.mass, mass.get(a.id)) });
+  }));
   const edges = g.edges.map(function (e) {
     return Object.assign({ id: e.id, from: e.from, to: e.to }, edgeStyle(e),
                          plan.frozenEdges.has(e.id) ? { physics: false } : {});

@@ -5439,6 +5439,37 @@ describe("an ion-channel assembly is laid out as one unit", () => {
     assert.deepEqual([at.e.x, at.e.y], [900, 900]);
   });
 
+  test("a body is heavier for more springs, so the hubs push each other apart", () => {
+    const v = loadViewer(unitCatalogue());
+    v.select("molecule", 1);
+    const g = v.catalogueGraph();
+    const plan = v.physicsPlan(g);
+    const mass = v.physicsMasses(g, plan);
+    // Counted the way the solver feels them: frozen lines are not springs, a
+    // proxy to an anchor is.
+    const springs = new Map();
+    for (const e of plain(g.edges.concat(g.links)).filter((e) => !plan.frozenEdges.has(e.id))
+      .concat(plain(plan.proxies))) {
+      for (const k of [e.from, e.to]) springs.set(k, (springs.get(k) || 0) + 1);
+    }
+    const keys = plain(g.nodes).map((n) => n.key).filter((k) => !plan.frozenNodes.has(k))
+      .concat(plain(plan.anchors).map((a) => a.id));
+    for (const a of keys) {
+      assert.ok(mass.get(a) >= 1, a + " is never lighter than 1");
+      for (const b of keys) {
+        if ((springs.get(a) || 0) > (springs.get(b) || 0)) assert.ok(mass.get(a) >= mass.get(b), a + " vs " + b);
+      }
+    }
+    assert.ok(keys.some((k) => mass.get(k) > 1), "something here is a hub");
+    // And vis is handed them: a node its weight, an anchor the heavier of its
+    // weight and its size.
+    const rows = Object.fromEntries(v.__networks[0].data.nodes.rows.map((r) => [r.id, r]));
+    for (const k of keys) {
+      if (k.startsWith("u:")) assert.ok(rows[k].mass >= mass.get(k) && rows[k].mass > 1, k);
+      else assert.equal(rows[k].mass, mass.get(k), k);
+    }
+  });
+
   test("a canvas with no units is spaced all the same", () => {
     const v = loadViewer(buildData({}));
     const g = { units: [], nodes: [{ key: "m1" }, { key: "m2" }, { key: "m3" }] };
