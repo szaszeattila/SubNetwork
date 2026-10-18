@@ -770,7 +770,8 @@ lines are drawn and carry no spring. When the solve settles, `unitPlacement`
 packs each unit on a sunflower spiral round its anchor — complex groups in the
 middle, subunits on the rim where the lines arrive — then **guarantees** the
 disc holds only its own nodes: discs are separated largest first, and any other
-node inside one is moved to just past its rim. Sizing the anchors alone left 148
+node inside one is moved to just past its rim (since 2026-10-18 inside
+`spreadNodes`, below, which also spaces the nodes it moves). Sizing the anchors alone left 148
 unrelated nodes inside discs and 2 discs overlapping; the pass leaves 0 and 0,
 measured in Chrome across two fresh layouts and after two filter changes. Every
 move is glided by the transition that follows. Dragging any node of a unit
@@ -781,6 +782,55 @@ behind. `getPositions()` without arguments leaves hidden nodes out, which is why
 
 Nothing counted changes: the same edges, hops, panels and similarity scores
 with units on or off (top-1 38.2%, MRR 0.5105 either way).
+
+**The middle of the canvas was a grid, and the solver was drawing it**
+(2026-10-18, reported as "a hashtag type pattern, where molecules are being
+drawn on top of one another"). Zoomed out, the molecules at the centre stood in
+rows and columns. A force layout has no reason to prefer the axes, so it had to
+be something in vis itself, and it was `barnesHut.avoidOverlap`. vis applies it
+by taking the node's own radius off its distance to each quadtree cell's centre
+of mass — a cell standing for many nodes, not one — so the push a node feels
+jumps wherever it crosses one of the tree's axis-aligned cell boundaries, and in
+the crush at the centre nodes settled along them. Measured in headless Chrome by
+comparing how tightly the middle half's x and y values bunch against the same
+nodes read on 45° axes (1.0 is no preference; a grid lifts only the first):
+
+| `avoidOverlap` | axis / diagonal | nodes within 20 of another |
+|---|---|---|
+| 1 | 1.45 (a square lattice, plain on screen) | 1,720 |
+| 0.35 (as shipped) | 1.02–1.03, two runs | 1,398–1,446 |
+| 0 | 0.98 | 654–707 |
+
+Lowering `theta` to 0.25, which makes the tree's approximation more exact,
+changed nothing (1.03), which is what put it on the overlap term rather than
+the approximation. So the solver's overlap avoidance is off, and spacing is
+done after the solve by `spreadNodes`, which has no preferred direction: any
+two nodes closer than `NODE_SPACING` (32 canvas units; a dot is 10 across the
+radius) are pushed apart along the line between them, half each, and any node
+inside a disc is moved past its rim, repeated until nothing moves or 200 passes
+have run. Two nodes on one spot part at a golden-angle step of their own, never
+along an axis. The rim step used to be the whole of the old pass, and it put
+every intruder on the same circle, which stacked them there.
+
+Off alone, the middle was still a carpet: molecules held together by their
+springs to the same hub targets, nothing between them. Repulsion went from −6500
+to −20000 with the change, chosen over a weaker central gravity (0.03 changed
+almost nothing) and over a wider spacing with milder repulsion (which only
+moved more nodes further):
+
+| | room per node, middle half | moved by `spreadNodes` | 9 in 10 moved by at most |
+|---|---|---|---|
+| −6500 | 1,230 square units | 1,982 of 4,151 | 59 |
+| −12000 | 1,786 | 1,260 | 39 |
+| −20000 | 2,394 | 826 | 7 |
+
+The layout is about 40% wider for it, which is the spread. Every node is at
+least 20 apart after the pass, on both seeds measured, against a third of the
+canvas before; the first solve's pass takes about 0.4 s, a filter change's 20 to
+180 ms, and "draw separately", which has no discs, is spaced too. These were
+measured against a local payload of 4,287 canvas nodes at the open defaults,
+not the published build; the solve is not reproducible run to run even with
+`Math.random` seeded, so each figure is one run unless it says two.
 
 **Selecting a complex lights its own subunits** (2026-09-25, at the user's
 request), wherever they are drawn, so what a receptor is made of can be read off

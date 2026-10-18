@@ -5414,6 +5414,41 @@ describe("an ion-channel assembly is laid out as one unit", () => {
     assert.ok(at["u:small"].x > 100, "moved clear along the line between them");
   });
 
+  test("vis's overlap avoidance stays off: it set the crowded middle in rows and columns", () => {
+    const v = loadViewer(buildData({}));
+    for (const initial of [true, false]) {
+      assert.equal(v.graphOptions(initial).physics.barnesHut.avoidOverlap, 0);
+    }
+  });
+
+  test("crowded nodes are spaced along the line between them; a node with room is not moved", () => {
+    const v = loadViewer(buildData({}));
+    const pts = [{ key: "a", x: 0, y: 0 }, { key: "b", x: 10, y: 0 },
+                 { key: "c", x: 100, y: 100 }, { key: "d", x: 100, y: 100 },
+                 { key: "e", x: 900, y: 900 }];
+    const at = Object.fromEntries(plain(v.spreadNodes(pts.map((p) => Object.assign({}, p)), []))
+      .map((p) => [p.key, p]));
+    const gap = (p, q) => Math.hypot(at[p].x - at[q].x, at[p].y - at[q].y);
+    assert.ok(gap("a", "b") >= 31, "a and b spaced");
+    assert.ok(Math.abs(at.a.y) < 1e-9 && Math.abs(at.b.y) < 1e-9, "along their own line, not across it");
+    assert.ok(gap("c", "d") >= 31, "two on one spot are parted");
+    // ...at an angle of their own, never along an axis, which is the grid this replaced.
+    const dx = Math.abs(at.c.x - at.d.x), dy = Math.abs(at.c.y - at.d.y);
+    assert.ok(dx > 1 && dy > 1, "parted off-axis");
+    assert.ok(!at.e.moved);
+    assert.deepEqual([at.e.x, at.e.y], [900, 900]);
+  });
+
+  test("a canvas with no units is spaced all the same", () => {
+    const v = loadViewer(buildData({}));
+    const g = { units: [], nodes: [{ key: "m1" }, { key: "m2" }, { key: "m3" }] };
+    const rows = plain(v.unitPlacement(g, { m1: { x: 0, y: 0 }, m2: { x: 0, y: 4 },
+                                            m3: { x: 400, y: 0 } }));
+    assert.deepEqual(rows.map((r) => r.id).sort(), ["m1", "m2"]);
+    const [p, q] = rows;
+    assert.ok(Math.hypot(p.x - q.x, p.y - q.y) >= 31);
+  });
+
   test("vis is handed small frozen nodes, a hidden anchor, hidden springs and a disc painter", () => {
     const v = loadViewer(unitCatalogue());
     v.select("molecule", 1);

@@ -633,7 +633,7 @@ the `class_wikipedia` table: 573 through the Wikidata item carrying the
 descriptor, and 90 whose item has no article through the main article its
 English category declares (Xanthines to *Xanthine*).
 
-The pipeline suite is 592 tests and the node suites are 746 (517 cohort
+The pipeline suite is 592 tests and the node suites are 749 (520 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`
@@ -942,6 +942,12 @@ behaviour a rule here describes.
 
 **Rendering correctness (not just performance)**
 
+- **Nodes are spaced after the solve by `spreadNodes`, never by vis's
+  `avoidOverlap`**, which stays 0: vis subtracts a node's radius from its
+  distance to whole quadtree cells, so the crowded middle settled in rows and
+  columns along the cell boundaries — a "#" at 0.35, a lattice at 1. The pass
+  pushes along the line between two nodes, never an axis; repulsion is −20000
+  so it has little left to do.
 - **A filter change calls `network.stabilize(n)` explicitly** — vis
   answers a DataSet change with `startSimulation()`, which never emits
   `stabilizationIterationsDone`, so physics never turns itself off.

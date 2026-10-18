@@ -8213,8 +8213,9 @@ function settleGraph() {
   network.setOptions({ physics: false });
   syncLabels();
   // Before the glide is worked out, so a unit's nodes glide to their packed
-  // places with everything else rather than jumping after it.
-  placeUnits();
+  // places, and a crowded node to its spaced one, with everything else rather
+  // than jumping after it.
+  placeNodes();
   startTransition();
 }
 
@@ -8308,9 +8309,22 @@ function graphOptions(initial) {
       // put the nodes further apart; the rest is done by labelling fewer of
       // them. centralGravity is low because pulling 1,373 nodes toward one
       // point is what packs the periphery onto the hubs in the first place.
-      barnesHut: { gravitationalConstant: -6500, centralGravity: 0.08,
+      //
+      // avoidOverlap is off because it drew a grid. vis applies it by taking
+      // the node's own radius off its distance to each quadtree cell's centre
+      // of mass, so the push from a cell jumps wherever a node crosses one of
+      // the tree's axis-aligned boundaries, and the crowded middle settled in
+      // rows and columns along them - at 1 a square lattice, at 0.35 a "#"
+      // the reader could see (2026-10-18). Spacing is done after the solve
+      // instead, by spreadNodes, which has no preferred direction. Repulsion
+      // went from -6500 to -20000 with it, because the middle was a carpet of
+      // molecules held together by their springs to the same hub targets:
+      // the inner half of the canvas now has twice the room per node (2,394
+      // square units, from 1,230), and spreadNodes moves 826 nodes, nine in
+      // ten of them by 7 units or less, where it had to move 1,982 by up to 59.
+      barnesHut: { gravitationalConstant: -20000, centralGravity: 0.08,
                    springLength: 130, springConstant: 0.02, damping: 0.55,
-                   avoidOverlap: 0.35 },
+                   avoidOverlap: 0 },
       // The budget, not the plan: _stabilizationBatch stops the moment the
       // layout converges, and a re-solve that started from the previous
       // positions usually converges long before this. The first layout has
@@ -8366,9 +8380,9 @@ const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 
 function unitMass(n) { return Math.max(1, Math.sqrt(n)); }
 
-// The radius the packed disc will have, given to the anchor as its size so that
-// vis's overlap avoidance keeps other nodes, and other discs, out of it. A point
-// anchor left 123 unrelated nodes inside discs and 5 discs overlapping.
+// The radius the packed disc will have, given to the anchor as its size. It was
+// for vis's overlap avoidance, which is now off (graphOptions); what keeps other
+// nodes and other discs out of a disc is unitPlacement.
 function unitRadius(n) { return UNIT_SPACING * Math.sqrt(Math.max(0, n - 1)) + UNIT_PAD; }
 
 // What vis is handed for the units, as data a test can read: the anchors, the
@@ -8426,10 +8440,84 @@ function unitOffsets(u) {
 // avoidance halved the overlaps and did not clear the intruders. So this is a
 // guarantee rather than a tendency, in one pass after the solve: discs are
 // placed largest first and a smaller one overlapping an earlier one is moved
-// just clear of it, then any other node inside a disc is moved out to just
-// past its rim, along the line from the centre. Nothing is hidden, and every
-// move is a node glided a short way by the transition that follows.
+// just clear of it, then every other node is spaced round them by spreadNodes.
+// Nothing is hidden, and every move is a node glided a short way by the
+// transition that follows.
 const UNIT_CLEARANCE = 14;     // canvas units kept between a disc and a neighbour
+
+// The other half of the guarantee, and the spacing the solver no longer does
+// (graphOptions, avoidOverlap). A third of the canvas sat on a neighbour after
+// the solve - 1,398 of 4,287 nodes within NODE_SPACING of another at the open
+// defaults - and moving every node inside a disc to its rim stacked them on
+// one circle. So, after the solve: any two nodes closer than NODE_SPACING are
+// pushed apart along the line between them, half each, and any node inside a
+// disc is moved out past its rim along the line from its centre, repeated
+// until nothing moves. Along the line, never along an axis, so the pass has no
+// grid of its own to print; the cells below only find the neighbours. A node
+// with room is never touched, so the solve's picture survives everywhere but
+// the crowded middle.
+const NODE_SPACING = 32;       // canvas units between two nodes' centres: a dot
+                               // is 10 across the radius, so a gap of about 10
+const SPREAD_SLACK = 0.5;      // closer than spacing by less than this is spaced
+const SPREAD_PASSES = 200;     // the budget; the loop stops when nothing moves
+
+function spreadNodes(points, discs) {
+  const cell = NODE_SPACING;
+  // A cell's key as one number: no canvas here is 65,536 cells across.
+  const cellKey = function (x, y) { return x * 65536 + y; };
+  for (let pass = 0; pass < SPREAD_PASSES; pass++) {
+    let again = false;
+    const grid = new Map();
+    points.forEach(function (p, i) {
+      const k = cellKey(Math.floor(p.x / cell), Math.floor(p.y / cell));
+      if (grid.has(k)) grid.get(k).push(i); else grid.set(k, [i]);
+    });
+    for (let i = 0; i < points.length; i++) {
+      const p = points[i];
+      const cx = Math.floor(p.x / cell), cy = Math.floor(p.y / cell);
+      for (let a = -1; a <= 1; a++) {
+        for (let b = -1; b <= 1; b++) {
+          const near = grid.get(cellKey(cx + a, cy + b));
+          if (!near) continue;
+          for (const j of near) {
+            if (j <= i) continue;
+            const q = points[j];
+            let dx = q.x - p.x, dy = q.y - p.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist >= NODE_SPACING - SPREAD_SLACK) continue;
+            // Two nodes on the same spot part at an angle of their own, so that
+            // a pile of them opens as a spiral rather than along a line.
+            // (i + 1), because at i = 0 the angle is 0 and that is an axis.
+            if (dist < 1e-6) {
+              dx = Math.cos((i + 1) * GOLDEN_ANGLE); dy = Math.sin((i + 1) * GOLDEN_ANGLE);
+            } else { dx /= dist; dy /= dist; }
+            const half = (NODE_SPACING - dist) / 2;
+            p.x -= dx * half; p.y -= dy * half;
+            q.x += dx * half; q.y += dy * half;
+            p.moved = q.moved = again = true;
+          }
+        }
+      }
+    }
+    // Discs last in every pass, so that whenever the loop stops no node is
+    // inside one: spacing is the tendency, a disc holding only its own nodes
+    // is the guarantee.
+    for (const p of points) {
+      for (const d of discs) {
+        const need = d.r + UNIT_CLEARANCE;
+        let dx = p.x - d.x, dy = p.y - d.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist >= need) continue;
+        if (dist < 1e-6) { dx = 1; dy = 0; } else { dx /= dist; dy /= dist; }
+        p.x = d.x + dx * need;
+        p.y = d.y + dy * need;
+        p.moved = again = true;
+      }
+    }
+    if (!again) break;
+  }
+  return points;
+}
 
 function unitPlacement(g, positions) {
   const discs = [];
@@ -8470,36 +8558,23 @@ function unitPlacement(g, positions) {
       out.push({ id: o.key, x: d.x + o.dx, y: d.y + o.dy });
     }
   }
+  const points = [];
   for (const n of g.nodes || []) {
     if (inUnit.has(n.key)) continue;
     const p = positions[n.key];
-    if (!p) continue;
-    // Repeated, because a node pushed out of one disc can land in the next;
-    // a handful of passes settles every case this canvas has.
-    let x = p.x, y = p.y, moved = false;
-    for (let pass = 0; pass < 4; pass++) {
-      let again = false;
-      for (const d of discs) {
-        const need = d.r + UNIT_CLEARANCE;
-        let dx = x - d.x, dy = y - d.y;
-        const dist = Math.hypot(dx, dy);
-        if (dist >= need) continue;
-        if (dist < 1e-6) { dx = 1; dy = 0; } else { dx /= dist; dy /= dist; }
-        x = d.x + dx * need;
-        y = d.y + dy * need;
-        moved = again = true;
-      }
-      if (!again) break;
-    }
-    if (moved) out.push({ id: n.key, x: x, y: y });
+    if (p) points.push({ key: n.key, x: p.x, y: p.y, moved: false });
+  }
+  for (const p of spreadNodes(points, discs)) {
+    if (p.moved) out.push({ id: p.key, x: p.x, y: p.y });
   }
   return out;
 }
 
-function placeUnits() {
+// Runs with no units too: spacing is for every canvas, and "draw separately"
+// is a canvas with no discs, not one that needs no room.
+function placeNodes() {
   if (!network || !visNodes) return;
   const g = catalogueGraph();
-  if (!g.units.length) return;
   const rows = unitPlacement(g, nodePositions());
   if (rows.length && !paintPositions(network, rows)) visNodes.update(rows);
 }
