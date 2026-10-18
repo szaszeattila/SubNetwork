@@ -770,7 +770,8 @@ lines are drawn and carry no spring. When the solve settles, `unitPlacement`
 packs each unit on a sunflower spiral round its anchor — complex groups in the
 middle, subunits on the rim where the lines arrive — then **guarantees** the
 disc holds only its own nodes: discs are separated largest first, and any other
-node inside one is moved to just past its rim. Sizing the anchors alone left 148
+node inside one is moved to just past its rim (since 2026-10-18 inside
+`spreadNodes`, below, which also spaces the nodes it moves). Sizing the anchors alone left 148
 unrelated nodes inside discs and 2 discs overlapping; the pass leaves 0 and 0,
 measured in Chrome across two fresh layouts and after two filter changes. Every
 move is glided by the transition that follows. Dragging any node of a unit
@@ -781,6 +782,96 @@ behind. `getPositions()` without arguments leaves hidden nodes out, which is why
 
 Nothing counted changes: the same edges, hops, panels and similarity scores
 with units on or off (top-1 38.2%, MRR 0.5105 either way).
+
+**The middle of the canvas was a grid, and the solver was drawing it**
+(2026-10-18, reported as "a hashtag type pattern, where molecules are being
+drawn on top of one another"). Zoomed out, the molecules at the centre stood in
+rows and columns. A force layout has no reason to prefer the axes, so it had to
+be something in vis itself, and it was `barnesHut.avoidOverlap`. vis applies it
+by taking the node's own radius off its distance to each quadtree cell's centre
+of mass — a cell standing for many nodes, not one — so the push a node feels
+jumps wherever it crosses one of the tree's axis-aligned cell boundaries, and in
+the crush at the centre nodes settled along them. Measured in headless Chrome by
+comparing how tightly the middle half's x and y values bunch against the same
+nodes read on 45° axes (1.0 is no preference; a grid lifts only the first):
+
+| `avoidOverlap` | axis / diagonal | nodes within 20 of another |
+|---|---|---|
+| 1 | 1.45 (a square lattice, plain on screen) | 1,720 |
+| 0.35 (as shipped) | 1.02–1.03, two runs | 1,398–1,446 |
+| 0 | 0.98 | 654–707 |
+
+Lowering `theta` to 0.25, which makes the tree's approximation more exact,
+changed nothing (1.03), which is what put it on the overlap term rather than
+the approximation. So the solver's overlap avoidance is off, and spacing is
+done after the solve by `spreadNodes`, which has no preferred direction: any
+two nodes closer than `NODE_SPACING` (32 canvas units; a dot is 10 across the
+radius) are pushed apart along the line between them, half each, and any node
+inside a disc is moved past its rim, repeated until nothing moves or 200 passes
+have run. Two nodes on one spot part at a golden-angle step of their own, never
+along an axis. The rim step used to be the whole of the old pass, and it put
+every intruder on the same circle, which stacked them there.
+
+Off alone, the middle was still a carpet: molecules held together by their
+springs to the same hub targets, nothing between them. Repulsion went from −6500
+to −20000 with the change, chosen over a weaker central gravity (0.03 changed
+almost nothing) and over a wider spacing with milder repulsion (which only
+moved more nodes further):
+
+| | room per node, middle half | moved by `spreadNodes` | 9 in 10 moved by at most |
+|---|---|---|---|
+| −6500 | 1,230 square units | 1,982 of 4,151 | 59 |
+| −12000 | 1,786 | 1,260 | 39 |
+| −20000 | 2,394 | 826 | 7 |
+
+The layout is about 40% wider for it, which is the spread. Every node is at
+least 20 apart after the pass, on both seeds measured, against a third of the
+canvas before; the first solve's pass takes about 0.4 s, a filter change's 20 to
+180 ms, and "draw separately", which has no discs, is spaced too. These were
+measured against a local payload of 4,287 canvas nodes at the open defaults,
+not the published build; the solve is not reproducible run to run even with
+`Math.random` seeded, so each figure is one run unless it says two.
+
+**And the middle was a knot of unrelated hubs** (the same day, reported as "a
+lot of unrelated proteins bunched together with molecules around them"). With
+the grid gone the centre could be read, and what it held was the 40
+most-measured proteins, nearly all of them inside the inner 5% of the canvas:
+hERG (331 molecules), ADRA1A, DRD2 and DRD3, the three monoamine transporters,
+the opioid receptors, the CYPs, COX-1, the bile-salt pump, the progesterone and
+androgen receptors. Every mass in the solver was 1, so a protein with three
+hundred lines was pulled toward the middle by three hundred springs, and all of
+them ended up there side by side, joined by nothing but the promiscuous
+molecules that touch them all (1,609 of the 1,770 pairs among the innermost 60
+targets share a molecule), which sat in a ring round the knot.
+
+`physicsMasses` gives each body a mass of its spring count to the power
+`HUB_MASS_EXPONENT` — ForceAtlas2's degree weighting, in vis's terms. vis
+multiplies repulsion by both masses and divides each body's forces by its own,
+so hubs repel one another hard and are dragged little by their own lines. It
+was judged on two things at once, because pulling hubs apart is easy and
+pulling a hub away from what it is related to is the failure: how far apart
+the 40 hubs sit (median distance to the next hub, over the median radius R),
+and how related a node is to its nearest neighbour of the same kind on the
+canvas (Jaccard of their sets of lines, over nodes with two lines or more).
+
+| exponent | hub spacing / R | nearest protein / molecule relatedness | R |
+|---|---|---|---|
+| none | 0.024–0.025 | 0.089–0.100 / 0.074–0.077 | ~1,280 |
+| 0.35 (adopted) | 0.034–0.039 | 0.083–0.099 / 0.078–0.087 | ~1,900 |
+| 0.5 | 0.041–0.052 | 0.084–0.091 / 0.071–0.077 | ~2,300 |
+| 0.5, repulsion −10000 | 0.038–0.051 | 0.083–0.090 / 0.070–0.076 | ~1,890 |
+| 0.75 | 0.069 | 0.076 / 0.066 | 3,297 |
+| 1 | 0.156 | 0.050 / 0.040 | 4,478 |
+
+Ranges are three seeds, single figures one. 0.35 breaks the knot and is the one
+setting that does not cost relatedness; past 0.5 hubs leave for the edge with
+their molecules strung out behind them. (The same measure puts the layout as
+shipped before this morning at 0.046 / 0.045: the spacing pass and the
+stronger repulsion had already doubled it.) The layout is about 45% wider again,
+the first solve's spacing pass now has 262 nodes to move rather than 826 because
+the weighting has done most of it, and a filter change still settles in 8.9 s.
+"Hubs in the inner 5%" was measured too and is too noisy to quote: 13 to 21 of
+40 for the same setting on three seeds.
 
 **Selecting a complex lights its own subunits** (2026-09-25, at the user's
 request), wherever they are drawn, so what a receptor is made of can be read off
