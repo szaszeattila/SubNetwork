@@ -48,6 +48,7 @@ def _fake_figures(**overrides):
         "wiki_molecules": 1051, "single_component": 2265, "wiki_targets": 1280,
         "multi_component": 310, "no_component": 2,
         "multi_single_protein": 1, "multi_single_protein_accessions": 3,
+        "wiki_multi": 280, "multi_no_article": 30, "multi_unreviewed": 0,
         "payload_bytes": 4390047, "gtopdb_bytes": 129332, "drugcentral_bytes": 31000, "shard_bytes": 71652390, "shard_count": 1176,
         "python_tests": 219, "viewer_cohort_tests": 182,
         "viewer_legacy_tests": 222, "viewer_tests": 404,
@@ -158,6 +159,15 @@ class RenderTest(unittest.TestCase):
         text = status.render_status(_fake_figures(multi_single_protein=0))
         self.assertNotIn("SINGLE PROTEIN carrying", text)
 
+    def test_multi_component_links_are_counted_and_unreviewed_ones_named(self):
+        text = " ".join(status.render_status(_fake_figures()).split())
+        self.assertIn("So do **280 of the 310 multi-component targets**", text)
+        self.assertIn("30 were reviewed and have no article of their own.", text)
+        self.assertNotIn("not yet reviewed", text)
+        text = " ".join(status.render_status(
+            _fake_figures(multi_unreviewed=4)).split())
+        self.assertIn("and 4 are not yet reviewed and stay unlinked.", text)
+
     def test_targets_with_no_accession_are_mentioned_only_when_there_are_some(self):
         self.assertIn("no accession at all",
                       status.render_status(_fake_figures(no_component=2)))
@@ -214,8 +224,8 @@ class ValidationGateTest(unittest.TestCase):
                 " ('evidence_policy','{\"policy_id\":\"e\",\"version\":\"1\"}');"
                 "CREATE TABLE molecules (in_cohort INT, is_seed INT,"
                 " admission_reason TEXT, evidence_status TEXT, wikipedia_url TEXT);"
-                "CREATE TABLE targets (n_components INT, target_type TEXT,"
-                " wikipedia_url TEXT);"
+                "CREATE TABLE targets (chembl_id TEXT, n_components INT,"
+                " target_type TEXT, wikipedia_url TEXT);"
                 "CREATE TABLE claims (basis TEXT, tier TEXT, curated_support INT,"
                 " multiple_study_support INT, parent_molregno INT,"
                 " target_chembl_id TEXT);"

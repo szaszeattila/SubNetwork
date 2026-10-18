@@ -3,9 +3,9 @@
 These lock in the rule the whole script exists to enforce (CLAUDE.md
 invariant 15: resolve external links by identifier, never by name) and the
 operational guarantees the task asked for: an ambiguous Wikidata match is
-dropped rather than guessed, a multi-component target is never queried at
-all, a failed lookup is distinguished from "no article exists", and a rerun
-never disturbs an already-resolved row.
+dropped rather than guessed, a multi-component target is queried only through
+its reviewed Wikidata item, a failed lookup is distinguished from "no article
+exists", and a rerun never disturbs an already-resolved row.
 
 No network access: `_wikidata_get` - the one seam that ever calls
 `requests.get` - is stubbed out in every test. The stub inspects the
@@ -18,10 +18,12 @@ Run with: python3 -m unittest discover -s tests
 """
 
 import itertools
+import json
 import re
 import pathlib
 import sqlite3
 import sys
+import tempfile
 import unittest
 from unittest import mock
 
@@ -377,18 +379,78 @@ class TargetResolutionTest(unittest.TestCase):
             conn.execute("SELECT wikipedia_url FROM targets WHERE chembl_id = 'CHEMBL_T1'").fetchone()[0],
             "https://en.wikipedia.org/wiki/EGFR")
 
-    def test_multi_component_target_is_never_queried(self):
+    def test_an_unreviewed_multi_component_target_is_never_queried(self):
         conn = fake_db()
         add_target(conn, "CHEMBL_COMPLEX", ["P1", "P2"], target_type="PROTEIN COMPLEX")
         log = []
         with mock.patch.object(rcw, "_wikidata_get",
                                 stub({"CHEMBL_COMPLEX": {"https://en.wikipedia.org/wiki/Wrong"}}, log=log)):
-            summary = rcw.resolve_targets(conn)
+            summary = rcw.resolve_targets(conn, items={})
         self.assertEqual(summary["multi_component"], 1)
         self.assertEqual(summary["queried"], 0)
+        self.assertEqual(summary["by_item"]["unreviewed"], 1)
         self.assertEqual(log, [])
         self.assertIsNone(
             conn.execute("SELECT wikipedia_url FROM targets WHERE chembl_id = 'CHEMBL_COMPLEX'").fetchone()[0])
+
+    def test_a_family_is_linked_through_its_reviewed_item_never_its_members(self):
+        # Walking out from PTGS1 and PTGS2 reaches "Haem peroxidase
+        # superfamily"; the family's own item is Cyclooxygenase's.
+        conn = fake_db()
+        add_target(conn, "CHEMBL2094253", ["P23219", "P35354"], target_type="PROTEIN FAMILY")
+        log = []
+        with mock.patch.object(rcw, "_wikidata_get", stub({"CHEMBL2094253": {
+                "https://en.wikipedia.org/wiki/Cyclooxygenase"}}, log=log)):
+            summary = rcw.resolve_targets(conn, items={"CHEMBL2094253": "Q410251"})
+        self.assertEqual(summary["by_item"]["resolved"], 1)
+        self.assertEqual(
+            conn.execute("SELECT wikipedia_url FROM targets WHERE chembl_id = 'CHEMBL2094253'").fetchone()[0],
+            "https://en.wikipedia.org/wiki/Cyclooxygenase")
+        self.assertEqual(len(log), 1)
+        self.assertIn("wd:Q410251", log[0])
+        self.assertNotIn("P23219", log[0])
+        self.assertNotIn("P35354", log[0])
+
+    def test_a_target_reviewed_with_no_article_is_never_queried(self):
+        conn = fake_db()
+        add_target(conn, "CHEMBL2221347", ["P51787", "P15382"], target_type="PROTEIN COMPLEX")
+        log = []
+        with mock.patch.object(rcw, "_wikidata_get", stub(log=log)):
+            summary = rcw.resolve_targets(conn, items={"CHEMBL2221347": None})
+        self.assertEqual(summary["by_item"]["refused"], 1)
+        self.assertEqual(summary["by_item"]["unreviewed"], 0)
+        self.assertEqual(log, [])
+
+    def test_a_reviewed_item_with_two_articles_is_ambiguous(self):
+        conn = fake_db()
+        add_target(conn, "CHEMBL_FAMILY", ["P1", "P2"], target_type="PROTEIN FAMILY")
+        with mock.patch.object(rcw, "_wikidata_get", stub({"CHEMBL_FAMILY": {
+                "https://en.wikipedia.org/wiki/A", "https://en.wikipedia.org/wiki/B"}})):
+            summary = rcw.resolve_targets(conn, items={"CHEMBL_FAMILY": "Q1"})
+        self.assertEqual(summary["by_item"]["ambiguous"], 1)
+        self.assertIsNone(
+            conn.execute("SELECT wikipedia_url FROM targets WHERE chembl_id = 'CHEMBL_FAMILY'").fetchone()[0])
+
+    def test_a_failed_item_lookup_is_a_failure_and_writes_nothing(self):
+        conn = fake_db()
+        add_target(conn, "CHEMBL_FAMILY", ["P1", "P2"], target_type="PROTEIN FAMILY",
+                   wikipedia_url="https://en.wikipedia.org/wiki/Kept")
+        with mock.patch.object(rcw, "_wikidata_get", stub(fail_keys=("CHEMBL_FAMILY",))):
+            summary = rcw.resolve_targets(conn, refresh=True, items={"CHEMBL_FAMILY": "Q1"})
+        self.assertEqual(summary["by_item"]["failed"], 1)
+        self.assertEqual(summary["failed"], 1)
+        self.assertEqual(
+            conn.execute("SELECT wikipedia_url FROM targets WHERE chembl_id = 'CHEMBL_FAMILY'").fetchone()[0],
+            "https://en.wikipedia.org/wiki/Kept")
+
+    def test_a_single_component_target_never_takes_the_item_route(self):
+        conn = fake_db()
+        add_target(conn, "CHEMBL_T1", ["P00533"])
+        log = []
+        with mock.patch.object(rcw, "_wikidata_get", stub(log=log)):
+            summary = rcw.resolve_targets(conn, items={"CHEMBL_T1": "Q1"})
+        self.assertEqual(summary["by_item"]["queried"], 0)
+        self.assertTrue(all("wd:Q1" not in q for q in log))
 
     def test_target_type_label_is_not_trusted_over_the_actual_component_count(self):
         # ChEMBL itself files some SINGLE PROTEIN targets with zero or several
@@ -678,6 +740,45 @@ class ClassResolutionTest(unittest.TestCase):
                          ("Purine", None))
         self.assertEqual(rcw.main_article("{{Cat main}}"), (None, "names no article"))
         self.assertEqual(rcw.main_article(None), (None, "no main article"))
+
+
+class TargetItemMapTest(unittest.TestCase):
+    """config/cohort1_target_wikidata.json is hand-reviewed, so nothing here
+    checks an item against Wikidata. These hold its shape, and its agreement
+    with the seven legacy assemblies reviewed the same way before it."""
+
+    def test_the_committed_map_loads(self):
+        items = rcw.load_target_items()
+        self.assertGreater(len(items), 400)
+        self.assertEqual(items["CHEMBL2094253"], "Q410251")  # Cyclooxygenase
+
+    def test_it_agrees_with_the_legacy_assembly_map(self):
+        sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent / "scripts"))
+        import build_db
+        items = rcw.load_target_items()
+        for chembl_id, item in build_db.COMPLEX_WIKIDATA_ITEMS.items():
+            self.assertEqual(items[chembl_id], item, chembl_id)
+
+    def write_map(self, targets):
+        tmp = pathlib.Path(self.enterContext(tempfile.TemporaryDirectory())) / "map.json"
+        tmp.write_text(json.dumps({"targets": targets}))
+        return tmp
+
+    def test_a_null_item_needs_a_reason(self):
+        path = self.write_map({"CHEMBL1": {"name": "x", "item": None}})
+        with self.assertRaises(SystemExit):
+            rcw.load_target_items(path)
+
+    def test_an_item_must_be_a_wikidata_item_id(self):
+        for bad in ("Cyclooxygenase", "q410251", "Q410251 "):
+            path = self.write_map({"CHEMBL1": {"name": "x", "item": bad}})
+            with self.assertRaises(SystemExit):
+                rcw.load_target_items(path)
+
+    def test_a_key_must_be_a_chembl_id(self):
+        path = self.write_map({"Cyclooxygenase": {"name": "x", "item": "Q410251"}})
+        with self.assertRaises(SystemExit):
+            rcw.load_target_items(path)
 
 
 class FullResolveTest(unittest.TestCase):

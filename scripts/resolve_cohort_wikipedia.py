@@ -36,20 +36,22 @@ others, with no rule saying which. Where both carry one and they differ, the
 protein's own is taken (TARGET_ARTICLE_PRECEDENCE).
 
 Multi-component targets (target_components has more than one row for a
-target - 310 of 2,577 in the build this was written against, not quite the
-"309" the docs quote because three targets ChEMBL itself files under SINGLE
-PROTEIN turn out to carry zero or several accessions; see the test suite)
-are deliberately left NULL. build_db.py tried twice to derive a link for its
-seven legacy protein assemblies from their members' accessions - walking
-P527/P361 outward, then requiring unanimity across every member - and both
-attempts produced confident wrong answers (5-HT3 to "Cys-loop receptor",
-the 7-member NMDA group to "Ionotropic glutamate receptor") rather than no
-answer, which is worse than the NULL this script leaves. Its fallback for
-those seven was a hand-written ChEMBL-id-to-Wikidata-item map
-(COMPLEX_WIKIDATA_ITEMS); that map covers seven specific legacy assemblies
-and does not generalise to the 310 here, so it is deliberately not ported.
-Building a review process for 310 hand-picked identities is future work, not
-a backfill.
+target: every PROTEIN COMPLEX, PROTEIN COMPLEX GROUP and PROTEIN FAMILY, and
+the one SINGLE PROTEIN ChEMBL files against three accessions) are never
+derived from their members. build_db.py tried twice for its seven legacy
+protein assemblies - walking P527/P361 outward from the members'
+accessions, then requiring unanimity across every member - and both attempts
+produced confident wrong answers (5-HT3 to "Cys-loop receptor", the
+7-member NMDA group to "Ionotropic glutamate receptor") rather than no
+answer; the same walk takes Cyclooxygenase's PTGS1 and PTGS2 to "Haem
+peroxidase superfamily". What links them instead is a reviewed
+ChEMBL-id-to-Wikidata-item map, config/cohort1_target_wikidata.json, the
+legacy COMPLEX_WIKIDATA_ITEMS widened to every multi-component target
+(2026-10-18): what is written down is the item, never the title, and the
+article is still resolved from the item here, through the same ambiguity
+check (invariant 15). A null item there is a target reviewed and found to
+have no article of its own; a multi-component target the map does not name
+is reported, never queried.
 
 MeSH structure classes match on their descriptor UI (P486) and, where that
 item has no English article, on the main article its English category
@@ -76,6 +78,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import json
 import pathlib
 import re
 import sqlite3
@@ -152,6 +155,18 @@ SELECT ?key (COUNT(DISTINCT ?gene) AS ?genes) WHERE {
   ?protein wdt:P352 ?accession .
   OPTIONAL { ?protein wdt:P702 ?gene }
 } GROUP BY ?key"""
+
+
+# A multi-component target is linked only through the item its reviewed entry
+# names (see the module docstring): the item's own English article, and
+# nothing reached from it.
+TARGET_ITEMS = common.CONFIG / "cohort1_target_wikidata.json"
+
+WIKIDATA_ITEM_QUERY = """
+SELECT ?key ?article WHERE {
+  VALUES (?key ?item) { %s }
+  ?article schema:about ?item ; schema:isPartOf <https://en.wikipedia.org/> .
+}"""
 
 
 class WikidataError(RuntimeError):
@@ -472,7 +487,7 @@ def infobox_articles(inchikey_by_chembl):
     return found, refused
 
 
-def resolve_targets(conn, dry_run=False, refresh=False, limit=None):
+def resolve_targets(conn, dry_run=False, refresh=False, limit=None, items=None):
     total = conn.execute("SELECT COUNT(*) FROM targets").fetchone()[0]
 
     # Eligible: exactly one target_components row, regardless of what
@@ -521,15 +536,74 @@ def resolve_targets(conn, dry_run=False, refresh=False, limit=None):
         conn, "targets", "chembl_id", candidates, found, failed, dry_run)
     print(f"  targets: {resolved}/{len(candidates)} queried linked to Wikipedia"
           f" ({total} total, {len(eligible_ids)} single-component eligible,"
-          f" {multi_component} multi-component skipped,"
+          f" {multi_component} multi-component,"
           f" {no_accession} with no accession skipped, {len(candidates)} queried)"
           + (f", {ambiguous} skipped as ambiguous" if ambiguous else "")
           + (f", {len(failed)} failed" if failed else "")
           + f", {no_article} with no article")
+    by_item = resolve_reviewed_targets(
+        conn, eligible_ids, load_target_items() if items is None else items,
+        dry_run, refresh, limit)
     return {
         "total": total, "eligible": len(eligible_ids),
         "multi_component": multi_component, "no_accession": no_accession,
         "queried": len(candidates), "resolved": resolved, "ambiguous": ambiguous,
+        "no_article": no_article, "failed": len(failed) + by_item["failed"],
+        "by_item": by_item,
+    }
+
+
+def load_target_items(path=TARGET_ITEMS):
+    """chembl_id -> the Wikidata item its reviewed entry names, or None for a
+    target reviewed and found to have no article of its own. A malformed
+    entry stops the run: it is a typo in a hand-written file, and a typo in an
+    item id would link a different thing, not nothing."""
+    items = {}
+    for chembl_id, entry in json.loads(path.read_text())["targets"].items():
+        item = entry.get("item")
+        if not re.fullmatch(r"CHEMBL\d+", chembl_id):
+            raise SystemExit(f"{path.name}: {chembl_id!r} is not a ChEMBL id")
+        if item is None and not entry.get("why"):
+            raise SystemExit(f"{path.name}: {chembl_id} has no item and no reason")
+        if item is not None and not re.fullmatch(r"Q\d+", item):
+            raise SystemExit(f"{path.name}: {chembl_id}'s item {item!r} is not a Wikidata item")
+        items[chembl_id] = item
+    return items
+
+
+def resolve_reviewed_targets(conn, eligible_ids, items, dry_run, refresh, limit):
+    """Link each target no single accession reaches through the Wikidata item
+    its reviewed entry names (TARGET_ITEMS). Only the item's own article is
+    taken - never one reached from its members - and two would be refused like
+    any other ambiguity. A target the map leaves out is named, not queried."""
+    where = "" if refresh else "WHERE wikipedia_url IS NULL"
+    sql = f"SELECT chembl_id FROM targets {where} ORDER BY chembl_id"
+    if limit:
+        sql += f" LIMIT {int(limit)}"
+    rest = [k for (k,) in conn.execute(sql) if k not in eligible_ids]
+    multi = {k for (k,) in conn.execute(
+        "SELECT target_chembl_id FROM target_components"
+        " GROUP BY target_chembl_id HAVING COUNT(*) > 1")}
+    candidates = [k for k in rest if items.get(k)]
+    refused = sum(1 for k in rest if k in items and items[k] is None)
+    unreviewed = [k for k in rest if k in multi and k not in items]
+
+    rows = [(k, f"({sparql_literal(k)} wd:{items[k]})") for k in candidates]
+    found, failed = sparql_articles(WIKIDATA_ITEM_QUERY, rows)
+    resolved, ambiguous, no_article = apply_results(
+        conn, "targets", "chembl_id", candidates, every_article(found), failed, dry_run)
+    print(f"  targets by reviewed item: {resolved}/{len(candidates)} queried linked"
+          f" to Wikipedia, {refused} reviewed with no article of their own"
+          + (f", {ambiguous} skipped as ambiguous" if ambiguous else "")
+          + (f", {len(failed)} failed" if failed else "")
+          + f", {no_article} whose item has no article")
+    if unreviewed:
+        print(f"    {len(unreviewed)} multi-component target(s) have no entry in"
+              f" {TARGET_ITEMS.name}, left unlinked until reviewed: "
+              + ", ".join(unreviewed))
+    return {
+        "queried": len(candidates), "resolved": resolved, "refused": refused,
+        "unreviewed": len(unreviewed), "ambiguous": ambiguous,
         "no_article": no_article, "failed": len(failed),
     }
 
@@ -859,11 +933,14 @@ def print_summary(summary):
           f"{m['ambiguous']} ambiguous (dropped), {m['refused']} infobox matches "
           f"refused, {m['failed']} failed "
           f"(of {m['queried']} queried, {m['total']} total)")
+    i = t["by_item"]
     print(f"targets:   {t['resolved']} resolved, {t['no_article']} no article, "
           f"{t['ambiguous']} ambiguous (dropped), {t['failed']} failed, "
-          f"{t['multi_component']} skipped as multi-component, "
           f"{t['no_accession']} skipped with no accession "
-          f"(of {t['queried']} queried, {t['eligible']} eligible, {t['total']} total)")
+          f"(of {t['queried']} queried, {t['eligible']} eligible, {t['total']} total); "
+          f"of {t['multi_component']} multi-component, {i['resolved']} resolved by "
+          f"reviewed item, {i['refused']} reviewed with no article, "
+          f"{i['unreviewed']} not reviewed")
     c = summary["classes"]
     print(f"classes:   {c['resolved']} resolved ({c['by_item']} by their own item, "
           f"{c['by_category']} by their category's main article), "
