@@ -79,9 +79,9 @@ python3 scripts/resolve_cohort_approved_elsewhere.py # offline
 python3 scripts/resolve_cohort_classes.py            # offline
 python3 scripts/resolve_cohort_pharm_actions.py      # MeSH, FDA UNII, Wikidata, a few minutes
 python3 scripts/resolve_cohort_mesh_structure.py     # MeSH, FDA UNII, ~35 s
-python3 scripts/resolve_cohort_wikipedia.py          # Wikidata and Wikipedia
 python3 scripts/resolve_cohort_gtopdb_actions.py     # GtoPdb 2026.3.1, see below
 python3 scripts/resolve_cohort_orthologues.py        # UniProt, ~2 min cold, needs parasail
+python3 scripts/resolve_cohort_wikipedia.py          # Wikidata and Wikipedia; after the orthologues
 python3 scripts/resolve_cohort_drugcentral.py        # DrugCentral dump, needs pg_restore, see below
 python3 scripts/export_cohort.py                     # ~6 s, writes viz/
 ```

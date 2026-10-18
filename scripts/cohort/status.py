@@ -199,7 +199,25 @@ def db_figures(db_path: pathlib.Path) -> dict:
             "multi_single_protein_accessions": _one(
                 db, "SELECT COALESCE(MAX(n_components),0) FROM targets"
                     " WHERE target_type='SINGLE PROTEIN' AND n_components>1"),
+            "wiki_multi": _one(
+                db, "SELECT COUNT(*) FROM targets"
+                    " WHERE n_components>1 AND wikipedia_url IS NOT NULL"),
         }
+        # Which multi-component targets the reviewed item map names, and which
+        # it records as having no article of their own.
+        reviewed = json.loads(
+            (common.CONFIG / "cohort1_target_wikidata.json").read_text())["targets"]
+        multi = [r[0] for r in db.execute(
+            "SELECT chembl_id FROM targets WHERE n_components>1")]
+        fig["multi_no_article"] = sum(
+            1 for k in multi if k in reviewed and reviewed[k]["item"] is None)
+        fig["multi_unreviewed"] = sum(1 for k in multi if k not in reviewed)
+        # Non-human records lent their human protein's article, where the
+        # Wikipedia backfill has written the column at all.
+        if "human_wikipedia_url" in {r[1] for r in db.execute("PRAGMA table_info(targets)")}:
+            fig["wiki_human_lent"] = _one(
+                db, "SELECT COUNT(*) FROM targets WHERE wikipedia_url IS NULL"
+                    " AND human_wikipedia_url IS NOT NULL")
         # Structure-class links arrived after the other two; a database
         # backfilled before them has no table, and the sentence is left out.
         if _one(db, "SELECT COUNT(*) FROM sqlite_master WHERE type='table'"
@@ -377,10 +395,11 @@ def render_status(fig: dict) -> str:
             f"publications and {_n(fig['supported_curated'])} by curated "
             f"mechanism, with no claim carrying both")
 
-    # Multi-component targets cannot take a Wikipedia link (invariant 15), and
-    # the odd one out is a target ChEMBL labels SINGLE PROTEIN while listing
-    # several accessions against it. Say how many accessions rather than
-    # asserting a number that has already been wrong once.
+    # Multi-component targets take a Wikipedia link only through a reviewed
+    # Wikidata item (invariant 15), and the odd one out is a target ChEMBL
+    # labels SINGLE PROTEIN while listing several accessions against it. Say
+    # how many accessions rather than asserting a number that has already been
+    # wrong once.
     if fig["multi_single_protein"] == 1:
         odd = (f", plus one ChEMBL-labelled SINGLE PROTEIN carrying "
                f"{_n(fig['multi_single_protein_accessions'])} accessions")
@@ -401,11 +420,25 @@ def render_status(fig: dict) -> str:
             f"has no article through the main article its English category "
             f"declares (Xanthines to *Xanthine*).")
 
+    unreviewed = ""
+    if fig["multi_unreviewed"]:
+        unreviewed = (
+            f", and {_n(fig['multi_unreviewed'])} are not yet reviewed and "
+            f"stay unlinked")
+
+    lent = ""
+    if fig.get("wiki_human_lent"):
+        lent = (
+            f" A further {_n(fig['wiki_human_lent'])} non-human records with no "
+            f"article of their own link the article of the human protein D20 "
+            f"matched them to, in `targets.human_wikipedia_url`, and the page "
+            f"says it is the human protein's.")
+
     no_accession = ""
     if fig["no_component"]:
         no_accession = (
             f" The {_n(fig['no_component'])} targets ChEMBL lists with no "
-            f"accession at all are left NULL for the same reason.")
+            f"accession at all are left NULL.")
 
     paragraphs = [
         _para(f"""
@@ -473,10 +506,14 @@ def render_status(fig: dict) -> str:
             **{_n(fig['wiki_molecules'])} of {_n(fig['molecules'])} molecules**
             and **{_n(fig['wiki_targets'])} of {_n(fig['single_component'])}
             single-component targets** link to an English Wikipedia article.
-            The other {_n(fig['multi_component'])} multi-component targets —
-            every PROTEIN COMPLEX, PROTEIN COMPLEX GROUP and PROTEIN
-            FAMILY{odd} — are left NULL rather than resolved to a
-            guess.{no_accession}{classes}
+            So do **{_n(fig['wiki_multi'])} of the
+            {_n(fig['multi_component'])} multi-component targets** — every
+            PROTEIN COMPLEX, PROTEIN COMPLEX GROUP and PROTEIN FAMILY{odd} —
+            each through the Wikidata item a reviewed entry in
+            `config/cohort1_target_wikidata.json` names for it, never through
+            its members' accessions; {_n(fig['multi_no_article'])} were
+            reviewed and have no article of their
+            own{unreviewed}.{lent}{no_accession}{classes}
         """),
 
         _para(f"""

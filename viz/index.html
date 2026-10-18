@@ -3349,9 +3349,25 @@ function reasonHelp(reason) {
 
 /* ----------------------------------------------------------- external links */
 
+// A non-human record's own accession rarely reaches an article - Wikidata
+// holds human proteins - so a record D20 matched to a human protein offers
+// that protein's article, named as the human one's: the link says whose
+// article it is, and the hover says why this record has none of its own.
+function humanWikipediaLink(ref) {
+  const sym = ref.human_orthologue ? proteinLabel(ref.human_orthologue) : "";
+  const label = "Wikipedia: human " + (sym || "protein");
+  return '<span class="help" tabindex="0">' + link(ref.human_wikipedia_url, label) +
+         '<span class="help-text">' + esc(
+           "English Wikipedia has no article for the " + speciesName(ref) +
+           " protein itself. This links the article on the human protein it was " +
+           "matched to by sequence" + (sym ? ", " + sym : "") + " — the same protein " +
+           "in another species, not this record's own page.") + "</span></span>";
+}
+
 function externalLinks(kind, ref) {
   const out = [];
   if (ref.wikipedia_url) out.push(link(ref.wikipedia_url, "Wikipedia"));
+  else if (kind === "target" && ref.human_wikipedia_url) out.push(humanWikipediaLink(ref));
   if (kind === "molecule") {
     out.push(link("https://www.ebi.ac.uk/chembl/compound_report_card/" +
                   encodeURIComponent(ref.chembl_id), ref.chembl_id));

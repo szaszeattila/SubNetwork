@@ -235,7 +235,7 @@ export const MOLECULE_FIELDS = [
 
 export const TARGET_FIELDS = [
   "chembl_id", "name", "target_type", "organism", "tax_id", "n_components",
-  "wikipedia_url", "components", "human_orthologue",
+  "wikipedia_url", "components", "human_orthologue", "human_wikipedia_url",
 ];
 
 export const CLAIM_FIELDS = [

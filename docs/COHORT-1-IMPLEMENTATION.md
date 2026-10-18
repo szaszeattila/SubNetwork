@@ -353,6 +353,12 @@ resolved its members individually are. 2 further targets carry zero
 component accessions at all (ChEMBL toxoid antigens with no UniProt record)
 and are skipped for the same reason: there is no identifier to match on.
 
+*Superseded 2026-10-18:* the review was done. Every multi-component target
+now has a reviewed entry in `config/cohort1_target_wikidata.json` naming its
+Wikidata item, or null with the reason it has no article of its own, and is
+linked through that item ([DATA-QUALITY-LOG](DATA-QUALITY-LOG.md),
+2026-10-18).
+
 The two remaining failure-free "0" columns are worth being explicit about:
 every one of 1,331+2,265 = 3,596 lookups attempted completed without a
 Wikidata request exhausting its retries. A run that did hit a failure would
@@ -526,7 +532,8 @@ first.
   pipeline's seven assemblies resolved confidently to the wrong article or to
   one too broad. There is no per-target fallback here the way there was for
   those seven; a molecule that acts only on a family or complex target links
-  out to nothing, correctly rather than by oversight.
+  out to nothing, correctly rather than by oversight. *(Superseded
+  2026-10-18 by a reviewed item per target; see above.)*
 
 ## Building, opening and rolling back
 

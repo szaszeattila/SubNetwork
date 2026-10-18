@@ -137,9 +137,9 @@ python3 scripts/resolve_cohort_approved_elsewhere.py  # molecules.approved_elsew
 python3 scripts/resolve_cohort_classes.py       # ATC codes and USAN stems (offline)
 python3 scripts/resolve_cohort_pharm_actions.py # MeSH pharmacological actions via FDA UNII and Wikidata (minutes)
 python3 scripts/resolve_cohort_mesh_structure.py # MeSH structure classes via FDA UNII (~35 s)
-python3 scripts/resolve_cohort_wikipedia.py    # Wikipedia links via Wikidata and infoboxes; after the MeSH classes
 python3 scripts/resolve_cohort_gtopdb_actions.py # GtoPdb curated actions (pinned 2026.3.1, cached)
 python3 scripts/resolve_cohort_orthologues.py   # target_orthologues by sequence (~2 min cold, needs parasail)
+python3 scripts/resolve_cohort_wikipedia.py    # Wikipedia links via Wikidata and infoboxes; after the MeSH classes and the orthologues
 python3 scripts/resolve_cohort_drugcentral.py   # molecule_approvals from DrugCentral's pinned dump (needs pg_restore)
 
 python3 scripts/export_cohort.py           # db/cohort1.db -> viz/*.data.js + viz/evidence/
@@ -188,12 +188,20 @@ stops if it does not describe every label-backed and trial-only record in the
 release. Each
 backfill changes only its own table or columns, never which molecules, targets
 or claims exist, and each is idempotent with `--dry-run`. Each is identifier-only
-(invariant 15). A target gets a Wikipedia link only when it has exactly one
-component accession: every complex, complex group and family stays NULL on
-purpose — the legacy pipeline derived one from members' accessions twice and
-was confidently wrong both times — and so do the one SINGLE PROTEIN ChEMBL files
-against three accessions (`CHEMBL3390824`, lanosterol 14-alpha demethylase) and
-the two targets it gives no accession at all. Where a protein's item and its
+(invariant 15). A target with exactly one component accession is linked
+through it. Every complex, complex group and family — and the one SINGLE
+PROTEIN ChEMBL files against three accessions (`CHEMBL3390824`, lanosterol
+14-alpha demethylase) — is linked only through the Wikidata item a reviewed
+entry in `config/cohort1_target_wikidata.json` names, never derived from its
+members: the legacy pipeline did that twice and was confidently wrong both
+times, and the same walk takes Cyclooxygenase to *Haem peroxidase
+superfamily*. The review takes the narrowest article about that receptor,
+channel, enzyme, family or complex, a subunit combination the receptor it is
+a form of, and never a superfamily, a domain, a set index or one subunit's
+own article; a target with none is recorded null with its reason, and one the
+file does not name is reported, not queried
+([DATA-QUALITY-LOG](docs/DATA-QUALITY-LOG.md), 2026-10-18). The two targets
+ChEMBL gives no accession at all stay NULL. Where a protein's item and its
 gene's item carry different articles, the protein's own is taken (Albumin:
 *Human serum albumin*, not *Serum albumin*), unless the protein item names two
 genes (HSPA1A's carries the *HSPA1B* article). A molecule Wikidata finds no
@@ -237,6 +245,9 @@ config/cohort1_selection.json  versioned membership policy: scope, routes, phase
 config/cohort1_evidence.json   versioned trust policy: bases, endpoints, tiers, conversions
 config/cohort1_label_status.json  each label-backed Approved in ChEMBL 37, checked
                           against DailyMed (D23); generated, committed, pinned
+config/cohort1_target_wikidata.json  the Wikidata item each multi-component
+                          target is, reviewed by hand; read by the Wikipedia
+                          backfill, never by the build
 db/schema_cohort.sql      every table of the cohort database (see Data model)
 db/cache/                 pinned upstream files for the backfills, and the
                           compound lists the analysis compares (gitignored)
@@ -423,7 +434,14 @@ rat record stays the rat record, with its own claims and its own rarity.
 
 **`wikipedia_url`** on molecules and targets is a backfill through Wikidata, on
 an exact identifier, and for a molecule Wikidata cannot place, through the
-ChEMBL ID its article's own infobox declares (see **Running it**). **`class_wikipedia`** holds the same
+ChEMBL ID its article's own infobox declares, and for a multi-component
+target, through the reviewed item `config/cohort1_target_wikidata.json` names
+(see **Running it**). **`targets.human_wikipedia_url`** is a non-human
+record's *lent* link: the article of the human protein D20 matched it to,
+resolved from that human accession by the same query, and kept out of
+`wikipedia_url` so the page can say whose article it is — a link, never a
+claim moved between records; the backfill reads `target_orthologues`, so it
+runs after the orthologues. **`class_wikipedia`** holds the same
 for MeSH structure classes, in a table of its own because the class backfills
 rewrite their `class_labels` rows; each row records the item, and whether the
 article was the item's own or its category's declared main article
@@ -571,9 +589,10 @@ database carried wrong data as a result.
     declares — and an ambiguous match is dropped. This is invariant 6 applied to links: a title search answers
     confidently and wrongly, and a wrong link on a page explaining what a
     protein *is* misinforms more directly than a missing one. Where no
-    identifier reaches the right item — the seven protein assemblies, where
-    every derivation tried was wrong or silent — what is written down by hand
-    is the Wikidata *item*, never the article title, and the article is still
+    identifier reaches the right item — every complex, complex group and
+    family, where every derivation tried was wrong or silent — what is
+    written down by hand is the Wikidata *item*, never the article title
+    (`config/cohort1_target_wikidata.json`), and the article is still
     resolved from that item at build time.
 
 ## Status
@@ -615,7 +634,7 @@ organism-format rows and 5 documented known-bad records are excluded with
 their reasons, and the exclusion accounting reconciles exactly to the
 1,255,388 activity rows scanned. All 15 build checks pass.
 
-What the page loads is 9.78 MB of startup payload in `viz/graph.data.js`, 0.21
+What the page loads is 9.84 MB of startup payload in `viz/graph.data.js`, 0.21
 MB in `viz/gtopdb.data.js`, GtoPdb's part, and 0.03 MB in
 `viz/drugcentral.data.js`, DrugCentral's, each kept apart for its licence; and
 119.2 MB of per-molecule evidence shards across 2,625 files under
@@ -624,16 +643,21 @@ MB in `viz/gtopdb.data.js`, GtoPdb's part, and 0.03 MB in
 `molecules.wikipedia_url` and `targets.wikipedia_url` are backfilled by
 `scripts/resolve_cohort_wikipedia.py` after a build: **2,526 of 3,291
 molecules** and **1,637 of 2,990 single-component targets** link to an English
-Wikipedia article. The other 454 multi-component targets — every PROTEIN
-COMPLEX, PROTEIN COMPLEX GROUP and PROTEIN FAMILY, plus one ChEMBL-labelled
-SINGLE PROTEIN carrying 3 accessions — are left NULL rather than resolved to a
-guess. The 2 targets ChEMBL lists with no accession at all are left NULL for
-the same reason. Of the 956 MeSH structure classes, **663** link one too, in
-the `class_wikipedia` table: 573 through the Wikidata item carrying the
-descriptor, and 90 whose item has no article through the main article its
-English category declares (Xanthines to *Xanthine*).
+Wikipedia article. So do **410 of the 454 multi-component targets** — every
+PROTEIN COMPLEX, PROTEIN COMPLEX GROUP and PROTEIN FAMILY, plus one
+ChEMBL-labelled SINGLE PROTEIN carrying 3 accessions — each through the
+Wikidata item a reviewed entry in `config/cohort1_target_wikidata.json` names
+for it, never through its members' accessions; 44 were reviewed and have no
+article of their own. A further 652 non-human records with no article of their
+own link the article of the human protein D20 matched them to, in
+`targets.human_wikipedia_url`, and the page says it is the human protein's.
+The 2 targets ChEMBL lists with no accession at all are left NULL. Of the 956
+MeSH structure classes, **663** link one too, in the `class_wikipedia` table:
+573 through the Wikidata item carrying the descriptor, and 90 whose item has
+no article through the main article its English category declares (Xanthines
+to *Xanthine*).
 
-The pipeline suite is 592 tests and the node suites are 756 (527 cohort
+The pipeline suite is 609 tests and the node suites are 759 (530 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`
@@ -853,6 +877,11 @@ behaviour a rule here describes.
   they were opened at first — a claim row opens its own record, a line
   its strongest. Complexes and families stay one node per species, and
   `proteinKey` is the only grouping key.
+- **A non-human record with no article of its own links its human
+  protein's, and says so** (2026-10-18, the user's call): the link reads
+  *Wikipedia: human OPRM1*, and its hover says the rat protein has no
+  article and this is the human one matched by sequence. The record's own
+  article always wins; the two are never shown as one.
 - **A claim has no panel of its own** — an edge opens the whole pair,
   grouped into drawn / held-back / retained, none summed; 2,601 of
   11,599 edges carry more than one claim.

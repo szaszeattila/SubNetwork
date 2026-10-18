@@ -54,6 +54,93 @@ alone.
 
 ---
 
+## 2026-10-18 — Cyclooxygenase had no link, and neither did any family
+
+**What happened.** The user asked why *Cyclooxygenase (human)*,
+`CHEMBL2094253`, does not link to Wikipedia's *Cyclooxygenase*. It was not a
+miss: it was the rule. The backfill linked a target only through a single
+UniProt accession, and every PROTEIN COMPLEX, PROTEIN COMPLEX GROUP and
+PROTEIN FAMILY — 454 of the 3,446 target records, with the one SINGLE
+PROTEIN ChEMBL files against three accessions — was left NULL. That was
+because the legacy pipeline derived an assembly's link from its members
+twice, and was confidently wrong both times (5-HT3 to *Cys-loop receptor*,
+NMDA to *Ionotropic glutamate receptor*). Its way out, a hand-written
+ChEMBL-id-to-item map for seven assemblies, was not ported, because 310
+entries needed a review nobody had done.
+
+**Nothing derives it.** No Wikidata item carries a ChEMBL family or complex
+ID (P592 on all 435 then in the main database: none). Cyclooxygenase's item,
+Q410251, carries a MeSH descriptor and nothing that joins to ChEMBL. The
+legacy walk still fails: PTGS1's and PTGS2's protein items are each "part of"
+*Haem peroxidase superfamily*, an InterPro import, and of nothing named
+cyclooxygenase.
+
+**The route taken.** The review the cohort pipeline had deferred,
+`config/cohort1_target_wikidata.json`: one entry per multi-component ChEMBL
+record, naming the Wikidata item it is, or null with the reason it has none.
+It is invariant 15's exception widened from seven assemblies to all of them:
+what is written down is the item, never the title, and
+`resolve_cohort_wikipedia.py` still resolves the article from the item, through
+the same ambiguity check. Candidates were found by searching Wikipedia for each
+ChEMBL name and reading the hits. That is a search for a reviewer, never a
+resolver: nothing is linked that a person did not read. The rule each entry
+was held to:
+
+- **the narrowest English article that covers the whole target and is about
+  that receptor, channel, enzyme, family or complex** — *Cyclooxygenase*,
+  *Adenosine receptor*, *Epithelial sodium channel*, *Proteasome*;
+- **a subunit combination takes the receptor it is a form of**, as the legacy
+  map did for GABA-A: every GABA-A combination takes *GABAA receptor*, a
+  nicotinic one its own article where there is one (*Alpha-4 beta-2 nicotinic
+  receptor*, *Muscle-type nicotinic receptor*) and *Nicotinic acetylcholine
+  receptor* where there is not, an integrin heterodimer *Integrin*, and a
+  CDK–cyclin pair its own article (*Cyclin E/Cdk2*, *Cyclin D/Cdk4*, *P-TEFb*,
+  *Maturation promoting factor*, *CDK-activating kinase*) or else
+  *Cyclin-dependent kinase complex*;
+- **never a structural superfamily, a protein domain, a disambiguation or
+  set-index page, or one subunit's own article.** *Adenosine A2 receptor* is
+  a disambiguation page, so the A2A/A2B family takes *Adenosine receptor*.
+  *Phosphodiesterase 4* is a set index, so PDE4 takes *3′,5′-cyclic-AMP
+  phosphodiesterase*, the page Wikipedia redirects PDE7 and PDE8 to. BET is
+  only a section of *Bromodomain*, an article about a domain, so it is null.
+  The CGRP receptor is null because Wikipedia redirects it to *CALCRL*, one
+  subunit's article and already that subunit's link.
+
+Where the text was the deciding fact it was read: *Lanosterol 14α-demethylase*
+is "the animal version", so Aspergillus's three CYP51s take *Sterol
+14-demethylase*; *KCNQ channels* says KCNQ2–5 form the M-channel, so the
+KCNQ2/KCNQ3 heteromer takes it over *M current*, an article about the current.
+
+**Measured.** All 454 records under 376 names are reviewed. 410 name one of
+168 items, each holding exactly one English article on 2026-10-18, and all 410
+resolved, with none ambiguous and none failed. 44 are null: 27 pair different
+proteins with no article of their own (FXR/RXRα, PD-1/PD-L1, HDAC3/NCoR1), 12
+are assemblies whose subunits alone have articles (IKs, as the legacy map
+recorded, LSD1/CoREST, NS3/NS4A), and 5 are the single cases above or ABL,
+SV2 and CDK5/p35. The map agrees with all seven legacy entries, IKs's null
+included, and a test holds that agreement. It is not an independent check:
+the legacy map was read first, and it set the subunit-combination rule.
+
+**Not done.** The two toxoid targets ChEMBL gives no accession stay NULL;
+they are vaccine antigens, not families.
+
+**Then the non-human records.** 1,249 non-human SINGLE PROTEIN records had no
+link, the dog's Cyclooxygenase-2 among them, because Wikidata holds human
+proteins and their own accessions reach none. 688 of them are D20-matched to
+a human protein, and for 81 of those the human protein is not in the
+catalogue, so the viewer could not borrow the human record's link alone. The
+user's call: show the human protein's article, and say it is the human one's.
+The backfill resolves it from the matched human accession, by the same query
+and ambiguity rule as any target, into its own column,
+`targets.human_wikipedia_url`, so that `wikipedia_url` still means the
+record's own. On the v3.5.0 build, 653 of 689 matched records were lent one
+from 465 human proteins: 4 were refused as ambiguous, and 32 human proteins
+have no article. Where the human protein is also a catalogue record, the lent
+article equals that record's own in all 584 cases. The page labels it
+*Wikipedia: human OPRM1* and explains it on hover
+([VIEWER](VIEWER.md), 2026-10-18). Because it reads `target_orthologues`, the
+Wikipedia backfill now runs after the orthologue backfill.
+
 ## 2026-10-16 — four open lists, and the names that point at the wrong compound
 
 D27 entered every compound Wikipedia, Wikidata, TripSit or PsychonautWiki
