@@ -698,6 +698,12 @@ behaviour a rule here describes.
   in `graphSignature` and redraws, as the page did before it drew the
   whole network. A line keeps its molecule's neighbourhood; with nothing
   to focus on, every target is drawn and the control says so.
+- **A target lights its molecules and, as its second hop, their other
+  targets; a family, complex group or complex also lights its drawn
+  components and their molecules** (2026-10-18). Lit, never merged: the
+  panels, ranking and counts still read the selection's own claims. A
+  target's second hop is a median 55 of 2,454 targets, but over a thousand
+  at the hubs (ADORA3, the PDE family).
 - **Edge culling is an exact viewport clip, not a bounding-box test,
   and never drops haze edges mid-gesture.** A box test kept 9,876 of
   12,835 edges at zoom 2.0 where the clip keeps 60; dropping haze on

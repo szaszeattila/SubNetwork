@@ -2894,7 +2894,8 @@ function groupLinks(nodes, byKey) {
 }
 
 // What a selection lights of those lines: one whose two ends are both lit as
-// the selection's own - its targets, or a pair's shared targets. A second-hop
+// the selection's own - its targets, a pair's shared targets, or a selected
+// group and its components. A second-hop
 // node is not enough, and neither is one end: the line says "this set, and
 // this protein inside it, are both on what you selected", and it says nothing
 // at all about a protein the selection does not reach.
@@ -2913,8 +2914,11 @@ function linkLit(link, hops) {
 // dimmed. Returned as maps rather than written onto the canvas, so a test can
 // read the decision without a renderer.
 //
-// A target gets no second hop: every other target of every molecule that binds
-// it is most of the catalogue, which is not a neighbourhood but a reset.
+// A target's second hop is the mirror image: the other targets its molecules
+// act on (2026-10-18, at the user's request). It had none, on the argument that
+// every other target of every molecule binding it is most of the catalogue;
+// measured, that holds only at the hubs - the median drawn target's second hop
+// is 55 of 2,454 targets, the 90th percentile 451, ADORA3's 1,243.
 //
 // Null means "light nothing, dim nothing" - the selection is not on the canvas
 // at all, which is the honest state for one of the 260 entries with no drawable
@@ -3005,23 +3009,36 @@ function highlightOver(g, kind, id, extra) {
     mark(nodes, e.from, 1);
     mark(nodes, e.to, 1);
   }
-  // A complex lights its own subunits wherever they are drawn (2026-09-25, at
-  // the user's request), so a reader can see what the receptor is made of
-  // without opening its Components list. Lit, not selected: they are not the
-  // selection's targets, and their own molecules and lines stay as they were.
-  // Complexes and complex groups only - a family's members are separate
-  // proteins, not parts of it.
-  if (kind === "target") {
-    const t = lookupTarget(id);
-    if (t && (t.target_type === "PROTEIN COMPLEX" || t.target_type === "PROTEIN COMPLEX GROUP")) {
-      for (const c of t.components || []) {
-        const p = proteinNodeTarget(c.accession);
-        const pk = p ? "t" + p.chembl_id : null;
-        if (pk && pk !== key && g.byKey.has(pk)) mark(nodes, pk, 1);
+  // A family, complex group or complex lights its own components wherever they
+  // are drawn, and the molecules acting on each (2026-10-18, at the user's
+  // request), so selecting the 23-member 3',5'-cyclic phosphodiesterase family
+  // shows the PDEs and what acts on them rather than its own two molecules.
+  // Complexes lit their subunits alone from 2026-09-25, and families nothing,
+  // as paralogues rather than parts; both now read as the set ChEMBL files
+  // them as. Lit, never merged: each line is still a claim at that protein,
+  // the panels and the ranking still read the selection's own claims, and a
+  // membership line is lit as one between two of the selection's own.
+  if (kind === "target" && picked && picked.target_type !== "SINGLE PROTEIN") {
+    for (const c of picked.components || []) {
+      const p = proteinNodeTarget(c.accession);
+      const pk = p ? "t" + p.chembl_id : null;
+      if (!pk || pk === key || !g.byKey.has(pk)) continue;
+      mark(nodes, pk, 1);
+      for (const e of edgesAt(pk)) {
+        mark(edges, e.id, 1);
+        mark(nodes, e.from, 1);
       }
     }
   }
-  if (kind !== "target") {
+  if (kind === "target") {
+    for (const entry of Array.from(nodes)) {
+      if (entry[1] !== 1 || entry[0].charAt(0) !== "m") continue;
+      for (const e of edgesAt(entry[0])) {
+        mark(edges, e.id, 2);
+        mark(nodes, e.to, 2);
+      }
+    }
+  } else {
     for (const entry of Array.from(nodes)) {
       if (entry[1] !== 1 || entry[0].charAt(0) !== "t") continue;
       for (const e of edgesAt(entry[0])) {
