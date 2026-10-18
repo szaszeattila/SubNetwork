@@ -122,11 +122,24 @@ included, and a test holds that agreement. It is not an independent check:
 the legacy map was read first, and it set the subunit-combination rule.
 
 **Not done.** The two toxoid targets ChEMBL gives no accession stay NULL;
-they are vaccine antigens, not families. And 583 non-human SINGLE PROTEIN
-records (the dog's Cyclooxygenase-2 among them) have no link while the human
-protein D20 matched them to does, because their own accession has no
-Wikidata item. Lending them the human article is a different question, about
-what D20's match may be used for, and is left to the user.
+they are vaccine antigens, not families.
+
+**Then the non-human records.** 1,249 non-human SINGLE PROTEIN records had no
+link, the dog's Cyclooxygenase-2 among them, because Wikidata holds human
+proteins and their own accessions reach none. 688 of them are D20-matched to
+a human protein, and for 81 of those the human protein is not in the
+catalogue, so the viewer could not borrow the human record's link alone. The
+user's call: show the human protein's article, and say it is the human one's.
+The backfill resolves it from the matched human accession, by the same query
+and ambiguity rule as any target, into its own column,
+`targets.human_wikipedia_url`, so that `wikipedia_url` still means the
+record's own. On the v3.5.0 build, 653 of 689 matched records were lent one
+from 465 human proteins: 4 were refused as ambiguous, and 32 human proteins
+have no article. Where the human protein is also a catalogue record, the lent
+article equals that record's own in all 584 cases. The page labels it
+*Wikipedia: human OPRM1* and explains it on hover
+([VIEWER](VIEWER.md), 2026-10-18). Because it reads `target_orthologues`, the
+Wikipedia backfill now runs after the orthologue backfill.
 
 ## 2026-10-16 — four open lists, and the names that point at the wrong compound
 

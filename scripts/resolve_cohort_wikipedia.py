@@ -53,6 +53,13 @@ check (invariant 15). A null item there is a target reviewed and found to
 have no article of its own; a multi-component target the map does not name
 is reported, never queried.
 
+A non-human single-protein record D20 matched to a human protein
+(target_orthologues) is also given that human protein's article, by its
+accession through the same query, in targets.human_wikipedia_url - kept
+apart from wikipedia_url so the page can say the article is the human
+protein's. It reads target_orthologues, so this script runs after
+resolve_cohort_orthologues.py.
+
 MeSH structure classes match on their descriptor UI (P486) and, where that
 item has no English article, on the main article its English category
 declares - see the comment above resolve_classes. They need the class
@@ -278,7 +285,8 @@ def preferred_articles(found, precedence):
     return out
 
 
-def apply_results(conn, table, key_column, keys, found, failed, dry_run):
+def apply_results(conn, table, key_column, keys, found, failed, dry_run,
+                  column="wikipedia_url"):
     """Write resolved URLs, skipping anything ambiguous. Never writes NULL:
     a key with no result (network failure or no article) leaves whatever was
     already stored untouched, exactly as build_db.py's apply_articles does -
@@ -299,7 +307,7 @@ def apply_results(conn, table, key_column, keys, found, failed, dry_run):
         resolved += 1
         if not dry_run:
             conn.execute(
-                f"UPDATE {table} SET wikipedia_url = ? WHERE {key_column} = ?",
+                f"UPDATE {table} SET {column} = ? WHERE {key_column} = ?",
                 (next(iter(articles)), key),
             )
     return resolved, ambiguous, no_article
@@ -515,23 +523,8 @@ def resolve_targets(conn, dry_run=False, refresh=False, limit=None, items=None):
         sql += f" LIMIT {int(limit)}"
     candidates = [row[0] for row in conn.execute(sql, params)] if eligible_ids else []
 
-    rows = [(chembl_id,
-             f"({sparql_literal(chembl_id)} {sparql_literal(accession_by_target[chembl_id])})")
-            for chembl_id in candidates]
-
-    found, failed = sparql_articles(WIKIDATA_TARGET_QUERY, rows)
-    # The precedence settles a protein/gene disagreement only for a protein
-    # item with one gene; anything else is read as one set, and two
-    # articles there are ambiguous.
-    disagree = [k for k, by_via in found.items()
-                if by_via.get("protein") and by_via.get("gene")
-                and by_via["protein"] != by_via["gene"]]
-    one_gene, count_failed = single_gene_targets(
-        [(k, accession_by_target[k]) for k in disagree])
-    failed |= count_failed
-    settled = {k: v for k, v in found.items() if k not in disagree or k in one_gene}
-    found = {**every_article({k: v for k, v in found.items() if k not in settled}),
-             **preferred_articles(settled, TARGET_ARTICLE_PRECEDENCE)}
+    found, failed = accession_articles(
+        [(chembl_id, accession_by_target[chembl_id]) for chembl_id in candidates])
     resolved, ambiguous, no_article = apply_results(
         conn, "targets", "chembl_id", candidates, found, failed, dry_run)
     print(f"  targets: {resolved}/{len(candidates)} queried linked to Wikipedia"
@@ -551,6 +544,85 @@ def resolve_targets(conn, dry_run=False, refresh=False, limit=None, items=None):
         "no_article": no_article, "failed": len(failed) + by_item["failed"],
         "by_item": by_item,
     }
+
+
+def accession_articles(pairs):
+    """(key -> set of articles, failed keys) for (key, UniProt accession)
+    pairs, through the protein item and its gene's (WIKIDATA_TARGET_QUERY)."""
+    accession = dict(pairs)
+    rows = [(k, f"({sparql_literal(k)} {sparql_literal(acc)})") for k, acc in pairs]
+    found, failed = sparql_articles(WIKIDATA_TARGET_QUERY, rows)
+    # The precedence settles a protein/gene disagreement only for a protein
+    # item with one gene; anything else is read as one set, and two
+    # articles there are ambiguous.
+    disagree = [k for k, by_via in found.items()
+                if by_via.get("protein") and by_via.get("gene")
+                and by_via["protein"] != by_via["gene"]]
+    one_gene, count_failed = single_gene_targets([(k, accession[k]) for k in disagree])
+    failed |= count_failed
+    settled = {k: v for k, v in found.items() if k not in disagree or k in one_gene}
+    return ({**every_article({k: v for k, v in found.items() if k not in settled}),
+             **preferred_articles(settled, TARGET_ARTICLE_PRECEDENCE)}, failed)
+
+
+# A non-human record whose own accession reaches no article - most of them:
+# Wikidata holds human proteins, and a rat record's accession is the rat's -
+# is lent the article of the human protein D20 matched it to by sequence
+# (target_orthologues, status 'matched'), in a column of its own so that
+# `wikipedia_url` still means the record's own article and the viewer can say
+# whose this one is. It is a link, never a claim moved between records.
+# Read from target_orthologues, so this runs after
+# resolve_cohort_orthologues.py; before that it says so and writes nothing.
+def resolve_human_articles(conn, dry_run=False, limit=None):
+    ensure_human_column(conn)
+    if not conn.execute("SELECT 1 FROM sqlite_master WHERE type = 'table'"
+                        " AND name = 'target_orthologues'").fetchone():
+        print("  human orthologues: target_orthologues is missing - run"
+              " resolve_cohort_orthologues.py first; nothing written")
+        return {"records": 0, "accessions": 0, "resolved": 0, "ambiguous": 0,
+                "no_article": 0, "cleared": 0, "failed": 0}
+    matched_sql = ("SELECT o.target_chembl_id, o.human_accession FROM target_orthologues o"
+                   " JOIN targets t ON t.chembl_id = o.target_chembl_id"
+                   " WHERE o.status = 'matched' AND o.human_accession IS NOT NULL"
+                   " ORDER BY o.target_chembl_id")
+    # A record no longer matched keeps no link lent by a match it has lost.
+    # That is read off the table here, not off a lookup that could have failed.
+    cleared = conn.execute(
+        "SELECT COUNT(*) FROM targets WHERE human_wikipedia_url IS NOT NULL"
+        f" AND chembl_id NOT IN (SELECT target_chembl_id FROM ({matched_sql}))").fetchone()[0]
+    if cleared and not dry_run:
+        conn.execute("UPDATE targets SET human_wikipedia_url = NULL"
+                     " WHERE human_wikipedia_url IS NOT NULL AND chembl_id NOT IN"
+                     f" (SELECT target_chembl_id FROM ({matched_sql}))")
+    if limit:
+        matched_sql += f" LIMIT {int(limit)}"
+    matched = dict(conn.execute(matched_sql))
+
+    # Every matched record is re-read each run: a few hundred human accessions,
+    # each asked once however many species' records share it.
+    accessions = sorted(set(matched.values()))
+    by_accession, failed_accessions = accession_articles([(a, a) for a in accessions])
+    found = {k: by_accession[a] for k, a in matched.items() if a in by_accession}
+    failed = {k for k, a in matched.items() if a in failed_accessions}
+    resolved, ambiguous, no_article = apply_results(
+        conn, "targets", "chembl_id", list(matched), found, failed, dry_run,
+        column="human_wikipedia_url")
+    print(f"  human orthologues: {resolved}/{len(matched)} matched non-human records"
+          f" lent their human protein's article ({len(accessions)} human proteins)"
+          + (f", {ambiguous} skipped as ambiguous" if ambiguous else "")
+          + (f", {len(failed)} failed" if failed else "")
+          + f", {no_article} whose human protein has no article"
+          + (f", {cleared} no longer matched cleared" if cleared else ""))
+    return {"records": len(matched), "accessions": len(accessions), "resolved": resolved,
+            "ambiguous": ambiguous, "no_article": no_article, "cleared": cleared,
+            "failed": len(failed)}
+
+
+def ensure_human_column(conn):
+    """targets.human_wikipedia_url, in a database built before the column."""
+    columns = {r[1] for r in conn.execute("PRAGMA table_info(targets)")}
+    if "human_wikipedia_url" not in columns:
+        conn.execute("ALTER TABLE targets ADD COLUMN human_wikipedia_url TEXT")
 
 
 def load_target_items(path=TARGET_ITEMS):
@@ -919,6 +991,7 @@ def resolve(conn, dry_run=False, refresh=False, limit=None):
     summary = {
         "molecules": resolve_molecules(conn, dry_run, refresh, limit),
         "targets": resolve_targets(conn, dry_run, refresh, limit),
+        "human": resolve_human_articles(conn, dry_run, limit),
         "classes": resolve_classes(conn, dry_run, refresh, limit),
     }
     return summary
@@ -941,13 +1014,18 @@ def print_summary(summary):
           f"of {t['multi_component']} multi-component, {i['resolved']} resolved by "
           f"reviewed item, {i['refused']} reviewed with no article, "
           f"{i['unreviewed']} not reviewed")
+    h = summary["human"]
+    print(f"human:     {h['resolved']} non-human records lent their human protein's "
+          f"article, {h['no_article']} no article, {h['ambiguous']} ambiguous (dropped), "
+          f"{h['failed']} failed (of {h['records']} matched, {h['accessions']} human "
+          f"proteins)")
     c = summary["classes"]
     print(f"classes:   {c['resolved']} resolved ({c['by_item']} by their own item, "
           f"{c['by_category']} by their category's main article), "
           f"{c['no_article']} no article, {c['ambiguous']} ambiguous (dropped), "
           f"{c['refused']} category routes refused, {c['failed']} failed "
           f"(of {c['queried']} queried, {c['total']} structure classes)")
-    failures = m["failed"] + t["failed"] + c["failed"]
+    failures = m["failed"] + t["failed"] + h["failed"] + c["failed"]
     if failures:
         print(f"\n{failures} key(s) failed after retries - rerun to retry them "
               "(unresolved rows are unchanged, not cleared).")

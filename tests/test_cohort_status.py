@@ -168,6 +168,11 @@ class RenderTest(unittest.TestCase):
             _fake_figures(multi_unreviewed=4)).split())
         self.assertIn("and 4 are not yet reviewed and stay unlinked.", text)
 
+    def test_lent_human_articles_are_counted_only_where_the_column_was_written(self):
+        text = " ".join(status.render_status(_fake_figures(wiki_human_lent=653)).split())
+        self.assertIn("A further 653 non-human records with no article of their own", text)
+        self.assertNotIn("A further", status.render_status(_fake_figures()))
+
     def test_targets_with_no_accession_are_mentioned_only_when_there_are_some(self):
         self.assertIn("no accession at all",
                       status.render_status(_fake_figures(no_component=2)))

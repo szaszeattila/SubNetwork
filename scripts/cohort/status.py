@@ -212,6 +212,12 @@ def db_figures(db_path: pathlib.Path) -> dict:
         fig["multi_no_article"] = sum(
             1 for k in multi if k in reviewed and reviewed[k]["item"] is None)
         fig["multi_unreviewed"] = sum(1 for k in multi if k not in reviewed)
+        # Non-human records lent their human protein's article, where the
+        # Wikipedia backfill has written the column at all.
+        if "human_wikipedia_url" in {r[1] for r in db.execute("PRAGMA table_info(targets)")}:
+            fig["wiki_human_lent"] = _one(
+                db, "SELECT COUNT(*) FROM targets WHERE wikipedia_url IS NULL"
+                    " AND human_wikipedia_url IS NOT NULL")
         # Structure-class links arrived after the other two; a database
         # backfilled before them has no table, and the sentence is left out.
         if _one(db, "SELECT COUNT(*) FROM sqlite_master WHERE type='table'"
@@ -420,6 +426,14 @@ def render_status(fig: dict) -> str:
             f", and {_n(fig['multi_unreviewed'])} are not yet reviewed and "
             f"stay unlinked")
 
+    lent = ""
+    if fig.get("wiki_human_lent"):
+        lent = (
+            f" A further {_n(fig['wiki_human_lent'])} non-human records with no "
+            f"article of their own link the article of the human protein D20 "
+            f"matched them to, in `targets.human_wikipedia_url`, and the page "
+            f"says it is the human protein's.")
+
     no_accession = ""
     if fig["no_component"]:
         no_accession = (
@@ -499,7 +513,7 @@ def render_status(fig: dict) -> str:
             `config/cohort1_target_wikidata.json` names for it, never through
             its members' accessions; {_n(fig['multi_no_article'])} were
             reviewed and have no article of their
-            own{unreviewed}.{no_accession}{classes}
+            own{unreviewed}.{lent}{no_accession}{classes}
         """),
 
         _para(f"""

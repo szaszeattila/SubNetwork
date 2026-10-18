@@ -742,6 +742,82 @@ class ClassResolutionTest(unittest.TestCase):
         self.assertEqual(rcw.main_article(None), (None, "no main article"))
 
 
+def add_orthologue(conn, chembl_id, accession, human, status="matched", tax_id=10116):
+    add_target(conn, chembl_id, [accession])
+    conn.execute("UPDATE targets SET tax_id = ?, organism = 'Rattus norvegicus'"
+                 " WHERE chembl_id = ?", (tax_id, chembl_id))
+    conn.execute(
+        "INSERT INTO target_orthologues(target_chembl_id, accession, tax_id,"
+        " human_accession, status) VALUES (?,?,?,?,?)",
+        (chembl_id, accession, tax_id, human if status == "matched" else None, status))
+
+
+def human_url(conn, chembl_id):
+    return conn.execute("SELECT human_wikipedia_url FROM targets WHERE chembl_id = ?",
+                        (chembl_id,)).fetchone()[0]
+
+
+class HumanOrthologueArticleTest(unittest.TestCase):
+    """A non-human record D20 matched is lent its human protein's article, in
+    a column of its own, found by the human accession and never the record's."""
+
+    def test_a_matched_rat_record_is_lent_the_human_proteins_article(self):
+        conn = fake_db()
+        add_orthologue(conn, "CHEMBL_RAT", "Q_RAT", "P35372")
+        log = []
+        with mock.patch.object(rcw, "_wikidata_get", stub({"P35372": {
+                "protein": {"https://en.wikipedia.org/wiki/Mu-opioid_receptor"}}}, log=log)):
+            summary = rcw.resolve_human_articles(conn)
+        self.assertEqual(summary["resolved"], 1)
+        self.assertEqual(human_url(conn, "CHEMBL_RAT"),
+                         "https://en.wikipedia.org/wiki/Mu-opioid_receptor")
+        self.assertIsNone(conn.execute(
+            "SELECT wikipedia_url FROM targets WHERE chembl_id = 'CHEMBL_RAT'").fetchone()[0])
+        self.assertTrue(all('"Q_RAT"' not in q for q in log))
+
+    def test_records_sharing_a_human_protein_ask_for_it_once(self):
+        conn = fake_db()
+        add_orthologue(conn, "CHEMBL_RAT", "Q_RAT", "P35372")
+        add_orthologue(conn, "CHEMBL_MOUSE", "Q_MOUSE", "P35372", tax_id=10090)
+        log = []
+        with mock.patch.object(rcw, "_wikidata_get", stub({"P35372": {
+                "protein": {"https://en.wikipedia.org/wiki/Mu-opioid_receptor"}}}, log=log)):
+            summary = rcw.resolve_human_articles(conn)
+        self.assertEqual((summary["records"], summary["accessions"], summary["resolved"]),
+                         (2, 1, 2))
+        self.assertEqual(log[0].count('"P35372"'), 2)  # key and accession, one row
+
+    def test_a_refused_match_is_never_lent_one_and_loses_one_it_had(self):
+        conn = fake_db()
+        add_orthologue(conn, "CHEMBL_RAT", "Q_RAT", None, status="not_reciprocal")
+        conn.execute("UPDATE targets SET human_wikipedia_url = 'https://en.wikipedia.org/wiki/Old'"
+                     " WHERE chembl_id = 'CHEMBL_RAT'")
+        log = []
+        with mock.patch.object(rcw, "_wikidata_get", stub(log=log)):
+            summary = rcw.resolve_human_articles(conn)
+        self.assertEqual(summary["cleared"], 1)
+        self.assertEqual(log, [])
+        self.assertIsNone(human_url(conn, "CHEMBL_RAT"))
+
+    def test_a_failed_lookup_is_a_failure_and_keeps_the_link(self):
+        conn = fake_db()
+        add_orthologue(conn, "CHEMBL_RAT", "Q_RAT", "P35372")
+        conn.execute("UPDATE targets SET human_wikipedia_url = 'https://en.wikipedia.org/wiki/Kept'"
+                     " WHERE chembl_id = 'CHEMBL_RAT'")
+        with mock.patch.object(rcw, "_wikidata_get", stub(fail_keys=("P35372",))):
+            summary = rcw.resolve_human_articles(conn)
+        self.assertEqual(summary["failed"], 1)
+        self.assertEqual(human_url(conn, "CHEMBL_RAT"), "https://en.wikipedia.org/wiki/Kept")
+
+    def test_the_column_is_added_to_a_database_built_before_it(self):
+        conn = sqlite3.connect(":memory:")
+        conn.execute("CREATE TABLE targets (chembl_id TEXT PRIMARY KEY, wikipedia_url TEXT)")
+        summary = rcw.resolve_human_articles(conn)
+        columns = {r[1] for r in conn.execute("PRAGMA table_info(targets)")}
+        self.assertIn("human_wikipedia_url", columns)
+        self.assertEqual(summary["records"], 0)  # no target_orthologues: says so, writes nothing
+
+
 class TargetItemMapTest(unittest.TestCase):
     """config/cohort1_target_wikidata.json is hand-reviewed, so nothing here
     checks an item against Wikidata. These hold its shape, and its agreement

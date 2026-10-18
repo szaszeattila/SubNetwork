@@ -326,7 +326,11 @@ CREATE TABLE IF NOT EXISTS targets (
     organism      TEXT,
     tax_id        INTEGER,
     n_components  INTEGER,
-    wikipedia_url TEXT
+    wikipedia_url TEXT,
+    -- A non-human record's lent link: the English article of the human
+    -- protein D20 matched it to (target_orthologues), never the record's own.
+    -- Written by scripts/resolve_cohort_wikipedia.py; a link, not a claim.
+    human_wikipedia_url TEXT
 );
 
 -- What a target contains, as context. These rows are never read as binding

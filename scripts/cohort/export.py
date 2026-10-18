@@ -130,11 +130,11 @@ MOLECULE_ALIASES = {
     "CHEMBL1009": ["L-DOPA", "L-dopa"],
 }
 
-# human_orthologue last: most targets are human or unmatched, and a trailing
-# null costs nothing on the wire.
+# human_orthologue and the human protein's article last: most targets are human
+# or unmatched, and a trailing null costs nothing on the wire.
 TARGET_FIELDS = [
     "chembl_id", "name", "target_type", "organism", "tax_id", "n_components",
-    "wikipedia_url", "components", "human_orthologue",
+    "wikipedia_url", "components", "human_orthologue", "human_wikipedia_url",
 ]
 
 # Sparse fields last: an experimental claim carries no action and no mechanism,

@@ -2103,6 +2103,31 @@ Nothing counted changes: the score, the ranking and the pair panel read
 caffeine lights 32 protein nodes where it lit 43 records, and its second hop
 reaches every molecule at those proteins in any species — 270 where it was 265.
 
+**A non-human record links its human protein's article, and says so**
+(2026-10-18, at the user's request: the human analogue "is what makes them
+interesting targets"). Wikidata holds human proteins, so a rat or dog record's
+own accession almost never reaches an article: 1,249 non-human single-protein
+records had none, the dog's Cyclooxygenase-2 among them, and a rat-only
+protein opened onto a panel with no way out to what the protein is. The
+Wikipedia backfill now resolves, for each record D20 matched, the human
+protein's article from the human accession, by the same query as any target,
+into `targets.human_wikipedia_url`. That is 653 of 689 matched records; where
+the human protein is in the catalogue too, the lent article is the human
+record's own in every one of 584 cases. The record's own `wikipedia_url` is
+never written with it, so the page can tell the two apart:
+
+- **The link names whose article it is.** *Wikipedia: human OPRM1*, with the
+  human protein's symbol (the matched record's own, upper-cased, where the
+  catalogue holds no human record). Plain *Wikipedia* would read as the rat
+  receptor's page.
+- **The hover says why.** English Wikipedia has no article for the rat protein
+  itself; this one is on the human protein it was matched to by sequence, the
+  same protein in another species. It is a link and never a claim, the same
+  line D20 draws for evidence.
+- **The record's own article always wins**, and the two are never offered
+  side by side. In a folded protein panel the rat section repeats the human
+  section's article under the human label. That is redundant, and accurate.
+
 **A "mostly common targets" tag was built and taken out before shipping.** It
 was meant to mark a rank resting on screening targets like hERG. Read off the
 prevalence discount (most of the score from targets below 0.5), it fired on

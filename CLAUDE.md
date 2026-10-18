@@ -137,9 +137,9 @@ python3 scripts/resolve_cohort_approved_elsewhere.py  # molecules.approved_elsew
 python3 scripts/resolve_cohort_classes.py       # ATC codes and USAN stems (offline)
 python3 scripts/resolve_cohort_pharm_actions.py # MeSH pharmacological actions via FDA UNII and Wikidata (minutes)
 python3 scripts/resolve_cohort_mesh_structure.py # MeSH structure classes via FDA UNII (~35 s)
-python3 scripts/resolve_cohort_wikipedia.py    # Wikipedia links via Wikidata and infoboxes; after the MeSH classes
 python3 scripts/resolve_cohort_gtopdb_actions.py # GtoPdb curated actions (pinned 2026.3.1, cached)
 python3 scripts/resolve_cohort_orthologues.py   # target_orthologues by sequence (~2 min cold, needs parasail)
+python3 scripts/resolve_cohort_wikipedia.py    # Wikipedia links via Wikidata and infoboxes; after the MeSH classes and the orthologues
 python3 scripts/resolve_cohort_drugcentral.py   # molecule_approvals from DrugCentral's pinned dump (needs pg_restore)
 
 python3 scripts/export_cohort.py           # db/cohort1.db -> viz/*.data.js + viz/evidence/
@@ -436,7 +436,12 @@ rat record stays the rat record, with its own claims and its own rarity.
 an exact identifier, and for a molecule Wikidata cannot place, through the
 ChEMBL ID its article's own infobox declares, and for a multi-component
 target, through the reviewed item `config/cohort1_target_wikidata.json` names
-(see **Running it**). **`class_wikipedia`** holds the same
+(see **Running it**). **`targets.human_wikipedia_url`** is a non-human
+record's *lent* link: the article of the human protein D20 matched it to,
+resolved from that human accession by the same query, and kept out of
+`wikipedia_url` so the page can say whose article it is — a link, never a
+claim moved between records; the backfill reads `target_orthologues`, so it
+runs after the orthologues. **`class_wikipedia`** holds the same
 for MeSH structure classes, in a table of its own because the class backfills
 rewrite their `class_labels` rows; each row records the item, and whether the
 article was the item's own or its category's declared main article
@@ -629,7 +634,7 @@ organism-format rows and 5 documented known-bad records are excluded with
 their reasons, and the exclusion accounting reconciles exactly to the
 1,255,388 activity rows scanned. All 15 build checks pass.
 
-What the page loads is 9.80 MB of startup payload in `viz/graph.data.js`, 0.21
+What the page loads is 9.84 MB of startup payload in `viz/graph.data.js`, 0.21
 MB in `viz/gtopdb.data.js`, GtoPdb's part, and 0.03 MB in
 `viz/drugcentral.data.js`, DrugCentral's, each kept apart for its licence; and
 119.2 MB of per-molecule evidence shards across 2,625 files under
@@ -643,13 +648,16 @@ PROTEIN COMPLEX, PROTEIN COMPLEX GROUP and PROTEIN FAMILY, plus one
 ChEMBL-labelled SINGLE PROTEIN carrying 3 accessions — each through the
 Wikidata item a reviewed entry in `config/cohort1_target_wikidata.json` names
 for it, never through its members' accessions; 44 were reviewed and have no
-article of their own. The 2 targets ChEMBL lists with no accession at all are
-left NULL. Of the 956 MeSH structure classes, **663** link one too, in the
-`class_wikipedia` table: 573 through the Wikidata item carrying the
-descriptor, and 90 whose item has no article through the main article its
-English category declares (Xanthines to *Xanthine*).
+article of their own. A further 652 non-human records with no article of their
+own link the article of the human protein D20 matched them to, in
+`targets.human_wikipedia_url`, and the page says it is the human protein's.
+The 2 targets ChEMBL lists with no accession at all are left NULL. Of the 956
+MeSH structure classes, **663** link one too, in the `class_wikipedia` table:
+573 through the Wikidata item carrying the descriptor, and 90 whose item has
+no article through the main article its English category declares (Xanthines
+to *Xanthine*).
 
-The pipeline suite is 603 tests and the node suites are 750 (521 cohort
+The pipeline suite is 609 tests and the node suites are 753 (524 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`
@@ -857,6 +865,11 @@ behaviour a rule here describes.
   they were opened at first — a claim row opens its own record, a line
   its strongest. Complexes and families stay one node per species, and
   `proteinKey` is the only grouping key.
+- **A non-human record with no article of its own links its human
+  protein's, and says so** (2026-10-18, the user's call): the link reads
+  *Wikipedia: human OPRM1*, and its hover says the rat protein has no
+  article and this is the human one matched by sequence. The record's own
+  article always wins; the two are never shown as one.
 - **A claim has no panel of its own** — an edge opens the whole pair,
   grouped into drawn / held-back / retained, none summed; 2,601 of
   11,599 edges carry more than one claim.
