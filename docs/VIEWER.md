@@ -128,6 +128,44 @@ the gap statements and search all still read the whole catalogue, so nothing
 becomes unfindable by being undrawn — caffeine's 59 visible claims and 265
 shared-target rows are identical with it on and off.
 
+**The same control can draw only the selection's neighbourhood** (2026-10-18,
+at the user's request): the selection, what it acts on, and the other molecules
+acting on those, with nothing else on the canvas. It is the one-neighbourhood
+drawing this page gave up as its default, brought back as an opt-in third
+setting, *Only the selection's neighbourhood*, and the reasons it stopped being
+the default are why it stays off: every selection re-solves the layout, so
+nothing holds still between two of them, and where a neighbourhood sits among
+the others cannot be seen. Four things decide how it behaves.
+
+- **It draws exactly what the highlight lights.** `focusOn` asks `highlightOver`
+  — the function behind `highlightFor`, run on the whole picture rather than
+  the drawn one — and keeps those nodes and lines, so "focused" and "lit" can
+  never disagree: a molecule brings its targets and every molecule on them
+  (hops 0–2), a target its molecules and every other target they act on (a
+  family, complex group or complex its components and their molecules too;
+  *Selecting a group*, below), a pair its overlap, a condition or class
+  its members and their targets. Like the periphery it is a drawing rule, and
+  the panels, ranking, gaps and search are untouched; the claim pass is cached
+  apart (`claimGraph`), so a selection does not re-read the claims.
+- **Under it alone, the selection is in `graphSignature`.** Everywhere else a
+  selection writes opacity and never rebuilds. A selection that redraws goes
+  through the busy line a filter change uses (`refreshSelection`), because
+  returning to the whole network costs what a filter change at the defaults
+  does: about 13 s in headless Chrome against the 2,450-entry payload, where a
+  neighbourhood redraw took about 2 s with the settle (caffeine: 391 molecules,
+  32 targets, 690 lines of 18,866).
+- **A line keeps its molecule's neighbourhood**, and retained claims are their
+  molecule (`focusSubject`): clicking a line to read its evidence must not take
+  every other line away.
+- **The view follows the neighbourhood.** Its nodes are solved from wherever
+  they sat before, which can be off screen, so a re-solve that draws or leaves
+  a focused picture ends in an animated `fit` (`fitAfterSolve`), unlike every
+  other re-solve, which keeps the reader's view.
+
+With nothing selected, or a selection the filters leave off the canvas, there
+is nothing to focus on: every target is drawn, the counts box has no *Drawn*
+line, and the control says why in a note that is not counted as a cost.
+
 **Trial sites is the one eligibility filter about the molecule rather than the
 claim** (2026-10-13, a proposal on the `worktree-foreign-trials` branch,
 [FOREIGN-TRIALS.md](FOREIGN-TRIALS.md)). It keeps the molecules whose Phase 1+
@@ -873,12 +911,31 @@ the weighting has done most of it, and a filter change still settles in 8.9 s.
 "Hubs in the inner 5%" was measured too and is too noisy to quote: 13 to 21 of
 40 for the same setting on three seeds.
 
-**Selecting a complex lights its own subunits** (2026-09-25, at the user's
-request), wherever they are drawn, so what a receptor is made of can be read off
-the canvas without opening its Components list. They are lit and not treated as
-the selection's targets: their own molecules and lines stay dark. Complexes and
-complex groups only; a family's members are separate proteins, not its parts. "Protein groups:
-draw separately" turns units and lines off together.
+**Selecting a group lights its components and the molecules on them**
+(2026-10-18, at the user's request), wherever they are drawn: a family, a
+complex group or a complex. Selecting the 23-member *3',5'-cyclic
+phosphodiesterase* family used to light its own two molecules and nothing that
+said what the family is; it now lights its 19 drawn PDE nodes, the 183
+molecules acting on them, and the 19 membership lines between them. Lit, never
+merged: each lit line is still a claim at its own protein, and the target
+panel, the ranking and the counts read the family's own claims as before. It
+replaces two narrower rules. From 2026-09-25 a complex lit its subunits alone,
+with their own molecules and lines left dark, and a family lit nothing, on the
+argument that its members are paralogues rather than parts; both read better
+as the set ChEMBL files the record as. "Protein groups: draw separately" turns
+units and lines off together.
+
+**A target has a second hop** (2026-10-18, at the user's request): the other
+targets its molecules act on, at the second hop's opacity, mirroring a
+molecule's. It had none, on the argument that every other target of every
+molecule binding it is most of the catalogue. Measured on the default canvas
+(2,454 drawn targets), that holds only at the hubs: the median target's second
+hop is 55 targets, the 90th percentile 451, the 99th 847, and ADORA3's 1,243.
+A group's second hop starts from its components' molecules too, so the PDE
+family's is 1,136 targets, and under *Only the selection's neighbourhood* it
+draws 183 molecules, 1,156 targets and 4,537 of the 18,866 lines (caffeine's
+neighbourhood is 690). A molecule on those targets is a third hop and stays
+dark.
 
 **A band round the selection's groups was shipped and taken off again**
 (version 12, removed 2026-09-25 at the user's request: "adding too much to an

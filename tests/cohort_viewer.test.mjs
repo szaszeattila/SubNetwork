@@ -542,12 +542,17 @@ describe("the whole network is drawn, and a selection lights part of it", () => 
     assert.ok([...lit.nodes.values()].every((o) => o > 0));
   });
 
-  test("a target's neighbourhood has no second hop", () => {
+  test("a target's second hop is the other targets its molecules act on", () => {
     const v = loadViewer(catalogue());
-    const h = v.highlightFor("target", "CHEMBLT1");
-    // Every other target of every molecule that binds it is most of the
-    // catalogue, which is not a neighbourhood but a reset.
-    assert.ok([...h.nodes.values()].every((hop) => hop <= 1));
+    const h = v.highlightFor("target", "CHEMBLT3");
+    assert.equal(h.nodes.get("tCHEMBLT3"), 0);
+    assert.equal(h.nodes.get("m1"), 1);
+    // Caffeine's other targets, and its lines to them, held in the background.
+    assert.equal(h.nodes.get("tCHEMBLT1"), 2);
+    assert.equal(h.nodes.get("tCHEMBLT2"), 2);
+    assert.equal(h.edges.get(v.catalogueGraph().byPair.get("m1|tCHEMBLT1").id), 2);
+    // A molecule on those targets is a third hop, and stays dark.
+    assert.equal(h.nodes.get("m2"), undefined);
   });
 
   test("a pair lights the overlap and nothing else", () => {
@@ -735,6 +740,79 @@ describe("the canvas control thins the picture without thinning the catalogue", 
   });
 });
 
+// The canvas control's third setting: the selection, its targets and the other
+// molecules on them, and nothing else drawn (2026-10-18).
+describe("the focus setting draws only the selection's neighbourhood", () => {
+  const keys = (g) => plain(g.nodes.map((n) => n.key).sort());
+
+  test("a molecule brings its targets and the molecules on them, and only those lines", () => {
+    const v = loadViewer(catalogue());
+    v.setFilter("periphery", "focus");
+    // BROADER ONLY acts at A1 alone, so caffeine and theophylline come with
+    // A1, and their lines to the family and to acetylcholinesterase do not.
+    v.select("molecule", 3);
+    const g = v.catalogueGraph();
+    assert.deepEqual(keys(g), ["m1", "m2", "m3", "tCHEMBLT1"]);
+    assert.deepEqual(plain(g.edges.map((e) => e.to)), ["tCHEMBLT1", "tCHEMBLT1", "tCHEMBLT1"]);
+    assert.deepEqual(plain(g.focused), { molecules: 0, molecules_kept: 3, targets: 2,
+                                         targets_kept: 1, edges: 3 });
+    assert.match(v.graphCountsHTML(), /Drawn: <b>3<\/b> molecules and <b>1<\/b> target, the selection's neighbourhood only$/);
+  });
+
+  test("a target brings the molecules acting on it, and their other targets", () => {
+    const v = loadViewer(catalogue());
+    v.setFilter("periphery", "focus");
+    v.select("target", "CHEMBLT3");
+    // Theophylline is on caffeine's other targets, a third hop, and not drawn.
+    assert.deepEqual(keys(v.catalogueGraph()), ["m1", "tCHEMBLT1", "tCHEMBLT2", "tCHEMBLT3"]);
+  });
+
+  test("each selection redraws it, and a line keeps its molecule's neighbourhood", () => {
+    const v = loadViewer(catalogue());
+    v.setFilter("periphery", "focus");
+    v.select("molecule", 3);
+    const three = v.catalogueGraph().signature;
+    v.select("molecule", 1);
+    assert.notEqual(v.catalogueGraph().signature, three);
+    const one = keys(v.catalogueGraph());
+    v.select("edge", 1, "CHEMBLT3");
+    assert.deepEqual(keys(v.catalogueGraph()), one);
+  });
+
+  test("with nothing to focus on, every target is drawn and the control says why", () => {
+    const v = loadViewer(catalogue());
+    v.setFilter("periphery", "focus");
+    v.clearSelection();
+    const g = v.catalogueGraph();
+    assert.equal(g.focused, null);
+    assert.equal(g.nodes.length, 6);
+    const b = v.filterBanners().filter((r) => r.control === "periphery");
+    assert.equal(b.length, 1);
+    assert.equal(b[0].kind, "note");
+    assert.match(b[0].text, /nothing on the canvas is selected, so every target is drawn/);
+  });
+
+  test("it changes what is drawn and nothing about what exists", () => {
+    const v = loadViewer(catalogue());
+    v.select("molecule", 3);
+    const claims = v.visibleClaimsFor(1).map((c) => c.id);
+    const ranked = v.sharedTargets(1).map((r) => r.molecule.id);
+    const kept = v.graphCountsHTML();
+    v.setFilter("periphery", "focus");
+    assert.deepEqual(plain(v.visibleClaimsFor(1).map((c) => c.id)), plain(claims));
+    assert.deepEqual(plain(v.sharedTargets(1).map((r) => r.molecule.id)), plain(ranked));
+    assert.equal(v.searchCatalogue("acetylcholinesterase").targets.length, 1);
+    assert.ok(v.graphCountsHTML().startsWith(kept + "<br>"));
+    const banner = v.filterBanners().map((b) => b.text).join(" ");
+    assert.match(banner, /All stay in the panels, the similarity ranking and search/);
+  });
+
+  test("a link carries it", () => {
+    const v = loadViewer(catalogue());
+    assert.equal(v.filtersFromLink("#m=CHEMBL113&canvas=focus").periphery, "focus");
+  });
+});
+
 describe("an edge on the canvas opens the pair behind it", () => {
   test("clicking an edge selects the molecule-target pair", () => {
     const v = loadViewer(catalogue());
@@ -825,7 +903,9 @@ describe("an edge on the canvas opens the pair behind it", () => {
   test("with nothing lit near the pointer, vis's own answer stands", () => {
     const v = loadViewer(catalogue());
     v.select("target", "CHEMBLT3");
-    placeBody(v, { m1: { x: 0, y: 0 }, tCHEMBLT3: { x: 200, y: 0 }, m2: { x: 100, y: 100 } }, 1);
+    // Caffeine's second-hop lines run left, away from the pointer.
+    placeBody(v, { m1: { x: 0, y: 0 }, tCHEMBLT3: { x: 200, y: 0 }, m2: { x: 100, y: 100 },
+                   tCHEMBLT1: { x: -300, y: 0 }, tCHEMBLT2: { x: -300, y: -50 } }, 1);
     v.onGraphClick(click(100, 100, { nodes: ["m2"] }));
     assert.equal(v.getSelection().kind, "molecule");
     assert.equal(v.getSelection().id, 2);
@@ -5233,10 +5313,13 @@ describe("a group is joined to its own proteins on the canvas", () => {
     assert.equal(o.links.get(byTo.get("tT_A1")), v.KEPT_LINK_OPACITY ?? 0.6);
     // Caffeine reaches the family and A1, not A2A: that line is not its own.
     assert.ok(o.links.get(byTo.get("tT_A2A")) < 0.1);
-    // A target selection lights molecules, never a second target, so no line.
+    // A family lights its own members, so both of its lines are its own.
     v.setSelection("target", "T_FAM");
     const t = v.highlightOpacity();
-    for (const x of t.links.values()) assert.ok(x < 0.1);
+    for (const x of t.links.values()) assert.equal(x, v.KEPT_LINK_OPACITY ?? 0.6);
+    // A protein selection lights no member and no line, even inside a family.
+    v.setSelection("target", "T_A2A");
+    for (const x of v.highlightOpacity().links.values()) assert.ok(x < 0.1);
   });
 
   test("the canvas gets the lines styled as structure, and a click on one opens the group", () => {
@@ -5540,19 +5623,27 @@ describe("an ion-channel assembly is laid out as one unit", () => {
     assert.ok(block[1].some((r) => r[1] === "ion channel"));
   });
 
-  test("selecting a complex lights its own subunits, and nothing else of theirs", () => {
+  test("selecting a complex or family lights its components and the molecules on them", () => {
     const v = loadViewer(unitCatalogue());
     const h = v.highlightFor("target", "C_132");
     // alpha1 and beta3 are drawn; gamma2 has no node of its own here.
     assert.equal(h.nodes.get("tS_A1"), 1);
     assert.equal(h.nodes.get("tS_B3"), 1);
-    // Zolpidem acts at alpha1 and not at the complex, so it stays dark: the
-    // subunits are lit, not treated as the selection's targets.
-    assert.equal(h.nodes.get("m2"), undefined);
+    // Zolpidem acts at alpha1 and not at the complex, and is lit with it.
+    assert.equal(h.nodes.get("m2"), 1);
+    assert.equal(h.edges.get(v.catalogueGraph().byPair.get("m2|tS_A1").id), 1);
     assert.equal(h.nodes.get("m1"), 1, "the complex's own molecule is lit as ever");
-    // A family is paralogues rather than parts, and lights no members.
+    // Their other targets are the second hop.
+    assert.equal(h.nodes.get("tF_GABA"), 2);
+    assert.equal(h.nodes.get("tC_122"), 2);
+    // Tofacitinib shares nothing with it.
+    assert.equal(h.nodes.get("m3"), undefined);
+    // A family lights its members as a complex does.
     const f = v.highlightFor("target", "F_GABA");
-    assert.equal(f.nodes.get("tS_A1"), undefined);
+    assert.equal(f.nodes.get("tS_A1"), 1);
+    assert.equal(f.nodes.get("m1"), 1, "diazepam, at alpha1");
+    // Lit, never merged: the family's own claims are still its own.
+    assert.deepEqual(plain(v.catalogueGraph().byNode.get("tF_GABA").map((e) => e.from)), ["m2"]);
   });
 });
 

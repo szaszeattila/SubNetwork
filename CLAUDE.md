@@ -633,7 +633,7 @@ the `class_wikipedia` table: 573 through the Wikidata item carrying the
 descriptor, and 90 whose item has no article through the main article its
 English category declares (Xanthines to *Xanthine*).
 
-The pipeline suite is 592 tests and the node suites are 750 (521 cohort
+The pipeline suite is 592 tests and the node suites are 756 (527 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`
@@ -692,6 +692,18 @@ behaviour a rule here describes.
   eligibility.** It removes 810 fringe proteins from the canvas, but
   caffeine's 59 claims and 265 shared-target rows are unchanged either
   way.
+- **"Only the selection's neighbourhood" is the canvas control's third
+  setting and a drawing rule too** (2026-10-18): it draws exactly what
+  `highlightFor` lights and nothing else, so under it alone a selection is
+  in `graphSignature` and redraws, as the page did before it drew the
+  whole network. A line keeps its molecule's neighbourhood; with nothing
+  to focus on, every target is drawn and the control says so.
+- **A target lights its molecules and, as its second hop, their other
+  targets; a family, complex group or complex also lights its drawn
+  components and their molecules** (2026-10-18). Lit, never merged: the
+  panels, ranking and counts still read the selection's own claims. A
+  target's second hop is a median 55 of 2,454 targets, but over a thousand
+  at the hubs (ADORA3, the PDE family).
 - **Edge culling is an exact viewport clip, not a bounding-box test,
   and never drops haze edges mid-gesture.** A box test kept 9,876 of
   12,835 edges at zoom 2.0 where the clip keeps 60; dropping haze on
