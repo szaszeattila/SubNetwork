@@ -1212,7 +1212,7 @@ const filters = {
   // which molecules' claims exist for every view.
   trials: "any",
   // The two controls here that are about the *drawing* rather than about which
-  // claims are eligible. "show" | "hide" - see catalogueGraph.
+  // claims are eligible. "show" | "hide" | "focus" - see catalogueGraph.
   periphery: "show",
   // Which question the line colour answers. "evidence" | "mechanism". It moves
   // no claim in or out of the picture - see edgeColor.
@@ -2515,13 +2515,22 @@ function nodeLabel(node) {
 
 let graphCache = null;
 
+// The claim filters alone: what is in the picture, before the canvas control
+// decides what of it is drawn.
+function claimSignature() {
+  return filters.tier + "|" + filters.basis + "|" + String(filters.potency) +
+         "|" + filters.mechanism.slice().sort().join(",") + "|" + filters.trials;
+}
+
 function graphSignature() {
   // lineColor is deliberately not in it: it repaints the lines that are already
   // drawn and moves nothing in or out of the picture, so a colour change must
   // not cost a rebuild and must not move the layout under the reader.
-  return filters.tier + "|" + filters.basis + "|" + String(filters.potency) +
-         "|" + filters.mechanism.slice().sort().join(",") + "|" + filters.trials +
-         "|" + filters.periphery +
+  const focus = filters.periphery === "focus" ? focusSubject() : null;
+  return claimSignature() + "|" + filters.periphery +
+         // The one setting under which a selection is a rebuild rather than a
+         // highlight: what is drawn is the selection's neighbourhood.
+         (focus ? ":" + focus.kind + ":" + focus.id + ":" + String(focus.extra) : "") +
          // groups is in it, unlike lineColor, because the membership lines are
          // springs as well as ink: they change what the layout solves for.
          "|" + filters.groups;
@@ -2570,6 +2579,46 @@ function prunePeriphery(nodes, edges) {
   };
 }
 
+// The canvas control's third setting (2026-10-18, at the user's request): draw
+// only the selection, what it acts on, and the other molecules acting on those
+// - the neighbourhood highlightFor lights, with nothing else on the canvas.
+//
+// It is the page's old one-neighbourhood-at-a-time drawing, brought back as an
+// opt-in and as a drawing rule, so the reasons it stopped being the default
+// still hold and are why it is off: the layout is re-solved on every
+// selection, so nothing holds still between two of them, and where a
+// neighbourhood sits among the others cannot be seen (VIEWER.md). It moves no
+// claim in or out of anything, like the periphery: the panels, the ranking,
+// the gap statements and search read the whole catalogue as before.
+//
+// What is focused on is the selection, except that a line keeps its molecule's
+// neighbourhood - clicking a line to read its evidence must not take every
+// other line away - and a molecule's retained claims are that molecule. With
+// nothing selected, or a selection the filters leave off the canvas, there is
+// nothing to focus on and every target is drawn.
+function focusSubject() {
+  const s = getSelection();
+  if (!s.kind) return null;
+  if (s.kind === "edge" || s.kind === "retained") return { kind: "molecule", id: s.id, extra: null };
+  return { kind: s.kind, id: s.id, extra: s.extra };
+}
+
+function focusOn(base, subject) {
+  const lit = subject ? highlightOver(base, subject.kind, subject.id, subject.extra) : null;
+  if (!lit) return null;
+  const nodes = base.nodes.filter(function (n) { return lit.nodes.has(n.key); });
+  const edges = base.edges.filter(function (e) { return lit.edges.has(e.id); });
+  const was = nodeCounts(base.nodes), now = nodeCounts(nodes);
+  return {
+    nodes: nodes, edges: edges,
+    focused: {
+      molecules: was.molecules - now.molecules, molecules_kept: now.molecules,
+      targets: was.targets - now.targets, targets_kept: now.targets,
+      edges: base.edges.length - edges.length,
+    },
+  };
+}
+
 // Molecules and targets among a set of canvas nodes, in the canvas's own unit:
 // a protein is one target whatever species recorded it (D20), as its node is.
 function nodeCounts(nodes) {
@@ -2592,15 +2641,18 @@ function catalogueTotals() {
   return catalogueTotalsCache;
 }
 
-// Built once per filter setting and cached, because a selection must not cost
-// a pass over 16,206 claims - it is the thing the reader does most.
-function catalogueGraph() {
-  const sig = graphSignature();
-  if (graphCache && graphCache.signature === sig) return graphCache;
+// The claim filters' picture, every target drawn: built once per claim-filter
+// setting and cached, because a selection must not cost a pass over 16,206
+// claims - it is the thing the reader does most, and under the focus setting
+// it is also a rebuild. Never written to: catalogueGraph builds new maps for
+// what it cuts.
+let claimGraphCache = null;
+function claimGraph() {
+  const sig = claimSignature();
+  if (claimGraphCache && claimGraphCache.signature === sig) return claimGraphCache;
   const byKey = new Map();
   const byPair = new Map();
-  const byNode = new Map();
-  let edges = [];
+  const edges = [];
   for (const c of allClaims()) {
     if (!claimVisible(c)) continue;
     const mol = lookupMolecule(c.molecule), t = lookupTarget(c.target);
@@ -2629,27 +2681,48 @@ function catalogueGraph() {
     }
     e.claims.push(c);
   }
-  // Pruning happens here and not in the drawing code, so that byKey, byPair
-  // and byNode describe the canvas that actually exists - a highlight computed
-  // over edges that are not drawn would light nothing and report success.
-  let nodes = Array.from(byKey.values());
-  // Read before the periphery is pruned: the claim filters decide what is in
-  // the picture, and the canvas control only what of it is drawn.
-  const shown = nodeCounts(nodes);
-  let pruned = null;
-  if (filters.periphery === "hide") {
-    const cut = prunePeriphery(nodes, edges);
-    nodes = cut.nodes; edges = cut.edges; pruned = cut.pruned;
-    byKey.clear();
-    for (const n of nodes) byKey.set(n.key, n);
-    byPair.clear();
-    for (const e of edges) byPair.set(e.from + "|" + e.to, e);
-  }
+  claimGraphCache = { signature: sig, nodes: Array.from(byKey.values()), edges: edges,
+                      byKey: byKey, byPair: byPair, byNode: edgesByNode(edges) };
+  return claimGraphCache;
+}
+
+function edgesByNode(edges) {
+  const byNode = new Map();
   for (const e of edges) {
     if (!byNode.has(e.from)) byNode.set(e.from, []);
     if (!byNode.has(e.to)) byNode.set(e.to, []);
     byNode.get(e.from).push(e);
     byNode.get(e.to).push(e);
+  }
+  return byNode;
+}
+
+// What is drawn: the claim filters' picture, cut by the canvas control, and
+// cached per graphSignature.
+function catalogueGraph() {
+  const sig = graphSignature();
+  if (graphCache && graphCache.signature === sig) return graphCache;
+  const base = claimGraph();
+  // Cutting happens here and not in the drawing code, so that byKey, byPair
+  // and byNode describe the canvas that actually exists - a highlight computed
+  // over edges that are not drawn would light nothing and report success.
+  let nodes = base.nodes, edges = base.edges;
+  let byKey = base.byKey, byPair = base.byPair, byNode = base.byNode;
+  // Read before the canvas control cuts anything: the claim filters decide
+  // what is in the picture, and the canvas control only what of it is drawn.
+  const shown = nodeCounts(nodes);
+  const cut = filters.periphery === "hide" ? prunePeriphery(nodes, edges)
+            : filters.periphery === "focus" ? focusOn(base, focusSubject())
+            : null;
+  let pruned = null, focused = null;
+  if (cut) {
+    nodes = cut.nodes; edges = cut.edges;
+    pruned = cut.pruned || null; focused = cut.focused || null;
+    byKey = new Map();
+    for (const n of nodes) byKey.set(n.key, n);
+    byPair = new Map();
+    for (const e of edges) byPair.set(e.from + "|" + e.to, e);
+    byNode = edgesByNode(edges);
   }
   let links = filters.groups === "linked" ? groupLinks(nodes, byKey) : [];
   const units = filters.groups === "linked" ? channelUnits(links) : [];
@@ -2663,7 +2736,7 @@ function catalogueGraph() {
     return !(u && u === unitOf.get(k.to));
   });
   graphCache = { signature: sig, nodes: nodes, edges: edges, pruned: pruned,
-                 shown: shown, drawn: nodeCounts(nodes),
+                 focused: focused, shown: shown, drawn: nodeCounts(nodes),
                  byKey: byKey, byPair: byPair, byNode: byNode, links: links,
                  units: units, unitOf: unitOf };
   return graphCache;
@@ -2848,7 +2921,12 @@ function linkLit(link, hops) {
 // evidence, or for anything the current filters have taken out. The panel still
 // says which of those two it is; the graph does not pretend to.
 function highlightFor(kind, id, extra) {
-  const g = catalogueGraph();
+  return highlightOver(catalogueGraph(), kind, id, extra);
+}
+
+// The same, over a graph named rather than the one drawn: the focus setting
+// asks it of the whole picture to decide what to draw.
+function highlightOver(g, kind, id, extra) {
   const nodes = new Map(), edges = new Map();
   const mark = function (map, key, hop) {
     const cur = map.get(key);
@@ -3024,8 +3102,9 @@ const HELP = {
   trials: "Keep molecules with a Phase 1+ trial for a brain condition, by where its " +
           "sites were, as ClinicalTrials.gov lists them for the trials ChEMBL cites. " +
           "Molecules in by an ATC code or a label alone have no trial to place.",
-  periphery: "Hide targets only one molecule acts on. They stay in lists, search " +
-             "and similarity.",
+  periphery: "Hide targets only one molecule acts on, or draw only the selection, its " +
+             "targets and the other molecules on them. What is not drawn stays in " +
+             "lists, search and similarity.",
   groups: "Link each protein family or complex to its proteins, and draw ion-channel " +
           "assemblies (GABA-A, NMDA, nicotinic, ...) as one disc around their subunits. " +
           "Only placement changes; nothing is merged or counted.",
@@ -3523,6 +3602,7 @@ function filtersHTML() {
   h += '<div class="ctl"><h4>' + helpLabel("Canvas", "periphery") + "</h4><div class=\"row\">";
   h += btn("periphery", "show", "Draw every target", f.periphery === "show");
   h += btn("periphery", "hide", "Hide single-molecule targets", f.periphery === "hide");
+  h += btn("periphery", "focus", "Only the selection's neighbourhood", f.periphery === "focus");
   h += "</div>" + cost("periphery") + "</div>";
 
   h += '<div class="ctl"><h4>' + helpLabel("Protein groups", "groups") + "</h4><div class=\"row\">";
@@ -3756,7 +3836,8 @@ function viewOptionsSettings() {
                      : "every molecule")
                   : "",
                 f.periphery === "hide" ? "single-molecule targets hidden"
-                                       : "every target drawn",
+                : f.periphery === "focus" ? "only the selection's neighbourhood drawn"
+                : "every target drawn",
                 f.groups === "linked" ? "protein groups linked" : "protein groups separate",
                 f.lineColor === "mechanism" ? "lines coloured by mechanism"
                                             : "lines coloured by evidence"];
@@ -3898,6 +3979,20 @@ function filterBanners() {
                (p.molecules ? " and " + plural(p.molecules, "molecule") + " left with none" : "") +
                " off the canvas. All stay in the panels, the similarity ranking and search.");
     }
+  }
+  if (f.periphery === "focus") {
+    const p = catalogueGraph().focused;
+    // With nothing to focus on everything is drawn, and the control says it is
+    // waiting rather than claiming a cost it is not paying.
+    push("periphery", p
+      ? "<b>Only the selection's neighbourhood</b> is drawn: " +
+        plural(p.molecules_kept, "molecule") + " and " + plural(p.targets_kept, "target") +
+        ", leaving " + plural(p.molecules, "molecule") + ", " + plural(p.targets, "target") +
+        " and " + plural(p.edges, "edge") + " off the canvas. Each selection redraws " +
+        "it. All stay in the panels, the similarity ranking and search."
+      : "<b>Only the selection's neighbourhood</b>: nothing on the canvas is selected, " +
+        "so every target is drawn.",
+      p ? "cost" : "note");
   }
   return out;
 }
@@ -8216,8 +8311,23 @@ function settleGraph() {
   // places, and a crowded node to its spaced one, with everything else rather
   // than jumping after it.
   placeNodes();
+  // A neighbourhood is solved from wherever its nodes sat in the picture
+  // before, which can be anywhere on the canvas or off it, so the view follows
+  // it - and follows back out to the whole network when focus ends. Asked
+  // before the glide puts the nodes back where they were, since vis reads the
+  // positions to fit at the call.
+  if (fitAfterSolve && network.fit) {
+    network.fit({ animation: { duration: TRANSITION_MS, easingFunction: "easeInOutQuad" } });
+    if (network.once) network.once("animationFinished", syncLabels);
+  }
+  fitAfterSolve = false;
   startTransition();
 }
+
+// Set by renderGraph when the picture it re-solves is, or replaces, a focused
+// one (see focusOn); consumed by the settle.
+let fitAfterSolve = false;
+let drawnFocused = false;
 
 // Positions are written through the DataSet rather than through moveNode, which
 // restarts vis's simulation - the thing this whole arrangement exists to avoid.
@@ -8752,6 +8862,7 @@ function renderGraph() {
     const pos = nodePositions();
     transitionFrom = pos;
     transition = null;
+    fitAfterSolve = !!g.focused || drawnFocused;
     for (const n of nodes) {
       const p = pos[n.id];
       if (p) { n.x = p.x; n.y = p.y; }
@@ -8768,6 +8879,7 @@ function renderGraph() {
   }
   if (network.once) network.once("stabilizationIterationsDone", settleGraph);
   drawnSignature = g.signature;
+  drawnFocused = !!g.focused;
   applyHighlight();
 }
 
@@ -8933,6 +9045,14 @@ function graphCountsHTML() {
   if (g.pruned) {
     h += "<br>Drawn: <b>" + fmtCount(g.drawn.molecules) + "</b> molecules and <b>" +
          fmtCount(g.drawn.targets) + "</b> targets, single-molecule targets hidden";
+  }
+  if (g.focused) {
+    // A target's neighbourhood is often one target, which "1 targets" misreads.
+    const n = function (count, word) {
+      return "<b>" + fmtCount(count) + "</b> " + (count === 1 ? word : word + "s");
+    };
+    h += "<br>Drawn: " + n(g.drawn.molecules, "molecule") + " and " +
+         n(g.drawn.targets, "target") + ", the selection's neighbourhood only";
   }
   return h;
 }
@@ -9376,15 +9496,26 @@ function select(kind, id, extra) {
     if (selectionHistory.length > SELECTION_HISTORY_MAX) selectionHistory.shift();
   }
   setSelection(kind, id, extra);
-  refresh();
+  refreshSelection();
 }
 
 function goBack() {
   if (!selectionHistory.length) return false;
   const prev = selectionHistory.pop();
   setSelection(prev.kind, prev.id, prev.extra);
-  refresh();
+  refreshSelection();
   return true;
+}
+
+// A selection is a highlight, except under the focus setting, where it is a
+// new picture - seconds of it when that picture is the whole network again -
+// so it says so before starting, as a filter change does.
+function refreshSelection() {
+  if (network && filters.periphery === "focus" && drawnSignature !== graphSignature()) {
+    refreshAfterFilters(null, "Redrawing the canvas…");
+  } else {
+    refresh();
+  }
 }
 
 // The name of what Back would return to, for its tooltip: null with nothing to
@@ -9418,7 +9549,7 @@ function clearSelection() {
 //   #class=mesh_pa:D018377          a class, by the key its panel is opened by
 //
 //   &tier=supported  &basis=human_direct  &potency=10  &mech=AGONIST,PARTIAL%20AGONIST
-//   &trials=elsewhere  &canvas=hide  &groups=separate  &color=evidence
+//   &trials=elsewhere  &canvas=hide (or focus)  &groups=separate  &color=evidence
 //
 // A filter is written only where it differs from its default, so a link to the
 // page as it opens is still just #m=CHEMBL113 - and a link names the whole
@@ -9441,7 +9572,7 @@ const LINK_FILTERS = [
   ["basis", "basis", ["human_direct", "all"]],
   ["potency", "potency", [1, 10, 100, 300]],
   ["trials", "trials", ["any", "us", "anywhere", "elsewhere"]],
-  ["periphery", "canvas", ["show", "hide"]],
+  ["periphery", "canvas", ["show", "hide", "focus"]],
   ["groups", "groups", ["linked", "separate"]],
   ["lineColor", "color", ["evidence", "mechanism"]],
 ];
@@ -9735,9 +9866,9 @@ function afterPaint(fn) {
   requestAnimationFrame(function () { setTimeout(fn, 0); });
 }
 
-function refreshAfterFilters(then) {
+function refreshAfterFilters(then, busy) {
   renderControls();
-  setBusy("Applying the filters…");
+  setBusy(busy || "Applying the filters…");
   // Reset's re-selection is kept if a plain filter click follows it.
   if (then) queuedThen = then;
   if (refreshQueued) return;

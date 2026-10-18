@@ -735,6 +735,78 @@ describe("the canvas control thins the picture without thinning the catalogue", 
   });
 });
 
+// The canvas control's third setting: the selection, its targets and the other
+// molecules on them, and nothing else drawn (2026-10-18).
+describe("the focus setting draws only the selection's neighbourhood", () => {
+  const keys = (g) => plain(g.nodes.map((n) => n.key).sort());
+
+  test("a molecule brings its targets and the molecules on them, and only those lines", () => {
+    const v = loadViewer(catalogue());
+    v.setFilter("periphery", "focus");
+    // BROADER ONLY acts at A1 alone, so caffeine and theophylline come with
+    // A1, and their lines to the family and to acetylcholinesterase do not.
+    v.select("molecule", 3);
+    const g = v.catalogueGraph();
+    assert.deepEqual(keys(g), ["m1", "m2", "m3", "tCHEMBLT1"]);
+    assert.deepEqual(plain(g.edges.map((e) => e.to)), ["tCHEMBLT1", "tCHEMBLT1", "tCHEMBLT1"]);
+    assert.deepEqual(plain(g.focused), { molecules: 0, molecules_kept: 3, targets: 2,
+                                         targets_kept: 1, edges: 3 });
+    assert.match(v.graphCountsHTML(), /Drawn: <b>3<\/b> molecules and <b>1<\/b> target, the selection's neighbourhood only$/);
+  });
+
+  test("a target brings the molecules acting on it", () => {
+    const v = loadViewer(catalogue());
+    v.setFilter("periphery", "focus");
+    v.select("target", "CHEMBLT3");
+    assert.deepEqual(keys(v.catalogueGraph()), ["m1", "tCHEMBLT3"]);
+  });
+
+  test("each selection redraws it, and a line keeps its molecule's neighbourhood", () => {
+    const v = loadViewer(catalogue());
+    v.setFilter("periphery", "focus");
+    v.select("molecule", 3);
+    const three = v.catalogueGraph().signature;
+    v.select("molecule", 1);
+    assert.notEqual(v.catalogueGraph().signature, three);
+    const one = keys(v.catalogueGraph());
+    v.select("edge", 1, "CHEMBLT3");
+    assert.deepEqual(keys(v.catalogueGraph()), one);
+  });
+
+  test("with nothing to focus on, every target is drawn and the control says why", () => {
+    const v = loadViewer(catalogue());
+    v.setFilter("periphery", "focus");
+    v.clearSelection();
+    const g = v.catalogueGraph();
+    assert.equal(g.focused, null);
+    assert.equal(g.nodes.length, 6);
+    const b = v.filterBanners().filter((r) => r.control === "periphery");
+    assert.equal(b.length, 1);
+    assert.equal(b[0].kind, "note");
+    assert.match(b[0].text, /nothing on the canvas is selected, so every target is drawn/);
+  });
+
+  test("it changes what is drawn and nothing about what exists", () => {
+    const v = loadViewer(catalogue());
+    v.select("molecule", 3);
+    const claims = v.visibleClaimsFor(1).map((c) => c.id);
+    const ranked = v.sharedTargets(1).map((r) => r.molecule.id);
+    const kept = v.graphCountsHTML();
+    v.setFilter("periphery", "focus");
+    assert.deepEqual(plain(v.visibleClaimsFor(1).map((c) => c.id)), plain(claims));
+    assert.deepEqual(plain(v.sharedTargets(1).map((r) => r.molecule.id)), plain(ranked));
+    assert.equal(v.searchCatalogue("acetylcholinesterase").targets.length, 1);
+    assert.ok(v.graphCountsHTML().startsWith(kept + "<br>"));
+    const banner = v.filterBanners().map((b) => b.text).join(" ");
+    assert.match(banner, /All stay in the panels, the similarity ranking and search/);
+  });
+
+  test("a link carries it", () => {
+    const v = loadViewer(catalogue());
+    assert.equal(v.filtersFromLink("#m=CHEMBL113&canvas=focus").periphery, "focus");
+  });
+});
+
 describe("an edge on the canvas opens the pair behind it", () => {
   test("clicking an edge selects the molecule-target pair", () => {
     const v = loadViewer(catalogue());

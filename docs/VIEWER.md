@@ -128,6 +128,42 @@ the gap statements and search all still read the whole catalogue, so nothing
 becomes unfindable by being undrawn — caffeine's 59 visible claims and 265
 shared-target rows are identical with it on and off.
 
+**The same control can draw only the selection's neighbourhood** (2026-10-18,
+at the user's request): the selection, what it acts on, and the other molecules
+acting on those, with nothing else on the canvas. It is the one-neighbourhood
+drawing this page gave up as its default, brought back as an opt-in third
+setting, *Only the selection's neighbourhood*, and the reasons it stopped being
+the default are why it stays off: every selection re-solves the layout, so
+nothing holds still between two of them, and where a neighbourhood sits among
+the others cannot be seen. Four things decide how it behaves.
+
+- **It draws exactly what the highlight lights.** `focusOn` asks `highlightOver`
+  — the function behind `highlightFor`, run on the whole picture rather than
+  the drawn one — and keeps those nodes and lines, so "focused" and "lit" can
+  never disagree: a molecule brings its targets and every molecule on them
+  (hops 0–2), a target its molecules, a pair its overlap, a condition or class
+  its members and their targets. Like the periphery it is a drawing rule, and
+  the panels, ranking, gaps and search are untouched; the claim pass is cached
+  apart (`claimGraph`), so a selection does not re-read the claims.
+- **Under it alone, the selection is in `graphSignature`.** Everywhere else a
+  selection writes opacity and never rebuilds. A selection that redraws goes
+  through the busy line a filter change uses (`refreshSelection`), because
+  returning to the whole network costs what a filter change at the defaults
+  does: about 13 s in headless Chrome against the 2,450-entry payload, where a
+  neighbourhood redraw took about 2 s with the settle (caffeine: 391 molecules,
+  32 targets, 690 lines of 18,866).
+- **A line keeps its molecule's neighbourhood**, and retained claims are their
+  molecule (`focusSubject`): clicking a line to read its evidence must not take
+  every other line away.
+- **The view follows the neighbourhood.** Its nodes are solved from wherever
+  they sat before, which can be off screen, so a re-solve that draws or leaves
+  a focused picture ends in an animated `fit` (`fitAfterSolve`), unlike every
+  other re-solve, which keeps the reader's view.
+
+With nothing selected, or a selection the filters leave off the canvas, there
+is nothing to focus on: every target is drawn, the counts box has no *Drawn*
+line, and the control says why in a note that is not counted as a cost.
+
 **Trial sites is the one eligibility filter about the molecule rather than the
 claim** (2026-10-13, a proposal on the `worktree-foreign-trials` branch,
 [FOREIGN-TRIALS.md](FOREIGN-TRIALS.md)). It keeps the molecules whose Phase 1+
