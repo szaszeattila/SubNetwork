@@ -160,7 +160,16 @@ the others cannot be seen. Four things decide how it behaves.
 - **The view follows the neighbourhood.** Its nodes are solved from wherever
   they sat before, which can be off screen, so a re-solve that draws or leaves
   a focused picture ends in an animated `fit` (`fitAfterSolve`), unlike every
-  other re-solve, which keeps the reader's view.
+  other re-solve, which keeps the reader's view. **Leaving it puts the whole
+  picture back** (`unfocusedPositions`, 2026-10-18): carried over as it stood,
+  the neighbourhood — solved among only itself, and spread to match — stayed in
+  the middle with a square of empty space round it, and the rest of the
+  catalogue, which had no positions left, was packed outside that (reported by
+  the user). Every node's place in the whole picture is kept from the moment
+  focus begins, and handed back when it ends; inside focus, a node the last
+  neighbourhood did not draw starts from it too. A page opened on a focused
+  link never drew the whole picture, so it lays that out afresh, with the first
+  layout's budget.
 
 With nothing selected, or a selection the filters leave off the canvas, there
 is nothing to focus on: every target is drawn, the counts box has no *Drawn*
