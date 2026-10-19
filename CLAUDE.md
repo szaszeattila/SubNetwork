@@ -657,7 +657,7 @@ MeSH structure classes, **663** link one too, in the `class_wikipedia` table:
 no article through the main article its English category declares (Xanthines
 to *Xanthine*).
 
-The pipeline suite is 609 tests and the node suites are 759 (530 cohort
+The pipeline suite is 609 tests and the node suites are 762 (533 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`
