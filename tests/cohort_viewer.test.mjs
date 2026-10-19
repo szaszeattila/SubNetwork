@@ -811,6 +811,74 @@ describe("the focus setting draws only the selection's neighbourhood", () => {
     const v = loadViewer(catalogue());
     assert.equal(v.filtersFromLink("#m=CHEMBL113&canvas=focus").periphery, "focus");
   });
+
+  // Reported 2026-10-18: back on "Draw every target", the neighbourhood stayed
+  // in the middle at the spacing it was solved to on its own, with a square of
+  // empty space round it, because it was the only part of the picture that
+  // still had positions to carry over.
+  test("leaving it puts every node back where the whole picture had it", () => {
+    const v = loadViewer(catalogue());
+    v.select("molecule", 3);
+    v.refresh();
+    const net = v.drawnCanvas().network;
+    const whole = {};
+    v.drawnCanvas().nodes.rows.forEach((n, i) => { whole[n.id] = { x: 10 * i, y: -10 * i }; });
+    net.positions = whole;
+    v.setFilter("periphery", "focus");
+    v.refresh();
+    const focused = v.drawnCanvas().nodes.rows.map((n) => n.id);
+    assert.ok(focused.length < Object.keys(whole).length);
+    // Solved among only themselves, the neighbourhood's nodes end up elsewhere.
+    const spread = {};
+    for (const id of focused) spread[id] = { x: 9000, y: 9000 };
+    net.finishStabilizing(spread);
+    v.setFilter("periphery", "show");
+    v.refresh();
+    const rows = v.drawnCanvas().nodes.rows;
+    assert.equal(rows.length, Object.keys(whole).length);
+    for (const n of rows) {
+      assert.deepEqual({ x: n.x, y: n.y }, whole[n.id], n.id + " was not put back");
+    }
+  });
+
+  test("a selection changed inside it starts a newly drawn node where the whole picture had it", () => {
+    const v = loadViewer(catalogue());
+    v.select("molecule", 3);
+    v.refresh();
+    const net = v.drawnCanvas().network;
+    const whole = {};
+    v.drawnCanvas().nodes.rows.forEach((n, i) => { whole[n.id] = { x: 10 * i, y: -10 * i }; });
+    net.positions = whole;
+    v.setFilter("periphery", "focus");
+    v.refresh();
+    const first = new Set(v.drawnCanvas().nodes.rows.map((n) => n.id));
+    const spread = {};
+    for (const id of first) spread[id] = { x: 9000, y: 9000 };
+    net.finishStabilizing(spread);
+    v.select("target", "CHEMBLT3");
+    v.refresh();
+    const rows = v.drawnCanvas().nodes.rows;
+    assert.ok(rows.some((n) => !first.has(n.id)), "the new selection should draw a new node");
+    for (const n of rows) {
+      // The nodes already on the canvas carry on from where they are.
+      const want = first.has(n.id) ? spread[n.id] : whole[n.id];
+      assert.deepEqual({ x: n.x, y: n.y }, want, n.id);
+    }
+  });
+
+  test("a page opened on it lays the whole picture out afresh when it ends", () => {
+    const v = loadViewer(catalogue(), { hash: "#m=CHEMBL113&canvas=focus" });
+    v.refresh();
+    assert.ok(v.catalogueGraph().focused, "the link should open focused");
+    const net = v.drawnCanvas().network;
+    v.setFilter("periphery", "show");
+    v.refresh();
+    // No whole picture was ever drawn, so there is none to put back, and
+    // building it round the neighbourhood is the defect this replaces.
+    for (const n of v.drawnCanvas().nodes.rows) assert.equal(n.x, undefined, n.id);
+    assert.equal(net.stabilizeCalls.at(-1),
+                 v.graphOptions(true).physics.stabilization.iterations);
+  });
 });
 
 describe("an edge on the canvas opens the pair behind it", () => {

@@ -8362,6 +8362,16 @@ function settleGraph() {
 let fitAfterSolve = false;
 let drawnFocused = false;
 
+// Where every node sat in the whole picture when focus began, kept until focus
+// ends and then handed back to the solver. Solved among only themselves, the
+// neighbourhood's nodes spread across the canvas, and the rest of the
+// catalogue had no position left to return to: carried over as they stood, the
+// neighbourhood stayed in the middle at its own spacing, with a square of empty
+// space round it and everything else packed outside that (reported
+// 2026-10-18). Going back to the whole picture is going back to the reader's
+// map, not to a new one built round the last selection.
+let unfocusedPositions = null;
+
 // Positions are written through the DataSet rather than through moveNode, which
 // restarts vis's simulation - the thing this whole arrangement exists to avoid.
 // Physics is already off by the time this runs, so nothing fights the glide.
@@ -8896,10 +8906,22 @@ function renderGraph() {
     transitionFrom = pos;
     transition = null;
     fitAfterSolve = !!g.focused || drawnFocused;
+    // See unfocusedPositions. Leaving focus, the whole picture's places win
+    // over the neighbourhood's; inside it, a node the last neighbourhood did
+    // not draw starts where it sat in the whole picture rather than nowhere.
+    // A page opened on a focused link never drew the whole picture, so it has
+    // none to go back to, and lays the whole one out afresh with the first
+    // layout's budget rather than building it round the neighbourhood.
+    if (!drawnFocused) unfocusedPositions = g.focused ? pos : null;
+    const restore = unfocusedPositions;
+    const leaving = drawnFocused && !g.focused;
+    const fresh = leaving && !restore;
     for (const n of nodes) {
-      const p = pos[n.id];
+      if (fresh) break;
+      const p = (leaving && restore[n.id]) || pos[n.id] || (restore && restore[n.id]);
       if (p) { n.x = p.x; n.y = p.y; }
     }
+    if (leaving) unfocusedPositions = null;
     graphSolving = true;
     setBusy("Laying out the network…");
     network.setOptions({ physics: graphOptions(false).physics });
@@ -8907,7 +8929,7 @@ function renderGraph() {
     visNodes.add(nodes); visEdges.add(edges);
     // Explicitly, because a DataSet change does not stabilize - it starts a
     // simulation, which is the drift this replaces.
-    if (network.stabilize) network.stabilize(graphOptions(false).physics.stabilization.iterations);
+    if (network.stabilize) network.stabilize(graphOptions(fresh).physics.stabilization.iterations);
     armSettle();
   }
   if (network.once) network.once("stabilizationIterationsDone", settleGraph);
