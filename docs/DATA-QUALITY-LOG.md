@@ -51,7 +51,309 @@ alone.
 | **FDA pharmacologic classes (NLM RxNav)** | FDA's Established Pharmacologic Class, mechanism of action and physiologic effect, as an answer key for the similarity ranking; never shown, never evidence | US-labelled drugs only (627 of 2,452 entries have an EPC); RxNorm files a salt apart from its ingredient, and some ChEMBL forms as ingredients of their own (aminophylline); unpinned, so its version is recorded |
 | **OnSIDES** (v3.1.1, pinned) | the adverse effects drug labels list, read by a model into MedDRA terms, as the one answer key sharing no input with the score; never shown, never evidence | carries no MedDRA hierarchy; what it reads from a label varies a hundredfold between labels of one drug; reads some table headings as effects ("Nervous") |
 | **ADReCS** (v3.3, pinned) | MedDRA's SOC to PT tree with its codes, to say which OnSIDES terms are nervous-system or psychiatric | no open licence stated; read locally as a lookup, nothing of it leaves the database; LLTs only as names among a PT's synonyms |
+| **DailyMed** | the FDA marketing category of each US label ChEMBL cites for an Approved (D23) | a published label is not an approval: UNAPPROVED DRUG OTHER labels are published too; its API serves only current labels, so archived ones are read from the label page; some labels state no category at all; a label page can have an empty `<title>` |
+| **RxNav** | the marketing category of a label DailyMed no longer serves, by the same set id (D24) | holds only labels whose NDCs RxNorm still keeps |
+| **DrugCentral** | which regulators (FDA, EMA, PMDA, a few others) approved an active ingredient, and when (D24) | molecule-level, never per disease; a ChEMBL ID can sit on two of its structures, and one structure can carry two catalogue entries' IDs; "YEAR INTRODUCED" is not a regulator; a PostgreSQL dump, read with `pg_restore` |
 
+---
+
+## 2026-10-18 — Cyclooxygenase had no link, and neither did any family
+
+**What happened.** The user asked why *Cyclooxygenase (human)*,
+`CHEMBL2094253`, does not link to Wikipedia's *Cyclooxygenase*. It was not a
+miss: it was the rule. The backfill linked a target only through a single
+UniProt accession, and every PROTEIN COMPLEX, PROTEIN COMPLEX GROUP and
+PROTEIN FAMILY — 454 of the 3,446 target records, with the one SINGLE
+PROTEIN ChEMBL files against three accessions — was left NULL. That was
+because the legacy pipeline derived an assembly's link from its members
+twice, and was confidently wrong both times (5-HT3 to *Cys-loop receptor*,
+NMDA to *Ionotropic glutamate receptor*). Its way out, a hand-written
+ChEMBL-id-to-item map for seven assemblies, was not ported, because 310
+entries needed a review nobody had done.
+
+**Nothing derives it.** No Wikidata item carries a ChEMBL family or complex
+ID (P592 on all 435 then in the main database: none). Cyclooxygenase's item,
+Q410251, carries a MeSH descriptor and nothing that joins to ChEMBL. The
+legacy walk still fails: PTGS1's and PTGS2's protein items are each "part of"
+*Haem peroxidase superfamily*, an InterPro import, and of nothing named
+cyclooxygenase.
+
+**The route taken.** The review the cohort pipeline had deferred,
+`config/cohort1_target_wikidata.json`: one entry per multi-component ChEMBL
+record, naming the Wikidata item it is, or null with the reason it has none.
+It is invariant 15's exception widened from seven assemblies to all of them:
+what is written down is the item, never the title, and
+`resolve_cohort_wikipedia.py` still resolves the article from the item, through
+the same ambiguity check. Candidates were found by searching Wikipedia for each
+ChEMBL name and reading the hits. That is a search for a reviewer, never a
+resolver: nothing is linked that a person did not read. The rule each entry
+was held to:
+
+- **the narrowest English article that covers the whole target and is about
+  that receptor, channel, enzyme, family or complex** — *Cyclooxygenase*,
+  *Adenosine receptor*, *Epithelial sodium channel*, *Proteasome*;
+- **a subunit combination takes the receptor it is a form of**, as the legacy
+  map did for GABA-A: every GABA-A combination takes *GABAA receptor*, a
+  nicotinic one its own article where there is one (*Alpha-4 beta-2 nicotinic
+  receptor*, *Muscle-type nicotinic receptor*) and *Nicotinic acetylcholine
+  receptor* where there is not, an integrin heterodimer *Integrin*, and a
+  CDK–cyclin pair its own article (*Cyclin E/Cdk2*, *Cyclin D/Cdk4*, *P-TEFb*,
+  *Maturation promoting factor*, *CDK-activating kinase*) or else
+  *Cyclin-dependent kinase complex*;
+- **never a structural superfamily, a protein domain, a disambiguation or
+  set-index page, or one subunit's own article.** *Adenosine A2 receptor* is
+  a disambiguation page, so the A2A/A2B family takes *Adenosine receptor*.
+  *Phosphodiesterase 4* is a set index, so PDE4 takes *3′,5′-cyclic-AMP
+  phosphodiesterase*, the page Wikipedia redirects PDE7 and PDE8 to. BET is
+  only a section of *Bromodomain*, an article about a domain, so it is null.
+  The CGRP receptor is null because Wikipedia redirects it to *CALCRL*, one
+  subunit's article and already that subunit's link.
+
+Where the text was the deciding fact it was read: *Lanosterol 14α-demethylase*
+is "the animal version", so Aspergillus's three CYP51s take *Sterol
+14-demethylase*; *KCNQ channels* says KCNQ2–5 form the M-channel, so the
+KCNQ2/KCNQ3 heteromer takes it over *M current*, an article about the current.
+
+**Measured.** All 454 records under 376 names are reviewed. 410 name one of
+168 items, each holding exactly one English article on 2026-10-18, and all 410
+resolved, with none ambiguous and none failed. 44 are null: 27 pair different
+proteins with no article of their own (FXR/RXRα, PD-1/PD-L1, HDAC3/NCoR1), 12
+are assemblies whose subunits alone have articles (IKs, as the legacy map
+recorded, LSD1/CoREST, NS3/NS4A), and 5 are the single cases above or ABL,
+SV2 and CDK5/p35. The map agrees with all seven legacy entries, IKs's null
+included, and a test holds that agreement. It is not an independent check:
+the legacy map was read first, and it set the subunit-combination rule.
+
+**Not done.** The two toxoid targets ChEMBL gives no accession stay NULL;
+they are vaccine antigens, not families.
+
+**Then the non-human records.** 1,249 non-human SINGLE PROTEIN records had no
+link, the dog's Cyclooxygenase-2 among them, because Wikidata holds human
+proteins and their own accessions reach none. 688 of them are D20-matched to
+a human protein, and for 81 of those the human protein is not in the
+catalogue, so the viewer could not borrow the human record's link alone. The
+user's call: show the human protein's article, and say it is the human one's.
+The backfill resolves it from the matched human accession, by the same query
+and ambiguity rule as any target, into its own column,
+`targets.human_wikipedia_url`, so that `wikipedia_url` still means the
+record's own. On the v3.5.0 build, 653 of 689 matched records were lent one
+from 465 human proteins: 4 were refused as ambiguous, and 32 human proteins
+have no article. Where the human protein is also a catalogue record, the lent
+article equals that record's own in all 584 cases. The page labels it
+*Wikipedia: human OPRM1* and explains it on hover
+([VIEWER](VIEWER.md), 2026-10-18). Because it reads `target_orthologues`, the
+Wikipedia backfill now runs after the orthologue backfill.
+
+## 2026-10-16 — four open lists, and the names that point at the wrong compound
+
+D27 entered every compound Wikipedia, Wikidata, TripSit or PsychonautWiki
+carries that is in ChEMBL and outside the clinical catalogue: 920 list entries
+at 665 parents. Most came with a structure: 715 of Wikipedia's and Wikidata's
+entries were placed by the InChIKey on the article's own Wikidata item, and
+118 more by an FDA UNII InChIKey. TripSit and PsychonautWiki give names only,
+so their entries are where the errors were. 72 placements not made by an
+identifier were reviewed against ChEMBL's structure, as D25's were, and two
+identifier placements were reviewed on a read-over:
+
+- **A synonym ChEMBL gives the wrong compound.** ChEMBL lists *2C-B-AN* — a
+  2C-B prodrug, brolphetaminil — as a synonym of isoaminile, an antitussive with
+  no bromine and no methoxy group; and *G-4*, a homologue of the DOx
+  psychedelics, as a synonym of dichlorophen, an antimicrobial. *αMT* matched
+  3-amino-3-deoxythymidine as *AMT* did for D25, and *Aleph*'s squashed name
+  matched dinitolmide. All refused.
+- **ChEMBL's name for a structure is wrong.** CHEMBL481044 is drawn as
+  myristicin (an allyl, a methoxy and a methylenedioxy) and named ELEMICIN,
+  which is the trimethoxy compound. FDA's UNII for myristicin reaches it by
+  InChIKey, so the placement is right and the entry is kept with a note; the
+  page shows ChEMBL's name, which is the error. Elemicin's own structure is
+  CHEMBL458690, unnamed; the name seems to come from a 1999 paper whose
+  "Elemicin" was registered at the myristicin structure. Item 2 of
+  [CHEMBL-ERROR-REPORT.md](CHEMBL-ERROR-REPORT.md), not yet sent.
+- **A deuterated drug folds onto its parent.** ChEMBL files deupsilocin as a
+  form of psilocin, so Wikipedia's *Deupsilocin* reached psilocin by exact
+  name. Refused: the article is about the deuterated drug, and psilocin is
+  listed under its own name. Two Wikidata items for deuterated mescaline
+  (*Beta-D*, *4-D*) reached mescaline by skeleton and were refused too.
+- **A name with no stereochemistry, three ways.** Where ChEMBL holds only
+  single enantiomers of a racemate (MT-45, 6-MAPB, 4-methylaminorex, MPMI,
+  DragonFLY and 10 more compounds), refused as D26 refused 5-MAPB. Where TripSit's or
+  PsychonautWiki's bare name reached several stereoisomers and Wikipedia's
+  article placed the same compound by InChIKey (3,4-CTMP, 4F-MPH, U-47700),
+  corrected to that record. U-47700 was refused in D25 for reaching two
+  enantiomers; Wikipedia's item draws one of them, and that is now the
+  identifier it enters by.
+
+19 were kept, 5 corrected and 50 refused, each refusal in its list's
+`considered_and_not_listed`. The decisions are the `REVIEW` table in
+`analysis/wiki_comparison/open_listings.py`, which stops on any placement it
+does not name.
+
+## 2026-10-16 — a label page with no title was read as no label, and a "Phase 4 trial" was not one
+
+Two of D23's assumptions, both found by measuring the gaps it named
+([D23-GAPS.md](D23-GAPS.md); D24 in [COHORT-2.md](COHORT-2.md)).
+
+**An empty title is not a missing page.** `parse_label` set `found` from the
+page's `<title>`, because DailyMed answers an unknown set id with its search
+page, titled "DailyMed". But 618 real label pages in the release have an empty
+title, and their marketing tables parse. `verdict` treats a label that is not
+`found` as unreadable, so 25 records stood `unresolved` on labels that said
+ANDA, NDA or monograph plainly. It never made a record wrongly *unapproved* -
+`unapproved` needs every label read - so the error only ever left ChEMBL's
+Approved standing for want of a reading, which is the safe direction, and is
+why nothing looked wrong. `found` now means the page names the set id asked
+for: the search page never does, and a label page names its own several times.
+D23's note said the 35 unresolved were mostly "a set id DailyMed no longer
+serves"; the cache showed one. The note was a guess written as a finding.
+
+**ChEMBL's 4 on a trial-only record is not the trial's phase.** D23 kept an
+Approved resting on ClinicalTrials.gov alone, on the reasoning that a Phase 4
+trial is post-marketing, and the hover said "a Phase 4 (post-marketing)
+trial". The registry's phases were already in `trial_status`, and nobody read
+them: of 884 such records in the release, 31 cite a trial the registry calls
+Phase 4. The rest cite Phase 3 (508), Phase 2 (280), Phase 1 (60), Early Phase
+1 (4), or nothing the registry returns a phase for (1). Where ChEMBL got its 4
+is not recorded. They now take their trials' furthest registry phase, the rule
+D23 already applied to unapproved labels.
+
+The lesson is the log's recurring one, applied to this project's own words: a
+hover that says what a source is ("a Phase 4 trial") is a claim, and was
+checked only where it was convenient.
+
+---
+
+## 2026-10-15 — the same review, on the psychedelics section
+
+D26 listed the sci-wiki's *Psychedelics & entactogens* section the way D25
+listed two others: 81 placements, the 34 not made by an exact ChEMBL name or an
+FDA UNII InChIKey each compared with ChEMBL's structure. Two kinds of error D25
+had not met:
+
+- **An abbreviation is a name for two compounds.** PubChem's name service took
+  *MDEA*, the entactogen, to N-methyldiethanolamine, an industrial amine with
+  the same initials. ChEMBL draws MDEA at CHEMBL126279. Corrected by hand.
+- **A racemate's name filed on one enantiomer.** ChEMBL lists *Limonene*,
+  *Limonene, dl-* and *Dipentene* — the last two names of the racemate — among
+  D-LIMONENE's synonyms, so the name landed on the (R)-enantiomer; ChEMBL's flat record, CHEMBL15799, is what a name with no
+  stereochemistry means. Corrected. The reverse also happened: 5-MAPB and MDPV
+  are racemates ChEMBL holds only as single enantiomers, and were refused
+  rather than given one.
+
+Ginkgolide B, LSZ and Ariadne reached two to eight stereoisomers by skeleton,
+and *Grayanotoxin* names a family; all four were refused. Six refusals in all,
+in `considered_and_not_listed`.
+
+## 2026-10-15 — isometheptene was Approved on labels FDA calls unapproved
+
+The user asked how isometheptene was approved for migraine; the page said
+Approved and nothing else. ChEMBL's only evidence was five DailyMed labels,
+and every one gives its marketing category as UNAPPROVED DRUG OTHER, under
+FDA's notice that "this drug has not been found by FDA to be safe and
+effective, and this labeling has not been approved by FDA". They are
+isometheptene / dichloralphenazone / acetaminophen and isometheptene /
+caffeine / acetaminophen products, their marketing ended between 2014 and
+2018, and they say themselves that FDA, on a National Academy of Sciences –
+National Research Council review, classed migraine as only a "possibly"
+effective use.
+
+**The shape is the recurring one.** `max_phase_for_ind = 4` parses as
+Approved and is stored as Approved, and ChEMBL means "a US label names this
+disease" by it as often as "a regulator approved it" — 32,892 DailyMed
+references against 718 FDA and 1,787 EMA behind the release's phase-4
+records. The label's own Marketing Category says which kind of label it is.
+
+**Measured.** 3,770 phase-4 records rest on labels alone; 141 (on 64
+molecules) on labels every one of which is unapproved, 35 on labels that could
+not be read. In this catalogue it moved 15 diseases and two members
+(isometheptene, sodium citrate). D23 in [COHORT-2.md](COHORT-2.md) has the
+counts and the rule.
+
+**Three things that went wrong on the way.**
+
+- **DailyMed's API does not serve archived labels.** `/services/v2/spls/{id}.xml`
+  answers 404 for all five of isometheptene's; the label page
+  (`drugInfo.cfm?setid=`) serves current and archived alike, and is what is
+  read. A set id DailyMed does not hold gets its search page back with status
+  200, which the parser recognises by its bare title rather than counting as a
+  label with no category.
+- **Some current labels state no category at all** — lithium carbonate's has
+  no marketing section in the page or in the SPL itself. A label that states
+  nothing is `unresolved`, never `unapproved`: absence is not an answer,
+  invariant 10's rule.
+- **The first parser matched whole tables**, and a non-greedy match starting at
+  an enclosing layout table swallowed the first marketing table inside it — a
+  label's first product could go unread. A fixture shaped like the real page
+  caught it; the parser now reads from each "Marketing Category" header to the
+  end of its own table, and the cached pages were parsed again.
+
+**And one rule taken back.** A Phase 4 trial alone was also read as no
+approval, and demoted desipramine's major depression and lidocaine's
+neuralgia, both approved uses. A post-marketing trial usually studies the
+approved use; it stays Approved, named on hover.
+
+## 2026-10-14 — a list placed by name, entered by identifier
+
+D25 entered the molecules two sections of the sci-wiki list. The list had
+already been placed against ChEMBL by name for a measurement
+(`analysis/wiki_comparison/`), which invariant 15 allows only because nothing
+there reached the database. Entering them reached it, so the 232 placements
+were reviewed one by one against what ChEMBL draws at the id, and only the id
+was written into the policy. What the review found is what a build reading the
+names would have carried:
+
+- **BPAP is two compounds.** PubChem's name service took the wiki's
+  benzofuranyl propylaminopentane, a monoaminergic enhancer, to bisphenol AP,
+  an industrial bisphenol. Refused.
+- **A synonym on a salt's record took the name from its own parent.**
+  ChEMBL lists "Deoxycorticosterone" among the synonyms of DESOXYCORTICOSTERONE
+  ACETATE (CHEMBL1200542), so an exact synonym match landed on the acetate. The
+  free steroid is a parent of its own, CHEMBL1498. Corrected by hand, with the
+  reason beside the entry.
+- **A name that reaches two parents names neither.** Dichloropane,
+  methylnaphthidate, hydroxydione, U-47700 and 4-methylpregabalin each reach two
+  or three ChEMBL parents, drawn as different stereoisomers or flat. Picking
+  one would be a guess at which isomer the wiki means. All refused (invariant 6).
+- **A skeleton match is a different compound when ChEMBL draws the stereo.**
+  Five matches on the InChIKey's first block alone landed on a record drawn as a
+  different stereoisomer, and were refused. LY451646 and MRZ-9547 are single
+  enantiomers that matched their racemates, which are entered anyway under
+  their own names. Three skeleton matches were kept, because ChEMBL's only
+  record draws no stereo at all.
+
+Every refusal is in the policy's `considered_and_not_listed` with its reason,
+and a test fails if a refused name is ever listed. The build never reads a
+name: a listing whose id is not in ChEMBL stops it.
+
+## 2026-10-14 — GtoPdb's cache was not GtoPdb's file
+
+Bumping the GtoPdb pin to 2026.3.1, the backfill's cached copy had a different
+sha256 from the same files fetched with `curl` a few minutes earlier, and was
+longer (545 bytes in `interactions.csv`, 600 in `ligands.csv`). GtoPdb serves its CSVs as `text/csv` with no charset;
+`requests` then decodes the body as ISO-8859-1, as HTTP's old default says, and
+the backfill wrote that text back out as UTF-8. Every non-ASCII character was
+doubled into two: `(3β,5β,17β)` in a ligand's synonyms became `(3Î²,5Î²,17Î²)`.
+
+**What it would have reached.** Only a dry run read the garbled files, so
+nothing was written. Every field the backfill matches on (InChIKey, ChEMBL id,
+UniProt accession, Type, Action) is ASCII, so no match would have changed. One
+stored field is not: seltorexant's primary-target row at OX2 carries the
+action comment "70–320-fold selective", whose en dash would have been stored
+as three characters of noise. Action comments are not exported, so it would
+have stopped at `gtopdb_interactions`. And the manifest would have recorded
+the sha256 of a file no download of the release reproduces, so the one check
+that says "this is the file GtoPdb published" could never pass.
+
+**2026.3 was not affected.** Its cache is clean UTF-8, with the same 218 and
+210 non-ASCII characters as 2026.3.1's and none of the doubled pairs the
+re-encoding leaves. The code was the same, so the server's answer differed at
+that download, perhaps naming a charset; it cannot be asked now.
+
+**Fixed.** `ensure_files` caches `r.content`, the bytes as served, and decodes
+them as UTF-8 only to read the version line; a test holds a "β" through a
+download. 2026.3.1's cache matches `curl` byte for byte.
+
+**The lesson** is invariant 1's, one layer down: a byte is only GtoPdb's if
+nothing between the server and the disk decided what it meant.
 ---
 
 ## 2026-10-14 — label effects from OnSIDES, and a hierarchy OnSIDES does not carry
@@ -641,7 +943,7 @@ identifier at each step. InChIKey goes to the PubChem compound(s); PubChem gives
 the MeSH action *concept* ids it lists for the compound; NLM's own descriptor
 file for a pinned year (`desc2026.gz`, cached in `db/cache/`, its sha256 in
 `build_manifest`) gives each concept's descriptor and tree positions.
-`class_labels.parents` carries the hierarchy inside the action branch (D27),
+`class_labels.parents` carries the hierarchy inside the action branch (MeSH tree D27),
 from depth 4 down, so a drug filed as a tricyclic is also under "Antidepressive
 Agents". The one link that is not ours to check is PubChem's own
 compound-to-MeSH match, which PubChem makes from names and registry numbers.

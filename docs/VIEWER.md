@@ -122,11 +122,72 @@ molecules and 10,789 edges, and its banner states the whole cost including the
 43 molecules left with nothing to draw. (Counted per protein node since
 2026-10-10; per record it was 1,036 of 2,063.) It is off by default, and it is a
 *drawing* rule rather than an eligibility rule: `claimVisible` answers "is this
-in the picture" and only the four claim filters may change that answer, while
+in the picture" and only the eligibility filters may change that answer, while
 this one answers "is this drawn". The panel's lists, the similarity ranking,
 the gap statements and search all still read the whole catalogue, so nothing
 becomes unfindable by being undrawn — caffeine's 59 visible claims and 265
 shared-target rows are identical with it on and off.
+
+**The same control can draw only the selection's neighbourhood** (2026-10-18,
+at the user's request): the selection, what it acts on, and the other molecules
+acting on those, with nothing else on the canvas. It is the one-neighbourhood
+drawing this page gave up as its default, brought back as an opt-in third
+setting, *Only the selection's neighbourhood*, and the reasons it stopped being
+the default are why it stays off: every selection re-solves the layout, so
+nothing holds still between two of them, and where a neighbourhood sits among
+the others cannot be seen. Four things decide how it behaves.
+
+- **It draws exactly what the highlight lights.** `focusOn` asks `highlightOver`
+  — the function behind `highlightFor`, run on the whole picture rather than
+  the drawn one — and keeps those nodes and lines, so "focused" and "lit" can
+  never disagree: a molecule brings its targets and every molecule on them
+  (hops 0–2), a target its molecules and every other target they act on (a
+  family, complex group or complex its components and their molecules too;
+  *Selecting a group*, below), a pair its overlap, a condition or class
+  its members and their targets. Like the periphery it is a drawing rule, and
+  the panels, ranking, gaps and search are untouched; the claim pass is cached
+  apart (`claimGraph`), so a selection does not re-read the claims.
+- **Under it alone, the selection is in `graphSignature`.** Everywhere else a
+  selection writes opacity and never rebuilds. A selection that redraws goes
+  through the busy line a filter change uses (`refreshSelection`), because
+  returning to the whole network costs what a filter change at the defaults
+  does: about 13 s in headless Chrome against the 2,450-entry payload, where a
+  neighbourhood redraw took about 2 s with the settle (caffeine: 391 molecules,
+  32 targets, 690 lines of 18,866).
+- **A line keeps its molecule's neighbourhood**, and retained claims are their
+  molecule (`focusSubject`): clicking a line to read its evidence must not take
+  every other line away.
+- **The view follows the neighbourhood.** Its nodes are solved from wherever
+  they sat before, which can be off screen, so a re-solve that draws or leaves
+  a focused picture ends in an animated `fit` (`fitAfterSolve`), unlike every
+  other re-solve, which keeps the reader's view. **Leaving it puts the whole
+  picture back** (`unfocusedPositions`, 2026-10-18): carried over as it stood,
+  the neighbourhood — solved among only itself, and spread to match — stayed in
+  the middle with a square of empty space round it, and the rest of the
+  catalogue, which had no positions left, was packed outside that (reported by
+  the user). Every node's place in the whole picture is kept from the moment
+  focus begins, and handed back when it ends; inside focus, a node the last
+  neighbourhood did not draw starts from it too. A page opened on a focused
+  link never drew the whole picture, so it lays that out afresh, with the first
+  layout's budget.
+
+With nothing selected, or a selection the filters leave off the canvas, there
+is nothing to focus on: every target is drawn, the counts box has no *Drawn*
+line, and the control says why in a note that is not counted as a cost.
+
+**Trial sites is the one eligibility filter about the molecule rather than the
+claim** (2026-10-13, a proposal on the `worktree-foreign-trials` branch,
+[FOREIGN-TRIALS.md](FOREIGN-TRIALS.md)). It keeps the molecules whose Phase 1+
+in-scope trials, as ChEMBL cites them, list a site in the US, anywhere, or
+outside the US, and drops every claim of the rest. It is in `claimVisible`
+rather than a drawing rule because the question it answers — "what does the
+picture look like on trials outside the US alone?" — is not answered by a
+canvas that still ranks the dropped molecules as neighbours. Its default moves
+nothing; it is offered only where the payload carries sites; and its banner
+counts the hidden in molecules, split into those with no trial ChEMBL cites
+(an ATC N member, a label) and those whose trials are on the other side, which
+are two different facts. On D21's build the four settings keep 2,452, 1,528,
+2,087 and 1,501 molecules.
 
 **What a frame costs, and the two things that were paying for nothing.** The
 page was slow to zoom and slow to drag, and the reason was not the size of the
@@ -181,7 +242,7 @@ it changes no pixel, which is asserted rather than argued — 13 views across fo
 positions and three zooms paint byte-identical canvases culled and unculled.
 
 It is **not** a filter and must never be described as one. `claimVisible` still
-answers what is in the picture and only the four claim filters may change that
+answers what is in the picture and only the eligibility filters may change that
 answer; the canvas control still answers what is drawn; this answers neither. It
 answers what is on screen, which is a question about the window and not about
 the data, and the panel lists, the ranking, the gap statements and search cannot
@@ -756,7 +817,8 @@ lines are drawn and carry no spring. When the solve settles, `unitPlacement`
 packs each unit on a sunflower spiral round its anchor — complex groups in the
 middle, subunits on the rim where the lines arrive — then **guarantees** the
 disc holds only its own nodes: discs are separated largest first, and any other
-node inside one is moved to just past its rim. Sizing the anchors alone left 148
+node inside one is moved to just past its rim (since 2026-10-18 inside
+`spreadNodes`, below, which also spaces the nodes it moves). Sizing the anchors alone left 148
 unrelated nodes inside discs and 2 discs overlapping; the pass leaves 0 and 0,
 measured in Chrome across two fresh layouts and after two filter changes. Every
 move is glided by the transition that follows. Dragging any node of a unit
@@ -768,12 +830,121 @@ behind. `getPositions()` without arguments leaves hidden nodes out, which is why
 Nothing counted changes: the same edges, hops, panels and similarity scores
 with units on or off (top-1 38.2%, MRR 0.5105 either way).
 
-**Selecting a complex lights its own subunits** (2026-09-25, at the user's
-request), wherever they are drawn, so what a receptor is made of can be read off
-the canvas without opening its Components list. They are lit and not treated as
-the selection's targets: their own molecules and lines stay dark. Complexes and
-complex groups only; a family's members are separate proteins, not its parts. "Protein groups:
-draw separately" turns units and lines off together.
+**The middle of the canvas was a grid, and the solver was drawing it**
+(2026-10-18, reported as "a hashtag type pattern, where molecules are being
+drawn on top of one another"). Zoomed out, the molecules at the centre stood in
+rows and columns. A force layout has no reason to prefer the axes, so it had to
+be something in vis itself, and it was `barnesHut.avoidOverlap`. vis applies it
+by taking the node's own radius off its distance to each quadtree cell's centre
+of mass — a cell standing for many nodes, not one — so the push a node feels
+jumps wherever it crosses one of the tree's axis-aligned cell boundaries, and in
+the crush at the centre nodes settled along them. Measured in headless Chrome by
+comparing how tightly the middle half's x and y values bunch against the same
+nodes read on 45° axes (1.0 is no preference; a grid lifts only the first):
+
+| `avoidOverlap` | axis / diagonal | nodes within 20 of another |
+|---|---|---|
+| 1 | 1.45 (a square lattice, plain on screen) | 1,720 |
+| 0.35 (as shipped) | 1.02–1.03, two runs | 1,398–1,446 |
+| 0 | 0.98 | 654–707 |
+
+Lowering `theta` to 0.25, which makes the tree's approximation more exact,
+changed nothing (1.03), which is what put it on the overlap term rather than
+the approximation. So the solver's overlap avoidance is off, and spacing is
+done after the solve by `spreadNodes`, which has no preferred direction: any
+two nodes closer than `NODE_SPACING` (32 canvas units; a dot is 10 across the
+radius) are pushed apart along the line between them, half each, and any node
+inside a disc is moved past its rim, repeated until nothing moves or 200 passes
+have run. Two nodes on one spot part at a golden-angle step of their own, never
+along an axis. The rim step used to be the whole of the old pass, and it put
+every intruder on the same circle, which stacked them there.
+
+Off alone, the middle was still a carpet: molecules held together by their
+springs to the same hub targets, nothing between them. Repulsion went from −6500
+to −20000 with the change, chosen over a weaker central gravity (0.03 changed
+almost nothing) and over a wider spacing with milder repulsion (which only
+moved more nodes further):
+
+| | room per node, middle half | moved by `spreadNodes` | 9 in 10 moved by at most |
+|---|---|---|---|
+| −6500 | 1,230 square units | 1,982 of 4,151 | 59 |
+| −12000 | 1,786 | 1,260 | 39 |
+| −20000 | 2,394 | 826 | 7 |
+
+The layout is about 40% wider for it, which is the spread. Every node is at
+least 20 apart after the pass, on both seeds measured, against a third of the
+canvas before; the first solve's pass takes about 0.4 s, a filter change's 20 to
+180 ms, and "draw separately", which has no discs, is spaced too. These were
+measured against a local payload of 4,287 canvas nodes at the open defaults,
+not the published build; the solve is not reproducible run to run even with
+`Math.random` seeded, so each figure is one run unless it says two.
+
+**And the middle was a knot of unrelated hubs** (the same day, reported as "a
+lot of unrelated proteins bunched together with molecules around them"). With
+the grid gone the centre could be read, and what it held was the 40
+most-measured proteins, nearly all of them inside the inner 5% of the canvas:
+hERG (331 molecules), ADRA1A, DRD2 and DRD3, the three monoamine transporters,
+the opioid receptors, the CYPs, COX-1, the bile-salt pump, the progesterone and
+androgen receptors. Every mass in the solver was 1, so a protein with three
+hundred lines was pulled toward the middle by three hundred springs, and all of
+them ended up there side by side, joined by nothing but the promiscuous
+molecules that touch them all (1,609 of the 1,770 pairs among the innermost 60
+targets share a molecule), which sat in a ring round the knot.
+
+`physicsMasses` gives each body a mass of its spring count to the power
+`HUB_MASS_EXPONENT` — ForceAtlas2's degree weighting, in vis's terms. vis
+multiplies repulsion by both masses and divides each body's forces by its own,
+so hubs repel one another hard and are dragged little by their own lines. It
+was judged on two things at once, because pulling hubs apart is easy and
+pulling a hub away from what it is related to is the failure: how far apart
+the 40 hubs sit (median distance to the next hub, over the median radius R),
+and how related a node is to its nearest neighbour of the same kind on the
+canvas (Jaccard of their sets of lines, over nodes with two lines or more).
+
+| exponent | hub spacing / R | nearest protein / molecule relatedness | R |
+|---|---|---|---|
+| none | 0.024–0.025 | 0.089–0.100 / 0.074–0.077 | ~1,280 |
+| 0.35 (adopted) | 0.034–0.039 | 0.083–0.099 / 0.078–0.087 | ~1,900 |
+| 0.5 | 0.041–0.052 | 0.084–0.091 / 0.071–0.077 | ~2,300 |
+| 0.5, repulsion −10000 | 0.038–0.051 | 0.083–0.090 / 0.070–0.076 | ~1,890 |
+| 0.75 | 0.069 | 0.076 / 0.066 | 3,297 |
+| 1 | 0.156 | 0.050 / 0.040 | 4,478 |
+
+Ranges are three seeds, single figures one. 0.35 breaks the knot and is the one
+setting that does not cost relatedness; past 0.5 hubs leave for the edge with
+their molecules strung out behind them. (The same measure puts the layout as
+shipped before this morning at 0.046 / 0.045: the spacing pass and the
+stronger repulsion had already doubled it.) The layout is about 45% wider again,
+the first solve's spacing pass now has 262 nodes to move rather than 826 because
+the weighting has done most of it, and a filter change still settles in 8.9 s.
+"Hubs in the inner 5%" was measured too and is too noisy to quote: 13 to 21 of
+40 for the same setting on three seeds.
+
+**Selecting a group lights its components and the molecules on them**
+(2026-10-18, at the user's request), wherever they are drawn: a family, a
+complex group or a complex. Selecting the 23-member *3',5'-cyclic
+phosphodiesterase* family used to light its own two molecules and nothing that
+said what the family is; it now lights its 19 drawn PDE nodes, the 183
+molecules acting on them, and the 19 membership lines between them. Lit, never
+merged: each lit line is still a claim at its own protein, and the target
+panel, the ranking and the counts read the family's own claims as before. It
+replaces two narrower rules. From 2026-09-25 a complex lit its subunits alone,
+with their own molecules and lines left dark, and a family lit nothing, on the
+argument that its members are paralogues rather than parts; both read better
+as the set ChEMBL files the record as. "Protein groups: draw separately" turns
+units and lines off together.
+
+**A target has a second hop** (2026-10-18, at the user's request): the other
+targets its molecules act on, at the second hop's opacity, mirroring a
+molecule's. It had none, on the argument that every other target of every
+molecule binding it is most of the catalogue. Measured on the default canvas
+(2,454 drawn targets), that holds only at the hubs: the median target's second
+hop is 55 targets, the 90th percentile 451, the 99th 847, and ADORA3's 1,243.
+A group's second hop starts from its components' molecules too, so the PDE
+family's is 1,136 targets, and under *Only the selection's neighbourhood* it
+draws 183 molecules, 1,156 targets and 4,537 of the 18,866 lines (caffeine's
+neighbourhood is 690). A molecule on those targets is a third hop and stays
+dark.
 
 **A band round the selection's groups was shipped and taken off again**
 (version 12, removed 2026-09-25 at the user's request: "adding too much to an
@@ -1544,6 +1715,21 @@ history or current reads without opening it. That span counts only dates the
 registry reports as having happened: a planned end, often long past on a
 trial nobody updated, would stretch it to a year nothing reached.
 
+**A trial names the countries it had sites in, beside its id** (2026-10-15, at
+the user's request, on the `worktree-foreign-trials` branch). Trimipramine's
+indications said its Phase 1+ trials ran outside the US only, in Germany, and
+not which trial that was; the line now reads "NCT02374567 (Germany) phase 3,
+2015–2017". The countries are the registry's own `trial_status.countries`
+(`schema_version` 4), exported per trial at a fixed index after the years. Of
+14,829 trials, 10,831 list one country and some up to 47, so three are named,
+the US first because it is the line the trial-sites filter draws, the rest
+counted ("+5 more") with the whole list as the hover. The 1,442 records that
+list no site say "(no sites listed)" — a gap in the record, not "nowhere" — and
+a row fetched before sites were asked for says nothing. It costs 0.31 MB of
+the startup file, nearly all of it the 1,999 distinct joined lists;
+interning each country instead would save about 30 KB, not worth a second
+format.
+
 ChEMBL's "Approved" is **not** US-only, which was said wrongly once in
 conversation: of the 1,376 approved indication records here, 122 rest on an EMA
 reference alone and 276 on ATC alone.
@@ -1667,6 +1853,22 @@ mostly barbiturates, are approved in ChEMBL with no approved indication filed
 at all, and the row says *ChEMBL records no condition it is approved for*
 instead of implying one. Nothing is added where a listed condition is itself
 approved.
+
+**And a phase with nothing behind it says so** (2026-10-17, at the user's
+request). Cyclazodone read *reached phase 2, not approved for any disease* over
+an empty Indications section. ChEMBL 37 gives it `max_phase` 2 with no
+`drug_indication` row, no mechanism and no activity, and its only source record
+is the WHO INN list; ClinicalTrials.gov registers no study under either of its
+INNs and PubMed holds no human study. That is ChEMBL's pattern rather than one
+record: 2,752 parents in the release are phase 2 with no indication and the INN
+list as their only drug source, and about 1,900 more add USAN. Here 163 entries
+carry a phase below 4 and no disease at all, and every one ChEMBL itself puts at
+phase 2 or 3 has an INN or USAN. The row now reads *ChEMBL records phase 2 but
+cites no trial or disease for it*: it keeps ChEMBL's number, because a name
+being recommended is some sign of development, and stops saying the molecule
+reached a phase nothing here shows. A molecule whose diseases all sit outside
+the scope keeps *reached*, since ChEMBL does file a phase under a disease for
+it, and an Approved with no condition keeps the line above.
 
 Bromazepam itself no longer needs the line. The finding behind it was that
 MeSH files **Anxiety** under Behavior (F01) and not Mental Disorders (F03),
@@ -1966,6 +2168,31 @@ Nothing counted changes: the score, the ranking and the pair panel read
 `proteinKey` as before (top-1 38.7%, MRR 0.5119). What moves is the picture:
 caffeine lights 32 protein nodes where it lit 43 records, and its second hop
 reaches every molecule at those proteins in any species — 270 where it was 265.
+
+**A non-human record links its human protein's article, and says so**
+(2026-10-18, at the user's request: the human analogue "is what makes them
+interesting targets"). Wikidata holds human proteins, so a rat or dog record's
+own accession almost never reaches an article: 1,249 non-human single-protein
+records had none, the dog's Cyclooxygenase-2 among them, and a rat-only
+protein opened onto a panel with no way out to what the protein is. The
+Wikipedia backfill now resolves, for each record D20 matched, the human
+protein's article from the human accession, by the same query as any target,
+into `targets.human_wikipedia_url`. That is 653 of 689 matched records; where
+the human protein is in the catalogue too, the lent article is the human
+record's own in every one of 584 cases. The record's own `wikipedia_url` is
+never written with it, so the page can tell the two apart:
+
+- **The link names whose article it is.** *Wikipedia: human OPRM1*, with the
+  human protein's symbol (the matched record's own, upper-cased, where the
+  catalogue holds no human record). Plain *Wikipedia* would read as the rat
+  receptor's page.
+- **The hover says why.** English Wikipedia has no article for the rat protein
+  itself; this one is on the human protein it was matched to by sequence, the
+  same protein in another species. It is a link and never a claim, the same
+  line D20 draws for evidence.
+- **The record's own article always wins**, and the two are never offered
+  side by side. In a folded protein panel the rat section repeats the human
+  section's article under the human label. That is redundant, and accurate.
 
 **A "mostly common targets" tag was built and taken out before shipping.** It
 was meant to mark a rank resting on screening targets like hERG. Read off the

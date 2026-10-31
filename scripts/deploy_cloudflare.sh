@@ -8,7 +8,7 @@
 # application whose Workers destination covers the Worker's preview URLs).
 #
 # Ships five paths and nothing else (docs/HOSTING-REVIEW.md): index.html,
-# vendor/, graph.data.js, gtopdb.data.js and evidence/, plus a _headers file
+# vendor/, graph.data.js, gtopdb.data.js, drugcentral.data.js and evidence/, plus a _headers file
 # and NOTICE as NOTICE.txt, the data's licences served beside the data.
 # The two .data.js files come from one export and go together. The data is
 # gitignored, so this uploads what is on disk now, after both suites and the
@@ -59,14 +59,14 @@ node --test "tests/*.test.mjs" >/dev/null 2>&1 \
   || { echo "viewer suite failed" >&2; exit 1; }
 python3 scripts/cohort_report.py --check-status
 
-[ -s viz/graph.data.js ] && [ -s viz/gtopdb.data.js ] && [ -d viz/evidence ] \
-  || { echo "viz/graph.data.js, viz/gtopdb.data.js or viz/evidence/ missing; run the export" >&2; exit 1; }
+[ -s viz/graph.data.js ] && [ -s viz/gtopdb.data.js ] && [ -s viz/drugcentral.data.js ] && [ -d viz/evidence ] \
+  || { echo "viz/graph.data.js, viz/gtopdb.data.js, viz/drugcentral.data.js or viz/evidence/ missing; run the export" >&2; exit 1; }
 
 STAGE=$(mktemp -d)
 trap 'rm -rf "$STAGE"' EXIT
 SITE="$STAGE/assets"
 mkdir "$SITE"
-cp viz/index.html viz/graph.data.js viz/gtopdb.data.js "$SITE"/
+cp viz/index.html viz/graph.data.js viz/gtopdb.data.js viz/drugcentral.data.js "$SITE"/
 cp -r viz/vendor viz/evidence "$SITE"/
 cp NOTICE "$SITE/NOTICE.txt"
 

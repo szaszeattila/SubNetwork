@@ -326,79 +326,77 @@
     <button id="back-btn" type="button" disabled
             title="Nothing to go back to">‹ Back</button>
     <button id="clear-btn" type="button"
-            title="Select nothing: light no neighbourhood and show the whole network at rest (Esc)">Clear selection</button>
+            title="Select nothing and show the whole network at rest (Esc)">Clear selection</button>
     <button id="reset-btn" type="button">Reset</button>
     <details id="about">
       <summary>About</summary>
       <div id="about-body">
         <h4>What this is</h4>
-        <p>A map of what drugs developed for neurological and psychiatric
-          conditions, and a few reference molecules such as theobromine, act
-          on: the proteins, how each molecule acts there (agonist,
-          antagonist, inhibitor, …), and how much published evidence stands
-          behind each claim. It is drawn from public research databases and is
-          exploratory and educational.</p>
+        <p>A map of what drugs for neurological and psychiatric conditions, and a
+          few reference molecules such as theobromine, act on: the proteins, how
+          each molecule acts there (agonist, antagonist, inhibitor, …), and how
+          much published evidence backs each claim. Built from public research
+          databases; exploratory and educational.</p>
         <h4>Not medical advice</h4>
         <p>Nothing here is medical, dosing or safety guidance. Do not start,
           stop, switch or combine any medicine because of this page; ask a
           doctor or pharmacist.</p>
         <p>This page does not cover interactions between drugs. Enzymes that
           break drugs down, such as CYP2D6, are drawn as targets like any
-          receptor: two molecules sharing one were both measured there, which
-          says nothing reliable about taking them together, and a missing
-          line does not mean they are safe together.</p>
+          receptor: two molecules sharing one says nothing about taking them
+          together, and a missing line does not mean they are safe together.</p>
         <h4>What "similar" means here</h4>
-        <p><b>Closest target profiles</b> ranks molecules by the targets they
-          share, weighted by how well each claim is evidenced, discounted by how
-          common the target is, and divided by how much each molecule does. That
-          is a much weaker claim than "these two drugs act alike". It knows
-          nothing about dose, exposure, or whether a molecule reaches the brain
-          at all, and two molecules close here are not substitutes for each
-          other. It is a place to start looking, not a verdict.</p>
-        <p>"Approved" and trial statuses are as ChEMBL and ClinicalTrials.gov
-          recorded them when this page was built. They may be out of date, and
-          they say nothing about whether a drug is right for anyone.</p>
+        <p><b>Closest target profiles</b> ranks molecules by shared targets,
+          weighted by evidence, discounted when a target is common, and divided
+          by how much each molecule does. It ignores dose, exposure and whether
+          a molecule reaches the brain, so two molecules close here are
+          not substitutes. It is a place to start looking, not a verdict.</p>
+        <h4>Approvals and trials</h4>
+        <p>As ChEMBL and ClinicalTrials.gov recorded them when the page was
+          built, with two corrections: an approval resting only on US labels FDA
+          lists as unapproved reads "Marketed unapproved", and one resting only
+          on trials, none of them Phase 4, reads the trials' phase. Hover over
+          Approved for its source and any withdrawal. Statuses may be out of
+          date, and say nothing about whether a drug is right for anyone.</p>
         <h4>Known limitations</h4>
         <ul>
-          <li>The weights in the similarity score are set by argument, not
-            fitted. Graded against the WHO's ATC drug classes, a molecule's top
-            match shares its class well under half the time.</li>
-          <li>How strongly a molecule binds is not weighed: 7 nM and
-            200 µM count alike.</li>
+          <li>The similarity weights are set by argument, not fitted. Against
+            the WHO's ATC drug classes, a molecule's top match shares its class
+            well under half the time.</li>
+          <li>Binding strength is not weighed: 7 nM and 200 µM count alike.</li>
           <li>There is no brain-expression data; the brain focus comes only
             from which molecules were chosen.</li>
-          <li>Source records can be wrong. One known ChEMBL error is
-            corrected for: ChEMBL files alfuzosin as an alpha-1 agonist, where
-            the label it cites calls it an antagonist, so the page withholds
-            that direction and says so where it would have appeared. No other
-            has been found, which is not the same as there being none.</li>
+          <li>Source records can be wrong. ChEMBL files alfuzosin as an alpha-1
+            agonist where its own cited label says antagonist, so that direction
+            is withheld, and the page says so. No other error has been found,
+            which does not mean there is none.</li>
         </ul>
         <h4>Report an error</h4>
-        <p>If something here is wrong, please open an
-          <a href="https://github.com/szaszeattila/SubNetwork/issues" target="_blank" rel="noopener">issue on GitHub</a>,
+        <p>Open an
+          <a href="https://github.com/szaszeattila/SubNetwork/issues" target="_blank" rel="noopener">issue on GitHub</a>
           naming the molecule, the target and the source that says otherwise.
-          The code and its documentation are
+          The code and documentation are
           <a href="https://github.com/szaszeattila/SubNetwork" target="_blank" rel="noopener">on GitHub</a>
-          too, and contributions are welcome.</p>
+          too; contributions are welcome.</p>
         <h4>This build</h4>
         <p id="about-version">The build date is not recorded in this copy of
           the data.</p>
         <h4>Sources and licences</h4>
         <ul id="about-sources"></ul>
-        <p>The data files this page loads are SubNetwork's adaptation of those
-          sources: records were filtered, salts and forms folded onto their
-          parent molecule, measurements summarised into claims, and the claims
-          scored. As share-alike requires, graph.data.js and the evidence files
-          are licensed under
-          <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>,
-          and gtopdb.data.js under the
-          <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">ODbL 1.0</a>
-          with its contents under
+        <p>The data files are SubNetwork's adaptation of these sources: records
+          filtered, salts and forms folded onto their parent molecule, and
+          measurements summarised into scored claims. As share-alike requires,
+          graph.data.js and the evidence files are
+          <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>;
+          gtopdb.data.js is
+          <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">ODbL 1.0</a>,
+          contents
           <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>;
-          what comes from the other sources keeps their terms. Each file says
-          so in its first lines, and the hosted copy serves the full terms as
-          NOTICE.txt beside them. The code is MIT-licensed. SubNetwork, by
-          Attila Szabo.</p>
+          drugcentral.data.js is
+          <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>;
+          data from the other sources keeps their terms. Each file states its
+          terms in its first lines, and the hosted copy serves them in full as
+          NOTICE.txt. The code is MIT-licensed. SubNetwork, by Attila Szabo.</p>
         <h4>How to cite</h4>
         <div id="about-cite"></div>
       </div>
@@ -417,20 +415,20 @@
       <button id="sidebar-toggle" type="button" aria-controls="sidebar"></button>
     </div>
     <div id="sidebar">
-      <div id="detail-empty" hidden>Nothing selected: the whole network is drawn at rest,
-        with nothing lit and nothing dimmed. Click a molecule, a target or a line,
-        or search, to light its neighbourhood.</div>
+      <div id="detail-empty" hidden>Nothing selected. Click a molecule, a target or a
+        line, or search, to light its neighbourhood.</div>
       <div id="detail" hidden></div>
     </div>
   </div>
-  <div id="disclaimer">Exploratory and educational, built from public research
-    databases: not medical, dosing or safety advice. Molecules that share
-    targets here are not interchangeable drugs, and the page does not cover
-    interactions between drugs. More under About; report an error on
+  <div id="disclaimer">Exploratory and educational, from public research
+    databases: not medical, dosing or safety advice. Molecules sharing targets
+    are not interchangeable, and the page does not cover interactions between drugs.
+    More under About; report an error on
     <a href="https://github.com/szaszeattila/SubNetwork/issues" target="_blank" rel="noopener">GitHub</a>.<span id="data-date"></span></div>
 </div>
 <script src="graph.data.js"></script>
 <script src="gtopdb.data.js"></script>
+<script src="drugcentral.data.js"></script>
 <script>
 /* ---------------------------------------------------------------------------
  * SubNetwork cohort-1 viewer.
@@ -540,7 +538,7 @@ const INTERNED_FIELDS = {
   name: 1, mechanism_of_action: 1, assay_description: 1, conversion_note: 1,
   activity_comment: 1, phase_label: 1, mesh_heading: 1, seed_name: 1, note: 1,
   description: 1, gene_symbol: 1, mechanism_comment: 1, selectivity_comment: 1,
-  gtp_type: 1, gtp_action: 1, selectivity: 1,
+  gtp_type: 1, gtp_action: 1, selectivity: 1, trial_sites: 1, trial_countries: 1,
 };
 
 function decodeTable(rows, fields, strings) {
@@ -577,22 +575,20 @@ function setLoadStatus(text, failed) {
 // chance: the data scripts are plain <script> tags ahead of this one.
 function loadProblem() {
   if (typeof COHORT_DATA === "undefined") {
-    return "The catalogue did not load: graph.data.js is missing, blocked or " +
-      "broken, so there is nothing to draw. That is a failed download, not an " +
-      "empty catalogue. Reloading the page may fix it.";
+    return "The catalogue did not load (graph.data.js is missing, blocked or " +
+      "broken): a failed download, not an empty catalogue. Try reloading.";
   }
   if (typeof vis === "undefined") {
     return "The drawing library (vendor/vis-network.min.js) did not load, so the " +
-      "network cannot be drawn. Search and the panels still work. Reloading the " +
-      "page may fix it.";
+      "network cannot be drawn; search and the panels still work. Try reloading.";
   }
   return null;
 }
 
 function onPageError(event) {
   const what = event && event.message ? String(event.message) : "an unknown error";
-  setLoadStatus("Something on this page failed (" + what + "), so what is drawn " +
-                "or listed may be incomplete. Reloading the page may fix it.", true);
+  setLoadStatus("Something on this page failed (" + what + "); what is drawn " +
+                "or listed may be incomplete. Try reloading.", true);
 }
 
 if (typeof window !== "undefined" && typeof window.addEventListener === "function") {
@@ -626,6 +622,17 @@ if (GTOPDB_FILE && GTOPDB !== GTOPDB_FILE) {
   console.warn("gtopdb.data.js was exported with a different graph.data.js (" +
                GTOPDB_FILE.generated + " vs " + DATA.generated + "); GtoPdb left out.");
 }
+// DrugCentral's part (D24): which regulators approved each molecule, in its
+// own file for its own licence (CC BY-SA 4.0), merged under the same rule as
+// GtoPdb's - only into the catalogue it was exported with. Without it the
+// page names no regulator for an ATC-backed Approved and says so.
+const DRUGCENTRAL_FILE = (typeof COHORT_DRUGCENTRAL !== "undefined") ? COHORT_DRUGCENTRAL : null;
+const DRUGCENTRAL = (DRUGCENTRAL_FILE && DRUGCENTRAL_FILE.generated === DATA.generated)
+  ? DRUGCENTRAL_FILE : { release: null, approvals: {} };
+if (DRUGCENTRAL_FILE && DRUGCENTRAL !== DRUGCENTRAL_FILE) {
+  console.warn("drugcentral.data.js was exported with a different graph.data.js (" +
+               DRUGCENTRAL_FILE.generated + " vs " + DATA.generated + "); DrugCentral left out.");
+}
 const GTOPDB_STR = GTOPDB.strings || [];
 const gtopdbClaims = decodeTable(GTOPDB.claims || [], (GTOPDB.fields || {}).claims || [], GTOPDB_STR);
 if (gtopdbClaims.length) {
@@ -656,6 +663,9 @@ const moleculeByChembl = new Map();
 for (const m of molecules) {
   m.synonyms = (m.synonyms || []).map(function (i) { return STR[i]; });
   m.aliases = (m.aliases || []).map(function (i) { return STR[i]; });
+  m.listings = (m.listings || []).map(function (l) {
+    return { source: STR[l[0]], name: STR[l[1]], slug: STR[l[2]] };
+  });
   moleculeById.set(m.id, m);
   moleculeByChembl.set(m.chembl_id, m);
 }
@@ -871,9 +881,21 @@ function moleculeIndications(id) {
       return (i === null || i === undefined) ? "" : (STR[i] === undefined ? "" : STR[i]);
     };
     const trials = s(r[5]);
+    // D23: what stands behind ChEMBL's phase 4, and where that was only US
+    // labels FDA lists as marketed without approval, those labels.
+    const labels = (r[7] || []).map(function (l) {
+      return { set_id: l[0], title: s(l[1]), labeler: s(l[2]),
+               categories: s(l[3]) ? s(l[3]).split("|") : [],
+               from: l[4] || null, until: l[5] || null };
+    });
+    // D24: the WHO ATC classes an `atc` Approved was read off, and why the
+    // label behind an `unresolved` or `unconfirmed` one went unread.
+    const atc = s(r[8]);
     return { mesh_id: r[0], heading: s(r[1]), phase_label: s(r[2]),
              scope_reasons: s(r[3]), qualifies: r[4],
-             trials: trials ? trials.split("|") : [] };
+             trials: trials ? trials.split("|") : [],
+             basis: s(r[6]) || null, unapproved_labels: labels,
+             atc_classes: atc ? atc.split("|") : [], unread_reason: s(r[9]) || null };
   });
 }
 
@@ -1063,8 +1085,16 @@ function classMembers(c) {
 // than derived from the label, because the label is the build's and a sort that
 // re-derives a rank from a string would go silent on a phase this page has not
 // seen. An unknown label sorts last and keeps its own words.
-const PHASE_RANK = { "Approved": 5, "Phase 3": 4, "Phase 2": 3, "Phase 1": 2,
-                     "Early Phase 1": 1 };
+// "Phase 4 trial" and "Marketed unapproved" are D23's: a disease ChEMBL calls
+// Approved on US labels FDA lists as marketed without approval, with a Phase 4
+// trial cited beside them or none. The first is a trial past Phase 3 and not an
+// approval; the second is no clinical phase at all, and sorts below every one.
+// "Approval unconfirmed" is D24's: an Approved resting on trials with no
+// phase in the registry, or on a label that could not be read for a drug FDA
+// records no approval of - no phase either, beside "Marketed unapproved".
+const PHASE_RANK = { "Approved": 5, "Phase 4 trial": 4.5, "Phase 3": 4, "Phase 2": 3,
+                     "Phase 1": 2, "Early Phase 1": 1, "Marketed unapproved": 0.5,
+                     "Approval unconfirmed": 0.5 };
 
 // One disease, at the furthest phase this molecule reached for it.
 //
@@ -1080,7 +1110,10 @@ const PHASE_RANK = { "Approved": 5, "Phase 3": 4, "Phase 2": 3, "Phase 1": 2,
 //
 // So a disease is one row at its highest phase, the trials from every record
 // behind it are pooled, and the number of records is stated rather than being
-// visible only as a repeat.
+// visible only as a repeat. What stands behind an Approved (D23) is read from
+// the records at that phase only, and unapproved US labels are carried only
+// where no record of the disease is an approval, since one that is answers
+// the question they raise.
 function indicationsByDisease(id) {
   const byMesh = new Map();
   for (const i of moleculeIndications(id)) {
@@ -1088,10 +1121,11 @@ function indicationsByDisease(id) {
     if (!seen) {
       byMesh.set(i.mesh_id, { mesh_id: i.mesh_id, heading: i.heading,
                               phase_label: i.phase_label, qualifies: i.qualifies,
-                              n_records: 1, trials: i.trials.slice() });
+                              n_records: 1, trials: i.trials.slice(), records: [i] });
       continue;
     }
     seen.n_records += 1;
+    seen.records.push(i);
     seen.qualifies = seen.qualifies || i.qualifies;
     for (const t of i.trials) if (seen.trials.indexOf(t) < 0) seen.trials.push(t);
     if ((PHASE_RANK[i.phase_label] || 0) > (PHASE_RANK[seen.phase_label] || 0)) {
@@ -1099,6 +1133,31 @@ function indicationsByDisease(id) {
     }
   }
   const out = Array.from(byMesh.values());
+  for (const d of out) {
+    d.bases = [];
+    d.unapproved_labels = [];
+    d.atc_classes = [];
+    d.unread_reasons = [];
+    for (const r of d.records) {
+      if (r.phase_label === d.phase_label && r.basis && d.bases.indexOf(r.basis) < 0) {
+        d.bases.push(r.basis);
+      }
+      if (r.phase_label === d.phase_label) {
+        for (const c of r.atc_classes) if (d.atc_classes.indexOf(c) < 0) d.atc_classes.push(c);
+        for (const u of (r.unread_reason ? r.unread_reason.split("|") : [])) {
+          if (d.unread_reasons.indexOf(u) < 0) d.unread_reasons.push(u);
+        }
+      }
+      if (d.phase_label !== "Approved") {
+        for (const l of r.unapproved_labels) {
+          if (!d.unapproved_labels.some(function (x) { return x.set_id === l.set_id; })) {
+            d.unapproved_labels.push(l);
+          }
+        }
+      }
+    }
+    delete d.records;
+  }
   out.sort(function (a, b) {
     return (PHASE_RANK[b.phase_label] || 0) - (PHASE_RANK[a.phase_label] || 0) ||
            a.heading.localeCompare(b.heading);
@@ -1147,8 +1206,13 @@ const filters = {
   // for them. An eligibility filter like tier and basis: it decides which
   // claims exist for every view, not just for the canvas.
   mechanism: [],
+  // Where a molecule's in-scope Phase 1+ trials had sites: "any" (no
+  // narrowing), "us", "anywhere", "elsewhere" - see trialsAllowed. An
+  // eligibility filter like the four above, but on the molecule: it decides
+  // which molecules' claims exist for every view.
+  trials: "any",
   // The two controls here that are about the *drawing* rather than about which
-  // claims are eligible. "show" | "hide" - see catalogueGraph.
+  // claims are eligible. "show" | "hide" | "focus" - see catalogueGraph.
   periphery: "show",
   // Which question the line colour answers. "evidence" | "mechanism". It moves
   // no claim in or out of the picture - see edgeColor.
@@ -1166,7 +1230,7 @@ function setFilter(key, value) { filters[key] = value; return filters[key]; }
 // two equal.
 function filterDefaults() {
   return { tier: "supported_preliminary", basis: "all", potency: null, mechanism: [],
-           periphery: "show", lineColor: "mechanism", groups: "linked" };
+           trials: "any", periphery: "show", lineColor: "mechanism", groups: "linked" };
 }
 function resetFilters() { applyFilters(filterDefaults()); }
 
@@ -1323,9 +1387,64 @@ function mechanismSummary() {
   return picked.map(mechanismLabel).join(" or ") + " only";
 }
 
+// The molecule's own trial sites, as the export computed them from the trials
+// ChEMBL cites for its in-scope indications (scripts/cohort/export.py,
+// trial_sites): "us", "both", "elsewhere", "unstated" (Phase 1+ trials, none
+// listing a site), or null (no Phase 1+ in-scope trial to place). "anywhere"
+// keeps the unstated ones - they had a trial, the record just says not where.
+const TRIAL_SITES_KEPT = {
+  us: { us: 1, both: 1 },
+  anywhere: { us: 1, both: 1, elsewhere: 1, unstated: 1 },
+  elsewhere: { elsewhere: 1, both: 1 },
+};
+
+// How many catalogue molecules each trial-sites setting keeps, and how many
+// carry a site class at all (`placed`, zero for a payload built without the
+// trial backfill's countries). `only_us` and `only_elsewhere` are the two
+// one-sided halves, for the banner; `none` the molecules with no Phase 1+
+// in-scope trial to place.
+function trialSiteCounts() {
+  const out = { total: 0, placed: 0, us: 0, anywhere: 0, elsewhere: 0,
+                only_us: 0, both: 0, only_elsewhere: 0, unstated: 0, none: 0 };
+  for (const m of moleculeById.values()) {
+    out.total++;
+    const s = m.trial_sites;
+    if (!s) { out.none++; continue; }
+    out.placed++;
+    if (TRIAL_SITES_KEPT.us[s]) out.us++;
+    if (TRIAL_SITES_KEPT.anywhere[s]) out.anywhere++;
+    if (TRIAL_SITES_KEPT.elsewhere[s]) out.elsewhere++;
+    if (s === "us") out.only_us++;
+    else if (s === "both") out.both++;
+    else if (s === "elsewhere") out.only_elsewhere++;
+    else if (s === "unstated") out.unstated++;
+  }
+  return out;
+}
+
+// Whether the page offers the trial-sites control: where any molecule says
+// where its trials ran, or where the filter is already narrowed (by a link),
+// so a narrowed filter can always be put back.
+function trialSitesOffered() {
+  if (filters.trials !== "any") return true;
+  for (const m of moleculeById.values()) if (m.trial_sites) return true;
+  return false;
+}
+
+function moleculeTrialsAllowed(m) {
+  if (filters.trials === "any") return true;
+  const kept = TRIAL_SITES_KEPT[filters.trials];
+  return !!(kept && m && m.trial_sites && kept[m.trial_sites]);
+}
+
+function trialsAllowed(claim) {
+  if (filters.trials === "any") return true;
+  return moleculeTrialsAllowed(lookupMolecule(claim.molecule));
+}
+
 function claimVisible(claim) {
   return tierAllowed(claim) && basisAllowed(claim) && potencyAllowed(claim) &&
-         mechanismAllowed(claim);
+         mechanismAllowed(claim) && trialsAllowed(claim);
 }
 
 // Why a claim is not on screen, in the reader's terms. "Hidden by a filter" is
@@ -1338,6 +1457,7 @@ function hiddenReason(claim) {
   // Two different absences, and the second is the one that must not read as a
   // negative result: this claim carries no curated action at all.
   if (!mechanismAllowed(claim)) return claim.action_type ? "mechanism" : "mechanism_none";
+  if (!trialsAllowed(claim)) return "trials";
   return null;
 }
 
@@ -1376,37 +1496,31 @@ const ACTION_COLORS = {
 const ACTION_HELP = {
   AGONIST: "Switches the target on, as the body's own messenger does. " +
            "E.g. morphine at the mu opioid receptor.",
-  "PARTIAL AGONIST": "Switches the target on, but only part of the way however much is " +
-                     "present - so beside a full agonist it can also damp the response. " +
-                     "E.g. aripiprazole at the dopamine D2 receptor.",
-  "INVERSE AGONIST": "Turns the target down below its resting activity, the reverse of " +
-                     "an agonist; possible only where a receptor is somewhat active on " +
-                     "its own. E.g. pimavanserin at the serotonin 5-HT2A receptor.",
-  ANTAGONIST: "Occupies the target's binding site without switching it on, so the " +
+  "PARTIAL AGONIST": "Switches the target on only part way, so beside a full agonist " +
+                     "it can damp the response. E.g. aripiprazole at the dopamine D2 receptor.",
+  "INVERSE AGONIST": "Turns a target that is active on its own below its resting level. " +
+                     "E.g. pimavanserin at the serotonin 5-HT2A receptor.",
+  ANTAGONIST: "Occupies the binding site without switching the target on, so the " +
               "body's own messenger cannot. E.g. caffeine at adenosine receptors.",
-  "NEGATIVE ALLOSTERIC MODULATOR": "Binds the target away from its messenger's site " +
-                                   "and weakens the response to that messenger. " +
-                                   "E.g. cannabidiol at the CB1 cannabinoid receptor.",
-  "POSITIVE ALLOSTERIC MODULATOR": "Binds the target away from its messenger's site " +
-                                   "and strengthens the response to that messenger, " +
-                                   "doing little on its own. E.g. diazepam at the " +
+  "NEGATIVE ALLOSTERIC MODULATOR": "Binds away from the messenger's site and weakens " +
+                                   "its effect. E.g. cannabidiol at the CB1 cannabinoid receptor.",
+  "POSITIVE ALLOSTERIC MODULATOR": "Binds away from the messenger's site and strengthens " +
+                                   "its effect, doing little alone. E.g. diazepam at the " +
                                    "GABA-A receptor.",
-  "POSITIVE MODULATOR": "Increases the target's activity or its response to its " +
-                        "messenger, without the curator saying by which route. " +
-                        "E.g. etomidate at the GABA-A receptor.",
-  MODULATOR: "Changes how the target works, where the curator records no single " +
-             "direction, up or down. E.g. gabapentin at voltage-gated calcium channels.",
+  "POSITIVE MODULATOR": "Raises the target's activity or response, by a route the curator " +
+                        "does not name. E.g. etomidate at the GABA-A receptor.",
+  MODULATOR: "Changes how the target works, with no direction recorded. " +
+             "E.g. gabapentin at voltage-gated calcium channels.",
   INHIBITOR: "Stops or slows what an enzyme or transporter does. E.g. fluoxetine " +
              "at the serotonin transporter.",
   BLOCKER: "Stops ions flowing through an ion channel. E.g. lidocaine at sodium " +
            "channels.",
-  ACTIVATOR: "Increases the activity of an enzyme or other protein that is not a " +
-             "receptor. E.g. nitric oxide at soluble guanylate cyclase.",
+  ACTIVATOR: "Raises the activity of an enzyme or other non-receptor protein. " +
+             "E.g. nitric oxide at soluble guanylate cyclase.",
   OPENER: "Lets more ions flow through an ion channel. E.g. ezogabine at KCNQ " +
           "potassium channels.",
-  "RELEASING AGENT": "Makes a transporter run backwards, pushing its neurotransmitter " +
-                     "out of the nerve cell instead of taking it back in. " +
-                     "E.g. amphetamine at the dopamine transporter.",
+  "RELEASING AGENT": "Runs a transporter backwards, pushing its neurotransmitter out " +
+                     "of the nerve cell. E.g. amphetamine at the dopamine transporter.",
 };
 const OTHER_ACTION_COLOR = "#9aa1ad";
 // A line carries two distinct curated actions mostly where GtoPdb's word
@@ -1471,20 +1585,19 @@ function gapStatement(mol) {
   if (visible > 0) return null;
   if (total > 0) {
     return { kind: "hidden_by_filters",
-             text: "Evidence hidden by the current filters: " + total +
-                   " drawable claim" + (total === 1 ? "" : "s") +
-                   " exist for this entry." };
+             text: "The current filters hide all " + total +
+                   " drawable claim" + (total === 1 ? "" : "s") + " for this entry." };
   }
   if ((mol.n_claims_limited || 0) > 0) {
     return { kind: "unresolved",
-             text: "This entry has " + mol.n_claims_limited + " retained claim" +
-                   (mol.n_claims_limited === 1 ? "" : "s") + ", and none meets the " +
+             text: mol.n_claims_limited + " retained claim" +
+                   (mol.n_claims_limited === 1 ? "" : "s") + ", none meeting the " +
                    "Preliminary rule, so nothing is drawn." };
   }
   return { kind: "no_eligible_evidence",
-           text: "No qualifying evidence found in ChEMBL 37, and GtoPdb names no " +
-                 "primary target for it. Other sources are not assessed in this " +
-                 "release, which is not the same as an absence of pharmacology." };
+           text: "No qualifying evidence in ChEMBL 37, and no GtoPdb primary " +
+                 "target. Other sources were not checked, so this is not an absence " +
+                 "of pharmacology." };
 }
 
 /* ------------------------------------------------------------- similarity */
@@ -2402,12 +2515,22 @@ function nodeLabel(node) {
 
 let graphCache = null;
 
+// The claim filters alone: what is in the picture, before the canvas control
+// decides what of it is drawn.
+function claimSignature() {
+  return filters.tier + "|" + filters.basis + "|" + String(filters.potency) +
+         "|" + filters.mechanism.slice().sort().join(",") + "|" + filters.trials;
+}
+
 function graphSignature() {
   // lineColor is deliberately not in it: it repaints the lines that are already
   // drawn and moves nothing in or out of the picture, so a colour change must
   // not cost a rebuild and must not move the layout under the reader.
-  return filters.tier + "|" + filters.basis + "|" + String(filters.potency) +
-         "|" + filters.mechanism.slice().sort().join(",") + "|" + filters.periphery +
+  const focus = filters.periphery === "focus" ? focusSubject() : null;
+  return claimSignature() + "|" + filters.periphery +
+         // The one setting under which a selection is a rebuild rather than a
+         // highlight: what is drawn is the selection's neighbourhood.
+         (focus ? ":" + focus.kind + ":" + focus.id + ":" + String(focus.extra) : "") +
          // groups is in it, unlike lineColor, because the membership lines are
          // springs as well as ink: they change what the layout solves for.
          "|" + filters.groups;
@@ -2421,7 +2544,7 @@ function graphSignature() {
 //
 // It is a *drawing* rule and not an eligibility rule, and the difference is
 // load-bearing. `claimVisible` answers "is this in the picture" and only the
-// four claim filters may change that answer; this one answers "is this drawn".
+// eligibility filters may change that answer; this one answers "is this drawn".
 // So the panel's lists, the similarity ranking, the gap statements and the
 // search all still read the whole catalogue, and nothing becomes unfindable by
 // being undrawn. It is off by default and it states its cost in the banner,
@@ -2456,6 +2579,46 @@ function prunePeriphery(nodes, edges) {
   };
 }
 
+// The canvas control's third setting (2026-10-18, at the user's request): draw
+// only the selection, what it acts on, and the other molecules acting on those
+// - the neighbourhood highlightFor lights, with nothing else on the canvas.
+//
+// It is the page's old one-neighbourhood-at-a-time drawing, brought back as an
+// opt-in and as a drawing rule, so the reasons it stopped being the default
+// still hold and are why it is off: the layout is re-solved on every
+// selection, so nothing holds still between two of them, and where a
+// neighbourhood sits among the others cannot be seen (VIEWER.md). It moves no
+// claim in or out of anything, like the periphery: the panels, the ranking,
+// the gap statements and search read the whole catalogue as before.
+//
+// What is focused on is the selection, except that a line keeps its molecule's
+// neighbourhood - clicking a line to read its evidence must not take every
+// other line away - and a molecule's retained claims are that molecule. With
+// nothing selected, or a selection the filters leave off the canvas, there is
+// nothing to focus on and every target is drawn.
+function focusSubject() {
+  const s = getSelection();
+  if (!s.kind) return null;
+  if (s.kind === "edge" || s.kind === "retained") return { kind: "molecule", id: s.id, extra: null };
+  return { kind: s.kind, id: s.id, extra: s.extra };
+}
+
+function focusOn(base, subject) {
+  const lit = subject ? highlightOver(base, subject.kind, subject.id, subject.extra) : null;
+  if (!lit) return null;
+  const nodes = base.nodes.filter(function (n) { return lit.nodes.has(n.key); });
+  const edges = base.edges.filter(function (e) { return lit.edges.has(e.id); });
+  const was = nodeCounts(base.nodes), now = nodeCounts(nodes);
+  return {
+    nodes: nodes, edges: edges,
+    focused: {
+      molecules: was.molecules - now.molecules, molecules_kept: now.molecules,
+      targets: was.targets - now.targets, targets_kept: now.targets,
+      edges: base.edges.length - edges.length,
+    },
+  };
+}
+
 // Molecules and targets among a set of canvas nodes, in the canvas's own unit:
 // a protein is one target whatever species recorded it (D20), as its node is.
 function nodeCounts(nodes) {
@@ -2478,15 +2641,18 @@ function catalogueTotals() {
   return catalogueTotalsCache;
 }
 
-// Built once per filter setting and cached, because a selection must not cost
-// a pass over 16,206 claims - it is the thing the reader does most.
-function catalogueGraph() {
-  const sig = graphSignature();
-  if (graphCache && graphCache.signature === sig) return graphCache;
+// The claim filters' picture, every target drawn: built once per claim-filter
+// setting and cached, because a selection must not cost a pass over 16,206
+// claims - it is the thing the reader does most, and under the focus setting
+// it is also a rebuild. Never written to: catalogueGraph builds new maps for
+// what it cuts.
+let claimGraphCache = null;
+function claimGraph() {
+  const sig = claimSignature();
+  if (claimGraphCache && claimGraphCache.signature === sig) return claimGraphCache;
   const byKey = new Map();
   const byPair = new Map();
-  const byNode = new Map();
-  let edges = [];
+  const edges = [];
   for (const c of allClaims()) {
     if (!claimVisible(c)) continue;
     const mol = lookupMolecule(c.molecule), t = lookupTarget(c.target);
@@ -2515,27 +2681,48 @@ function catalogueGraph() {
     }
     e.claims.push(c);
   }
-  // Pruning happens here and not in the drawing code, so that byKey, byPair
-  // and byNode describe the canvas that actually exists - a highlight computed
-  // over edges that are not drawn would light nothing and report success.
-  let nodes = Array.from(byKey.values());
-  // Read before the periphery is pruned: the claim filters decide what is in
-  // the picture, and the canvas control only what of it is drawn.
-  const shown = nodeCounts(nodes);
-  let pruned = null;
-  if (filters.periphery === "hide") {
-    const cut = prunePeriphery(nodes, edges);
-    nodes = cut.nodes; edges = cut.edges; pruned = cut.pruned;
-    byKey.clear();
-    for (const n of nodes) byKey.set(n.key, n);
-    byPair.clear();
-    for (const e of edges) byPair.set(e.from + "|" + e.to, e);
-  }
+  claimGraphCache = { signature: sig, nodes: Array.from(byKey.values()), edges: edges,
+                      byKey: byKey, byPair: byPair, byNode: edgesByNode(edges) };
+  return claimGraphCache;
+}
+
+function edgesByNode(edges) {
+  const byNode = new Map();
   for (const e of edges) {
     if (!byNode.has(e.from)) byNode.set(e.from, []);
     if (!byNode.has(e.to)) byNode.set(e.to, []);
     byNode.get(e.from).push(e);
     byNode.get(e.to).push(e);
+  }
+  return byNode;
+}
+
+// What is drawn: the claim filters' picture, cut by the canvas control, and
+// cached per graphSignature.
+function catalogueGraph() {
+  const sig = graphSignature();
+  if (graphCache && graphCache.signature === sig) return graphCache;
+  const base = claimGraph();
+  // Cutting happens here and not in the drawing code, so that byKey, byPair
+  // and byNode describe the canvas that actually exists - a highlight computed
+  // over edges that are not drawn would light nothing and report success.
+  let nodes = base.nodes, edges = base.edges;
+  let byKey = base.byKey, byPair = base.byPair, byNode = base.byNode;
+  // Read before the canvas control cuts anything: the claim filters decide
+  // what is in the picture, and the canvas control only what of it is drawn.
+  const shown = nodeCounts(nodes);
+  const cut = filters.periphery === "hide" ? prunePeriphery(nodes, edges)
+            : filters.periphery === "focus" ? focusOn(base, focusSubject())
+            : null;
+  let pruned = null, focused = null;
+  if (cut) {
+    nodes = cut.nodes; edges = cut.edges;
+    pruned = cut.pruned || null; focused = cut.focused || null;
+    byKey = new Map();
+    for (const n of nodes) byKey.set(n.key, n);
+    byPair = new Map();
+    for (const e of edges) byPair.set(e.from + "|" + e.to, e);
+    byNode = edgesByNode(edges);
   }
   let links = filters.groups === "linked" ? groupLinks(nodes, byKey) : [];
   const units = filters.groups === "linked" ? channelUnits(links) : [];
@@ -2549,7 +2736,7 @@ function catalogueGraph() {
     return !(u && u === unitOf.get(k.to));
   });
   graphCache = { signature: sig, nodes: nodes, edges: edges, pruned: pruned,
-                 shown: shown, drawn: nodeCounts(nodes),
+                 focused: focused, shown: shown, drawn: nodeCounts(nodes),
                  byKey: byKey, byPair: byPair, byNode: byNode, links: links,
                  units: units, unitOf: unitOf };
   return graphCache;
@@ -2707,7 +2894,8 @@ function groupLinks(nodes, byKey) {
 }
 
 // What a selection lights of those lines: one whose two ends are both lit as
-// the selection's own - its targets, or a pair's shared targets. A second-hop
+// the selection's own - its targets, a pair's shared targets, or a selected
+// group and its components. A second-hop
 // node is not enough, and neither is one end: the line says "this set, and
 // this protein inside it, are both on what you selected", and it says nothing
 // at all about a protein the selection does not reach.
@@ -2726,15 +2914,23 @@ function linkLit(link, hops) {
 // dimmed. Returned as maps rather than written onto the canvas, so a test can
 // read the decision without a renderer.
 //
-// A target gets no second hop: every other target of every molecule that binds
-// it is most of the catalogue, which is not a neighbourhood but a reset.
+// A target's second hop is the mirror image: the other targets its molecules
+// act on (2026-10-18, at the user's request). It had none, on the argument that
+// every other target of every molecule binding it is most of the catalogue;
+// measured, that holds only at the hubs - the median drawn target's second hop
+// is 55 of 2,454 targets, the 90th percentile 451, ADORA3's 1,243.
 //
 // Null means "light nothing, dim nothing" - the selection is not on the canvas
 // at all, which is the honest state for one of the 260 entries with no drawable
 // evidence, or for anything the current filters have taken out. The panel still
 // says which of those two it is; the graph does not pretend to.
 function highlightFor(kind, id, extra) {
-  const g = catalogueGraph();
+  return highlightOver(catalogueGraph(), kind, id, extra);
+}
+
+// The same, over a graph named rather than the one drawn: the focus setting
+// asks it of the whole picture to decide what to draw.
+function highlightOver(g, kind, id, extra) {
   const nodes = new Map(), edges = new Map();
   const mark = function (map, key, hop) {
     const cur = map.get(key);
@@ -2813,23 +3009,36 @@ function highlightFor(kind, id, extra) {
     mark(nodes, e.from, 1);
     mark(nodes, e.to, 1);
   }
-  // A complex lights its own subunits wherever they are drawn (2026-09-25, at
-  // the user's request), so a reader can see what the receptor is made of
-  // without opening its Components list. Lit, not selected: they are not the
-  // selection's targets, and their own molecules and lines stay as they were.
-  // Complexes and complex groups only - a family's members are separate
-  // proteins, not parts of it.
-  if (kind === "target") {
-    const t = lookupTarget(id);
-    if (t && (t.target_type === "PROTEIN COMPLEX" || t.target_type === "PROTEIN COMPLEX GROUP")) {
-      for (const c of t.components || []) {
-        const p = proteinNodeTarget(c.accession);
-        const pk = p ? "t" + p.chembl_id : null;
-        if (pk && pk !== key && g.byKey.has(pk)) mark(nodes, pk, 1);
+  // A family, complex group or complex lights its own components wherever they
+  // are drawn, and the molecules acting on each (2026-10-18, at the user's
+  // request), so selecting the 23-member 3',5'-cyclic phosphodiesterase family
+  // shows the PDEs and what acts on them rather than its own two molecules.
+  // Complexes lit their subunits alone from 2026-09-25, and families nothing,
+  // as paralogues rather than parts; both now read as the set ChEMBL files
+  // them as. Lit, never merged: each line is still a claim at that protein,
+  // the panels and the ranking still read the selection's own claims, and a
+  // membership line is lit as one between two of the selection's own.
+  if (kind === "target" && picked && picked.target_type !== "SINGLE PROTEIN") {
+    for (const c of picked.components || []) {
+      const p = proteinNodeTarget(c.accession);
+      const pk = p ? "t" + p.chembl_id : null;
+      if (!pk || pk === key || !g.byKey.has(pk)) continue;
+      mark(nodes, pk, 1);
+      for (const e of edgesAt(pk)) {
+        mark(edges, e.id, 1);
+        mark(nodes, e.from, 1);
       }
     }
   }
-  if (kind !== "target") {
+  if (kind === "target") {
+    for (const entry of Array.from(nodes)) {
+      if (entry[1] !== 1 || entry[0].charAt(0) !== "m") continue;
+      for (const e of edgesAt(entry[0])) {
+        mark(edges, e.id, 2);
+        mark(nodes, e.to, 2);
+      }
+    }
+  } else {
     for (const entry of Array.from(nodes)) {
       if (entry[1] !== 1 || entry[0].charAt(0) !== "t") continue;
       for (const e of edgesAt(entry[0])) {
@@ -2899,167 +3108,146 @@ function basisPill(claim) {
 // which nobody reads in a tooltip. A curated fact names both curators, ChEMBL
 // and GtoPdb, wherever either can supply it (D17, D18).
 const HELP = {
-  tier: "How much evidence backs a claim. Supported: curators (ChEMBL or GtoPdb) " +
-        "recorded it as the drug's mechanism, or two separate papers measured it. " +
-        "Preliminary: one study only.",
-  basis: "Which experiments count. Direct human: measured on the human protein " +
-         "itself. The broader layer adds other species, related proteins and " +
-         "mutants, kept separate so they never inflate a human result.",
-  prevalence: "How many molecules act on this target. A target nearly everything " +
-              "hits (like the heart-safety channel hERG) says little about two " +
-              "drugs sharing it, so it counts for less in similarity.",
-  potency: "Hide claims weaker than a chosen concentration (lower = stronger " +
-           "binding). Claims with no single number to compare are hidden and " +
-           "counted separately.",
-  periphery: "Hide targets that only one molecule acts on. They leave the " +
-             "picture, not the catalogue: lists, search and similarity still " +
-             "include them.",
-  groups: "Join each protein family or complex to its own proteins, and draw " +
-          "ion-channel assemblies (GABA-A, NMDA, nicotinic, ...) as one disc with " +
-          "their subunits inside. Only placement changes; nothing is merged or counted.",
-  similarity: "Molecules ranked by how closely their targets match this one's. " +
-              "Higher when the shared targets are well evidenced, rare, and most of " +
-              "what both do; lower where curators record opposite actions. Not the " +
-              "same as acting alike: dose and brain entry are ignored. The bar is " +
-              "each score against the top one.",
-  score_target: "A target both molecules act on. One protein recorded in several " +
-                "species is one target, and a family whose proteins the pair already " +
-                "shares one by one is left out, as it adds nothing.",
-  score_kind: "×1 for one protein or one complex; ×½ for a family or loose group " +
-              "of proteins, which is a claim about a set rather than one protein.",
-  score_evidence: "How well evidenced the weaker of the two molecules' claims here " +
-                  "is: 1 curated and replicated, 0.9 replicated, 0.75 curated, " +
-                  "0.5 a single study.",
-  score_rarity: "How few molecules in the catalogue act on this target: 1 when " +
-                "almost none do, lower the more do. A target nearly every drug " +
-                "hits, like hERG, says little about two drugs sharing it.",
+  tier: "How much evidence backs a claim. Supported: curated as the drug's mechanism " +
+        "(ChEMBL or GtoPdb), or measured in two separate papers. Preliminary: one study.",
+  basis: "Direct human: measured on the human protein. The broader layer adds other " +
+         "species, related proteins and mutants, kept apart from human results.",
+  prevalence: "How many molecules act on this target. One nearly everything hits " +
+              "(like hERG) says little about two drugs sharing it, so it counts for less.",
+  potency: "Hide claims weaker than this concentration (lower = stronger binding). " +
+           "Claims with no comparable number are hidden and counted separately.",
+  trials: "Keep molecules with a Phase 1+ trial for a brain condition, by where its " +
+          "sites were, as ClinicalTrials.gov lists them for the trials ChEMBL cites. " +
+          "Molecules in by an ATC code or a label alone have no trial to place.",
+  periphery: "Hide targets only one molecule acts on, or draw only the selection, its " +
+             "targets and the other molecules on them. What is not drawn stays in " +
+             "lists, search and similarity.",
+  groups: "Link each protein family or complex to its proteins, and draw ion-channel " +
+          "assemblies (GABA-A, NMDA, nicotinic, ...) as one disc around their subunits. " +
+          "Only placement changes; nothing is merged or counted.",
+  similarity: "Molecules whose targets best match this one's: higher for shared targets " +
+              "that are well evidenced, rare and most of what both do; lower where " +
+              "curators record opposite actions. Ignores dose and brain entry. Bars are " +
+              "relative to the top score.",
+  score_target: "A target both act on. A protein counts once across species; a family " +
+                "whose proteins are already shared one by one is left out.",
+  score_kind: "×1 for a protein or complex; ×½ for a family or group, a claim about " +
+              "a set.",
+  score_evidence: "The weaker of the two claims here: 1 curated and replicated, " +
+                  "0.9 replicated, 0.75 curated, 0.5 one study.",
+  score_rarity: "1 when almost no molecule acts on this target, lower the more do. " +
+                "A target nearly every drug hits, like hERG, says little.",
   score_species: "How many species' records of this protein both molecules have. " +
-                 "The protein counts once, times the square root of that number: " +
-                 "a second species adds some weight, a second protein adds more.",
+                 "It counts √n times: a second species adds less than a second protein.",
   score_share: "This target's part of the pair's score: kind × evidence × rarity × " +
-               "species, as a share of the sum over all shared targets.",
-  why_score: "Each shared target adds kind (protein ×1, family ×½) × evidence × " +
-             "rarity × species; Share is its part of the total. The sum is then cut for " +
-             "opposite actions and divided by how many targets each molecule has, " +
-             "counting a protein once across species.",
-  target_type: "What kind of target this is: one protein, a multi-protein complex, " +
-               "or a family of related proteins. A claim about a family is not " +
-               "split among its members.",
-  bounds: "Not an exact value: the experiment saw no effect up to this " +
-          "concentration. Kept, but left out of averages.",
-  conditional: "Converted from a weight-based unit using a molecular weight that " +
-               "may be for the wrong salt form, so it is shown but not used.",
-  gap: "Neither ChEMBL 37 nor GtoPdb gives a usable target for this molecule. " +
-       "Other databases were not checked, so this is not evidence that it has none.",
-  role: "Curated: ChEMBL's or GtoPdb's curators say how the drug acts here " +
-        "(agonist, blocker, ...). Binding or functional: a lab measurement, which " +
-        "shows how strongly, not in which direction.",
-  action: "How the drug acts on this target, as ChEMBL's or GtoPdb's curators " +
-          "recorded it (agonist, antagonist, inhibitor, ...). Most claims have none " +
-          "recorded, which means unknown, not absent.",
-  refs: "The papers, patents and drug labels ChEMBL's curators relied on for " +
-        "this mechanism.",
-  mechanism_filter: "Show only claims with the curated actions you pick; pick " +
-          "several to combine them. An action comes from ChEMBL's curators or, " +
-          "where they recorded none for the pair, from GtoPdb's. Claims with no " +
-          "recorded action are hidden too, and counted separately.",
-  line_color: "Colour the lines by how the claim is backed, or by the curated " +
-          "action (ChEMBL's, or GtoPdb's where ChEMBL has none; several colours " +
-          "means the two disagree). Changes only colours; dashed still means Preliminary.",
-  counts: "Measurements are individual data points; studies are the separate " +
-          "papers, patents or datasets they came from.",
-  endpoints: "The kind of measurement (Ki, Kd, IC50, EC50, ...). Different kinds " +
-             "are never averaged together.",
-  measurements: "Every individual data point behind this claim, with the " +
-                "experiment and paper it came from.",
+               "species, over the total.",
+  why_score: "Each shared target adds kind × evidence × rarity × species. The sum is " +
+             "cut for opposite actions, then divided by how many targets each molecule " +
+             "has, a protein counting once across species.",
+  target_type: "One protein, a multi-protein complex, or a protein family. A family " +
+               "claim is not split among its members.",
+  bounds: "Not an exact value: no effect seen up to this concentration. Kept, but " +
+          "left out of averages.",
+  conditional: "Converted from a weight-based unit with a molecular weight that may " +
+               "be the wrong salt form, so shown but not used.",
+  gap: "Neither ChEMBL 37 nor GtoPdb gives a usable target. Other databases were " +
+       "not checked, so this is not evidence it has none.",
+  role: "Curated: curators (ChEMBL or GtoPdb) say how the drug acts (agonist, " +
+        "blocker, ...). Binding or functional: a lab measurement of how strongly, " +
+        "not which way.",
+  action: "How the drug acts here, as ChEMBL's or GtoPdb's curators recorded it. " +
+          "Most claims have none, which means unknown, not absent.",
+  refs: "The papers, patents and drug labels ChEMBL's curators cite for this " +
+        "mechanism.",
+  mechanism_filter: "Show only claims with the curated actions you pick; several " +
+          "combine. Actions are ChEMBL's, or GtoPdb's where ChEMBL has none. Claims " +
+          "with no action are hidden too, and counted separately.",
+  line_color: "Colour lines by what backs the claim, or by curated action (ChEMBL's, " +
+          "else GtoPdb's; several colours means they disagree). Dashed still means " +
+          "Preliminary.",
+  counts: "Measurements are data points; studies are the papers, patents or " +
+          "datasets they came from.",
+  endpoints: "The kind of measurement (Ki, Kd, IC50, EC50, ...). Kinds are never " +
+             "averaged together.",
+  measurements: "Every data point behind this claim, with its experiment and paper.",
   tier_reason: "The rule that decided this claim's evidence level.",
-  supported_at: "The kind of measurement that was replicated. The strongest " +
-                "value may come from a different kind and is labelled as such.",
-  edge_claims: "Everything recorded between this molecule and this target. They " +
-               "are listed side by side, never added together.",
-  claim_grouping: "Sort these claims into Supported and Preliminary, or by what each " +
-                  "one says: the curated action (antagonist, inhibitor, …) " +
-                  "where there is one, otherwise whether it is a binding or a functional measurement.",
-  claim_mechanism: "Claims where curators (ChEMBL or GtoPdb) recorded this action here. " +
-                   "Only curated claims carry one; a measured affinity never does.",
-  claim_binding: "Measured binding (Ki, Kd, binding IC50): how tightly the molecule " +
-                 "binds, never which way it acts. A curated direction at the same target " +
-                 "is a separate claim, listed under its action above.",
-  claim_functional: "Measured activity in a functional assay: an effect was seen, with no " +
-                    "curated direction attached. A curated direction at the same target " +
-                    "is a separate claim, listed under its action above.",
+  supported_at: "The kind of measurement that was replicated. The strongest value " +
+                "may be another kind, labelled as such.",
+  edge_claims: "Everything recorded between this molecule and this target, listed " +
+               "side by side, never added together.",
+  claim_grouping: "Sort claims by evidence tier, or by what each says: its curated " +
+                  "action where it has one, else binding or functional measurement.",
+  claim_mechanism: "Claims where curators (ChEMBL or GtoPdb) recorded this action. " +
+                   "A measured affinity never carries one.",
+  claim_binding: "Measured binding (Ki, Kd, binding IC50): how tightly, never which " +
+                 "way. A curated direction at this target is a separate claim, above.",
+  claim_functional: "A functional assay saw an effect, with no curated direction. " +
+                    "A curated direction at this target is a separate claim, above.",
   claim_curated_none: "Mechanisms curators recorded without naming an action.",
-  gtopdb: "How the drug acts here according to the IUPHAR/BPS Guide to " +
-          "Pharmacology (GtoPdb), a second curated database. At the drug's primary " +
-          "target it counts as a Supported claim; elsewhere it adds a direction " +
-          "only. Data CC BY-SA 4.0.",
-  retained: "Claims that meet neither the Supported nor the Preliminary rule, such " +
-            "as ones with only bounds or no exact value. Not drawn; kept so you can " +
-            "inspect the observations (individual data rows) behind them.",
-  indications: "Neurological and pain conditions this drug is approved or tested " +
-               "for, how far each got, and its trials on ClinicalTrials.gov. A " +
-               "condition with no trial link usually rests on the drug label instead.",
-  condition_targets: "Targets that two or more of these molecules act on, most " +
-                     "shared first. Compare with the catalogue-wide count: a target " +
-                     "almost every drug hits says little about this condition.",
-  primary_outcome: "The question the trial was designed to answer, with the " +
-                   "p-value the sponsor reported. Below 0.05 usually means it " +
-                   "found a difference, though not which way; above means it did not.",
-  development: "The furthest this molecule has got for any condition, not only " +
-               "those listed here.",
-  components: "The proteins that make up this target. A claim here is about the " +
-              "whole target, never passed on to these proteins.",
-  wider: "Complexes or families that include this protein. Claims made about " +
-         "them are about the whole group, not this protein alone.",
-  target_molecules: "Molecules with a claim at this target. In each section, curated drugs first, then " +
-                    "replicated measurements, then single-study ones; strongest " +
-                    "binding first within each.",
-  opposed: "Curators (ChEMBL or GtoPdb) record these two acting in opposite " +
-           "directions (e.g. agonist and antagonist) at shared proteins, so the " +
-           "score is cut: to a quarter when every comparable protein is opposite.",
-  subsumed: "Family claims whose proteins are all already shared individually. " +
-            "Listed in the pair, but not counted a second time.",
+  gtopdb: "How the drug acts here per the IUPHAR/BPS Guide to Pharmacology (GtoPdb), " +
+          "a second curated database. At the drug's primary target it is a Supported " +
+          "claim; elsewhere, a direction only. Data CC BY-SA 4.0.",
+  retained: "Claims meeting neither the Supported nor the Preliminary rule, such as " +
+            "bounds only. Not drawn; kept so their data rows can be inspected.",
+  indications: "Neurological and pain conditions this drug is approved or tested for, " +
+               "how far each got, and its trials. No trial link usually means a drug " +
+               "label stands behind the phase. Hover over Approved for its source.",
+  condition_targets: "Targets two or more of these molecules act on, most shared " +
+                     "first. One nearly every drug hits (see the catalogue-wide count) " +
+                     "says little about this condition.",
+  primary_outcome: "What the trial was designed to answer, with the sponsor's p-value. " +
+                   "Below 0.05 usually means it found a difference, though not which way.",
+  development: "The furthest this molecule got for any condition, not only those " +
+               "listed here.",
+  listing: "Why this molecule is here: a public list names it, not a brain " +
+           "indication or a nervous-system drug code. A listing says nothing about " +
+           "targets and does not count toward similarity. SubNetwork is not " +
+           "affiliated with the list.",
+  components: "The proteins this target is made of. A claim here is about the whole, " +
+              "never passed on to them.",
+  wider: "Complexes or families containing this protein. Their claims are about the " +
+         "whole group.",
+  target_molecules: "Molecules with a claim at this target. Each section lists curated " +
+                    "drugs, then replicated, then single-study ones; strongest binding " +
+                    "first within each.",
+  opposed: "Curators (ChEMBL or GtoPdb) record opposite actions (e.g. agonist and " +
+           "antagonist) at shared proteins, so the score is cut: to a quarter when " +
+           "every comparable protein is opposite.",
+  subsumed: "Family claims whose proteins are all shared individually: listed, not " +
+            "counted again.",
   unresolved: "Data points whose value or units could not be read.",
-  conflict: "The sources disagree here: opposite curated actions, or measured " +
-            "values more than 100-fold apart.",
+  conflict: "The sources disagree: opposite curated actions, or measured values over " +
+            "100-fold apart.",
   category: "What kind of substance this is: small molecule, protein, antibody, ...",
-  formula: "The molecular formula of the parent compound (salts and hydrates " +
-           "set aside).",
-  atc: "The WHO drug classification code. Codes starting with N are nervous-" +
-       "system drugs.",
-  mesh_pa: "What the drug does, as the National Library of Medicine's indexers record " +
-           "it (MeSH pharmacological actions), e.g. Antidepressive Agents, Tricyclic. " +
-           "Linked by FDA's structure identifier, or through Wikidata. Click one to " +
-           "see every molecule filed under it.",
-  mesh_struct: "What the molecule is built like, as the National Library of Medicine " +
-               "files it (MeSH chemical classes), e.g. Xanthines. Linked by FDA's " +
-               "structure identifier.",
-  class_children: "The narrower classes inside this one, with how many molecules " +
-                  "here fall in each.",
+  formula: "The parent compound's molecular formula, salts and hydrates aside.",
+  atc: "The WHO drug classification code. N codes are nervous-system drugs.",
+  mesh_pa: "What the drug does, as the National Library of Medicine indexes it (MeSH " +
+           "pharmacological actions), e.g. Antidepressive Agents, Tricyclic. Click one " +
+           "for every molecule filed under it.",
+  mesh_struct: "What the molecule is built like, as MeSH chemical classes file it, " +
+               "e.g. Xanthines.",
+  class_children: "Narrower classes inside this one, with how many molecules fall " +
+                  "in each.",
   usan_stem: "The part of a drug's official name shared by one family of drugs, " +
              "e.g. -pramine for imipramine-type antidepressants.",
-  class_members: "Every molecule in the catalogue filed in this class, including " +
-                 "ones with nothing drawn.",
-  class_targets: "Targets that two or more of these molecules act on, most shared " +
-                 "first. A target almost every drug hits says little about the class.",
+  class_members: "Every catalogue molecule in this class, including ones with " +
+                 "nothing drawn.",
+  class_targets: "Targets two or more of these molecules act on, most shared first. " +
+                 "One nearly every drug hits says little about the class.",
   atc_flags: "Caveats about the ATC code, e.g. it is for pain in general, or the " +
              "drug acts outside the brain.",
-  identity_flags: "Things to know about this molecule's identity, e.g. no single " +
-                  "structure, or a form of it was withdrawn from a market. Not a " +
-                  "safety statement.",
-  organism: "The species the target protein comes from. Non-human results are " +
-            "kept separate from human ones.",
-  edge_pair: "How many separate claims this line stands for. Together they count " +
-             "as one shared target.",
-  edge_species: "The species this molecule's claims at this protein were recorded in. " +
-                "ChEMBL files a protein once per species, matched here to the human " +
-                "protein by sequence; each species' claims are listed in a section of " +
-                "their own and never added together, and in the similarity score the " +
-                "protein counts once.",
+  identity_flags: "Notes on this molecule's identity, e.g. no single structure, or a " +
+                  "form withdrawn from a market. Not a safety statement.",
+  organism: "The species of the target protein. Non-human results are kept apart " +
+            "from human ones.",
+  edge_pair: "How many claims this line stands for. Together they count as one " +
+             "shared target.",
+  edge_species: "The species this molecule's claims at this protein come from, matched " +
+                "to the human protein by sequence. Each species is its own section, " +
+                "never added; in similarity the protein counts once.",
   target_species: "The species ChEMBL recorded this protein in, matched to the human " +
-                  "protein by sequence and drawn as one node. Each species' record " +
-                  "keeps its own claims, listed in a section of its own below; in the " +
-                  "similarity score the protein counts once.",
+                  "protein by sequence and drawn as one node. Each keeps its own " +
+                  "claims, below; in similarity the protein counts once.",
 };
 
 function helpLabel(text, key) {
@@ -3083,7 +3271,7 @@ const TIER_REASONS = {
   gtopdb_primary_target: {
     label: "GtoPdb primary target",
     text: "The IUPHAR/BPS Guide to Pharmacology names this as the target the drug's " +
-          "effect comes from, and cites its sources.",
+          "effect comes from, with sources.",
   },
   multiple_study_support: {
     label: "Replicated across publications",
@@ -3091,15 +3279,15 @@ const TIER_REASONS = {
   },
   multiple_publications_split_across_endpoint_classes: {
     label: "Several publications, no two in one endpoint class",
-    text: "Several papers gave exact values, but each measured a different kind of value, so none replicates another.",
+    text: "Several papers gave exact values, each of a different kind, so none replicates another.",
   },
   one_publication: {
     label: "One publication",
-    text: "Only one paper gave an exact value, so nothing replicates it. Any other values are from patents or bulk deposits, which never count as replication.",
+    text: "Only one paper gave an exact value. Patent and bulk-deposit values never count as replication.",
   },
   deposited_datasets_only: {
     label: "Bulk deposits only",
-    text: "The exact values were deposited in bulk rather than published, which never counts as replication.",
+    text: "The exact values were deposited in bulk, not published, which never counts as replication.",
   },
   patents_only: {
     label: "Patents only",
@@ -3107,7 +3295,7 @@ const TIER_REASONS = {
   },
   patents_and_deposits_only: {
     label: "Patents and bulk deposits only",
-    text: "The exact values come from patents and bulk deposits, neither of which ever counts as replication.",
+    text: "The exact values come from patents and bulk deposits, which never count as replication.",
   },
   unresolved_study_provenance: {
     label: "No identifiable study",
@@ -3115,7 +3303,7 @@ const TIER_REASONS = {
   },
   conditional_conversion_only: {
     label: "Conditional conversions only",
-    text: "Every value had to be converted from a weight-based unit that may refer to the wrong salt form, so none is used.",
+    text: "Every value was converted from a weight-based unit that may be for the wrong salt form, so none is used.",
   },
   censored_only: {
     label: "Bounds only, no exact value",
@@ -3135,7 +3323,7 @@ const TIER_REASONS = {
   },
   curated_indirect: {
     label: "Curated as an indirect interaction",
-    text: "A curated mechanism that works through something else, not by acting on this target directly.",
+    text: "A curated mechanism that works through something else, not on this target directly.",
   },
   curated_untraceable: {
     label: "Curated mechanism with nothing to follow",
@@ -3156,15 +3344,30 @@ function reasonHelp(reason) {
   if (!r) return esc(reasonLabel(reason));
   return '<span class="help" tabindex="0">' + esc(r.label) +
          '<span class="help-text">' + esc(r.text) +
-         " The build records this reason as " + esc(String(reason)) +
-         '.</span></span>';
+         " (Recorded as " + esc(String(reason)) + '.)</span></span>';
 }
 
 /* ----------------------------------------------------------- external links */
 
+// A non-human record's own accession rarely reaches an article - Wikidata
+// holds human proteins - so a record D20 matched to a human protein offers
+// that protein's article, named as the human one's: the link says whose
+// article it is, and the hover says why this record has none of its own.
+function humanWikipediaLink(ref) {
+  const sym = ref.human_orthologue ? proteinLabel(ref.human_orthologue) : "";
+  const label = "Wikipedia: human " + (sym || "protein");
+  return '<span class="help" tabindex="0">' + link(ref.human_wikipedia_url, label) +
+         '<span class="help-text">' + esc(
+           "English Wikipedia has no article for the " + speciesName(ref) +
+           " protein itself. This links the article on the human protein it was " +
+           "matched to by sequence" + (sym ? ", " + sym : "") + " — the same protein " +
+           "in another species, not this record's own page.") + "</span></span>";
+}
+
 function externalLinks(kind, ref) {
   const out = [];
   if (ref.wikipedia_url) out.push(link(ref.wikipedia_url, "Wikipedia"));
+  else if (kind === "target" && ref.human_wikipedia_url) out.push(humanWikipediaLink(ref));
   if (kind === "molecule") {
     out.push(link("https://www.ebi.ac.uk/chembl/compound_report_card/" +
                   encodeURIComponent(ref.chembl_id), ref.chembl_id));
@@ -3177,6 +3380,113 @@ function externalLinks(kind, ref) {
     }
   }
   return out;
+}
+
+/* ----------------------------------------------------------------- listings */
+
+// The public lists a molecule can be entered from (D25, D27), keyed as the
+// selection policy keys them and in the order a panel names them: the open
+// lists first, and the sci-wiki, which since D27 cites only what none of them
+// names. Each entry links to its own page on the list, built from the slug the
+// export carries; the export refuses a source this map lacks, so no listing
+// reaches the page uncredited. `credit` is the list's line in About, worded to
+// its terms (docs/COMPOUND-LIST-TERMS.md), given the count it entered.
+const LISTING_SOURCES = {
+  wikipedia: {
+    label: "Wikipedia",
+    home: "https://en.wikipedia.org/",
+    page: function (slug) {
+      return "https://en.wikipedia.org/wiki/" + encodeURIComponent(slug);
+    },
+    credit: function (n) {
+      return externalLink(this.home, "Wikipedia") + ": " + moleculesBecause(n) +
+        (n === 1 ? "its English article is" : "their English articles are") +
+        " in Wikipedia's nootropic, psychedelic, other " +
+        "psychoactive or designer-drug categories (read 2026-10-15). Only article " +
+        "titles are used, each linked. Article text " + licenceLink("CC BY-SA 4.0") + ".";
+    },
+  },
+  wikidata: {
+    label: "Wikidata",
+    home: "https://www.wikidata.org/",
+    page: function (slug) {
+      return "https://www.wikidata.org/wiki/" + encodeURIComponent(slug);
+    },
+    credit: function (n) {
+      return externalLink(this.home, "Wikidata") + ": " + moleculesBecause(n) +
+        (n === 1 ? "its item gives it" : "their items give them") +
+        " a nootropic or psychoactive role (read 2026-10-15). Only " +
+        "item labels are used, each linked. " + licenceLink("CC0 1.0") + ".";
+    },
+  },
+  psychonautwiki: {
+    label: "PsychonautWiki",
+    home: "https://psychonautwiki.org/",
+    page: function (slug) {
+      return "https://psychonautwiki.org/wiki/" + encodeURIComponent(slug);
+    },
+    credit: function (n) {
+      return externalLink(this.home, "PsychonautWiki") + ": " + moleculesBecause(n) +
+        "its substance index names " + them(n) + " (read 2026-10-11). Only names are used, each " +
+        "linked, under the index's licence, " + licenceLink("CC BY 4.0") + ".";
+    },
+  },
+  tripsit: {
+    label: "TripSit",
+    home: "https://tripsit.me/factsheets/",
+    page: function (slug) {
+      return "https://tripsit.me/factsheets/" + encodeURIComponent(slug);
+    },
+    credit: function (n) {
+      return externalLink(this.home, "TripSit's factsheets") + ": " + moleculesBecause(n) +
+        "TripSit has a factsheet on " + them(n) + " (read 2026-10-11). Each names TripSit as its " +
+        "source and links to the factsheet; only names are used, free of charge for " +
+        "non-commercial use as " +
+        externalLink("https://wiki.tripsit.me/wiki/Factsheets", "TripSit's terms") + " allow.";
+    },
+  },
+  sciwiki: {
+    label: "the sci-wiki",
+    home: "https://www.scientificsean.wiki/",
+    page: function (slug) {
+      return "https://www.scientificsean.wiki/compounds/" + encodeURIComponent(slug);
+    },
+    credit: function (n) {
+      return externalLink(this.home, "The sci-wiki") + " (Scientific Sean LLC): " +
+        moleculesBecause(n) + "its cognition, psychiatric or psychedelics lists name " +
+        them(n) + " and none of the open lists above does (read 2026-10-11). Only names are " +
+        "used, each linked.";
+    },
+  },
+};
+
+function moleculesBecause(n) {
+  return n + (n === 1 ? " molecule is" : " molecules are") + " here because ";
+}
+
+function them(n) { return n === 1 ? "it" : "them"; }
+
+function knownListings(mol) {
+  const order = Object.keys(LISTING_SOURCES);
+  return (mol.listings || []).filter(function (l) { return LISTING_SOURCES[l.source]; })
+    .sort(function (a, b) { return order.indexOf(a.source) - order.indexOf(b.source); });
+}
+
+// One identity-table row citing the lists an entry was entered from, each
+// under the list's own name for it and naming the list as the source of the
+// listing, which is what TripSit's terms ask of every page showing its
+// information. A listed molecule the clinical routes also admit says "Also
+// listed by" instead, because the listing is then not why it is here.
+function listingRowHTML(mol) {
+  const known = knownListings(mol);
+  if (!known.length) return "";
+  const entered = mol.admission_reason === "listed_only";
+  return "<tr><td>" + helpLabel(entered ? "Entered from" : "Also listed by", "listing") +
+    "</td><td>" + known.map(function (l) {
+      const src = LISTING_SOURCES[l.source];
+      return "<div>" + externalLink(src.home, esc(src.label)) + ", as " +
+        externalLink(src.page(l.slug), esc(l.name)) + "</div>";
+    }).join("") + "</td></tr>";
 }
 
 /* -------------------------------------------------------- evidence shards */
@@ -3308,9 +3618,24 @@ function filtersHTML() {
   }
   h += "</div>" + cost("mechanism") + "</div>";
 
+  // Counted in molecules, the thing the control keeps or drops, and offered
+  // only where the payload says where any trial ran: a build without the
+  // trial backfill would otherwise offer three settings that empty the canvas.
+  const sites = trialSiteCounts();
+  if (trialSitesOffered()) {
+    h += '<div class="ctl"><h4>' + helpLabel("Trial sites", "trials") + "</h4><div class=\"row\">";
+    h += btn("trials", "any", "Every molecule (" + sites.total + ")", f.trials === "any");
+    h += btn("trials", "us", "US sites (" + sites.us + ")", f.trials === "us");
+    h += btn("trials", "anywhere", "Anywhere (" + sites.anywhere + ")", f.trials === "anywhere");
+    h += btn("trials", "elsewhere", "Outside the US (" + sites.elsewhere + ")",
+             f.trials === "elsewhere");
+    h += "</div>" + cost("trials") + "</div>";
+  }
+
   h += '<div class="ctl"><h4>' + helpLabel("Canvas", "periphery") + "</h4><div class=\"row\">";
   h += btn("periphery", "show", "Draw every target", f.periphery === "show");
   h += btn("periphery", "hide", "Hide single-molecule targets", f.periphery === "hide");
+  h += btn("periphery", "focus", "Only the selection's neighbourhood", f.periphery === "focus");
   h += "</div>" + cost("periphery") + "</div>";
 
   h += '<div class="ctl"><h4>' + helpLabel("Protein groups", "groups") + "</h4><div class=\"row\">";
@@ -3331,7 +3656,7 @@ function filtersHTML() {
   h += '<div class="ctl small muted">Catalogue: ' + esc(String(counts.molecules || 0)) +
        " molecules, " + esc(String(counts.targets || 0)) + " ChEMBL target records, " +
        esc(String(counts.claims_drawable || 0)) + " drawable claims. " +
-       "Sources and licences are under About.</div>";
+       "Sources and licences: About.</div>";
   return h;
 }
 
@@ -3357,9 +3682,11 @@ function dataDates() {
   return {
     built: isoDay(catalogueMeta().built_at),
     trialsFrom: isoDay(trials[0]), trialsTo: isoDay(trials[1]),
+    labelsTo: isoDay((metaRecord("label_status").labels_read || {}).last),
     mesh: mesh ? mesh[1] : "",
     uniprot: String(metaRecord("target_orthologues").reference_release || ""),
     gtopdb: GTOPDB.release ? String(GTOPDB.release) : "",
+    drugcentral: DRUGCENTRAL.release ? String(DRUGCENTRAL.release) : "",
   };
 }
 
@@ -3382,6 +3709,7 @@ function aboutVersionText() {
   const d = dataDates();
   const also = [];
   if (d.gtopdb) also.push("GtoPdb " + d.gtopdb);
+  if (d.drugcentral) also.push("DrugCentral " + d.drugcentral);
   if (d.mesh) also.push("MeSH " + d.mesh);
   if (d.uniprot) also.push("UniProt " + d.uniprot);
   return line + (also.length ? " Also " + also.join(", ") + "." : "") +
@@ -3419,30 +3747,64 @@ function aboutSourcesHTML() {
   if (GTOPDB.release) {
     items.push(link("https://www.guidetopharmacology.org/",
                     "IUPHAR/BPS Guide to Pharmacology") + " " + esc(String(GTOPDB.release)) +
-      ": curated actions and primary targets, laid on claims ChEMBL already has. " +
-      "Made available here under the database's licence, " + licenceLink("ODbL 1.0") +
-      ", contents " + licenceLink("CC BY-SA 4.0") + "; kept in its own data file.");
+      ": curated actions and primary targets, on pairs ChEMBL already has. " +
+      licenceLink("ODbL 1.0") + ", contents " + licenceLink("CC BY-SA 4.0") +
+      "; in its own data file.");
   } else if (typeof COHORT_GTOPDB !== "undefined") {
-    items.push("GtoPdb's file (gtopdb.data.js) is from a different export than the " +
-      "catalogue, so its curated actions are left out of this page.");
+    items.push("GtoPdb's file (gtopdb.data.js) is from a different export, so its " +
+      "curated actions are left out.");
+  }
+  if (DRUGCENTRAL.release) {
+    items.push(link("https://drugcentral.org/", "DrugCentral") + " " +
+      esc(String(DRUGCENTRAL.release)) + ": which regulators (FDA, EMA, PMDA, ...) " +
+      "approved a drug, named where ChEMBL's approval rests on a WHO ATC class. " +
+      licenceLink("CC BY-SA 4.0") + "; in its own data file.");
+  } else if (typeof COHORT_DRUGCENTRAL !== "undefined") {
+    items.push("DrugCentral's file (drugcentral.data.js) is from a different export, " +
+      "so no regulator is named.");
   }
   items.push(
     link("https://www.nlm.nih.gov/mesh/", "MeSH") + (d.mesh ? " " + esc(d.mesh) : "") +
-      ", courtesy of the U.S. National Library of Medicine, reached through the " +
-      "FDA's UNII registry and Wikidata: drug classes. MeSH is a registered mark of the " +
-      "NLM, which does not endorse this project; this is not the most current MeSH. " +
+      ", courtesy of the U.S. National Library of Medicine, via the FDA's UNII " +
+      "registry and Wikidata: drug classes. MeSH is a registered mark of the NLM, " +
+      "which does not endorse this project; this is not the most current MeSH. " +
       licenceLink("NLM's terms") + ".",
     link("https://clinicaltrials.gov/", "ClinicalTrials.gov") +
-      ", courtesy of the U.S. National Library of Medicine: trial status" +
+      ", courtesy of the U.S. National Library of Medicine: trial status and site countries" +
       (d.trialsTo ? ", fetched " + esc(trialsFetchedText(d)) : "") +
       ". The NLM does not endorse this project, and a status may have changed since. " +
       licenceLink("NLM's terms") + ".",
+    link("https://dailymed.nlm.nih.gov/", "DailyMed") +
+      ", courtesy of the U.S. National Library of Medicine: the FDA marketing category " +
+      "of each US label ChEMBL cites for an approval" +
+      (d.labelsTo ? ", read " + esc(d.labelsTo) : "") + ", with " +
+      link("https://lhncbc.nlm.nih.gov/RxNav/", "RxNav") + " where DailyMed no " +
+      "longer serves one. The NLM does not endorse this project. " +
+      licenceLink("NLM's terms") + ".",
     link("https://www.uniprot.org/", "UniProt") + (d.uniprot ? " " + esc(d.uniprot) : "") +
-      ": protein sequences, to match a protein across species. " +
+      ": protein sequences, to match proteins across species. " +
       licenceLink("CC BY 4.0") + ".",
-    link("https://www.wikidata.org/", "Wikidata") + ": Wikipedia links, and a " +
-      "molecule's MeSH record where the FDA's registry does not reach it. " +
+    link("https://www.wikidata.org/", "Wikidata") + ": Wikipedia links, and MeSH " +
+      "records the FDA's registry does not reach. " +
       licenceLink("CC0 1.0") + ".");
+  // A list is credited only when the payload carries entries from it, the way
+  // GtoPdb is only when its file was merged.
+  let anyListed = false;
+  Object.keys(LISTING_SOURCES).forEach(function (src) {
+    const n = molecules.filter(function (m) {
+      return m.admission_reason === "listed_only" &&
+        m.listings.some(function (l) { return l.source === src; });
+    }).length;
+    if (n) {
+      items.push(LISTING_SOURCES[src].credit(n));
+      anyListed = true;
+    }
+  });
+  if (anyListed) {
+    items.push("A listing only says why an entry is here; what it acts on comes from " +
+      "the databases above. SubNetwork is not affiliated with or endorsed by any of " +
+      "these lists.");
+  }
   return items.map(function (li) { return "<li>" + li + "</li>"; }).join("") +
     "<li>No other database of measurements (PDSP, BindingDB) is assessed.</li>";
 }
@@ -3468,7 +3830,7 @@ function aboutCiteHTML() {
     (d.built ? ", data version " + esc(d.built) : "") + ". Built from ChEMBL 37" +
     (d.gtopdb ? " and the IUPHAR/BPS Guide to Pharmacology " + esc(d.gtopdb) : "") + "." +
     (address ? " " + esc(address) + "." : "") + " Accessed " + esc(accessed) + ".</p>";
-  h += "<p>The data is the sources' work, so please cite them too:</p><ul class=\"cite\">" +
+  h += "<p>Please cite the sources too:</p><ul class=\"cite\">" +
     "<li>Zdrazil B, et al. The ChEMBL Database in 2023: a drug discovery platform " +
     "spanning multiple bioactivity data types and time periods. Nucleic Acids Res. " +
     "2024;52(D1):D1180–D1192. " + externalLink("https://doi.org/10.1093/nar/gkad1004",
@@ -3499,12 +3861,20 @@ function viewOptionsSettings() {
                 f.basis === "human_direct" ? "direct human" : "including broader assignment",
                 f.potency === null ? "no potency cutoff" : "potency ≤ " + f.potency + " µM",
                 mechanismSummary(),
+                // Named only where the control is offered (see filtersHTML).
+                trialSitesOffered()
+                  ? (f.trials === "us" ? "trials at US sites"
+                     : f.trials === "anywhere" ? "trials anywhere"
+                     : f.trials === "elsewhere" ? "trials outside the US"
+                     : "every molecule")
+                  : "",
                 f.periphery === "hide" ? "single-molecule targets hidden"
-                                       : "every target drawn",
+                : f.periphery === "focus" ? "only the selection's neighbourhood drawn"
+                : "every target drawn",
                 f.groups === "linked" ? "protein groups linked" : "protein groups separate",
                 f.lineColor === "mechanism" ? "lines coloured by mechanism"
                                             : "lines coloured by evidence"];
-  return bits.join(" · ");
+  return bits.filter(Boolean).join(" · ");
 }
 
 // What a filter is doing, counted from the loaded data, and returned against
@@ -3537,7 +3907,7 @@ function filterBanners() {
   if (f.tier === "supported") {
     let n = 0;
     for (const c of all) if (c.tier === "preliminary" && basisAllowed(c)) n++;
-    if (n) push("tier", "Showing <b>Supported</b> claims only. " +
+    if (n) push("tier", "<b>Supported</b> claims only: " +
                 plural(n, "Preliminary claim") + isAre(n) + "hidden.");
   } else {
     // The default, and it says so. A reader looking at the resting picture is
@@ -3548,10 +3918,9 @@ function filterBanners() {
     // inferred from the pills is how a Preliminary claim reads as a settled one.
     let n = 0;
     for (const c of all) if (c.tier === "preliminary" && basisAllowed(c)) n++;
-    if (n) push("tier", "Showing <b>Supported and Preliminary</b> claims. " +
-                plural(n, "claim") + isAre(n) + "Preliminary: exactly one " +
-                "identifiable study behind " + (n === 1 ? "it" : "each") +
-                ". Every row carries its tier.", "inclusion");
+    if (n) push("tier", "<b>Supported and Preliminary</b> claims: " +
+                plural(n, "claim") + " rest" + (n === 1 ? "s" : "") + " on one study. " +
+                "Every row shows its tier.", "inclusion");
   }
   if (f.basis === "human_direct") {
     const mols = new Set();
@@ -3563,15 +3932,14 @@ function filterBanners() {
     let onlyBroader = 0;
     for (const m of mols) if (visibleClaimsFor(m).length === 0) onlyBroader++;
     if (n) {
-      push("basis", "Showing <b>direct human</b> assignments only. " + plural(n, "claim") +
-               " in the broader layer" + isAre(n) + "hidden" +
-               (onlyBroader ? ", including the only evidence for " + plural(onlyBroader, "entry") +
-                ". Turn on “Include broader assignment” to see them." : "."));
+      push("basis", "<b>Direct human</b> only: " + plural(n, "broader claim") +
+               isAre(n) + "hidden" +
+               (onlyBroader ? ", the only evidence for " + plural(onlyBroader, "entry") +
+                ". “Include broader assignment” shows them." : "."));
     }
   } else {
-    push("basis", "Showing the <b>broader assignment</b> layer as well as direct human " +
-             "results, labelled on every row and never pooled with direct results.",
-             "inclusion");
+    push("basis", "Including the <b>broader assignment</b> layer, labelled on every " +
+             "row and never pooled with direct human results.", "inclusion");
   }
   if (f.potency !== null) {
     let failed = 0, novalue = 0;
@@ -3582,8 +3950,7 @@ function filterBanners() {
     }
     push("potency", "Potency <b>≤ " + f.potency + " µM</b>: hides " +
              plural(failed, "weaker claim") + ", and " + novalue +
-             " with no comparable value (e.g. curated mechanisms) for want of one, " +
-             "not as failures.");
+             " for want of a comparable value (e.g. curated mechanisms).");
   }
   if (f.mechanism.length) {
     // Two costs, counted apart, because they are two different statements. A
@@ -3600,36 +3967,65 @@ function filterBanners() {
     const names = f.mechanism.map(function (t) { return esc(mechanismLabel(t)); });
     const what = names.length === 1 ? names[0]
                : names.slice(0, -1).join(", ") + " or " + names[names.length - 1];
-    push("mechanism", "Showing claims with <b>" + what + "</b> only. " +
+    push("mechanism", "<b>" + what + "</b> only. " +
       (other ? plural(other, "claim") + " with another curated action" +
                (none ? " and " : "") : "") +
       (none ? plural(none, "claim") + " with no curated action at all" : "") +
       (other + none ? isAre(other + none) + "hidden. " : "") +
-      "An absent annotation is ChEMBL not having curated a mechanism, never a " +
-      "finding that the molecule does not act this way.");
+      "No annotation means none was curated, not that the molecule does not act " +
+      "this way.");
+  }
+  if (f.trials !== "any") {
+    // Counted in molecules, and the hidden ones split by why, because "no
+    // trial abroad" and "no trial ChEMBL cites at all" are different facts: an
+    // ATC N member or a label-based approval has no trial to place anywhere.
+    const s = trialSiteCounts();
+    const where = f.trials === "us" ? "a site in the US"
+                : f.trials === "elsewhere" ? "a site outside the US"
+                : "a site anywhere, or with no site listed";
+    const kept = s[f.trials];
+    const noTrial = s.none;
+    const otherSide = f.trials === "us" ? s.only_elsewhere + s.unstated
+                    : f.trials === "elsewhere" ? s.only_us + s.unstated : 0;
+    push("trials", "Molecules with a <b>Phase 1+ brain-condition trial</b> at " + where +
+         ": " + kept + " of " + s.total + ". Hidden: " +
+         plural(noTrial, "molecule") + " with no such trial ChEMBL cites" +
+         (otherSide ? ", and " + plural(otherSide, "molecule") + " whose trials " +
+          (f.trials === "us" ? "list no US site" : "list no site outside the US") : "") +
+         ". Sites are ClinicalTrials.gov's; a trial registered only elsewhere is " +
+         "not counted.");
   }
   if (f.lineColor === "mechanism") {
     const g = catalogueGraph();
     let annotated = 0;
     for (const e of g.edges) if (edgeActions(e).length) annotated++;
     push("lineColor", "Lines coloured by <b>curated mechanism</b>: " + annotated + " of " +
-             plural(g.edges.length, "drawn edge") + " have one; the rest mean none " +
-             "was curated, not that the molecule does nothing.", "inclusion");
+             plural(g.edges.length, "drawn edge") + " have one. The rest have none " +
+             "curated, not no effect.", "inclusion");
   }
   if (f.periphery === "hide") {
     const p = catalogueGraph().pruned;
     if (p) {
-      push("periphery", "<b>Canvas thinned</b>: " + plural(p.targets, "target") + " with a single " +
-               "molecule at them " + (p.targets === 1 ? "is" : "are") + " not drawn, leaving " +
-               p.targets_kept + " of " + p.targets_before + ". " +
-               plural(p.edges, "edge") + isAre(p.edges) + "off the canvas with them" +
-               (p.molecules ? ", and " + plural(p.molecules, "molecule") +
-                " " + (p.molecules === 1 ? "has" : "have") +
-                " nothing left to draw and " + (p.molecules === 1 ? "is" : "are") +
-                " off it too" : "") +
-               ". Nothing is removed from the catalogue: every one of them is still in " +
-               "the panel, the similarity ranking and the search.");
+      push("periphery", "<b>Canvas thinned</b>: " + plural(p.targets, "single-molecule target") +
+               " not drawn (" + p.targets_kept + " of " + p.targets_before + " kept), taking " +
+               plural(p.edges, "edge") +
+               (p.molecules ? " and " + plural(p.molecules, "molecule") + " left with none" : "") +
+               " off the canvas. All stay in the panels, the similarity ranking and search.");
     }
+  }
+  if (f.periphery === "focus") {
+    const p = catalogueGraph().focused;
+    // With nothing to focus on everything is drawn, and the control says it is
+    // waiting rather than claiming a cost it is not paying.
+    push("periphery", p
+      ? "<b>Only the selection's neighbourhood</b> is drawn: " +
+        plural(p.molecules_kept, "molecule") + " and " + plural(p.targets_kept, "target") +
+        ", leaving " + plural(p.molecules, "molecule") + ", " + plural(p.targets, "target") +
+        " and " + plural(p.edges, "edge") + " off the canvas. Each selection redraws " +
+        "it. All stay in the panels, the similarity ranking and search."
+      : "<b>Only the selection's neighbourhood</b>: nothing on the canvas is selected, " +
+        "so every target is drawn.",
+      p ? "cost" : "note");
   }
   return out;
 }
@@ -4084,17 +4480,179 @@ function foldedSection(key, heading, body, anchor) {
 // least one. The link is built from the NCT id rather than stored, which is
 // invariant 15: an identifier resolves to exactly one registry record, and
 // nothing here searches for a study by its name.
-function indicationRowsHTML(rows) {
+// What ChEMBL read an Approved off (D23, approval_basis), worded for the hover
+// on the phase. Every one of these is an approval as far as anything cited
+// says; the words say how direct that is, from a regulator's own document to a
+// post-marketing trial.
+//
+// D24 made three of them say more. A trial is now one the registry calls
+// Phase 4, so "Phase 4 trial" is true where it was an assumption. A WHO ATC
+// class is a classification by use and not a regulator, so it is named as the
+// class, with the regulators DrugCentral records approving the drug where it
+// has any (a molecule-level fact, said as one), and otherwise with "no
+// regulator's record is cited" rather than reading as anyone's approval. An
+// unread label says why it went unread, beside FDA's approval year that keeps
+// it standing.
+const APPROVAL_BASIS_WORDS = {
+  regulator: "an FDA or EMA approval document",
+  label: "a US drug label FDA approved",
+  monograph: "a US label sold under an FDA over-the-counter monograph",
+  unresolved: "a US drug label whose marketing category could not be read",
+  atc: "the WHO ATC class the drug is filed in",
+  trial: "a trial the registry calls Phase 4 (post-marketing)",
+  unsourced: "no reference ChEMBL gives",
+};
+const UNREAD_WORDS = {
+  "no marketing table": "a US drug label older than FDA's marketing categories",
+  "not served": "a US drug label DailyMed and RxNav no longer serve",
+};
+const DAILYMED_URL = "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=";
+
+// The regulators DrugCentral records approving a molecule, earliest first, as
+// "EMA (1998), PMDA (2004)"; empty without its file (D24).
+function regulatorApprovals(mol) {
+  return (mol && (DRUGCENTRAL.approvals || {})[String(mol.id)]) || [];
+}
+
+function regulatorsText(list) {
+  return list.map(function (a) { return a[0] + (a[1] ? " (" + a[1] + ")" : ""); }).join(", ");
+}
+
+function approvalBasisWords(basis, d, mol) {
+  if (basis === "atc") {
+    const classes = (d && d.atc_classes) || [];
+    const regs = regulatorApprovals(mol);
+    return (classes.length ? "WHO ATC class " + classes.join(" and ")
+                           : APPROVAL_BASIS_WORDS.atc) + "; " +
+      (regs.length ? "approved by " + regulatorsText(regs) + " per DrugCentral, " +
+                     "not necessarily for this disease"
+                   : "no regulator's record is cited");
+  }
+  if (basis === "unresolved") {
+    const why = ((d && d.unread_reasons) || []).map(function (u) { return UNREAD_WORDS[u] || u; });
+    return (why.length ? why.join(" and ") : APPROVAL_BASIS_WORDS.unresolved) +
+      (mol && mol.first_approval ? "; FDA approved the drug in " + mol.first_approval
+                                 : "");
+  }
+  return APPROVAL_BASIS_WORDS[basis] || basis;
+}
+
+function approvalBasisTitle(bases, d, mol) {
+  const words = (bases || []).map(function (b) { return approvalBasisWords(b, d, mol); });
+  return words.length ? "ChEMBL's source: " + words.join("; and ") : "";
+}
+
+// Where ChEMBL records an approval withdrawn (D24, drug_warning): "withdrawn
+// worldwide (1984)" where any record says Worldwide, the user's call - a
+// worldwide withdrawal is said as one, not as a list of markets - and
+// otherwise the markets and years, "withdrawn in France, 1990". More than two
+// events are counted, every one on hover with ChEMBL's reasons. Null where
+// ChEMBL records none.
+const WITHDRAWALS_SHOWN = 2;
+
+function withdrawalsOf(mol) {
+  return ((mol && mol.withdrawals) || []).map(function (w) {
+    const s = function (i) { return (i === null || i === undefined) ? "" : (STR[i] || ""); };
+    return { countries: s(w[0]), year: w[1] || null,
+             classes: s(w[2]) ? s(w[2]).split("|") : [] };
+  });
+}
+
+function countryList(text) {
+  const c = String(text || "").split(/;\s*/).filter(Boolean);
+  return c.length <= 1 ? c.join("") : c.slice(0, -1).join(", ") + " and " + c[c.length - 1];
+}
+
+function withdrawalNote(mol) {
+  const events = withdrawalsOf(mol);
+  if (!events.length) return null;
+  const title = "Withdrawn, per ChEMBL: " + events.map(function (e) {
+    return (e.countries === "Worldwide" ? "worldwide" : countryList(e.countries)) +
+      (e.year ? ", " + e.year : "") + (e.classes.length ? " (" + e.classes.join(", ") + ")" : "");
+  }).join("; ");
+  const world = events.filter(function (e) { return e.countries === "Worldwide"; });
+  if (world.length) {
+    const year = world.map(function (e) { return e.year; }).filter(Boolean).sort()[0];
+    return { worldwide: true, text: "withdrawn worldwide" + (year ? " (" + year + ")" : ""),
+             title: title };
+  }
+  if (events.length <= WITHDRAWALS_SHOWN) {
+    return { worldwide: false, title: title, text: "withdrawn in " + events.map(function (e) {
+      return countryList(e.countries) + (e.year ? ", " + e.year : "");
+    }).join("; in ") };
+  }
+  const years = events.map(function (e) { return e.year; }).filter(Boolean).sort();
+  return { worldwide: false, title: title,
+           text: "withdrawn in " + events.length + " markets" +
+                 (years.length ? ", " + years[0] + (years[years.length - 1] !== years[0]
+                                                    ? "–" + years[years.length - 1] : "") : "") };
+}
+
+// "Approved, withdrawn worldwide (1984)" or "Approved; withdrawn in France,
+// 1990": the phase as a reader sees it on an Approved row of a withdrawn drug.
+function approvedLabelText(mol) {
+  const w = withdrawalNote(mol);
+  if (!w) return "Approved";
+  return "Approved" + (w.worldwide ? ", " : "; ") + w.text;
+}
+
+// A ChEMBL Approved this page does not state (D24), said in ChEMBL's terms and
+// beside the phase the row now reads: one resting on trials none of which the
+// registry calls Phase 4, or on a label that could not be read for a drug FDA
+// records no approval of.
+function fallenApprovalHTML(bases) {
+  const notes = [];
+  if (bases.indexOf("trial_phase") >= 0) {
+    notes.push("ChEMBL's Approved rests on trials alone, none of them Phase 4.");
+  }
+  if (bases.indexOf("unconfirmed") >= 0) {
+    notes.push("ChEMBL's Approved rests on an unreadable US label, and FDA records " +
+               "no approval of the drug.");
+  }
+  return notes.length ? '<div class="small">' + esc(notes.join(" ")) + "</div>" : "";
+}
+
+// The US labels a ChEMBL Approved rested on where FDA lists every one as
+// marketed without its approval (D23). Said as what ChEMBL cites, never as
+// "never approved": another product, one ChEMBL does not cite, could be.
+function unapprovedLabelsHTML(labels) {
+  if (!labels.length) return "";
+  const years = function (d) { return d ? String(d).slice(-4) : null; };
+  const from = labels.map(function (l) { return years(l.from); }).filter(Boolean).sort();
+  const open = labels.some(function (l) { return !l.until; });
+  const until = labels.map(function (l) { return years(l.until); }).filter(Boolean).sort();
+  const span = !from.length ? "" : open ? ", sold since " + from[0]
+    : ", sold " + from[0] + (until[until.length - 1] !== from[0]
+                             ? "–" + until[until.length - 1] : "");
+  const n = labels.length;
+  return '<div class="small">ChEMBL\'s Approved rests on ' +
+    (n === 1 ? "one US label" : n + " US labels") + " FDA lists as unapproved" +
+    esc(span) + ": " +
+    labels.map(function (l) {
+      return link(DAILYMED_URL + encodeURIComponent(l.set_id), l.title || l.set_id) +
+        (l.labeler ? ' <span class="muted">(' + esc(l.labeler) + ")</span>" : "");
+    }).join(", ") + "</div>";
+}
+
+function indicationRowsHTML(rows, mol) {
+  const withdrawn = withdrawalNote(mol);
   return rows.map(function (i) {
+    const approved = i.phase_label === "Approved";
+    const basis = approved ? approvalBasisTitle(i.bases, i, mol) : "";
+    const title = [basis, approved && withdrawn ? withdrawn.title : ""].filter(Boolean)
+      .join(". ");
     let h = '<div class="ind"><a href="#" data-select="condition" data-id="' +
       esc(i.mesh_id) + '">' + esc(i.heading) + "</a>" +
-      (i.phase_label ? ' <span class="muted">' + esc(i.phase_label) + "</span>" : "");
+      (i.phase_label ? ' <span class="muted"' + (title ? ' title="' + esc(title) + '"' : "") +
+                       ">" + esc(approved ? approvedLabelText(mol) : i.phase_label) +
+                       "</span>" : "");
+    h += unapprovedLabelsHTML(i.unapproved_labels || []);
+    if (!approved) h += fallenApprovalHTML(i.bases || []);
     const notes = [];
     // Stated rather than left visible only as a repeated disease name, the way
     // a curated claim states how many records its references came from.
     if (i.n_records > 1) {
-      notes.push(esc(plural(i.n_records, "ChEMBL record")) +
-                 ", at the furthest phase any of them reached");
+      notes.push(esc(plural(i.n_records, "ChEMBL record")) + ", furthest phase shown");
     }
     if (notes.length) h += '<div class="small muted">' + notes.join(" · ") + "</div>";
     if (i.trials.length === 1) {
@@ -4149,11 +4707,13 @@ const TRIAL_STATUS_WORDS = {
 };
 
 // Export row: [status, why_stopped, phases, primary outcomes, start year,
-// end year, planned], strings interned, trailing fields omitted when empty.
-// Outcomes are [[title, [p, ...]], ...] - the trial's primary outcomes only,
-// with the p-values the sponsor reported for them, verbatim. `planned` flags
-// which of the two years the registry gives only as an estimate (1 start,
-// 2 end).
+// end year, planned, countries], strings interned, trailing fields omitted
+// when empty. Outcomes are [[title, [p, ...]], ...] - the trial's primary
+// outcomes only, with the p-values the sponsor reported for them, verbatim.
+// `planned` flags which of the two years the registry gives only as an
+// estimate (1 start, 2 end). Countries are where it lists a site,
+// '|'-joined: null there is a record listing none, and a row too short to
+// reach it was fetched before sites were asked for.
 function trialStatus(nct) {
   const r = (DATA.trial_status || {})[nct];
   if (!r) return null;
@@ -4168,7 +4728,29 @@ function trialStatus(nct) {
     }),
     start: r[4] || null, end: r[5] || null,
     startPlanned: !!(r[6] & 1), endPlanned: !!(r[6] & 2),
+    countries: r.length > 7 ? (s(r[7]) ? s(r[7]).split("|") : []) : undefined,
   };
+}
+
+// Where a trial had sites, beside its id (2026-10-15, at the user's request:
+// trimipramine's indications said its trials ran in Germany, and not which
+// one). The US comes first, since it is the line the trial-sites filter
+// draws; past three the rest are counted and the whole list is the hover. A
+// record listing no site says so, and one fetched before sites were asked for
+// says nothing.
+const TRIAL_SITES_SHOWN = 3;
+const HOME_COUNTRY = "United States";   // the registry's name, as export.py reads it
+
+function trialSitesHTML(t) {
+  if (!t || !t.countries) return "";
+  if (!t.countries.length) return ' <span class="muted">(no sites listed)</span>';
+  const all = t.countries.filter(function (c) { return c === HOME_COUNTRY; })
+    .concat(t.countries.filter(function (c) { return c !== HOME_COUNTRY; }));
+  let text = all.slice(0, TRIAL_SITES_SHOWN).join(", ");
+  if (all.length > TRIAL_SITES_SHOWN) text += " +" + (all.length - TRIAL_SITES_SHOWN) + " more";
+  const hover = all.length > TRIAL_SITES_SHOWN
+    ? ' title="' + esc(all.length + " countries: " + all.join(", ")) + '"' : "";
+  return ' <span class="trial-sites"' + hover + ">(" + esc(text) + ")</span>";
 }
 
 // When a trial ran, in years (2026-09-28, at the user's request): a phase 2
@@ -4255,7 +4837,7 @@ function trialOutcomeHTML(nct, t) {
   if (!tested.length) {
     return ' <span class="muted">· ' +
       link(TRIAL_URL + encodeURIComponent(nct) + "?tab=results", "results posted") +
-      ", no test of the main goal reported</span>";
+      ", no test of the main goal</span>";
   }
   // One goal, its title cut short, and its first p-value: the rest are counted
   // rather than listed, and the full title is the hover (2026-09-24).
@@ -4284,7 +4866,8 @@ function pText(p) {
 function trialLineHTML(nct) {
   const t = trialStatus(nct);
   const meta = [trialPhaseLabel(t), trialYears(t)].filter(Boolean).join(", ");
-  return trialLink(nct) + (meta ? ' <span class="muted">' + esc(meta) + "</span>" : "") +
+  return trialLink(nct) + trialSitesHTML(t) +
+    (meta ? ' <span class="muted">' + esc(meta) + "</span>" : "") +
     " " + trialStatusHTML(nct) + trialOutcomeHTML(nct, t);
 }
 
@@ -4307,13 +4890,13 @@ function trialSpan(ncts) {
   return lo === hi ? String(lo) : lo + "–" + hi;
 }
 
-// "73 trials, 2001–2019, 21 at phase 3 or later: 2 ongoing, 56 completed, 10 stopped early"
+// "73 trials, 2001–2019, 21 at phase 3+: 2 ongoing, 56 completed, 10 stopped early"
 function trialSummary(ncts) {
   const late = ncts.filter(function (t) { return trialPhaseRank(t) >= 3; }).length;
   const phased = ncts.some(function (t) { return trialPhaseRank(t) >= 0; });
   const span = trialSpan(ncts);
   return plural(ncts.length, "trial") + (span ? ", " + span : "") +
-    (phased ? ", " + late + " at phase 3 or later" : "") + ": " + trialTally(ncts);
+    (phased ? ", " + late + " at phase 3+" : "") + ": " + trialTally(ncts);
 }
 
 function trialGroup(nct) {
@@ -4351,8 +4934,35 @@ function trialTally(ncts) {
 function developmentStatus(mol) {
   const p = mol.max_phase;
   if (p === null || p === undefined) return "not recorded by ChEMBL";
+  // D23: ChEMBL's approval rests only on US labels FDA lists as marketed
+  // without approval, and FDA records no approval year for any form.
+  if (mol.approval_status === "unapproved_marketing") {
+    const c = mol.max_phase_checked;
+    const reached = { 3: "phase 3", 2: "phase 2", 1: "phase 1", 0.5: "early phase 1" }[c];
+    return "sold in the US without FDA approval, ChEMBL's only grounds for Approved" +
+           (reached ? "; trials reached " + reached : "");
+  }
+  // D24: every approval ChEMBL records for it has fallen, some on trials the
+  // registry does not call Phase 4 or on an unread label.
+  if (mol.approval_status === "no_approval_cited") {
+    const c = mol.max_phase_checked;
+    const reached = { 3: "phase 3", 2: "phase 2", 1: "phase 1", 0.5: "early phase 1" }[c];
+    return "approved per ChEMBL, but nothing it cites is an approval" +
+           (reached ? "; trials reached " + reached : "");
+  }
+  // A phase ChEMBL files no disease under at all (2026-10-17, at the user's
+  // request): 163 entries here, every one ChEMBL puts at phase 2 or 3 carrying
+  // an INN or USAN, and cyclazodone's only source is the INN list, with no trial
+  // registered. "Reached phase 2" asserts a trial nothing here cites, so the
+  // line says what ChEMBL records and that it cites nothing for it.
+  if (mol.n_indications_chembl === 0) {
+    const named = { 3: "phase 3", 2: "phase 2", 1: "phase 1", 0.5: "early phase 1" }[p];
+    if (named) return "ChEMBL records " + named + " but cites no trial or disease for it";
+  }
   if (p === 4) {
-    return "approved" + (mol.first_approval ? ", first in " + mol.first_approval : "");
+    const w = withdrawalNote(mol);
+    return "approved" + (mol.first_approval ? ", first in " + mol.first_approval : "") +
+      (w ? (w.worldwide ? ", " : "; ") + w.text : "");
   }
   if (p === 3) return "reached phase 3, not approved for any disease";
   if (p === 2) return "reached phase 2, not approved for any disease";
@@ -4376,14 +4986,14 @@ const APPROVED_ELSEWHERE_SHOWN = 3;
 
 function developmentHTML(mol) {
   const text = developmentStatus(mol);
-  if (mol.max_phase !== 4) return esc(text);
+  if (mol.max_phase !== 4 || mol.approval_status) return esc(text);
   const listed = indicationsByDisease(mol.id).some(function (i) {
     return i.phase_label === "Approved";
   });
   if (listed) return esc(text);
   const names = mol.approved_elsewhere ? String(mol.approved_elsewhere).split("|") : [];
   if (!names.length) {
-    return esc(text) + '<div class="small muted">ChEMBL records no condition it is ' +
+    return esc(text) + '<div class="small muted">ChEMBL names no condition it is ' +
            "approved for.</div>";
   }
   const shown = names.slice(0, APPROVED_ELSEWHERE_SHOWN);
@@ -4391,7 +5001,7 @@ function developmentHTML(mol) {
   return esc(text) + '<div class="small muted"' +
     (more ? ' title="' + esc(names.join(", ")) + '"' : "") + ">for " +
     esc(shown.join(", ")) + (more ? " and " + more + " more" : "") +
-    ", " + (names.length === 1 ? "a condition" : "conditions") + " not listed here</div>";
+    " (not listed here)</div>";
 }
 
 // What the molecule is developed or used for, inside the part of the adopted
@@ -4415,6 +5025,22 @@ function developmentHTML(mol) {
 // 1,078 approved diseases here - because what ChEMBL cites there is a product
 // label rather than a trial, so the section says so instead of letting a
 // missing link read as a missing trial.
+// Where this molecule's Phase 1 or later trials for these conditions had
+// sites, as the trial-sites filter reads it, or "" where there is none to
+// place. The countries outside the US are named, up to six, so "outside the
+// US" can be checked against the trials listed below it.
+function trialSitesSentence(mol) {
+  const s = mol && mol.trial_sites;
+  if (!s) return "";
+  if (s === "unstated") return "Its Phase 1+ trials list no sites.";
+  const abroad = mol.trial_countries ? String(mol.trial_countries).split("|") : [];
+  const named = abroad.slice(0, 6).map(esc).join(", ") +
+    (abroad.length > 6 ? " and " + (abroad.length - 6) + " more" : "");
+  if (s === "us") return "Its Phase 1+ trials ran in the US only.";
+  if (s === "elsewhere") return "Its Phase 1+ trials ran outside the US only: " + named + ".";
+  return "Its Phase 1+ trials ran in the US and elsewhere: " + named + ".";
+}
+
 function indicationsHTML(mol) {
   const rows = indicationsByDisease(mol.id);
   if (!rows.length) return "";
@@ -4426,17 +5052,18 @@ function indicationsHTML(mol) {
   const total = mol.n_indications_chembl || rows.length;
 
   let note = rows.length >= total
-    ? "All of this drug's conditions are listed."
-    : "Neurological and pain conditions only: " + rows.length + " of the " + total +
-      " ChEMBL records for this drug.";
+    ? "All of this drug's conditions."
+    : "Neurological and pain conditions only: " + rows.length + " of ChEMBL's " +
+      total + ".";
   if (withTrials) {
-    note += " Phase is the furthest any trial reached, and completed means the " +
-      "trial finished, not that it worked.";
+    note += " Phase is the furthest reached; completed means finished, not successful.";
   }
+  const sites = trialSitesSentence(mol);
+  if (sites) note += " " + sites;
 
   return foldedSection("indications",
     helpLabel("Indications", "indications") + " (" + rows.length + ")",
-    '<div class="small muted">' + note + "</div>" + indicationRowsHTML(rows));
+    '<div class="small muted">' + note + "</div>" + indicationRowsHTML(rows, mol));
 }
 
 // A molecule's classes, as rows of its identity table: the MeSH actions and
@@ -4506,6 +5133,7 @@ function showMolecule(mol) {
   // for something new, and the two used to read identically.
   h += "<tr><td>" + helpLabel("Development", "development") + "</td><td>" +
        developmentHTML(mol) + "</td></tr>";
+  h += listingRowHTML(mol);
   if (mol.molecular_formula) {
     h += "<tr><td>" + helpLabel("Formula", "formula") + "</td><td>" +
          esc(mol.molecular_formula) + "</td></tr>";
@@ -4541,8 +5169,8 @@ function showMolecule(mol) {
   const similar = sharedTargets(mol.id);
   let similarBody = "";
   if (!similar.length) {
-    similarBody += '<div class="small muted">Nothing else in the catalogue shares a target ' +
-         "with this entry under the current filters.</div>";
+    similarBody += '<div class="small muted">No shared targets under the current ' +
+         "filters.</div>";
   }
   // Every row, not the first 25. The heading counts the whole list, and 304 of
   // the 1,331 entries have more than 25 neighbours - haloperidol has 180 under
@@ -5072,21 +5700,21 @@ function compareTargetMolecules(a, b) {
 // counted is stated beside it, so the text does not claim either way.
 const VALIDITY_COMMENTS = {
   "Outside typical range": { warn: true,
-    text: "ChEMBL's automatic check: the value is unusually weak or strong for " +
-          "this kind of measurement, so may not be accurate. It is not an error " +
-          "found in the paper, and a weak value is often real." },
+    text: "ChEMBL's automatic check: unusually weak or strong for this kind of " +
+          "measurement, so possibly inaccurate. Not an error found in the paper; a " +
+          "weak value is often real." },
   "Potential transcription error": { warn: true,
-    text: "ChEMBL's curators found this about ten times off from earlier reports " +
-          "of the same measurement, so the units may have been copied wrong." },
+    text: "ChEMBL's curators found this about tenfold off earlier reports of the " +
+          "same measurement; the units may have been copied wrong." },
   "Non standard unit for type": { warn: true,
-    text: "The units are unusual for this kind of measurement, so either the " +
-          "units or the measurement type may be wrong." },
+    text: "Unusual units for this kind of measurement; the units or the type may " +
+          "be wrong." },
   "Potential missing data": { warn: true,
-    text: "The source gave no value, units or comment here; ChEMBL marks it " +
-          "for further investigation." },
+    text: "The source gave no value, units or comment; ChEMBL flags it for " +
+          "investigation." },
   "Potential author error": { warn: true,
-    text: "ChEMBL's curators checked this against the paper: it is as printed, " +
-          "but the authors may have made an error." },
+    text: "As printed in the paper, per ChEMBL's curators, but the authors may " +
+          "have erred." },
   "Author confirmed error": { warn: true,
     text: "The paper's authors have confirmed this value is wrong." },
   "Manually validated": { warn: false,
@@ -5341,8 +5969,8 @@ function curatedRefs(claim, ev) {
 function curatedRefsHTML(claim, ev, settled) {
   if (!ev) {
     return settled
-      ? '<div class="small muted">The evidence file for this molecule could not be ' +
-        "loaded. That is a missing file, not an absence of references.</div>"
+      ? '<div class="small muted">This molecule\'s evidence file did not load: a ' +
+        "missing file, not missing references.</div>"
       : '<div class="small muted">Loading\u2026</div>';
   }
   const found = curatedRefs(claim, ev);
@@ -5352,10 +5980,9 @@ function curatedRefsHTML(claim, ev, settled) {
   }
   let h = "";
   if (found.records > 1) {
-    h += '<div class="small muted">ChEMBL files this mechanism as ' +
-         plural(found.records, "record") + ", one per form of the molecule it was " +
-         "curated against. They fold onto one parent here and are one assertion, so " +
-         "each reference below is listed once rather than once per record.</div>";
+    h += '<div class="small muted">ChEMBL files this mechanism once per form of the ' +
+         "molecule (" + plural(found.records, "record") + "); here they are one " +
+         "assertion, each reference listed once.</div>";
   }
   // The curators' own prose, where they left any: 453 of the 1,485 mechanisms
   // here carry one, and it is the only place a curated claim says anything
@@ -5380,8 +6007,8 @@ function claimEvidenceHTML(claim, ev, settled) {
     // Not yet and not there are different statements about a molecule's
     // evidence, and only one of them is about the data.
     return settled
-      ? '<div class="small muted">The evidence file for this molecule could not be ' +
-        "loaded. That is a missing file, not an absence of evidence.</div>"
+      ? '<div class="small muted">This molecule\'s evidence file did not load: a ' +
+        "missing file, not missing evidence.</div>"
       : '<div class="small muted">Loading\u2026</div>';
   }
   const rows = (ev.byClaim.get(claim.id) || []);
@@ -5405,9 +6032,8 @@ function showRetained(mol, ev) {
   // Reached from the molecule panel, and until now a one-way trip.
   h += '<div class="row-item" data-select="molecule" data-id="' + esc(String(mol.id)) +
        '">Back to ' + esc(mol.name) + "</div>";
-  h += '<div class="small muted">Claims that exist in ChEMBL 37 but meet neither the ' +
-       "Supported nor the Preliminary rule, grouped by the reason. Each is built from one " +
-       "or more observations - individual data rows - and none is drawn as a line.</div>";
+  h += '<div class="small muted">Claims in ChEMBL 37 meeting neither the Supported ' +
+       "nor the Preliminary rule, grouped by reason. None is drawn.</div>";
   if (!ev) return h + '<div class="small muted">Evidence file not loaded.</div>';
   const byReason = new Map();
   for (const c of ev.claims) {
@@ -5459,11 +6085,11 @@ function showRetained(mol, ev) {
 function eitherEndHTML(mol, target, extra) {
   let h = "";
   h += '<div class="row-item" data-select="molecule" data-id="' + esc(String(mol.id)) +
-       '">Open ' + esc(mol.name) + '<div class="small muted">Its targets, its evidence ' +
-       "and what else acts where it does</div></div>";
+       '">Open ' + esc(mol.name) + '<div class="small muted">Its targets, evidence ' +
+       "and neighbours</div></div>";
   h += '<div class="row-item" data-select="target" data-id="' + esc(target.chembl_id) +
        '">Open ' + esc(proteinTitle(target)) + '<div class="small muted">' +
-       esc(target.target_type) + " · every molecule here with a claim at it</div></div>";
+       esc(target.target_type) + " · every molecule with a claim at it</div></div>";
   return foldedSection("either_end", "Either end", h + (extra || ""));
 }
 
@@ -5538,7 +6164,7 @@ function showEdge(mol, target, ev) {
     // The one honest empty state, and it is two different ones: the filters
     // draw no line between these two, or the catalogue holds nothing to draw.
     h += '<div class="small muted">No line under the current filters' +
-         (heldN ? ": every claim between them is hidden by them." : "") +
+         (heldN ? ", which hide every claim between these two." : ".") +
          "</div>";
   }
 
@@ -5552,8 +6178,8 @@ function showEdge(mol, target, ev) {
         helpLabel("Claims", "edge_claims") + " (" + total + ")",
         edgeClaimsBody(p, ev, "edge_group_"));
     } else if (settled) {
-      h += '<div class="small muted">No claim between these two in the catalogue, and no ' +
-           "retained claim in this molecule's evidence file.</div>";
+      h += '<div class="small muted">No claim between these two, retained or ' +
+           "otherwise.</div>";
     }
   } else {
     for (const p of pairRecords) {
@@ -5640,20 +6266,19 @@ function edgeClaimsBody(p, ev, keyPrefix) {
   const entries = [];
   for (const c of p.drawn) entries.push({ claim: c, note: null });
   for (const c of p.held) {
-    entries.push({ claim: c, note: "Hidden by the current filters, and no part of this " +
-                                   "line while they are on." });
+    entries.push({ claim: c, note: "Hidden by the current filters, so not part of " +
+                                   "this line." });
   }
   for (const c of p.retained) {
-    entries.push({ claim: c, note: "Retained: no part of this line. It meets neither " +
-                                   "the Supported nor the Preliminary rule, and is " +
-                                   "counted into nothing." });
+    entries.push({ claim: c, note: "Retained: meets neither the Supported nor the " +
+                                   "Preliminary rule; not drawn or counted." });
   }
   if (!entries.length) {
-    return '<div class="small muted">No claim at this record, and no retained claim in ' +
-           "this molecule's evidence file.</div>";
+    return '<div class="small muted">No claim at this record, retained or ' +
+           "otherwise.</div>";
   }
-  let body = '<div class="small muted">Listed, never added: a curated mechanism and a ' +
-             "measured result are different kinds of evidence.</div>";
+  let body = '<div class="small muted">Listed, never added: curated and measured ' +
+             "are different kinds of evidence.</div>";
   for (const g of edgeClaimGroups(entries)) {
     let gb = "";
     for (const e of g.entries) gb += claimBlockHTML(e.claim, ev, e.note, false, true);
@@ -5732,12 +6357,10 @@ function relatedTargetsHTML(mol, target) {
     let h = "";
     h += '<div class="small muted">' + plural(ov.n_total, "protein") +
          (ov.n_present
-           ? ", " + ov.n_present + " of which " + (ov.n_present === 1 ? "is" : "are") +
-             " also drawn as " + (ov.n_present === 1 ? "a line" : "lines") + " of " +
-             esc(mol.name) + "'s own. That is a claim about this set beside " +
-             (ov.n_present === 1 ? "a claim" : "claims") + " about the proteins in it, " +
-             "not the same finding drawn twice, and neither is derived from the other."
-           : ", none of which carries a claim of its own from " + esc(mol.name) +
+           ? "; " + ov.n_present + " also " + (ov.n_present === 1 ? "has" : "have") +
+             " a line of " + esc(mol.name) + "'s own, a separate claim from this one " +
+             "about the set."
+           : ", none with a claim of its own from " + esc(mol.name) +
              " under these filters.") + "</div>";
     for (const r of ov.rows.slice(0, 30)) {
       if (r.inView && r.target) {
@@ -5745,8 +6368,8 @@ function relatedTargetsHTML(mol, target) {
       } else if (r.target) {
         h += '<div class="row-item" data-select="target" data-id="' + esc(r.target.chembl_id) +
           '">' + esc(r.gene_symbol || r.accession) + '<div class="small muted">' +
-          esc(r.target.name) + " · a target in its own right, with no claim from " +
-          esc(mol.name) + " under these filters</div></div>";
+          esc(r.target.name) + " · no claim from " + esc(mol.name) +
+          " under these filters</div></div>";
       } else {
         h += '<div class="small">' + esc(r.gene_symbol || r.accession) +
           ' <span class="muted">' + esc(r.accession) +
@@ -5833,8 +6456,8 @@ function splitOppositionHTML(a, b, row) {
     (viaGtopdb
       ? (one ? "Where the opposite direction comes from:" : "Where the opposite directions come from:")
       : one
-        ? "The direction is curated on two different records, so no one block below shows it:"
-        : "These directions are curated on different records, so no one block below shows them:") +
+        ? "Curated on two different records, so no one block below shows it:"
+        : "Curated on different records, so no one block below shows them:") +
     "</div>";
   // The curator sits beside the action it curated, since every target title
   // now ends in its species and "(human) (GtoPdb)" read as two of one thing.
@@ -5859,11 +6482,10 @@ function pairRecordHTML(a, b, s) {
   let blk = '<div class="small muted">' + esc(s.target.target_type) +
        (s.subsumed
          ? " · " + esc(geneList(s.target.components || [], 8)) +
-           " — every one of them shared above, so this claim is not counted as " +
-           "another shared target"
+           " — all shared above, so not counted again"
          : s.same_protein_as
            ? " · the same protein as " + esc(targetTitle(s.same_protein_as)) +
-             " above, in another species, so it is counted there, once"
+             " above, in another species, counted there once"
            : "") + "</div>";
   // How much of the catalogue is at this target, said where the overlap is
   // being read. The prevalence discount is the one weighting here that can
@@ -6137,9 +6759,9 @@ function showCondition(c) {
   let h = "<h3>" + esc(c.heading) + "</h3>";
   h += '<div class="small muted">' + link("https://meshb.nlm.nih.gov/record/ui?ui=" +
        encodeURIComponent(c.mesh_id), "MeSH " + c.mesh_id) + "</div>";
-  h += '<div class="small muted">' + plural(c.rows.length, "molecule") + " in the " +
-       "catalogue " + (c.rows.length === 1 ? "is" : "are") + " approved for or tested " +
-       "in this condition. That says what a drug is given for, not what it acts on.</div>";
+  h += '<div class="small muted">' + plural(c.rows.length, "molecule") + " approved " +
+       "for or tested in this condition: what a drug is given for, not what it " +
+       "acts on.</div>";
 
   const byPhase = new Map();
   for (const r of c.rows) {
@@ -6151,9 +6773,11 @@ function showCondition(c) {
     let body = "";
     for (const r of rows) {
       const n = visibleClaimsFor(r.molecule.id).length;
+      const w = phase === "Approved" ? withdrawalNote(r.molecule) : null;
       body += '<div class="row-item" data-select="molecule" data-id="' +
         esc(String(r.molecule.id)) + '">' + esc(r.molecule.name) +
         '<div class="small muted">' +
+        (w ? '<span title="' + esc(w.title) + '">' + esc(w.text) + "</span> · " : "") +
         (r.trials.length ? esc(trialSummary(r.trials)) : "no linked trial") +
         " · " + (n ? plural(n, "visible claim") : "no claim under these filters") +
         "</div></div>";
@@ -6233,12 +6857,12 @@ function showClass(c) {
                esc(className(p)) + "</a>";
       }).join(", ") + "</div>";
     }
-    h += '<div class="small muted">What these molecules are built like, as MeSH files ' +
-         "them. Not a statement about what they do or about their targets.</div>";
+    h += '<div class="small muted">Grouped by structure, as MeSH files them; says ' +
+         "nothing about what they do or their targets.</div>";
   } else {
     h += '<div class="small muted">USAN/INN name stem <b>' + esc(c.code) + "</b></div>";
-    h += '<div class="small muted">Drugs whose official names share this stem, which ' +
-         "is given to one family of drugs. Not a statement about their targets.</div>";
+    h += '<div class="small muted">Drugs whose official names share this stem, given ' +
+         "to one family of drugs; says nothing about their targets.</div>";
   }
 
   const kids = Array.from(c.children).map(lookupClass).filter(Boolean);
@@ -6733,7 +7357,7 @@ function syncLabels() {
 // is not part of the picture, and declining to draw it changes no pixel; this
 // is vis's own node rule applied to the other half of the canvas. It is not a
 // filter and must never be read as one - `claimVisible` still answers what is
-// in the picture and only the four claim filters may change that answer, the
+// in the picture and only the eligibility filters may change that answer, the
 // canvas control still answers what is drawn, and this answers neither. It
 // answers "is this on screen", which is a question about the window rather than
 // about the data, and the panel lists, the ranking, the gap statements and
@@ -7717,10 +8341,36 @@ function settleGraph() {
   network.setOptions({ physics: false });
   syncLabels();
   // Before the glide is worked out, so a unit's nodes glide to their packed
-  // places with everything else rather than jumping after it.
-  placeUnits();
+  // places, and a crowded node to its spaced one, with everything else rather
+  // than jumping after it.
+  placeNodes();
+  // A neighbourhood is solved from wherever its nodes sat in the picture
+  // before, which can be anywhere on the canvas or off it, so the view follows
+  // it - and follows back out to the whole network when focus ends. Asked
+  // before the glide puts the nodes back where they were, since vis reads the
+  // positions to fit at the call.
+  if (fitAfterSolve && network.fit) {
+    network.fit({ animation: { duration: TRANSITION_MS, easingFunction: "easeInOutQuad" } });
+    if (network.once) network.once("animationFinished", syncLabels);
+  }
+  fitAfterSolve = false;
   startTransition();
 }
+
+// Set by renderGraph when the picture it re-solves is, or replaces, a focused
+// one (see focusOn); consumed by the settle.
+let fitAfterSolve = false;
+let drawnFocused = false;
+
+// Where every node sat in the whole picture when focus began, kept until focus
+// ends and then handed back to the solver. Solved among only themselves, the
+// neighbourhood's nodes spread across the canvas, and the rest of the
+// catalogue had no position left to return to: carried over as they stood, the
+// neighbourhood stayed in the middle at its own spacing, with a square of empty
+// space round it and everything else packed outside that (reported
+// 2026-10-18). Going back to the whole picture is going back to the reader's
+// map, not to a new one built round the last selection.
+let unfocusedPositions = null;
 
 // Positions are written through the DataSet rather than through moveNode, which
 // restarts vis's simulation - the thing this whole arrangement exists to avoid.
@@ -7812,9 +8462,22 @@ function graphOptions(initial) {
       // put the nodes further apart; the rest is done by labelling fewer of
       // them. centralGravity is low because pulling 1,373 nodes toward one
       // point is what packs the periphery onto the hubs in the first place.
-      barnesHut: { gravitationalConstant: -6500, centralGravity: 0.08,
+      //
+      // avoidOverlap is off because it drew a grid. vis applies it by taking
+      // the node's own radius off its distance to each quadtree cell's centre
+      // of mass, so the push from a cell jumps wherever a node crosses one of
+      // the tree's axis-aligned boundaries, and the crowded middle settled in
+      // rows and columns along them - at 1 a square lattice, at 0.35 a "#"
+      // the reader could see (2026-10-18). Spacing is done after the solve
+      // instead, by spreadNodes, which has no preferred direction. Repulsion
+      // went from -6500 to -20000 with it, because the middle was a carpet of
+      // molecules held together by their springs to the same hub targets:
+      // the inner half of the canvas now has twice the room per node (2,394
+      // square units, from 1,230), and spreadNodes moves 826 nodes, nine in
+      // ten of them by 7 units or less, where it had to move 1,982 by up to 59.
+      barnesHut: { gravitationalConstant: -20000, centralGravity: 0.08,
                    springLength: 130, springConstant: 0.02, damping: 0.55,
-                   avoidOverlap: 0.35 },
+                   avoidOverlap: 0 },
       // The budget, not the plan: _stabilizationBatch stops the moment the
       // layout converges, and a re-solve that started from the previous
       // positions usually converges long before this. The first layout has
@@ -7870,9 +8533,9 @@ const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 
 function unitMass(n) { return Math.max(1, Math.sqrt(n)); }
 
-// The radius the packed disc will have, given to the anchor as its size so that
-// vis's overlap avoidance keeps other nodes, and other discs, out of it. A point
-// anchor left 123 unrelated nodes inside discs and 5 discs overlapping.
+// The radius the packed disc will have, given to the anchor as its size. It was
+// for vis's overlap avoidance, which is now off (graphOptions); what keeps other
+// nodes and other discs out of a disc is unitPlacement.
 function unitRadius(n) { return UNIT_SPACING * Math.sqrt(Math.max(0, n - 1)) + UNIT_PAD; }
 
 // What vis is handed for the units, as data a test can read: the anchors, the
@@ -7908,6 +8571,37 @@ function physicsPlan(g) {
            frozenEdges: frozenEdges };
 }
 
+// How heavy each body is to the solver: its number of springs to the power
+// HUB_MASS_EXPONENT. vis multiplies repulsion by both bodies' masses and divides
+// every force on a body by its own, so a heavy node is pushed hard by other
+// heavy nodes and dragged little by its own springs. With every mass 1, the
+// most-measured proteins - hERG, ADRA1A, the monoamine transporters, the CYPs,
+// COX-1, the progesterone and androgen receptors - were each pulled into the
+// middle by their hundreds of lines and sat there side by side, related by
+// nothing but the promiscuous molecules joining them, with those molecules in a
+// ring round the knot. Weighted, each hub keeps a stretch of canvas of its own
+// with its molecules round it: what ForceAtlas2 does with degree. A unit's
+// anchor counts its proxy springs and keeps the heavier of that and its size.
+// 0.35 moves the 40 most-measured proteins about half as far apart again and
+// leaves the nearest neighbour on the canvas at least as related as before;
+// 0.5 parts them further at a small cost to that, and 1 throws hubs to the
+// edge with their molecules strung out after them (2026-10-18, docs/VIEWER.md).
+const HUB_MASS_EXPONENT = 0.35;
+
+function physicsMasses(g, plan) {
+  const springs = new Map();
+  const add = function (k) { springs.set(k, (springs.get(k) || 0) + 1); };
+  for (const e of g.edges.concat(g.links)) {
+    if (plan.frozenEdges.has(e.id)) continue;
+    add(e.from); add(e.to);
+  }
+  for (const p of plan.proxies) { add(p.from); add(p.to); }
+  const out = new Map();
+  for (const n of g.nodes) out.set(n.key, Math.max(1, Math.pow(springs.get(n.key) || 0, HUB_MASS_EXPONENT)));
+  for (const a of plan.anchors) out.set(a.id, Math.max(1, Math.pow(springs.get(a.id) || 0, HUB_MASS_EXPONENT)));
+  return out;
+}
+
 // The packing: a sunflower spiral, first node at the centre, each further one a
 // golden angle round and a square root out, which fills a disc evenly for any
 // count. Offsets from the anchor, in the unit's own node order.
@@ -7930,10 +8624,84 @@ function unitOffsets(u) {
 // avoidance halved the overlaps and did not clear the intruders. So this is a
 // guarantee rather than a tendency, in one pass after the solve: discs are
 // placed largest first and a smaller one overlapping an earlier one is moved
-// just clear of it, then any other node inside a disc is moved out to just
-// past its rim, along the line from the centre. Nothing is hidden, and every
-// move is a node glided a short way by the transition that follows.
+// just clear of it, then every other node is spaced round them by spreadNodes.
+// Nothing is hidden, and every move is a node glided a short way by the
+// transition that follows.
 const UNIT_CLEARANCE = 14;     // canvas units kept between a disc and a neighbour
+
+// The other half of the guarantee, and the spacing the solver no longer does
+// (graphOptions, avoidOverlap). A third of the canvas sat on a neighbour after
+// the solve - 1,398 of 4,287 nodes within NODE_SPACING of another at the open
+// defaults - and moving every node inside a disc to its rim stacked them on
+// one circle. So, after the solve: any two nodes closer than NODE_SPACING are
+// pushed apart along the line between them, half each, and any node inside a
+// disc is moved out past its rim along the line from its centre, repeated
+// until nothing moves. Along the line, never along an axis, so the pass has no
+// grid of its own to print; the cells below only find the neighbours. A node
+// with room is never touched, so the solve's picture survives everywhere but
+// the crowded middle.
+const NODE_SPACING = 32;       // canvas units between two nodes' centres: a dot
+                               // is 10 across the radius, so a gap of about 10
+const SPREAD_SLACK = 0.5;      // closer than spacing by less than this is spaced
+const SPREAD_PASSES = 200;     // the budget; the loop stops when nothing moves
+
+function spreadNodes(points, discs) {
+  const cell = NODE_SPACING;
+  // A cell's key as one number: no canvas here is 65,536 cells across.
+  const cellKey = function (x, y) { return x * 65536 + y; };
+  for (let pass = 0; pass < SPREAD_PASSES; pass++) {
+    let again = false;
+    const grid = new Map();
+    points.forEach(function (p, i) {
+      const k = cellKey(Math.floor(p.x / cell), Math.floor(p.y / cell));
+      if (grid.has(k)) grid.get(k).push(i); else grid.set(k, [i]);
+    });
+    for (let i = 0; i < points.length; i++) {
+      const p = points[i];
+      const cx = Math.floor(p.x / cell), cy = Math.floor(p.y / cell);
+      for (let a = -1; a <= 1; a++) {
+        for (let b = -1; b <= 1; b++) {
+          const near = grid.get(cellKey(cx + a, cy + b));
+          if (!near) continue;
+          for (const j of near) {
+            if (j <= i) continue;
+            const q = points[j];
+            let dx = q.x - p.x, dy = q.y - p.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist >= NODE_SPACING - SPREAD_SLACK) continue;
+            // Two nodes on the same spot part at an angle of their own, so that
+            // a pile of them opens as a spiral rather than along a line.
+            // (i + 1), because at i = 0 the angle is 0 and that is an axis.
+            if (dist < 1e-6) {
+              dx = Math.cos((i + 1) * GOLDEN_ANGLE); dy = Math.sin((i + 1) * GOLDEN_ANGLE);
+            } else { dx /= dist; dy /= dist; }
+            const half = (NODE_SPACING - dist) / 2;
+            p.x -= dx * half; p.y -= dy * half;
+            q.x += dx * half; q.y += dy * half;
+            p.moved = q.moved = again = true;
+          }
+        }
+      }
+    }
+    // Discs last in every pass, so that whenever the loop stops no node is
+    // inside one: spacing is the tendency, a disc holding only its own nodes
+    // is the guarantee.
+    for (const p of points) {
+      for (const d of discs) {
+        const need = d.r + UNIT_CLEARANCE;
+        let dx = p.x - d.x, dy = p.y - d.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist >= need) continue;
+        if (dist < 1e-6) { dx = 1; dy = 0; } else { dx /= dist; dy /= dist; }
+        p.x = d.x + dx * need;
+        p.y = d.y + dy * need;
+        p.moved = again = true;
+      }
+    }
+    if (!again) break;
+  }
+  return points;
+}
 
 function unitPlacement(g, positions) {
   const discs = [];
@@ -7974,36 +8742,23 @@ function unitPlacement(g, positions) {
       out.push({ id: o.key, x: d.x + o.dx, y: d.y + o.dy });
     }
   }
+  const points = [];
   for (const n of g.nodes || []) {
     if (inUnit.has(n.key)) continue;
     const p = positions[n.key];
-    if (!p) continue;
-    // Repeated, because a node pushed out of one disc can land in the next;
-    // a handful of passes settles every case this canvas has.
-    let x = p.x, y = p.y, moved = false;
-    for (let pass = 0; pass < 4; pass++) {
-      let again = false;
-      for (const d of discs) {
-        const need = d.r + UNIT_CLEARANCE;
-        let dx = x - d.x, dy = y - d.y;
-        const dist = Math.hypot(dx, dy);
-        if (dist >= need) continue;
-        if (dist < 1e-6) { dx = 1; dy = 0; } else { dx /= dist; dy /= dist; }
-        x = d.x + dx * need;
-        y = d.y + dy * need;
-        moved = again = true;
-      }
-      if (!again) break;
-    }
-    if (moved) out.push({ id: n.key, x: x, y: y });
+    if (p) points.push({ key: n.key, x: p.x, y: p.y, moved: false });
+  }
+  for (const p of spreadNodes(points, discs)) {
+    if (p.moved) out.push({ id: p.key, x: p.x, y: p.y });
   }
   return out;
 }
 
-function placeUnits() {
+// Runs with no units too: spacing is for every canvas, and "draw separately"
+// is a canvas with no discs, not one that needs no room.
+function placeNodes() {
   if (!network || !visNodes) return;
   const g = catalogueGraph();
-  if (!g.units.length) return;
   const rows = unitPlacement(g, nodePositions());
   if (rows.length && !paintPositions(network, rows)) visNodes.update(rows);
 }
@@ -8098,11 +8853,15 @@ function renderGraph() {
     return;
   }
   const plan = physicsPlan(g);
+  const mass = physicsMasses(g, plan);
   const nodes = g.nodes.map(function (node) {
     const row = Object.assign({ id: node.key, label: nodeLabel(node) }, nodeStyle(node));
     if (plan.frozenNodes.has(node.key)) { row.physics = false; row.size = UNIT_NODE_SIZE; }
+    else row.mass = mass.get(node.key);
     return row;
-  }).concat(plan.anchors);
+  }).concat(plan.anchors.map(function (a) {
+    return Object.assign({}, a, { mass: Math.max(a.mass, mass.get(a.id)) });
+  }));
   const edges = g.edges.map(function (e) {
     return Object.assign({ id: e.id, from: e.from, to: e.to }, edgeStyle(e),
                          plan.frozenEdges.has(e.id) ? { physics: false } : {});
@@ -8146,10 +8905,23 @@ function renderGraph() {
     const pos = nodePositions();
     transitionFrom = pos;
     transition = null;
+    fitAfterSolve = !!g.focused || drawnFocused;
+    // See unfocusedPositions. Leaving focus, the whole picture's places win
+    // over the neighbourhood's; inside it, a node the last neighbourhood did
+    // not draw starts where it sat in the whole picture rather than nowhere.
+    // A page opened on a focused link never drew the whole picture, so it has
+    // none to go back to, and lays the whole one out afresh with the first
+    // layout's budget rather than building it round the neighbourhood.
+    if (!drawnFocused) unfocusedPositions = g.focused ? pos : null;
+    const restore = unfocusedPositions;
+    const leaving = drawnFocused && !g.focused;
+    const fresh = leaving && !restore;
     for (const n of nodes) {
-      const p = pos[n.id];
+      if (fresh) break;
+      const p = (leaving && restore[n.id]) || pos[n.id] || (restore && restore[n.id]);
       if (p) { n.x = p.x; n.y = p.y; }
     }
+    if (leaving) unfocusedPositions = null;
     graphSolving = true;
     setBusy("Laying out the network…");
     network.setOptions({ physics: graphOptions(false).physics });
@@ -8157,11 +8929,12 @@ function renderGraph() {
     visNodes.add(nodes); visEdges.add(edges);
     // Explicitly, because a DataSet change does not stabilize - it starts a
     // simulation, which is the drift this replaces.
-    if (network.stabilize) network.stabilize(graphOptions(false).physics.stabilization.iterations);
+    if (network.stabilize) network.stabilize(graphOptions(fresh).physics.stabilization.iterations);
     armSettle();
   }
   if (network.once) network.once("stabilizationIterationsDone", settleGraph);
   drawnSignature = g.signature;
+  drawnFocused = !!g.focused;
   applyHighlight();
 }
 
@@ -8328,15 +9101,23 @@ function graphCountsHTML() {
     h += "<br>Drawn: <b>" + fmtCount(g.drawn.molecules) + "</b> molecules and <b>" +
          fmtCount(g.drawn.targets) + "</b> targets, single-molecule targets hidden";
   }
+  if (g.focused) {
+    // A target's neighbourhood is often one target, which "1 targets" misreads.
+    const n = function (count, word) {
+      return "<b>" + fmtCount(count) + "</b> " + (count === 1 ? word : word + "s");
+    };
+    h += "<br>Drawn: " + n(g.drawn.molecules, "molecule") + " and " +
+         n(g.drawn.targets, "target") + ", the selection's neighbourhood only";
+  }
   return h;
 }
 
 function graphCountsTitle() {
   const total = catalogueTotals();
-  return "Counted as the canvas draws them: a protein recorded in several species " +
-    "is one target, so the catalogue's " + fmtCount(total.target_records) +
-    " ChEMBL target records are " + fmtCount(total.targets) + " targets here. " +
-    "Molecules and targets the filters leave out are still searchable.";
+  return "Counted as drawn: a protein in several species is one target, so " +
+    fmtCount(total.target_records) + " ChEMBL target records are " +
+    fmtCount(total.targets) + " targets here. What the filters leave out is " +
+    "still searchable.";
 }
 
 // What a filter change is doing, under the counts it is changing ("" for
@@ -8543,21 +9324,19 @@ function mechanismLegendRows() {
       return b[1] - a[1] || String(a[0]).localeCompare(String(b[0]));
     }).map(function (r) { return String(r[0]).toLowerCase() + " (" + r[1] + ")"; });
     out.push([line(OTHER_ACTION_COLOR), "other curated action (" + other + ")",
-              "A curated action this legend gives no colour of its own. Here: " +
+              "A curated action with no colour of its own here: " +
               held.join(", ") + "."]);
   }
   if (mixed) {
     out.push([line(MIXED_ACTION_COLOR), "several curated actions (" + mixed + ")",
-              "The curators name more than one action for this molecule at this " +
-              "target - usually ChEMBL and GtoPdb using different words, such as " +
-              "antagonist and inverse agonist, and now and then one curator naming " +
-              "two. Open the line to see each."]);
+              "More than one curated action at this pair, usually ChEMBL and GtoPdb " +
+              "using different words (antagonist, inverse agonist). Open the line to " +
+              "see each."]);
   }
   if (none) {
     out.push([line(NO_ACTION_COLOR), "no curated mechanism (" + none + ")",
-              "No curator records which way this molecule acts here: the line rests " +
-              "on measurements, or on a curated mechanism that names no action. " +
-              "Not a sign that it has no effect."]);
+              "No curator records which way this molecule acts here; the line rests " +
+              "on measurements or an action-less mechanism. Not a sign of no effect."]);
   }
   return out;
 }
@@ -8629,7 +9408,7 @@ function renderSidebarState(resized) {
     const name = selectionName();
     btn.textContent = sidebarOpen ? "Hide panel ›" : "‹ Panel" + (name ? " · " + name : "");
     btn.setAttribute("aria-expanded", sidebarOpen ? "true" : "false");
-    btn.setAttribute("title", sidebarOpen ? "Fold the panel away and give the graph the whole width"
+    btn.setAttribute("title", sidebarOpen ? "Fold the panel away"
                                           : "Show the panel" + (name ? " for " + name : ""));
   }
   const clear = byId("clear-btn");
@@ -8772,15 +9551,26 @@ function select(kind, id, extra) {
     if (selectionHistory.length > SELECTION_HISTORY_MAX) selectionHistory.shift();
   }
   setSelection(kind, id, extra);
-  refresh();
+  refreshSelection();
 }
 
 function goBack() {
   if (!selectionHistory.length) return false;
   const prev = selectionHistory.pop();
   setSelection(prev.kind, prev.id, prev.extra);
-  refresh();
+  refreshSelection();
   return true;
+}
+
+// A selection is a highlight, except under the focus setting, where it is a
+// new picture - seconds of it when that picture is the whole network again -
+// so it says so before starting, as a filter change does.
+function refreshSelection() {
+  if (network && filters.periphery === "focus" && drawnSignature !== graphSignature()) {
+    refreshAfterFilters(null, "Redrawing the canvas…");
+  } else {
+    refresh();
+  }
 }
 
 // The name of what Back would return to, for its tooltip: null with nothing to
@@ -8814,7 +9604,7 @@ function clearSelection() {
 //   #class=mesh_pa:D018377          a class, by the key its panel is opened by
 //
 //   &tier=supported  &basis=human_direct  &potency=10  &mech=AGONIST,PARTIAL%20AGONIST
-//   &canvas=hide  &groups=separate  &color=evidence
+//   &trials=elsewhere  &canvas=hide (or focus)  &groups=separate  &color=evidence
 //
 // A filter is written only where it differs from its default, so a link to the
 // page as it opens is still just #m=CHEMBL113 - and a link names the whole
@@ -8836,7 +9626,8 @@ const LINK_FILTERS = [
   ["tier", "tier", ["supported", "supported_preliminary"]],
   ["basis", "basis", ["human_direct", "all"]],
   ["potency", "potency", [1, 10, 100, 300]],
-  ["periphery", "canvas", ["show", "hide"]],
+  ["trials", "trials", ["any", "us", "anywhere", "elsewhere"]],
+  ["periphery", "canvas", ["show", "hide", "focus"]],
   ["groups", "groups", ["linked", "separate"]],
   ["lineColor", "color", ["evidence", "mechanism"]],
 ];
@@ -9130,9 +9921,9 @@ function afterPaint(fn) {
   requestAnimationFrame(function () { setTimeout(fn, 0); });
 }
 
-function refreshAfterFilters(then) {
+function refreshAfterFilters(then, busy) {
   renderControls();
-  setBusy("Applying the filters…");
+  setBusy(busy || "Applying the filters…");
   // Reset's re-selection is kept if a plain filter click follows it.
   if (then) queuedThen = then;
   if (refreshQueued) return;

@@ -137,7 +137,7 @@ describe("the three filters are independent and each answers for itself", () => 
     const gap = v.gapStatement(mol);
     assert.equal(gap.kind, "hidden_by_filters");
     const banners = v.filterBanners().map((b) => b.text).join(" ");
-    assert.match(banners, /broader layer is hidden/);
+    assert.match(banners, /broader claim is hidden/);
     assert.match(banners, /Include broader assignment/);
   });
 
@@ -160,8 +160,8 @@ describe("the three filters are independent and each answers for itself", () => 
     assert.equal(v.potencyAllowed(curated), false);
     assert.equal(v.hiddenReason(curated), "potency_no_value");
     const banner = v.filterBanners().map((b) => b.text).join(" ");
-    assert.match(banner, /no comparable value/);
-    assert.match(banner, /for want of one, not as failures/);
+    assert.match(banner, /hides \d+ weaker claim/);
+    assert.match(banner, /for want of a comparable value/);
   });
 
   test("potency never removes an entry from the catalogue or from search", () => {
@@ -256,7 +256,7 @@ describe("every entry stays searchable, including the ones with no edge", () => 
     const gap = v.gapStatement(hits[0].molecule);
     assert.equal(gap.kind, "no_eligible_evidence");
     assert.match(gap.text, /ChEMBL 37/);
-    assert.match(gap.text, /not the same as an absence of pharmacology/);
+    assert.match(gap.text, /not an absence of pharmacology/);
   });
 
   test("a retained seed outside the cohort is found and shown like any other entry", () => {
@@ -542,12 +542,17 @@ describe("the whole network is drawn, and a selection lights part of it", () => 
     assert.ok([...lit.nodes.values()].every((o) => o > 0));
   });
 
-  test("a target's neighbourhood has no second hop", () => {
+  test("a target's second hop is the other targets its molecules act on", () => {
     const v = loadViewer(catalogue());
-    const h = v.highlightFor("target", "CHEMBLT1");
-    // Every other target of every molecule that binds it is most of the
-    // catalogue, which is not a neighbourhood but a reset.
-    assert.ok([...h.nodes.values()].every((hop) => hop <= 1));
+    const h = v.highlightFor("target", "CHEMBLT3");
+    assert.equal(h.nodes.get("tCHEMBLT3"), 0);
+    assert.equal(h.nodes.get("m1"), 1);
+    // Caffeine's other targets, and its lines to them, held in the background.
+    assert.equal(h.nodes.get("tCHEMBLT1"), 2);
+    assert.equal(h.nodes.get("tCHEMBLT2"), 2);
+    assert.equal(h.edges.get(v.catalogueGraph().byPair.get("m1|tCHEMBLT1").id), 2);
+    // A molecule on those targets is a third hop, and stays dark.
+    assert.equal(h.nodes.get("m2"), undefined);
   });
 
   test("a pair lights the overlap and nothing else", () => {
@@ -731,7 +736,148 @@ describe("the canvas control thins the picture without thinning the catalogue", 
     v.setFilter("periphery", "hide");
     const banner = v.filterBanners().map((b) => b.text).join(" ");
     assert.match(banner, /Canvas thinned/);
-    assert.match(banner, /still in the panel, the similarity ranking and the search/);
+    assert.match(banner, /All stay in the panels, the similarity ranking and search/);
+  });
+});
+
+// The canvas control's third setting: the selection, its targets and the other
+// molecules on them, and nothing else drawn (2026-10-18).
+describe("the focus setting draws only the selection's neighbourhood", () => {
+  const keys = (g) => plain(g.nodes.map((n) => n.key).sort());
+
+  test("a molecule brings its targets and the molecules on them, and only those lines", () => {
+    const v = loadViewer(catalogue());
+    v.setFilter("periphery", "focus");
+    // BROADER ONLY acts at A1 alone, so caffeine and theophylline come with
+    // A1, and their lines to the family and to acetylcholinesterase do not.
+    v.select("molecule", 3);
+    const g = v.catalogueGraph();
+    assert.deepEqual(keys(g), ["m1", "m2", "m3", "tCHEMBLT1"]);
+    assert.deepEqual(plain(g.edges.map((e) => e.to)), ["tCHEMBLT1", "tCHEMBLT1", "tCHEMBLT1"]);
+    assert.deepEqual(plain(g.focused), { molecules: 0, molecules_kept: 3, targets: 2,
+                                         targets_kept: 1, edges: 3 });
+    assert.match(v.graphCountsHTML(), /Drawn: <b>3<\/b> molecules and <b>1<\/b> target, the selection's neighbourhood only$/);
+  });
+
+  test("a target brings the molecules acting on it, and their other targets", () => {
+    const v = loadViewer(catalogue());
+    v.setFilter("periphery", "focus");
+    v.select("target", "CHEMBLT3");
+    // Theophylline is on caffeine's other targets, a third hop, and not drawn.
+    assert.deepEqual(keys(v.catalogueGraph()), ["m1", "tCHEMBLT1", "tCHEMBLT2", "tCHEMBLT3"]);
+  });
+
+  test("each selection redraws it, and a line keeps its molecule's neighbourhood", () => {
+    const v = loadViewer(catalogue());
+    v.setFilter("periphery", "focus");
+    v.select("molecule", 3);
+    const three = v.catalogueGraph().signature;
+    v.select("molecule", 1);
+    assert.notEqual(v.catalogueGraph().signature, three);
+    const one = keys(v.catalogueGraph());
+    v.select("edge", 1, "CHEMBLT3");
+    assert.deepEqual(keys(v.catalogueGraph()), one);
+  });
+
+  test("with nothing to focus on, every target is drawn and the control says why", () => {
+    const v = loadViewer(catalogue());
+    v.setFilter("periphery", "focus");
+    v.clearSelection();
+    const g = v.catalogueGraph();
+    assert.equal(g.focused, null);
+    assert.equal(g.nodes.length, 6);
+    const b = v.filterBanners().filter((r) => r.control === "periphery");
+    assert.equal(b.length, 1);
+    assert.equal(b[0].kind, "note");
+    assert.match(b[0].text, /nothing on the canvas is selected, so every target is drawn/);
+  });
+
+  test("it changes what is drawn and nothing about what exists", () => {
+    const v = loadViewer(catalogue());
+    v.select("molecule", 3);
+    const claims = v.visibleClaimsFor(1).map((c) => c.id);
+    const ranked = v.sharedTargets(1).map((r) => r.molecule.id);
+    const kept = v.graphCountsHTML();
+    v.setFilter("periphery", "focus");
+    assert.deepEqual(plain(v.visibleClaimsFor(1).map((c) => c.id)), plain(claims));
+    assert.deepEqual(plain(v.sharedTargets(1).map((r) => r.molecule.id)), plain(ranked));
+    assert.equal(v.searchCatalogue("acetylcholinesterase").targets.length, 1);
+    assert.ok(v.graphCountsHTML().startsWith(kept + "<br>"));
+    const banner = v.filterBanners().map((b) => b.text).join(" ");
+    assert.match(banner, /All stay in the panels, the similarity ranking and search/);
+  });
+
+  test("a link carries it", () => {
+    const v = loadViewer(catalogue());
+    assert.equal(v.filtersFromLink("#m=CHEMBL113&canvas=focus").periphery, "focus");
+  });
+
+  // Reported 2026-10-18: back on "Draw every target", the neighbourhood stayed
+  // in the middle at the spacing it was solved to on its own, with a square of
+  // empty space round it, because it was the only part of the picture that
+  // still had positions to carry over.
+  test("leaving it puts every node back where the whole picture had it", () => {
+    const v = loadViewer(catalogue());
+    v.select("molecule", 3);
+    v.refresh();
+    const net = v.drawnCanvas().network;
+    const whole = {};
+    v.drawnCanvas().nodes.rows.forEach((n, i) => { whole[n.id] = { x: 10 * i, y: -10 * i }; });
+    net.positions = whole;
+    v.setFilter("periphery", "focus");
+    v.refresh();
+    const focused = v.drawnCanvas().nodes.rows.map((n) => n.id);
+    assert.ok(focused.length < Object.keys(whole).length);
+    // Solved among only themselves, the neighbourhood's nodes end up elsewhere.
+    const spread = {};
+    for (const id of focused) spread[id] = { x: 9000, y: 9000 };
+    net.finishStabilizing(spread);
+    v.setFilter("periphery", "show");
+    v.refresh();
+    const rows = v.drawnCanvas().nodes.rows;
+    assert.equal(rows.length, Object.keys(whole).length);
+    for (const n of rows) {
+      assert.deepEqual({ x: n.x, y: n.y }, whole[n.id], n.id + " was not put back");
+    }
+  });
+
+  test("a selection changed inside it starts a newly drawn node where the whole picture had it", () => {
+    const v = loadViewer(catalogue());
+    v.select("molecule", 3);
+    v.refresh();
+    const net = v.drawnCanvas().network;
+    const whole = {};
+    v.drawnCanvas().nodes.rows.forEach((n, i) => { whole[n.id] = { x: 10 * i, y: -10 * i }; });
+    net.positions = whole;
+    v.setFilter("periphery", "focus");
+    v.refresh();
+    const first = new Set(v.drawnCanvas().nodes.rows.map((n) => n.id));
+    const spread = {};
+    for (const id of first) spread[id] = { x: 9000, y: 9000 };
+    net.finishStabilizing(spread);
+    v.select("target", "CHEMBLT3");
+    v.refresh();
+    const rows = v.drawnCanvas().nodes.rows;
+    assert.ok(rows.some((n) => !first.has(n.id)), "the new selection should draw a new node");
+    for (const n of rows) {
+      // The nodes already on the canvas carry on from where they are.
+      const want = first.has(n.id) ? spread[n.id] : whole[n.id];
+      assert.deepEqual({ x: n.x, y: n.y }, want, n.id);
+    }
+  });
+
+  test("a page opened on it lays the whole picture out afresh when it ends", () => {
+    const v = loadViewer(catalogue(), { hash: "#m=CHEMBL113&canvas=focus" });
+    v.refresh();
+    assert.ok(v.catalogueGraph().focused, "the link should open focused");
+    const net = v.drawnCanvas().network;
+    v.setFilter("periphery", "show");
+    v.refresh();
+    // No whole picture was ever drawn, so there is none to put back, and
+    // building it round the neighbourhood is the defect this replaces.
+    for (const n of v.drawnCanvas().nodes.rows) assert.equal(n.x, undefined, n.id);
+    assert.equal(net.stabilizeCalls.at(-1),
+                 v.graphOptions(true).physics.stabilization.iterations);
   });
 });
 
@@ -825,7 +971,9 @@ describe("an edge on the canvas opens the pair behind it", () => {
   test("with nothing lit near the pointer, vis's own answer stands", () => {
     const v = loadViewer(catalogue());
     v.select("target", "CHEMBLT3");
-    placeBody(v, { m1: { x: 0, y: 0 }, tCHEMBLT3: { x: 200, y: 0 }, m2: { x: 100, y: 100 } }, 1);
+    // Caffeine's second-hop lines run left, away from the pointer.
+    placeBody(v, { m1: { x: 0, y: 0 }, tCHEMBLT3: { x: 200, y: 0 }, m2: { x: 100, y: 100 },
+                   tCHEMBLT1: { x: -300, y: 0 }, tCHEMBLT2: { x: -300, y: -50 } }, 1);
     v.onGraphClick(click(100, 100, { nodes: ["m2"] }));
     assert.equal(v.getSelection().kind, "molecule");
     assert.equal(v.getSelection().id, 2);
@@ -934,7 +1082,7 @@ describe("an edge on the canvas opens the pair behind it", () => {
     // Caffeine's acetylcholinesterase claim is Preliminary and hidden by default.
     const h = v.showEdge(v.lookupMolecule(1), v.lookupTarget("CHEMBLT3"), null);
     assert.match(h, /No line under the current filters/);
-    assert.match(h, /every claim between them is hidden by them/);
+    assert.match(h, /which hide every claim between these two/);
     // And it is still shown, because it exists: the filter says what it took.
     assert.match(h, /Hidden by the current filters/);
   });
@@ -1067,7 +1215,7 @@ describe("evidence loads on demand and reconciles to what it claims", () => {
     const html = v.observationRowHTML(bound, ev.studies);
     assert.match(html, /&gt; 100 nM/);
     assert.ok(!/counted<\/span>/.test(html.replace("not counted", "")));
-    assert.match(html, /no effect up to this concentration/);
+    assert.match(html, /no effect seen up to this concentration/);
   });
 
   test("a conditional mass conversion is labelled as conditional", () => {
@@ -1085,7 +1233,7 @@ describe("evidence loads on demand and reconciles to what it claims", () => {
     v.registerEvidence(shard());
     const html = v.showRetained(v.lookupMolecule(1), v.evidenceFor(1));
     assert.match(html, /censored_only/);
-    assert.match(html, /none is drawn as a line/);
+    assert.match(html, /None is drawn/);
     assert.match(html, /retained claims<\/h3>/);
     // And the retained claim is not in the drawable set.
     assert.ok(!v.allClaims().some((c) => c.id === 99 && c.tier !== "limited_or_unresolved"));
@@ -1094,8 +1242,8 @@ describe("evidence loads on demand and reconciles to what it claims", () => {
   test("a missing shard is a missing file, not an absence of evidence", () => {
     const v = loadViewer(catalogue());
     const html = v.claimEvidenceHTML(v.allClaims()[0], null, true);
-    assert.match(html, /could not be loaded/);
-    assert.match(html, /not an absence of evidence/);
+    assert.match(html, /did not load/);
+    assert.match(html, /not missing evidence/);
   });
 
   test("a shard still in flight says so instead", () => {
@@ -1148,7 +1296,7 @@ describe("a retained claim says what else the pair holds", () => {
     // The token is still there, inside the explanation, because it is what the
     // database stores and the thing to grep for - and not beside the label,
     // which would be one fact wearing two headings.
-    assert.match(html, /The build records this reason as invalid_units_only/);
+    assert.match(html, /Recorded as invalid_units_only/);
     assert.ok(!/>invalid_units_only \(1\)/.test(html));
   });
 
@@ -1197,7 +1345,7 @@ describe("a retained claim says what else the pair holds", () => {
     assert.equal((html.match(/class="claim-block"/g) || []).length, 2);
     assert.match(html, /1 claim drawn as this line/);
     assert.match(html, /1 retained, backing no line/);
-    assert.match(html, /Retained: no part of this line. It meets neither the Supported/);
+    assert.match(html, /Retained: meets neither the Supported/);
     assert.match(html, /Supported · multiple studies/);
     assert.match(html, /No resolvable value/);
     // They are listed, never added: the pair is one shared target (invariant 13).
@@ -1666,7 +1814,7 @@ describe("the panel says what it is counting", () => {
     assert.ok(!/1 trial:/.test(html), "a single trial is linked, not folded");
     // Why a condition has no link is in the section's hover rather than a
     // count in the note, and the row itself is never marked as untrialled.
-    assert.match(html, /no trial link usually rests on the drug label/);
+    assert.match(html, /No trial link usually means a drug label/);
   });
 
   test("a trial says whether it is ongoing, completed or stopped early", () => {
@@ -1694,7 +1842,7 @@ describe("the panel says what it is counting", () => {
     assert.match(html, /<summary>4 trials: 1 ongoing, 1 completed, 1 stopped early, 1 status not fetched<\/summary>/);
     assert.match(html, /withdrawn before enrolling/);
     // Completed is never presented as success.
-    assert.match(html, /completed means the trial finished, not that it worked/);
+    assert.match(html, /completed means finished, not successful/);
   });
 
   test("each trial says its own phase and what it reported on its main goal", () => {
@@ -1715,11 +1863,11 @@ describe("the panel says what it is counting", () => {
     });
     const v = loadViewer(data);
     const html = v.showMolecule(v.lookupMolecule(1));
-    assert.match(html, /<summary>4 trials, 2 at phase 3 or later: /);
+    assert.match(html, /<summary>4 trials, 2 at phase 3\+: /);
     assert.match(html, /NCT00000002<\/a> <span class="muted">phase 2\/3<\/span>/);
     assert.match(html, /Seizure &lt;rate&gt;: p &lt; 0.0001/);
     assert.match(html, /NCT00000001<\/a> <span class="muted">phase 2<\/span>[^]*?no results posted/);
-    assert.match(html, /results posted<\/a>, no test of the main goal reported/);
+    assert.match(html, /results posted<\/a>, no test of the main goal</);
     // Highest phase first; an unfetched trial sorts last and claims nothing.
     const order = [...new Set([...html.matchAll(/study\/(NCT\d+)/g)].map((m) => m[1]))];
     assert.deepEqual(plain(order), ["NCT00000002", "NCT00000003", "NCT00000001", "NCT00000004"]);
@@ -1755,7 +1903,7 @@ describe("the panel says what it is counting", () => {
     assert.match(html, /NCT00000006<\/a> <span class="trial-status/);
     // The folded summary spans only what happened: 1999 to 2009, not to the
     // planned 2012 or 2029.
-    assert.match(html, /<summary>6 trials, 1999–2009, 1 at phase 3 or later: /);
+    assert.match(html, /<summary>6 trials, 1999–2009, 1 at phase 3\+: /);
     // Within a phase the latest first, by end year (planned or not); undated last.
     const order = [...new Set([...html.matchAll(/study\/(NCT\d+)/g)].map((m) => m[1]))];
     assert.deepEqual(plain(order), ["NCT00000002", "NCT00000003", "NCT00000001",
@@ -1798,7 +1946,7 @@ describe("the panel says what it is counting", () => {
     const html = v.showMolecule(v.lookupMolecule(1));
     assert.match(html, /<\/span> \(1\)</, "two records read as two diseases");
     assert.ok(!/Phase 2/.test(html), "the lower phase is shown as a second row");
-    assert.match(html, /2 ChEMBL records, at the furthest phase any of them reached/);
+    assert.match(html, /2 ChEMBL records, furthest phase shown/);
     assert.match(html, /<summary>2 trials: /);
   });
 
@@ -1815,6 +1963,30 @@ describe("the panel says what it is counting", () => {
       molecules: [molecule({ id: 2, max_phase: 4, first_approval: 1948 })],
     }));
     assert.match(v2.showMolecule(v2.lookupMolecule(2)), /approved, first in 1948/);
+  });
+
+  test("a phase ChEMBL files no disease under says it cites nothing for it", () => {
+    // Cyclazodone is phase 2 in ChEMBL 37 with no drug_indication row, and its
+    // only source is the INN list: "reached phase 2" asserted a trial nothing
+    // cites (2026-10-17).
+    const v = loadViewer(buildData({
+      molecules: [molecule({ id: 1, max_phase: 2, n_indications_chembl: 0 })],
+    }));
+    const html = v.showMolecule(v.lookupMolecule(1));
+    assert.match(html, /ChEMBL records phase 2 but cites no trial or disease for it/);
+    assert.ok(!/reached phase 2/.test(html));
+    // A molecule with diseases, none of them listed here, keeps "reached".
+    const v2 = loadViewer(buildData({
+      molecules: [molecule({ id: 2, max_phase: 3, n_indications_chembl: 4 })],
+    }));
+    assert.match(v2.showMolecule(v2.lookupMolecule(2)),
+                 /reached phase 3, not approved for any disease/);
+    // An approval with no condition keeps its own line (2026-09-27).
+    const v3 = loadViewer(buildData({
+      molecules: [molecule({ id: 3, max_phase: 4, n_indications_chembl: 0 })],
+    }));
+    assert.match(v3.showMolecule(v3.lookupMolecule(3)),
+                 /ChEMBL names no condition it is approved for/);
   });
 
   test("the claim and similarity sections fold, and fold with their counts on them", () => {
@@ -1915,7 +2087,7 @@ describe("the panel says what it is counting", () => {
     assert.match(html, /Below the line/, "a near miss is dropped rather than shown");
     assert.ok(!/more indications/.test(html), "the list is still capped");
     // What share of the record is shown, said once.
-    assert.match(html, /Neurological and pain conditions only: 15 of the 20 ChEMBL records/);
+    assert.match(html, /Neurological and pain conditions only: 15 of ChEMBL's 20\./);
   });
 
   test("a target panel lists its components and says on hover they are not claims", () => {
@@ -1930,7 +2102,7 @@ describe("the panel says what it is counting", () => {
     const v = loadViewer(data);
     const html = v.showTarget(v.lookupTarget("T1"));
     assert.ok(!/Context only/.test(html));
-    assert.match(html, /never passed on to these proteins/);
+    assert.match(html, /never passed on to them/);
     assert.match(html, />G1 </);
   });
 
@@ -2001,8 +2173,8 @@ describe("banners state the cost of every control that hides something", () => {
     const v = loadViewer(catalogue());
     v.setFilter("basis", "all");
     const banner = v.filterBanners().map((b) => b.text).join(" ");
-    assert.match(banner, /broader assignment.*as well as direct human/s);
-    assert.match(banner, /never pooled with direct results/);
+    assert.match(banner, /Including the <b>broader assignment<\/b> layer/);
+    assert.match(banner, /never pooled with direct human results/);
   });
 
   test("the button counts what is hidden and its tooltip names every setting", () => {
@@ -2154,9 +2326,9 @@ describe("the curated mechanism is a first-class thing to filter on", () => {
     v.setFilter("basis", "human_direct");
     v.toggleMechanism("ANTAGONIST");
     const banner = v.filterBanners().map((b) => b.text).join(" ");
-    assert.match(banner, /claims with <b>antagonist<\/b> only/);
+    assert.match(banner, /<b>antagonist<\/b> only/);
     assert.match(banner, /2 claims with no curated action at all/);
-    assert.match(banner, /never a finding that the molecule does not act this way/);
+    assert.match(banner, /not that the molecule does not act this way/);
     // Two tokens are named, not summed into one word.
     v.toggleMechanism("AGONIST");
     assert.match(v.filterBanners().map((b) => b.text).join(" "), /antagonist or agonist/);
@@ -2247,7 +2419,7 @@ describe("line colour answers one question at a time", () => {
     v.setFilter("lineColor", "mechanism");
     const banner = v.filterBanners().map((b) => b.text).join(" ");
     assert.match(banner, /2 of 4 drawn edges have one/);
-    assert.match(banner, /none was curated, not that the molecule does nothing/);
+    assert.match(banner, /none curated, not no effect/);
   });
 });
 
@@ -2640,8 +2812,8 @@ describe("every heading that offers an explanation has one", () => {
     const html = v.claimBlockHTML(v.allClaims().find((c) => c.id === 2), ev);
     assert.equal((html.match(/15095008/g) || []).length, 2, "one link, one href");
     // And the folding is stated rather than only being visible as its absence.
-    assert.match(html, /files this mechanism as 2 records/);
-    assert.match(html, /listed once rather than once per record/);
+    assert.match(html, /once per form of the molecule \(2 records\)/);
+    assert.match(html, /each reference listed once/);
     assert.match(html, /References[\s\S]*\(2\)/);
   });
 
@@ -2770,7 +2942,7 @@ describe("a family and its own proteins say how they relate", () => {
     const v = loadViewer(familyCatalogue());
     const h = v.showEdge(v.lookupMolecule(1), v.lookupTarget("T_FAM"));
     assert.match(h, /The proteins in it/);
-    assert.match(h, /2 of which are also drawn as lines/);
+    assert.match(h, /2 also have a line of/);
     assert.match(h, /data-select="edge" data-id="1" data-other="T_A1"/);
   });
 
@@ -2826,7 +2998,7 @@ describe("a family overlap is not a second share of its own proteins", () => {
     assert.equal(fam.subsumed, true);
     const h = v.showPair(v.lookupMolecule(1), v.lookupMolecule(2));
     assert.match(h, /1 family claim repeats proteins already shared here/);
-    assert.match(h, /not counted as another shared target/);
+    assert.match(h, /all shared above, so not counted again/);
   });
 
   test("the compression is stated on the ranked row rather than silent", () => {
@@ -3383,7 +3555,7 @@ describe("direction is read at the protein, not at the target record", () => {
     // A page that announces a demotion and shows nothing explaining it is the
     // shape this project keeps trying not to have.
     assert.match(pair, /quartered/);
-    assert.match(pair, /curated on two different records/);
+    assert.match(pair, /Curated on two different records/);
     assert.match(pair, /OPRM1/);
     assert.match(pair, /MORPHINE AGONIST \(ChEMBL\) at Mu opioid receptor \(human\)/);
     assert.match(pair, /NALTREXONE ANTAGONIST \(ChEMBL\) at Opioid receptors; mu\/kappa\/delta \(human\)/);
@@ -4593,7 +4765,7 @@ describe("a name stem can be searched for and opened", () => {
     assert.match(html, /<h3>antidepressants \(imipramine type\)<\/h3>/);
     assert.match(html, /Molecules[^]*?\(2\)/);
     assert.match(html, /data-select="target" data-id="T1">Serotonin transporter[^]*?2 of these 2 molecules/);
-    assert.match(html, /Not a statement about their targets/);
+    assert.match(html, /says nothing about their targets/);
     assert.match(v.showClass(v.lookupClass("usan:-oxetine")),
                  /FLUOXETINE<div class="small muted">-tioxetine: antidepressants \(fluoxetine type\): thioether derivatives/);
   });
@@ -5209,10 +5381,13 @@ describe("a group is joined to its own proteins on the canvas", () => {
     assert.equal(o.links.get(byTo.get("tT_A1")), v.KEPT_LINK_OPACITY ?? 0.6);
     // Caffeine reaches the family and A1, not A2A: that line is not its own.
     assert.ok(o.links.get(byTo.get("tT_A2A")) < 0.1);
-    // A target selection lights molecules, never a second target, so no line.
+    // A family lights its own members, so both of its lines are its own.
     v.setSelection("target", "T_FAM");
     const t = v.highlightOpacity();
-    for (const x of t.links.values()) assert.ok(x < 0.1);
+    for (const x of t.links.values()) assert.equal(x, v.KEPT_LINK_OPACITY ?? 0.6);
+    // A protein selection lights no member and no line, even inside a family.
+    v.setSelection("target", "T_A2A");
+    for (const x of v.highlightOpacity().links.values()) assert.ok(x < 0.1);
   });
 
   test("the canvas gets the lines styled as structure, and a click on one opens the group", () => {
@@ -5390,6 +5565,72 @@ describe("an ion-channel assembly is laid out as one unit", () => {
     assert.ok(at["u:small"].x > 100, "moved clear along the line between them");
   });
 
+  test("vis's overlap avoidance stays off: it set the crowded middle in rows and columns", () => {
+    const v = loadViewer(buildData({}));
+    for (const initial of [true, false]) {
+      assert.equal(v.graphOptions(initial).physics.barnesHut.avoidOverlap, 0);
+    }
+  });
+
+  test("crowded nodes are spaced along the line between them; a node with room is not moved", () => {
+    const v = loadViewer(buildData({}));
+    const pts = [{ key: "a", x: 0, y: 0 }, { key: "b", x: 10, y: 0 },
+                 { key: "c", x: 100, y: 100 }, { key: "d", x: 100, y: 100 },
+                 { key: "e", x: 900, y: 900 }];
+    const at = Object.fromEntries(plain(v.spreadNodes(pts.map((p) => Object.assign({}, p)), []))
+      .map((p) => [p.key, p]));
+    const gap = (p, q) => Math.hypot(at[p].x - at[q].x, at[p].y - at[q].y);
+    assert.ok(gap("a", "b") >= 31, "a and b spaced");
+    assert.ok(Math.abs(at.a.y) < 1e-9 && Math.abs(at.b.y) < 1e-9, "along their own line, not across it");
+    assert.ok(gap("c", "d") >= 31, "two on one spot are parted");
+    // ...at an angle of their own, never along an axis, which is the grid this replaced.
+    const dx = Math.abs(at.c.x - at.d.x), dy = Math.abs(at.c.y - at.d.y);
+    assert.ok(dx > 1 && dy > 1, "parted off-axis");
+    assert.ok(!at.e.moved);
+    assert.deepEqual([at.e.x, at.e.y], [900, 900]);
+  });
+
+  test("a body is heavier for more springs, so the hubs push each other apart", () => {
+    const v = loadViewer(unitCatalogue());
+    v.select("molecule", 1);
+    const g = v.catalogueGraph();
+    const plan = v.physicsPlan(g);
+    const mass = v.physicsMasses(g, plan);
+    // Counted the way the solver feels them: frozen lines are not springs, a
+    // proxy to an anchor is.
+    const springs = new Map();
+    for (const e of plain(g.edges.concat(g.links)).filter((e) => !plan.frozenEdges.has(e.id))
+      .concat(plain(plan.proxies))) {
+      for (const k of [e.from, e.to]) springs.set(k, (springs.get(k) || 0) + 1);
+    }
+    const keys = plain(g.nodes).map((n) => n.key).filter((k) => !plan.frozenNodes.has(k))
+      .concat(plain(plan.anchors).map((a) => a.id));
+    for (const a of keys) {
+      assert.ok(mass.get(a) >= 1, a + " is never lighter than 1");
+      for (const b of keys) {
+        if ((springs.get(a) || 0) > (springs.get(b) || 0)) assert.ok(mass.get(a) >= mass.get(b), a + " vs " + b);
+      }
+    }
+    assert.ok(keys.some((k) => mass.get(k) > 1), "something here is a hub");
+    // And vis is handed them: a node its weight, an anchor the heavier of its
+    // weight and its size.
+    const rows = Object.fromEntries(v.__networks[0].data.nodes.rows.map((r) => [r.id, r]));
+    for (const k of keys) {
+      if (k.startsWith("u:")) assert.ok(rows[k].mass >= mass.get(k) && rows[k].mass > 1, k);
+      else assert.equal(rows[k].mass, mass.get(k), k);
+    }
+  });
+
+  test("a canvas with no units is spaced all the same", () => {
+    const v = loadViewer(buildData({}));
+    const g = { units: [], nodes: [{ key: "m1" }, { key: "m2" }, { key: "m3" }] };
+    const rows = plain(v.unitPlacement(g, { m1: { x: 0, y: 0 }, m2: { x: 0, y: 4 },
+                                            m3: { x: 400, y: 0 } }));
+    assert.deepEqual(rows.map((r) => r.id).sort(), ["m1", "m2"]);
+    const [p, q] = rows;
+    assert.ok(Math.hypot(p.x - q.x, p.y - q.y) >= 31);
+  });
+
   test("vis is handed small frozen nodes, a hidden anchor, hidden springs and a disc painter", () => {
     const v = loadViewer(unitCatalogue());
     v.select("molecule", 1);
@@ -5450,19 +5691,27 @@ describe("an ion-channel assembly is laid out as one unit", () => {
     assert.ok(block[1].some((r) => r[1] === "ion channel"));
   });
 
-  test("selecting a complex lights its own subunits, and nothing else of theirs", () => {
+  test("selecting a complex or family lights its components and the molecules on them", () => {
     const v = loadViewer(unitCatalogue());
     const h = v.highlightFor("target", "C_132");
     // alpha1 and beta3 are drawn; gamma2 has no node of its own here.
     assert.equal(h.nodes.get("tS_A1"), 1);
     assert.equal(h.nodes.get("tS_B3"), 1);
-    // Zolpidem acts at alpha1 and not at the complex, so it stays dark: the
-    // subunits are lit, not treated as the selection's targets.
-    assert.equal(h.nodes.get("m2"), undefined);
+    // Zolpidem acts at alpha1 and not at the complex, and is lit with it.
+    assert.equal(h.nodes.get("m2"), 1);
+    assert.equal(h.edges.get(v.catalogueGraph().byPair.get("m2|tS_A1").id), 1);
     assert.equal(h.nodes.get("m1"), 1, "the complex's own molecule is lit as ever");
-    // A family is paralogues rather than parts, and lights no members.
+    // Their other targets are the second hop.
+    assert.equal(h.nodes.get("tF_GABA"), 2);
+    assert.equal(h.nodes.get("tC_122"), 2);
+    // Tofacitinib shares nothing with it.
+    assert.equal(h.nodes.get("m3"), undefined);
+    // A family lights its members as a complex does.
     const f = v.highlightFor("target", "F_GABA");
-    assert.equal(f.nodes.get("tS_A1"), undefined);
+    assert.equal(f.nodes.get("tS_A1"), 1);
+    assert.equal(f.nodes.get("m1"), 1, "diazepam, at alpha1");
+    // Lit, never merged: the family's own claims are still its own.
+    assert.deepEqual(plain(v.catalogueGraph().byNode.get("tF_GABA").map((e) => e.from)), ["m2"]);
   });
 });
 
@@ -5536,9 +5785,9 @@ describe("the legend explains each mechanism on hover", () => {
     assert.deepEqual(rows.map((r) => r[1]),
       ["antagonist (1)", "other curated action (1)", "no curated mechanism (1)"]);
     assert.equal(rows[0][2], v.actionHelp("ANTAGONIST"));
-    assert.match(rows[1][2], /no colour of its own\. Here: hydrolytic enzyme \(1\)\./,
+    assert.match(rows[1][2], /no colour of its own here: hydrolytic enzyme \(1\)\./,
                  "the catch-all names what it holds");
-    assert.match(rows[2][2], /Not a sign that it has no effect/);
+    assert.match(rows[2][2], /Not a sign of no effect/);
   });
 
   test("a claim naming two actions is both of them, never an 'other' action", () => {
@@ -5953,19 +6202,19 @@ describe("an approved molecule says what it is approved for when the list cannot
   test("an approval outside the listed conditions is named", () => {
     const v = approved({ approved_elsewhere: "Anxiety" }, phase3);
     const html = v.showMolecule(v.lookupMolecule(1));
-    assert.match(html, /approved<div class="small muted">for Anxiety, a condition not listed here<\/div>/);
+    assert.match(html, /approved<div class="small muted">for Anxiety \(not listed here\)<\/div>/);
   });
 
   test("past three names the rest are counted, and every name is on hover", () => {
     const v = approved({ approved_elsewhere: "A|B|C|D|E" }, phase3);
     const html = v.showMolecule(v.lookupMolecule(1));
-    assert.match(html, /title="A, B, C, D, E">for A, B, C and 2 more, conditions not listed here/);
+    assert.match(html, /title="A, B, C, D, E">for A, B, C and 2 more \(not listed here\)/);
   });
 
   test("an approval ChEMBL files under no condition says so", () => {
     const v = approved({}, phase3);
     assert.match(v.showMolecule(v.lookupMolecule(1)),
-                 /ChEMBL records no condition it is approved for/);
+                 /ChEMBL names no condition it is approved for/);
   });
 
   test("nothing is added where a listed condition is itself approved", () => {
@@ -5984,6 +6233,83 @@ describe("an approved molecule says what it is approved for when the list cannot
   });
 });
 
+describe("an Approved resting only on unapproved US labels is not one (D23)", () => {
+  // Isometheptene was Approved for migraine on five DailyMed labels, every one
+  // marketed as UNAPPROVED DRUG OTHER; FDA never approved it.
+  const LABELS = [
+    ["0844-set", "Nodolor Capsules", "Macoven Pharmaceuticals", "UNAPPROVED DRUG OTHER",
+     "06/28/2011", "12/20/2017"],
+    ["7752-set", "Isometheptene Mucate/Dichloralphenazone/Acetaminophen Capsules",
+     "ECI <Pharmaceuticals>", "UNAPPROVED DRUG OTHER", "02/15/2011", "03/31/2018"],
+  ];
+  function viewer(over, rows) {
+    return loadViewer(buildData({
+      molecules: [molecule(Object.assign({ id: 1, name: "ISOMETHEPTENE", max_phase: 4 }, over))],
+      indications: { 1: rows },
+    }));
+  }
+
+  test("the disease reads Marketed unapproved and names and links the labels", () => {
+    const v = viewer({}, [["D1", "Migraine Disorders", "Marketed unapproved", "core", 0,
+                           null, "unapproved", LABELS]]);
+    const h = v.indicationsHTML(v.lookupMolecule(1));
+    assert.match(h, /Migraine Disorders<\/a> <span class="muted">Marketed unapproved<\/span>/);
+    assert.match(h, /ChEMBL's Approved rests on 2 US labels FDA lists as unapproved, sold 2011–2018/);
+    assert.match(h, /href="https:\/\/dailymed\.nlm\.nih\.gov\/dailymed\/drugInfo\.cfm\?setid=0844-set"[^>]*>Nodolor Capsules<\/a>/);
+    assert.match(h, /\(ECI &lt;Pharmaceuticals&gt;\)/, "a labeler is escaped (invariant 11)");
+  });
+
+  test("a label still on sale is said so, not given an end", () => {
+    const open = [["s", "T", "L", "UNAPPROVED DRUG OTHER", "01/01/1973", null]];
+    const v = viewer({}, [["D1", "Myasthenia Gravis", "Marketed unapproved", "core", 0,
+                           null, "unapproved", open]]);
+    assert.match(v.indicationsHTML(v.lookupMolecule(1)), /on one US label .*, sold since 1973:/);
+  });
+
+  test("a disease another record approves carries no label note", () => {
+    const v = viewer({}, [["D1", "Pain", "Approved", "core", 1, null, "regulator"],
+                          ["D1", "Pain", "Marketed unapproved", "core", 0, null,
+                           "unapproved", LABELS]]);
+    const h = v.indicationsHTML(v.lookupMolecule(1));
+    assert.match(h, /title="ChEMBL&#39;s source: an FDA or EMA approval document">Approved/);
+    assert.ok(!/FDA lists as unapproved/.test(h));
+  });
+
+  test("an unapproved record's cited trial sets its phase, and it still says why", () => {
+    const v = viewer({}, [["D1", "Chronic Pain", "Phase 2", "core", 1, "NCT01",
+                           "unapproved", LABELS]]);
+    const h = v.indicationsHTML(v.lookupMolecule(1));
+    assert.match(h, /<span class="muted">Phase 2<\/span>/);
+    assert.match(h, /FDA lists as unapproved/);
+  });
+
+  test("Phase 4 trial sorts between Approved and Phase 3, Marketed unapproved below every phase", () => {
+    const v = viewer({}, [["D1", "A", "Early Phase 1", "core", 0],
+                          ["D2", "B", "Marketed unapproved", "core", 0, null, "unapproved", LABELS],
+                          ["D3", "C", "Phase 3", "core", 1],
+                          ["D4", "D", "Phase 4 trial", "core", 1, null, "unapproved", LABELS]]);
+    assert.deepEqual(v.indicationsByDisease(1).map((i) => i.phase_label),
+                     ["Phase 4 trial", "Phase 3", "Early Phase 1", "Marketed unapproved"]);
+  });
+
+  test("an approval read off a trial or an ATC class says so on hover", () => {
+    const v = viewer({}, [["D1", "Narcolepsy", "Approved", "core", 1, "NCT9", "trial"],
+                          ["D2", "Pain", "Approved", "core", 1, null, "atc"]]);
+    const h = v.indicationsHTML(v.lookupMolecule(1));
+    assert.match(h, /ChEMBL&#39;s source: a trial the registry calls Phase 4 \(post-marketing\)/);
+    assert.match(h, /ChEMBL&#39;s source: the WHO ATC class the drug is filed in; no regulator&#39;s record is cited/);
+  });
+
+  test("a molecule whose only approval was such labels is not called approved", () => {
+    const v = viewer({ approval_status: "unapproved_marketing", max_phase_checked: 2 },
+                     [["D1", "Migraine Disorders", "Phase 2", "core", 1, "NCT1", "unapproved",
+                       LABELS]]);
+    const h = v.showMolecule(v.lookupMolecule(1));
+    assert.match(h, /sold in the US without FDA approval, ChEMBL&#39;s only grounds for Approved; trials reached phase 2/);
+    assert.ok(!/names no condition it is approved for|not listed here/.test(h));
+  });
+});
+
 describe("the columns of Why this score explain themselves", () => {
   test("each header carries a hover explanation, anchored to the table", () => {
     const v = loadViewer(buildData({
@@ -5997,7 +6323,7 @@ describe("the columns of Why this score explain themselves", () => {
       assert.match(h, new RegExp('<th><span class="help" tabindex="0">' + col +
                                  '<span class="help-text">'), col);
     }
-    assert.match(h, /How few molecules in the catalogue act on this target/);
+    assert.match(h, /1 when almost no molecule acts on this target/);
     assert.match(h, /<div class="score-wrap"><table class="score-table">/);
     assert.match(viewerHtml(), /\.score-wrap \{ position: relative; \}/);
   });

@@ -34,7 +34,11 @@ answered by D18, for primary targets only.
   the MeSH and trial ones, writing `gtopdb_interactions` and the
   `gtopdb_actions` key of `build_manifest`. Release **2026.3** (published
   2026-09-16), pinned by the files' own version line, cached under
-  `db/cache/gtopdb/2026.3/`, sha256 in the manifest.
+  `db/cache/gtopdb/2026.3/`, sha256 in the manifest. Bumped on 2026-10-14 to
+  **2026.3.1** (published 2026-10-12), which changes nothing in this
+  catalogue: its 25 new interaction rows and 40 new ligands are all outside
+  it, and the 2,749 stored rows and 739 claims are identical column for
+  column. Its one new (Type, Action) pair is mapped below.
 - Matched by identifier only. The ligand by exact InChIKey, else by a ChEMBL id
   naming exactly one parent; two routes disagreeing drops the ligand. The target
   by UniProt accession, to one SINGLE PROTEIN record, or — for a multi-subunit
@@ -44,6 +48,8 @@ answered by D18, for primary targets only.
   `action_type` vocabulary so the viewer's `OPPOSED_ACTIONS` reads both
   sources; "Neutral", "Binding", "Mixed" and the like map to no direction. A
   pair a future release adds is stored undirected and listed in the manifest.
+  2026.3.1 added one, ('Antibody', 'Activation'), on denecimig at coagulation
+  factor IX, mapped to ACTIVATOR as ('Activator', 'Activation') is.
 - The export carries a `gtopdb` block; the viewer folds its directions into
   `directionIndex` only where the pair has a claim the filters show, names the
   curator in every sentence about an opposition, and shows GtoPdb's own words
@@ -349,6 +355,417 @@ ignoring stereochemistry, which put esmethadone on methadone's record) are in
 [MESH-ACTIONS-ROUTE-B.md](MESH-ACTIONS-ROUTE-B.md) and DATA-QUALITY-LOG,
 2026-10-13.
 
+### D23 — an Approved resting only on unapproved US labels is not one
+
+**Decision (user, 2026-10-15).** Asked how isometheptene was approved for
+migraine, and told it never was: "lets measure how many other drugs are
+actually unapproved, and label it as such in the graph, even if we lose
+molecules from the cohort. we want to be truthful, not just follow chembl".
+Selection policy 3.1.0. Worked in the `unapproved-labels` worktree.
+
+**What ChEMBL's Approved is.** `max_phase_for_ind = 4` on a disease, backed
+by whatever `indication_refs` cites: an FDA or EMA document, a DailyMed label,
+an ATC class, or a Phase 4 trial. A DailyMed label is a published label, not
+an approval. FDA publishes the labels of products sold without one, under the
+marketing category UNAPPROVED DRUG OTHER, with its own notice that "this drug
+has not been found by FDA to be safe and effective". Isometheptene's only
+evidence was five such labels (combination capsules and tablets, marketed
+2011–2018); the labels themselves say FDA rated it only "possibly" effective
+for migraine.
+
+**What was measured.** Every phase-4 record in ChEMBL 37 whose approval rests
+on a label — DailyMed cited, no FDA or EMA document — is 3,770 records citing
+14,015 labels. Each label was read by its set id, from the label page, which
+also serves archived labels where DailyMed's API does not
+(`scripts/check_dailymed_labels.py`). Per record:
+
+| verdict | records | meaning |
+|---|---|---|
+| label | 3,350 | a cited label holds an application (NDA, ANDA, BLA, authorised generic) |
+| monograph | 244 | none does; one is sold under an FDA OTC monograph |
+| unapproved | 141 | every cited label was read, and each is marketed without approval |
+| unresolved | 35 | a label DailyMed no longer serves, or one stating no category |
+
+The 141 cover 64 molecules, mostly vitamins, minerals, topical analgesics and
+old injectables (folic acid, capsaicin, epinephrine, neostigmine); their
+labels are UNAPPROVED DRUG OTHER but for a few EXPORT ONLY and MEDICAL FOOD
+ones. 28 also cite a trial.
+
+**The rule** (`scripts/cohort/labels.py`). An unapproved record cites no
+approval, so it takes the furthest phase the registry records for the trials
+it cites, read by NCT id: none ("Marketed unapproved"), a phase, or a Phase 4
+trial labelled as one rather than as Approved. An ATC class beside the labels
+is not contradicted (5 records): a code normally means approval in some
+country. A molecule's own Approved is taken back only where FDA records no
+approval year for any form and every phase-4 record is unapproved with no
+Phase 4 trial. Membership follows: an indication needs a phase to admit
+(D21). What DailyMed said is committed as `config/cohort1_label_status.json`
+and pinned by sha256 in the selection policy, so the build still reads no
+network, and stops if the file does not describe every label-backed record.
+
+**What was tried and taken back.** A Phase 4 trial alone (no label) was first
+read as no approval too and labelled "Phase 4 trial". Of the three in-scope
+diseases that lost Approved that way, two were approved uses: desipramine for
+major depression and lidocaine for neuralgia (the Lidoderm patch), and
+trial-only records sat under approved uses elsewhere too (oxybate for
+narcolepsy, avalglucosidase alfa for Pompe disease), kept Approved only by
+another record of the same disease. A post-marketing trial usually studies
+the approved use, so it stands as Approved, and the page names it as the
+source on hover.
+
+**What it did.** Two molecules leave the catalogue, each admitted only by
+such a record: isometheptene (Migraine) and sodium citrate (Depressive
+Disorder). The catalogue goes from 2,452 to 2,450 and the cohort from 2,449 to
+2,447. Within scope 15 records on 13 molecules change: 13 read Marketed
+unapproved (neostigmine's myasthenia gravis on two methylsulfate injection
+labels sold unapproved 1973–2016; lidocaine's myalgia, muscle cramp and back
+pain on unapproved patches), alcohol's chronic pain reads Phase 2 and sodium
+bicarbonate's pain Phase 4 trial. In-scope diseases reading Approved go from
+1,114 to 1,101. Outside the scope 28 molecules' approved-elsewhere lists lose
+diseases (biotin and niacinamide all of theirs; lidocaine bursitis,
+osteoarthritis and tendinopathy, keeping cardiac arrhythmias). No member
+loses its molecule-level approval.
+
+**What it does not see.** Only the labels ChEMBL cites: an approved product
+it does not cite is invisible, which is why the page says what ChEMBL rested
+on rather than "never approved". The 35 unresolved keep ChEMBL's Approved; so
+do approvals read off an ATC class alone (293 in-scope records) or a Phase 4
+trial alone (115), named on hover and checked against no regulator. D24
+closed or narrowed all three.
+
+### D24 — D23's three gaps, closed where an identifier reaches
+
+**Decision (user, 2026-10-16).** The three gaps were measured and a fix
+proposed for each in [D23-GAPS.md](D23-GAPS.md). The user annotated it:
+adopt gap 1's four proposals; adopt gap 3's first two "only, not 3"; for a
+withdrawal, "if it was withdrawn worldwide, it should say so"; "install
+postgreSQL and RDKit and implement" DrugCentral's regulators; "measure"
+DrugCentral's disease-level indications; and adopt the ATC wording, with
+"finding regulators … as a possible action item in the future". Selection
+policy 3.2.0, label status 2.0.0. Worked in the `d23-gaps` worktree.
+
+**Gap 1, labels that could not be read.** `scripts/check_dailymed_labels.py`
+read `found` off the page title, and 618 label pages have an empty one; a
+page is now the label when it names the set id asked for
+(DATA-QUALITY-LOG, 2026-10-16). A set id DailyMed no longer serves is asked
+of NLM's RxNav by the same id: 134 cited labels, all of which RxNav still
+holds a category for. An fda.gov page in ChEMBL's DailyMed slot (Aucatzyl, a
+BLA) is an FDA document. Of the 35 unresolved records, 23 became `label`, 1
+`monograph`, 2 `unapproved` and 1 `regulator`; 8 remain, the labels older
+than FDA's structured marketing category. They keep ChEMBL's Approved only
+where FDA records an approval year for the molecule, across its forms
+(`molecule_dictionary.first_approval`); all 8 do, so the guard moves nothing
+today. A record it would drop reads "Approval unconfirmed" (basis
+`unconfirmed`). Benzocaine's anaesthesia reads Marketed unapproved: all five
+labels it cites are UNAPPROVED DRUG OTHER. Two in-scope records stay
+unresolved and Approved: ISMO's angina and Lithane's depression, both with
+"older than FDA's marketing categories" and FDA's year on hover.
+
+**Gap 3, trials alone.** D23 assumed a phase-4 record citing only
+ClinicalTrials.gov cites a Phase 4 trial. Of 884 such records in the
+release, the registry calls one of the cited trials Phase 4 in 31. The rest
+take the furthest registry phase among their trials, as an unapproved label
+does (basis `trial_phase`): 508 Phase 3, 280 Phase 2, 60 Phase 1, 4 Early
+Phase 1, and one whose trials the registry returns no phase for, "Approval
+unconfirmed". The phases come through the committed status file, so the
+build still reads no network, and it stops if the file does not describe
+every trial-only record. In scope, 108 of 115 records change and two
+diseases fall to Phase 3: lidocaine's muscle cramp and folic acid's
+depression. Lithium's depression stays Approved on the Lithane label;
+desipramine's major depression and Lidoderm's neuralgia keep theirs on Phase 4
+trials. The hover now says "a trial the registry records as Phase 4", which is
+true, and a fallen row says ChEMBL's Approved rests on trials none of which is.
+The stricter check - the trial's own condition, and its site countries - was
+not adopted.
+
+**Gap 2, an ATC class.** Three parts:
+
+- *Withdrawals.* ChEMBL's `drug_warning` ('Withdrawn') is read into
+  `molecule_withdrawals` (341 records, 91 molecules). Every Approved disease of
+  a withdrawn molecule says so: "Approved; withdrawn in France, 1990", or, the
+  user's choice, "Approved, withdrawn worldwide (1984)" for the five withdrawn
+  worldwide (glafenine, zimeldine, nomifensine, remoxipride, thioridazine).
+  83 Approved in-scope diseases on 54 molecules. Display only.
+- *Regulators, from DrugCentral.* `scripts/resolve_cohort_drugcentral.py`
+  reads the `approval` and `identifier` tables of DrugCentral's pinned dump
+  (2026-09-25, v56, CC BY-SA 4.0) with `pg_restore`, and matches a structure
+  to a catalogue entry by the ChEMBL IDs DrugCentral files for it, refusing a
+  structure that reaches two entries (64 entries) or an entry two structures
+  reach (29). 1,381 entries match; 1,075 carry a regulator's approval (FDA
+  1,040, EMA 292, PMDA 224, 7 others); "YEAR INTRODUCED" (58) names none and
+  is left out. Of the 228 in-scope diseases still resting on an ATC class
+  alone, 139 (122 molecules) now name a regulator on hover, as a fact about
+  the drug and not about the disease. Of the 80 molecules with no US trace,
+  8 do - 7 approved by FDA without a ChEMBL approval year, 1 by PMDA - which is
+  what D23-GAPS expected: their approvals are national European ones, which
+  DrugCentral does not list. Exported to `viz/drugcentral.data.js`, apart for
+  its licence like GtoPdb's.
+- *Wording.* An ATC-backed Approved reads "classified by WHO ATC in N05BA
+  (anxiolytics: benzodiazepine derivatives)", then the regulators, or "no
+  regulator's record is cited".
+
+**Measured, not adopted: DrugCentral's indications.** Its `omop_relationship`
+separates on-label from off-label use, keyed by UMLS CUI. Bridged to MeSH
+through Wikidata items carrying both (P2892 and P486, 1:1 pairs only, run
+2026-10-16), it confirms 49 of the 230 ATC-only diseases on-label: 21 exact,
+14 at a narrower MeSH heading, 14 only at a broader one (Pain for Arthralgia).
+That is a floor: 91 more have DrugCentral indications the bridge does not map
+(Schizophrenia for Psychotic Disorders, Major depressive disorder). Every
+match inspected was right. Not adopted: the user asked for a measurement, and
+a disease-level check would move phases, a membership question.
+
+**Rejected sources**, recorded so they are not proposed again: NLM MED-RT
+`may_treat` mixes labelled and off-label uses without saying which; EMA's
+medicines spreadsheet names substances and diseases only as text (invariant
+15) and lists central authorisations only; openFDA labels give indications as
+free text; Health Canada's DPD and PMDA offer no identifier-keyed list.
+
+**What it did.** Membership does not move: 2,450 entries, 2,447 members. In-
+scope diseases reading Approved go from 1,101 to 1,098. No molecule loses its
+molecule-level approval.
+
+**What stays unchecked.** National authorisations outside the US, EU and
+Japan: no public identifier-keyed source was found, and the page says "no
+regulator's record is cited" rather than reading as one. Finding them is an
+open item.
+
+### D25 — a molecule the sci-wiki lists is entered, and cites it
+
+**Decision (user, 2026-10-14).** "lets implement the compounds in these lists
+that are in CHEMBL with or without target data … lets cite the wiki as a
+source of entry", of two of the section lists in
+[analysis/wiki_comparison/sections/](../analysis/wiki_comparison/sections/):
+*Cognition & nootropic* and *Psychiatric & neuro-clinical*, from the sci-wiki
+(scientificsean.wiki, read 2026-10-11). Selection policy 3.3.0. Worked in the
+`wiki-comparison` worktree.
+
+**What it is.** A third reason for being in the catalogue, beside the clinical
+routes (D01, D21) and the seeds (D05), and shaped like the seeds:
+`listings.sciwiki` in `config/cohort1_selection.json` names ChEMBL ids, the
+build normalises each to its parent and keeps it whatever the clinical routes
+say, and `in_cohort` stays the clinical routes alone. Such an entry reads
+`admission_reason = 'listed_only'`, carries the exclusion reason a seed would,
+and has a row in the new `molecule_listings` table: the wiki's name for the
+compound, the slug its page is linked by, the section, and how the name was
+placed. A listing is no evidence of anything and never enters the score.
+
+**"With or without target data"** is taken literally: an entry ChEMBL holds no
+eligible evidence for is entered like any other and says so, as 263 clinical
+members already did.
+
+**Only entries outside D21's catalogue are named.** Of the two sections' 764
+rows, 317 already place at a catalogue entry; the clinical route is their
+reason for being here, so they need no listing, and not naming them keeps
+what is copied from the wiki to what the entries need. Another 93 were
+outside the 1,335-entry build the sections were counted against and are D21
+members (`with_d21`); 66 are identified but not in ChEMBL, and 56 not
+identified at all. That leaves 232 in ChEMBL and outside the catalogue.
+
+**Identity is an identifier, written down after review** (invariant 15). The
+names were placed by `analysis/wiki_comparison/placing.py`, by name, which the
+database refuses. So each of the 232 candidate rows was checked against what
+ChEMBL draws at the id, and what is written into the policy is the id; the
+build never reads a name. The 157 placed by an exact ChEMBL preferred name or
+an FDA UNII InChIKey were read over and kept. The 75 placed through a synonym, PubChem or a
+skeleton-only match were each compared with ChEMBL's structure by hand:
+
+- **kept**, 63 of them, among them three skeleton matches whose ChEMBL record
+  is drawn with no stereochemistry and is its only record of the compound
+  (MAP4343, nooglutyl, androstadienone), each with a `review` note;
+- **corrected**, one: *Deoxycorticosterone* had landed on
+  DESOXYCORTICOSTERONE ACETATE through the acetate's synonym list; the free
+  steroid is its own parent, CHEMBL1498;
+- **refused**, 11, each in `considered_and_not_listed` with its reason:
+  *BPAP*, which PubChem's name took to bisphenol AP; five names reaching two or
+  three parents (Dichloropane, Methylnaphthidate, Hydroxydione, U-47700,
+  4-Methylpregabalin), where choosing one would be a guess at a stereoisomer;
+  and five skeleton matches to a record drawn as a different stereoisomer
+  (LY451646 and MRZ-9547, whose racemates are listed under LY404187 and
+  Phenylpiracetam; α-conotoxin PIA; allotetrahydrocorticosterone; Org 20599).
+
+**What the wiki allows, and so what is kept.** Its terms (/about/legal, §13 and
+§18) allow "reading, linking to a page, and quoting a short passage with
+attribution", and refuse "republishing entries, copying the reference in
+bulk" and building "a competing dataset"; they also forbid suggesting an
+endorsement. So an entry keeps what a citation needs: the compound's name, a
+chemical name, and the slug. The URL is built from the slug on the page, the
+wiki's own classes are not copied into the policy, the database or the page,
+and the credit says SubNetwork is not affiliated with it.
+
+**On the page.** A listed entry's identity table has an *Entered from* row:
+"the sci-wiki, as Noopept", the name linking to that compound's page, with a
+hover saying a listing is not evidence and not an affiliation. A listed
+molecule the clinical routes also admit would read *Also listed by*; none does
+yet. About credits the sci-wiki, with the count, only when the payload holds an
+entry from it. Where ChEMBL gives the parent no preferred name (83 of the 221),
+the wiki's name is the label, so a reader sees *Noopept* and not
+CHEMBL4303687; it is attached through the reviewed id and is never a match. The
+wiki's name is searchable on every listed entry.
+
+**What it did.** The catalogue goes from 2,452 to 2,673 entries: 221 listed
+molecules, 144 from the cognition section and 77 from the psychiatric one, and
+none lost; the cohort stays 2,449. Of the 221, 68 have a Supported claim, 61
+only Preliminary ones, 13 only the broader layer, 3 only retained observations,
+and 76 no eligible evidence in ChEMBL 37. The ATC grade goes from 32.7% to
+31.7% top-1 and MRR 0.4607 to 0.4467; with the 221 skipped in each list it is
+32.4% and 0.4589, so most of the fall is a judge that cannot label them
+([SIMILARITY-HARNESS.md](SIMILARITY-HARNESS.md) §18).
+
+**Left open.** The 410 rows of the two sections already in the catalogue carry
+no listing, so their pages do not cite the wiki. And
+`analysis/wiki_comparison/` published the wiki's whole compound list with its
+sections and classes (`wiki_compounds.csv`, `comparison.csv`, `sections/`),
+committed before its terms were read. [COMPOUND-LIST-TERMS.md](COMPOUND-LIST-TERMS.md)
+weighed it and recommended removing the list and its classes before `main`;
+**the user agreed on 2026-10-15**, and asked that the copy be kept on disk as
+the widest list to measure the catalogue against. The list, the sections and
+the full comparison files now live in `db/cache/sciwiki/`, which is
+gitignored, and the scripts read them there; the repository keeps the
+comparison files without the wiki's `section` and `wiki_class` columns. The
+commits that carried them stay reachable by hash on the published branch.
+
+### D26 — the sci-wiki's psychedelics section is listed too
+
+**Decision (user, 2026-10-15).** "also implement the scientific sean compounds
+in psychedelics-entactogens that are in CHEMBL": D25's rule, applied to a third
+section, *Psychedelics & entactogens*. Selection policy 3.4.0. Worked in the
+`wiki-comparison` worktree.
+
+**What it is.** Nothing new in kind: 75 more entries in `listings.sciwiki`,
+each a ChEMBL id written down after review, `admission_reason = 'listed_only'`,
+a `molecule_listings` row and the *Entered from* row on the page. The policy's
+rule names the third section.
+
+**Which.** Of the section's 175 rows, 106 place at a ChEMBL parent; 25 of those
+are already catalogue members by a clinical route and need no listing (MDMA,
+LSD, psilocybin, 5-MeO-DMT, esketamine and the anticholinergic deliriants
+among them); 49 are identified but not in
+ChEMBL, and 20 not identified at all. That leaves 81 candidates, and the same
+review as D25's:
+
+- the 47 placed by an exact ChEMBL preferred name or an FDA UNII InChIKey were
+  read over and kept;
+- the 34 placed through a synonym, PubChem or a skeleton match were each
+  compared with ChEMBL's structure: 26 **kept** (MDA through the four-letter
+  synonym, ChEMBL's TENAMFETAMINE; *Atropa belladonna* at ChEMBL's
+  structureless BELLADONNA record, with a `review` note);
+- 2 **corrected**: *MDEA*, which PubChem's name took to N-methyldiethanolamine,
+  an abbreviation clash, is CHEMBL126279; *Limonene*, which ChEMBL's synonym
+  put on D-limonene, is CHEMBL15799, ChEMBL's record drawn with no
+  stereochemistry, since the name gives none;
+- 6 **refused**, in `considered_and_not_listed`: 5-MAPB and MDPV, racemates
+  ChEMBL holds only as single enantiomers; Ginkgolide B (eight parents), LSZ
+  (three) and Ariadne (two), skeleton matches where choosing one stereoisomer
+  would be a guess; and *Grayanotoxin*, a family of diterpenes that PubChem's
+  name took to one flat record.
+
+**What it did.** The catalogue goes from 2,673 to 2,748 entries, 296 of them
+listed; the cohort stays 2,449. Of the 75, 9 have a Supported claim, 23 only
+Preliminary ones, 9 only the broader layer, 1 only retained observations, and
+33 no eligible evidence in ChEMBL 37 — the section is mostly research
+chemicals ChEMBL holds a structure for and little else. 49 of the 75 have no
+ChEMBL preferred name, so the wiki's name is their label. The ATC grade goes
+from 31.7% to 32.0% top-1 and MRR 0.4467 to 0.4477; with all 296 skipped in
+each list it is 32.7% and 0.4601, the D21 build's own grade, so what the
+listing costs the ranking is again the judge's
+([SIMILARITY-HARNESS.md](SIMILARITY-HARNESS.md) §18).
+
+How the 296 sit against Wikipedia, Wikidata, TripSit and PsychonautWiki is in
+[NOOTROPIC-WIKI-COMPARISON.md](NOOTROPIC-WIKI-COMPARISON.md), *The listed
+entries against other public lists*: 62 of these 75 are on at least one of
+them, against 43 of the cognition section's 144 and 15 of the psychiatric
+section's 77.
+
+### D27 — what Wikipedia, Wikidata, TripSit and PsychonautWiki list is entered, and cites them
+
+**Decision (user, 2026-10-16),** two comments on the table *The lists against
+the catalogue now* in [NOOTROPIC-WIKI-COMPARISON.md](NOOTROPIC-WIKI-COMPARISON.md):
+of its "in ChEMBL, outside" column, "lets bring in all these compounds, and
+state where they came in from. make sure to cite them correctly according to
+their terms"; and of its "entered from the wiki" column, "for these compounds,
+state the non-scientific sean wiki as the sources instead of how its currently
+cited". Selection policy 3.5.0. Worked in the `wiki-comparison` worktree.
+
+**What it is.** D25's rule, applied to four open lists as four more
+`listings` blocks: `wikipedia` (the *Nootropics*, psychoactive and *Designer
+drugs* categories), `wikidata` (nootropic and psychoactive roles), `tripsit`
+(its factsheets) and `psychonautwiki` (its substance index). Each entry is a
+ChEMBL id with the list's name for the compound and the key its page is linked
+by; `admission_reason = 'listed_only'`, never in the cohort, never evidence.
+A parent no clinical route or seed holds is listed under every one of the four
+that carries it. **A compound one of them carries is no longer cited from the
+sci-wiki:** of the 296 entries D25 and D26 listed, the 120 also on an open list
+now cite that list instead, and the sci-wiki block keeps the 176 none of them
+names. Read as "the non-sci-wiki list" in the second comment; the comment's
+column is exactly those 120.
+
+**Identity.** The four lists were placed by
+`analysis/wiki_comparison/compare_lists.py`: Wikipedia's articles and Wikidata's
+items by the InChIKey on the item where there is one (715 of their 733
+entries), the rest and TripSit's and PsychonautWiki's names by exact ChEMBL
+name, FDA UNII InChIKey or weaker tiers. `open_listings.py` writes the policy
+blocks and stops on any placement its `REVIEW` table does not decide; the 72
+not made by an identifier, and two identifier placements a read-over caught,
+were compared with ChEMBL's structure: 19 kept, 5 corrected, 50 refused
+([DATA-QUALITY-LOG](DATA-QUALITY-LOG.md), 2026-10-16). Among the refusals,
+ChEMBL synonyms that name another compound (*2C-B-AN* on isoaminile, *G-4* on
+dichlorophen), deupsilocin folded onto psilocin, and racemates ChEMBL holds
+only as single enantiomers, as D26 refused 5-MAPB.
+
+**Citing them by their terms**, reread at the source for TripSit and
+PsychonautWiki ([COMPOUND-LIST-TERMS.md](COMPOUND-LIST-TERMS.md), *Used as
+reasons for entry since D27*). Only a name and a page key are kept from any of
+them. The panel's *Entered from* row names each list and links the compound's
+page there — Wikipedia's article, Wikidata's item, TripSit's factsheet,
+PsychonautWiki's page — open lists first. That row is the note "citing TripSit
+as the source … on every page which uses/displays the information" TripSit's
+terms ask for, beside the link back; its non-commercial condition holds while
+SubNetwork is free. About credits each list with its count and its licence:
+Wikipedia's article text CC BY-SA 4.0, Wikidata CC0, PsychonautWiki's semantic
+data CC BY 4.0, TripSit's terms linked; and it says SubNetwork is affiliated
+with none of them. Where ChEMBL gives a parent no preferred name (552 of the
+841 listed), the label is a substance index's name, then a Wikipedia title
+without its disambiguator, then the sci-wiki's, then Wikidata's label, which
+can be a salt's.
+
+**What it did.** The catalogue goes from 2,748 to 3,293 entries, 841 of them
+listed (665 by an open list, 176 by the sci-wiki alone); the cohort stays
+2,449, and no entry is lost. Of the 545 new entries, 64 have a Supported
+claim, 220 only Preliminary ones, 53 only the broader layer, 12 only retained
+observations, and 196 no eligible evidence in ChEMBL 37; 420 have no ChEMBL
+preferred name, so a list's name is their label. The ATC grade goes from 32.0%
+to 30.3% top-1 and MRR 0.4477 to 0.4343, under both floors in
+`tests/similarity_harness.test.mjs`; with all 841 listed entries skipped in
+each list it is 33.5% and 0.4646, above the D26 build's 32.7% and 0.4601 the
+same way. So the floors now grade with listed entries skipped
+(`skippingListed`, `evaluate.mjs --skip-listed`), and were not lowered
+([SIMILARITY-HARNESS.md](SIMILARITY-HARNESS.md) §18).
+
+**Left open.** The catalogue now holds Wikipedia's psychoactive and
+designer-drug categories wholesale where ChEMBL has a structure, which includes
+designer steroids and SARMs (bolandiol, LGD-4033) filed there as designer
+drugs, and a few drugs PsychonautWiki indexes for their effects (efavirenz,
+serotonin, tyrosine). **The user's test for them (2026-10-16): "anything that
+acts on a brain protein I think is fair game"**, as a SERM acts on oestrogen
+receptors in the brain. Measured by `listed_brain_proteins.py` against the
+Human Protein Atlas 25.1's brain regions, all of these pass: the SARMs and
+designer steroids act on the androgen receptor, the others on brain receptors
+among many. Of the 841 listed entries, 495 have a claim at a protein HPA
+detects in the brain, 41 have claims and none there, and 305 have no claim to
+test. The 41 are not non-brain drugs: most are psychedelics, opioids and
+neurosteroids whose only claims are at a rat receptor family or complex, which
+D20 maps to no human protein (2C-x and DOx compounds at the rat 5-HT2 family,
+desomorphine at the rat opioid family, arketamine at rat NMDA), and the rest
+lack their main target in ChEMBL (2C-C, 2C-E only at TAAR1, which HPA's RNA
+barely detects). So the test removes nothing it should, and nothing was
+removed. It is also weak: HPA detects 17,235 of the 19,217 proteins it
+measures in some brain region.
+
+The sections of NOOTROPIC-WIKI-COMPARISON.md that count the catalogue against
+the lists were measured before D27, and its last section says what changed.
+The myristicin record ChEMBL names ELEMICIN is item 2 of
+[CHEMBL-ERROR-REPORT.md](CHEMBL-ERROR-REPORT.md), not yet sent.
+
 ---
 
 ## Open
@@ -366,13 +783,19 @@ In the order they bear on the picture.
 4. **Primary-only for evidence, all rows for direction** (the user's call on
    2026-09-27). Worth revisiting if a second error like vilazodone's appears.
 5. **New molecules** — the second step. D21 added 1,119 by lowering the
-   indication route's phase floor. GtoPdb's ligands outside the cohort are
+   indication route's phase floor, D25 221 by the sci-wiki's two
+   sections and D26 75 by its psychedelics section, and D27 545 more from
+Wikipedia, Wikidata, TripSit and PsychonautWiki; the sci-wiki's other eight sections
+   (peptides, botanicals, formats and the rest) are not listed, and the 17
+   refused names would need a ChEMBL record drawn as the compound they mean. GtoPdb's ligands outside the cohort are
    still unadmitted, by a rule still to be written; see
    [COHORT-BOUNDARY-REVIEW.md](COHORT-BOUNDARY-REVIEW.md) for the curated-route
    proposal it should start from.
-6. **Report the alfuzosin mechanism to ChEMBL.** Drafted 2026-10-10 in
-   [CHEMBL-ERROR-REPORT-ALFUZOSIN.md](CHEMBL-ERROR-REPORT-ALFUZOSIN.md) and not
-   sent. The action is withheld locally in the meantime
+6. **Report ChEMBL's errors, in one email.** Alfuzosin's mechanism (drafted
+   2026-10-10) and the myristicin record named ELEMICIN (added 2026-10-16) are
+   collected in [CHEMBL-ERROR-REPORT.md](CHEMBL-ERROR-REPORT.md), to be sent
+   as one email later, with further errors added as they are found; not
+   sent. Alfuzosin's action is withheld locally in the meantime
    (`CHEMBL_MECHANISM_ACTION_EXCLUSIONS`, DATA-QUALITY-LOG 2026-10-10); the
    entry stops the build when ChEMBL corrects the row, which is when to remove
    it.
@@ -389,3 +812,12 @@ In the order they bear on the picture.
    neurofibromatosis), mostly cancer drugs trialled in glioma. Both edges
    were accepted at Phase 3 in D02. Whether "brain indication" should exclude
    them at the lower floor is the user's call.
+10. **Finding the regulators D24 could not** (the user's future action item,
+    2026-10-16). 89 in-scope ATC-only diseases name no regulator, 72 of the
+    80 molecules with no US trace among them, mostly national European or
+    Japanese authorisations (bromazepam, sulpiride, dosulepin, clotiazepam,
+    piribedil). Any source must be keyed by an identifier this database
+    holds (invariant 15), which rules out the four D24 rejected. Two leads
+    worth measuring: national registers that publish ATC code with an
+    identifier, and DrugCentral's own UMLS-to-MeSH identifiers as a second
+    bridge for its indications.

@@ -1,0 +1,2321 @@
+{
+ "about": "Which Wikidata item each multi-component ChEMBL target is - every PROTEIN COMPLEX, PROTEIN COMPLEX GROUP and PROTEIN FAMILY, and the SINGLE PROTEIN ChEMBL files against several accessions - for scripts/resolve_cohort_wikipedia.py. No identifier reaches these (a member's accession walks to a superfamily), so the identity is written down by hand after review: the item, never the article title, which is still resolved from the item when the backfill runs (CLAUDE.md invariant 15). A null item is a target that was reviewed and has no article of its own, with the reason.",
+ "rule": "The narrowest English article that covers the whole target and is about that receptor, channel, enzyme, family or complex. A subunit combination takes the article of the receptor it is a form of (GABA-A alpha-1/beta-2/gamma-2 takes GABAA receptor). Never a structural superfamily, a protein domain, a disambiguation or set-index page, or one subunit's own article - that is the subunit's link, not the assembly's.",
+ "reviewed": "2026-10-18, against ChEMBL 37 under selection policy cohort1-selection v3.5.0",
+ "targets": {
+  "CHEMBL3542430": {
+   "name": "11-beta-hydroxysteroid dehydrogenase",
+   "organism": "Homo sapiens",
+   "item": "Q1145920"
+  },
+  "CHEMBL3831201": {
+   "name": "20S proteasome",
+   "organism": "Homo sapiens",
+   "item": "Q14878333"
+  },
+  "CHEMBL2364701": {
+   "name": "26S proteasome",
+   "organism": "Homo sapiens",
+   "item": "Q14878333"
+  },
+  "CHEMBL2363066": {
+   "name": "3',5'-cyclic phosphodiesterase",
+   "organism": "Homo sapiens",
+   "item": "Q424304"
+  },
+  "CHEMBL2096975": {
+   "name": "Acetylcholine receptor",
+   "organism": "Torpedo californica",
+   "item": "Q6940265"
+  },
+  "CHEMBL1907588": {
+   "name": "Acetylcholine receptor; alpha1/beta1/delta/gamma",
+   "organism": "Homo sapiens",
+   "item": "Q6940265"
+  },
+  "CHEMBL2094117": {
+   "name": "Adenosine A2 receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q356147"
+  },
+  "CHEMBL2094257": {
+   "name": "Adenosine A2 receptor",
+   "organism": "Homo sapiens",
+   "item": "Q356147"
+  },
+  "CHEMBL2111329": {
+   "name": "Adenosine receptor",
+   "organism": "Homo sapiens",
+   "item": "Q356147"
+  },
+  "CHEMBL2111386": {
+   "name": "Adenosine receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q356147"
+  },
+  "CHEMBL2095179": {
+   "name": "Adenylate cyclase",
+   "organism": "Rattus norvegicus",
+   "item": "Q356257"
+  },
+  "CHEMBL2331074": {
+   "name": "Adrenergic receptor",
+   "organism": "Homo sapiens",
+   "item": "Q410568"
+  },
+  "CHEMBL2094111": {
+   "name": "Adrenergic receptor alpha",
+   "organism": "Rattus norvegicus",
+   "item": "Q410568"
+  },
+  "CHEMBL2095203": {
+   "name": "Adrenergic receptor alpha",
+   "organism": "Homo sapiens",
+   "item": "Q410568"
+  },
+  "CHEMBL1907610": {
+   "name": "Adrenergic receptor alpha-1",
+   "organism": "Rattus norvegicus",
+   "item": "Q288060"
+  },
+  "CHEMBL2094251": {
+   "name": "Adrenergic receptor alpha-1",
+   "organism": "Homo sapiens",
+   "item": "Q288060"
+  },
+  "CHEMBL2093864": {
+   "name": "Adrenergic receptor alpha-2",
+   "organism": "Rattus norvegicus",
+   "item": "Q288084"
+  },
+  "CHEMBL2095158": {
+   "name": "Adrenergic receptor alpha-2",
+   "organism": "Homo sapiens",
+   "item": "Q288084"
+  },
+  "CHEMBL2094118": {
+   "name": "Adrenergic receptor beta",
+   "organism": "Homo sapiens",
+   "item": "Q410568"
+  },
+  "CHEMBL2095166": {
+   "name": "Adrenergic receptor beta",
+   "organism": "Rattus norvegicus",
+   "item": "Q410568"
+  },
+  "CHEMBL3833502": {
+   "name": "Alpha glucosidase",
+   "organism": "Homo sapiens",
+   "item": "Q2839456"
+  },
+  "CHEMBL2111338": {
+   "name": "Alpha-2 adrenergic receptor",
+   "organism": "Mus musculus",
+   "item": "Q288084"
+  },
+  "CHEMBL5291954": {
+   "name": "Alpha-glucosidase",
+   "organism": "Saccharomyces cerevisiae S288c",
+   "item": "Q2839456"
+  },
+  "CHEMBL2107836": {
+   "name": "Amiloride-sensitive sodium channel, ENaC",
+   "organism": "Homo sapiens",
+   "item": "Q424948"
+  },
+  "CHEMBL2111345": {
+   "name": "AMP-activated protein kinase (AMPK) alpha-1/beta-1/gamma-1",
+   "organism": "Homo sapiens",
+   "item": "Q295240"
+  },
+  "CHEMBL2096907": {
+   "name": "AMP-activated protein kinase, AMPK",
+   "organism": "Homo sapiens",
+   "item": "Q295240"
+  },
+  "CHEMBL4524016": {
+   "name": "AMP-activated protein kinase, AMPK",
+   "organism": "Rattus norvegicus",
+   "item": "Q295240"
+  },
+  "CHEMBL3038455": {
+   "name": "AMPK alpha2/beta1/gamma1",
+   "organism": "Homo sapiens",
+   "item": "Q295240"
+  },
+  "CHEMBL2094112": {
+   "name": "Angiotensin II receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q24778533"
+  },
+  "CHEMBL2094256": {
+   "name": "Angiotensin II receptor",
+   "organism": "Homo sapiens",
+   "item": "Q24778533"
+  },
+  "CHEMBL2094250": {
+   "name": "Angiotensin II receptor (AT-1) type-1",
+   "organism": "Rattus norvegicus",
+   "item": "Q15332826"
+  },
+  "CHEMBL612409": {
+   "name": "Anti-estrogen binding site (AEBS)",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL3430907": {
+   "name": "Aurora kinase B/Inner centromere protein",
+   "organism": "Homo sapiens",
+   "item": "Q14762608"
+  },
+  "CHEMBL2311224": {
+   "name": "Bacterial DNA gyrase",
+   "organism": "Bacteria",
+   "item": "Q70551687"
+  },
+  "CHEMBL2364672": {
+   "name": "Bacterial DNA-directed RNA polymerase",
+   "organism": "Bacteria",
+   "item": "Q272631"
+  },
+  "CHEMBL2354204": {
+   "name": "Bacterial penicillin-binding protein",
+   "organism": "Bacteria",
+   "item": "Q7162855"
+  },
+  "CHEMBL2364683": {
+   "name": "Bacterial urease",
+   "organism": "Bacteria",
+   "item": "Q22327086"
+  },
+  "CHEMBL2111395": {
+   "name": "Beta-adrenergic receptor",
+   "organism": "Mus musculus",
+   "item": "Q410568"
+  },
+  "CHEMBL3885525": {
+   "name": "beta-catenin-B-cell lymphoma 9 protein complex",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL3038485": {
+   "name": "Beta-N-acetyl-D-hexosaminidase-A/B",
+   "organism": "Homo sapiens",
+   "item": "Q1313153"
+  },
+  "CHEMBL3391661": {
+   "name": "Betaine-homocysteine S-methyltransferase",
+   "organism": "Homo sapiens",
+   "item": "Q3266660"
+  },
+  "CHEMBL3885529": {
+   "name": "Bile acid receptor/Retinoic acid receptor RXR-alpha",
+   "organism": "Mus musculus",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL4296614": {
+   "name": "Bromodomain and extra-terminal motif (BET)",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "English Wikipedia covers the BET family only as a section of Bromodomain, an article about a protein domain"
+  },
+  "CHEMBL2096667": {
+   "name": "c-Jun N-terminal kinase, JNK",
+   "organism": "Homo sapiens",
+   "item": "Q24774703"
+  },
+  "CHEMBL4296086": {
+   "name": "Cacna1b/Cacnb3",
+   "organism": "Rattus norvegicus",
+   "item": "Q26916851"
+  },
+  "CHEMBL3832947": {
+   "name": "Calcitonin gene-related peptide",
+   "organism": "Homo sapiens",
+   "item": "Q419432"
+  },
+  "CHEMBL2107838": {
+   "name": "Calcitonin-gene-related peptide receptor, CALCRL/RAMP1",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "English Wikipedia redirects the CGRP receptor to CALCRL, one subunit's article"
+  },
+  "CHEMBL2097164": {
+   "name": "CaM kinase II",
+   "organism": "Homo sapiens",
+   "item": "Q2707563"
+  },
+  "CHEMBL2094138": {
+   "name": "cAMP-dependent protein kinase (PKA)",
+   "organism": "Homo sapiens",
+   "item": "Q281417"
+  },
+  "CHEMBL2111446": {
+   "name": "cAMP-dependent protein kinase A",
+   "organism": "Bos taurus",
+   "item": "Q281417"
+  },
+  "CHEMBL2096981": {
+   "name": "Cannabinoid receptor",
+   "organism": "Homo sapiens",
+   "item": "Q421237"
+  },
+  "CHEMBL2111385": {
+   "name": "Cannabinoid receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q421237"
+  },
+  "CHEMBL2111415": {
+   "name": "Cannabinoid receptor",
+   "organism": "Mus musculus",
+   "item": "Q421237"
+  },
+  "CHEMBL2095180": {
+   "name": "Carbonic anhydrase",
+   "organism": "Homo sapiens",
+   "item": "Q284089"
+  },
+  "CHEMBL2096971": {
+   "name": "Carbonic anhydrase",
+   "organism": "Bos taurus",
+   "item": "Q284089"
+  },
+  "CHEMBL2111457": {
+   "name": "Carbonic anhydrase V",
+   "organism": "Homo sapiens",
+   "item": "Q284089"
+  },
+  "CHEMBL3832943": {
+   "name": "Casein kinase 2",
+   "organism": "Homo sapiens",
+   "item": "Q21102140"
+  },
+  "CHEMBL3988629": {
+   "name": "Casein kinase 2",
+   "organism": "Rattus norvegicus",
+   "item": "Q21102140"
+  },
+  "CHEMBL2111458": {
+   "name": "Casein kinase I",
+   "organism": "Homo sapiens",
+   "item": "Q5048387"
+  },
+  "CHEMBL3038494": {
+   "name": "Casein kinase I delta/epsilon",
+   "organism": "Homo sapiens",
+   "item": "Q5048387"
+  },
+  "CHEMBL2095191": {
+   "name": "Casein kinase II",
+   "organism": "Homo sapiens",
+   "item": "Q21102140"
+  },
+  "CHEMBL3038467": {
+   "name": "CDK1/Cyclin A",
+   "organism": "Homo sapiens",
+   "item": "Q5198255"
+  },
+  "CHEMBL4106169": {
+   "name": "CDK12/Cyclin K",
+   "organism": "Homo sapiens",
+   "item": "Q5198255"
+  },
+  "CHEMBL3038470": {
+   "name": "CDK2/Cyclin A1",
+   "organism": "Homo sapiens",
+   "item": "Q5198255"
+  },
+  "CHEMBL3038469": {
+   "name": "CDK2/Cyclin A2",
+   "organism": "Homo sapiens",
+   "item": "Q5198255"
+  },
+  "CHEMBL4523633": {
+   "name": "CDK2/Cyclin-E2",
+   "organism": "Homo sapiens",
+   "item": "Q124785192"
+  },
+  "CHEMBL3038472": {
+   "name": "CDK4/Cyclin D3",
+   "organism": "Homo sapiens",
+   "item": "Q5198268"
+  },
+  "CHEMBL2111455": {
+   "name": "CDK6/cyclin D1",
+   "organism": "Homo sapiens",
+   "item": "Q5198255"
+  },
+  "CHEMBL2111448": {
+   "name": "CDK6/cyclin D3",
+   "organism": "Homo sapiens",
+   "item": "Q5198255"
+  },
+  "CHEMBL3038473": {
+   "name": "CDK7/Cyclin H/MNAT1",
+   "organism": "Homo sapiens",
+   "item": "Q4035942"
+  },
+  "CHEMBL3038474": {
+   "name": "CDK8/Cyclin C",
+   "organism": "Homo sapiens",
+   "item": "Q5198255"
+  },
+  "CHEMBL3038475": {
+   "name": "CDK9/Cyclin K",
+   "organism": "Homo sapiens",
+   "item": "Q5198255"
+  },
+  "CHEMBL2111389": {
+   "name": "CDK9/cyclin T1",
+   "organism": "Homo sapiens",
+   "item": "Q15314917"
+  },
+  "CHEMBL4296103": {
+   "name": "Cereblon/Ikaros",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL2111420": {
+   "name": "Cerebral cortex alpha adrenergic receptor",
+   "organism": "Bos taurus",
+   "item": "Q410568"
+  },
+  "CHEMBL2095185": {
+   "name": "Cholecystokinin receptor",
+   "organism": "Homo sapiens",
+   "item": "Q24788694"
+  },
+  "CHEMBL2096986": {
+   "name": "Cholecystokinin receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q24788694"
+  },
+  "CHEMBL4523988": {
+   "name": "Class 1 histone deacetylase",
+   "organism": "Homo sapiens",
+   "item": "Q174378"
+  },
+  "CHEMBL4662931": {
+   "name": "ClpP1P2",
+   "organism": "Mycobacterium tuberculosis (strain ATCC 25618 / H37Rv)",
+   "item": "Q5012788"
+  },
+  "CHEMBL6066543": {
+   "name": "Coagulation factor V/Coagulation factor X/Serine/threonine-protein kinase BRSK2",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL2095194": {
+   "name": "Coagulation factor VII/tissue factor",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "no English article on the assembly; its subunits have their own"
+  },
+  "CHEMBL2364188": {
+   "name": "Collagen",
+   "organism": "Homo sapiens",
+   "item": "Q26868"
+  },
+  "CHEMBL3885546": {
+   "name": "Corticotropin-releasing factor receptor 2/Corticotropin-releasing factor-binding protein",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL3883300": {
+   "name": "CREB-binding protein/Histone acetyltransferase p300",
+   "organism": "Homo sapiens",
+   "item": "Q7117884"
+  },
+  "CHEMBL3833061": {
+   "name": "CRL4(CRBN) E3 ubiquitin ligase",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "no English article on the assembly; its subunits have their own"
+  },
+  "CHEMBL4296065": {
+   "name": "Cyclin-dependent kinase 1/ G1/S-specific cyclin-D3",
+   "organism": "Homo sapiens",
+   "item": "Q5198255"
+  },
+  "CHEMBL2094127": {
+   "name": "Cyclin-dependent kinase 1/cyclin B",
+   "organism": "Homo sapiens",
+   "item": "Q417889"
+  },
+  "CHEMBL1907602": {
+   "name": "Cyclin-dependent kinase 1/cyclin B1",
+   "organism": "Homo sapiens",
+   "item": "Q417889"
+  },
+  "CHEMBL6066545": {
+   "name": "Cyclin-dependent kinase 1/G2/mitotic-specific cyclin-B",
+   "organism": "Oryzias latipes",
+   "item": "Q417889"
+  },
+  "CHEMBL2094128": {
+   "name": "Cyclin-dependent kinase 2/cyclin A",
+   "organism": "Homo sapiens",
+   "item": "Q5198255"
+  },
+  "CHEMBL2094126": {
+   "name": "Cyclin-dependent kinase 2/cyclin E",
+   "organism": "Homo sapiens",
+   "item": "Q124785192"
+  },
+  "CHEMBL1907605": {
+   "name": "Cyclin-dependent kinase 2/cyclin E1",
+   "organism": "Homo sapiens",
+   "item": "Q124785192"
+  },
+  "CHEMBL3885553": {
+   "name": "Cyclin-dependent kinase 4/6",
+   "organism": "Homo sapiens",
+   "item": "Q46292"
+  },
+  "CHEMBL2095942": {
+   "name": "Cyclin-dependent kinase 4/cyclin D",
+   "organism": "Homo sapiens",
+   "item": "Q5198268"
+  },
+  "CHEMBL1907601": {
+   "name": "Cyclin-dependent kinase 4/cyclin D1",
+   "organism": "Homo sapiens",
+   "item": "Q5198268"
+  },
+  "CHEMBL3885554": {
+   "name": "Cyclin-dependent kinase 4/G1/S-specific cyclin-E1",
+   "organism": "Homo sapiens",
+   "item": "Q5198255"
+  },
+  "CHEMBL1907600": {
+   "name": "Cyclin-dependent kinase 5/CDK5 activator 1",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "CDK5's activator p35 is not a cyclin, and English Wikipedia has no article on the pair"
+  },
+  "CHEMBL2111288": {
+   "name": "Cyclin-dependent kinase 7/ cyclin H",
+   "organism": "Homo sapiens",
+   "item": "Q4035942"
+  },
+  "CHEMBL3885549": {
+   "name": "Cyclin-T1/Cyclin-dependent-like kinase 5",
+   "organism": "Homo sapiens",
+   "item": "Q5198255"
+  },
+  "CHEMBL2094253": {
+   "name": "Cyclooxygenase",
+   "organism": "Homo sapiens",
+   "item": "Q410251"
+  },
+  "CHEMBL2095157": {
+   "name": "Cyclooxygenase",
+   "organism": "Rattus norvegicus",
+   "item": "Q410251"
+  },
+  "CHEMBL2096674": {
+   "name": "Cyclooxygenase",
+   "organism": "Bos taurus",
+   "item": "Q410251"
+  },
+  "CHEMBL2094254": {
+   "name": "Cysteinyl leukotriene receptor",
+   "organism": "Homo sapiens",
+   "item": "Q24777999"
+  },
+  "CHEMBL2364675": {
+   "name": "Cytochrome P450 3A",
+   "organism": "Homo sapiens",
+   "item": "Q5014970"
+  },
+  "CHEMBL2331075": {
+   "name": "D2-like dopamine receptor",
+   "organism": "Homo sapiens",
+   "item": "Q1752866"
+  },
+  "CHEMBL2094139": {
+   "name": "DNA gyrase",
+   "organism": "Escherichia coli",
+   "item": "Q70551687"
+  },
+  "CHEMBL2311244": {
+   "name": "DNA gyrase",
+   "organism": "Neisseria gonorrhoeae",
+   "item": "Q70551687"
+  },
+  "CHEMBL3038482": {
+   "name": "DNA gyrase",
+   "organism": "Staphylococcus aureus",
+   "item": "Q70551687"
+  },
+  "CHEMBL3430898": {
+   "name": "DNA gyrase subunit A/DNA gyrase subunit B",
+   "organism": "Mycobacterium tuberculosis (strain ATCC 25618 / H37Rv)",
+   "item": "Q70551687"
+  },
+  "CHEMBL2363042": {
+   "name": "DNA polymerase (alpha/delta/epsilon)",
+   "organism": "Homo sapiens",
+   "item": "Q206286"
+  },
+  "CHEMBL2094255": {
+   "name": "DNA topoisomerase II",
+   "organism": "Homo sapiens",
+   "item": "Q411991"
+  },
+  "CHEMBL2093868": {
+   "name": "Dopamine receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q415496"
+  },
+  "CHEMBL2096905": {
+   "name": "Dopamine receptor",
+   "organism": "Homo sapiens",
+   "item": "Q415496"
+  },
+  "CHEMBL2096970": {
+   "name": "Dopamine receptor",
+   "organism": "Bos taurus",
+   "item": "Q415496"
+  },
+  "CHEMBL2111289": {
+   "name": "Dual specificity mitogen-activated protein kinase kinase; MEK1/2",
+   "organism": "Homo sapiens",
+   "item": "Q6593810"
+  },
+  "CHEMBL2366581": {
+   "name": "Ecdysone receptor",
+   "organism": "Drosophila melanogaster",
+   "item": "Q22325789"
+  },
+  "CHEMBL2366583": {
+   "name": "Ecdysone receptor",
+   "organism": "Leptinotarsa decemlineata",
+   "item": "Q22325789"
+  },
+  "CHEMBL2366588": {
+   "name": "Ecdysone receptor",
+   "organism": "Spodoptera frugiperda",
+   "item": "Q22325789"
+  },
+  "CHEMBL2366589": {
+   "name": "Ecdysone receptor",
+   "organism": "Nezara viridula",
+   "item": "Q22325789"
+  },
+  "CHEMBL2096678": {
+   "name": "Endothelin receptor, ET-A/ET-B",
+   "organism": "Homo sapiens",
+   "item": "Q24721308"
+  },
+  "CHEMBL2363043": {
+   "name": "Ephrin receptor",
+   "organism": "Homo sapiens",
+   "item": "Q423602"
+  },
+  "CHEMBL2363049": {
+   "name": "Epidermal growth factor receptor",
+   "organism": "Homo sapiens",
+   "item": "Q5385089"
+  },
+  "CHEMBL2111431": {
+   "name": "Epidermal growth factor receptor and ErbB2 (HER1 and HER2)",
+   "organism": "Homo sapiens",
+   "item": "Q5385089"
+  },
+  "CHEMBL2093866": {
+   "name": "Estrogen receptor",
+   "organism": "Homo sapiens",
+   "item": "Q416496"
+  },
+  "CHEMBL2094114": {
+   "name": "Estrogen receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q416496"
+  },
+  "CHEMBL2304421": {
+   "name": "Estrogen receptor",
+   "organism": "Ovis aries",
+   "item": "Q416496"
+  },
+  "CHEMBL2095232": {
+   "name": "Exodeoxyribonuclease V",
+   "organism": "Escherichia coli (strain K12)",
+   "item": "Q2066326"
+  },
+  "CHEMBL3831282": {
+   "name": "Fast skeletal troponin complex",
+   "organism": "Homo sapiens",
+   "item": "Q7846262"
+  },
+  "CHEMBL2364709": {
+   "name": "Fibrinogen",
+   "organism": "Homo sapiens",
+   "item": "Q381899"
+  },
+  "CHEMBL2221341": {
+   "name": "FKBP12A/mTOR",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL2111392": {
+   "name": "GABA A receptor alpha-1/beta-1/gamma-2",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL2111327": {
+   "name": "GABA A receptor alpha-2/beta-2/gamma-2",
+   "organism": "Rattus norvegicus",
+   "item": "Q60147"
+  },
+  "CHEMBL2111413": {
+   "name": "GABA A receptor alpha-2/beta-2/gamma-2",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL2111339": {
+   "name": "GABA A receptor alpha-3/beta-2/gamma-2",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL2111343": {
+   "name": "GABA A receptor alpha-3/beta-2/gamma-2",
+   "organism": "Rattus norvegicus",
+   "item": "Q60147"
+  },
+  "CHEMBL2111366": {
+   "name": "GABA A receptor alpha-4/beta-3/gamma-2",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL2111374": {
+   "name": "GABA A receptor alpha-5/beta-3/gamma-2",
+   "organism": "Rattus norvegicus",
+   "item": "Q60147"
+  },
+  "CHEMBL2111365": {
+   "name": "GABA A receptor alpha-6/beta-2/gamma-2",
+   "organism": "Rattus norvegicus",
+   "item": "Q60147"
+  },
+  "CHEMBL2111370": {
+   "name": "GABA A receptor alpha-6/beta-2/gamma-2",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL2111474": {
+   "name": "GABA B receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q305671"
+  },
+  "CHEMBL2111478": {
+   "name": "GABA transporter",
+   "organism": "Rattus norvegicus",
+   "item": "Q5512772"
+  },
+  "CHEMBL4106151": {
+   "name": "GABA-A receptor alpha-1/beta-3",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL2109244": {
+   "name": "GABA-A receptor; agonist GABA site",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL2095167": {
+   "name": "GABA-A receptor; alpha-1/beta-2/gamma-2",
+   "organism": "Rattus norvegicus",
+   "item": "Q60147"
+  },
+  "CHEMBL2095172": {
+   "name": "GABA-A receptor; alpha-1/beta-2/gamma-2",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL2094121": {
+   "name": "GABA-A receptor; alpha-1/beta-3/gamma-2",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL2094130": {
+   "name": "GABA-A receptor; alpha-2/beta-3/gamma-2",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL2094120": {
+   "name": "GABA-A receptor; alpha-3/beta-3/gamma-2",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL2094122": {
+   "name": "GABA-A receptor; alpha-5/beta-3/gamma-2",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL2095190": {
+   "name": "GABA-A receptor; alpha-6/beta-3/gamma-2",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL1907607": {
+   "name": "GABA-A receptor; anion channel",
+   "organism": "Rattus norvegicus",
+   "item": "Q60147"
+  },
+  "CHEMBL2093872": {
+   "name": "GABA-A receptor; anion channel",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL2094107": {
+   "name": "GABA-A receptor; anion channel",
+   "organism": "Bos taurus",
+   "item": "Q60147"
+  },
+  "CHEMBL2094133": {
+   "name": "GABA-A receptor; anion channel",
+   "organism": "Mus musculus",
+   "item": "Q60147"
+  },
+  "CHEMBL1907597": {
+   "name": "GABA-A receptor; GABA-A site (alpha1/beta2 interface)",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL2111463": {
+   "name": "GABA-B receptor",
+   "organism": "Homo sapiens",
+   "item": "Q305671"
+  },
+  "CHEMBL2109242": {
+   "name": "GABA-C receptor",
+   "organism": "Homo sapiens",
+   "item": "Q798179"
+  },
+  "CHEMBL3885570": {
+   "name": "Gamma-aminobutyric acid receptor subunit alpha-1/ beta-1",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL5303741": {
+   "name": "Gamma-aminobutyric acid receptor subunit alpha-1/alpha-2/beta-2/gamma-2",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL5291947": {
+   "name": "Gamma-aminobutyric acid receptor subunit alpha-1/alpha-6/beta-3/gamma-2",
+   "organism": "Rattus norvegicus",
+   "item": "Q60147"
+  },
+  "CHEMBL4296062": {
+   "name": "Gamma-aminobutyric acid receptor subunit alpha-1/beta-3/gamma-2",
+   "organism": "Rattus norvegicus",
+   "item": "Q60147"
+  },
+  "CHEMBL5291949": {
+   "name": "Gamma-aminobutyric acid receptor subunit alpha-2/beta-1/gamma-2",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL3885571": {
+   "name": "Gamma-aminobutyric acid receptor subunit alpha-2/beta-2",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL4296048": {
+   "name": "Gamma-aminobutyric acid receptor subunit alpha-2/beta-3/gamma-2",
+   "organism": "Rattus norvegicus",
+   "item": "Q60147"
+  },
+  "CHEMBL3885572": {
+   "name": "Gamma-aminobutyric acid receptor subunit alpha-3/ beta-2",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL3885573": {
+   "name": "Gamma-aminobutyric acid receptor subunit alpha-3/ beta-3/gamma-3",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL3885574": {
+   "name": "Gamma-aminobutyric acid receptor subunit alpha-3/beta-3",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL4296047": {
+   "name": "Gamma-aminobutyric acid receptor subunit alpha-3/beta-3/gamma-2",
+   "organism": "Rattus norvegicus",
+   "item": "Q60147"
+  },
+  "CHEMBL3885575": {
+   "name": "Gamma-aminobutyric acid receptor subunit alpha-3/beta-3/theta",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL4296046": {
+   "name": "Gamma-aminobutyric acid receptor subunit alpha-4/beta-2/delta",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL4523640": {
+   "name": "Gamma-aminobutyric acid receptor subunit alpha-4/beta-2/gamma-2",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL3430899": {
+   "name": "Gamma-aminobutyric acid receptor subunit alpha-4/beta3/delta",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL3885576": {
+   "name": "Gamma-aminobutyric acid receptor subunit alpha-5/beta-2",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL4523641": {
+   "name": "Gamma-aminobutyric acid receptor subunit alpha-5/beta-2/gamma-2",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL3885577": {
+   "name": "Gamma-aminobutyric acid receptor subunit alpha-5/beta-3/gamma-3",
+   "organism": "Homo sapiens",
+   "item": "Q60147"
+  },
+  "CHEMBL4296054": {
+   "name": "Gamma-aminobutyric acid receptor subunit alpha-6/beta-3/gamma-2",
+   "organism": "Rattus norvegicus",
+   "item": "Q60147"
+  },
+  "CHEMBL2094135": {
+   "name": "Gamma-secretase",
+   "organism": "Homo sapiens",
+   "item": "Q15328541"
+  },
+  "CHEMBL4106137": {
+   "name": "GATA4/NKX2-5",
+   "organism": "Mus musculus",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL2095164": {
+   "name": "Geranylgeranyl transferase type I",
+   "organism": "Homo sapiens",
+   "item": "Q50273129"
+  },
+  "CHEMBL2096987": {
+   "name": "Geranylgeranyl transferase type I",
+   "organism": "Bos taurus",
+   "item": "Q50273129"
+  },
+  "CHEMBL4106172": {
+   "name": "Glucocerebrosidase GBA1/GBA2",
+   "organism": "Homo sapiens",
+   "item": "Q22032481"
+  },
+  "CHEMBL2094124": {
+   "name": "Glutamate [NMDA] receptor",
+   "organism": "Homo sapiens",
+   "item": "Q414896"
+  },
+  "CHEMBL1907608": {
+   "name": "Glutamate NMDA receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q414896"
+  },
+  "CHEMBL1907604": {
+   "name": "Glutamate NMDA receptor; GRIN1/GRIN2A",
+   "organism": "Homo sapiens",
+   "item": "Q414896"
+  },
+  "CHEMBL2096680": {
+   "name": "Glutamate NMDA receptor; Grin1/Grin2a",
+   "organism": "Rattus norvegicus",
+   "item": "Q414896"
+  },
+  "CHEMBL1907603": {
+   "name": "Glutamate NMDA receptor; GRIN1/GRIN2B",
+   "organism": "Homo sapiens",
+   "item": "Q414896"
+  },
+  "CHEMBL2096666": {
+   "name": "Glutamate NMDA receptor; Grin1/Grin2b",
+   "organism": "Rattus norvegicus",
+   "item": "Q414896"
+  },
+  "CHEMBL2096911": {
+   "name": "Glutamate NMDA receptor; Grin1/Grin2c",
+   "organism": "Rattus norvegicus",
+   "item": "Q414896"
+  },
+  "CHEMBL3883294": {
+   "name": "Glutamate receptor AMPA 1/2",
+   "organism": "Homo sapiens",
+   "item": "Q295251"
+  },
+  "CHEMBL3883291": {
+   "name": "Glutamate receptor AMPA 2/3",
+   "organism": "Homo sapiens",
+   "item": "Q295251"
+  },
+  "CHEMBL3885581": {
+   "name": "Glutamate receptor AMPA 3/4",
+   "organism": "Homo sapiens",
+   "item": "Q295251"
+  },
+  "CHEMBL3885582": {
+   "name": "Glutamate receptor AMPA 3/4",
+   "organism": "Rattus norvegicus",
+   "item": "Q295251"
+  },
+  "CHEMBL2096670": {
+   "name": "Glutamate receptor ionotropic AMPA",
+   "organism": "Homo sapiens",
+   "item": "Q295251"
+  },
+  "CHEMBL2109241": {
+   "name": "Glutamate receptor ionotropic kainate",
+   "organism": "Homo sapiens",
+   "item": "Q3454536"
+  },
+  "CHEMBL2093871": {
+   "name": "Glutamate receptor ionotropic, AMPA",
+   "organism": "Rattus norvegicus",
+   "item": "Q295251"
+  },
+  "CHEMBL2094119": {
+   "name": "Glutamate receptor ionotropic, kainate",
+   "organism": "Rattus norvegicus",
+   "item": "Q3454536"
+  },
+  "CHEMBL3392921": {
+   "name": "Glycine receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q426887"
+  },
+  "CHEMBL2363052": {
+   "name": "Glycine receptor (alpha-1/beta)",
+   "organism": "Homo sapiens",
+   "item": "Q426887"
+  },
+  "CHEMBL2095188": {
+   "name": "Glycogen synthase kinase-3",
+   "organism": "Homo sapiens",
+   "item": "Q910847"
+  },
+  "CHEMBL2366565": {
+   "name": "Glycogen synthase kinase-3",
+   "organism": "Sus scrofa",
+   "item": "Q910847"
+  },
+  "CHEMBL2364169": {
+   "name": "Granulocyte-macrophage colony-stimulating factor receptor",
+   "organism": "Homo sapiens",
+   "item": "Q14914524"
+  },
+  "CHEMBL4106139": {
+   "name": "GroEL/GroES",
+   "organism": "Escherichia coli",
+   "item": "Q24771589"
+  },
+  "CHEMBL4106154": {
+   "name": "Group II metabotropic glutamate receptor (mGlu2/mGlu3)",
+   "organism": "Rattus norvegicus",
+   "item": "Q2033959"
+  },
+  "CHEMBL5465253": {
+   "name": "HAT1/Rbap46",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL4296112": {
+   "name": "HDAC1/REST corepressor 3",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL2111408": {
+   "name": "Heart phosphodiesterase",
+   "organism": "Bos taurus",
+   "item": "Q424304"
+  },
+  "CHEMBL2095165": {
+   "name": "Heat shock protein HSP90",
+   "organism": "Homo sapiens",
+   "item": "Q24772687"
+  },
+  "CHEMBL2095231": {
+   "name": "Hepatitis C virus serine protease, NS3/NS4A",
+   "organism": "Hepatitis C virus",
+   "item": null,
+   "why": "no English article on the assembly; its subunits have their own"
+  },
+  "CHEMBL3833421": {
+   "name": "Heterotrimeric lymphotoxin LTa1b2",
+   "organism": "Homo sapiens",
+   "item": "Q24774130"
+  },
+  "CHEMBL2093865": {
+   "name": "Histone deacetylase",
+   "organism": "Homo sapiens",
+   "item": "Q174378"
+  },
+  "CHEMBL2095943": {
+   "name": "Histone deacetylase",
+   "organism": "Rattus norvegicus",
+   "item": "Q174378"
+  },
+  "CHEMBL3832944": {
+   "name": "Histone deacetylase",
+   "organism": "Mus musculus",
+   "item": "Q174378"
+  },
+  "CHEMBL2111429": {
+   "name": "Histone deacetylase (HDAC1 and HDAC2)",
+   "organism": "Homo sapiens",
+   "item": "Q174378"
+  },
+  "CHEMBL3430897": {
+   "name": "Histone deacetylase 1/2/3",
+   "organism": "Homo sapiens",
+   "item": "Q174378"
+  },
+  "CHEMBL3038483": {
+   "name": "Histone deacetylase 1/3/5/8",
+   "organism": "Homo sapiens",
+   "item": "Q174378"
+  },
+  "CHEMBL3885590": {
+   "name": "Histone deacetylase 1/Nuclear receptor corepressor 2",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL3885591": {
+   "name": "Histone deacetylase 2/Nuclear receptor corepressor 2",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL3038484": {
+   "name": "Histone deacetylase 3/NCoR1",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL2111363": {
+   "name": "Histone deacetylase 3/Nuclear receptor corepressor 2 (HDAC3/NCoR2)",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL4106131": {
+   "name": "HSP60/HSP10",
+   "organism": "Homo sapiens",
+   "item": "Q24771589"
+  },
+  "CHEMBL2221345": {
+   "name": "Hypoxia inducible factors; HIF-1-alpha, HIF-2-alpha",
+   "organism": "Homo sapiens",
+   "item": "Q415096"
+  },
+  "CHEMBL3831261": {
+   "name": "Hypoxia-inducible factor prolyl hydroxylase",
+   "organism": "Homo sapiens",
+   "item": "Q3818007"
+  },
+  "CHEMBL2111328": {
+   "name": "Inhibitor of NF-kappa-B kinase (IKK)",
+   "organism": "Homo sapiens",
+   "item": "Q6103519"
+  },
+  "CHEMBL4804252": {
+   "name": "Innate repair receptor",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL2111369": {
+   "name": "Inosine-5'-monophosphate dehydrogenase (IMPDH)",
+   "organism": "Homo sapiens",
+   "item": "Q6036610"
+  },
+  "CHEMBL1907599": {
+   "name": "Integrin alpha-4/beta-1",
+   "organism": "Homo sapiens",
+   "item": "Q50257813"
+  },
+  "CHEMBL2095184": {
+   "name": "Integrin alpha-4/beta-7",
+   "organism": "Homo sapiens",
+   "item": "Q409715"
+  },
+  "CHEMBL2095226": {
+   "name": "Integrin alpha-5/beta-1",
+   "organism": "Homo sapiens",
+   "item": "Q409715"
+  },
+  "CHEMBL3885595": {
+   "name": "Integrin alpha-5/Neuronal acetylcholine receptor subunit alpha-3/Neuronal acetylcholine receptor subunit beta-2/Neuronal acetylcholine receptor subunit beta-4",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL2093869": {
+   "name": "Integrin alpha-IIb/beta-3",
+   "organism": "Homo sapiens",
+   "item": "Q2335787"
+  },
+  "CHEMBL2364172": {
+   "name": "Integrin alpha-L/beta-2 (LFA-1)",
+   "organism": "Homo sapiens",
+   "item": "Q4042438"
+  },
+  "CHEMBL3430893": {
+   "name": "Integrin alpha-V/alpha-5",
+   "organism": "Homo sapiens",
+   "item": "Q409715"
+  },
+  "CHEMBL1907598": {
+   "name": "Integrin alpha-V/beta-3",
+   "organism": "Homo sapiens",
+   "item": "Q50254584"
+  },
+  "CHEMBL4106150": {
+   "name": "Integrin alpha-V/beta-3/alpha-V/beta-5",
+   "organism": "Homo sapiens",
+   "item": "Q409715"
+  },
+  "CHEMBL2096675": {
+   "name": "Integrin alpha-V/beta-5",
+   "organism": "Homo sapiens",
+   "item": "Q409715"
+  },
+  "CHEMBL2111416": {
+   "name": "Integrin alpha-V/beta-6",
+   "organism": "Homo sapiens",
+   "item": "Q409715"
+  },
+  "CHEMBL3430892": {
+   "name": "Integrin alpha-V/beta-8",
+   "organism": "Homo sapiens",
+   "item": "Q409715"
+  },
+  "CHEMBL4296069": {
+   "name": "Integrin subunit alpha 2b/beta-3",
+   "organism": "Rattus norvegicus",
+   "item": "Q2335787"
+  },
+  "CHEMBL2096661": {
+   "name": "Intercellular adhesion molecule (ICAM-1), Integrin alpha-L/beta-2",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL2364170": {
+   "name": "Interferon alpha/beta receptor",
+   "organism": "Homo sapiens",
+   "item": "Q6046426"
+  },
+  "CHEMBL2364171": {
+   "name": "Interferon gamma receptor",
+   "organism": "Homo sapiens",
+   "item": "Q140067876"
+  },
+  "CHEMBL3831285": {
+   "name": "Interleukin 13 receptor",
+   "organism": "Homo sapiens",
+   "item": "Q6046910"
+  },
+  "CHEMBL2364153": {
+   "name": "Interleukin-12",
+   "organism": "Homo sapiens",
+   "item": "Q2409681"
+  },
+  "CHEMBL2364167": {
+   "name": "Interleukin-2 receptor",
+   "organism": "Homo sapiens",
+   "item": "Q5971673"
+  },
+  "CHEMBL2364154": {
+   "name": "Interleukin-23",
+   "organism": "Homo sapiens",
+   "item": "Q23308590"
+  },
+  "CHEMBL2096909": {
+   "name": "Interleukin-8 receptors, CXCR1/CXCR2",
+   "organism": "Homo sapiens",
+   "item": "Q24719789"
+  },
+  "CHEMBL3038504": {
+   "name": "Ionotropic glutamate receptor NMDA 1/2C",
+   "organism": "Homo sapiens",
+   "item": "Q414896"
+  },
+  "CHEMBL3038505": {
+   "name": "Ionotropic glutamate receptor NMDA 1/2D",
+   "organism": "Homo sapiens",
+   "item": "Q414896"
+  },
+  "CHEMBL3038506": {
+   "name": "Ionotropic glutamate receptor NMDA 1/2D",
+   "organism": "Rattus norvegicus",
+   "item": "Q414896"
+  },
+  "CHEMBL3301390": {
+   "name": "JAK1/JAK2/TYK2",
+   "organism": "Homo sapiens",
+   "item": "Q903451"
+  },
+  "CHEMBL3301391": {
+   "name": "JAK1/TYK2",
+   "organism": "Homo sapiens",
+   "item": "Q903451"
+  },
+  "CHEMBL4523618": {
+   "name": "JAK1/TYK2",
+   "organism": "Mus musculus",
+   "item": "Q903451"
+  },
+  "CHEMBL3038492": {
+   "name": "JAK2/JAK1",
+   "organism": "Homo sapiens",
+   "item": "Q903451"
+  },
+  "CHEMBL3301392": {
+   "name": "JAK2/TYK2",
+   "organism": "Homo sapiens",
+   "item": "Q903451"
+  },
+  "CHEMBL3038491": {
+   "name": "JAK3/JAK1",
+   "organism": "Homo sapiens",
+   "item": "Q903451"
+  },
+  "CHEMBL2363062": {
+   "name": "Janus Kinase (JAK)",
+   "organism": "Homo sapiens",
+   "item": "Q903451"
+  },
+  "CHEMBL2363063": {
+   "name": "KCNQ (Kv7) potassium channel",
+   "organism": "Homo sapiens",
+   "item": "Q74805923"
+  },
+  "CHEMBL3885598": {
+   "name": "Kv channel-interacting protein 2/Potassium voltage-gated channel subfamily D member 3",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "no English article on the assembly; its subunits have their own"
+  },
+  "CHEMBL3988632": {
+   "name": "L-type calcium channel",
+   "organism": "Mus musculus",
+   "item": "Q2600696"
+  },
+  "CHEMBL4106164": {
+   "name": "L-type calcium channel alpha-1c/beta-2/alpha2delta-1",
+   "organism": "Homo sapiens",
+   "item": "Q2600696"
+  },
+  "CHEMBL2364187": {
+   "name": "Laminin",
+   "organism": "Homo sapiens",
+   "item": "Q58345"
+  },
+  "CHEMBL3390824": {
+   "name": "Lanosterol 14-alpha demethylase",
+   "organism": "Aspergillus",
+   "item": "Q1805541"
+  },
+  "CHEMBL2095160": {
+   "name": "Leukotriene B4 receptor",
+   "organism": "Homo sapiens",
+   "item": "Q20708036"
+  },
+  "CHEMBL3885599": {
+   "name": "LIM domain kinase 1/2",
+   "organism": "Homo sapiens",
+   "item": "Q17121083"
+  },
+  "CHEMBL3137262": {
+   "name": "LSD1/CoREST complex",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "no English article on the assembly; its subunits have their own"
+  },
+  "CHEMBL4296114": {
+   "name": "Lysine-specific histone demethylase 1A/REST corepressor",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "no English article on the assembly; its subunits have their own"
+  },
+  "CHEMBL2094115": {
+   "name": "MAP kinase p38",
+   "organism": "Homo sapiens",
+   "item": "Q2043632"
+  },
+  "CHEMBL2094268": {
+   "name": "Melatonin receptor",
+   "organism": "Homo sapiens",
+   "item": "Q24784310"
+  },
+  "CHEMBL2095154": {
+   "name": "Melatonin receptor",
+   "organism": "Gallus gallus",
+   "item": "Q24784310"
+  },
+  "CHEMBL2111335": {
+   "name": "Metabotropic glutamate receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q2033959"
+  },
+  "CHEMBL4106140": {
+   "name": "METTL3/METTL14",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "no English article on the assembly; its subunits have their own"
+  },
+  "CHEMBL2363065": {
+   "name": "Mitochondrial complex I (NADH dehydrogenase)",
+   "organism": "Homo sapiens",
+   "item": "Q22326958"
+  },
+  "CHEMBL612444": {
+   "name": "Mitochondrial complex V; ATP synthase",
+   "organism": "Bos taurus",
+   "item": "Q22327117"
+  },
+  "CHEMBL1907606": {
+   "name": "Mitogen-activated protein kinase; ERK1/ERK2",
+   "organism": "Homo sapiens",
+   "item": "Q409325"
+  },
+  "CHEMBL2095196": {
+   "name": "Monoamine oxidase",
+   "organism": "Rattus norvegicus",
+   "item": "Q410867"
+  },
+  "CHEMBL2095205": {
+   "name": "Monoamine oxidase",
+   "organism": "Homo sapiens",
+   "item": "Q410867"
+  },
+  "CHEMBL2363064": {
+   "name": "Monoamine transporter",
+   "organism": "Homo sapiens",
+   "item": "Q5692421"
+  },
+  "CHEMBL4296661": {
+   "name": "mTORC1",
+   "organism": "Homo sapiens",
+   "item": "Q14876060"
+  },
+  "CHEMBL3883321": {
+   "name": "Mu opioid receptor/Alpha-2A adrenergic receptor",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL5465380": {
+   "name": "MUS81-ECE1",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL1907609": {
+   "name": "Muscarinic acetylcholine receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q410959"
+  },
+  "CHEMBL2094109": {
+   "name": "Muscarinic acetylcholine receptor",
+   "organism": "Homo sapiens",
+   "item": "Q410959"
+  },
+  "CHEMBL2097162": {
+   "name": "Muscarinic acetylcholine receptor",
+   "organism": "Mus musculus",
+   "item": "Q410959"
+  },
+  "CHEMBL2362997": {
+   "name": "Muscle-type nicotinic acetylcholine receptor",
+   "organism": "Homo sapiens",
+   "item": "Q6940265"
+  },
+  "CHEMBL6066154": {
+   "name": "Mushroom tyrosinase",
+   "organism": "Agaricus bisporus",
+   "item": "Q416452"
+  },
+  "CHEMBL4106165": {
+   "name": "N+/K+ ATPase alpha-4/beta-1",
+   "organism": "Rattus norvegicus",
+   "item": "Q59143"
+  },
+  "CHEMBL4106160": {
+   "name": "N-type calcium channel alpha-1b/alpha2delta-1/beta-1b",
+   "organism": "Homo sapiens",
+   "item": "Q26916851"
+  },
+  "CHEMBL3831283": {
+   "name": "NEDD8 activating enzyme",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "no English article on the assembly; its subunits have their own"
+  },
+  "CHEMBL2094110": {
+   "name": "Neuronal acetylcholine receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q412256"
+  },
+  "CHEMBL3885609": {
+   "name": "Neuronal acetylcholine receptor subunit alpha-3/beta-4",
+   "organism": "Mus musculus",
+   "item": "Q4734890"
+  },
+  "CHEMBL3885610": {
+   "name": "Neuronal acetylcholine receptor subunit alpha-4/alpha-6/beta-2/beta-3",
+   "organism": "Mus musculus",
+   "item": "Q412256"
+  },
+  "CHEMBL3883314": {
+   "name": "Neuronal acetylcholine receptor subunit alpha-4/beta-2",
+   "organism": "Mus musculus",
+   "item": "Q4734895"
+  },
+  "CHEMBL3885611": {
+   "name": "Neuronal acetylcholine receptor subunit alpha-6/beta-2",
+   "organism": "Mus musculus",
+   "item": "Q412256"
+  },
+  "CHEMBL3883329": {
+   "name": "Neuronal acetylcholine receptor subunit alpha-6/beta-3",
+   "organism": "Rattus norvegicus",
+   "item": "Q412256"
+  },
+  "CHEMBL1907592": {
+   "name": "Neuronal acetylcholine receptor; alpha2/beta2",
+   "organism": "Rattus norvegicus",
+   "item": "Q412256"
+  },
+  "CHEMBL2109236": {
+   "name": "Neuronal acetylcholine receptor; alpha2/beta2",
+   "organism": "Homo sapiens",
+   "item": "Q412256"
+  },
+  "CHEMBL1907590": {
+   "name": "Neuronal acetylcholine receptor; alpha2/beta4",
+   "organism": "Rattus norvegicus",
+   "item": "Q412256"
+  },
+  "CHEMBL2109230": {
+   "name": "Neuronal acetylcholine receptor; alpha2/beta4",
+   "organism": "Homo sapiens",
+   "item": "Q412256"
+  },
+  "CHEMBL2109233": {
+   "name": "Neuronal acetylcholine receptor; alpha3/alpha6/beta2/beta3",
+   "organism": "Homo sapiens",
+   "item": "Q412256"
+  },
+  "CHEMBL1907587": {
+   "name": "Neuronal acetylcholine receptor; alpha3/beta2",
+   "organism": "Rattus norvegicus",
+   "item": "Q18351422"
+  },
+  "CHEMBL2109234": {
+   "name": "Neuronal acetylcholine receptor; alpha3/beta2",
+   "organism": "Homo sapiens",
+   "item": "Q18351422"
+  },
+  "CHEMBL1907593": {
+   "name": "Neuronal acetylcholine receptor; alpha3/beta4",
+   "organism": "Rattus norvegicus",
+   "item": "Q4734890"
+  },
+  "CHEMBL1907594": {
+   "name": "Neuronal acetylcholine receptor; alpha3/beta4",
+   "organism": "Homo sapiens",
+   "item": "Q4734890"
+  },
+  "CHEMBL1907589": {
+   "name": "Neuronal acetylcholine receptor; alpha4/beta2",
+   "organism": "Homo sapiens",
+   "item": "Q4734895"
+  },
+  "CHEMBL1907596": {
+   "name": "Neuronal acetylcholine receptor; alpha4/beta2",
+   "organism": "Rattus norvegicus",
+   "item": "Q4734895"
+  },
+  "CHEMBL1907591": {
+   "name": "Neuronal acetylcholine receptor; alpha4/beta4",
+   "organism": "Homo sapiens",
+   "item": "Q412256"
+  },
+  "CHEMBL1907595": {
+   "name": "Neuronal acetylcholine receptor; alpha4/beta4",
+   "organism": "Rattus norvegicus",
+   "item": "Q412256"
+  },
+  "CHEMBL2109237": {
+   "name": "Neuronal acetylcholine receptor; alpha6/beta2",
+   "organism": "Homo sapiens",
+   "item": "Q412256"
+  },
+  "CHEMBL2109238": {
+   "name": "Neuronal acetylcholine receptor; alpha9/alpha10",
+   "organism": "Homo sapiens",
+   "item": "Q412256"
+  },
+  "CHEMBL2221346": {
+   "name": "Neuronal acetylcholine receptors; alpha-3/beta-4, alpha-5, beta-2",
+   "organism": "Homo sapiens",
+   "item": "Q412256"
+  },
+  "CHEMBL3350222": {
+   "name": "Neuronal nicotinic acetylcholine receptor",
+   "organism": "Mus musculus",
+   "item": "Q412256"
+  },
+  "CHEMBL3885508": {
+   "name": "Nicotinic acetylcholine receptor alpha-1/beta-1",
+   "organism": "Homo sapiens",
+   "item": "Q6940265"
+  },
+  "CHEMBL3301382": {
+   "name": "Nicotinic acetylcholine receptor alpha-4/beta-2",
+   "organism": "Mus musculus",
+   "item": "Q412256"
+  },
+  "CHEMBL3038460": {
+   "name": "Nicotinic acetylcholine receptor alpha1/beta1/gamma/delta",
+   "organism": "Mus musculus",
+   "item": "Q6940265"
+  },
+  "CHEMBL3038458": {
+   "name": "Nicotinic acetylcholine receptor alpha2/beta2",
+   "organism": "Homo sapiens",
+   "item": "Q412256"
+  },
+  "CHEMBL3038459": {
+   "name": "Nicotinic acetylcholine receptor alpha2/beta4",
+   "organism": "Homo sapiens",
+   "item": "Q412256"
+  },
+  "CHEMBL2111384": {
+   "name": "Nicotinic acetylcholine receptor alpha3/betaX",
+   "organism": "Homo sapiens",
+   "item": "Q412256"
+  },
+  "CHEMBL3038461": {
+   "name": "Nicotinic acetylcholine receptor alpha4/beta2/alpha5",
+   "organism": "Homo sapiens",
+   "item": "Q412256"
+  },
+  "CHEMBL3137276": {
+   "name": "Nicotinic acetylcholine receptor alpha6/alpha3/beta4",
+   "organism": "Rattus norvegicus",
+   "item": "Q412256"
+  },
+  "CHEMBL3137285": {
+   "name": "Nicotinic acetylcholine receptor alpha6/alpha3/beta4",
+   "organism": "Homo sapiens",
+   "item": "Q412256"
+  },
+  "CHEMBL4630725": {
+   "name": "Nitric oxide synthase",
+   "organism": "Homo sapiens",
+   "item": "Q417619"
+  },
+  "CHEMBL2094258": {
+   "name": "Nuclear factor NF-kappa-B complex",
+   "organism": "Homo sapiens",
+   "item": "Q411114"
+  },
+  "CHEMBL3885613": {
+   "name": "Nuclear receptor subfamily 4 group A member 2/Retinoic acid receptor RXR-alpha",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL2094129": {
+   "name": "Opioid receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q421797"
+  },
+  "CHEMBL2095192": {
+   "name": "Opioid receptor",
+   "organism": "Mus musculus",
+   "item": "Q421797"
+  },
+  "CHEMBL2221343": {
+   "name": "Opioid receptors; mu and delta",
+   "organism": "Mus musculus",
+   "item": "Q421797"
+  },
+  "CHEMBL2095181": {
+   "name": "Opioid receptors; mu/kappa/delta",
+   "organism": "Homo sapiens",
+   "item": "Q421797"
+  },
+  "CHEMBL3038476": {
+   "name": "ORAI 1/2/3",
+   "organism": "Homo sapiens",
+   "item": "Q1283774"
+  },
+  "CHEMBL3832644": {
+   "name": "ORAI1/STIM1",
+   "organism": "Homo sapiens",
+   "item": "Q1283774"
+  },
+  "CHEMBL3307226": {
+   "name": "Orexin receptor",
+   "organism": "Homo sapiens",
+   "item": "Q24785218"
+  },
+  "CHEMBL3831281": {
+   "name": "P2X2/P2X3 heterotrimeric receptor",
+   "organism": "Homo sapiens",
+   "item": "Q24739479"
+  },
+  "CHEMBL2362973": {
+   "name": "Penicillin-binding protein",
+   "organism": "Streptococcus pneumoniae",
+   "item": "Q7162855"
+  },
+  "CHEMBL2096973": {
+   "name": "Peptide N-myristoyltransferase",
+   "organism": "Homo sapiens",
+   "item": "Q3772243"
+  },
+  "CHEMBL3559683": {
+   "name": "Peroxisome proliferator-activated receptor",
+   "organism": "Homo sapiens",
+   "item": "Q419629"
+  },
+  "CHEMBL2096619": {
+   "name": "Phosphatidylinositol 4-kinase, PI4K",
+   "organism": "Homo sapiens",
+   "item": "Q4545821"
+  },
+  "CHEMBL3885618": {
+   "name": "Phospho-N-acetylmuramoyl-pentapeptide-transferase/UDP-N-acetylglucosamine--N-acetylmuramyl-(pentapeptide) pyrophosphoryl-undecaprenol N-acetylglucosamine transferase",
+   "organism": "Escherichia coli K-12",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL2095150": {
+   "name": "Phosphodiesterase 1",
+   "organism": "Homo sapiens",
+   "item": "Q5864323"
+  },
+  "CHEMBL2097166": {
+   "name": "Phosphodiesterase 1",
+   "organism": "Bos taurus",
+   "item": "Q5864323"
+  },
+  "CHEMBL2111322": {
+   "name": "Phosphodiesterase 1",
+   "organism": "Rattus norvegicus",
+   "item": "Q5864323"
+  },
+  "CHEMBL2094125": {
+   "name": "Phosphodiesterase 3",
+   "organism": "Homo sapiens",
+   "item": "Q906688"
+  },
+  "CHEMBL2093863": {
+   "name": "Phosphodiesterase 4",
+   "organism": "Homo sapiens",
+   "item": "Q5864331"
+  },
+  "CHEMBL2094267": {
+   "name": "Phosphodiesterase 4",
+   "organism": "Rattus norvegicus",
+   "item": "Q5864331"
+  },
+  "CHEMBL2111373": {
+   "name": "Phosphodiesterase 4",
+   "organism": "Mus musculus",
+   "item": "Q5864331"
+  },
+  "CHEMBL2096979": {
+   "name": "Phosphodiesterase 6",
+   "organism": "Bos taurus",
+   "item": "Q107451481"
+  },
+  "CHEMBL2097163": {
+   "name": "Phosphodiesterase 6",
+   "organism": "Homo sapiens",
+   "item": "Q107451481"
+  },
+  "CHEMBL2111411": {
+   "name": "Phosphodiesterase 7",
+   "organism": "Homo sapiens",
+   "item": "Q5864331"
+  },
+  "CHEMBL2363067": {
+   "name": "Phosphodiesterase 8",
+   "organism": "Homo sapiens",
+   "item": "Q5864331"
+  },
+  "CHEMBL2097161": {
+   "name": "Phosphodiesterase, PDE1/PDE5",
+   "organism": "Homo sapiens",
+   "item": "Q424304"
+  },
+  "CHEMBL2096677": {
+   "name": "Phosphoglycerate kinase",
+   "organism": "Homo sapiens",
+   "item": "Q24772193"
+  },
+  "CHEMBL2111367": {
+   "name": "PI3-kinase p110-alpha/p85-alpha",
+   "organism": "Homo sapiens",
+   "item": "Q423725"
+  },
+  "CHEMBL2111432": {
+   "name": "PI3-kinase p110-delta/p85-alpha",
+   "organism": "Homo sapiens",
+   "item": "Q423725"
+  },
+  "CHEMBL3038510": {
+   "name": "PI3K p110 beta/p85 alpha",
+   "organism": "Homo sapiens",
+   "item": "Q423725"
+  },
+  "CHEMBL2095189": {
+   "name": "Platelet-derived growth factor receptor",
+   "organism": "Homo sapiens",
+   "item": "Q7202242"
+  },
+  "CHEMBL2096980": {
+   "name": "Platelet-derived growth factor receptor",
+   "organism": "Mus musculus",
+   "item": "Q7202242"
+  },
+  "CHEMBL2111344": {
+   "name": "Platelet-derived growth factor receptor (PDGFr)",
+   "organism": "Rattus norvegicus",
+   "item": "Q7202242"
+  },
+  "CHEMBL3885622": {
+   "name": "Potassium voltage-gated channel subfamily KQT member 2/member 3",
+   "organism": "Rattus norvegicus",
+   "item": "Q74805923"
+  },
+  "CHEMBL2095173": {
+   "name": "Potassium-transporting ATPase",
+   "organism": "Homo sapiens",
+   "item": "Q415784"
+  },
+  "CHEMBL2095228": {
+   "name": "Potassium-transporting ATPase",
+   "organism": "Sus scrofa",
+   "item": "Q415784"
+  },
+  "CHEMBL3137261": {
+   "name": "PRMT5/MEP50 complex",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "no English article on the assembly; its subunits have their own"
+  },
+  "CHEMBL4523993": {
+   "name": "Programmed cell death protein 1/Programmed cell death 1 ligand 1",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL2363068": {
+   "name": "Prostaglandin E2 receptor",
+   "organism": "Homo sapiens",
+   "item": "Q28208812"
+  },
+  "CHEMBL2111349": {
+   "name": "Prostaglandin G/H synthase (cyclooxygenase)",
+   "organism": "Mus musculus",
+   "item": "Q410251"
+  },
+  "CHEMBL2111358": {
+   "name": "Prostaglandin G/H synthase (cyclooxygenase)",
+   "organism": "Ovis aries",
+   "item": "Q410251"
+  },
+  "CHEMBL2094108": {
+   "name": "Protein farnesyltransferase",
+   "organism": "Homo sapiens",
+   "item": "Q410994"
+  },
+  "CHEMBL2095178": {
+   "name": "Protein farnesyltransferase",
+   "organism": "Bos taurus",
+   "item": "Q410994"
+  },
+  "CHEMBL2096912": {
+   "name": "Protein farnesyltransferase",
+   "organism": "Mus musculus",
+   "item": "Q410994"
+  },
+  "CHEMBL2111381": {
+   "name": "Protein farnesyltransferase (PFT)",
+   "organism": "Plasmodium falciparum",
+   "item": "Q410994"
+  },
+  "CHEMBL2093867": {
+   "name": "Protein kinase C (PKC)",
+   "organism": "Homo sapiens",
+   "item": "Q420877"
+  },
+  "CHEMBL2094266": {
+   "name": "Protein kinase C (PKC)",
+   "organism": "Rattus norvegicus",
+   "item": "Q420877"
+  },
+  "CHEMBL5482991": {
+   "name": "Prothrombinase complex",
+   "organism": "Homo sapiens",
+   "item": "Q423640"
+  },
+  "CHEMBL2096663": {
+   "name": "Pyruvate dehydrogenase kinase",
+   "organism": "Rattus norvegicus",
+   "item": "Q6321025"
+  },
+  "CHEMBL2096665": {
+   "name": "Pyruvate dehydrogenase kinase",
+   "organism": "Homo sapiens",
+   "item": "Q6321025"
+  },
+  "CHEMBL2363069": {
+   "name": "Retinoic acid receptor",
+   "organism": "Homo sapiens",
+   "item": "Q2838685"
+  },
+  "CHEMBL3885632": {
+   "name": "Retinoic acid receptor RXR-alpha/Vitamin D3 receptor",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL2363071": {
+   "name": "Retinoid receptor",
+   "organism": "Homo sapiens",
+   "item": "Q7316801"
+  },
+  "CHEMBL2363070": {
+   "name": "Retinoid X receptor",
+   "organism": "Homo sapiens",
+   "item": "Q3454518"
+  },
+  "CHEMBL4106177": {
+   "name": "Rho GTPase Rac1/CDC42",
+   "organism": "Homo sapiens",
+   "item": "Q29564364"
+  },
+  "CHEMBL2111459": {
+   "name": "Rho-associated protein kinase",
+   "organism": "Homo sapiens",
+   "item": "Q24721770"
+  },
+  "CHEMBL2095215": {
+   "name": "Ribonucleoside-diphosphate reductase RR1",
+   "organism": "Homo sapiens",
+   "item": "Q420089"
+  },
+  "CHEMBL3301398": {
+   "name": "Ribonucleotide reductase",
+   "organism": "Homo sapiens",
+   "item": "Q420089"
+  },
+  "CHEMBL4523676": {
+   "name": "RNA-directed RNA polymerase",
+   "organism": "Influenza A virus (strain A/Puerto Rico/8/1934 H1N1)",
+   "item": "Q2919111"
+  },
+  "CHEMBL2111394": {
+   "name": "RXR alpha/PPAR gamma",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL2111353": {
+   "name": "Serine/threonine-protein kinase AKT",
+   "organism": "Homo sapiens",
+   "item": "Q423650"
+  },
+  "CHEMBL2111351": {
+   "name": "Serine/threonine-protein kinase RAF and Dual specificity mitogen-activated protein kinase kinase 1 (Raf/MEK)",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL2094123": {
+   "name": "Serotonin (5-HT) receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q238516"
+  },
+  "CHEMBL2096904": {
+   "name": "Serotonin (5-HT) receptor",
+   "organism": "Homo sapiens",
+   "item": "Q238516"
+  },
+  "CHEMBL2095159": {
+   "name": "Serotonin 1 (5-HT1) receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q753583"
+  },
+  "CHEMBL3301381": {
+   "name": "Serotonin 1B/1D receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q753583"
+  },
+  "CHEMBL2093870": {
+   "name": "Serotonin 2 (5-HT2) receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q753586"
+  },
+  "CHEMBL2095200": {
+   "name": "Serotonin 2 (5-HT2) receptor",
+   "organism": "Homo sapiens",
+   "item": "Q753586"
+  },
+  "CHEMBL2096671": {
+   "name": "Serotonin 2 (5-HT2) receptor",
+   "organism": "Mus musculus",
+   "item": "Q753586"
+  },
+  "CHEMBL2094116": {
+   "name": "Serotonin 3 (5-HT3) receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q3454515"
+  },
+  "CHEMBL2094132": {
+   "name": "Serotonin 3 (5-HT3) receptor",
+   "organism": "Homo sapiens",
+   "item": "Q3454515"
+  },
+  "CHEMBL2111332": {
+   "name": "Serotonin 3 (5-HT3) receptor",
+   "organism": "Homo sapiens",
+   "item": "Q3454515"
+  },
+  "CHEMBL2111333": {
+   "name": "Serotonin 3 receptor (5HT3)",
+   "organism": "Mus musculus",
+   "item": "Q3454515"
+  },
+  "CHEMBL2331043": {
+   "name": "Sodium channel alpha subunit",
+   "organism": "Homo sapiens",
+   "item": "Q70444589"
+  },
+  "CHEMBL2095171": {
+   "name": "Sodium channel alpha subunits; brain (Types I, II, III)",
+   "organism": "Rattus norvegicus",
+   "item": "Q70444589"
+  },
+  "CHEMBL2096682": {
+   "name": "Sodium channel alpha subunits; brain (Types I, II, III)",
+   "organism": "Homo sapiens",
+   "item": "Q70444589"
+  },
+  "CHEMBL4630765": {
+   "name": "Sodium channel protein type 9 subunit alpha/beta-1/beta-2",
+   "organism": "Homo sapiens",
+   "item": "Q70444589"
+  },
+  "CHEMBL4630766": {
+   "name": "Sodium channel protein type 9 subunit alpha/beta-1/beta-2",
+   "organism": "Mus musculus",
+   "item": "Q70444589"
+  },
+  "CHEMBL2095186": {
+   "name": "Sodium/potassium-transporting ATPase",
+   "organism": "Homo sapiens",
+   "item": "Q59143"
+  },
+  "CHEMBL6066559": {
+   "name": "Sodium/potassium-transporting ATPase subunit alpha-1/beta-1",
+   "organism": "Homo sapiens",
+   "item": "Q59143"
+  },
+  "CHEMBL3885640": {
+   "name": "Sodium/potassium-transporting ATPase subunit alpha-2/alpha-3",
+   "organism": "Rattus norvegicus",
+   "item": "Q59143"
+  },
+  "CHEMBL6066560": {
+   "name": "Sodium/potassium-transporting ATPase subunit alpha-2/beta-1",
+   "organism": "Homo sapiens",
+   "item": "Q59143"
+  },
+  "CHEMBL6066561": {
+   "name": "Sodium/potassium-transporting ATPase subunit alpha-2/beta-2",
+   "organism": "Homo sapiens",
+   "item": "Q59143"
+  },
+  "CHEMBL6066562": {
+   "name": "Sodium/potassium-transporting ATPase subunit alpha-2/beta-3",
+   "organism": "Homo sapiens",
+   "item": "Q59143"
+  },
+  "CHEMBL2111348": {
+   "name": "Soluble guanylate cyclase",
+   "organism": "Homo sapiens",
+   "item": "Q7558945"
+  },
+  "CHEMBL3137281": {
+   "name": "Soluble guanylate cyclase alpha1/beta1 complex",
+   "organism": "Homo sapiens",
+   "item": "Q7558945"
+  },
+  "CHEMBL2111436": {
+   "name": "Somatostatin receptor",
+   "organism": "Homo sapiens",
+   "item": "Q2067077"
+  },
+  "CHEMBL2363041": {
+   "name": "Sphingosine 1-phosphate receptor",
+   "organism": "Homo sapiens",
+   "item": "Q24782485"
+  },
+  "CHEMBL2363074": {
+   "name": "SRC",
+   "organism": "Homo sapiens",
+   "item": "Q7582406"
+  },
+  "CHEMBL2096664": {
+   "name": "Steroid 5-alpha-reductase",
+   "organism": "Rattus norvegicus",
+   "item": "Q143333"
+  },
+  "CHEMBL2363075": {
+   "name": "Steroid 5-alpha-reductase",
+   "organism": "Homo sapiens",
+   "item": "Q143333"
+  },
+  "CHEMBL2096972": {
+   "name": "Sulfonylurea receptor 1, Kir6.2",
+   "organism": "Homo sapiens",
+   "item": "Q4654794"
+  },
+  "CHEMBL2095198": {
+   "name": "Sulfonylurea receptor 2, Kir6.2",
+   "organism": "Homo sapiens",
+   "item": "Q4654794"
+  },
+  "CHEMBL2095174": {
+   "name": "SUMO-activating enzyme",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "no English article on the assembly; its subunits have their own"
+  },
+  "CHEMBL4665594": {
+   "name": "Synaptic vesicle protein",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "no English article on the SV2 family; SV2A has its own"
+  },
+  "CHEMBL2364168": {
+   "name": "T cell surface glycoprotein CD3",
+   "organism": "Homo sapiens",
+   "item": "Q419458"
+  },
+  "CHEMBL2096978": {
+   "name": "Thioredoxin reductase",
+   "organism": "Homo sapiens",
+   "item": "Q2540636"
+  },
+  "CHEMBL3885528": {
+   "name": "Thymidylate synthase/GAR transformylase/AICAR transformylase",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL2111462": {
+   "name": "Thyroid hormone receptor",
+   "organism": "Homo sapiens",
+   "item": "Q2539644"
+  },
+  "CHEMBL2363076": {
+   "name": "Topoisomerase IV",
+   "organism": "Bacteria",
+   "item": "Q7824976"
+  },
+  "CHEMBL2363077": {
+   "name": "Topoisomerase IV",
+   "organism": "Neisseria gonorrhoeae",
+   "item": "Q7824976"
+  },
+  "CHEMBL3038508": {
+   "name": "Topoisomerase IV",
+   "organism": "Staphylococcus aureus",
+   "item": "Q7824976"
+  },
+  "CHEMBL2111421": {
+   "name": "Transcription factor AP1",
+   "organism": "Homo sapiens",
+   "item": "Q3270441"
+  },
+  "CHEMBL3988361": {
+   "name": "Transferrin receptor",
+   "organism": "Homo sapiens",
+   "item": "Q1134983"
+  },
+  "CHEMBL2095202": {
+   "name": "Troponin, cardiac muscle",
+   "organism": "Homo sapiens",
+   "item": "Q7846262"
+  },
+  "CHEMBL2095204": {
+   "name": "Trypsin",
+   "organism": "Homo sapiens",
+   "item": "Q127450"
+  },
+  "CHEMBL2094134": {
+   "name": "Tubulin",
+   "organism": "Bos taurus",
+   "item": "Q422492"
+  },
+  "CHEMBL2095182": {
+   "name": "Tubulin",
+   "organism": "Homo sapiens",
+   "item": "Q422492"
+  },
+  "CHEMBL2111354": {
+   "name": "Tubulin",
+   "organism": "Sus scrofa",
+   "item": "Q422492"
+  },
+  "CHEMBL2111464": {
+   "name": "Tubulin",
+   "organism": "Bos taurus",
+   "item": "Q422492"
+  },
+  "CHEMBL2364704": {
+   "name": "Tubulin",
+   "organism": "Taeniidae",
+   "item": "Q422492"
+  },
+  "CHEMBL2364705": {
+   "name": "Tubulin",
+   "organism": "Nematoda",
+   "item": "Q422492"
+  },
+  "CHEMBL3885642": {
+   "name": "TYK2/JAK1/JAK2",
+   "organism": "Mus musculus",
+   "item": "Q903451"
+  },
+  "CHEMBL2111414": {
+   "name": "Tyrosine-protein kinase ABL",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "no English article on the ABL family short of a general tyrosine-kinase article; ABL1 has its own"
+  },
+  "CHEMBL3885649": {
+   "name": "Tyrosine-protein kinase JAK1/JAK2",
+   "organism": "Mus musculus",
+   "item": "Q903451"
+  },
+  "CHEMBL3885650": {
+   "name": "Tyrosine-protein kinase JAK1/JAK3",
+   "organism": "Mus musculus",
+   "item": "Q903451"
+  },
+  "CHEMBL3430885": {
+   "name": "Ubiquitin carboxyl-terminal hydrolase 1/WD repeat-containing protein 48",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "no English article on the assembly; its subunits have their own"
+  },
+  "CHEMBL3885651": {
+   "name": "Urease subunit alpha/Urease subunit beta",
+   "organism": "Helicobacter pylori (strain ATCC 700392 / 26695) (Campylobacterpylori)",
+   "item": "Q22327086"
+  },
+  "CHEMBL2096684": {
+   "name": "Vanilloid receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q7671491"
+  },
+  "CHEMBL2095227": {
+   "name": "Vascular endothelial growth factor receptor",
+   "organism": "Homo sapiens",
+   "item": "Q4356503"
+  },
+  "CHEMBL2363078": {
+   "name": "Vasopressin receptor",
+   "organism": "Homo sapiens",
+   "item": "Q24784390"
+  },
+  "CHEMBL2095221": {
+   "name": "Vasopressin V1 receptor",
+   "organism": "Rattus norvegicus",
+   "item": "Q24784390"
+  },
+  "CHEMBL3988638": {
+   "name": "Voltage-dependent L-type calcium channel alpha1C/alpha2delta/beta1b",
+   "organism": "Homo sapiens",
+   "item": "Q2600696"
+  },
+  "CHEMBL3885653": {
+   "name": "Voltage-dependent L-type calcium channel subunit beta-1/alpha-1B/alpha-2/delta-1",
+   "organism": "Rattus norvegicus",
+   "item": "Q14905735"
+  },
+  "CHEMBL2363032": {
+   "name": "Voltage-gated calcium channel",
+   "organism": "Homo sapiens",
+   "item": "Q14905735"
+  },
+  "CHEMBL2095177": {
+   "name": "Voltage-gated L-type calcium channel",
+   "organism": "Rattus norvegicus",
+   "item": "Q2600696"
+  },
+  "CHEMBL2095229": {
+   "name": "Voltage-gated L-type calcium channel",
+   "organism": "Homo sapiens",
+   "item": "Q2600696"
+  },
+  "CHEMBL2362996": {
+   "name": "Voltage-gated potassium channel",
+   "organism": "Homo sapiens",
+   "item": "Q106939566"
+  },
+  "CHEMBL3430890": {
+   "name": "Voltage-gated potassium channel subunit Kv7.1/Misshapen-like kinase 1",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "a pairing of different proteins with no English article of its own"
+  },
+  "CHEMBL2221347": {
+   "name": "Voltage-gated potassium channel, IKs; KCNQ1(Kv7.1)/KCNE1(MinK)",
+   "organism": "Homo sapiens",
+   "item": null,
+   "why": "no English article on the assembly; its subunits have their own"
+  },
+  "CHEMBL2221348": {
+   "name": "Voltage-gated potassium channel, KQT; KCNQ2(Kv7.2)/KCNQ3(Kv7.3)",
+   "organism": "Homo sapiens",
+   "item": "Q74805923"
+  },
+  "CHEMBL2362995": {
+   "name": "Voltage-gated T-type calcium channel",
+   "organism": "Homo sapiens",
+   "item": "Q2487620"
+  }
+ }
+}

@@ -283,18 +283,19 @@ describe("a link carries the sender's filters", () => {
   test("every moved filter is written in the documented order and read back", () => {
     const v = loadViewer(curatedCatalogue());
     v.applyFilters({ tier: "supported", basis: "human_direct", potency: 10,
-                     mechanism: ["PARTIAL AGONIST", "curated"], periphery: "hide",
-                     groups: "separate", lineColor: "evidence" });
+                     mechanism: ["PARTIAL AGONIST", "curated"], trials: "elsewhere",
+                     periphery: "hide", groups: "separate", lineColor: "evidence" });
     const text = v.filterLink();
     assert.equal(text, "tier=supported&basis=human_direct&potency=10" +
-      "&mech=PARTIAL%20AGONIST,curated&canvas=hide&groups=separate&color=evidence");
+      "&mech=PARTIAL%20AGONIST,curated&trials=elsewhere&canvas=hide&groups=separate" +
+      "&color=evidence");
     assert.deepEqual(plain(v.filtersFromLink("#m=CHEMBL113&" + text)), plain(v.getFilters()));
   });
 
   test("a value no control offers is left at its default", () => {
     const v = loadViewer(curatedCatalogue());
     const f = plain(v.filtersFromLink(
-      "#tier=everything&basis=<b>&potency=5&canvas=1&groups=&color=red" +
+      "#tier=everything&basis=<b>&potency=5&trials=mars&canvas=1&groups=&color=red" +
       "&mech=NOT%20AN%20ACTION,%3Cscript%3E,ANTAGONIST,ANTAGONIST"));
     assert.deepEqual(f, Object.assign(plain(v.filterDefaults()), { mechanism: ["ANTAGONIST"] }));
   });

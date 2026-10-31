@@ -319,7 +319,7 @@ describe("D20: the pair panel names the fold and shows the Species column", () =
     // The folded block points back at the counted one.
     assert.ok(h.includes(
       "the same protein as Mu-type opioid receptor (human) above, in another " +
-      "species, so it is counted there, once"),
+      "species, counted there once"),
       "expected the folded block's own note");
 
     // The counted block states how many species and the multiplier.
@@ -552,5 +552,39 @@ describe("D20 in the panels: the protein's panel has a section per species", () 
     assert.ok(h.includes('data-fold="edge_claims"'));
     assert.ok(!h.includes('data-fold="edge_claims_'));
     assert.ok(h.startsWith("<h3>ALPHA → OPRM1 · Mu-type opioid receptor</h3>"));
+  });
+});
+
+describe("D20: a non-human record links its human protein's article, and says so", () => {
+  const rat = { accession: "P2", gene_symbol: "Oprm1", description: "Mu-type opioid receptor" };
+  function ratOnly(over = {}) {
+    return loadViewer(buildData({
+      molecules: [molecule({ id: 1, name: "ALPHA" })],
+      targets: [target(Object.assign(
+        { chembl_id: "TR", name: "Mu-type opioid receptor", organism: "Rattus norvegicus",
+          tax_id: 10116, components: [rat], human_orthologue: "P1",
+          human_wikipedia_url: "https://en.wikipedia.org/wiki/Mu-opioid_receptor" }, over))],
+      claims: [claim({ id: 1, molecule: 1, target: "TR" })],
+    }));
+  }
+
+  test("a rat record with no article of its own names the human protein's as the human one's", () => {
+    const v = ratOnly();
+    const links = v.externalLinks("target", v.lookupTarget("TR")).join(" ");
+    assert.match(links, /href="https:\/\/en\.wikipedia\.org\/wiki\/Mu-opioid_receptor"[^>]*>Wikipedia: human OPRM1<\/a>/);
+    assert.match(plain(links), /no article for the rat protein itself/);
+    assert.ok(v.showTarget(v.lookupTarget("TR")).includes("Wikipedia: human OPRM1"));
+  });
+
+  test("the record's own article comes first, and the human one is not offered beside it", () => {
+    const v = ratOnly({ wikipedia_url: "https://en.wikipedia.org/wiki/Rat_receptor" });
+    const links = v.externalLinks("target", v.lookupTarget("TR")).join(" ");
+    assert.match(links, />Wikipedia<\/a>/);
+    assert.doesNotMatch(links, /human OPRM1|Mu-opioid_receptor/);
+  });
+
+  test("with neither, there is no Wikipedia link at all", () => {
+    const v = ratOnly({ human_wikipedia_url: null });
+    assert.doesNotMatch(v.externalLinks("target", v.lookupTarget("TR")).join(" "), /Wikipedia/);
   });
 });

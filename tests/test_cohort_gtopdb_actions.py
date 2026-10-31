@@ -131,15 +131,15 @@ def interaction_row(lig_id, target_id, accessions, **overrides):
     return row
 
 
-VERSION_LINE = '"# GtoPdb Version: 2026.3 - published: 2026-09-16"'
+VERSION_LINE = '"# GtoPdb Version: 2026.3.1 - published: 2026-10-12"'
 
 
 class _Resp:
-    """A stand-in for requests.Response: only .text and .raise_for_status()
+    """A stand-in for requests.Response: only .content and .raise_for_status()
     are ever used by ensure_files."""
 
     def __init__(self, text):
-        self.text = text
+        self.content = text.encode("utf-8")
 
     def raise_for_status(self):
         pass
@@ -149,7 +149,12 @@ class _Resp:
 
 class FileVersionPublishedTest(unittest.TestCase):
     def test_file_version_parses_the_pinned_release_off_the_first_line(self):
-        self.assertEqual(gca.file_version(VERSION_LINE), "2026.3")
+        self.assertEqual(gca.file_version(VERSION_LINE), "2026.3.1")
+
+    def test_a_point_release_is_not_the_release_it_amends(self):
+        # GtoPdb's 2026.3.1 is a new file, not 2026.3 re-served: the pin
+        # compares whole version strings, so neither passes for the other.
+        self.assertNotEqual(gca.file_version(VERSION_LINE), "2026.3")
 
     def test_file_version_is_none_when_the_line_does_not_match(self):
         self.assertIsNone(gca.file_version("Ligand ID,InChIKey\n"))
@@ -158,11 +163,11 @@ class FileVersionPublishedTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             path = pathlib.Path(d) / "interactions.csv"
             path.write_text(VERSION_LINE + "\nLigand ID\n1\n")
-            self.assertEqual(gca.published(path), "2026-09-16")
+            self.assertEqual(gca.published(path), "2026-10-12")
 
 
 class EnsureFilesTest(unittest.TestCase):
-    VERSION = "2026.3"
+    VERSION = "2026.3.1"
     GOOD = VERSION_LINE + "\nLigand ID\n1\n"
     BAD = '"# GtoPdb Version: 2025.1 - published: 2025-01-01"\nLigand ID\n1\n'
 
@@ -193,6 +198,17 @@ class EnsureFilesTest(unittest.TestCase):
             for name, path in paths.items():
                 self.assertTrue(path.exists(), name)
                 self.assertEqual(path.read_text(), self.GOOD)
+
+    def test_the_cache_holds_the_bytes_as_served(self):
+        # GtoPdb sends UTF-8 with no charset; decoded as requests' Latin-1
+        # guess and written back, "\u03b2" became "\u00ce\u00b2" and the sha256
+        # matched no download of the release.
+        served = VERSION_LINE + "\nName\n(3\u03b2,5\u03b2)-androstane\n"
+        with tempfile.TemporaryDirectory() as d:
+            paths = gca.ensure_files(cache=pathlib.Path(d), version=self.VERSION,
+                                     get=lambda url: _Resp(served))
+            for path in paths.values():
+                self.assertEqual(path.read_bytes(), served.encode("utf-8"))
 
     def test_a_cached_file_with_the_wrong_version_raises_without_downloading(self):
         with tempfile.TemporaryDirectory() as d:
@@ -320,6 +336,10 @@ class ActionMapTest(unittest.TestCase):
     def test_an_action_naming_an_efficacy_outranks_the_type(self):
         self.assertEqual(
             gca.ACTION_MAP[("Antagonist", "Inverse agonist")], "INVERSE AGONIST")
+
+    def test_an_antibody_activating_an_enzyme_is_an_activator(self):
+        # new in 2026.3.1: denecimig at coagulation factor IX
+        self.assertEqual(gca.ACTION_MAP[("Antibody", "Activation")], "ACTIVATOR")
 
     def test_a_neutral_allosteric_ligand_names_no_direction(self):
         self.assertIsNone(gca.ACTION_MAP[("Allosteric modulator", "Neutral")])

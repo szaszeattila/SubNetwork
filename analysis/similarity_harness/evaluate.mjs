@@ -8,13 +8,14 @@
 //                                         # exclusion list and sibling credit (needs db/cohort1.db)
 //   node analysis/similarity_harness/evaluate.mjs --key onsides   # nearest neighbours by the
 //                                         # nervous-system effects on the label (also onsides-all)
+//   node analysis/similarity_harness/evaluate.mjs --skip-listed  # listed entries out of each list
 //
 // The per-class table below the headline is the part worth reading. A class at
 // 0% is either a ranking failure or a label that was never a fair question, and
 // the aggregate cannot tell you which -- only the name of the class can.
 
 import { loadPayload, loadViewer, loadKey, KEYS, grade, byClass, pct, NDCG_K,
-  HarnessError } from "./harness.mjs";
+  HarnessError, skippingListed } from "./harness.mjs";
 
 const argv = process.argv.slice(2);
 const asJson = argv.includes("--json");
@@ -26,7 +27,7 @@ const keyName = keyArg >= 0 ? argv[keyArg + 1] : "atc";
 async function main() {
   const data = loadPayload();
   const key = await loadKey(keyName, data);
-  const viewer = loadViewer(data);
+  const viewer = argv.includes("--skip-listed") ? skippingListed(loadViewer(data)) : loadViewer(data);
   const started = Date.now();
   const g = grade(viewer, key);
   const elapsed = Date.now() - started;

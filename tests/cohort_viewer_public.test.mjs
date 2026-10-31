@@ -151,7 +151,7 @@ describe("the data's date", () => {
   test("the NLM sources carry acknowledgement, non-endorsement, version and date", () => {
     const h = loadViewer(dated()).aboutSourcesHTML();
     assert.match(h, /MeSH<\/a> 2026, courtesy of the U\.S\. National Library of Medicine/);
-    assert.match(h, /ClinicalTrials\.gov<\/a>, courtesy of the U\.S\. National Library of Medicine: trial status, fetched 2026-10-09 to 2026-10-10\. The NLM does not endorse/);
+    assert.match(h, /ClinicalTrials\.gov<\/a>, courtesy of the U\.S\. National Library of Medicine: trial status and site countries, fetched 2026-10-09 to 2026-10-10\. The NLM does not endorse/);
   });
 
   test("every licence named in About is a link to its text", () => {

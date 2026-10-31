@@ -14,7 +14,7 @@ Many errors are upstream, in ChEMBL or the Guide to Pharmacology, and are best
 fixed there. This project does not rewrite a source's record. Where one is
 known to be wrong, it is withheld with the reason shown on the page, and the
 source is told. Alfuzosin's alpha-1 action is the example: see
-[docs/CHEMBL-ERROR-REPORT-ALFUZOSIN.md](docs/CHEMBL-ERROR-REPORT-ALFUZOSIN.md).
+[docs/CHEMBL-ERROR-REPORT.md](docs/CHEMBL-ERROR-REPORT.md).
 
 ## Changing the code
 

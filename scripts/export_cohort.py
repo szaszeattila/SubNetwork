@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export the cohort database to viz/graph.data.js, viz/gtopdb.data.js and viz/evidence/."""
+"""Export the cohort database to viz/graph.data.js, viz/gtopdb.data.js, viz/drugcentral.data.js and viz/evidence/."""
 
 import pathlib
 import sys
@@ -24,6 +24,8 @@ def main() -> int:
     print("  viz/gtopdb.data.js  %6.2f MB  %d actions, %d claims, %d entry statuses changed"
           % (r["gtopdb_bytes"] / 1e6, r["gtopdb_actions"], r["gtopdb_claims"],
              r["gtopdb_status_changes"]))
+    print("  viz/drugcentral.data.js  %6.2f MB  %d molecules with a regulator's approval"
+          % (r["drugcentral_bytes"] / 1e6, r["drugcentral_molecules"]))
     print("  viz/evidence/      %6.2f MB across %d shards (largest %.0f KB, mean %.0f KB)"
           % (r["evidence_bytes"] / 1e6, r["evidence_shards"],
              r["evidence_largest_shard"] / 1e3,
