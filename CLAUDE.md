@@ -1123,10 +1123,13 @@ molecules) are in [docs/COHORT-2.md](docs/COHORT-2.md) and come first.
   pre-registered pairwise key (§16) is held out of the sweeps for the check
   after a change. **None of those small signs is yet a finding**
   ([docs/ANSWER-KEYS-REVIEW.md](docs/ANSWER-KEYS-REVIEW.md) §2): compared
-  paired with Holm's correction, only D15 is detected under every key and the
-  family weight under MeSH alone; the curated-only and replicated-only changes
-  are inside every key's noise, and the smallest change any key can detect is
-  0.011 to 0.021 MRR.
+  paired with Holm's correction, only D15 is detected under every key, and the
+  family weight under MeSH, EPC and PE but under no key that reads no curation
+  (under MeSH alone before D25–D27 changed the lists); the curated-only and
+  replicated-only changes are inside every key's noise, and the smallest
+  change any key can detect is 0.010 to 0.019 MRR. A larger catalogue does not
+  shrink that: a key gains only labelled questions, and the 841 listed entries
+  added 112 to MeSH and almost none elsewhere (§6 there).
 - **D20 keeps rarity per record,** so a rodent record, measured on by fewer
   molecules, often stands for its protein in a pair's score. Both obvious fixes
   graded worse ([docs/COHORT-2.md](docs/COHORT-2.md), D20).

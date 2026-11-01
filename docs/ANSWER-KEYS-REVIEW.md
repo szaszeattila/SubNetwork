@@ -1,6 +1,11 @@
 # The answer keys against the literature, and what they can decide
 
-Written 2026-10-16 against the active build of 2026-10-13 (2,452 entries).
+Written 2026-10-16 against the build of 2026-10-13 (2,452 entries), and
+**updated 2026-10-31 to the build of 2026-10-16 (3,291 entries)**, after
+D25–D27 entered 841 molecules because a public list names them. Every figure
+in §2–§4 was measured again on the larger build. §6 is new: what adding those
+molecules did to the keys, and what adding more would do. The 2,452-entry
+figures appear only where §6 sets the two builds side by side.
 **A review and a proposal; nothing in it is adopted, and no key, constant or
 page behaviour was changed.** Every measurement is reproduced by a read-only
 script under `analysis/answer_keys/`, named where it is used.
@@ -17,16 +22,17 @@ changes they will be asked to decide?
 In short:
 
 - **The keys cannot see the changes the sweep reports.** Compared paired,
-  question by question, the smallest change a key can detect is 0.011 MRR
-  (MeSH) to 0.021 (repaired ATC). The changes §15 of the harness sorts into
+  question by question, the smallest change a key can detect is 0.010 MRR
+  (MeSH) to 0.019 (repaired ATC). The changes §15 of the harness sorts into
   "agreed by every judge", "agreed only by the curated judges" and "split"
   are mostly +0.002 to +0.009. Under a paired test with Holm's correction
   across the 42 key-by-setting cells, **only switching D15 off is detected
-  under every key.** Raising the family weight to 1.0 is detected under MeSH
-  alone. The other four settings are within every key's noise, including the
-  curated-only gain and the replicated-only split that §15 reads as a finding.
-  To detect a +0.004 change at 80% power would need 4,500 to 7,000
-  questions depending on the key; the catalogue has 2,452 molecules (§2).
+  under every key.** Raising the family weight to 1.0 is detected under MeSH,
+  EPC and PE, and under neither label reading (on the 2,452-entry build, under
+  MeSH alone). The other four settings are within every key's noise, including
+  the curated-only gain and the replicated-only split that §15 reads as a
+  finding. To detect a +0.004 change at 80% power would need 3,200 to 6,400
+  questions depending on the key; the most any key asks is 978 (§2).
 - **The label key is noisier than the ranking it grades.** Build it twice,
   once from US labels and once from UK, EU and Japanese labels, and the two
   share 14% of their five nearest neighbours. The target ranking predicts each
@@ -34,10 +40,10 @@ In short:
   literature: a US and an EU label for the same CNS drug share 29% of their
   adverse-reaction terms (Cornelius 2016).
 - **The label key's agreement with the ranking runs through shared
-  indication.** Label neighbours share an approved indication 42% of the time,
+  indication.** Label neighbours share an approved indication 41% of the time,
   random pairs 8%. Rebuilt so that a neighbour must be approved for a
   different disease, the key agrees with the ranking at top-1 1.6% against a
-  shuffle's 0.8% (§3.4). It is independent of the score's inputs, but not of
+  shuffle's 0.7% (§3.4). It is independent of the score's inputs, but not of
   what the drugs are for.
 - **Most of the pairwise key's negatives cannot fail.** 96 of the 160
   negative directions share no target, so they are absent from both lists and
@@ -49,7 +55,20 @@ In short:
   own drug descriptions about half the time (Winnenburg 2015), and ATC is
   extended only on request (Liu 2015). A miss under a class key is often a
   missing label, which supports reading the filtered grade first (§3.1–3.3).
-- **Proposed order (§6):** fix the decision rule before the next constant is
+- **A larger catalogue does not make the keys sharper.** A key gains power
+  only from questions, and a question needs a label. The 841 molecules D25–D27
+  entered are 25.6% of the catalogue. They are no ATC question, 112 MeSH
+  questions, 11 EPC, 15 PE and 4 label-key questions. The headline ATC key
+  cannot gain a question at all: every ATC N molecule in ChEMBL 37 is already
+  in. What the new molecules did do is crowd every list. Grades as built fell
+  (ATC MRR 0.4607 to 0.4341), and so did the pairwise key's positives within
+  the top 10 (75.4% to 69.8%), but the ranking among the old molecules did not
+  get worse: read with the listed entries skipped, the same build grades
+  0.4644 and 75.0%. The label key's answers moved too, and seven of the ten
+  molecules that appear most often in others' top 10 are now listed entries.
+  Even entering every approved drug in ChEMBL 37, most of them outside the
+  brain scope, would bring the best key to about 0.007, not 0.004 (§6).
+- **Proposed order (§7):** fix the decision rule before the next constant is
   moved (no new data); a pairwise key v2 with negatives that can fail and a
   second, independent drafter; a label key v2 that requires agreement across
   regulators and removes a drug's own indication symptoms; then pilots of
@@ -92,30 +111,30 @@ bootstrap interval over questions:
 
 | key | questions | MRR | 95% interval |
 | --- | --- | --- | --- |
-| ATC (headline) | 284 | 0.4607 | 0.414 – 0.508 |
-| ATC repaired | 259 | 0.4958 | 0.447 – 0.546 |
-| MeSH | 865 | 0.5945 | 0.569 – 0.620 |
-| EPC | 455 | 0.5946 | 0.559 – 0.631 |
-| PE | 598 | 0.5154 | 0.483 – 0.548 |
-| label, nervous system | 346 | 0.2620 | 0.227 – 0.298 |
-| label, every effect | 507 | 0.3180 | 0.287 – 0.351 |
+| ATC (headline) | 284 | 0.4341 | 0.388 – 0.481 |
+| ATC repaired | 259 | 0.4640 | 0.414 – 0.514 |
+| MeSH | 978 | 0.5607 | 0.535 – 0.586 |
+| EPC | 469 | 0.5650 | 0.528 – 0.601 |
+| PE | 612 | 0.4984 | 0.465 – 0.530 |
+| label, nervous system | 350 | 0.2512 | 0.217 – 0.287 |
+| label, every effect | 514 | 0.3056 | 0.274 – 0.338 |
 
 **What each setting does, under seven keys.** The full table, with intervals
 and the count of questions moved each way, is the script's output.
 
 | setting | MRR change across the seven keys | keys whose interval excludes zero | detected (Holm) |
 | --- | --- | --- | --- |
-| D15 off (`OPPOSED_PAIR_FACTOR` 1.0) | −0.015 to −0.034 | 7 | **7** |
-| family weight 0.5 → 1.0 | +0.002 to +0.018 | 4 (MeSH, EPC, PE, label every effect) | 1 (MeSH) |
-| curated-only 0.75 → 1.0 | +0.002 to +0.009 | 1 (MeSH) | 0 |
-| replicated-only 0.9 → 0.75 | −0.004 to +0.008 | 1 (MeSH) | 0 |
-| Preliminary 0.5 → 0.25 | −0.013 to +0.011 | 0 | 0 |
-| `SPECIES_EXPONENT` 0.5 → 0.75 | +0.000 to +0.008 | 0 | 0 |
+| D15 off (`OPPOSED_PAIR_FACTOR` 1.0) | −0.015 to −0.029 | 7 | **7** |
+| family weight 0.5 → 1.0 | +0.003 to +0.019 | 4 (MeSH, EPC, PE, label every effect) | 3 (MeSH, EPC, PE) |
+| curated-only 0.75 → 1.0 | +0.004 to +0.008 | 1 (MeSH) | 0 |
+| replicated-only 0.9 → 0.75 | −0.002 to +0.007 | 0 | 0 |
+| Preliminary 0.5 → 0.25 | −0.018 to +0.009 | 0 | 0 |
+| `SPECIES_EXPONENT` 0.5 → 0.75 | −0.000 to +0.005 | 0 | 0 |
 
-Resampling whole classes widens most class-key intervals, by up to 80% for
-D15 under ATC, since one change moves a class together. Of the 30 class-key
-cells, 10 still exclude zero under it, against 13 of all 42 cells at the
-question level.
+Resampling whole classes widens most class-key intervals, by up to 98% for
+D15 under the repaired ATC key, since one change moves a class together. Of
+the 30 class-key cells, 9 still exclude zero under it, against 12 of all 42
+cells at the question level.
 
 **What this changes in §15's reading.** §15 sorted the constants into three
 kinds by the sign of their change under five judges:
@@ -124,39 +143,49 @@ kinds by the sign of their change under five judges:
   resolves. The other three are not shown by these keys to do anything, though
   §15 reads them as small agreed gains. The curated-only gain is the case that
   matters, because §15 and CLAUDE.md read it as answering the old caveat that
-  the judge flattered curation. Under the label key it is +0.0058, interval
-  −0.004 to +0.017.
+  the judge flattered curation. Under the label key it is +0.0045, interval
+  −0.004 to +0.013.
+- **The family weight** is the one setting near the line, and the line moved
+  under it. On this build MeSH, EPC and PE detect it, though only MeSH did on
+  the 2,452-entry build. With the listed entries skipped in each list, MeSH and
+  PE detect it and EPC does not (`power.mjs --skip-listed`). The keys did not
+  get sharper here. The catalogue changed what the setting does (§6). No key
+  that reads no curation detects it: the every-effect label reading's interval
+  excludes zero, but the cell does not survive Holm's correction.
 - **"Agreed only by the curated judges."** The replicated-only change helps
   under ATC and MeSH and "hurts" under both label readings, and §15 calls
   this "the pattern the label key was built to catch". The label key's
-  intervals are −0.012 to +0.003 and −0.010 to +0.002. It has not caught
-  anything yet: it cannot tell −0.004 from zero.
-- **"Split."** The Preliminary weight is as noisy as the sweep has: 37 to 140
+  intervals are −0.009 to +0.006 and −0.009 to +0.004. It has not caught
+  anything yet: it cannot tell −0.002 from zero.
+- **"Split."** The Preliminary weight is as noisy as the sweep has: 46 to 168
   questions move each way under every key.
 
 **How large a change can be seen.** The baseline intervals above say how
 well a grade is known in absolute terms, which matters when comparing builds.
 Two settings on one build are compared paired, which is tighter. Under the
 five small settings, a question's reciprocal rank changes with a standard
-deviation of about 0.10 to 0.12. A paired test at 5% with 80% power then
+deviation of about 0.08 to 0.11. A paired test at 5% with 80% power then
 detects a change of 2.8 × sd / √n, and needs 7.84 × (sd / δ)² questions to
 detect a change of δ (Sakai's topic-set-size design, with this project's
 measured spread; `power.mjs` prints both):
 
 | key | questions | smallest detectable change | questions needed for 0.004 |
 | --- | --- | --- | --- |
-| ATC (headline) | 284 | 0.019 | 6,374 |
-| ATC repaired | 259 | 0.021 | 6,987 |
-| MeSH | 865 | 0.011 | 6,682 |
-| EPC | 455 | 0.015 | 6,638 |
-| PE | 598 | 0.013 | 6,483 |
-| label, nervous system | 346 | 0.014 | 4,512 |
-| label, every effect | 507 | 0.013 | 5,123 |
+| ATC (headline) | 284 | 0.018 | 5,407 |
+| ATC repaired | 259 | 0.019 | 5,926 |
+| MeSH | 978 | 0.010 | 5,592 |
+| EPC | 469 | 0.015 | 6,441 |
+| PE | 612 | 0.012 | 5,382 |
+| label, nervous system | 350 | 0.012 | 3,220 |
+| label, every effect | 514 | 0.012 | 4,473 |
 
-A change of 0.004 cannot be resolved by any per-question key on a
-2,452-molecule catalogue, however well built. **The keys can arbitrate changes
-of roughly 0.01 to 0.02 MRR and above, depending on the key. Below that the
-sweep reports signs, not findings.**
+A change of 0.004 cannot be resolved by any per-question key on this
+catalogue, however well built. **The keys can arbitrate changes of roughly 0.01
+to 0.02 MRR and above, depending on the key. Below that the sweep reports
+signs, not findings.** These figures are a little lower than on the 2,452-entry
+build. That is mostly because the added molecules lowered every reciprocal
+rank, and with it the spread of the changes. It is not because the keys gained
+questions: §6 separates the two.
 
 Voorhees 2000 is the reassurance: different assessors' relevance judgements
 vary widely, yet rank retrieval systems alike. A noisy key still orders
@@ -182,13 +211,13 @@ reading of the full text, which was not checked here.
 | Mougin, Burgun & Bodenreider 2012, [*Comparing drug-class membership in ATC and NDF-RT*](https://doi.org/10.1145/2110363.2110413) | Lexical mapping aligned about half of ATC's terms; mapping cardiovascular classes by hand raised common pairs from 39 to 128 (abstract). | Agreement between ATC and FDA's classes depends on how they are mapped; `agreement.mjs` compares classmate pairs over shared molecules, the safe way. |
 
 **Measured here.** In this catalogue, **95.1% of repaired-ATC classmate pairs
-share an approved indication** (`confounding.mjs`; random pairs 7.7%).
+share an approved indication** (`confounding.mjs`; random pairs 7.6%).
 SIMILARITY-LITERATURE §3.5 classed 4 of the 64 level-4 classes as use
 classes. By what its members are approved for, nearly all of them behave like
 use classes. The repaired key is therefore as much a "same indication" key as
 the label key is, and more so. And one class can decide the grade: the five
 largest classes hold a quarter of the questions. Averaged over classes rather
-than questions, MRR falls from 0.4607 to 0.4148 (`difficulty.mjs`).
+than questions, MRR falls from 0.4341 to 0.3882 (`difficulty.mjs`).
 
 **What the literature does not give.** No paper tests information-content
 similarity over the ATC tree (Resnik, Lin; reviewed by
@@ -205,13 +234,15 @@ links as one cause of MeSH–ATC misalignment. This project's own audit is the
 D22 work in [MESH-ACTIONS-ROUTE-B.md](MESH-ACTIONS-ROUTE-B.md), and
 the *Gestormone* error in CLAUDE.md is an NLM indexing error it found.
 
-**Measured here.** MeSH is the most powerful key: 865 questions, the
-narrowest interval, and the only key under which the family weight is
-detected. It is powerful because its classes are broad: it accepts 79% of
-ATC's classmate pairs, and 157 classes hold its 865 questions. Breadth buys
-power and costs fidelity, so the one change only MeSH detects is the one to
-distrust most. Its MRR falls from 0.5945 to 0.5214 when averaged over
-classes, the largest drop of any key.
+**Measured here.** MeSH is the most powerful key: 978 questions, the
+narrowest interval, and the only key that detected the family weight on the
+2,452-entry build. It is powerful because its classes are broad: it accepts
+79% of ATC's classmate pairs, and 168 classes hold its 978 questions. It is
+also the one key the listed entries grew, by 112 scoreable questions (§6).
+Breadth buys power and costs fidelity, so a change MeSH detects and the
+narrower keys do not is the one to distrust most. Its MRR falls from 0.5607 to
+0.4833 when averaged over classes. Only PE's falls further, from 0.4984 to
+0.4040.
 
 ### 3.3 FDA's classes (EPC, MoA, PE)
 
@@ -222,7 +253,8 @@ classes, the largest drop of any key.
 | Nelson et al. 2017, [*Interoperability of medication classification systems: lessons learned mapping EPCs to SNOMED CT*](https://doi.org/10.3233/978-1-61499-830-3-920) | Of 543 EPCs, 284 map to an equivalent SNOMED CT class, 205 are more specific and 54 do not map (abstract, as relayed). | EPC's granularity is its own; no other vocabulary stands in for it. |
 
 **Measured here.** 75.3% of EPC classmate pairs share an approved indication.
-EPC detects a paired change of about 0.015 (§2).
+EPC detects a paired change of about 0.015 (§2). The listed entries added 11
+of its 469 questions.
 
 ### 3.4 The label key (OnSIDES)
 
@@ -250,7 +282,7 @@ neighbours are drawn from that common set.
 | scope | ingredients | five nearest neighbours shared by the halves | chance |
 | --- | --- | --- | --- |
 | nervous system | 152 | 14.1% | 3.3% |
-| every effect | 376 | 17.1% | 1.3% |
+| every effect | 379 | 17.0% | 1.3% |
 
 Graded the way the harness grades, on questions both can answer, over the same
 candidates:
@@ -258,13 +290,13 @@ candidates:
 | judged by | predicted by | top-1 | MRR |
 | --- | --- | --- | --- |
 | non-US half, nervous system (126 questions) | the US half's own similarity list | 18.3% | 0.3459 |
-| | the target ranking | 31.0% | 0.4786 |
+| | the target ranking | 31.0% | 0.4796 |
 | US half, nervous system (126) | the non-US half's own list | 24.6% | 0.3981 |
-| | the target ranking | 34.1% | 0.4495 |
-| non-US half, every effect (317) | the US half's own list | 25.9% | 0.3977 |
-| | the target ranking | 28.7% | 0.4203 |
-| US half, every effect (317) | the non-US half's own list | 31.9% | 0.4431 |
-| | the target ranking | 38.8% | 0.4856 |
+| | the target ranking | 34.9% | 0.4539 |
+| non-US half, every effect (319) | the US half's own list | 25.7% | 0.3995 |
+| | the target ranking | 27.6% | 0.4124 |
+| US half, every effect (319) | the non-US half's own list | 31.3% | 0.4400 |
+| | the target ranking | 39.5% | 0.4892 |
 
 In all four cases the target ranking predicts a half of the label key better
 than the other half of the label data does. Two cautions. First, each half is
@@ -282,24 +314,24 @@ id, with forms folded onto parents.
 
 | pairs, both with an approved indication | pairs | share one |
 | --- | --- | --- |
-| label neighbours, nervous system | 2,023 | 41.9% |
-| label neighbours, every effect | 2,936 | 46.2% |
+| label neighbours, nervous system | 2,042 | 41.2% |
+| label neighbours, every effect | 2,970 | 46.0% |
 | repaired-ATC classmates | 1,281 | 95.1% |
-| EPC classmates | 2,934 | 75.3% |
-| the ranking's first answer (label-key questions) | 273 | 63.7% |
-| random pairs of labelled molecules | 18,372 | 7.7% |
+| EPC classmates | 2,988 | 75.3% |
+| the ranking's first answer (label-key questions) | 264 | 65.2% |
+| random pairs of labelled molecules | 18,418 | 7.6% |
 
 The label key is less a use key than the class keys are. To test whether its
 agreement with the ranking survives without shared use, the key was rebuilt
 with every candidate sharing an approved indication with the question set
 aside. A neighbour must then come from a drug for another disease. The
-recomputed neighbours match the key's exactly for all 409 questions before
+recomputed neighbours match the key's exactly for all 413 questions before
 anything is set aside.
 
-| on the 393 questions with an approved indication | scoreable | top-1 | shuffled | MRR |
+| on the 397 questions with an approved indication | scoreable | top-1 | shuffled | MRR |
 | --- | --- | --- | --- | --- |
-| label key as built | 336 | 14.3% | 1.8% | 0.2608 |
-| neighbours from other diseases only | 306 | 1.6% | 0.8% | 0.0682 |
+| label key as built | 340 | 13.5% | 1.6% | 0.2503 |
+| neighbours from other diseases only | 309 | 1.6% | 0.7% | 0.0630 |
 
 **Read this carefully, because it does not mean what it first seems to.**
 Drugs with one mechanism are mostly approved for one disease, so setting
@@ -332,10 +364,12 @@ disease.
 
 | | directions | clean by construction (no shared target) | of those that could fail, kept below rank 10 |
 | --- | --- | --- | --- |
-| negatives | 160 | 96 (60.0%) | 61 of 64 (95.3%) |
-| opposites | 94 | 0 | 85 of 94 (90.4%) |
+| negatives | 160 | 96 (60.0%) | 62 of 64 (96.9%) |
+| opposites | 94 | 0 | 89 of 94 (94.7%) |
 
-The headline "98.1% of negatives clean" is therefore 64 informative
+On the 2,452-entry build the last column read 61 of 64 and 85 of 94. The
+ranking did not get better at these pairs: the added molecules pushed them
+down (§6). The headline "98.8% of negatives clean" is 64 informative
 directions in a denominator of 160. They are good news, but over a quarter of
 the size the figure suggests. The opposites are the key's hardest and most
 informative part: every one can fail, and they found the flumazenil gap
@@ -366,17 +400,21 @@ positives mostly re-ask questions the class keys already ask; six do not.
   the truth. ATC, MeSH and EPC share curation, and every key shares indication
   (§3.4), so the assumption fails here, and a pooled "consensus key" would
   count one curator's error several times.
-- **Hubness is not a current problem.** Radovanović et al. 2010
+- **Hubness grew with the listed entries.** Radovanović et al. 2010
   ([JMLR](https://jmlr.org/papers/v11/radovanovic10a.html)) describe
   nearest-neighbour lists dominated by a few points, and CLAUDE.md records
   that before normalisation aripiprazole was the top answer for 14 molecules.
-  Now the skewness of top-10 appearances is 1.45, the top 1% of molecules
-  fill 5.4% of top-10 places, and the most frequent appears in 49 lists
-  (`difficulty.mjs`). The tested remedies, mutual proximity
+  On the 2,452-entry build the skewness of top-10 appearances was 1.45, the
+  top 1% of molecules filled 5.4% of top-10 places, and the most frequent
+  appeared in 49 lists. On this build they are 2.03, 6.4% and 77, and seven of
+  the ten most frequent are listed entries (`difficulty.mjs`, `growth.mjs`;
+  §6). Skip the listed entries and all three return exactly to the old
+  values. The tested remedies, mutual proximity
   ([Schnitzer et al. 2012](https://jmlr.org/papers/v13/schnitzer12a.html))
   and CSLS ([Conneau et al. 2018](https://arxiv.org/abs/1710.04087)), would
-  change the score and are not indicated. The figure is worth keeping as a
-  diagnostic after any change to the normalisation.
+  change the score, and nothing here shows the hubs are wrong answers. The
+  figure is worth keeping as a diagnostic after any change to the
+  normalisation or the membership.
 
 ---
 
@@ -384,13 +422,13 @@ positives mostly re-ask questions the class keys already ask; six do not.
 
 | key | smallest detectable change (MRR) | shares with the score | share of classmate pairs with a shared approved indication | own reliability | note |
 | --- | --- | --- | --- | --- | --- |
-| ATC headline | 0.019 | curated mechanisms, partly | (headline not measured; repaired 95%) | not measurable | mostly structure and use classes |
-| ATC repaired | 0.021 | curated mechanisms, partly | 95.1% | not measurable | |
-| MeSH | 0.011 | mechanisms, often | not measured | not measurable | most power, broadest classes |
+| ATC headline | 0.018 | curated mechanisms, partly | (headline not measured; repaired 95%) | not measurable | mostly structure and use classes; cannot gain a question from new molecules |
+| ATC repaired | 0.019 | curated mechanisms, partly | 95.1% | not measurable | its questions cannot grow either |
+| MeSH | 0.010 | mechanisms, often | not measured | not measurable | most power, broadest classes; the one key new molecules grew |
 | EPC | 0.015 | restates mechanism | 75.3% | not measurable | about half of memberships unasserted (Winnenburg 2015) |
-| PE | 0.013 | little | not measured | not measurable | coarse |
-| label | 0.013–0.014 | nothing | 41.9% | 14% neighbour agreement between regulators | below the ranking's own agreement with it |
-| pairwise | not a rate over questions | mechanisms labels state | — | one drafter per area | 64 informative negatives, 94 opposites |
+| PE | 0.012 | little | not measured | not measurable | coarse |
+| label | 0.012 | nothing | 41.2% | 14% neighbour agreement between regulators | below the ranking's own agreement with it; its answers move with the catalogue |
+| pairwise | not a rate over questions | mechanisms labels state | — | one drafter per area | 64 informative negatives, 94 opposites; its top-10 rates move with the catalogue's size |
 
 The detectable change is for two settings compared paired on one build, at 5%
 with 80% power (§2).
@@ -398,8 +436,10 @@ with 80% power (§2).
 Three conclusions follow.
 
 1. **D15 is the only constant every key has tested.** The family weight at 1.0
-   is detected under MeSH alone, the broadest key. Every other change in the
-   sweep sits below what any key resolves, so the sweep can neither confirm
+   is detected under MeSH, EPC and PE on this build, under MeSH alone on the
+   last one, and under no key that reads no curation. It crossed the line
+   because the catalogue changed, not because a key got sharper. Every other
+   change in the sweep sits below what any key resolves, so the sweep can neither confirm
    nor reject it. SIMILARITY-LITERATURE §4.1's rule, "adopt a
    constant only when judges of different provenance agree", needs a
    companion: *and only when the change is larger than those judges can
@@ -433,7 +473,147 @@ none is ready at catalogue scale.
 
 ---
 
-## 6. Proposed order
+## 6. What adding molecules does to the keys (`growth.mjs`)
+
+Between the two versions of this review the catalogue grew from 2,452 to
+3,291 entries. Nearly all of that is D25–D27, which entered 841 molecules because
+Wikipedia, Wikidata, TripSit, PsychonautWiki or the sci-wiki lists them. They
+are mostly research compounds and recreational substances: 35 of the 841 are
+approved in ChEMBL's record, and 37 carry any ATC code. That makes them a natural
+experiment in what a larger catalogue does to keys built from labels.
+
+`node analysis/answer_keys/growth.mjs` reads the 3,291-entry build twice:
+as built, and with the listed entries taken out of every list
+(`skippingListed`, the reading the floor test already uses). The second
+reading is the same ranking among the same old molecules, so the difference
+between the two is what the additions did. The 2,452-entry build is quoted
+beside them and not subtracted, because more than the listing changed between
+the builds (§8).
+
+### 6.1 What the 841 did
+
+**Questions.** A molecule becomes a question only when a key labels it and a
+classmate shares a target with it:
+
+| key | questions, 2,452 build | questions, 3,291 build | of them listed | MRR, 2,452 build | MRR as built | MRR of the old questions, listed skipped | smallest detectable change, 2,452 → 3,291 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| ATC (headline) | 284 | 284 | 0 | 0.4607 | 0.4341 | 0.4644 (284) | 0.019 → 0.018 |
+| ATC repaired | 259 | 259 | 0 | 0.4958 | 0.4640 | 0.4993 (259) | 0.021 → 0.019 |
+| MeSH | 865 | 978 | 112 | 0.5945 | 0.5607 | 0.5931 (864) | 0.011 → 0.010 |
+| EPC | 455 | 469 | 11 | 0.5946 | 0.5650 | 0.5983 (455) | 0.015 → 0.015 |
+| PE | 598 | 612 | 15 | 0.5154 | 0.4984 | 0.5150 (597) | 0.013 → 0.012 |
+| label, nervous system | 346 | 350 | 4 | 0.2620 | 0.2512 | 0.2639 (346) | 0.014 → 0.012 |
+| label, every effect | 507 | 514 | 7 | 0.3180 | 0.3056 | 0.3179 (506) | 0.013 → 0.012 |
+
+Six things follow.
+
+1. **Questions come from labels, not from molecules.** The listed entries are
+   a quarter of the catalogue and 3% of the label key's questions. Only MeSH,
+   whose supplementary records reach research compounds, gained a real
+   number, 112. Neither ATC key can gain any. An ATC N code admits a
+   molecule by itself, so all 544 parents in ChEMBL 37 with an N code are
+   already in, and both ATC keys ask only about N-coded molecules. The
+   repaired key takes its peers from every ATC level, so adding drugs with
+   other ATC codes could make more of its 353 labelled questions scoreable.
+   It can never make more than 353.
+2. **Unlabelled additions lower every grade as built, and the ranking is no
+   worse for it.** A listed entry ranked above a classmate is a miss under
+   every class key however apt it is (SIMILARITY-HARNESS §11 and §18 say the
+   same of D21 and D25). Read with the listed entries skipped, the old
+   questions grade within 0.004 of the 2,452-entry build under every key. What
+   gap remains is what else changed between the builds (§8). So a grade
+   compared across two builds as built mixes the catalogue's growth with the
+   ranking's quality. The filtered reading, or `--skip-listed` over the old
+   questions, does not. The new questions themselves are harder: MeSH's 971
+   with listed entries skipped grade 0.5766, its 864 old ones 0.5931.
+3. **The resolution barely moved, and mostly for the wrong reason.** As built,
+   the smallest detectable changes are a little smaller. But that is because
+   the added molecules push every classmate down, which lowers every
+   reciprocal rank and with it the spread of per-question changes (under ATC,
+   sd 0.115 with the listed entries skipped, 0.105 as built). The effects
+   being measured shrink in the same proportion (D15 under ATC: −0.0295
+   skipped, −0.0270 as built). Relative to the grade, ATC
+   resolves about 4% of its MRR on both builds. Only the new questions are a
+   real gain: MeSH's 112, which moves its threshold from 0.011 to 0.010.
+4. **The pairwise key's top-10 rates depend on the catalogue's size.** Its
+   pairs are fixed, but the listed entries lengthen every list: for a
+   molecule not listed, the median list has 179 entries as built and 164
+   with them skipped.
+
+   | | 2,452 build | 3,291 as built | 3,291, listed skipped |
+   | --- | --- | --- | --- |
+   | positives within the top 10 | 75.4% | 69.8% | 75.0% |
+   | negatives kept out of it | 98.1% | 98.8% | 98.8% |
+   | opposites kept out of it | 90.4% | 94.7% | 92.6% |
+   | a positive above a negative or opposite | 96.0% | 96.0% | — |
+
+   The positive rate falls and the opposite rate rises without the ranking
+   changing its order among the pairs. A catalogue change can therefore look
+   like a trade between the two, or, summed, like nothing. The ordering
+   figure, which compares partners within one list, is the one that does not
+   move with the catalogue's size. It should be read first (§7, step 2).
+5. **The label key's answers move with the catalogue.** Its classmates are
+   each question's five nearest label neighbours *among the catalogue's
+   molecules*, so a newly entered molecule with a label can become one. On
+   the two builds, 30 of the 409 shared nervous-system questions have a
+   different answer set: 31 of 2,176 neighbours were replaced, 14 of them by
+   molecules entered since. Under every effect, 67 of 609 changed. Version
+   1.0.0 froze the rules but not the answers, so a v1.0.0 grade on two
+   builds is two slightly different keys (§7, step 3).
+6. **The new molecules became the ranking's hubs, mostly in each other's
+   lists.** Skewness of top-10 appearances went from 1.45 to 2.03, and the
+   most frequent molecule from 49 lists to 77. Seven of the ten most frequent
+   are listed entries: cannabinoid ligands (AM-1241, CB-13), a tryptamine
+   (5-MeO-αMT), a cathinone, muscarine, homomazindol and
+   7-hydroxymitragynine. They fill 58.3% of the top-10 places in listed
+   entries' lists and 15.2% in everyone else's. With them skipped, all three
+   hubness figures return exactly to the 2,452-entry build's. The entries
+   come in families (synthetic cannabinoids, cathinones, tryptamines), and
+   these figures say a family mostly fills its own members' lists. Why the
+   few that reach into others' lists do so was not examined.
+
+**One sweep result moved with the catalogue.** The family weight at 1.0 was
+detected under MeSH alone on the 2,452-entry build. On this build MeSH, EPC
+and PE detect it, and with the listed entries skipped, MeSH and PE detect it
+and EPC does not (§2). None of the keys is sharper: the lists they grade
+changed, and why EPC's moved this way was not examined. This is why a constant should be compared between two settings on one
+build, never across a catalogue change.
+
+### 6.2 What adding more would do
+
+Under the paired test of §2, the smallest detectable change is 2.8 × sd / √n
+for n questions, so halving it takes four times the questions. Detecting the
+sweep's +0.004 would take 3,200 to 6,400 questions depending on the key,
+against 284 to 978 now. Each way the catalogue could grow gives this much:
+
+| route | how many | what it gives the keys | best smallest detectable change |
+| --- | --- | --- | --- |
+| more molecules like D25–D27's | the four open lists are spent: D27 entered what they name that ChEMBL 37 holds, except the placements its review refused (COHORT-2, D27) | 13% become MeSH questions, at most 2% anything else | MeSH 0.004 only after about 34,600 more such molecules |
+| every approved drug in ChEMBL 37 not yet in | about 1,745 (2,996 approved parents; 1,251 in) | at the yields of the approved drugs already in: per molecule, 0.59 MeSH questions, 0.48 PE, 0.41 label (every effect), 0.37 EPC, 0.28 label (nervous system), 0 ATC | MeSH about 0.007; PE and both label readings about 0.008; EPC about 0.010 |
+| any route, for the ATC keys | — | none: their questions are the 544 N-coded parents, already in | stays at 0.018–0.019 |
+
+Two warnings on the second row. First, those drugs are approved almost
+entirely for diseases outside the adopted scope; were their indications in
+scope, the indication route would already have admitted them. Their questions
+would be about antibiotics, cancer drugs and antihypertensives, so the keys
+would be grading the score on something other than the page's question.
+Second, admitting them is a membership change, which is the user's decision
+(CLAUDE.md, *Not done*). It is costed here, not proposed.
+
+**So the catalogue cannot grow its way to resolving the sweep's small
+changes.** The bound is how many labelled drugs exist, not how many molecules
+ChEMBL holds. What adding molecules does reliably is the opposite of what a
+sweep needs: it lowers grades as built, crowds the pairwise key's top 10,
+changes the label key's answers and adds hubs, all without the ranking
+changing. Power has to come from elsewhere. One source is questions that
+carry more information each, such as pairwise negatives that can fail (§7,
+step 2). The other is not sweeping for changes too small to see. Growing the
+catalogue is worth doing for the page, as long as every comparison is made on
+one build or with the new entries skipped.
+
+---
+
+## 7. Proposed order
 
 Each step is its own change and adopts nothing about the score.
 
@@ -450,8 +630,14 @@ data).**
   provenance, one of them reading no curation; must not worsen the pairwise
   key's negatives or opposites; and is confirmed once on the held-out pairwise
   key after it is chosen, never before. Under that rule, of the six settings
-  in §2 only D15 would qualify, and it is already adopted.
+  in §2 only D15 would qualify, and it is already adopted. The family weight
+  is detected under three curated keys on this build, but under no key that
+  reads no curation, so it would not.
 - Report MRR averaged over classes beside MRR averaged over questions.
+- Compare two builds only with the entries a key cannot label skipped in
+  each list (`--skip-listed`, as the floor test already grades), and state
+  the catalogue's size beside every grade. Compare two settings only on one
+  build (§6).
 
 **Step 2: pairwise key v2.** Keep v1 frozen; add, never edit.
 
@@ -469,6 +655,11 @@ data).**
 - Audit v1's negatives with one symmetric rule for what disqualifies a
   negative, and budget for Hauben's 17%.
 - Grow the opposites, the part that has found a real gap.
+- Report a reading that does not depend on the catalogue's size beside the
+  top-10 rates: the share of lists ranking a positive above a negative or
+  opposite, which v1 already reports (96.0% on both builds), or each
+  partner's rank as a share of its list. v1's frozen rules are not changed
+  for this; the new reading sits beside them (§6).
 
 **Step 3: label key v2.** Under SIMILARITY-LITERATURE §4.1 a new key needs a
 new version and a changelog entry; v1 stays.
@@ -482,6 +673,9 @@ new version and a changelog entry; v1 stays.
   MedDRA terms, never by name. Then rerun `confounding.mjs`: the test is
   whether the "other diseases only" row rises above its shuffle.
 - Consider OFFSIDES (Tatonetti 2012) as an indication-adjusted second source.
+- Freeze each version's answers, not only its rules. Write each question's
+  neighbours to a file when the version is cut, so that a catalogue change
+  cannot change the key under the same version number (§6).
 
 **Step 4: graded relevance by information content**, as one alternative
 reading of the repaired ATC key and the MeSH key, labelled untested
@@ -498,11 +692,11 @@ curation and indication, and agreement among them is not independent
 evidence. Do not pool the keys into a consensus by latent-class methods: their
 errors are correlated. And do not keep sweeping for changes under about 0.01 MRR:
 on this catalogue no key can see them, and a constant chosen there is chosen
-by noise.
+by noise. Do not expect a larger catalogue to change that (§6).
 
 ---
 
-## 7. How much to trust this
+## 8. How much to trust this
 
 - **Citations.** Three literature sweeps were run by subagents in parallel
   (class keys, phenotype keys, evaluation method). Every DOI cited here was
@@ -514,11 +708,23 @@ by noise.
   Those figures should be checked before anything depends on them. Pakhomov
   et al. 2010 (UMNSRS) and Dimpfel 2003 have no DOI.
 - **Measurements.** Every figure in §2–§4 comes from `power.mjs`,
-  `label_reliability.mjs` (with `label_halves.py`), `confounding.mjs` and
-  `difficulty.mjs`, against the 2026-10-13 build. They read the payload,
-  `db/cohort1.db`, the cached OnSIDES zip and, for indications, ChEMBL 37 at
-  `$CHEMBL_SQLITE_PATH`. They write nothing. The bootstraps are seeded, so a
-  rerun prints the same intervals.
+  `label_reliability.mjs` (with `label_halves.py`), `confounding.mjs`,
+  `difficulty.mjs` and `agreement.mjs`, and §6's from `growth.mjs` and
+  `power.mjs --skip-listed`. All were run on 2026-10-31 against the build of
+  2026-10-16, with the two answer-key backfills run on it that day. They read
+  the payload, `db/cohort1.db`, the cached OnSIDES zip and, for indications,
+  ChEMBL 37 at `$CHEMBL_SQLITE_PATH`. They write nothing. The bootstraps are
+  seeded, so a rerun prints the same intervals. The 2,452-entry figures in §6
+  are the first version's, from the 2026-10-13 build. One comparison in §6,
+  the label key's answers on the two builds, was made once against a saved
+  copy of that build, and the repository cannot rerun it.
+- **The two builds differ by more than the listing.** Between them came D23
+  and D24 (an Approved taken back where only unapproved labels support it),
+  GtoPdb 2026.3.1, and the Wikipedia and viewer work. None of these changes
+  the score's formula, but the GtoPdb release changes some claims. So the
+  clean comparison in §6 is the same build read twice, as built and with the
+  listed entries skipped, and the old build is quoted beside it, not
+  subtracted from it.
 - **The detectable changes and sample sizes** (§2) use each key's median
   standard deviation of per-question changes over the five small settings, and
   the normal approximation. They are orders of magnitude, not a design; a
@@ -526,6 +732,9 @@ by noise.
 - **The indication test** compares exact MeSH ids. "Depressive Disorder" and
   "Depressive Disorder, Major" count as different, which undercounts
   sharing, so the true share for every row in §3.4 is somewhat higher.
+- **The projections in §6** carry the yield per molecule of one kind of
+  addition over to another, and assume the spread of per-question changes
+  stays where it is. They give orders of magnitude.
 - **Not measured.** The MeSH key's share of same-indication pairs; the
   redundancy measure proposed in §3.6; the agreement between the three
   pairwise drafters, which cannot be measured since each drafted a different

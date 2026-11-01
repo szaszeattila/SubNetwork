@@ -69,12 +69,14 @@ docs/SIMILARITY-HARNESS.md, never in the same change as a constant.
 
 ```bash
 node analysis/answer_keys/power.mjs              # can each key see the sweep's changes? (~2.5 min)
+node analysis/answer_keys/power.mjs --skip-listed  # ...with the listed entries (D25-D27) out of each list
 node analysis/answer_keys/label_reliability.mjs  # the label key against itself, US against non-US labels
 node analysis/answer_keys/confounding.mjs        # how much of the label key is shared indication
 node analysis/answer_keys/difficulty.mjs         # pairwise negatives that can fail, class skew, hubness
+node analysis/answer_keys/growth.mjs             # what the listed entries did to each key
 ```
 
-These four are the measurements behind
+These five are the measurements behind
 [../../docs/ANSWER-KEYS-REVIEW.md](../../docs/ANSWER-KEYS-REVIEW.md), which
 checks the keys against the literature on reference standards.
 
@@ -102,3 +104,10 @@ directions share no target and so are clean by construction, and how many
 positives are already class-key classmates; it sets each class key's MRR over
 questions beside its MRR over classes, and measures hubness in the top-10
 lists.
+
+`growth.mjs` reads one build twice, as built and with the molecules D25-D27
+entered because a public list names them taken out of every list. It reports
+how many of each key's questions are listed entries and what the old questions
+grade without them, the pairwise key's rates and the lists' length both ways,
+and hubness both ways with whose lists the hubs sit in. The difference is what
+entering molecules the keys cannot label does to the keys.

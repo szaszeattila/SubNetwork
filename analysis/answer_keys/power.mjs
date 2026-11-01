@@ -3,6 +3,7 @@
 //
 //   node analysis/answer_keys/power.mjs
 //   node analysis/answer_keys/power.mjs --b 2000      # fewer resamples, faster
+//   node analysis/answer_keys/power.mjs --skip-listed # listed entries (D25-D27) out of each list
 //
 // SIMILARITY-HARNESS §15 sorts the scoring constants by the sign of an MRR
 // change under five judges, and the changes are small: +0.0042, -0.0044,
@@ -25,11 +26,17 @@
 // Nothing here is adopted and no constant is changed. It reports how large a
 // change each key can see.
 
-import { loadPayload, loadViewer, loadKey, grade, patchConstant } from "../similarity_harness/harness.mjs";
+import { loadPayload, loadViewer as load, loadKey, grade, patchConstant, skippingListed }
+  from "../similarity_harness/harness.mjs";
 
 const argv = process.argv.slice(2);
 const bAt = argv.indexOf("--b");
 const B = bAt >= 0 ? Number(argv[bAt + 1]) : 10000;
+// With --skip-listed every list is read with the entries D25-D27 listed taken
+// out, as the floor test grades: no class key can label them, so as built
+// each one ranked above a classmate is a miss however apt.
+const skipListed = argv.includes("--skip-listed");
+const loadViewer = (data, patch) => (skipListed ? skippingListed(load(data, patch)) : load(data, patch));
 
 const KEY_NAMES = ["atc", "atc-repaired", "mesh", "epc", "pe", "onsides", "onsides-all"];
 const SETTINGS = [
@@ -101,7 +108,8 @@ async function main() {
   const baseRR = {};
   for (const k of KEY_NAMES) baseRR[k] = rr(grade(base, keys[k]));
 
-  console.log(`Can each key see the sweep's changes? Paired over questions, B = ${B}`);
+  console.log(`Can each key see the sweep's changes? Paired over questions, B = ${B}` +
+    (skipListed ? ", listed entries skipped" : ""));
   console.log("=".repeat(100));
   console.log("Baseline MRR with a 95% bootstrap interval over questions:");
   const rand0 = mulberry32(1);
