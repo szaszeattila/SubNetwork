@@ -81,7 +81,7 @@ CREATE TABLE activities (
     activity_id INTEGER PRIMARY KEY, molregno INTEGER, assay_id INTEGER, doc_id INTEGER,
     standard_type TEXT, standard_relation TEXT, standard_value REAL,
     standard_units TEXT, data_validity_comment TEXT, potential_duplicate INTEGER,
-    activity_comment TEXT);
+    activity_comment TEXT, action_type TEXT);
 CREATE TABLE drug_mechanism (
     mec_id INTEGER PRIMARY KEY, molregno INTEGER, tid INTEGER, action_type TEXT,
     mechanism_of_action TEXT, direct_interaction INTEGER, molecular_mechanism INTEGER,

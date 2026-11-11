@@ -147,7 +147,7 @@ CLAIM_FIELDS = [
     "n_unresolved", "n_patents", "n_datasets", "assignment_classes",
     "supporting_endpoint_class", "action_type", "direct_interaction",
     "conflict_action", "conflict_dispersion", "mechanism_of_action", "conflict_detail",
-    "action_exclusion",
+    "action_exclusion", "assay_actions",
 ]
 
 ENDPOINT_FIELDS = [
@@ -164,8 +164,43 @@ OBSERVATION_FIELDS = [
     "material_basis_verified", "measured_full_mwt", "measured_form",
     "data_validity_comment", "potential_duplicate", "activity_comment",
     "assignment_reason", "exclusion_reason", "measured_chembl_id", "variant_id",
-    "assay_type",
+    "assay_type", "assay_action_type",
 ]
+
+# D28: the words ChEMBL attaches to single functional-assay results that its
+# action_type table files as a direction. Only these travel; a binding assay's
+# word describes the readout rather than the drug and stays in the database.
+DIRECTIONAL_PARENTS = ("POSITIVE MODULATOR", "NEGATIVE MODULATOR")
+
+
+def _shown_assay_action(obs) -> str | None:
+    """The observation's assay label where D28 shows it, else None."""
+    if (obs.get("assay_type") == "F" and obs.get("value_status") == "exact"
+            and obs.get("assay_action_parent_type") in DIRECTIONAL_PARENTS):
+        return obs.get("assay_action_type")
+    return None
+
+
+def _assay_actions(db) -> dict[int, list]:
+    """{claim_id: [[ACTION, n distinct studies], ...]}, most studies first.
+
+    A direction to show beside a measured claim (D28), never evidence: the
+    studies are the ones the claim already counts, and nothing here moves a
+    tier. Empty where the database predates the backfill's columns.
+    """
+    cols = {c[1] for c in db.execute("PRAGMA table_info(observations)")}
+    if not {"assay_action_type", "assay_action_parent_type"} <= cols:
+        return {}
+    studies = collections.defaultdict(lambda: collections.defaultdict(set))
+    for r in db.execute("SELECT activity_id, claim_id, assay_type, value_status,"
+                        " assay_action_type, assay_action_parent_type, study_key"
+                        " FROM observations WHERE claim_id IS NOT NULL"
+                        " AND assay_action_type IS NOT NULL"):
+        action = _shown_assay_action(dict(r))
+        if action:
+            studies[r["claim_id"]][action].add(r["study_key"] or f"act:{r['activity_id']}")
+    return {cid: sorted(([a, len(k)] for a, k in by.items()), key=lambda x: (-x[1], x[0]))
+            for cid, by in studies.items()}
 
 STUDY_FIELDS = [
     "study_key", "provenance_class", "pubmed_id", "year", "journal", "title",
@@ -605,6 +640,7 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
     for r in db.execute("SELECT * FROM claim_endpoints ORDER BY claim_id, endpoint_class"):
         endpoints[r["claim_id"]].append(dict(r))
 
+    assay_actions = _assay_actions(db)
     drawable = []
     gtopdb_claims = []
     gtp_s = Strings()
@@ -616,6 +652,7 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
         rec["molecule"] = mid
         rec["target"] = rec.pop("target_chembl_id")
         rec["role"] = rec.pop("claim_role")
+        rec["assay_actions"] = assay_actions.get(rec["id"])
         claim_molecule[rec["id"]] = mid
         if rec["role"] == GTOPDB_ROLE:
             # D18 writes these Supported with no measurement behind them, so
@@ -849,6 +886,7 @@ def export(db_path=None, out_dir=None, backup=True) -> dict:
             rec["molecule"] = rec.pop("parent_molregno")
             rec["target"] = rec.pop("target_chembl_id")
             rec["study"] = study_ref(rec)
+            rec["assay_action_type"] = _shown_assay_action(rec)
             observations.append(_row(rec, OBSERVATION_FIELDS, s_local))
 
         claim_studies = []

@@ -1386,6 +1386,71 @@ function claimActions(claim) {
   return out;
 }
 
+// The directions a measured claim's row names (D28, 2026-11-11, at the user's
+// request: "binding, no direction" was untrue at a pair where some of the
+// evidence points one way). Three sources, each named on the row: ChEMBL's
+// curated claim at the pair (its own row, in its own group, says it too),
+// GtoPdb's action at the pair, and the word ChEMBL attaches to single
+// functional-assay results there (`assay_actions`, from the pair's drawable
+// functional claims; a binding assay's word is never shipped). Claims count
+// only in the layers the basis filter allows. Display only. Nothing here is read by claimActions, so the line
+// colour, the mechanism filter and D15's oppositions are what they were, and
+// no tier moves: whether a functional label should count toward any of those
+// is open (docs/COHORT-2.md, D28).
+function measuredDirections(claim) {
+  const out = [];
+  if (isCuratedRole(claim)) return out;
+  const pairClaims = moleculeClaims(claim.molecule).filter(function (c) {
+    return c.target === claim.target && basisAllowed(c);
+  });
+  const chembl = new Set();
+  for (const c of pairClaims) {
+    if (c.role !== "curated") continue;
+    for (const a of curatedActions(c)) {
+      if (!chembl.has(a)) { chembl.add(a); out.push({ source: "chembl", action: a }); }
+    }
+  }
+  const seen = new Set();
+  for (const g of gtopdbAt(claim.molecule, claim.target)) {
+    if (!g.action_type || seen.has(g.action_type)) continue;
+    seen.add(g.action_type);
+    out.push({ source: "gtopdb", action: g.action_type });
+  }
+  // One count per action across the pair's functional claims: the largest,
+  // since two claims' studies can overlap and a sum could overstate them.
+  const assay = new Map();
+  for (const c of pairClaims) {
+    if (!c.assay_actions) continue;
+    for (const pair of c.assay_actions) {
+      assay.set(pair[0], Math.max(assay.get(pair[0]) || 0, pair[1]));
+    }
+  }
+  for (const [action, n] of assay) out.push({ source: "assay", action: action, n: n });
+  return out;
+}
+
+function measuredDirectionsHTML(claim) {
+  const dirs = measuredDirections(claim);
+  if (!dirs.length) return "";
+  // One phrase per action, naming every source that gives it: "ANTAGONIST per
+  // ChEMBL's curators, GtoPdb and ChEMBL's functional-assay label (1 study)"
+  // rather than the action three times.
+  const byAction = new Map();
+  for (const d of dirs) {
+    if (!byAction.has(d.action)) byAction.set(d.action, []);
+    byAction.get(d.action).push(d.source === "chembl" ? "ChEMBL's curators"
+      : d.source === "gtopdb" ? "GtoPdb"
+      : "ChEMBL's functional-assay label (" + plural(d.n, "study") + ")");
+  }
+  const phrases = [];
+  for (const [action, who] of byAction) {
+    const list = who.length > 1
+      ? who.slice(0, -1).join(", ") + " and " + who[who.length - 1] : who[0];
+    phrases.push(esc(action) + " per " + esc(list));
+  }
+  return helpLabel("direction", "measured_direction") + ": " + phrases.join("; ");
+}
+
 function mechanismAllowed(claim) {
   const picked = filters.mechanism;
   if (!picked.length) return true;
@@ -3122,20 +3187,71 @@ function supportingEndpoint(claim) {
   return null;
 }
 
+// A status pill with its own hover explanation (2026-11-10, at the user's
+// request: "Supported · curated" meant nothing to a first-time reader, and
+// nothing on the page said what it was). Same .help box as helpLabel and
+// validityPill; the pill's own words stay first so tests and readers find them.
+function helpPill(cls, label, text) {
+  return '<span class="help" tabindex="0"><span class="pill' + (cls ? " " + cls : "") +
+         '">' + esc(label) + '</span><span class="help-text">' + esc(text) +
+         "</span></span>";
+}
+
+const PILL_HELP = {
+  curated: "curated: ChEMBL's or GtoPdb's curators record this as how the drug " +
+           "works, citing a source.",
+  multiple: "multiple studies: ChEMBL holds the same kind of measurement from two " +
+            "or more separate papers.",
+  preliminary: "The lower of the two evidence levels shown. Measured, but not in " +
+               "two separate papers that ChEMBL holds, and no curator (ChEMBL or " +
+               "GtoPdb) records it as how the drug works. Papers outside ChEMBL " +
+               "are not counted.",
+  limited: "No exact value to go on: the results recorded are only cut-offs " +
+           "(e.g. no effect seen up to 10 µM), or values whose units could not be " +
+           "read or reliably converted. Kept to inspect, not drawn on the graph.",
+  broader: "Not a direct human result: another species, a related protein, a " +
+           "mutant or a less specific assay. Kept apart from human results.",
+  conflict_action: "The curators record opposite actions here (e.g. agonist and " +
+                   "antagonist), so this claim's direction is uncertain.",
+  conflict_dispersion: "Studies measured this more than 100-fold apart, so its " +
+                       "median is a rough guide.",
+  conflict_retained: "The disagreement is kept as recorded: neither side is dropped.",
+  withheld: "ChEMBL records an action here that its own cited source contradicts, " +
+            "so it is withheld. The claim keeps its curated support.",
+  supported_here: "ChEMBL holds this kind of measurement from two or more " +
+                  "separate papers: it is what made the claim Supported.",
+  duplicate: "ChEMBL flags this measurement as possibly a copy of one reported " +
+             "elsewhere.",
+};
+
 function tierPill(claim) {
   if (claim.tier === "supported") {
     const routes = [];
-    if (claim.curated_support) routes.push("curated");
-    if (claim.multiple_study_support) routes.push("multiple studies");
-    return '<span class="pill supported">Supported · ' + esc(routes.join(" + ") || "—") + "</span>";
+    const why = [];
+    if (claim.curated_support) { routes.push("curated"); why.push(PILL_HELP.curated); }
+    if (claim.multiple_study_support) {
+      routes.push("multiple studies"); why.push(PILL_HELP.multiple);
+    }
+    return helpPill("supported", "Supported · " + (routes.join(" + ") || "—"),
+      "The higher of the two evidence levels shown (Supported, Preliminary). " +
+      why.join(" "));
   }
-  if (claim.tier === "preliminary") return '<span class="pill preliminary">Preliminary</span>';
-  return '<span class="pill limited">Limited / unresolved</span>';
+  if (claim.tier === "preliminary") {
+    return helpPill("preliminary", "Preliminary", PILL_HELP.preliminary);
+  }
+  return helpPill("limited", "Limited / unresolved", PILL_HELP.limited);
 }
 
 function basisPill(claim) {
   if (claim.basis === "human_direct") return "";
-  return '<span class="pill warn">broader assignment</span>';
+  return helpPill("warn", "broader assignment", PILL_HELP.broader);
+}
+
+function conflictPills(claim) {
+  return (claim.conflict_action
+      ? helpPill("warn", "conflicting curated directions", PILL_HELP.conflict_action) : "") +
+    (claim.conflict_dispersion
+      ? helpPill("warn", "values disagree >100×", PILL_HELP.conflict_dispersion) : "");
 }
 
 // Hover explanations. Each one answers "what am I looking at" in a sentence or
@@ -3146,7 +3262,8 @@ function basisPill(claim) {
 // and GtoPdb, wherever either can supply it (D17, D18).
 const HELP = {
   tier: "How much evidence backs a claim. Supported: curated as the drug's mechanism " +
-        "(ChEMBL or GtoPdb), or measured in two separate papers. Preliminary: one study.",
+        "(ChEMBL or GtoPdb), or measured in two separate papers ChEMBL holds. " +
+        "Preliminary: measured, but not in two. Papers outside ChEMBL are not counted.",
   basis: "Direct human: measured on the human protein. The broader layer adds other " +
          "species, related proteins and mutants, kept apart from human results.",
   prevalence: "How many molecules act on this target. One nearly everything hits " +
@@ -3171,7 +3288,7 @@ const HELP = {
   score_kind: "×1 for a protein or complex; ×½ for a family or group, a claim about " +
               "a set.",
   score_evidence: "The weaker of the two claims here: 1 curated and replicated, " +
-                  "0.9 replicated, 0.75 curated, 0.5 one study.",
+                  "0.9 replicated, 0.75 curated, 0.5 Preliminary.",
   score_rarity: "1 when almost no molecule acts on this target, lower the more do. " +
                 "A target nearly every drug hits, like hERG, says little.",
   score_species: "How many species' records of this protein both molecules have. " +
@@ -3216,10 +3333,18 @@ const HELP = {
                   "action where it has one, else binding or functional measurement.",
   claim_mechanism: "Claims where curators (ChEMBL or GtoPdb) recorded this action. " +
                    "A measured affinity never carries one.",
-  claim_binding: "Measured binding (Ki, Kd, binding IC50): how tightly, never which " +
-                 "way. A curated direction at this target is a separate claim, above.",
-  claim_functional: "A functional assay saw an effect, with no curated direction. " +
-                    "A curated direction at this target is a separate claim, above.",
+  claim_binding: "Measured binding (Ki, Kd, binding IC50): how tightly, not which " +
+                 "way. A direction on a row is from curators or a functional assay at " +
+                 "the same target, and names its source.",
+  claim_functional: "A functional assay saw an effect. A direction on a row is from " +
+                    "curators or ChEMBL's label for a functional assay's result, and " +
+                    "names its source.",
+  measured_direction: "Which way the drug acts at this target, from ChEMBL's or " +
+                      "GtoPdb's curators, or from the word ChEMBL gives a functional " +
+                      "assay's result. Shown only: it does not raise this claim's " +
+                      "evidence level.",
+  assay_label: "The word ChEMBL gives this functional assay's result. It says which " +
+               "way the drug acted in this experiment, not that this is how it works.",
   claim_curated_none: "Mechanisms curators recorded without naming an action.",
   gtopdb: "How the drug acts here per the IUPHAR/BPS Guide to Pharmacology (GtoPdb), " +
           "a second curated database. At the drug's primary target it is a Supported " +
@@ -3245,7 +3370,7 @@ const HELP = {
   wider: "Complexes or families containing this protein. Their claims are about the " +
          "whole group.",
   target_molecules: "Molecules with a claim at this target. Each section lists curated " +
-                    "drugs, then replicated, then single-study ones; strongest binding " +
+                    "drugs, then replicated, then Preliminary ones; strongest binding " +
                     "first within each.",
   opposed: "Curators (ChEMBL or GtoPdb) record opposite actions (e.g. agonist and " +
            "antagonist) at shared proteins, so the score is cut: to a quarter when " +
@@ -3312,15 +3437,15 @@ const TIER_REASONS = {
   },
   multiple_study_support: {
     label: "Replicated across publications",
-    text: "Two or more separate papers measured the same kind of value.",
+    text: "Two or more separate papers in ChEMBL measured the same kind of value.",
   },
   multiple_publications_split_across_endpoint_classes: {
     label: "Several publications, no two in one endpoint class",
-    text: "Several papers gave exact values, each of a different kind, so none replicates another.",
+    text: "Several papers in ChEMBL gave exact values, each of a different kind, so none replicates another.",
   },
   one_publication: {
     label: "One publication",
-    text: "Only one paper gave an exact value. Patent and bulk-deposit values never count as replication.",
+    text: "Only one paper in ChEMBL gave an exact value. Patent and bulk-deposit values never count as replication.",
   },
   deposited_datasets_only: {
     label: "Bulk deposits only",
@@ -3336,7 +3461,7 @@ const TIER_REASONS = {
   },
   unresolved_study_provenance: {
     label: "No identifiable study",
-    text: "There are values, but no paper they can be traced to.",
+    text: "There are values, but ChEMBL traces them to no paper.",
   },
   conditional_conversion_only: {
     label: "Conditional conversions only",
@@ -3956,7 +4081,7 @@ function filterBanners() {
     let n = 0;
     for (const c of all) if (c.tier === "preliminary" && basisAllowed(c)) n++;
     if (n) push("tier", "<b>Supported and Preliminary</b> claims: " +
-                plural(n, "claim") + " rest" + (n === 1 ? "s" : "") + " on one study. " +
+                plural(n, "claim") + (n === 1 ? " is" : " are") + " measured but not replicated across papers in ChEMBL. " +
                 "Every row shows its tier.", "inclusion");
   }
   if (f.basis === "human_direct") {
@@ -4389,6 +4514,8 @@ function claimDetail(claim, headed) {
     }
     if (kept.length) parts.push(kept.join(", "));
   }
+  const dirs = measuredDirectionsHTML(claim);
+  if (dirs) parts.push(dirs);
   return parts.join(" · ");
 }
 
@@ -4460,8 +4587,7 @@ function claimRowHTML(claim, ctx, headed) {
   return '<div class="row-item" data-select="edge" data-id="' +
     esc(String(claim.molecule)) + '" data-other="' + esc(claim.target) + '">' +
     esc(t ? t.name : claim.target) + " " + tierPill(claim) + basisPill(claim) +
-    (claim.conflict_action ? '<span class="pill warn">conflicting curated directions</span>' : "") +
-    (claim.conflict_dispersion ? '<span class="pill warn">values disagree &gt;100×</span>' : "") +
+    conflictPills(claim) +
     '<div class="small muted">' + sub + " · " + esc(t ? t.target_type : "") +
     (t ? " · " + esc(t.organism || "organism not recorded") : "") + "</div>" +
     containmentNoteHTML(t, ctx) + "</div>";
@@ -5270,7 +5396,11 @@ function showMolecule(mol) {
 // group"). Panel state, not a filter - it moves no claim in or out of anything,
 // changes no count, and is not in the graph signature, so switching it only
 // re-renders the panel. Kept across selections for the same reason a fold is.
-let claimGrouping = "tier";
+//
+// Opens on "mechanism" (2026-11-10, at the user's request): what a drug does at
+// each target is the first question a reader brings, and the tier still shows
+// on every row's pill.
+let claimGrouping = "mechanism";
 function getClaimGrouping() { return claimGrouping; }
 function setClaimGrouping(value) {
   claimGrouping = value === "mechanism" ? "mechanism" : "tier";
@@ -5364,7 +5494,9 @@ function claimsByTierHTML(visible, ctx) {
 // commonest first. A measured claim has no curated action however strong it
 // is: an affinity says how tightly, never which way (the `role` help entry).
 // So those follow, grouped by what was measured, as the edge panel groups
-// them, with the heading saying in words that they carry no direction.
+// them. The heading said "no direction" until 2026-11-11 (D28): a measurement
+// carries none, but the pair can, and where GtoPdb or a functional assay's
+// label gives one the row now names it and its source.
 //
 // They used to share one group headed "No curated mechanism", which read as a
 // statement about the pair rather than the claim: armodafinil's measured Ki at
@@ -5375,9 +5507,9 @@ const MOLECULE_ROLE_GROUPS = [
   { role: "curated", key: "curated_none", label: "Curated",
     sub: "no direction recorded", help: "claim_curated_none" },
   { role: "binding", key: "measured_binding", label: "Binding",
-    sub: "measured affinity, no direction", help: "claim_binding" },
+    sub: "measured affinity", help: "claim_binding" },
   { role: "functional", key: "measured_functional", label: "Functional",
-    sub: "measured activity, no direction", help: "claim_functional" },
+    sub: "measured activity", help: "claim_functional" },
 ];
 
 function claimsByMechanismHTML(visible, ctx) {
@@ -5811,8 +5943,14 @@ function observationRowHTML(o, studies) {
     h += '<div class="small muted">' + esc(o.conversion_note || "") + "</div>";
   }
   if (o.data_validity_comment) h += '<div class="small">' + validityPill(o) + "</div>";
+  // Shipped only from a functional assay with an exact value (D28).
+  if (o.assay_action_type) {
+    h += '<div class="small">' + helpLabel("ChEMBL's assay label", "assay_label") + ": " +
+         esc(o.assay_action_type) + "</div>";
+  }
   if (o.potential_duplicate) {
-    h += '<div class="small"><span class="pill">flagged a potential duplicate upstream</span></div>';
+    h += '<div class="small">' +
+         helpPill("", "flagged a potential duplicate upstream", PILL_HELP.duplicate) + "</div>";
   }
   if (o.basis === "broader") {
     h += '<div class="small muted">' + esc(o.assignment_reason || "") + "</div>";
@@ -5838,11 +5976,7 @@ function observationRowHTML(o, studies) {
 // one shared target however many of them there are.
 function claimBlockHTML(claim, ev, note, open, headed) {
   let h = '<div class="claim-block">';
-  h += "<div>" + tierPill(claim) + basisPill(claim) +
-    (claim.conflict_action
-      ? '<span class="pill warn">conflicting curated directions</span>' : "") +
-    (claim.conflict_dispersion
-      ? '<span class="pill warn">values disagree &gt;100×</span>' : "") + "</div>";
+  h += "<div>" + tierPill(claim) + basisPill(claim) + conflictPills(claim) + "</div>";
   const detail = claimDetail(claim, headed);
   if (detail) h += '<div class="small">' + detail + "</div>";
   if (note) h += '<div class="small muted">' + note + "</div>";
@@ -5860,14 +5994,14 @@ function claimBlockHTML(claim, ev, note, open, headed) {
          esc(claim.mechanism_of_action) + "</div>";
   }
   if (claim.conflict_detail) {
-    h += '<div class="small"><span class="pill warn">retained</span> ' +
+    h += '<div class="small">' + helpPill("warn", "retained", PILL_HELP.conflict_retained) + " " +
          esc(claim.conflict_detail) + "</div>";
   }
   // ChEMBL's own word, kept and named, where the build withheld it as an error
   // its cited reference contradicts (CHEMBL_MECHANISM_ACTION_EXCLUSIONS). The
   // claim keeps its curated support; only the direction is gone.
   if (claim.action_exclusion) {
-    h += '<div class="small"><span class="pill warn">direction withheld</span> ' +
+    h += '<div class="small">' + helpPill("warn", "direction withheld", PILL_HELP.withheld) + " " +
          esc(claim.action_exclusion) + "</div>";
   }
 
@@ -5909,7 +6043,7 @@ function claimBlockHTML(claim, ev, note, open, headed) {
          helpLabel("Endpoint classes", "endpoints") + "</div>";
     for (const e of claim.endpoints) {
       h += '<div class="row-item static"><b>' + esc(e.endpoint_class) + "</b> " +
-        (e.supported ? '<span class="pill supported">supported here</span>' : "") +
+        (e.supported ? helpPill("supported", "supported here", PILL_HELP.supported_here) : "") +
         '<div class="small">median ' + esc(fmtNM(e.median_nm)) + " · " +
         plural(e.n_measurements, "measurement") + " · " +
         plural(e.n_studies, "study") + ", " + e.n_publications +
@@ -6333,12 +6467,13 @@ function edgeClaimsBody(p, ev, keyPrefix) {
 // A curated action is ChEMBL's direction and gets its own group, at ChEMBL's
 // own granularity (an inhibitor is not an antagonist); a curated claim with no
 // action is its own group rather than being filed under a guess. Measured
-// claims are grouped by what was measured, and their heading says in words that
-// a measurement carries no direction, because that is the thing a reader
-// scanning for "antagonist" needs to know about them.
+// claims are grouped by what was measured. Their heading said "no direction"
+// until 2026-11-11 (D28); a direction GtoPdb or a functional assay's label gives
+// at the pair is now named on the claim, with its source, and the heading's
+// help says the measurement itself carries none.
 const EDGE_ROLE_GROUPS = {
-  binding: { label: "Binding", sub: "measured affinity, no direction", help: "role" },
-  functional: { label: "Functional", sub: "measured activity, no direction", help: "role" },
+  binding: { label: "Binding", sub: "measured affinity", help: "claim_binding" },
+  functional: { label: "Functional", sub: "measured activity", help: "claim_functional" },
 };
 
 function edgeClaimGroups(entries) {
@@ -9434,7 +9569,7 @@ function legendRows() {
   // are not named twice.
   const evidence = (mechanism
     ? [[legendLine(edge("supported", false)), "Supported"],
-       [legendLine(edge("preliminary", false)), "Preliminary (1 study)"]]
+       [legendLine(edge("preliminary", false)), "Preliminary (not replicated)"]]
     : []).concat([
       [legendSwatch(mol(true), "dot"), "has a Supported claim"],
       [legendSwatch(mol(false), "dot"), "none Supported"]]);
@@ -9449,7 +9584,7 @@ function legendRows() {
       : ["Line colour · evidence", [
           [legendLine(edge("supported", true)), "curated"],
           [legendLine(edge("supported", false)), "replicated"],
-          [legendLine(edge("preliminary", false)), "Preliminary (1 study)"],
+          [legendLine(edge("preliminary", false)), "Preliminary (not replicated)"],
         ]],
     ["Evidence", evidence],
     ...(filters.groups === "linked"

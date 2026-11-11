@@ -768,6 +768,43 @@ The myristicin record ChEMBL names ELEMICIN is item 2 of
 
 ---
 
+### D28 — a measured claim names the pair's direction, and ChEMBL's functional-assay word is one
+
+**Decision (user, 2026-11-11).** "lets label both the gtopdb and functional
+assay directions, but not escalate their evidence tier ... this would make
+the labels more accurate since 'binding - no direction' is not true if some
+of the evidence points to a direction. also lets not count towards D15
+oppositions yet but write somewhere that we need to decide on this later."
+
+**What it is.** A measured claim's row names every direction at its pair, by
+source and once per action: ChEMBL's curated claim there, GtoPdb's action
+(D17), and the word ChEMBL attaches to single functional-assay results
+(`activities.action_type`), with the number of studies giving it. The
+Binding and Functional headings no longer say "no direction"; a measurement
+carries none, and the row says whose the direction is. The functional word
+is copied verbatim onto `observations` by the build and by
+`scripts/resolve_cohort_assay_actions.py`, and exported only from a
+functional assay with an exact value under ChEMBL's positive or negative
+parent: 838 drawn claims.
+
+**What it is not.** Not evidence: no tier moves. It is the measurement's own
+description, and counting it as curated support would let one paper make a
+claim Supported - 618 Preliminary claims would have, and 56 with no exact
+value at all - which invariant 7 forbids. Not read by `claimActions`, so the
+line colour, the mechanism filter and D15's oppositions are what they were.
+Not from a binding assay, whose word describes the readout: known activators
+get INHIBITOR or ANTAGONIST from one in a quarter of cases (DATA-QUALITY-LOG,
+2026-11-11).
+
+**Why.** Functional assays observe the effect, and their word agrees with the
+curators 602 times in 615 where both speak - on a par with GtoPdb's
+non-primary directions (96 in 100), which already count for D15. The same
+measurement found D18's premise for keeping GtoPdb's non-primary rows out of
+evidence does not hold at these pairs: 908 of 1,251 cite papers ChEMBL does
+not hold.
+
+---
+
 ## Open
 
 In the order they bear on the picture.
@@ -821,3 +858,13 @@ Wikipedia, Wikidata, TripSit and PsychonautWiki; the sci-wiki's other eight sect
     worth measuring: national registers that publish ATC code with an
     identifier, and DrugCentral's own UMLS-to-MeSH identifiers as a second
     bridge for its indications.
+11. **Whether ChEMBL's functional-assay word should count, and for what**
+    (D28, to decide later, the user's request on 2026-11-11). It is shown and
+    read by nothing. Three separate questions: D15's oppositions (proposed:
+    only where two or more studies give the same word, replication being the
+    project's own test of a measurement); the line colour and the mechanism
+    filter, which read `claimActions` and would change what a reader can
+    pick; and whether D18 should be revisited for GtoPdb's non-primary rows,
+    whose papers at these pairs are mostly ones ChEMBL never abstracted
+    (908 of 1,251; DATA-QUALITY-LOG 2026-11-11). GtoPdb's vilazodone error
+    is the case to check first.

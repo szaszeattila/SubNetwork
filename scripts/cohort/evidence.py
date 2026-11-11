@@ -215,6 +215,7 @@ ACTIVITY_SQL = """
 SELECT act.activity_id, act.molregno, act.standard_type, act.standard_relation,
        act.standard_value, act.standard_units, act.data_validity_comment,
        act.potential_duplicate, act.activity_comment,
+       act.action_type AS assay_action_type, aat.parent_type AS assay_action_parent_type,
        a.assay_id, a.chembl_id AS assay_chembl_id, a.description AS assay_description,
        a.assay_type, a.confidence_score, a.relationship_type, a.variant_id, a.tid,
        bao.label AS bao_label,
@@ -225,6 +226,7 @@ SELECT act.activity_id, act.molregno, act.standard_type, act.standard_relation,
   JOIN assays a ON a.assay_id = act.assay_id
   LEFT JOIN bioassay_ontology bao ON bao.bao_id = a.bao_format
   LEFT JOIN docs d ON d.doc_id = act.doc_id
+  LEFT JOIN action_type aat ON aat.action_type = act.action_type
 """
 
 
@@ -353,6 +355,9 @@ def scan_activities(conn, assessor, member_to_parent, target_index, measured, em
             "doc_title": row["doc_title"],
             "claim_id": None,
             "exclusion_reason": None if basis else areason,
+            # D28: shown from a functional assay, never evidence (schema).
+            "assay_action_type": row["assay_action_type"],
+            "assay_action_parent_type": row["assay_action_parent_type"],
         })
 
     counts["scanned"] = scanned

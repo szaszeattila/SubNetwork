@@ -2069,6 +2069,29 @@ with no curated claim gets nothing but Binding and Functional in that mode, and
 a Ki is not a mechanism. The stored value is still `mechanism`, so a remembered
 grouping and its fold keys carry over.
 
+**Action or measurement is what the panels open on** (2026-11-10, at the
+user's request), with Evidence tier the other setting: what a drug does at each
+target is the first question a reader brings, and the tier is still on every
+row's pill. In the same change every status pill (*Supported · curated*,
+*Preliminary*, *broader assignment*, *values disagree >100×*, *supported here*,
+...) gained a hover explanation (`helpPill`, `PILL_HELP`), since a coloured
+pill alone told a first-time reader nothing about what earned it.
+
+**A measured claim's row names the direction at its pair, and whose it is**
+(D28, 2026-11-11, at the user's request). The Binding and Functional headings
+read "measured affinity, no direction" and "measured activity, no direction",
+which was untrue at a pair where GtoPdb, or a functional assay ChEMBL labels,
+says which way the drug acts. The heading now says what was measured, and
+the row adds *direction: ANTAGONIST per ChEMBL's curators, GtoPdb and
+ChEMBL's functional-assay label (1 study)*, one phrase per action
+(`measuredDirections`, `measuredDirectionsHTML`), with only the claims the
+basis filter allows contributing. A measurement row from a functional assay
+names its word too. None of it raises a tier, and the functional word is not
+read by `claimActions`, so line colour, the mechanism filter and D15 are
+unchanged; whether it should be is COHORT-2 **Open** 11. Where the functional
+claims at a pair give one word different study counts, the largest is shown,
+since two claims can share a study and a sum could overstate it.
+
 The measured claims used to be one group headed **No curated mechanism**, and
 that heading read as a statement about the *pair* when it was one about the
 *claim*: armodafinil's measured Ki at human DAT sat under it two groups below

@@ -75,6 +75,7 @@ backfill, so each one is rerun after it.
 python3 scripts/build_cohort.py                      # ~20 s, ChEMBL only
 python3 scripts/resolve_cohort_trials.py             # ClinicalTrials.gov, ~20 s
 python3 scripts/resolve_cohort_protein_class.py      # offline
+python3 scripts/resolve_cohort_assay_actions.py      # offline (D28)
 python3 scripts/resolve_cohort_approved_elsewhere.py # offline
 python3 scripts/resolve_cohort_classes.py            # offline
 python3 scripts/resolve_cohort_pharm_actions.py      # MeSH, FDA UNII, Wikidata, a few minutes

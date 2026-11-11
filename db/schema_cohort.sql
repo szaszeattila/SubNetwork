@@ -495,7 +495,16 @@ CREATE TABLE IF NOT EXISTS observations (
     doc_year          INTEGER,
     doc_journal       TEXT,
     doc_title         TEXT,
-    exclusion_reason  TEXT              -- why this observation backs no claim
+    exclusion_reason  TEXT,             -- why this observation backs no claim
+    -- ChEMBL's activities.action_type for this one record, verbatim, and the
+    -- parent ChEMBL's action_type table gives it (POSITIVE MODULATOR, NEGATIVE
+    -- MODULATOR, OTHER). It is the word chosen for one assay's readout. From a
+    -- binding assay it describes the readout, not the drug (every triptan is
+    -- ANTAGONIST at 5-HT1B on a Ki), and nothing reads it; from a functional
+    -- assay the export ships it as a direction to show (D28). Never evidence,
+    -- never a tier, never an opposition.
+    assay_action_type TEXT,
+    assay_action_parent_type TEXT
 );
 
 CREATE INDEX IF NOT EXISTS idx_observations_claim ON observations(claim_id);

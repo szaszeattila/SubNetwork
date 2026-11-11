@@ -133,6 +133,7 @@ python3 scripts/check_dailymed_labels.py write   # --dry-run prints the counts o
 # backfills: run after a build (a rebuild wipes them), before the export
 python3 scripts/resolve_cohort_trials.py       # trial_status from ClinicalTrials.gov (~20 s)
 python3 scripts/resolve_cohort_protein_class.py  # target_components.protein_class (offline)
+python3 scripts/resolve_cohort_assay_actions.py  # observations.assay_action_type, D28 (offline)
 python3 scripts/resolve_cohort_approved_elsewhere.py  # molecules.approved_elsewhere (offline)
 python3 scripts/resolve_cohort_classes.py       # ATC codes and USAN stems (offline)
 python3 scripts/resolve_cohort_pharm_actions.py # MeSH pharmacological actions via FDA UNII and Wikidata (minutes)
@@ -376,7 +377,10 @@ claim.
 assignment, a target type outside the four — and keeps its reason, so an entry
 can show what exists without an edge being manufactured. `value_status`
 separates an exact value from a bound, a conditional mass-basis conversion and
-an unresolved one; only exact rows are `counted`.
+an unresolved one; only exact rows are `counted`. `assay_action_type` is
+ChEMBL's word for that one assay's readout, verbatim (D28): from a binding
+assay it describes the readout, not the drug, and nothing reads it; from a
+functional assay the page shows it as a direction, never as evidence.
 
 **`exclusion_summary`, `excluded_records`, `source_coverage`, `validation`** and
 **`build_manifest`** exist so a build can be audited without rerunning it: what
@@ -638,10 +642,10 @@ organism-format rows and 5 documented known-bad records are excluded with
 their reasons, and the exclusion accounting reconciles exactly to the
 1,255,388 activity rows scanned. All 15 build checks pass.
 
-What the page loads is 9.84 MB of startup payload in `viz/graph.data.js`, 0.21
+What the page loads is 9.86 MB of startup payload in `viz/graph.data.js`, 0.21
 MB in `viz/gtopdb.data.js`, GtoPdb's part, and 0.03 MB in
 `viz/drugcentral.data.js`, DrugCentral's, each kept apart for its licence; and
-119.2 MB of per-molecule evidence shards across 2,625 files under
+119.3 MB of per-molecule evidence shards across 2,625 files under
 `viz/evidence/`, fetched one at a time on demand.
 
 `molecules.wikipedia_url` and `targets.wikipedia_url` are backfilled by
@@ -661,7 +665,7 @@ MeSH structure classes, **663** link one too, in the `class_wikipedia` table:
 no article through the main article its English category declares (Xanthines
 to *Xanthine*).
 
-The pipeline suite is 609 tests and the node suites are 772 (543 cohort
+The pipeline suite is 614 tests and the node suites are 781 (552 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`
@@ -809,6 +813,14 @@ behaviour a rule here describes.
   one curator names several at a pair (varenicline AGONIST / PARTIAL
   AGONIST); read it through `curatedActions`, never whole — whole, it was a
   word no filter, colour or opposite knew.
+- **A measured claim names every direction at its pair, by source, and none
+  of them is evidence** (D28, 2026-11-11, the user's call): ChEMBL's curated
+  claim there, GtoPdb's action, and ChEMBL's word for a functional assay's
+  result (`measuredDirections`), so a Binding row no longer reads "no
+  direction" where some of the evidence points one way. The functional word
+  is read by no tier, no `claimActions`, so no line colour, mechanism filter or
+  opposition; a binding assay's word is never shipped (a quarter of known
+  activators are INHIBITOR or ANTAGONIST in one).
 - **A partial agonist against an antagonist or inverse agonist is half an
   opposite** (D19, `HALF_OPPOSED_ACTIONS`); partial against full agonist is
   never one. Counting it fully threw aripiprazole from #6 to #90 for
@@ -1051,6 +1063,12 @@ molecules) are in [docs/COHORT-2.md](docs/COHORT-2.md) and come first.
   `OPPOSED_ACTIONS` is nine hand-written pairs, eight of them never examined the
   way PARTIAL AGONIST/INVERSE AGONIST was (removed on a measurement). Each entry
   is a pharmacological claim, not a number to sweep.
+- **Whether ChEMBL's functional-assay direction counts toward D15, the line
+  colour or the mechanism filter is undecided** (D28; the user asked for it to
+  be decided later). It is shown and read by nothing. The same measurement
+  found GtoPdb's non-primary directions mostly cite papers ChEMBL never
+  abstracted, which undercuts one of D18's reasons for keeping them out of
+  evidence ([docs/COHORT-2.md](docs/COHORT-2.md) **Open** 11).
 - **The six scoring constants are unvalidated; the two newer terms were
   measured first.** The one live finding, under both the ATC and the MeSH
   judge: the gap between a curated claim (0.75) and a replicated one (0.9) is

@@ -54,6 +54,63 @@ alone.
 
 ---
 
+## 2026-11-11 — what ChEMBL's per-assay action word is worth, measured again
+
+**What prompted it.** The page headed every measured claim "Binding · measured
+affinity, no direction", including at pairs where GtoPdb gives a direction.
+The user asked whether GtoPdb's direction there is evidence or a second
+reading of ChEMBL's own paper, and then whether ChEMBL's per-measurement
+`activities.action_type` could be used, as the 2026-09-26 entry below had
+decided against.
+
+**GtoPdb is mostly not citing ChEMBL's papers.** Of the 1,251 pairs where
+ChEMBL's claims carry no curated action and a non-primary GtoPdb row gives one
+citing a PubMed id, every GtoPdb paper is also behind ChEMBL's claim at 243,
+some are at 58, and none at 950. Of those 950, 908 cite papers that are not in
+ChEMBL at all; 22 are in ChEMBL with this molecule measured only at other
+targets or species, 12 with no data for it, and 8 with data at this target
+that the claim's filters left out. D18 keeps non-primary rows as directions
+partly because "the other rows are mostly affinities from the papers ChEMBL
+already abstracts"; for this subset that is not so (COHORT-2, D28).
+
+**The per-assay word, split by what the drug does.** On the current catalogue,
+11,839 observations on claims carry a word, 10,215 from binding assays and
+1,624 from functional ones; 78% are from 2020-2024 papers. Against the
+direction ChEMBL's curated mechanisms or GtoPdb give at the same pair, with
+the words sorted into activates/inhibits for this measurement only (the page
+never folds them):
+
+| Assay | The curators say the drug | The word agrees |
+|---|---|---|
+| binding | inhibits or blocks | 4,763 of 4,781 |
+| binding | **activates** | **408 of 562 (73%)** |
+| functional | inhibits or blocks | 185 of 190 |
+| functional | activates | 417 of 425 |
+
+The binding-assay figure is what the 2026-09-26 entry's 197-in-215 hid: a
+displacement assay cannot see direction, "inhibitor" is the default word for
+its readout, and it is right by default for drugs that inhibit and wrong for a
+quarter of the ones that activate. The records behind the examples: every
+triptan (suma-, riza-, zolmi-, naratriptan) is ANTAGONIST at 5-HT1B and 5-HT1D
+on Ki values from one 2024 review, *Indole-containing pharmaceuticals*
+(PMID 38516587); cabergoline INHIBITOR at D2 on a Ki from another 2024 review
+(PMID 39038276); diazepam's [3H]flunitrazepam displacement is POSITIVE
+ALLOSTERIC MODULATOR in one paper, INHIBITOR in a second and BINDING AGENT in
+a third. The agreement is measured only where a curator already speaks, which
+leans to primary targets.
+
+**What was done (D28).** The word is copied verbatim onto `observations`
+(`assay_action_type`, `assay_action_parent_type`) by the build and by
+`scripts/resolve_cohort_assay_actions.py`: 13,250 of 342,808 observations
+carry one. Only a functional assay's word with an exact value, filed by ChEMBL
+under a positive or negative parent, is exported (838 drawn claims carry one),
+and the page names it beside a measured claim as ChEMBL's functional-assay
+label. It moves no tier, no line colour, no mechanism filter and no
+opposition; the binding-assay word is stored and never read. The ATC grade is
+unchanged (30.3%, MRR 0.4341).
+
+---
+
 ## 2026-10-18 — Cyclooxygenase had no link, and neither did any family
 
 **What happened.** The user asked why *Cyclooxygenase (human)*,

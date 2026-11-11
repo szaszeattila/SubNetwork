@@ -1037,7 +1037,7 @@ describe("an edge on the canvas opens the pair behind it", () => {
     assert.ok(at("action_ANTAGONIST") < at("role_binding"));
     assert.ok(at("role_binding") < at("role_functional"));
     assert.match(h, /tabindex="0">Antagonist<[^]*?\(1\) <span class="muted">· curated by ChEMBL/);
-    assert.match(h, /measured affinity, no direction/);
+    assert.match(h, /measured affinity</);
     // The same three claims, once each, and nothing added.
     assert.equal((h.match(/class="claim-block"/g) || []).length, 3);
     assert.match(h, /3 claims drawn as this line/);
@@ -1146,7 +1146,7 @@ describe("the legend is on the page and says what the canvas draws", () => {
     // The dashes still carry the evidence in this mode, so the legend has to
     // say so somewhere: the colour block no longer can.
     const ev = v.legendRows().find((b) => b[0] === "Evidence")[1].map((r) => r[1]);
-    assert.ok(ev.includes("Supported") && ev.includes("Preliminary (1 study)"));
+    assert.ok(ev.includes("Supported") && ev.includes("Preliminary (not replicated)"));
 
     const rows = v.legendRows().find((b) => b[0].startsWith("Line colour"))[1];
     const labels = rows.map((r) => r[1]);
@@ -1467,6 +1467,7 @@ describe("the target panel counts molecules, not claims", () => {
 
   test("one molecule with two claims here is one molecule", () => {
     const v = loadViewer(twoClaimsAtOneTarget());
+    v.setClaimGrouping("tier");   // these sections are the tier grouping
     const html = v.showTarget(v.lookupTarget("CHEMBLT1"));
     assert.match(html, /class="small target-molecules">[^\n]*?2 molecules<[\s\S]*?· 3 claims/);
     // And a section holding one molecule twice says so beside its claim count:
@@ -1501,6 +1502,7 @@ describe("the target panel counts molecules, not claims", () => {
     for (let i = 0; i < 65; i++) add(100 + i, "FILLER " + i, { tier: "preliminary",
       multiple_study_support: 0, n_publications: 1, endpoints: [endpoint({ median_nm: 10 + i })] });
     const v = loadViewer(buildData({ molecules: mols, targets: [target({ chembl_id: "T" })], claims }));
+    v.setClaimGrouping("tier");   // these sections are the tier grouping
     v.setFilter("tier", "supported_preliminary");
     v.setFilter("basis", "all");
     const html = v.showTarget(v.lookupTarget("T"));
@@ -1545,6 +1547,7 @@ describe("the target panel counts molecules, not claims", () => {
 
   test("a target panel folds its sections apart from a molecule panel's", () => {
     const v = loadViewer(twoClaimsAtOneTarget());
+    v.setClaimGrouping("tier");   // these sections are the tier grouping
     v.setSectionOpen("claims_supported", true);
     const html = v.showTarget(v.lookupTarget("CHEMBLT1"));
     assert.match(html, /<details class="section"><summary class="section-toggle" data-fold="target_claims_supported">/);
@@ -1638,8 +1641,8 @@ describe("the panel says what it is counting", () => {
     // that earned the tier, not on the strongest number.
     const v = loadViewer(catalogue());
     const html = v.claimBlockHTML(v.allClaims().find((c) => c.id === 1), null);
-    assert.match(html, /binding:Ki<\/b> <span class="pill supported">supported here/);
-    assert.ok(!/binding:IC50<\/b> <span class="pill supported">/.test(html));
+    assert.match(html, /binding:Ki<\/b> <span class="help" tabindex="0"><span class="pill supported">supported here/);
+    assert.ok(!/binding:IC50<\/b> <span class="help" tabindex="0"><span class="pill supported">/.test(html));
     // And the stronger value is still shown, named as the endpoint it is.
     assert.match(html, /strongest value[\s\S]*binding:IC50/);
   });
@@ -1719,8 +1722,12 @@ describe("the panel says what it is counting", () => {
     // One group per exact ChEMBL action, and the measured claims - which carry
     // no direction however well replicated - after them, grouped by role.
     // It is panel state and not a filter: the same claims, the same rows.
+    // Action or measurement is what the panel opens on (2026-11-10, the user's
+    // call); tier is the other setting.
     const v = loadViewer(catalogue());
+    assert.equal(v.getClaimGrouping(), "mechanism");
     const mol = v.lookupMolecule(1);
+    v.setClaimGrouping("tier");
     const byTier = v.showMolecule(mol);
     assert.match(byTier, /data-claim-group="tier" aria-pressed="true"/);
     assert.match(byTier, /data-fold="claims_supported"/);
@@ -1736,7 +1743,7 @@ describe("the panel says what it is counting", () => {
     const heading = (at) => byMech.slice(at, byMech.indexOf("</summary>", at));
     assert.match(heading(antagonist), /tabindex="0">Antagonist<[\s\S]* \(1\)$/);
     assert.match(heading(none),
-      /tabindex="0">Binding<[\s\S]* \(2\) <span class="muted">· measured affinity, no direction<\/span>$/);
+      /tabindex="0">Binding<[\s\S]* \(2\) <span class="muted">· measured affinity<\/span>$/);
     assert.ok(!/No curated mechanism/.test(byMech));
     // Under the Antagonist heading the row does not say ANTAGONIST again.
     const antBody = byMech.slice(antagonist, none);
@@ -1785,7 +1792,7 @@ describe("the panel says what it is counting", () => {
     assert.ok(at("claims_curated_none") < at("claims_measured_binding"));
     assert.ok(at("claims_measured_binding") < at("claims_measured_functional"));
     assert.match(h, /tabindex="0">Curated<[^]*?\(1\) <span class="muted">· no direction recorded/);
-    assert.match(h, /tabindex="0">Functional<[^]*?\(1\) <span class="muted">· measured activity, no direction/);
+    assert.match(h, /tabindex="0">Functional<[^]*?\(1\) <span class="muted">· measured activity</);
     assert.ok(!/No curated mechanism/.test(h));
     // Each group holds one row, and the binding row does not repeat its role.
     const body = h.slice(at("claims_measured_binding"), at("claims_measured_functional"));
@@ -1995,6 +2002,7 @@ describe("the panel says what it is counting", () => {
     // and it keeps the count, because a section that hid how many rows it held
     // would be hiding rather than folding.
     const v = loadViewer(catalogue());
+    v.setClaimGrouping("tier");   // these sections are the tier grouping
     const html = v.showMolecule(v.lookupMolecule(1));
     assert.match(html, /<summary class="section-toggle" data-fold="claims_supported">/);
     assert.match(html, /<summary class="section-toggle" data-fold="similar">/);
@@ -2031,6 +2039,7 @@ describe("the panel says what it is counting", () => {
     // would spring open on the next click of a control - which reads as the
     // fold not having worked.
     const v = loadViewer(catalogue());
+    v.setClaimGrouping("tier");   // these sections are the tier grouping
     v.setSectionOpen("similar", false);
     v.setSectionOpen("claims_supported", true);
     const html = v.showMolecule(v.lookupMolecule(1));
@@ -3145,6 +3154,23 @@ describe("a row does not say the same thing twice", () => {
     assert.equal(detail.startsWith("ANTAGONIST"), true);
     assert.doesNotMatch(detail, /curated/);
     assert.match(v.tierPill(curated), /Supported · curated/);
+  });
+
+  test("every status pill explains itself on hover", () => {
+    // 2026-11-10, at the user's request: a green "Supported · curated" said
+    // nothing to a first-time reader about what earned it.
+    const v = loadViewer(catalogue());
+    const hovered = (html) => /^<span class="help" tabindex="0"><span class="pill[^"]*">[^<]+<\/span><span class="help-text">[^<]+<\/span><\/span>$/.test(html);
+    for (const c of v.allClaims()) assert.ok(hovered(v.tierPill(c)), v.tierPill(c));
+    assert.ok(hovered(v.tierPill({ tier: "preliminary" })));
+    assert.ok(hovered(v.tierPill({ tier: "limited_or_unresolved" })));
+    assert.ok(hovered(v.basisPill({ basis: "broader" })));
+    assert.equal(v.basisPill({ basis: "human_direct" }), "");
+    const both = v.tierPill({ tier: "supported", curated_support: 1, multiple_study_support: 1 });
+    assert.match(both, /Supported · curated \+ multiple studies<\/span><span class="help-text">[^<]*curated:[^<]*multiple studies:/);
+    const conflicts = v.conflictPills({ conflict_action: 1, conflict_dispersion: 1 });
+    assert.equal((conflicts.match(/class="help-text"/g) || []).length, 2);
+    assert.match(conflicts, /values disagree &gt;100×/);
   });
 
   test("a measured row still says which kind of claim it is", () => {

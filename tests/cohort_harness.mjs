@@ -271,7 +271,7 @@ export const CLAIM_FIELDS = [
   "n_unresolved", "n_patents", "n_datasets", "assignment_classes",
   "supporting_endpoint_class", "action_type", "direct_interaction",
   "conflict_action", "conflict_dispersion", "mechanism_of_action", "conflict_detail",
-  "action_exclusion",
+  "action_exclusion", "assay_actions",
 ];
 
 export const ENDPOINT_FIELDS = [
@@ -288,7 +288,7 @@ export const OBSERVATION_FIELDS = [
   "material_basis_verified", "measured_full_mwt", "measured_form",
   "data_validity_comment", "potential_duplicate", "activity_comment",
   "assignment_reason", "exclusion_reason", "measured_chembl_id", "variant_id",
-  "assay_type",
+  "assay_type", "assay_action_type",
 ];
 
 export const STUDY_FIELDS = [

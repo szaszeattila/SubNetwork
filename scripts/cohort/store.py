@@ -185,7 +185,8 @@ OBS_COLUMNS = [
     "variant_id", "assay_chembl_id", "assay_description", "assay_type", "bao_label",
     "data_validity_comment", "potential_duplicate", "activity_comment", "study_key",
     "provenance_class", "pubmed_id", "doi", "patent_id", "doc_chembl_id", "doc_year",
-    "doc_journal", "doc_title", "exclusion_reason",
+    "doc_journal", "doc_title", "exclusion_reason", "assay_action_type",
+    "assay_action_parent_type",
 ]
 
 OBS_SQL = ("INSERT OR REPLACE INTO observations(" + ",".join(OBS_COLUMNS) + ") VALUES("
