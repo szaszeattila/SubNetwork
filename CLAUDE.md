@@ -143,6 +143,8 @@ python3 scripts/resolve_cohort_wikipedia.py    # Wikipedia links via Wikidata an
 python3 scripts/resolve_cohort_drugcentral.py   # molecule_approvals from DrugCentral's pinned dump (needs pg_restore)
 
 python3 scripts/export_cohort.py           # db/cohort1.db -> viz/*.data.js + viz/evidence/
+node scripts/build_layout.mjs              # solve the opening picture -> viz/layout.data.js (~30 s, Chrome)
+node scripts/build_layout.mjs --check      # exit 1 if it no longer matches the data and the page
 python3 scripts/cohort_report.py           # the measured results of the active build
 python3 scripts/cohort_report.py --write-status  # refresh the generated block in ## Status
 python3 scripts/cohort_report.py --check-status  # exit 1 if that block is stale
@@ -266,6 +268,8 @@ viz/index.html            the page: self-contained, vendored vis-network
 viz/graph.data.js         startup payload: catalogue, targets, ChEMBL's claims
 viz/gtopdb.data.js        GtoPdb's part, apart for its licence (ODbL / CC BY-SA 4.0)
 viz/drugcentral.data.js   DrugCentral's regulators, apart for its licence (CC BY-SA 4.0)
+viz/layout.data.js        where each node of the opening picture is drawn, solved ahead
+                          of time by scripts/build_layout.mjs; gitignored like the data
 viz/evidence/             per-molecule evidence shards, loaded on demand
 tests/test_cohort_*.py    offline pipeline and backfill tests; test_cohort_status
                           fails when the generated Status block is stale
@@ -657,7 +661,7 @@ MeSH structure classes, **663** link one too, in the `class_wikipedia` table:
 no article through the main article its English category declares (Xanthines
 to *Xanthine*).
 
-The pipeline suite is 609 tests and the node suites are 762 (533 cohort
+The pipeline suite is 609 tests and the node suites are 772 (543 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`
@@ -857,8 +861,9 @@ behaviour a rule here describes.
   moves the first. ChEMBL's record count is named "target records"
   wherever it appears, never "targets" (invariant 13).
 - **A filter change paints its busy line before the rebuild starts**
-  (`refreshAfterFilters`: a timeout queued in a frame callback), in the
-  count box and not `#load-status`, which the open Display options covers.
+  (`refreshAfterFilters`: a timeout queued in a frame callback), in
+  `#busy-status` at the canvas's centre, above the open Display options and
+  click-through — never `#load-status`, which that popover covers.
   The re-solve's batch size stays at 100: lowered, the `SETTLE_MS`
   backstop ended the solve early (docs/VIEWER.md).
 
@@ -982,6 +987,22 @@ behaviour a rule here describes.
   counted, all on hover.
 
 **Rendering correctness (not just performance)**
+
+- **The opening picture is solved ahead of time, never in the reader's
+  browser** (2026-11-10, the user's call). `scripts/build_layout.mjs` opens
+  the page in headless Chrome, lets it lay itself out, and writes the settled
+  positions to `viz/layout.data.js`; the page draws them with physics off
+  (`prebuiltLayout`), opening in 1.2 s where the solve took 25. Used only with
+  the export it was solved from (`generated`) and for exactly the filters it
+  was solved under, every node placed; any other first picture is solved from
+  its places with a filter change's budget, and filters put back to the
+  defaults glide back to them without a solve. The deploy re-solves it when
+  the data or the page's script has changed. **A whole picture the reader's
+  browser solves is kept too** (`rememberLayout`): the last 10, in memory and
+  in `localStorage` under the export and `LAYOUT_CACHE_VERSION`, so choosing a
+  setting again glides to it (8.3 s the first time, 1.1 s after, across
+  reloads). Raise `LAYOUT_CACHE_VERSION` when a change moves what a solve
+  produces; a neighbourhood is never kept.
 
 - **Nodes are spaced after the solve by `spreadNodes`, never by vis's
   `avoidOverlap`**, which stays 0: vis subtracts a node's radius from its

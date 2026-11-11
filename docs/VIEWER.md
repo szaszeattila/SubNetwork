@@ -1374,10 +1374,69 @@ was re-solved (line colour). Clicks while one is queued fold into it, and a
 layout settling meanwhile leaves the queued change's line up. Reset goes the
 same way.
 
-The line is in the counts box rather than in `#load-status`, which was the
-first place it went: that is centred on the canvas, and Display options — open
+The line is now `#busy-status`, centred on the canvas above the popover
+(z-index 60 to its 50) and click-through (`pointer-events: none`), so it
+cannot take a click meant for a control under it (2026-11-10, the user's call:
+in the counts box it was easy to miss). It was in the counts box, and before
+that in `#load-status`, which was the first place it went: that is centred on the canvas, and Display options — open
 whenever a filter is clicked — sits over the middle of the canvas at z-index 50
 against its 30. The first screenshot of the change showed nothing.
+
+**The opening layout is solved ahead of time** (2026-11-10, the user's call).
+Timed in headless Chrome, the page took 25 s to open on the whole network:
+0.1 s to read the data files, 1.2 s to index them, and 23 s for the first
+solve - all 320 iterations of its budget, about 3.6 s per batch of 50 over
+4,895 nodes and 22,576 lines, never converging early because it started from
+nothing - then 0.5 s to settle. Nothing could be clicked during it, and every
+reader paid it for the same picture. `scripts/build_layout.mjs` now pays it
+once: it serves `viz/` to headless Chrome with any existing layout withheld,
+lets the page solve and settle exactly as it would for a reader, reads
+`nodePositions()` back over the DevTools protocol, and writes them, rounded to
+0.1 canvas units, to `viz/layout.data.js` (119 KB). It then opens the page
+again with the file and fails unless the page drew from it. The page opens in
+1.2 s.
+
+The page uses the file under the rule its other data files follow - only with
+the `graph.data.js` it was exported with, since a node key carries the page's
+molecule number and another export may give that number to another molecule -
+and only when its filter signature is the picture's and it places every node
+(`prebuiltLayout`). Then the network is built with physics off and settled at
+once: `placeNodes` runs as after any solve and has next to nothing to move,
+since the positions were read after it. A first picture it was not solved for,
+such as a link carrying other filters, starts from the file's places for its
+nodes (`seedFromLayout`) and is solved with a filter change's budget rather
+than the first layout's; a page opened on a neighbourhood link leaves focus to
+the file's whole picture instead of a fresh solve. Putting the filters back to
+the opening ones glides to the file's places without solving. Without the file
+the page lays itself out as before. The file records the sha256 of the two
+data files and of the page's inline script; `--check` compares them and the
+deploy re-solves when any differs, so editing About's text does not, and a
+change to the layout code or the defaults does.
+
+**A picture solved once is kept** (2026-11-10, the user's call). Every whole
+picture the reader's browser solves after a filter change is stored by its
+filter signature (`rememberLayout`, read through `knownLayout` beside the
+file), so choosing that setting again goes the way the opening filters do:
+its places, glided to, with no solve. Measured in headless Chrome, *Supported
+only* took 8.3 s the first time, then 1.1 s when chosen again, and 1.1 s after
+a reload. The last 10 are kept (`LAYOUT_CACHE_MAX`, about 77 KB each as
+stored) in memory and in `localStorage`, under the export's `generated` stamp
+and `LAYOUT_CACHE_VERSION`: a store from another export is cleared, a full one
+drops its oldest layouts, and one that is blocked or missing costs a solve and
+nothing else. **Raise `LAYOUT_CACHE_VERSION` whenever a change moves what a
+solve produces** (physics settings, `spreadNodes`, node keys), or readers keep
+pictures the old code drew. A neighbourhood is never kept: it solves in about
+2 s, and one per selection would push out the whole pictures. A layout is
+stored only once it settled from a solve, never again when it was drawn from a
+known one.
+
+A link carries no layout. Under the default canvas setting the selection is
+not part of the picture's signature, so a link naming only a selection opens
+on the file's layout like any other visit; a link carrying other filters is
+solved from the file's places, like a filter change. Carrying the positions
+themselves would put about 55 KB in the address even compressed, which mail
+and chat clients truncate, and storing them on the server for a short id
+would give a static site state to keep.
 
 **The solver's batch size was tried and left alone.** The browser paints only
 between vis's batches (`updateInterval`, 100 ticks for a re-solve, about 4 s
@@ -1938,8 +1997,10 @@ the same click dismisses the two popovers, and losing a selection to it would be
 the worse surprise. Reset still returns to caffeine (D13).
 
 **Back undoes a selection** (2026-09-26, at the user's request, for misclicks).
-"‹ Back" in the top bar returns to whatever was selected before, and its hover
-names it. Every path that changes the selection goes through `select()`, which
+"‹ Back" returns to whatever was selected before, and its hover names it. It
+sits on the canvas's top-right corner beside the panel toggle, not in the top
+bar (2026-11-10, the user's call): it is pressed after reading the panel, so it
+is placed where the eye already is, and stays there with the panel folded. Every path that changes the selection goes through `select()`, which
 records the previous one, so a canvas click, a panel row, a search result,
 Clear selection and Reset are all steps Back can undo. Nothing selected is a
 state like any other, so Back after an accidental Clear brings the selection

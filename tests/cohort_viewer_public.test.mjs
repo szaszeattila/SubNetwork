@@ -87,8 +87,9 @@ describe("a filter change says it is working", () => {
     for (const t of v.__timers.splice(0)) if (!t.cleared && t.ms === 0) t.fn();
   };
 
-  // The busy line sits in the counts box at the top left, never on the
-  // centred #load-status: the open Display options popover covers that.
+  // The busy line is its own centred box, above the Display options popover,
+  // never #load-status, which that popover covers, nor the counts box.
+  const busyBox = (v) => v.document.getElementById("busy-status");
   const counts = (v) => v.document.getElementById("graph-counts");
 
   test("the busy line goes up before the rebuild, and down once the layout settles", () => {
@@ -98,7 +99,9 @@ describe("a filter change says it is working", () => {
     const solves = (net.stabilizeCalls || []).length;
     v.onFilterClick(filterClick("tier", "supported"));
     assert.equal(v.getBusy(), "Applying the filters…");
-    assert.match(counts(v).innerHTML, /<div class="busy">Applying the filters…<\/div>$/);
+    assert.equal(busyBox(v).textContent, "Applying the filters…");
+    assert.equal(busyBox(v).hidden, false);
+    assert.doesNotMatch(counts(v).innerHTML, /Applying/);
     assert.equal(v.document.getElementById("load-status").hidden, true);
     // Nothing rebuilt yet: the filter is set, the re-solve has not started.
     assert.equal(v.getFilters().tier, "supported");
@@ -108,7 +111,7 @@ describe("a filter change says it is working", () => {
     assert.equal(v.getBusy(), "Laying out the network…");
     net.finishStabilizing({});
     assert.equal(v.getBusy(), "");
-    assert.doesNotMatch(counts(v).innerHTML, /busy/);
+    assert.equal(busyBox(v).hidden, true);
   });
 
   test("clicks while one is queued fold into it", () => {
