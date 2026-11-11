@@ -109,11 +109,23 @@
     color: var(--text-dim); font-size: 13px; line-height: 1.5; text-align: center;
   }
   #load-status.failed { color: var(--text); border-color: #d9534f; text-align: left; }
+  /* A filter change's busy line, in the middle of the canvas where it is seen
+     (2026-11-10, the user's call). Above the Display options popover (z 50),
+     which is open whenever a filter is clicked and covers the middle, and
+     click-through, so it never takes a click meant for a control under it. */
+  #busy-status {
+    position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
+    z-index: 60; pointer-events: none; padding: 10px 16px;
+    background: var(--panel-bg); border: 1px solid var(--accent); border-radius: 6px;
+    color: var(--text); font-size: 14px; line-height: 1.5; white-space: nowrap;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, .5);
+  }
+  #busy-status[hidden] { display: none; }
   /* Work in progress turns, so a filter change that takes seconds to lay out
      reads as working rather than as a click that did nothing. A transform
      animation runs on the compositor, so it keeps turning while vis holds the
      main thread. */
-  #load-status:not(.failed)::before, #graph-counts .busy::before {
+  #load-status:not(.failed)::before, #busy-status::before {
     content: ""; display: inline-block; width: 11px; height: 11px;
     margin-right: 8px; vertical-align: -1px; box-sizing: border-box;
     border: 2px solid var(--border); border-top-color: var(--accent);
@@ -121,8 +133,8 @@
   }
   @keyframes load-spin { to { transform: rotate(360deg); } }
   /* What is in the catalogue and what the filters leave of it, on the canvas
-     those filters drew. Top left: the legend has the bottom, the panel toggle
-     the top right. */
+     those filters drew. Top left: the legend has the bottom, Back and the
+     panel toggle the top right. */
   #graph-counts {
     position: absolute; left: 8px; top: 8px; z-index: 20; max-width: 55%;
     background: rgba(23,26,33,.93); border: 1px solid var(--border);
@@ -130,7 +142,6 @@
     color: var(--text-dim); cursor: help;
   }
   #graph-counts b { color: var(--text); font-weight: 600; }
-  #graph-counts .busy { color: var(--text); }
   #graph-counts[hidden] { display: none; }
   #about-body .cite { font-size: 12px; color: var(--text-dim); }
   #filters {
@@ -298,14 +309,21 @@
   #detail-empty { color: var(--text-dim); font-size: 13px; line-height: 1.5; }
   /* The panel folds away to give the graph the whole width. The toggle sits on
      the graph's top-right corner, next to the thing it hides, and stays there
-     folded so the panel is one click from coming back. */
+     folded so the panel is one click from coming back. Back sits beside it
+     rather than in the top bar (2026-11-10, the user's call): it is pressed
+     after reading the panel, so it belongs where the eye already is, and it
+     stays there with the panel folded. */
   #sidebar[hidden] { display: none; }
-  #sidebar-toggle {
-    position: absolute; top: 8px; right: 8px; z-index: 20;
-    padding: 3px 8px; font-size: 12px; max-width: 60%;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    background: rgba(32, 37, 46, 0.92);
+  #panel-controls {
+    position: absolute; top: 8px; right: 8px; z-index: 20; max-width: 60%;
+    display: flex; gap: 6px; justify-content: flex-end;
   }
+  #panel-controls > button {
+    padding: 3px 8px; font-size: 12px; background: rgba(32, 37, 46, 0.92);
+    white-space: nowrap;
+  }
+  #back-btn { flex: 0 0 auto; }
+  #sidebar-toggle { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
   button:disabled { opacity: .45; cursor: default; }
   button:disabled:hover { border-color: var(--border); }
 </style>
@@ -323,8 +341,6 @@
       <summary id="view-options-summary">Display options</summary>
       <div id="filters"></div>
     </details>
-    <button id="back-btn" type="button" disabled
-            title="Nothing to go back to">‹ Back</button>
     <button id="clear-btn" type="button"
             title="Select nothing and show the whole network at rest (Esc)">Clear selection</button>
     <button id="reset-btn" type="button">Reset</button>
@@ -332,10 +348,10 @@
       <summary>About</summary>
       <div id="about-body">
         <h4>What this is</h4>
-        <p>A map of what drugs for neurological and psychiatric conditions, and a
-          few reference molecules such as theobromine, act on: the proteins, how
-          each molecule acts there (agonist, antagonist, inhibitor, …), and how
-          much published evidence backs each claim. Built from public research
+        <p>This map links substances that affect the brain to the proteins they
+          act on. Each link shows how much published research supports it and,
+          where it has been recorded, what the substance does there, such as
+          switching the protein on or blocking it. Built from public research
           databases; exploratory and educational.</p>
         <h4>Not medical advice</h4>
         <p>Nothing here is medical, dosing or safety guidance. Do not start,
@@ -410,9 +426,14 @@
         <div id="noscript">This page draws the network with JavaScript, which
           is turned off or blocked in this browser.</div></noscript>
       <div id="graph-counts" role="status" hidden></div>
+      <div id="busy-status" role="status" aria-live="polite" hidden></div>
       <div id="legend"></div>
       <div id="legend-tip" role="tooltip" hidden></div>
-      <button id="sidebar-toggle" type="button" aria-controls="sidebar"></button>
+      <div id="panel-controls">
+        <button id="back-btn" type="button" disabled
+                title="Nothing to go back to">‹ Back</button>
+        <button id="sidebar-toggle" type="button" aria-controls="sidebar"></button>
+      </div>
     </div>
     <div id="sidebar">
       <div id="detail-empty" hidden>Nothing selected. Click a molecule, a target or a
@@ -429,6 +450,7 @@
 <script src="graph.data.js"></script>
 <script src="gtopdb.data.js"></script>
 <script src="drugcentral.data.js"></script>
+<script src="layout.data.js"></script>
 <script>
 /* ---------------------------------------------------------------------------
  * SubNetwork cohort-1 viewer.
@@ -632,6 +654,21 @@ const DRUGCENTRAL = (DRUGCENTRAL_FILE && DRUGCENTRAL_FILE.generated === DATA.gen
 if (DRUGCENTRAL_FILE && DRUGCENTRAL !== DRUGCENTRAL_FILE) {
   console.warn("drugcentral.data.js was exported with a different graph.data.js (" +
                DRUGCENTRAL_FILE.generated + " vs " + DATA.generated + "); DrugCentral left out.");
+}
+// Where every node of the opening picture sits, solved once ahead of time by
+// scripts/build_layout.mjs in headless Chrome rather than in every reader's
+// browser (2026-11-10, the user's call): the first solve was about 23 of the
+// 25 seconds the page took to open, and nothing could be clicked during it.
+// Like the two files above it is used only with the catalogue it was solved
+// from - node keys carry the page's molecule numbers, which another export
+// may give to other molecules - and only for the filters it was solved under
+// (prebuiltLayout). Without it the page lays the network out itself, as it
+// always did.
+const LAYOUT_FILE = (typeof COHORT_LAYOUT !== "undefined") ? COHORT_LAYOUT : null;
+const LAYOUT = (LAYOUT_FILE && LAYOUT_FILE.generated === DATA.generated) ? LAYOUT_FILE : null;
+if (LAYOUT_FILE && LAYOUT !== LAYOUT_FILE) {
+  console.warn("layout.data.js was solved for a different graph.data.js (" +
+               LAYOUT_FILE.generated + " vs " + DATA.generated + "); laying out afresh.");
 }
 const GTOPDB_STR = GTOPDB.strings || [];
 const gtopdbClaims = decodeTable(GTOPDB.claims || [], (GTOPDB.fields || {}).claims || [], GTOPDB_STR);
@@ -8344,6 +8381,7 @@ function settleGraph() {
   // places, and a crowded node to its spaced one, with everything else rather
   // than jumping after it.
   placeNodes();
+  if (!settlingKnown) rememberLayout(drawnSignature, nodePositions());
   // A neighbourhood is solved from wherever its nodes sat in the picture
   // before, which can be anywhere on the canvas or off it, so the view follows
   // it - and follows back out to the whole network when focus ends. Asked
@@ -8844,6 +8882,114 @@ function drawUnits(ctx) {
   ctx.restore();
 }
 
+// Every whole picture this reader's browser has solved, so choosing a filter
+// setting again glides back to it instead of solving it again (2026-11-10, the
+// user's call). Kept for the session in memory and across visits in
+// localStorage, under the export it was solved from - a node key carries the
+// page's molecule number, which another export may give to another molecule -
+// and LAYOUT_CACHE_VERSION, raised whenever the layout code changes what a
+// solve produces. The most recent LAYOUT_CACHE_MAX are kept (~110 KB each);
+// storage that is full, blocked or missing costs the next visit a solve and
+// nothing else. A neighbourhood is not kept: it solves in about 2 s, and one per
+// selection would push out the whole pictures, which take 10 or more.
+const LAYOUT_CACHE_VERSION = 1;
+const LAYOUT_CACHE_MAX = 10;
+const LAYOUT_STORE_KEY = "subnetworkLayouts";
+const layoutCache = new Map();
+function layoutStoreId() { return LAYOUT_CACHE_VERSION + "|" + String(DATA.generated); }
+
+function loadLayoutCache() {
+  try {
+    if (typeof localStorage === "undefined") return;
+    const stored = JSON.parse(localStorage.getItem(LAYOUT_STORE_KEY) || "null");
+    if (!stored || stored.id !== layoutStoreId() || !Array.isArray(stored.layouts)) {
+      if (stored) localStorage.removeItem(LAYOUT_STORE_KEY);
+      return;
+    }
+    for (const entry of stored.layouts) layoutCache.set(entry[0], entry[1]);
+  } catch (e) { /* unreadable storage: solve as if nothing were kept */ }
+}
+
+function saveLayoutCache() {
+  if (typeof localStorage === "undefined") return;
+  // Oldest first out when the browser's quota is full.
+  const layouts = Array.from(layoutCache.entries());
+  while (layouts.length) {
+    try {
+      localStorage.setItem(LAYOUT_STORE_KEY,
+                           JSON.stringify({ id: layoutStoreId(), layouts: layouts }));
+      return;
+    } catch (e) { layouts.shift(); }
+  }
+  try { localStorage.removeItem(LAYOUT_STORE_KEY); } catch (e) { /* nothing kept */ }
+}
+
+// Called once a solve has settled, with where every node now is.
+function rememberLayout(signature, positions) {
+  // drawnFocused, not the filters, which a click may have moved since.
+  if (!signature || drawnFocused) return;
+  if (LAYOUT && LAYOUT.signature === signature) return;   // the file has it
+  const kept = {};
+  for (const k of Object.keys(positions)) {
+    kept[k] = [Math.round(positions[k].x * 10) / 10, Math.round(positions[k].y * 10) / 10];
+  }
+  layoutCache.delete(signature);
+  layoutCache.set(signature, kept);
+  while (layoutCache.size > LAYOUT_CACHE_MAX) layoutCache.delete(layoutCache.keys().next().value);
+  saveLayoutCache();
+}
+function layoutCacheSize() { return layoutCache.size; }
+
+// The places solved for exactly this picture, from the file or this reader's
+// own earlier solves, or null.
+function knownLayout(signature) {
+  if (LAYOUT && LAYOUT.signature === signature) return LAYOUT.positions;
+  return layoutCache.get(signature) || null;
+}
+
+// Puts every node at its place in layout.data.js, or in a layout this browser
+// solved before, when that was solved for exactly this picture - the same
+// filters and every node in it placed - and says whether it did; otherwise it
+// moves nothing. The positions are the settled ones, after placeNodes, so the
+// settle that follows has next to nothing left to move.
+function prebuiltLayout(signature, nodes) {
+  const at = knownLayout(signature);
+  if (!at) return false;
+  for (const n of nodes) if (!at[n.id]) return false;
+  for (const n of nodes) { n.x = at[n.id][0]; n.y = at[n.id][1]; }
+  return true;
+}
+
+// A first picture the file was not solved for (a link carrying other filters,
+// a neighbourhood) starts from whatever places the file has for its nodes, and
+// is solved from there with a filter change's budget rather than the first
+// layout's. Says whether it placed any.
+function seedFromLayout(nodes) {
+  const at = LAYOUT && LAYOUT.positions;
+  let placed = 0;
+  if (at) {
+    for (const n of nodes) {
+      const p = at[n.id];
+      if (p) { n.x = p[0]; n.y = p[1]; placed++; }
+    }
+  }
+  return placed > 0;
+}
+
+// Set while a picture drawn from a known layout settles, so it is not stored
+// again as though it had been solved.
+let settlingKnown = false;
+
+// The file's positions as nodePositions() gives them, for a re-solve that has
+// no picture of its own to start from.
+function prebuiltPositions() {
+  const at = LAYOUT && LAYOUT.positions;
+  if (!at) return null;
+  const out = {};
+  for (const k of Object.keys(at)) out[k] = { x: at[k][0], y: at[k][1] };
+  return out;
+}
+
 function renderGraph() {
   if (typeof vis === "undefined" || typeof document === "undefined") return;
   const g = catalogueGraph();
@@ -8869,11 +9015,23 @@ function renderGraph() {
     return Object.assign({ id: k.id, from: k.from, to: k.to }, linkStyle(REST_EDGE_OPACITY),
                          plan.frozenEdges.has(k.id) ? { physics: false } : {});
   })).concat(plan.proxies);
+  const firstRender = !network;
+  let prebuilt = false;
   if (!network) {
+    prebuilt = prebuiltLayout(g.signature, nodes);
+    const options = graphOptions(true);
+    // Solved already: no physics at all, so vis draws the positions as given.
+    if (prebuilt) options.physics = Object.assign({}, options.physics, { enabled: false });
+    // Placed in part: a re-solve's budget from there, and the first layout's fit.
+    else if (seedFromLayout(nodes)) {
+      options.physics = Object.assign({}, options.physics, {
+        stabilization: Object.assign({}, graphOptions(false).physics.stabilization,
+                                     { fit: true }) });
+    }
     visNodes = new vis.DataSet(nodes);
     visEdges = new vis.DataSet(edges);
     network = new vis.Network(document.getElementById("graph"),
-      { nodes: visNodes, edges: visEdges }, graphOptions(true));
+      { nodes: visNodes, edges: visEdges }, options);
     network.on("click", onGraphClick);
     if (network.on) {
       network.on("zoom", syncLabels);
@@ -8913,7 +9071,9 @@ function renderGraph() {
     // none to go back to, and lays the whole one out afresh with the first
     // layout's budget rather than building it round the neighbourhood.
     if (!drawnFocused) unfocusedPositions = g.focused ? pos : null;
-    const restore = unfocusedPositions;
+    // A page opened on a focused link has no whole picture of its own, but the
+    // file has one to go back to.
+    const restore = unfocusedPositions || (drawnFocused ? prebuiltPositions() : null);
     const leaving = drawnFocused && !g.focused;
     const fresh = leaving && !restore;
     for (const n of nodes) {
@@ -8923,19 +9083,32 @@ function renderGraph() {
     }
     if (leaving) unfocusedPositions = null;
     graphSolving = true;
-    setBusy("Laying out the network…");
-    network.setOptions({ physics: graphOptions(false).physics });
+    // Back to the picture the file was solved for (Reset, or a filter put back
+    // to its default): its places, glided to, with nothing to solve.
+    prebuilt = prebuiltLayout(g.signature, nodes);
+    if (!prebuilt) setBusy("Laying out the network…");
     visNodes.clear(); visEdges.clear();
+    if (!prebuilt) network.setOptions({ physics: graphOptions(false).physics });
     visNodes.add(nodes); visEdges.add(edges);
     // Explicitly, because a DataSet change does not stabilize - it starts a
     // simulation, which is the drift this replaces.
-    if (network.stabilize) network.stabilize(graphOptions(fresh).physics.stabilization.iterations);
-    armSettle();
+    if (!prebuilt) {
+      if (network.stabilize) network.stabilize(graphOptions(fresh).physics.stabilization.iterations);
+      armSettle();
+    }
   }
-  if (network.once) network.once("stabilizationIterationsDone", settleGraph);
+  if (!prebuilt && network.once) network.once("stabilizationIterationsDone", settleGraph);
   drawnSignature = g.signature;
   drawnFocused = !!g.focused;
   applyHighlight();
+  // Nothing was solved, so nothing will report back: settle now. The first
+  // picture is fitted at once, as the first solve's own fit did.
+  if (prebuilt) {
+    settlingKnown = true;
+    settleGraph();
+    settlingKnown = false;
+    if (firstRender && network.fit) network.fit();
+  }
 }
 
 // Which species' record a line to a protein opens at the top of its panel: the
@@ -9125,6 +9298,8 @@ function graphCountsTitle() {
 let busyText = "";
 function setBusy(text) {
   busyText = text || "";
+  const el = byId("busy-status");
+  if (el) { el.textContent = busyText; el.hidden = !busyText; }
   renderGraphCounts();
 }
 function getBusy() { return busyText; }
@@ -9135,8 +9310,7 @@ function renderGraphCounts() {
   // An empty catalogue is a failed download (loadProblem), not "0 of 0".
   el.hidden = !allMolecules().length;
   if (el.hidden) return;
-  el.innerHTML = graphCountsHTML() +
-    (busyText ? '<div class="busy">' + esc(busyText) + "</div>" : "");
+  el.innerHTML = graphCountsHTML();
   if (el.setAttribute) el.setAttribute("aria-busy", busyText ? "true" : "false");
   if (el.setAttribute) el.setAttribute("title", graphCountsTitle());
 }
@@ -9905,9 +10079,11 @@ function onFilterClick(event) {
 // where nothing needs laying out, until the rebuild returns. Clicks that land
 // while one is queued are folded into it - it reads the filters when it runs.
 //
-// The line is in the counts box and not #load-status, which is centred on the
-// canvas: Display options is open whenever a filter is clicked, and its popover
-// sits over the middle of the canvas, so a status there was never seen.
+// The line is #busy-status, centred on the canvas, and not #load-status, which
+// is centred too but sits under Display options - open whenever a filter is
+// clicked, over the middle of the canvas - so a status there was never seen.
+// It was in the counts box at the top left until 2026-11-10, where it was
+// easy to miss; it now sits above the popover and lets clicks through.
 let refreshQueued = false;
 let queuedThen = null;
 
@@ -9987,6 +10163,7 @@ function openingMolecule() {
 
 function init() {
   if (typeof document === "undefined") return;
+  loadLayoutCache();
   renderLegend();
   const legend = byId("legend");
   if (legend) {

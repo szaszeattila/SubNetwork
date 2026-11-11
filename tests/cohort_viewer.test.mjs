@@ -13,7 +13,7 @@ import assert from "node:assert/strict";
 
 import {
   loadViewer, buildData, buildShard, molecule, target, claim, endpoint,
-  observation, study, viewerHtml, viewerSource, plain,
+  observation, study, viewerHtml, viewerSource, plain, LAYOUT_FILE, memoryStorage,
 } from "./cohort_harness.mjs";
 
 // A small catalogue: caffeine with a supported claim, a preliminary claim, a
@@ -6367,3 +6367,164 @@ describe("disclaimer and credits", () => {
     for (const a of links) assert.match(a, /href="https:\/\/[^"]+" target="_blank" rel="noopener"/);
   });
 });
+
+describe("the opening picture is solved ahead of time (layout.data.js)", () => {
+  // A layout for exactly the picture this catalogue opens on, at places far
+  // enough apart that the settle's spacing pass has nothing to move.
+  function solvedLayout(over = {}) {
+    const data = catalogue();
+    const v = loadViewer(data);
+    const positions = {};
+    v.drawnCanvas().nodes.rows.forEach((n, i) => { positions[n.id] = [1000 * i, -500 * i]; });
+    return { format: "cohort1-layout/1", generated: data.generated,
+             signature: v.graphSignature(), positions, ...over };
+  }
+  function withLayout(layout) {
+    const data = catalogue();
+    data[LAYOUT_FILE] = layout;
+    return data;
+  }
+
+  test("the page draws it as given and solves nothing", () => {
+    const layout = solvedLayout();
+    const v = loadViewer(withLayout(layout));
+    const net = v.drawnCanvas().network;
+    assert.equal(net.options.physics.enabled === true, false, "physics must not start");
+    assert.equal(net.stabilizeCalls, undefined);
+    const rows = v.drawnCanvas().nodes.rows;
+    assert.ok(rows.length > 0);
+    for (const n of rows) {
+      assert.deepEqual([n.x, n.y], layout.positions[n.id], "node " + n.id + " moved");
+    }
+    // Settled at once, so the load line is down and nothing waits on vis.
+    assert.equal(v.document.getElementById("load-status").textContent, "");
+    assert.equal(net.handlers.stabilizationIterationsDone, undefined);
+  });
+
+  test("a layout solved from another export is not used", () => {
+    const v = loadViewer(withLayout(solvedLayout({ generated: "some other export" })));
+    const net = v.drawnCanvas().network;
+    assert.equal(net.options.physics.enabled, true);
+    assert.equal(net.options.physics.stabilization.iterations,
+                 v.graphOptions(true).physics.stabilization.iterations);
+    for (const n of v.drawnCanvas().nodes.rows) assert.equal(n.x, undefined);
+  });
+
+  test("a layout missing a node is solved from, not drawn as given", () => {
+    const layout = solvedLayout();
+    const keys = Object.keys(layout.positions);
+    delete layout.positions[keys[0]];
+    const v = loadViewer(withLayout(layout));
+    const net = v.drawnCanvas().network;
+    assert.equal(net.options.physics.enabled, true);
+    assert.equal(net.options.physics.stabilization.iterations,
+                 v.graphOptions(false).physics.stabilization.iterations);
+    assert.equal(net.options.physics.stabilization.fit, true);
+  });
+
+  test("a link with other filters starts from the file's places and is solved", () => {
+    const layout = solvedLayout();
+    const v = loadViewer(withLayout(layout), { hash: "#m=CHEMBL113&tier=supported" });
+    assert.equal(v.getFilters().tier, "supported");
+    const net = v.drawnCanvas().network;
+    assert.equal(net.options.physics.enabled, true);
+    assert.equal(net.options.physics.stabilization.iterations,
+                 v.graphOptions(false).physics.stabilization.iterations);
+    const placed = v.drawnCanvas().nodes.rows.filter((n) => layout.positions[n.id]);
+    assert.ok(placed.length > 0);
+    for (const n of placed) assert.deepEqual([n.x, n.y], layout.positions[n.id]);
+  });
+
+  test("putting the filters back returns to the file's places without a solve", () => {
+    const layout = solvedLayout();
+    const v = loadViewer(withLayout(layout));
+    const net = v.drawnCanvas().network;
+    v.setFilter("tier", "supported");
+    v.refresh();
+    assert.equal((net.stabilizeCalls || []).length, 1, "a filter change is solved");
+    const solved = {};
+    for (const n of v.drawnCanvas().nodes.rows) solved[n.id] = { x: 3, y: 4 };
+    net.finishStabilizing(solved);
+    v.setFilter("tier", v.filterDefaults().tier);
+    v.refresh();
+    assert.equal(net.stabilizeCalls.length, 1, "the opening filters were solved again");
+    assert.equal(net.options.physics, false);
+    assert.equal(v.drawnCanvas().signature, layout.signature);
+  });
+});
+
+describe("a picture solved once is not solved again (the layout cache)", () => {
+  // Every drawn node somewhere distinct, as a finished solve reports it.
+  const solvedAt = (v, dx) => {
+    const out = {};
+    v.drawnCanvas().nodes.rows.forEach((n, i) => { out[n.id] = { x: dx + 1000 * i, y: 300 * i }; });
+    return out;
+  };
+  const solves = (net) => (net.stabilizeCalls || []).length;
+  // Laying out: physics on. Drawn from a known layout it never was, and the
+  // settle has since switched it off outright.
+  const solving = (net) => !!(net.options.physics && net.options.physics.enabled === true);
+
+  test("choosing a filter setting again glides back to its layout without a solve", () => {
+    const v = loadViewer(catalogue());
+    const net = v.drawnCanvas().network;
+    net.finishStabilizing(solvedAt(v, 0));               // the opening picture
+    v.setFilter("tier", "supported");
+    v.refresh();
+    assert.equal(solves(net), 1);
+    net.finishStabilizing(solvedAt(v, 5));
+    v.setFilter("tier", v.filterDefaults().tier);
+    v.refresh();
+    v.setFilter("tier", "supported");
+    v.refresh();
+    assert.equal(solves(net), 1, "a setting already solved was solved again");
+    assert.equal(v.layoutCacheSize(), 2);
+    assert.equal(v.getBusy(), "");
+  });
+
+  test("the layouts outlast the visit, and only for the export they were solved from", () => {
+    const storage = memoryStorage();
+    const first = loadViewer(catalogue(), { storage });
+    first.drawnCanvas().network.finishStabilizing(solvedAt(first, 0));
+    assert.ok(storage.getItem("subnetworkLayouts"));
+
+    const again = loadViewer(catalogue(), { storage });
+    const net = again.drawnCanvas().network;
+    assert.equal(solving(net), false, "a second visit solved its opening again");
+
+    const other = catalogue();
+    other.generated = "another export";
+    const elsewhere = loadViewer(other, { storage });
+    assert.equal(solving(elsewhere.drawnCanvas().network), true);
+    assert.equal(storage.getItem("subnetworkLayouts"), null, "a stale store is cleared");
+  });
+
+  test("full storage drops the oldest layouts, and none at all still works", () => {
+    const storage = memoryStorage({ quota: 10 });
+    const v = loadViewer(catalogue(), { storage });
+    v.drawnCanvas().network.finishStabilizing(solvedAt(v, 0));
+    assert.equal(storage.getItem("subnetworkLayouts"), null);
+    assert.equal(v.layoutCacheSize(), 1, "the session keeps it even when storage cannot");
+  });
+
+  test("a neighbourhood is not kept", () => {
+    const v = loadViewer(catalogue(), { hash: "#m=CHEMBL113&canvas=focus" });
+    v.drawnCanvas().network.finishStabilizing(solvedAt(v, 0));
+    assert.equal(v.layoutCacheSize(), 0);
+  });
+
+  test("a link naming only a selection opens on the saved layout", () => {
+    const data = catalogue();
+    const plainView = loadViewer(data);
+    const positions = {};
+    plainView.drawnCanvas().nodes.rows.forEach((n, i) => { positions[n.id] = [1000 * i, 0]; });
+    const withFile = catalogue();
+    withFile[LAYOUT_FILE] = { format: "cohort1-layout/1", generated: data.generated,
+                              signature: plainView.graphSignature(), positions };
+    const v = loadViewer(withFile, { hash: "#m=CHEMBL190" });
+    assert.equal(v.getSelection().kind, "molecule");
+    assert.notEqual(v.getSelection().id, plainView.getSelection().id);
+    assert.equal(solving(v.drawnCanvas().network), false);
+  });
+});
+

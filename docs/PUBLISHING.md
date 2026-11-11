@@ -294,8 +294,12 @@ scripts/deploy_cloudflare.sh --preview   # upload to the private staging alias; 
 scripts/deploy_cloudflare.sh             # deploy to production
 ```
 
-Every mode runs both suites and `--check-status` first. It then stages
-`index.html`, `graph.data.js`, `gtopdb.data.js`, `vendor/`, `evidence/`,
+Every mode runs both suites and `--check-status` first, then solves
+`layout.data.js` afresh if it no longer matches the data and the page
+(`scripts/build_layout.mjs --if-stale`, about 30 s in headless Chrome; see
+[VIEWER.md](VIEWER.md), *The opening layout is solved ahead of time*). It then
+stages `index.html`, `graph.data.js`, `gtopdb.data.js`, `layout.data.js`,
+`vendor/`, `evidence/`,
 `NOTICE` as `NOTICE.txt` (the data's licences, beside the data) and a
 `_headers` file. Only changed files are uploaded.
 

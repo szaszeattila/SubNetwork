@@ -57,6 +57,24 @@ function stubElement() {
 export const GTOPDB_FILE = Symbol("gtopdb.data.js");
 // DrugCentral's file (D24), carried the same way.
 export const DRUGCENTRAL_FILE = Symbol("drugcentral.data.js");
+// The opening layout (layout.data.js), carried the same way.
+export const LAYOUT_FILE = Symbol("layout.data.js");
+
+// A localStorage that lives as long as the test holds it, so two loads of the
+// page can be two visits by one reader. `quota` is in characters.
+export function memoryStorage({ quota = Infinity } = {}) {
+  const items = new Map();
+  return {
+    items,
+    getItem(k) { return items.has(k) ? items.get(k) : null; },
+    setItem(k, v) {
+      const size = [...items].reduce((n, [key, val]) => n + (key === k ? 0 : val.length), 0);
+      if (size + String(v).length > quota) throw new Error("QuotaExceededError");
+      items.set(k, String(v));
+    },
+    removeItem(k) { items.delete(k); },
+  };
+}
 
 export function makeSandbox(data, options = {}) {
   const elements = new Map();
@@ -74,6 +92,10 @@ export function makeSandbox(data, options = {}) {
     COHORT_DATA: data,
     ...(data && data[GTOPDB_FILE] ? { COHORT_GTOPDB: data[GTOPDB_FILE] } : {}),
     ...(data && data[DRUGCENTRAL_FILE] ? { COHORT_DRUGCENTRAL: data[DRUGCENTRAL_FILE] } : {}),
+    ...(data && data[LAYOUT_FILE] ? { COHORT_LAYOUT: data[LAYOUT_FILE] } : {}),
+    // Browser storage, only where a test hands one in (memoryStorage): a page
+    // without it must work, and most tests are that page.
+    ...(options.storage ? { localStorage: options.storage } : {}),
     console,
     URL,
     performance: { now: () => 0 },
@@ -110,8 +132,12 @@ export function makeSandbox(data, options = {}) {
         getPositions() {
           if (this.positions) return this.positions;
           const out = {};
+          // A node given a place in its data is drawn there, as vis does with
+          // physics off (layout.data.js); one with none is somewhere.
+          const physics = this.options && this.options.physics;
+          const given = physics === false || (physics && physics.enabled === false);
           for (const n of (this.data && this.data.nodes ? this.data.nodes.rows : [])) {
-            out[n.id] = { x: 100, y: 200 };
+            out[n.id] = given && n.x !== undefined ? { x: n.x, y: n.y } : { x: 100, y: 200 };
           }
           return out;
         }
