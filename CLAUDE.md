@@ -905,6 +905,12 @@ behaviour a rule here describes.
   *Wikipedia: human OPRM1*, and its hover says the rat protein has no
   article and this is the human one matched by sequence. The record's own
   article always wins; the two are never shown as one.
+- **The claim lists group by action, then by kind of claim** (2026-11-11,
+  the user's call): one heading per action a claim carries
+  (`claimDirections`), then **No direction**, each holding Curated (ChEMBL /
+  GtoPdb), Binding and Functional subgroups. A row says neither its heading's
+  action nor its role again, only whose the direction is, and names its
+  target's species beside the name.
 - **A claim has no panel of its own** — an edge opens the whole pair,
   grouped into drawn / held-back / retained, none summed; 2,601 of
   11,599 edges carry more than one claim.

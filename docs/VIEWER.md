@@ -2112,6 +2112,24 @@ default filters (23,881 with none, now 23,279). The control is headed
 *Action*, its whole-annotation buttons *Any action* and *No action*; the
 tokens in a shared link (`curated`, `uncurated`) kept their names.
 
+**Under each action, and under No direction, one subgroup per kind of claim**
+(2026-11-11, the same day, at the user's request). With measured claims under
+the actions, one heading mixed curated mechanisms, binding affinities and
+functional results, two kinds of evidence a heading must not run together
+(D06). Each action now holds *Curated · ChEMBL*, *Curated · GtoPdb*, *Binding*
+and *Functional* as they occur (`CLAIM_ROLE_SUBGROUPS`), and the claims with no
+direction of their own go last under **No direction**, with the same
+subgroups; a row there still names a direction another source gives at its
+pair. Subgroups fold apart and open until folded. Three wording rules came
+with it: a row under an action does not name that action again, only whose it
+is (*direction from GtoPdb and ChEMBL's functional-assay label (1 study)*),
+and any other as *also INVERSE AGONIST per ...*; nor its role, which the
+subheading says; and the target's species stands beside its name, *Adenosine
+receptor A1 (rat)*, instead of last on the line below, since caffeine's
+Antagonist group lists one protein's human, rat and mouse records. The edge
+panel keeps its own grouping (`edgeClaimGroups`), which is one pair and
+already names each curator.
+
 The measured claims used to be one group headed **No curated mechanism**, and
 that heading read as a statement about the *pair* when it was one about the
 *claim*: armodafinil's measured Ki at human DAT sat under it two groups below

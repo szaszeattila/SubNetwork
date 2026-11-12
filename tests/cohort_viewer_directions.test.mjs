@@ -114,12 +114,18 @@ describe("a functional claim sits under the action its assay label gives", () =>
   test("it is grouped under that action, and its row says it was functional", () => {
     const v = loadViewer(labelled());
     const groups = v.claimGroups(v.moleculeClaims(1), "mechanism");
-    assert.deepEqual(plain(groups.map((g) => [g.heading, g.rows.map((c) => c.id)])),
-                     [["Antagonist", [2]], ["Binding", [1]]]);
+    assert.deepEqual(plain(groups.map((g) => [g.heading, g.subgroups.map((s) =>
+      [s.heading, s.rows.map((c) => c.id)])])),
+      [["Antagonist", [["Functional", [2]]]], ["No direction", [["Binding", [1]]]]]);
     const byId = (id) => v.allClaims().find((c) => c.id === id);
-    assert.match(v.claimDetail(byId(2), true), /^functional · /);
-    // Under a role heading the role is not said twice.
-    assert.doesNotMatch(v.claimDetail(byId(1), true), /^binding · /);
+    // The subheading says the kind of claim, and the row does not say the
+    // action again, only whose it is (2026-11-11, at the user's request).
+    const under = v.claimDetail(byId(2), true, "ANTAGONIST");
+    assert.doesNotMatch(under, /^functional · /);
+    assert.match(under, /<\/span><\/span> from ChEMBL&#39;s functional-assay label \(2 studies\)$/);
+    assert.doesNotMatch(under, /ANTAGONIST/);
+    // Under No direction, a direction from elsewhere at the pair is still named.
+    assert.match(v.claimDetail(byId(1), true, null), /: ANTAGONIST per ChEMBL&#39;s functional-assay label/);
   });
 
   test("a claim with two labels is under both, as the filter keeps it for either", () => {
@@ -131,6 +137,9 @@ describe("a functional claim sits under the action its assay label gives", () =>
     }));
     const headings = v.claimGroups(v.moleculeClaims(1), "mechanism").map((g) => g.heading);
     assert.deepEqual(plain(headings), ["Antagonist", "Inverse agonist"]);
+    // Under one, the row names the other as "also".
+    assert.match(v.claimDetail(v.allClaims()[0], true, "ANTAGONIST"),
+      /from ChEMBL&#39;s functional-assay label \(2 studies\); also INVERSE AGONIST per ChEMBL&#39;s functional-assay label \(1 study\)$/);
     for (const token of ["ANTAGONIST", "INVERSE AGONIST"]) {
       v.resetFilters();
       v.toggleMechanism(token);
@@ -159,8 +168,9 @@ describe("a functional claim sits under the action its assay label gives", () =>
     ], claims: [], status: {}, release: "2026.3" }));
     const v = loadViewer(data);
     const groups = v.claimGroups(v.moleculeClaims(1), "mechanism");
-    assert.deepEqual(plain(groups.map((g) => [g.heading, g.rows.map((c) => c.id).sort()])),
-                     [["Antagonist", [1, 2]]]);
+    assert.deepEqual(plain(groups.map((g) => [g.heading, g.subgroups.map((s) =>
+      [s.heading, s.rows.map((c) => c.id)])])),
+      [["Antagonist", [["Binding", [1]], ["Functional", [2]]]]]);
   });
 });
 

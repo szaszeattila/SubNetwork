@@ -1533,12 +1533,13 @@ describe("the target panel counts molecules, not claims", () => {
       const html = v.showTarget(v.lookupTarget("CHEMBLT1"));
       assert.match(html, /data-claim-group="mechanism" aria-pressed="true"/);
       assert.match(html, /data-fold="target_claims_mech_ANTAGONIST">[\s\S]*?Antagonist<[\s\S]*? \(1\)/);
-      assert.match(html, /data-fold="target_claims_measured_binding">[\s\S]*?Binding<[\s\S]*? \(2\)/);
+      assert.match(html, /data-fold="target_claims_no_direction">[\s\S]*?No direction<[\s\S]*? \(2\)/);
+      assert.match(html, /data-fold="target_claims_no_direction_binding">[\s\S]*?Binding<[\s\S]*? \(2\)/);
       assert.ok(html.indexOf("target_claims_mech_ANTAGONIST") <
-                html.indexOf("target_claims_measured_binding"));
+                html.indexOf("target_claims_no_direction"));
       assert.ok(!/target_claims_supported/.test(html));
       const antagonist = html.slice(html.indexOf("target_claims_mech_ANTAGONIST"),
-                                    html.indexOf("target_claims_measured_binding"));
+                                    html.indexOf("target_claims_no_direction"));
       assert.ok(!/ANTAGONIST<\/div>|· ANTAGONIST/.test(antagonist), "the row repeats its heading");
     } finally {
       v.setClaimGrouping("tier");
@@ -1714,8 +1715,11 @@ describe("the panel says what it is counting", () => {
     const claim = v.allClaims().find((c) => c.id === 1);
     const t = v.lookupTarget(claim.target);
     assert.ok(t.organism, "the fixture target carries an organism");
+    // Beside the name, where one protein's records in several species are told
+    // apart, not last on the line below (2026-11-11).
     const row = v.claimRowHTML(claim);
-    assert.ok(row.includes(" · " + t.organism + "</div>"), row);
+    assert.ok(row.includes(t.name + ' <span class="muted">(' + v.speciesName(t) + ")</span>"), row);
+    assert.ok(!row.includes(t.organism + "</div>"), row);
   });
 
   test("claims can be grouped by curated mechanism instead of by tier", () => {
@@ -1738,33 +1742,34 @@ describe("the panel says what it is counting", () => {
     assert.match(byMech, /data-claim-group="mechanism" aria-pressed="true"/);
     assert.ok(!/data-fold="claims_supported"/.test(byMech));
     const antagonist = byMech.indexOf('data-fold="claims_mech_ANTAGONIST"');
-    const none = byMech.indexOf('data-fold="claims_measured_binding"');
-    assert.ok(antagonist > 0 && none > antagonist, "the measured claims come last");
+    const none = byMech.indexOf('data-fold="claims_no_direction"');
+    assert.ok(antagonist > 0 && none > antagonist, "the claims with no direction come last");
     const heading = (at) => byMech.slice(at, byMech.indexOf("</summary>", at));
     assert.match(heading(antagonist), /tabindex="0">Antagonist<[\s\S]* \(1\)$/);
-    assert.match(heading(none),
+    assert.match(heading(none), /tabindex="0">No direction<[\s\S]* \(2\)$/);
+    assert.match(heading(byMech.indexOf('data-fold="claims_no_direction_binding"')),
       /tabindex="0">Binding<[\s\S]* \(2\) <span class="muted">· measured affinity<\/span>$/);
     assert.ok(!/No curated mechanism/.test(byMech));
     // Under the Antagonist heading the row does not say ANTAGONIST again.
     const antBody = byMech.slice(antagonist, none);
-    assert.ok(!/ANTAGONIST/.test(antBody.slice(antBody.indexOf("</summary>"))));
+    assert.ok(!/ANTAGONIST/.test(antBody.slice(antBody.indexOf("</summary>"))
+      .replace(/data-fold="[^"]*"/g, "")));
     // Every claim row is still there, once.
     const rows = (html) => (html.match(/class="row-item" data-select="edge"/g) || []).length;
     assert.equal(rows(byMech), rows(byTier));
     for (const key of ["claim_grouping", "claim_mechanism", "claim_binding",
-                       "claim_functional", "claim_curated_none"]) {
+                       "claim_functional", "claim_curated_none", "claim_no_direction"]) {
       assert.match(v.helpLabel("x", key), /help-text/, key);
     }
     v.setClaimGrouping("tier");
   });
 
-  test("a measured claim is grouped by role, never under 'no curated mechanism'", () => {
-    // 2026-09-25, at the user's request. Armodafinil has a curated INHIBITOR
-    // claim at human DAT and a measured Ki claim at the same target; one group
-    // headed "No curated mechanism" read as a statement about the pair and
-    // contradicted the group above it. The measured claims are now Binding and
-    // Functional, as on the edge panel, and a curated claim with no action has
-    // a group of its own rather than being filed as a measurement.
+  test("each direction and No direction hold one subgroup per kind of claim", () => {
+    // 2026-09-25, at the user's request: armodafinil has a curated INHIBITOR
+    // claim at human DAT and a measured Ki claim at the same target, and one
+    // group headed "No curated mechanism" read as a statement about the pair.
+    // 2026-11-11, at the user's request: under each action, and under No
+    // direction, one subgroup per kind of claim - curated, binding, functional.
     const v = loadViewer(buildData({
       molecules: [molecule({ id: 1 })],
       targets: [target({ chembl_id: "DAT" }), target({ chembl_id: "NET" })],
@@ -1781,21 +1786,28 @@ describe("the panel says what it is counting", () => {
                 multiple_study_support: 0, action_type: null,
                 n_measurements: 0, n_studies: 0, supporting_endpoint_class: null,
                 endpoints: [] }),
+        claim({ id: 5, molecule: 1, target: "NET", role: "functional",
+                assay_actions: [["INHIBITOR", 1]] }),
       ],
     }));
     v.setClaimGrouping("mechanism");
     const h = v.showMolecule(v.lookupMolecule(1));
     v.setClaimGrouping("tier");
     const at = (k) => h.indexOf('data-fold="' + k + '"');
-    assert.ok(at("claims_mech_INHIBITOR") > 0);
-    assert.ok(at("claims_mech_INHIBITOR") < at("claims_curated_none"));
-    assert.ok(at("claims_curated_none") < at("claims_measured_binding"));
-    assert.ok(at("claims_measured_binding") < at("claims_measured_functional"));
-    assert.match(h, /tabindex="0">Curated<[^]*?\(1\) <span class="muted">· no direction recorded/);
+    const order = ["claims_mech_INHIBITOR", "claims_mech_INHIBITOR_curated",
+                   "claims_mech_INHIBITOR_functional", "claims_no_direction",
+                   "claims_no_direction_curated", "claims_no_direction_binding",
+                   "claims_no_direction_functional"];
+    for (let i = 0; i < order.length; i++) {
+      assert.ok(at(order[i]) > 0, order[i]);
+      if (i) assert.ok(at(order[i - 1]) < at(order[i]), order[i]);
+    }
+    assert.match(h, /tabindex="0">Curated<[^]*?\(1\) <span class="muted">· ChEMBL, no direction recorded/);
     assert.match(h, /tabindex="0">Functional<[^]*?\(1\) <span class="muted">· measured activity</);
     assert.ok(!/No curated mechanism/.test(h));
-    // Each group holds one row, and the binding row does not repeat its role.
-    const body = h.slice(at("claims_measured_binding"), at("claims_measured_functional"));
+    // A subgroup is open until it is folded, and its rows do not repeat the role.
+    assert.match(h, /<details class="subsection claim-subgroup" open><summary class="subsection-toggle" data-fold="claims_no_direction_binding">/);
+    const body = h.slice(at("claims_no_direction_binding"), at("claims_no_direction_functional"));
     assert.equal((body.match(/class="row-item" data-select="edge"/g) || []).length, 1);
     assert.match(body, /<div class="small muted">binding:Ki median/);
     assert.ok(!/<div class="small muted">binding ·/.test(body));

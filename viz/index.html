@@ -214,6 +214,9 @@
     color: var(--text); margin: 10px 0 2px;
   }
   .subsection > .claim-block { margin-left: 4px; }
+  /* What kind of claim, under an action in the claim lists (2026-11-11). */
+  .claim-subgroup { margin: 4px 0 4px 8px; }
+  .claim-subgroup > .subsection-toggle { font-weight: 500; color: var(--text-dim); margin: 6px 0 2px; }
   .k { color: var(--text-dim); }
   .v { color: var(--text); }
   .pill {
@@ -1451,7 +1454,10 @@ function measuredDirections(claim) {
   return out;
 }
 
-function measuredDirectionsHTML(claim) {
+// Under an action heading (`underAction`) the row does not name that action
+// again (2026-11-11, at the user's request), only whose it is - every
+// direction still names its source - and any other action as "also".
+function measuredDirectionsHTML(claim, underAction) {
   const dirs = measuredDirections(claim);
   if (!dirs.length) return "";
   // One phrase per action, naming every source that gives it: "ANTAGONIST per
@@ -1464,13 +1470,21 @@ function measuredDirectionsHTML(claim) {
       : d.source === "gtopdb" ? "GtoPdb"
       : "ChEMBL's functional-assay label (" + plural(d.n, "study") + ")");
   }
-  const phrases = [];
-  for (const [action, who] of byAction) {
-    const list = who.length > 1
-      ? who.slice(0, -1).join(", ") + " and " + who[who.length - 1] : who[0];
-    phrases.push(esc(action) + " per " + esc(list));
+  const listOf = function (who) {
+    return who.length > 1 ? who.slice(0, -1).join(", ") + " and " + who[who.length - 1] : who[0];
+  };
+  const label = helpLabel("direction", "measured_direction");
+  if (underAction && byAction.has(underAction)) {
+    const also = [];
+    for (const [action, who] of byAction) {
+      if (action !== underAction) also.push(esc(action) + " per " + esc(listOf(who)));
+    }
+    return label + " from " + esc(listOf(byAction.get(underAction))) +
+      (also.length ? "; also " + also.join("; ") : "");
   }
-  return helpLabel("direction", "measured_direction") + ": " + phrases.join("; ");
+  const phrases = [];
+  for (const [action, who] of byAction) phrases.push(esc(action) + " per " + esc(listOf(who)));
+  return label + ": " + phrases.join("; ");
 }
 
 function mechanismAllowed(claim) {
@@ -3364,12 +3378,12 @@ const HELP = {
                    "measurement, GtoPdb's action here or ChEMBL's label for a " +
                    "functional assay's result. Each row names its source; its pill " +
                    "says how well it is evidenced.",
-  claim_binding: "Measured binding (Ki, Kd, binding IC50) with no action of its own: " +
-                 "how tightly, not which way. A direction on a row is from curators or " +
-                 "a functional assay at the same target, and names its source.",
-  claim_functional: "A functional assay saw an effect, and nothing gives this claim an " +
-                    "action. A direction on a row is from curators or a functional " +
-                    "assay at the same target, and names its source.",
+  claim_binding: "Measured binding (Ki, Kd, binding IC50): how tightly, not which " +
+                 "way. Under an action, that action is GtoPdb's at this target, and " +
+                 "each row says whose its direction is.",
+  claim_functional: "A functional assay saw an effect. Under an action, that action is " +
+                    "ChEMBL's label for the assay's result or GtoPdb's at this target, " +
+                    "and each row says whose its direction is.",
   measured_direction: "Which way the drug acts at this target, from ChEMBL's or " +
                       "GtoPdb's curators, or from the word ChEMBL gives a functional " +
                       "assay's result. It sorts and filters this claim but does not " +
@@ -3377,6 +3391,10 @@ const HELP = {
   assay_label: "The word ChEMBL gives this functional assay's result. It says which " +
                "way the drug acted in this experiment, not that this is how it works.",
   claim_curated_none: "Mechanisms curators recorded without naming an action.",
+  claim_no_direction: "Claims nothing gives a direction of their own: curated " +
+                      "mechanisms with no action named, and measurements GtoPdb and " +
+                      "ChEMBL's assay labels give none. A row may still name a direction " +
+                      "another source gives at the same target.",
   gtopdb: "How the drug acts here per the IUPHAR/BPS Guide to Pharmacology (GtoPdb), " +
           "a second curated database. At the drug's primary target it is a Supported " +
           "claim; elsewhere, a direction only. Data CC BY-SA 4.0.",
@@ -4499,20 +4517,23 @@ function detailSaysMechanism(claim) {
 }
 
 // `headed` is true where a heading above the claim already names its role and
-// its curated action - the edge panel's mechanism groups - so the line does not
-// say them a second time underneath (invariant 13).
-function claimDetail(claim, headed) {
+// its curated action - the edge panel's mechanism groups, and the claim
+// lists' action and kind-of-claim headings - so the line does not say them a
+// second time underneath (invariant 13). `underAction` is the action heading
+// the row sits under, if any: the row names only the other actions.
+function claimDetail(claim, headed, underAction) {
   const parts = [];
   const pillSaysCurated = claim.tier === "supported" && !!claim.curated_support;
   const curatedRow = isCuratedRole(claim) && pillSaysCurated;
-  // Under a role heading the role is said; under an action heading a measured
-  // claim still has to say it was a measurement (D28 put them there).
-  const roleHeaded = headed && (isCuratedRole(claim) || !claimDirections(claim).length);
-  if (!curatedRow && !roleHeaded) parts.push(esc(claim.role));
+  if (!curatedRow && !headed) parts.push(esc(claim.role));
   // A claim with several curated actions sits under each, so under one heading
-  // its row still names them all.
+  // its row names the others.
   if (claim.action_type) {
-    if (!headed || curatedActions(claim).length > 1) parts.push(esc(claim.action_type));
+    if (!headed) parts.push(esc(claim.action_type));
+    else if (underAction) {
+      const others = curatedActions(claim).filter(function (a) { return a !== underAction; });
+      if (others.length) parts.push("also " + esc(others.join(" / ")));
+    }
   }
   else if (curatedRow) {
     // A direction withheld as a known ChEMBL error is not one ChEMBL never
@@ -4552,7 +4573,7 @@ function claimDetail(claim, headed) {
     }
     if (kept.length) parts.push(kept.join(", "));
   }
-  const dirs = measuredDirectionsHTML(claim);
+  const dirs = measuredDirectionsHTML(claim, headed ? underAction : null);
   if (dirs) parts.push(dirs);
   return parts.join(" · ");
 }
@@ -4619,15 +4640,19 @@ function gtopdbHTMLFor(moleculeId, targetChemblId) {
   return gtopdbPhraseHTML(gtopdbAt(moleculeId, targetChemblId));
 }
 
-function claimRowHTML(claim, ctx, headed) {
+// The species stands beside the name (2026-11-11, at the user's request): one
+// protein's human, rat and guinea-pig records read as the same row three
+// times when it came last on the line below.
+function claimRowHTML(claim, ctx, headed, underAction) {
   const t = lookupTarget(claim.target);
-  const sub = claimDetail(claim, headed);
+  const sub = claimDetail(claim, headed, underAction);
   return '<div class="row-item" data-select="edge" data-id="' +
     esc(String(claim.molecule)) + '" data-other="' + esc(claim.target) + '">' +
-    esc(t ? t.name : claim.target) + " " + tierPill(claim) + basisPill(claim) +
-    conflictPills(claim) +
-    '<div class="small muted">' + sub + " · " + esc(t ? t.target_type : "") +
-    (t ? " · " + esc(t.organism || "organism not recorded") : "") + "</div>" +
+    esc(t ? t.name : claim.target) +
+    (t ? ' <span class="muted">(' + esc(speciesName(t)) + ")</span>" : "") + " " +
+    tierPill(claim) + basisPill(claim) + conflictPills(claim) +
+    '<div class="small muted">' + [sub, esc(t ? t.target_type : "")].filter(Boolean).join(" · ") +
+    "</div>" +
     containmentNoteHTML(t, ctx) + "</div>";
 }
 
@@ -5477,42 +5502,60 @@ function claimGroups(claims, mode) {
     }).filter(function (g) { return g.rows.length; });
   }
   const groups = new Map();
-  const byRole = new Map();
+  const none = [];
   // Under every action the claim carries (claimDirections, which the mechanism
   // filter reads too), so a heading lists exactly what choosing its action
   // keeps: a claim naming two is under both, as the filter keeps it for either.
   for (const c of claims) {
     const actions = claimDirections(c);
-    if (actions.length) {
-      for (const a of actions) {
-        if (!groups.has(a)) groups.set(a, []);
-        groups.get(a).push(c);
-      }
-      continue;
+    if (!actions.length) { none.push(c); continue; }
+    for (const a of actions) {
+      if (!groups.has(a)) groups.set(a, []);
+      groups.get(a).push(c);
     }
-    const role = String(c.role || "other");
-    if (!byRole.has(role)) byRole.set(role, []);
-    byRole.get(role).push(c);
   }
   const order = Array.from(groups.keys()).sort(function (a, b) {
     return groups.get(b).length - groups.get(a).length || (a < b ? -1 : a > b ? 1 : 0);
   });
-  // Every heading names the action or the role, so no row repeats it.
+  // Every heading names the action, and every subheading the kind of claim, so
+  // no row repeats either.
   const out = order.map(function (action) {
-    return { key: "mech_" + action, heading: action.charAt(0) + action.slice(1).toLowerCase(),
-             help: "claim_mechanism", sub: "", headed: true, rows: groups.get(action) };
+    const key = "mech_" + action;
+    return { key: key, heading: action.charAt(0) + action.slice(1).toLowerCase(),
+             help: "claim_mechanism", sub: "", headed: true, action: action,
+             rows: groups.get(action), subgroups: claimRoleSubgroups(groups.get(action), key, false) };
   });
-  for (const g of MOLECULE_ROLE_GROUPS) {
-    if (byRole.has(g.role)) {
-      out.push({ key: g.key, heading: g.label, help: g.help, sub: g.sub, headed: true,
-                 rows: byRole.get(g.role) });
-    }
+  if (none.length) {
+    out.push({ key: "no_direction", heading: "No direction", help: "claim_no_direction",
+               sub: "", headed: true, action: null, rows: none,
+               subgroups: claimRoleSubgroups(none, "no_direction", true) });
+  }
+  return out;
+}
+
+// One subgroup per kind of claim under an action or under No direction
+// (2026-11-11, at the user's request): what kind of evidence says so is the
+// second question, and under one action a curated mechanism and a measured
+// affinity are two kinds of evidence, never two strengths of one (D06). A
+// role this page has never seen is named by itself rather than dropped.
+function claimRoleSubgroups(rows, parentKey, noDirection) {
+  const byRole = new Map();
+  for (const c of rows) {
+    const role = String(c.role || "other");
+    if (!byRole.has(role)) byRole.set(role, []);
+    byRole.get(role).push(c);
+  }
+  const out = [];
+  for (const g of CLAIM_ROLE_SUBGROUPS) {
+    if (!byRole.has(g.role)) continue;
+    out.push({ key: parentKey + "_" + g.role, heading: g.label,
+               sub: noDirection && g.subNone ? g.subNone : g.sub,
+               help: noDirection && g.helpNone ? g.helpNone : g.help,
+               rows: byRole.get(g.role) });
     byRole.delete(g.role);
   }
-  // A role this page has never seen is named by itself rather than dropped.
-  for (const [role, rows] of byRole) {
-    out.push({ key: "role_" + role, heading: role, help: "role", sub: "", headed: true,
-               rows: rows });
+  for (const [role, rs] of byRole) {
+    out.push({ key: parentKey + "_role_" + role, heading: role, sub: "", help: "role", rows: rs });
   }
   return out;
 }
@@ -5535,38 +5578,56 @@ function claimsByTierHTML(visible, ctx) {
 
 // One group per exact ChEMBL action, at ChEMBL's own granularity - an
 // inhibitor is not an antagonist, for the reason the mechanism filter gives -
-// commonest first. A measured claim has no curated action however strong it
-// is: an affinity says how tightly, never which way (the `role` help entry).
-// Since 2026-11-11 (D28, the user's call) one sits under an action heading
-// where GtoPdb gives that action at its pair or ChEMBL labels its own
-// functional-assay result with it (claimDirections), naming its role and the
-// source on its row; the rest follow, grouped by what was measured, as the
-// edge panel groups them. Those headings said "no direction" until D28: a
-// measurement carries none, but the pair can, and the row names it.
+// commonest first, then one headed No direction; inside each, one subgroup per
+// kind of claim (2026-11-11, at the user's request). A measured claim has no
+// curated action however strong it is: an affinity says how tightly, never
+// which way (the `role` help entry). It sits under an action where GtoPdb
+// gives that action at its pair or ChEMBL labels its own functional-assay
+// result with it (claimDirections, D28), and its row names the source.
 //
-// They used to share one group headed "No curated mechanism", which read as a
-// statement about the pair rather than the claim: armodafinil's measured Ki at
-// human DAT sat under it two rows below ChEMBL's curated INHIBITOR claim at the
-// same target (2026-09-25, split at the user's request). The tier pill on
+// Measured claims used to share one group headed "No curated mechanism", which
+// read as a statement about the pair rather than the claim: armodafinil's
+// measured Ki at human DAT sat under it two rows below ChEMBL's curated
+// INHIBITOR claim at the same target (2026-09-25, split at the user's
+// request). "No direction" is a statement about the claim: a row under it
+// still names any direction another source gives at its pair. The tier pill on
 // every row still says how well evidenced each claim is.
-const MOLECULE_ROLE_GROUPS = [
-  { role: "curated", key: "curated_none", label: "Curated",
-    sub: "no direction recorded", help: "claim_curated_none" },
-  { role: "binding", key: "measured_binding", label: "Binding",
-    sub: "measured affinity", help: "claim_binding" },
-  { role: "functional", key: "measured_functional", label: "Functional",
-    sub: "measured activity", help: "claim_functional" },
+const CLAIM_ROLE_SUBGROUPS = [
+  { role: "curated", label: "Curated", sub: "ChEMBL", help: "action",
+    subNone: "ChEMBL, no direction recorded", helpNone: "claim_curated_none" },
+  { role: "gtopdb", label: "Curated", sub: "GtoPdb", help: "gtopdb" },
+  { role: "binding", label: "Binding", sub: "measured affinity", help: "claim_binding" },
+  { role: "functional", label: "Functional", sub: "measured activity", help: "claim_functional" },
 ];
+
+// A group's subgroups, each folding on its own and open until a reader folds
+// it: opening the group was already the choice to read it. Used at any depth,
+// so the target panel's species sections can hold them too.
+function claimSubgroupsHTML(g, keyPrefix, rowHTML) {
+  let h = "";
+  for (const s of g.subgroups) {
+    const key = keyPrefix + s.key;
+    let body = "";
+    for (const c of s.rows) body += rowHTML(c);
+    h += '<details class="subsection claim-subgroup"' + (sectionOpen(key, true) ? " open" : "") +
+      '><summary class="subsection-toggle" data-fold="' + esc(key) + '">' +
+      claimGroupHeading(s, s.rows.length) + "</summary>" + body + "</details>";
+  }
+  return h;
+}
 
 function claimsByMechanismHTML(visible, ctx) {
   const tierRank = { supported: 0, preliminary: 1 };
   let h = "";
   for (const g of claimGroups(visible, "mechanism")) {
-    g.rows.sort(function (a, b) {
-      return ((tierRank[a.tier] || 0) - (tierRank[b.tier] || 0)) || byPublications(a, b);
+    for (const s of g.subgroups) {
+      s.rows.sort(function (a, b) {
+        return ((tierRank[a.tier] || 0) - (tierRank[b.tier] || 0)) || byPublications(a, b);
+      });
+    }
+    const body = claimSubgroupsHTML(g, "claims_", function (c) {
+      return claimRowHTML(c, ctx, true, g.action);
     });
-    let body = "";
-    for (const c of g.rows) body += claimRowHTML(c, ctx, true);
     h += foldedSection("claims_" + g.key, claimGroupHeading(g, g.rows.length), body);
   }
   return h;
@@ -5831,14 +5892,16 @@ function targetClaimSectionsHTML(ordered, mode, keyPrefix, nested) {
   // Every molecule, not the first 60: the cap cut off 22 of the 41 drugs
   // ChEMBL curates at DRD2 with no way to reach them. The sections fold instead.
   for (const sec of claimGroups(ordered, mode)) {
-    let body = "";
-    for (const c of sec.rows) {
+    const row = function (c) {
       const m = lookupMolecule(c.molecule);
-      body += '<div class="row-item" data-select="edge" data-id="' + esc(String(c.molecule)) +
+      return '<div class="row-item" data-select="edge" data-id="' + esc(String(c.molecule)) +
         '" data-other="' + esc(c.target) + '">' +
         esc(m ? m.name : c.molecule) + " " + tierPill(c) + basisPill(c) +
-        '<div class="small muted">' + claimDetail(c, sec.headed) + "</div></div>";
-    }
+        '<div class="small muted">' + claimDetail(c, sec.headed, sec.action) + "</div></div>";
+    };
+    let body = "";
+    if (sec.subgroups) body = claimSubgroupsHTML(sec, keyPrefix, row);
+    else for (const c of sec.rows) body += row(c);
     const nMol = new Set(sec.rows.map(function (c) { return c.molecule; })).size;
     const key = keyPrefix + sec.key;
     const heading = claimGroupHeading(sec, sec.rows.length,
