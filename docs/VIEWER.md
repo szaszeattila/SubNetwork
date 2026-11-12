@@ -2087,10 +2087,30 @@ ChEMBL's functional-assay label (1 study)*, one phrase per action
 (`measuredDirections`, `measuredDirectionsHTML`), with only the claims the
 basis filter allows contributing. A measurement row from a functional assay
 names its word too. None of it raises a tier, and the functional word is not
-read by `claimActions`, so line colour, the mechanism filter and D15 are
-unchanged; whether it should be is COHORT-2 **Open** 11. Where the functional
+read by `claimActions`, so line colour and D15 are unchanged; whether it
+should be is COHORT-2 **Open** 11. Where the functional
 claims at a pair give one word different study counts, the largest is shown,
 since two claims can share a study and a sum could overstate it.
+
+**A measured claim with an action of its own sits under that action's
+heading, and the mechanism filter keeps what the heading lists** (2026-11-11,
+the user's call: "if a functional assay has a direction it should go under the
+header of that action ... caffeine, the functional claim that reports
+antagonist should go under antagonist"). A claim's actions for both are
+`claimDirections`: its curated action, else GtoPdb's at its pair, plus the
+words ChEMBL gives its own functional-assay results. Before this the headings
+read `action_type` and the filter `claimActions`, so a binding claim GtoPdb
+calls an antagonist was kept by the Antagonist filter but listed under
+Binding; the two now agree. A claim with two actions sits under both, as the
+filter keeps it for either, and a curated claim with several (varenicline)
+names them all on its row under each. Under an action heading a measured
+row starts with its role, since the heading no longer says it. A sibling
+claim's label at the same pair is named on the row and moves it nowhere.
+Caffeine's Antagonist group went from its curated claims alone to 24, with
+19 measured; across the catalogue 602 claims gained an action under the
+default filters (23,881 with none, now 23,279). The control is headed
+*Action*, its whole-annotation buttons *Any action* and *No action*; the
+tokens in a shared link (`curated`, `uncurated`) kept their names.
 
 The measured claims used to be one group headed **No curated mechanism**, and
 that heading read as a statement about the *pair* when it was one about the

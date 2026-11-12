@@ -665,7 +665,7 @@ MeSH structure classes, **663** link one too, in the `class_wikipedia` table:
 no article through the main article its English category declares (Xanthines
 to *Xanthine*).
 
-The pipeline suite is 614 tests and the node suites are 781 (552 cohort
+The pipeline suite is 614 tests and the node suites are 785 (556 cohort
 viewer, 222 legacy viewer, 7 similarity harness).
 
 The similarity ranking is graded by `analysis/similarity_harness/evaluate.mjs`
@@ -807,9 +807,12 @@ behaviour a rule here describes.
   opposition names its curator. A
   `gtopdb`-role claim (D18) is curated like a `curated` one — ask
   `isCuratedRole`, name the curator with `curatorOf`, never test the role
-  string. The mechanism filter and line colour read `claimActions`: a curated
-  claim's own action, a measured claim the GtoPdb action at its pair — never
-  relabelling ChEMBL. A claim's `action_type` is a ` / `-joined list where
+  string. The line colour reads `claimActions`: a curated claim's own action,
+  a measured claim the GtoPdb action at its pair — never relabelling ChEMBL.
+  The mechanism filter and the panels' action headings read
+  `claimDirections`, which is `claimActions` plus a functional claim's own
+  assay words (D28), so a heading lists exactly what choosing its action
+  keeps, and a claim naming two actions sits under both. A claim's `action_type` is a ` / `-joined list where
   one curator names several at a pair (varenicline AGONIST / PARTIAL
   AGONIST); read it through `curatedActions`, never whole — whole, it was a
   word no filter, colour or opposite knew.
@@ -817,10 +820,13 @@ behaviour a rule here describes.
   of them is evidence** (D28, 2026-11-11, the user's call): ChEMBL's curated
   claim there, GtoPdb's action, and ChEMBL's word for a functional assay's
   result (`measuredDirections`), so a Binding row no longer reads "no
-  direction" where some of the evidence points one way. The functional word
-  is read by no tier, no `claimActions`, so no line colour, mechanism filter or
-  opposition; a binding assay's word is never shipped (a quarter of known
-  activators are INHIBITOR or ANTAGONIST in one).
+  direction" where some of the evidence points one way. A functional claim's
+  own word also sorts it under that action's heading and lets the mechanism
+  filter keep it (`claimDirections`; caffeine's functional ANTAGONIST results
+  sit under Antagonist, the user's call), and its row then says it was
+  functional. It is read by no tier and not by `claimActions`, so no line
+  colour or opposition; a binding assay's word is never shipped (a quarter of
+  known activators are INHIBITOR or ANTAGONIST in one).
 - **A partial agonist against an antagonist or inverse agonist is half an
   opposite** (D19, `HALF_OPPOSED_ACTIONS`); partial against full agonist is
   never one. Counting it fully threw aripiprazole from #6 to #90 for
@@ -1063,9 +1069,10 @@ molecules) are in [docs/COHORT-2.md](docs/COHORT-2.md) and come first.
   `OPPOSED_ACTIONS` is nine hand-written pairs, eight of them never examined the
   way PARTIAL AGONIST/INVERSE AGONIST was (removed on a measurement). Each entry
   is a pharmacological claim, not a number to sweep.
-- **Whether ChEMBL's functional-assay direction counts toward D15, the line
-  colour or the mechanism filter is undecided** (D28; the user asked for it to
-  be decided later). It is shown and read by nothing. The same measurement
+- **Whether ChEMBL's functional-assay direction counts toward D15 or the line
+  colour is undecided** (D28; the user asked for it to be decided later). It
+  is shown, and sorts and filters claims (2026-11-11), but scores and colours
+  nothing. The same measurement
   found GtoPdb's non-primary directions mostly cite papers ChEMBL never
   abstracted, which undercuts one of D18's reasons for keeping them out of
   evidence ([docs/COHORT-2.md](docs/COHORT-2.md) **Open** 11).

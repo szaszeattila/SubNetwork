@@ -2289,7 +2289,7 @@ describe("the curated mechanism is a first-class thing to filter on", () => {
     v.toggleMechanism("uncurated");
     assert.equal(v.catalogueGraph().edges.length, 3);
     assert.equal(v.mechanismSummary(),
-                 "any curated mechanism or no curated mechanism only");
+                 "any recorded action or no recorded action only");
   });
 
   test("taking every action back off is every claim, not an empty canvas", () => {
@@ -2336,7 +2336,7 @@ describe("the curated mechanism is a first-class thing to filter on", () => {
     v.toggleMechanism("ANTAGONIST");
     const banner = v.filterBanners().map((b) => b.text).join(" ");
     assert.match(banner, /<b>antagonist<\/b> only/);
-    assert.match(banner, /2 claims with no curated action at all/);
+    assert.match(banner, /2 claims with no recorded action at all/);
     assert.match(banner, /not that the molecule does not act this way/);
     // Two tokens are named, not summed into one word.
     v.toggleMechanism("AGONIST");

@@ -2,17 +2,18 @@
 //
 // What is locked in: where GtoPdb gives an action at a pair, or ChEMBL labels a
 // functional assay's result there, the measured claims at that pair name the
-// direction and its source instead of reading "no direction". It is display
-// only: no tier, no line colour, no mechanism filter and no D15 opposition
-// reads a functional-assay label (whether any of them should is open in
-// docs/COHORT-2.md, D28).
+// direction and its source instead of reading "no direction". A functional
+// claim's own label also sorts it under that action's heading, and the
+// mechanism filter keeps what the heading lists (the user's call, 2026-11-11).
+// No tier, no line colour and no D15 opposition reads it (whether either of the
+// last two should is open in docs/COHORT-2.md, D28).
 //
 // Run with: node --test tests/cohort_viewer_directions.test.mjs
 
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
 
-import { loadViewer, buildData, buildGtopdb, withGtopdbFile, molecule, target, claim,
+import { loadViewer, plain, buildData, buildGtopdb, withGtopdbFile, molecule, target, claim,
          endpoint, observation } from "./cohort_harness.mjs";
 
 const D2 = { accession: "P14416", gene_symbol: "DRD2", description: "Dopamine D2 receptor" };
@@ -86,7 +87,6 @@ describe("a measured claim names the pair's direction and its source", () => {
     v.setClaimGrouping("mechanism");
     const html = v.showMolecule(v.lookupMolecule(1));
     assert.match(html, /· measured affinity<\/span>/);
-    assert.match(html, /· measured activity<\/span>/);
     assert.doesNotMatch(html, /measured (affinity|activity), no direction/);
   });
 
@@ -107,15 +107,73 @@ describe("a measured claim names the pair's direction and its source", () => {
   });
 });
 
-describe("a functional-assay label is shown, never counted", () => {
-  test("it moves no tier, no line colour, no mechanism filter and no opposition", () => {
+describe("a functional claim sits under the action its assay label gives", () => {
+  // 2026-11-11, the user's call: caffeine's functional ANTAGONIST results
+  // belong under Antagonist, and the mechanism filter keeps what the heading
+  // lists.
+  test("it is grouped under that action, and its row says it was functional", () => {
+    const v = loadViewer(labelled());
+    const groups = v.claimGroups(v.moleculeClaims(1), "mechanism");
+    assert.deepEqual(plain(groups.map((g) => [g.heading, g.rows.map((c) => c.id)])),
+                     [["Antagonist", [2]], ["Binding", [1]]]);
+    const byId = (id) => v.allClaims().find((c) => c.id === id);
+    assert.match(v.claimDetail(byId(2), true), /^functional · /);
+    // Under a role heading the role is not said twice.
+    assert.doesNotMatch(v.claimDetail(byId(1), true), /^binding · /);
+  });
+
+  test("a claim with two labels is under both, as the filter keeps it for either", () => {
+    const v = loadViewer(buildData({
+      molecules: [molecule({ id: 1, chembl_id: "CHEMBL1", name: "X" })],
+      targets: [target({ chembl_id: "T_D2", components: [D2] })],
+      claims: [claim({ id: 1, molecule: 1, target: "T_D2", role: "functional",
+                       assay_actions: [["ANTAGONIST", 2], ["INVERSE AGONIST", 1]] })],
+    }));
+    const headings = v.claimGroups(v.moleculeClaims(1), "mechanism").map((g) => g.heading);
+    assert.deepEqual(plain(headings), ["Antagonist", "Inverse agonist"]);
+    for (const token of ["ANTAGONIST", "INVERSE AGONIST"]) {
+      v.resetFilters();
+      v.toggleMechanism(token);
+      assert.ok(v.mechanismAllowed(v.allClaims()[0]), token);
+    }
+  });
+
+  test("the mechanism filter keeps it, counts it and offers its action", () => {
+    const v = loadViewer(labelled());
+    const counts = v.actionCounts();
+    assert.deepEqual(plain(counts.rows.map((r) => r.action).sort()), ["AGONIST", "ANTAGONIST"]);
+    assert.equal(counts.curated, 2);
+    assert.equal(counts.uncurated, 2);
+    v.toggleMechanism("ANTAGONIST");
+    const byId = (id) => v.allClaims().find((c) => c.id === id);
+    assert.deepEqual(plain(v.allClaims().filter(v.claimVisible).map((c) => c.id)), [2]);
+    assert.equal(v.hiddenReason(byId(4)), "mechanism");
+    assert.equal(v.hiddenReason(byId(1)), "mechanism_none");
+  });
+
+  test("a measured claim GtoPdb gives an action at is under that action too", () => {
+    const data = withGtopdbFile(labelled(), buildGtopdb({ actions: [
+      { molecule: 1, target: "T_D2", action_type: "ANTAGONIST", gtp_type: "Antagonist",
+        gtp_action: "Antagonist", primary_target: 0, endogenous: 0, gtp_ligand_id: 1,
+        gtp_target_id: 215 },
+    ], claims: [], status: {}, release: "2026.3" }));
+    const v = loadViewer(data);
+    const groups = v.claimGroups(v.moleculeClaims(1), "mechanism");
+    assert.deepEqual(plain(groups.map((g) => [g.heading, g.rows.map((c) => c.id).sort()])),
+                     [["Antagonist", [1, 2]]]);
+  });
+});
+
+describe("a functional-assay label is shown and sorted, never counted", () => {
+  test("it moves no tier, no line colour and no opposition", () => {
     const plain = loadViewer(labelled());
     const v = loadViewer(labelled());
     for (const c of v.allClaims()) {
-      // claimActions is what the colour, the filter and D15 read.
+      // claimActions is what the line colour and D15 read.
       assert.equal(v.claimActions(c).length, 0);
       assert.equal(c.tier, plain.allClaims().find((p) => p.id === c.id).tier);
     }
+    for (const e of v.catalogueGraph().edges) assert.equal(v.edgeActions(e).length, 0);
     const row = v.sharedTargets(1).find((r) => r.molecule.id === 2);
     assert.equal(row.n_comparable, 0);       // ANTAGONIST against AGONIST, never compared
     assert.ok(!row.all_opposed);

@@ -1386,6 +1386,27 @@ function claimActions(claim) {
   return out;
 }
 
+// The directions a claim is sorted and filtered by: claimActions, then the
+// words ChEMBL gives this claim's own functional-assay results (D28), each
+// once. The panels' action headings and the mechanism filter both read it, so
+// a claim a heading lists is a claim choosing that action keeps (2026-11-11,
+// the user's call: caffeine's functional ANTAGONIST results belong under
+// Antagonist). The claim's own words only: a sibling claim's label at the
+// same pair is named on this row by measuredDirections, but moves it nowhere.
+//
+// Display, never evidence: no tier reads it, and the line colour and D15's
+// oppositions still read claimActions and directionIndex, without the
+// functional word (docs/COHORT-2.md, D28 and Open 11).
+function claimDirections(claim) {
+  const out = claimActions(claim).slice();
+  if (claim.assay_actions && !isCuratedRole(claim)) {
+    for (const pair of claim.assay_actions) {
+      if (pair[0] && out.indexOf(pair[0]) < 0) out.push(pair[0]);
+    }
+  }
+  return out;
+}
+
 // The directions a measured claim's row names (D28, 2026-11-11, at the user's
 // request: "binding, no direction" was untrue at a pair where some of the
 // evidence points one way). Three sources, each named on the row: ChEMBL's
@@ -1396,7 +1417,8 @@ function claimActions(claim) {
 // only in the layers the basis filter allows. Display only. Nothing here is read by claimActions, so the line
 // colour, the mechanism filter and D15's oppositions are what they were, and
 // no tier moves: whether a functional label should count toward any of those
-// is open (docs/COHORT-2.md, D28).
+// is open (docs/COHORT-2.md, D28). The claim's own words also sort it under
+// an action heading and let the mechanism filter keep it (claimDirections).
 function measuredDirections(claim) {
   const out = [];
   if (isCuratedRole(claim)) return out;
@@ -1454,7 +1476,7 @@ function measuredDirectionsHTML(claim) {
 function mechanismAllowed(claim) {
   const picked = filters.mechanism;
   if (!picked.length) return true;
-  const actions = claimActions(claim);
+  const actions = claimDirections(claim);
   for (const token of picked) {
     if (token === "curated") { if (actions.length) return true; continue; }
     if (token === "uncurated") { if (!actions.length) return true; continue; }
@@ -1475,8 +1497,10 @@ function toggleMechanism(token) {
 }
 
 function mechanismLabel(token) {
-  if (token === "curated") return "any curated mechanism";
-  if (token === "uncurated") return "no curated mechanism";
+  // The tokens keep their names, which shared links carry; what they mean
+  // widened with D28 to any recorded direction, a functional label included.
+  if (token === "curated") return "any recorded action";
+  if (token === "uncurated") return "no recorded action";
   return String(token).toLowerCase();
 }
 
@@ -1557,8 +1581,10 @@ function hiddenReason(claim) {
   if (!basisAllowed(claim)) return "basis";
   if (!potencyAllowed(claim)) return bestPotency(claim) ? "potency" : "potency_no_value";
   // Two different absences, and the second is the one that must not read as a
-  // negative result: this claim carries no curated action at all.
-  if (!mechanismAllowed(claim)) return claim.action_type ? "mechanism" : "mechanism_none";
+  // negative result: this claim carries no recorded action at all.
+  if (!mechanismAllowed(claim)) {
+    return claimDirections(claim).length ? "mechanism" : "mechanism_none";
+  }
   if (!trialsAllowed(claim)) return "trials";
   return null;
 }
@@ -1662,7 +1688,7 @@ function actionCounts() {
   let curated = 0, uncurated = 0;
   for (const c of allClaims()) {
     if (!tierAllowed(c) || !basisAllowed(c) || !potencyAllowed(c)) continue;
-    const actions = claimActions(c);
+    const actions = claimDirections(c);
     if (!actions.length) { uncurated++; continue; }
     curated++;
     for (const a of actions) counts.set(a, (counts.get(a) || 0) + 1);
@@ -3313,9 +3339,11 @@ const HELP = {
           "Most claims have none, which means unknown, not absent.",
   refs: "The papers, patents and drug labels ChEMBL's curators cite for this " +
         "mechanism.",
-  mechanism_filter: "Show only claims with the curated actions you pick; several " +
-          "combine. Actions are ChEMBL's, or GtoPdb's where ChEMBL has none. Claims " +
-          "with no action are hidden too, and counted separately.",
+  mechanism_filter: "Show only claims with the actions you pick; several combine. " +
+          "Actions are ChEMBL's curated ones, or GtoPdb's where ChEMBL has none, and " +
+          "for a functional measurement the word ChEMBL gives its result. The same " +
+          "actions head the claim lists. Claims with no action are hidden too, and " +
+          "counted separately.",
   line_color: "Colour lines by what backs the claim, or by curated action (ChEMBL's, " +
           "else GtoPdb's; several colours means they disagree). Dashed still means " +
           "Preliminary.",
@@ -3329,20 +3357,23 @@ const HELP = {
                 "may be another kind, labelled as such.",
   edge_claims: "Everything recorded between this molecule and this target, listed " +
                "side by side, never added together.",
-  claim_grouping: "Sort claims by evidence tier, or by what each says: its curated " +
-                  "action where it has one, else binding or functional measurement.",
-  claim_mechanism: "Claims where curators (ChEMBL or GtoPdb) recorded this action. " +
-                   "A measured affinity never carries one.",
-  claim_binding: "Measured binding (Ki, Kd, binding IC50): how tightly, not which " +
-                 "way. A direction on a row is from curators or a functional assay at " +
-                 "the same target, and names its source.",
-  claim_functional: "A functional assay saw an effect. A direction on a row is from " +
-                    "curators or ChEMBL's label for a functional assay's result, and " +
-                    "names its source.",
+  claim_grouping: "Sort claims by evidence tier, or by what each says: the action " +
+                  "recorded for it where there is one, else binding or functional " +
+                  "measurement.",
+  claim_mechanism: "Claims with this action: curated by ChEMBL or GtoPdb, or, for a " +
+                   "measurement, GtoPdb's action here or ChEMBL's label for a " +
+                   "functional assay's result. Each row names its source; its pill " +
+                   "says how well it is evidenced.",
+  claim_binding: "Measured binding (Ki, Kd, binding IC50) with no action of its own: " +
+                 "how tightly, not which way. A direction on a row is from curators or " +
+                 "a functional assay at the same target, and names its source.",
+  claim_functional: "A functional assay saw an effect, and nothing gives this claim an " +
+                    "action. A direction on a row is from curators or a functional " +
+                    "assay at the same target, and names its source.",
   measured_direction: "Which way the drug acts at this target, from ChEMBL's or " +
                       "GtoPdb's curators, or from the word ChEMBL gives a functional " +
-                      "assay's result. Shown only: it does not raise this claim's " +
-                      "evidence level.",
+                      "assay's result. It sorts and filters this claim but does not " +
+                      "raise its evidence level.",
   assay_label: "The word ChEMBL gives this functional assay's result. It says which " +
                "way the drug acted in this experiment, not that this is how it works.",
   claim_curated_none: "Mechanisms curators recorded without naming an action.",
@@ -3756,13 +3787,13 @@ function filtersHTML() {
   // reader wants is usually several of them at once, so they compose.
   const actions = actionCounts();
   const picked = f.mechanism;
-  h += '<div class="ctl"><h4>' + helpLabel("Curated mechanism", "mechanism_filter") +
+  h += '<div class="ctl"><h4>' + helpLabel("Action", "mechanism_filter") +
        "</h4><div class=\"row\">";
   h += btn("mechanism", "", "Every claim (" + (actions.curated + actions.uncurated) + ")",
            picked.length === 0);
-  h += btn("mechanism", "curated", "Any curated (" + actions.curated + ")",
+  h += btn("mechanism", "curated", "Any action (" + actions.curated + ")",
            picked.indexOf("curated") >= 0);
-  h += btn("mechanism", "uncurated", "None curated (" + actions.uncurated + ")",
+  h += btn("mechanism", "uncurated", "No action (" + actions.uncurated + ")",
            picked.indexOf("uncurated") >= 0);
   h += "</div>";
   h += '<div class="row" style="margin-top:5px">';
@@ -4124,17 +4155,17 @@ function filterBanners() {
     for (const c of all) {
       if (!tierAllowed(c) || !basisAllowed(c) || !potencyAllowed(c)) continue;
       if (mechanismAllowed(c)) continue;
-      if (c.action_type) other++; else none++;
+      if (claimDirections(c).length) other++; else none++;
     }
     const names = f.mechanism.map(function (t) { return esc(mechanismLabel(t)); });
     const what = names.length === 1 ? names[0]
                : names.slice(0, -1).join(", ") + " or " + names[names.length - 1];
     push("mechanism", "<b>" + what + "</b> only. " +
-      (other ? plural(other, "claim") + " with another curated action" +
+      (other ? plural(other, "claim") + " with another recorded action" +
                (none ? " and " : "") : "") +
-      (none ? plural(none, "claim") + " with no curated action at all" : "") +
+      (none ? plural(none, "claim") + " with no recorded action at all" : "") +
       (other + none ? isAre(other + none) + "hidden. " : "") +
-      "No annotation means none was curated, not that the molecule does not act " +
+      "No action means none was recorded, not that the molecule does not act " +
       "this way.");
   }
   if (f.trials !== "any") {
@@ -4474,8 +4505,15 @@ function claimDetail(claim, headed) {
   const parts = [];
   const pillSaysCurated = claim.tier === "supported" && !!claim.curated_support;
   const curatedRow = isCuratedRole(claim) && pillSaysCurated;
-  if (!curatedRow && !headed) parts.push(esc(claim.role));
-  if (claim.action_type) { if (!headed) parts.push(esc(claim.action_type)); }
+  // Under a role heading the role is said; under an action heading a measured
+  // claim still has to say it was a measurement (D28 put them there).
+  const roleHeaded = headed && (isCuratedRole(claim) || !claimDirections(claim).length);
+  if (!curatedRow && !roleHeaded) parts.push(esc(claim.role));
+  // A claim with several curated actions sits under each, so under one heading
+  // its row still names them all.
+  if (claim.action_type) {
+    if (!headed || curatedActions(claim).length > 1) parts.push(esc(claim.action_type));
+  }
   else if (curatedRow) {
     // A direction withheld as a known ChEMBL error is not one ChEMBL never
     // recorded; the block below says what it was and why.
@@ -5440,10 +5478,16 @@ function claimGroups(claims, mode) {
   }
   const groups = new Map();
   const byRole = new Map();
+  // Under every action the claim carries (claimDirections, which the mechanism
+  // filter reads too), so a heading lists exactly what choosing its action
+  // keeps: a claim naming two is under both, as the filter keeps it for either.
   for (const c of claims) {
-    if (c.action_type) {
-      if (!groups.has(c.action_type)) groups.set(c.action_type, []);
-      groups.get(c.action_type).push(c);
+    const actions = claimDirections(c);
+    if (actions.length) {
+      for (const a of actions) {
+        if (!groups.has(a)) groups.set(a, []);
+        groups.get(a).push(c);
+      }
       continue;
     }
     const role = String(c.role || "other");
@@ -5493,10 +5537,12 @@ function claimsByTierHTML(visible, ctx) {
 // inhibitor is not an antagonist, for the reason the mechanism filter gives -
 // commonest first. A measured claim has no curated action however strong it
 // is: an affinity says how tightly, never which way (the `role` help entry).
-// So those follow, grouped by what was measured, as the edge panel groups
-// them. The heading said "no direction" until 2026-11-11 (D28): a measurement
-// carries none, but the pair can, and where GtoPdb or a functional assay's
-// label gives one the row now names it and its source.
+// Since 2026-11-11 (D28, the user's call) one sits under an action heading
+// where GtoPdb gives that action at its pair or ChEMBL labels its own
+// functional-assay result with it (claimDirections), naming its role and the
+// source on its row; the rest follow, grouped by what was measured, as the
+// edge panel groups them. Those headings said "no direction" until D28: a
+// measurement carries none, but the pair can, and the row names it.
 //
 // They used to share one group headed "No curated mechanism", which read as a
 // statement about the pair rather than the claim: armodafinil's measured Ki at
@@ -10041,7 +10087,7 @@ let mechanismTokenCache = null;
 function mechanismTokens() {
   if (mechanismTokenCache) return mechanismTokenCache;
   mechanismTokenCache = new Set(["curated", "uncurated"]);
-  for (const c of allClaims()) for (const a of claimActions(c)) mechanismTokenCache.add(a);
+  for (const c of allClaims()) for (const a of claimDirections(c)) mechanismTokenCache.add(a);
   return mechanismTokenCache;
 }
 
